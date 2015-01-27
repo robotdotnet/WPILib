@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib", "WPILib\WPILib.csproj", "{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-Base", "HAL-Base\HAL-Base.csproj", "{471A8C6B-AA80-492A-85A3-3EF67FC70988}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-RoboRIO", "HAL-RoboRIO\HAL-RoboRIO.csproj", "{D41E4184-C699-4F9C-9895-1915638AF9D7}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{471A8C6B-AA80-492A-85A3-3EF67FC70988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471A8C6B-AA80-492A-85A3-3EF67FC70988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471A8C6B-AA80-492A-85A3-3EF67FC70988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471A8C6B-AA80-492A-85A3-3EF67FC70988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D41E4184-C699-4F9C-9895-1915638AF9D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D41E4184-C699-4F9C-9895-1915638AF9D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D41E4184-C699-4F9C-9895-1915638AF9D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D41E4184-C699-4F9C-9895-1915638AF9D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
