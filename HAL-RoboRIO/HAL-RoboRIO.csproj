@@ -35,7 +35,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="HAL.cs" />
+    <Compile Include="HALAccelerometer.cs" />
+    <Compile Include="HALCANTalon.cs" />
+    <Compile Include="HALCompressor.cs" />
+    <Compile Include="HALDigital.cs" />
+    <Compile Include="HALNotifier.cs" />
+    <Compile Include="HALPDP.cs" />
+    <Compile Include="HALPower.cs" />
+    <Compile Include="HALSemaphore.cs" />
+    <Compile Include="HALSerialPort.cs" />
+    <Compile Include="HALSolenoid.cs" />
+    <Compile Include="HALUsageReporter.cs" />
+    <Compile Include="HALInterrupts.cs" />
+    <Compile Include="HALUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

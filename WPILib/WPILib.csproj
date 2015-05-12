@@ -35,8 +35,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DriverStation.cs" />
+    <Compile Include="Interfaces\MotorSafety.cs" />
+    <Compile Include="MotorSafetyHelper.cs" />
+    <Compile Include="RobotBase.cs" />
+    <Compile Include="Timer.cs" />
+    <Compile Include="Util\Exceptions.cs" />
+    <Compile Include="InterruptableSensorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.cs" />
+    <Compile Include="SensorBase.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+      <Project>{471a8c6b-aa80-492a-85a3-3ef67fc70988}</Project>
+      <Name>HAL-Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj">
+      <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>
+      <Name>HAL-RoboRIO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
