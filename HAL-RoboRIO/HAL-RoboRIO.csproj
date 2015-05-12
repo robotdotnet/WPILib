@@ -7,7 +7,7 @@
     <ProjectGuid>{D41E4184-C699-4F9C-9895-1915638AF9D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAL_RoboRIO</RootNamespace>
+    <RootNamespace>HAL_FRC</RootNamespace>
     <AssemblyName>HAL-RoboRIO</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

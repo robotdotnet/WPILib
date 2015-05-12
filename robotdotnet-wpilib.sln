@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib", "WPILib\WPILib.csproj", "{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib", "WPILib\WPILib.csp
 		{D41E4184-C699-4F9C-9895-1915638AF9D7} = {D41E4184-C699-4F9C-9895-1915638AF9D7}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-Base", "HAL-Base\HAL-Base.csproj", "{471A8C6B-AA80-492A-85A3-3EF67FC70988}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-Simulation", "HAL-Simulation\HAL-Simulation.csproj", "{471A8C6B-AA80-492A-85A3-3EF67FC70988}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-RoboRIO", "HAL-RoboRIO\HAL-RoboRIO.csproj", "{D41E4184-C699-4F9C-9895-1915638AF9D7}"
 EndProject

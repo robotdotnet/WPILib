@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using HAL_RoboRIO;
+using HAL_FRC;
 using WPILib.Util;
 
 namespace WPILib

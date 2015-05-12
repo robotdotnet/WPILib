@@ -7,8 +7,8 @@
     <ProjectGuid>{471A8C6B-AA80-492A-85A3-3EF67FC70988}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAL_Base</RootNamespace>
-    <AssemblyName>HAL-Base</AssemblyName>
+    <RootNamespace>HAL_FRC</RootNamespace>
+    <AssemblyName>HAL-Simulation</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,7 +35,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="HAL.cs" />
+    <Compile Include="HALAccelerometer.cs" />
+    <Compile Include="HALAnalog.cs" />
+    <Compile Include="HALCANTalon.cs" />
+    <Compile Include="HALCompressor.cs" />
+    <Compile Include="HALDigital.cs" />
+    <Compile Include="HALInterrupts.cs" />
+    <Compile Include="HALNotifier.cs" />
+    <Compile Include="HALPDP.cs" />
+    <Compile Include="HALPower.cs" />
+    <Compile Include="HALSemaphore.cs" />
+    <Compile Include="HALSerialPort.cs" />
+    <Compile Include="HALSolenoid.cs" />
+    <Compile Include="HALUsageReporter.cs" />
+    <Compile Include="HALUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
