@@ -50,6 +50,7 @@
     <Compile Include="Interfaces\PIDSource.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
     <Compile Include="IterativeRobot.cs" />
+    <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="PWM.cs" />
@@ -59,12 +60,15 @@
     <Compile Include="SampleRobot.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="Talon.cs" />
+    <Compile Include="TalonSRX.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="Util\Exceptions.cs" />
     <Compile Include="InterruptableSensorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="SensorBase.cs" />
+    <Compile Include="Victor.cs" />
+    <Compile Include="VictorSP.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
