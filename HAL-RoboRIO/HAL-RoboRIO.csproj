@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="HAL.cs" />
     <Compile Include="HALAccelerometer.cs" />
+    <Compile Include="HALAnalog.cs" />
     <Compile Include="HALCANTalon.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />

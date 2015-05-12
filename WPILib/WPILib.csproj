@@ -35,12 +35,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccumulatorResult.cs" />
+    <Compile Include="AnalogInput.cs" />
+    <Compile Include="DigitalInput.cs" />
+    <Compile Include="DigitalOutput.cs" />
+    <Compile Include="DigitalSource.cs" />
     <Compile Include="DriverStation.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
+    <Compile Include="Interfaces\PIDOutput.cs" />
+    <Compile Include="Interfaces\PIDSource.cs" />
+    <Compile Include="Interfaces\SpeedController.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
+    <Compile Include="PWM.cs" />
     <Compile Include="RobotBase.cs" />
+    <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
+    <Compile Include="Servo.cs" />
+    <Compile Include="Talon.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="Util\Exceptions.cs" />
     <Compile Include="InterruptableSensorBase.cs" />

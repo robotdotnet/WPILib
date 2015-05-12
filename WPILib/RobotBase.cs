@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using HAL_RoboRIO;
+using System.IO;
 
 namespace WPILib
 {
@@ -115,23 +116,39 @@ namespace WPILib
             HAL.Initialize();
         }
 
-        public static void main(RobotBase rBase)
+        public static void main(string RobotName)
         {
-            RobotBase.InitializeHardwareConfiguration();
-            HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
+            InitializeHardwareConfiguration();
+            HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_Python);
 
             RobotBase robot;
             try
             {
-                robot = rBase;
+                robot = (RobotBase)(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(RobotName));
                 robot.Prestart();
             }
             catch (Exception ex)
             {
 
-                DriverStation.ReportError("ERROR Could not instantiate robot", true);
+                DriverStation.ReportError("EROR Unhandled exception instantiating robot " + RobotName + " " + ex.ToString() + " at " + ex.StackTrace, false);//"ERROR Could not instantiate robot", true);
                 //Log Robots dont quit
+                Console.Error.WriteLine("WARNING: Robots don't quit!");
+                Console.Error.WriteLine("Error: Could not instantiate robot " + RobotName + "!");
+                Environment.Exit(1);
                 return;
+            }
+
+            string file = "/tmp/frc_versions/FRC_Lib_Version.ini";
+            try
+            {
+                if (File.Exists(file))
+                    File.Delete(file);
+
+                File.WriteAllText(file, "RobotDotNet V1.0");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine(ex.StackTrace);
             }
 
             try
@@ -143,7 +160,7 @@ namespace WPILib
             {
                 DriverStation.ReportError("ERROR Unhandled exception", true);
                 return;
-
+                
             }
             finally
             {
