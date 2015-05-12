@@ -6,6 +6,14 @@ using WPILib.Util;
 
 namespace WPILib
 {
+    public enum WaitResult
+    {
+        kTimeout = 0x0,
+        kRisingEdge = 0x1,
+        kFallingEdge = 0x100,
+        kBoth = 0x101,
+    }
+
     public abstract class InterruptableSensorBase : SensorBase
     {
         //figure this out
@@ -86,19 +94,20 @@ namespace WPILib
             Interrupts.Free((int)InterruptIndex);
         }
 
-        public void WaitForInterrupt(double timeout, bool ignorePrevious)
+        public WaitResult WaitForInterrupt(double timeout, bool ignorePrevious)
         {
             if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
             int status = 0;
-            HALInterrupts.waitForInterrupt(Interrupt, timeout, ignorePrevious, ref status);
+            uint value = HALInterrupts.waitForInterrupt(Interrupt, timeout, ignorePrevious, ref status);
+            return (WaitResult)value;
         }
 
-        public void WaitForInterrupt(double timeout)
+        public WaitResult WaitForInterrupt(double timeout)
         {
-            WaitForInterrupt(timeout, true);
+            return WaitForInterrupt(timeout, true);
         }
 
         public void EnableInterrupts()

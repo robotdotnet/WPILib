@@ -6,7 +6,7 @@ using HAL_RoboRIO;
 
 namespace WPILib
 {
-    class TalonSRX : SafePWM, SpeedController
+    public class TalonSRX : SafePWM, SpeedController
     {
         private void InitTalonSRX()
         {
