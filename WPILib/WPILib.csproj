@@ -37,8 +37,10 @@
   <ItemGroup>
     <Compile Include="DriverStation.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
+    <Compile Include="IterativeRobot.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="RobotBase.cs" />
+    <Compile Include="SampleRobot.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="Util\Exceptions.cs" />
     <Compile Include="InterruptableSensorBase.cs" />

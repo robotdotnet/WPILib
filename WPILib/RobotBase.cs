@@ -105,7 +105,7 @@ namespace WPILib
 
         public abstract void StartCompetition();
 
-        protected void Prestart()
+        protected virtual void Prestart()
         {
             HAL.NetworkCommunicationObserveUserProgramStarting();
         }
