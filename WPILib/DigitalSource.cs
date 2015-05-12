@@ -43,17 +43,17 @@ namespace WPILib
             _channel = 0;
         }
 
-        protected override int GetChannelForRouting()
+        public override int GetChannelForRouting()
         {
             return _channel;
         }
 
-        protected override byte GetModuleForRouting()
+        public override byte GetModuleForRouting()
         {
             return 0;
         }
 
-        protected override bool GetAnalogTriggerForRouting()
+        public override bool GetAnalogTriggerForRouting()
         {
             return false;
         }

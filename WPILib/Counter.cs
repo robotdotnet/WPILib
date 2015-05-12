@@ -43,7 +43,7 @@ namespace WPILib
             if (source == null)
                 throw new NullReferenceException("Digital Source given was null");
             InitCounter(Mode.kTwoPulse);
-            //SetUpSource(source);
+            SetUpSource(source);
         }
 
         public Counter(int channel)
@@ -101,7 +101,50 @@ namespace WPILib
 
         public void SetUpSource(int channel)
         {
+            SetUpSource(new DigitalInput(channel));
+            _allocatedUpSource = true;
+        }
+        public void SetUpSource(DigitalSource source)
+        {
+            if (_upSource != null && _allocatedUpSource)
+            {
+                _upSource.Free();
+                _allocatedUpSource = false;
+            }
+            _upSource = source;
+            int status = 0;
+            HALDigital.setCounterUpSource(_counterPtr, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
+        }
 
+        public void SetUpSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
+        {
+            if (analogTrigger == null)
+                throw new NullReferenceException("Analog Trigger given was null");
+            if (triggerType == null)
+                throw new NullReferenceException("Analog Trigger Type given was null");
+            //SetUpSource() //Waiting on AnalogTriggerOutput
+            _allocatedUpSource = true;
+        }
+
+        public void SetUpSource(bool risingEdge, bool fallingEdge)
+        {
+            if (_upSource == null)
+                throw new SystemException("Up Source must be set before setting the edge!");
+            int status = 0;
+            HALDigital.setCounterUpSourceEdge(_counterPtr, risingEdge, fallingEdge, ref status);
+        }
+
+        public void ClearUpSource()
+        {
+            if (_upSource != null && _allocatedUpSource)
+            {
+                _upSource.Free();
+                _allocatedUpSource = false;
+            }
+            _upSource = null;
+
+            int status = 0;
+            HALDigital.clearCounterUpSource(_counterPtr, ref status);
         }
 
         public int Get()

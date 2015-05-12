@@ -37,18 +37,24 @@
   <ItemGroup>
     <Compile Include="AccumulatorResult.cs" />
     <Compile Include="AnalogInput.cs" />
+    <Compile Include="AnalogTrigger.cs" />
+    <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />
     <Compile Include="DigitalOutput.cs" />
     <Compile Include="DigitalSource.cs" />
     <Compile Include="DriverStation.cs" />
+    <Compile Include="Interfaces\CounterBase.cs" />
+    <Compile Include="Interfaces\GenericHID.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
     <Compile Include="Interfaces\PIDOutput.cs" />
     <Compile Include="Interfaces\PIDSource.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
     <Compile Include="IterativeRobot.cs" />
+    <Compile Include="Joystick.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="PWM.cs" />
     <Compile Include="RobotBase.cs" />
+    <Compile Include="RobotDrive.cs" />
     <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
     <Compile Include="Servo.cs" />

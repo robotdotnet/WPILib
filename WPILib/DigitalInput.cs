@@ -26,7 +26,7 @@ namespace WPILib
             return _channel;
         }
 
-        protected override bool GetAnalogTriggerForRouting()
+        public override bool GetAnalogTriggerForRouting()
         {
             return false;
         }

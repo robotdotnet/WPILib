@@ -22,9 +22,9 @@ namespace WPILib
             Interrupt = IntPtr.Zero;
         }
 
-        protected abstract bool GetAnalogTriggerForRouting();
-        protected abstract int GetChannelForRouting();
-        protected abstract byte GetModuleForRouting();
+        public abstract bool GetAnalogTriggerForRouting();
+        public abstract int GetChannelForRouting();
+        public abstract byte GetModuleForRouting();
 
         public void RequestInterupts(InterruptHandlerFunction handler)
         {
