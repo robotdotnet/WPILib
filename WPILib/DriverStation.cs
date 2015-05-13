@@ -81,11 +81,15 @@ namespace WPILib
             while (threadKeepAlive)
             {
                 HALSemaphore.takeMultiWait(packetDataAvailableSem, packetDataAvailableMutex, 0);
+                GetData();
+                //HALSemaphore.giveMultiWait(dataSem);
 
+                /*
                 lock (this)
                 {
                     GetData();
                 }
+                 * */
                 lock (dataSem)
                 {
                     Monitor.PulseAll(dataSem);
@@ -111,6 +115,8 @@ namespace WPILib
 
         public void WaitForData(long timeout = 0)
         {
+            HALSemaphore.takeMultiWait(packetDataAvailableSem, packetDataAvailableMutex, -1);
+            /*
             lock (dataSem)
             {
                 try
@@ -122,6 +128,7 @@ namespace WPILib
 
                 }
             }
+             * */
         }
 
         protected void GetData()
