@@ -137,18 +137,20 @@ namespace WPILib
                 Environment.Exit(1);
                 return;
             }
-
-            string file = "/tmp/frc_versions/FRC_Lib_Version.ini";
-            try
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
-                if (File.Exists(file))
-                    File.Delete(file);
+                string file = "/tmp/frc_versions/FRC_Lib_Version.ini";
+                try
+                {
+                    if (File.Exists(file))
+                        File.Delete(file);
 
-                File.WriteAllText(file, "RobotDotNet V1.0");
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.StackTrace);
+                    File.WriteAllText(file, "RobotDotNet V1.0");
+                }
+                catch (IOException ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                }
             }
 
             try

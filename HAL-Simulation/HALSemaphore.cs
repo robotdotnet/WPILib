@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace HAL_FRC
 {
@@ -13,9 +14,17 @@ namespace HAL_FRC
 
 
         /// Return Type: MUTEX_ID->void*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexNormal")]
-        public static extern System.IntPtr initializeMutexNormal();
+        //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexNormal")]
+        //public static extern System.IntPtr initializeMutexNormal();
 
+        public static IntPtr initializeMutexNormal()
+        {
+            MUTEX_ID p = new MUTEX_ID();
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
+            Marshal.StructureToPtr(p, ptr, true);
+
+            return ptr;
+        }
 
         /// Return Type: void
         ///sem: MUTEX_ID->void*
@@ -72,9 +81,17 @@ namespace HAL_FRC
 
 
         /// Return Type: MULTIWAIT_ID->void*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeMultiWait")]
-        public static extern System.IntPtr initializeMultiWait();
+        //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeMultiWait")]
+        //public static extern System.IntPtr initializeMultiWait();
+        public static IntPtr initializeMultiWait()
+        {
+            MULTIWAIT_ID p = new MULTIWAIT_ID();
+            p.lockObject = new object();
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
+            Marshal.StructureToPtr(p, ptr, true);
 
+            return ptr;
+        }
 
         /// Return Type: void
         ///sem: MULTIWAIT_ID->void*
@@ -86,9 +103,23 @@ namespace HAL_FRC
         ///sem: MULTIWAIT_ID->void*
         ///m: MUTEX_ID->void*
         ///timeout: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "takeMultiWait")]
-        public static extern byte takeMultiWait(System.IntPtr sem, System.IntPtr m, int timeout);
+        //[DllImport("libHALAthena_shared.so", EntryPoint = "takeMultiWait")]
+        //public static extern byte takeMultiWait(System.IntPtr sem, System.IntPtr m, int timeout);
+        public static byte takeMultiWait(IntPtr sem, IntPtr m, int timeout)
+        {
+            lock (HAL.newDataSem)
+            {
+                try
+                {
+                    Monitor.Wait(HAL.newDataSem);
+                }
+                catch (ThreadInterruptedException ex)
+                {
 
+                }
+            }
+            return 0;
+        }
 
         /// Return Type: byte
         ///sem: MULTIWAIT_ID->void*

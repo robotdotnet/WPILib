@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.InteropServices;
 
 namespace HAL_FRC
 {
@@ -88,15 +89,30 @@ namespace HAL_FRC
 
         /// Return Type: void*
         ///pin: byte
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPort")]
-        public static extern System.IntPtr GetPort(byte pin);
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPort")]
+        //public static extern System.IntPtr GetPort(byte pin);
+
+        public static IntPtr GetPort(byte pin)
+        {
+            return GetPortWithModule(1, pin);
+        }
+
+        public static IntPtr GetPortWithModule(byte module, byte pin)
+        {
+            Port port = new Port();
+            port.pin = pin;
+            port.module = module;
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(port));
+            Marshal.StructureToPtr(port, ptr, true);
+            return ptr;
+        }
 
 
         /// Return Type: void*
         ///module: byte
         ///pin: byte
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPortWithModule")]
-        public static extern System.IntPtr GetPortWithModule(byte module, byte pin);
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPortWithModule")]
+        //public static extern System.IntPtr GetPortWithModule(byte module, byte pin);
 
 
         /// Return Type: char*
@@ -195,9 +211,15 @@ namespace HAL_FRC
 
         /// Return Type: void
         ///sem: void*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALSetNewDataSem")]
-        public static extern void SetNewDataSem(System.IntPtr sem);
-
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALSetNewDataSem")]
+        //public static extern void SetNewDataSem(System.IntPtr sem);
+        internal static object newDataSem;
+        
+        public static void SetNewDataSem(IntPtr sem)
+        {
+            MULTIWAIT_ID p = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            newDataSem = p.lockObject;
+        }
 
         /// Return Type: boolean
         ///status: int*
@@ -218,7 +240,7 @@ namespace HAL_FRC
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALInitialize")]
         private static extern int HALInitialize(int mode = 0);
 
-
+        /*
         /// Return Type: void
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramStarting")]
         public static extern void NetworkCommunicationObserveUserProgramStarting();
@@ -242,6 +264,45 @@ namespace HAL_FRC
         /// Return Type: void
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTest")]
         public static extern void NetworkCommunicationObserveUserProgramTest();
+         * */
+
+        /// Return Type: void
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramStarting")]
+        public static  void NetworkCommunicationObserveUserProgramStarting()
+        {
+
+        }
+
+
+        /// Return Type: void
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramDisabled")]
+        public static  void NetworkCommunicationObserveUserProgramDisabled()
+        {
+
+        }
+
+
+        /// Return Type: void
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramAutonomous")]
+        public static  void NetworkCommunicationObserveUserProgramAutonomous()
+        {
+
+        }
+
+
+        /// Return Type: void
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTeleop")]
+        public static void NetworkCommunicationObserveUserProgramTeleop()
+        {
+        }
+        
+
+        /// Return Type: void
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTest")]
+        public static  void NetworkCommunicationObserveUserProgramTest()
+        {
+
+        }
 
 
         /// Return Type: unsigned int
@@ -249,9 +310,12 @@ namespace HAL_FRC
         ///instanceNumber: byte
         ///context: byte
         ///feature: char*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALReport")]
-        private static extern uint HALReport(byte resource, byte instanceNumber, byte context = 0, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string feature = null);
-
+        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALReport")]
+        //private static extern uint HALReport(byte resource, byte instanceNumber, byte context = 0, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string feature = null);
+        private static uint HALReport(byte resource, byte instanceNumber, byte context = 0, string feature = null)
+        {
+            return 0;
+        }
 
         /// Return Type: void
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "NumericArrayResize")]
@@ -308,11 +372,15 @@ namespace HAL_FRC
 
         public static void Initialize(int mode = 0)
         {
+            return;
+            //Do dictionary and other initialization here
+            /*
             var rv = HALInitialize();
             if (rv == 0)
             {
                 //Throw exception saying HAL not initialized
             }
+             * */
 
 
         }
@@ -364,7 +432,7 @@ namespace HAL_FRC
         {
             //HALControlWord temp = new HALControlWord();
             uint temp = 0;
-            GetControlWord(ref temp);
+            //GetControlWord(ref temp);
             return new HALControlWord(temp);
         }
     }

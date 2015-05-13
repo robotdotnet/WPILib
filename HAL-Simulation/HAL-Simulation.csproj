@@ -49,6 +49,7 @@
     <Compile Include="HALSemaphore.cs" />
     <Compile Include="HALSerialPort.cs" />
     <Compile Include="HALSolenoid.cs" />
+    <Compile Include="HALStructures.cs" />
     <Compile Include="HALUsageReporter.cs" />
     <Compile Include="HALUtilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
