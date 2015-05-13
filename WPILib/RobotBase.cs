@@ -116,15 +116,15 @@ namespace WPILib
             HAL.Initialize();
         }
 
-        public static void main(string RobotName)
+        public static void main(string RobotAssembly, string RobotName)
         {
             InitializeHardwareConfiguration();
             HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_Python);
-
             RobotBase robot;
             try
             {
-                robot = (RobotBase)(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(RobotName));
+                robot = (RobotBase) (Activator.CreateInstance(RobotAssembly, RobotName)).Unwrap();
+                //robot = (RobotBase)(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(RobotName));
                 robot.Prestart();
             }
             catch (Exception ex)

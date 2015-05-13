@@ -4,147 +4,6 @@ using System.Text;
 
 namespace HAL_FRC
 {
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALControlWord
-    {
-
-        /// enabled : 1
-        ///autonomous : 1
-        ///test : 1
-        ///eStop : 1
-        ///fmsAttached : 1
-        ///dsAttached : 1
-        ///control_reserved : 26
-        public uint bitvector1;
-
-        public uint enabled
-        {
-            get
-            {
-                return ((uint)((this.bitvector1 & 1u)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)((value | this.bitvector1)));
-            }
-        }
-
-        public uint autonomous
-        {
-            get
-            {
-                return ((uint)(((this.bitvector1 & 2u)
-                            / 2)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)(((value * 2)
-                            | this.bitvector1)));
-            }
-        }
-
-        public uint test
-        {
-            get
-            {
-                return ((uint)(((this.bitvector1 & 4u)
-                            / 4)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)(((value * 4)
-                            | this.bitvector1)));
-            }
-        }
-
-        public uint eStop
-        {
-            get
-            {
-                return ((uint)(((this.bitvector1 & 8u)
-                            / 8)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)(((value * 8)
-                            | this.bitvector1)));
-            }
-        }
-
-        public uint fmsAttached
-        {
-            get
-            {
-                return ((uint)(((this.bitvector1 & 16u)
-                            / 16)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)(((value * 16)
-                            | this.bitvector1)));
-            }
-        }
-
-        public uint dsAttached
-        {
-            get
-            {
-                return ((uint)(((this.bitvector1 & 32u)
-                            / 32)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)(((value * 32)
-                            | this.bitvector1)));
-            }
-        }
-
-        public uint control_reserved
-        {
-            get
-            {
-                return ((uint)(((this.bitvector1 & 4294967232u)
-                            / 64)));
-            }
-            set
-            {
-                this.bitvector1 = ((uint)(((value * 64)
-                            | this.bitvector1)));
-            }
-        }
-
-        public bool GetEnabled()
-        {
-            return Convert.ToBoolean(enabled);
-        }
-
-        public bool GetAutonomous()
-        {
-            return Convert.ToBoolean(autonomous);
-        }
-
-        public bool GetTest()
-        {
-            return Convert.ToBoolean(test);
-        }
-
-        public bool GetEStop()
-        {
-            return Convert.ToBoolean(eStop);
-        }
-
-        public bool GetFMSAttached()
-        {
-            return Convert.ToBoolean(fmsAttached);
-        }
-
-        public bool GetDSAttached()
-        {
-            return Convert.ToBoolean(dsAttached);
-        }
-
-    }
-
     public enum HALAllianceStationID
     {
 
@@ -282,7 +141,7 @@ namespace HAL_FRC
         /// Return Type: int
         ///data: HALControlWord*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALGetControlWord")]
-        private static extern int GetControlWord(ref HALControlWord data);
+        private static extern int GetControlWord(ref uint data);
 
 
         /// Return Type: int
@@ -503,9 +362,52 @@ namespace HAL_FRC
 
         public static HALControlWord GetControlWord()
         {
-            HALControlWord temp = new HALControlWord();
+            //HALControlWord temp = new HALControlWord();
+            uint temp = 0;
             GetControlWord(ref temp);
-            return temp;
+            return new HALControlWord(temp);
         }
+    }
+
+    public struct HALControlWord
+    {
+        private uint wordData;
+
+        public HALControlWord(uint data)
+        {
+            wordData = data;
+        }
+
+        public bool GetEnabled()
+        {
+            return (wordData & (1 << 1 - 1)) != 0;
+        }
+
+        public bool GetAutonomous()
+        {
+            return (wordData & (1 << 2 - 1)) != 0;
+        }
+
+        public bool GetTest()
+        {
+            return (wordData & (1 << 3 - 1)) != 0;
+        }
+
+        public bool GetEStop()
+        {
+            return (wordData & (1 << 4 - 1)) != 0;
+        }
+
+        public bool GetFMSAttached()
+        {
+            return (wordData & (1 << 5 - 1)) != 0;
+        }
+
+        public bool GetDSAttached()
+        {
+            return (wordData & (1 << 6 - 1)) != 0;
+        }
+
+
     }
 }

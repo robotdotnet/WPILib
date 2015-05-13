@@ -28,7 +28,6 @@ namespace WPILib
             }
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
-            Console.WriteLine(portPointer.ToString());
             int status = 0;
             _port = HALDigital.initializeDigitalPort(portPointer, ref status);
             HALDigital.allocateDIO(_port, input, ref status);
