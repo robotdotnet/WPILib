@@ -14,6 +14,8 @@ namespace WPILib
         Both = 0x101,
     }
 
+    public delegate void InterruptHandlerFunction();
+
     public abstract class InterruptableSensorBase : SensorBase
     {
         //figure this out
@@ -34,8 +36,14 @@ namespace WPILib
         public abstract int GetChannelForRouting();
         public abstract byte GetModuleForRouting();
 
-        public void RequestInterupts(InterruptHandlerFunction handler)
+        
+
+        public void RequestInterrupts(InterruptHandlerFunction handler)
         {
+            InterruptHandlerFunctionHAL function = new InterruptHandlerFunctionHAL(delegate(uint mask, IntPtr param)
+            {
+                handler();
+            });
             if (m_interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
@@ -44,8 +52,8 @@ namespace WPILib
 
             int status = 0;
             HALInterrupts.requestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
-            //Set Up Source Edge
-            HALInterrupts.attachInterruptHandler(m_interrupt, handler, IntPtr.Zero, ref status);
+            SetUpSourceEdge(true, false);
+            HALInterrupts.attachInterruptHandler(m_interrupt, function, IntPtr.Zero, ref status);
             //allocate Interupts
         }
 
@@ -61,6 +69,7 @@ namespace WPILib
             int status = 0;
             HALInterrupts.requestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(),
                 GetAnalogTriggerForRouting(), ref status);
+            SetUpSourceEdge(true, false);
             //Setup Source Edge
         }
 

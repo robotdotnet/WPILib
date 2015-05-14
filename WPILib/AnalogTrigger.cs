@@ -8,8 +8,8 @@ namespace WPILib
 {
     public class AnalogTrigger
     {
-        protected IntPtr m_port;
-        protected int m_index;
+        internal IntPtr m_port;
+        internal int m_index;
 
         protected void InitTrigger(int channel)
         {
@@ -83,6 +83,9 @@ namespace WPILib
             return value;
         }
 
-        //Add analogTriggerOutput
+        public AnalogTriggerOutput CreateOutput(AnalogTriggerType type)
+        {
+            return new AnalogTriggerOutput(this, type);
+        }
     }
 }

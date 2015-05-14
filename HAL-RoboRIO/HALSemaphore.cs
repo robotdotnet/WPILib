@@ -10,7 +10,7 @@ namespace HAL_FRC
 
 
         /// Return Type: MUTEX_ID->void*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "nitializeMutexNormal")]
+        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexNormal")]
         public static extern System.IntPtr initializeMutexNormal();
 
 

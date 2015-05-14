@@ -4,7 +4,7 @@ namespace HAL_FRC
     /// Return Type: void
     ///interruptAssertedMask: unsigned int
     ///param: void*
-    public delegate void InterruptHandlerFunction(uint interruptAssertedMask, System.IntPtr param);
+    public delegate void InterruptHandlerFunctionHAL(uint interruptAssertedMask, System.IntPtr param);
 
     public class HALInterrupts
     {
@@ -20,7 +20,7 @@ namespace HAL_FRC
         ///interrupt_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "cleanInterrupts")]
-        public static extern void cleanInterrupts(System.IntPtr interrupt_pointer, ref int status);
+        public static extern void cleanInterrupts(System.IntPtr interruptPointer, ref int status);
 
 
         /// Return Type: unsigned int
@@ -29,35 +29,35 @@ namespace HAL_FRC
         ///ignorePrevious: boolean
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "waitForInterrupt")]
-        public static extern uint waitForInterrupt(System.IntPtr interrupt_pointer, double timeout, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool ignorePrevious, ref int status);
+        public static extern uint waitForInterrupt(System.IntPtr interruptPointer, double timeout, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool ignorePrevious, ref int status);
 
 
         /// Return Type: void
         ///interrupt_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "enableInterrupts")]
-        public static extern void enableInterrupts(System.IntPtr interrupt_pointer, ref int status);
+        public static extern void enableInterrupts(System.IntPtr interruptPointer, ref int status);
 
 
         /// Return Type: void
         ///interrupt_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "disableInterrupts")]
-        public static extern void disableInterrupts(System.IntPtr interrupt_pointer, ref int status);
+        public static extern void disableInterrupts(System.IntPtr interruptPointer, ref int status);
 
 
         /// Return Type: double
         ///interrupt_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "readRisingTimestamp")]
-        public static extern double readRisingTimestamp(System.IntPtr interrupt_pointer, ref int status);
+        public static extern double readRisingTimestamp(System.IntPtr interruptPointer, ref int status);
 
 
         /// Return Type: double
         ///interrupt_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "readFallingTimestamp")]
-        public static extern double readFallingTimestamp(System.IntPtr interrupt_pointer, ref int status);
+        public static extern double readFallingTimestamp(System.IntPtr interruptPointer, ref int status);
 
 
         /// Return Type: void
@@ -67,7 +67,7 @@ namespace HAL_FRC
         ///routing_analog_trigger: boolean
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "requestInterrupts")]
-        public static extern void requestInterrupts(System.IntPtr interrupt_pointer, byte routing_module, uint routing_pin, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool routing_analog_trigger, ref int status);
+        public static extern void requestInterrupts(System.IntPtr interruptPointer, byte routingModule, uint routingPin, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool routingAnalogTrigger, ref int status);
 
 
         /// Return Type: void
@@ -76,7 +76,7 @@ namespace HAL_FRC
         ///param: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "attachInterruptHandler")]
-        public static extern void attachInterruptHandler(System.IntPtr interrupt_pointer, InterruptHandlerFunction handler, System.IntPtr param, ref int status);
+        public static extern void attachInterruptHandler(System.IntPtr interruptPointer, InterruptHandlerFunctionHAL handler, System.IntPtr param, ref int status);
 
 
         /// Return Type: void
@@ -85,6 +85,6 @@ namespace HAL_FRC
         ///fallingEdge: boolean
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setInterruptUpSourceEdge")]
-        public static extern void setInterruptUpSourceEdge(System.IntPtr interrupt_pointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
+        public static extern void setInterruptUpSourceEdge(System.IntPtr interruptPointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
     }
 }

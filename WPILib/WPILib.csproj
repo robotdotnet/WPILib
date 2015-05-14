@@ -40,11 +40,13 @@
     <Compile Include="AccumulatorResult.cs" />
     <Compile Include="AnalogInput.cs" />
     <Compile Include="AnalogTrigger.cs" />
+    <Compile Include="AnalogTriggerOutput.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />
     <Compile Include="DigitalOutput.cs" />
     <Compile Include="DigitalSource.cs" />
     <Compile Include="DriverStation.cs" />
+    <Compile Include="Encoder.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
     <Compile Include="Interfaces\GenericHID.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
