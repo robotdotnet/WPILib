@@ -21,7 +21,7 @@ namespace WPILib
         };
 
         private const double JoystickUnpluggedMessageInterval = 1.0;
-        private double _nextMessageTime = 0.0;
+        private double m_nextMessageTime = 0.0;
 
         //Figure out driver station task
 
@@ -31,18 +31,22 @@ namespace WPILib
         private short[][] _joystickPOVs = new short[JoystickPorts][];
         private HALJoystickButtons[] _joystickButtons = new HALJoystickButtons[JoystickPorts];
 
-        private Thread _thread;
-        private Object _dataSem;
-        private Object _mutex;
-        private bool _threadKeepAlive = true;
-        private bool _userInDisabled = false;
-        private bool _userInAutonomous = false;
-        private bool _userInTeleop = false;
-        private bool _userInTest = false;
-        private bool _newControlData;
+// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        private readonly Thread m_thread;
+        //private Object _dataSem;
+        //private Object _mutex;
+        private bool m_threadKeepAlive = true;
+        private bool m_userInDisabled = false;
+        private bool m_userInAutonomous = false;
+        private bool m_userInTeleop = false;
+        private bool m_userInTest = false;
+        //private bool _newControlData;
 
-        private IntPtr _packetDataAvailableMutex;
-        private IntPtr _packetDataAvailableSem;
+        private IntPtr m_newControlData;
+        private IntPtr m_packetDataAvailableMultiWait;
+        private IntPtr m_packetDataAvailableMutex;
+        private IntPtr m_waitForDataSem;
+        private IntPtr m_waitForDataMutex;
 
         public static DriverStation GetInstance()
         {
@@ -51,8 +55,8 @@ namespace WPILib
 
         protected DriverStation()
         {
-            _dataSem = new object();
-            _mutex = new object();
+            //_dataSem = new object();
+            //_mutex = new object();
             for (int i = 0; i < JoystickPorts; i++)
             {
                 _joystickButtons[i] = new HALJoystickButtons();
@@ -60,26 +64,35 @@ namespace WPILib
                 _joystickPOVs[i] = new short[12];
             }
 
-            _packetDataAvailableMutex = HALSemaphore.initializeMutexNormal();
-            _packetDataAvailableSem = HALSemaphore.initializeMultiWait();
-            HAL.SetNewDataSem(_packetDataAvailableSem);
+            m_packetDataAvailableMultiWait = HALSemaphore.initializeMultiWait();
+            m_newControlData = HALSemaphore.initializeSemaphore(0);
 
-            _thread = new Thread(Task) { Priority = ThreadPriority.AboveNormal };
-            _thread.Start();
+            m_waitForDataSem = HALSemaphore.initializeMultiWait();
+            m_waitForDataMutex = HALSemaphore.initializeMutexNormal();
+
+
+            m_packetDataAvailableMutex = HALSemaphore.initializeMutexNormal();
+            //m_packetDataAvailableSem = HALSemaphore.initializeMultiWait();
+            HAL.SetNewDataSem(m_packetDataAvailableMultiWait);
+
+            m_thread = new Thread(Task) { Priority = ThreadPriority.AboveNormal };
+            m_thread.Start();
         }
 
         public void Release()
         {
-            _threadKeepAlive = false;
+            m_threadKeepAlive = false;
         }
 
         private void Task()
         {
             int safetyCounter = 0;
-            while (_threadKeepAlive)
+            while (m_threadKeepAlive)
             {
-                HALSemaphore.takeMultiWait(_packetDataAvailableSem, _packetDataAvailableMutex, 0);
+                //Console.WriteLine("Running DS Loop");
+                HALSemaphore.takeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
                 GetData();
+                HALSemaphore.giveMultiWait(m_waitForDataSem);
                 //HALSemaphore.giveMultiWait(dataSem);
 
                 /*
@@ -87,31 +100,31 @@ namespace WPILib
                 {
                     GetData();
                 }
-                 * */
+                 * *
                 lock (_dataSem)
                 {
                     Monitor.PulseAll(_dataSem);
                 }
-
+                */
                 if (++safetyCounter >= 4)
                 {
                     MotorSafetyHelper.CheckMotors();
                     safetyCounter = 0;
                 }
-                if (_userInDisabled)
+                if (m_userInDisabled)
                     HAL.NetworkCommunicationObserveUserProgramDisabled();
-                if (_userInAutonomous)
+                if (m_userInAutonomous)
                     HAL.NetworkCommunicationObserveUserProgramAutonomous();
-                if (_userInTeleop)
+                if (m_userInTeleop)
                     HAL.NetworkCommunicationObserveUserProgramTeleop();
-                if (_userInTest)
+                if (m_userInTest)
                     HAL.NetworkCommunicationObserveUserProgramTest();
             }
         }
 
         public void WaitForData(long timeout = 0)
         {
-            HALSemaphore.takeMultiWait(_packetDataAvailableSem, _packetDataAvailableMutex, -1);
+            HALSemaphore.takeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
             /*
             lock (dataSem)
             {
@@ -129,6 +142,7 @@ namespace WPILib
 
         protected void GetData()
         {
+            /*
             lock (_mutex)
             {
                 for (byte stick = 0; stick < JoystickPorts; stick++)
@@ -139,6 +153,14 @@ namespace WPILib
                 }
                 _newControlData = true;
             }
+             * */
+            for (byte stick = 0; stick < JoystickPorts; stick++)
+            {
+                _joystickAxes[stick] = HAL.GetJoystickAxes(stick);
+                _joystickPOVs[stick] = HAL.GetJoystickPOVs(stick);
+                _joystickButtons[stick] = HAL.GetJoystickButtons(stick);
+            }
+            HALSemaphore.giveSemaphore(m_newControlData);
         }
 
         public double GetBatteryVoltage()
@@ -150,10 +172,10 @@ namespace WPILib
         private void ReportJoystickUnpluggedError(String message)
         {
             double currentTime = Timer.GetFPGATimestamp();
-            if (currentTime > _nextMessageTime)
+            if (currentTime > m_nextMessageTime)
             {
                 ReportError(message, false);
-                _nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
+                m_nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
             }
         }
 
@@ -168,26 +190,25 @@ namespace WPILib
             {
                 throw new SystemException("Joystick axis is out of range");
             }
-            lock (_mutex)
+
+            if (axis >= _joystickAxes[stick].Length)
             {
-                if (axis >= _joystickAxes[stick].Length)
-                {
-                    ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
-                                                 " not available, check if controller is plugged in\n");
-                    return 0.0;
-                }
-
-                sbyte value = (sbyte)_joystickAxes[stick][axis];
-
-                if (value < 0)
-                {
-                    return value / 128.0;
-                }
-                else
-                {
-                    return value / 127.0;
-                }
+                ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
+                                             " not available, check if controller is plugged in\n");
+                return 0.0;
             }
+
+            sbyte value = (sbyte)_joystickAxes[stick][axis];
+
+            if (value < 0)
+            {
+                return value / 128.0;
+            }
+            else
+            {
+                return value / 127.0;
+            }
+
         }
 
         public int GetStickAxisCount(int stick)
@@ -196,10 +217,9 @@ namespace WPILib
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
-            lock (_mutex)
-            {
-                return _joystickAxes[stick].Length;
-            }
+
+            return _joystickAxes[stick].Length;
+
         }
 
         public int GetStickPOV(int stick, int pov)
@@ -214,17 +234,16 @@ namespace WPILib
                 throw new SystemException("Joystick POV is out of range");
             }
 
-            lock (_mutex)
-            {
-                if (pov >= _joystickPOVs[stick].Length)
-                {
-                    ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
-                                                 " not available, check if controller is plugged in\n");
-                    return 0;
-                }
 
-                return _joystickPOVs[stick][pov];
+            if (pov >= _joystickPOVs[stick].Length)
+            {
+                ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
+                                             " not available, check if controller is plugged in\n");
+                return 0;
             }
+
+            return _joystickPOVs[stick][pov];
+
         }
 
         public int GetStickPOVCount(int stick)
@@ -233,10 +252,9 @@ namespace WPILib
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
-            lock (_mutex)
-            {
-                return _joystickPOVs[stick].Length;
-            }
+
+            return _joystickPOVs[stick].Length;
+
         }
 
         public int GetStickButtons(int stick)
@@ -246,10 +264,9 @@ namespace WPILib
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            lock (_mutex)
-            {
-                return (int)_joystickButtons[stick].buttons;
-            }
+
+            return (int)_joystickButtons[stick].buttons;
+
         }
 
         public bool GetStickButton(int stick, byte button)
@@ -259,22 +276,20 @@ namespace WPILib
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            lock (_mutex)
+            if (button > _joystickButtons[stick].count)
             {
-                if (button > _joystickButtons[stick].count)
-                {
-                    ReportJoystickUnpluggedError("WARNING: Joystick Button " + button + " on port " + stick +
-                                                 " not available, check if controller is plugged in\n");
-                    return false;
-                }
-
-                if (button <= 0)
-                {
-                    ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
-                    return false;
-                }
-                return ((0x1 << (button - 1)) & _joystickButtons[stick].buttons) != 0;
+                ReportJoystickUnpluggedError("WARNING: Joystick Button " + button + " on port " + stick +
+                                             " not available, check if controller is plugged in\n");
+                return false;
             }
+
+            if (button <= 0)
+            {
+                ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
+                return false;
+            }
+            return ((0x1 << (button - 1)) & _joystickButtons[stick].buttons) != 0;
+
         }
 
         public int GetStickButtonCount(int stick)
@@ -284,10 +299,8 @@ namespace WPILib
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            lock (_mutex)
-            {
-                return _joystickButtons[stick].count;
-            }
+            return _joystickButtons[stick].count;
+
         }
 
         /**
@@ -368,12 +381,15 @@ namespace WPILib
 
         public bool IsNewControlData()
         {
+            return HALSemaphore.tryTakeSemaphore(m_newControlData) == 0;
+            /*
             lock (_mutex)
             {
                 bool result = _newControlData;
                 _newControlData = false;
                 return result;
             }
+             * */
         }
 
         public Alliance GetAlliance()
@@ -469,7 +485,7 @@ namespace WPILib
 
         public void InDisabled(bool entering)
         {
-            _userInDisabled = entering;
+            m_userInDisabled = entering;
         }
 
         /** Only to be used to tell the Driver Station what code you claim to be executing
@@ -478,7 +494,7 @@ namespace WPILib
 
         public void InAutonomous(bool entering)
         {
-            _userInAutonomous = entering;
+            m_userInAutonomous = entering;
         }
 
         /** Only to be used to tell the Driver Station what code you claim to be executing
@@ -487,7 +503,7 @@ namespace WPILib
 
         public void InOperatorControl(bool entering)
         {
-            _userInTeleop = entering;
+            m_userInTeleop = entering;
         }
 
         /** Only to be used to tell the Driver Station what code you claim to be executing
@@ -496,7 +512,7 @@ namespace WPILib
 
         public void InTest(bool entering)
         {
-            _userInTest = entering;
+            m_userInTest = entering;
         }
     }
 }
