@@ -50,10 +50,12 @@
     <Compile Include="Interfaces\PIDOutput.cs" />
     <Compile Include="Interfaces\PIDSource.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
+    <Compile Include="Interfaces\TimerEventHandler.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
+    <Compile Include="Notifier.cs" />
     <Compile Include="PWM.cs" />
     <Compile Include="RobotBase.cs" />
     <Compile Include="RobotDrive.cs" />
