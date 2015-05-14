@@ -33,6 +33,7 @@ namespace WPILib
         public Semaphore m_handler_semaphore = new Semaphore(1, 1);
 
 
+
         public Notifier(TimerEventHandler handler, object param)
         {
             m_handler = handler;
@@ -43,9 +44,9 @@ namespace WPILib
                 {
                     
                     int status = 0;
-                    HALNotifier.initializeNotifier(s_notifier_process_queue, ref status);
-                    //HALNotifier.initializeNotifier(handler, ref status);
+                    s_notifier = HALNotifier.initializeNotifier(s_notifier_process_queue, ref status);
                 }
+                s_ref_count++;
             }
         }
 
@@ -80,19 +81,22 @@ namespace WPILib
             else
             {
                 Notifier last = s_timer_queue_head;
-                Notifier cur = s_timer_queue_head.m_next_event;
+                Notifier cur;
                 bool looking = true;
+
                 while (looking)
                 {
+                    cur = last.m_next_event;
                     if (cur == null || cur.m_expiration_time > this.m_expiration_time)
                     {
                         last.m_next_event = this;
                         this.m_next_event = cur;
                         looking = false;
                     }
-                }
+                    last = last.m_next_event;
+                }              
             }
-            m_queued = false;
+            m_queued = true;
         }
 
         public void DeleteFromQueue()
@@ -133,6 +137,7 @@ namespace WPILib
 
         public void StartPeriodic(double period)
         {
+            
             lock (s_queue_semaphore)
             {
                 m_periodic = true;

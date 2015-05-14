@@ -458,6 +458,7 @@ namespace WPILib
             TextWriter errorWriter = Console.Error;
             errorWriter.WriteLine(errorString);
             errorWriter.Close();
+            
 
             HALControlWord controlWord = HAL.GetControlWord();
             if (controlWord.GetDSAttached())
