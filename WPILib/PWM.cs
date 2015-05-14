@@ -112,9 +112,10 @@ namespace WPILib
             }
 
             int rawValue;
+            
             // note, need to perform the multiplication below as floating point before converting to int
             rawValue = (int)((pos * (double)GetFullRangeScaleFactor()) + GetMinNegativePwm());
-
+            
             // send the computed pwm value to the FPGA
             SetRaw(rawValue);
         }
