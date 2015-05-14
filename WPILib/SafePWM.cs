@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using WPILib.Util;
@@ -10,7 +12,7 @@ namespace WPILib
     {
         private MotorSafetyHelper _safetyHelper;
 
-        void InitSafePWM()
+        private void InitSafePWM()
         {
             _safetyHelper = new MotorSafetyHelper(this);
             _safetyHelper.SetExpiration(0.0);

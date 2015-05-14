@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -15,13 +17,10 @@ namespace WPILib
         protected RobotBase()
         {
             m_ds = DriverStation.GetInstance();
-
-
         }
 
         public void Free()
         {
-
         }
 
         /**
@@ -123,13 +122,12 @@ namespace WPILib
             RobotBase robot;
             try
             {
-                robot = (RobotBase) (Activator.CreateInstance(RobotAssembly, RobotName)).Unwrap();
+                robot = (RobotBase)(Activator.CreateInstance(RobotAssembly, RobotName)).Unwrap();
                 //robot = (RobotBase)(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(RobotName));
                 robot.Prestart();
             }
             catch (Exception ex)
             {
-
                 DriverStation.ReportError("EROR Unhandled exception instantiating robot " + RobotName + " " + ex.ToString() + " at " + ex.StackTrace, false);//"ERROR Could not instantiate robot", true);
                 //Log Robots dont quit
                 Console.Error.WriteLine("WARNING: Robots don't quit!");
@@ -162,7 +160,6 @@ namespace WPILib
             {
                 DriverStation.ReportError("ERROR Unhandled exception", true);
                 return;
-                
             }
             finally
             {

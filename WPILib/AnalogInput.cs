@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using WPILib.Interfaces;
@@ -10,10 +12,10 @@ namespace WPILib
     public class AnalogInput : SensorBase, PIDSource
     {
         //private static int AccumulatorSlot = 1;
-        private static Resource channels = new Resource(AnalogInputChannels);
+        private static Resource s_channels = new Resource(AnalogInputChannels);
         private IntPtr _port;
         private int _channel;
-        private static int[] AccumulatorChannels = { 0, 1 };
+        private static int[] s_accumulatorChannels = { 0, 1 };
         private long _accumulatorOffset;
 
         public AnalogInput(int channel)
@@ -24,15 +26,15 @@ namespace WPILib
 
             try
             {
-                channels.Allocate(channel);
+                s_channels.Allocate(channel);
             }
-            catch( CheckedAllocationException ex)
+            catch (CheckedAllocationException ex)
             {
                 throw new AllocationException("Analog input channel " + _channel
                      + " is already allocated");
             }
 
-            IntPtr portPointer = HAL.GetPort((byte) channel);
+            IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
             _port = HALAnalog.initializeAnalogInputPort(portPointer, ref status);
             HAL.Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
@@ -40,7 +42,7 @@ namespace WPILib
 
         public override void Free()
         {
-            channels.Free(_channel);
+            s_channels.Free(_channel);
             _channel = 0;
             _accumulatorOffset = 0;
         }
@@ -115,7 +117,7 @@ namespace WPILib
         {
             int status = 0;
             uint value = HALAnalog.getAnalogOversampleBits(_port, ref status);
-            return (int) value;
+            return (int)value;
         }
 
         public void InitAccumulator()
@@ -145,7 +147,7 @@ namespace WPILib
             Timer.Delay(sampleTime * overSamples * averageSamples);
         }
 
-        public void SetAccumulatorDeadband (int deadband)
+        public void SetAccumulatorDeadband(int deadband)
         {
             int status = 0;
             HALAnalog.setAccumulatorDeadband(_port, deadband, ref status);
@@ -181,12 +183,12 @@ namespace WPILib
             result.count = count;
         }
 
-        
+
         public bool IsAccumulatorChannel()
         {
-            for (int i = 0; i < AccumulatorChannels.Length; i++)
+            for (int i = 0; i < s_accumulatorChannels.Length; i++)
             {
-                if (_channel == AccumulatorChannels[i])
+                if (_channel == s_accumulatorChannels[i])
                 {
                     return true;
                 }

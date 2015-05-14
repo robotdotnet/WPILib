@@ -1,4 +1,5 @@
-﻿namespace HAL_FRC
+﻿
+namespace HAL_FRC
 {
     /// Return Type: void
     ///interruptAssertedMask: unsigned int
@@ -7,7 +8,6 @@
 
     public class HALInterrupts
     {
-
         /// Return Type: void*
         ///interruptIndex: unsigned int
         ///watcher: boolean
@@ -86,6 +86,5 @@
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setInterruptUpSourceEdge")]
         public static extern void setInterruptUpSourceEdge(System.IntPtr interrupt_pointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
-
     }
 }

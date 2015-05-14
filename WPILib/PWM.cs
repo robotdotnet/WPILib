@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -37,7 +39,7 @@ namespace WPILib
         private void InitPwm(int channel)
         {
             CheckPwmChannel(channel);
-            this._channel = channel;
+            _channel = channel;
 
             int status = 0;
             _port = HALDigital.initializeDigitalPort(HAL.GetPort((byte)channel), ref status);
@@ -51,8 +53,6 @@ namespace WPILib
             _eliminateDeadband = false;
 
             HAL.Report(ResourceType.kResourceType_PWM, (byte)channel);
-
-
         }
 
         public PWM(int channel)
@@ -70,7 +70,7 @@ namespace WPILib
 
         public void EnableDeadbandElimination(bool eliminateDeadband)
         {
-            this._eliminateDeadband = eliminateDeadband;
+            _eliminateDeadband = eliminateDeadband;
         }
 
         public void SetBounds(int max, int deadbandMax, int center, int deadbandMin, int min)
@@ -112,10 +112,10 @@ namespace WPILib
             }
 
             int rawValue;
-            
+
             // note, need to perform the multiplication below as floating point before converting to int
             rawValue = (int)((pos * (double)GetFullRangeScaleFactor()) + GetMinNegativePwm());
-            
+
             // send the computed pwm value to the FPGA
             SetRaw(rawValue);
         }
@@ -273,6 +273,6 @@ namespace WPILib
         protected int GetFullRangeScaleFactor()
         {
             return GetMaxPositivePwm() - GetMinNegativePwm();
-        } 
+        }
     }
 }

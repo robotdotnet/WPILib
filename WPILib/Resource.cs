@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using WPILib.Util;
@@ -7,45 +9,45 @@ namespace WPILib
 {
     public class Resource
     {
-        private static Resource resourceList = null;
+        private static Resource s_resourceList = null;
 
-        private readonly bool[] numAllocated;
-        private readonly int size;
-        private readonly Resource nextResource;
+        private readonly bool[] _numAllocated;
+        private readonly int _size;
+        private readonly Resource _nextResource;
 
 
         public static void Reset()
         {
-            for (Resource r = Resource.resourceList; r != null; r = r.nextResource)
+            for (Resource r = Resource.s_resourceList; r != null; r = r._nextResource)
             {
-                for (int i = 0; i < r.size; i++)
+                for (int i = 0; i < r._size; i++)
                 {
-                    r.numAllocated[i] = false;
+                    r._numAllocated[i] = false;
                 }
             }
         }
 
         public Resource(int size)
         {
-            this.size = size;
-            numAllocated = new bool[size];
+            _size = size;
+            _numAllocated = new bool[size];
 
-            for (int i = 0; i < this.size; i++)
+            for (int i = 0; i < _size; i++)
             {
-                numAllocated[i] = false;
+                _numAllocated[i] = false;
             }
 
-            nextResource = Resource.resourceList;
-            Resource.resourceList = this;
+            _nextResource = Resource.s_resourceList;
+            Resource.s_resourceList = this;
         }
 
         public int Allocate()
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < _size; i++)
             {
-                if (!numAllocated[i])
+                if (!_numAllocated[i])
                 {
-                    numAllocated[i] = true;
+                    _numAllocated[i] = true;
                     return i;
                 }
             }
@@ -54,25 +56,25 @@ namespace WPILib
 
         public int Allocate(int index)
         {
-            if (index >= size || index < 0)
+            if (index >= _size || index < 0)
             {
                 throw new CheckedAllocationException("Index " + index + " out of range");
             }
-            if (numAllocated[index] == true)
+            if (_numAllocated[index] == true)
             {
                 throw new CheckedAllocationException("Resource at index " + index + " already allocated");
             }
-            numAllocated[index] = true;
+            _numAllocated[index] = true;
             return index;
         }
 
         public void Free(int index)
         {
-            if (!numAllocated[index])
+            if (!_numAllocated[index])
             {
                 throw new AllocationException("No resource available to be freed");
             }
-            numAllocated[index] = false;
+            _numAllocated[index] = false;
         }
     }
 }

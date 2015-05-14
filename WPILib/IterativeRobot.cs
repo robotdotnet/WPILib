@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -7,22 +9,21 @@ namespace WPILib
 {
     public class IterativeRobot : RobotBase
     {
-        private bool m_disabledInitialized;
-        private bool m_autonomousInitialized;
-        private bool m_teleopInitialized;
-        private bool m_testInitialized;
+        private bool _disabledInitialized;
+        private bool _autonomousInitialized;
+        private bool _teleopInitialized;
+        private bool _testInitialized;
 
         public IterativeRobot() : base()
         {
-            m_autonomousInitialized = false;
-            m_disabledInitialized = false;
-            m_teleopInitialized = false;
-            m_testInitialized = false;
+            _autonomousInitialized = false;
+            _disabledInitialized = false;
+            _teleopInitialized = false;
+            _testInitialized = false;
         }
 
         protected override void Prestart()
         {
-            
         }
 
         public override void StartCompetition()
@@ -41,15 +42,15 @@ namespace WPILib
                 {
                     // call DisabledInit() if we are now just entering disabled mode from
                     // either a different mode or from power-on
-                    if (!m_disabledInitialized)
+                    if (!_disabledInitialized)
                     {
                         //LiveWindow.setEnabled(false);
                         DisabledInit();
-                        m_disabledInitialized = true;
+                        _disabledInitialized = true;
                         // reset the initialization flags for the other modes
-                        m_autonomousInitialized = false;
-                        m_teleopInitialized = false;
-                        m_testInitialized = false;
+                        _autonomousInitialized = false;
+                        _teleopInitialized = false;
+                        _testInitialized = false;
                     }
                     if (NextPeriodReady())
                     {
@@ -61,14 +62,14 @@ namespace WPILib
                 {
                     // call TestInit() if we are now just entering test mode from either
                     // a different mode or from power-on
-                    if (!m_testInitialized)
+                    if (!_testInitialized)
                     {
                         //LiveWindow.setEnabled(true);
                         TestInit();
-                        m_testInitialized = true;
-                        m_autonomousInitialized = false;
-                        m_teleopInitialized = false;
-                        m_disabledInitialized = false;
+                        _testInitialized = true;
+                        _autonomousInitialized = false;
+                        _teleopInitialized = false;
+                        _disabledInitialized = false;
                     }
                     if (NextPeriodReady())
                     {
@@ -80,17 +81,17 @@ namespace WPILib
                 {
                     // call Autonomous_Init() if this is the first time
                     // we've entered autonomous_mode
-                    if (!m_autonomousInitialized)
+                    if (!_autonomousInitialized)
                     {
                         //LiveWindow.setEnabled(false);
                         // KBS NOTE: old code reset all PWMs and relays to "safe values"
                         // whenever entering autonomous mode, before calling
                         // "Autonomous_Init()"
                         AutonomousInit();
-                        m_autonomousInitialized = true;
-                        m_testInitialized = false;
-                        m_teleopInitialized = false;
-                        m_disabledInitialized = false;
+                        _autonomousInitialized = true;
+                        _testInitialized = false;
+                        _teleopInitialized = false;
+                        _disabledInitialized = false;
                     }
                     if (NextPeriodReady())
                     {
@@ -102,14 +103,14 @@ namespace WPILib
                 {
                     // call Teleop_Init() if this is the first time
                     // we've entered teleop_mode
-                    if (!m_teleopInitialized)
+                    if (!_teleopInitialized)
                     {
                         //LiveWindow.setEnabled(false);
                         TeleopInit();
-                        m_teleopInitialized = true;
-                        m_testInitialized = false;
-                        m_autonomousInitialized = false;
-                        m_disabledInitialized = false;
+                        _teleopInitialized = true;
+                        _testInitialized = false;
+                        _autonomousInitialized = false;
+                        _disabledInitialized = false;
                     }
                     if (NextPeriodReady())
                     {
@@ -140,37 +141,30 @@ namespace WPILib
 
         public virtual void DisabledPeriodic()
         {
-            
         }
 
         public virtual void TestInit()
         {
-            
         }
 
         public virtual void TestPeriodic()
         {
-            
         }
 
         public virtual void AutonomousInit()
         {
-            
         }
 
         public virtual void AutonomousPeriodic()
         {
-            
         }
 
         public virtual void TeleopInit()
         {
-            
         }
 
         public virtual void TeleopPeriodic()
         {
-            
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
@@ -7,7 +9,6 @@ namespace HAL_FRC
 {
     public enum HALAllianceStationID
     {
-
         kHALAllianceStationID_red1,
 
         kHALAllianceStationID_red2,
@@ -24,7 +25,6 @@ namespace HAL_FRC
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct HALJoystickAxes
     {
-
         /// unsigned short
         public ushort count;
 
@@ -36,7 +36,6 @@ namespace HAL_FRC
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct HALJoystickPOVs
     {
-
         /// unsigned short
         public ushort count;
 
@@ -48,7 +47,6 @@ namespace HAL_FRC
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct HALJoystickButtons
     {
-
         /// unsigned int
         public uint buttons;
 
@@ -59,7 +57,6 @@ namespace HAL_FRC
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
     public struct HALJoystickDescriptor
     {
-
         /// byte
         public byte isXbox;
 
@@ -214,7 +211,7 @@ namespace HAL_FRC
         //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALSetNewDataSem")]
         //public static extern void SetNewDataSem(System.IntPtr sem);
         internal static object newDataSem;
-        
+
         public static void SetNewDataSem(IntPtr sem)
         {
             MULTIWAIT_ID p = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
@@ -268,25 +265,22 @@ namespace HAL_FRC
 
         /// Return Type: void
         //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramStarting")]
-        public static  void NetworkCommunicationObserveUserProgramStarting()
+        public static void NetworkCommunicationObserveUserProgramStarting()
         {
-
         }
 
 
         /// Return Type: void
         //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramDisabled")]
-        public static  void NetworkCommunicationObserveUserProgramDisabled()
+        public static void NetworkCommunicationObserveUserProgramDisabled()
         {
-
         }
 
 
         /// Return Type: void
         //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramAutonomous")]
-        public static  void NetworkCommunicationObserveUserProgramAutonomous()
+        public static void NetworkCommunicationObserveUserProgramAutonomous()
         {
-
         }
 
 
@@ -295,13 +289,12 @@ namespace HAL_FRC
         public static void NetworkCommunicationObserveUserProgramTeleop()
         {
         }
-        
+
 
         /// Return Type: void
         //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTest")]
-        public static  void NetworkCommunicationObserveUserProgramTest()
+        public static void NetworkCommunicationObserveUserProgramTest()
         {
-
         }
 
 
@@ -439,43 +432,41 @@ namespace HAL_FRC
 
     public struct HALControlWord
     {
-        private uint wordData;
+        private uint _wordData;
 
         public HALControlWord(uint data)
         {
-            wordData = data;
+            _wordData = data;
         }
 
         public bool GetEnabled()
         {
-            return (wordData & (1 << 1 - 1)) != 0;
+            return (_wordData & (1 << 1 - 1)) != 0;
         }
 
         public bool GetAutonomous()
         {
-            return (wordData & (1 << 2 - 1)) != 0;
+            return (_wordData & (1 << 2 - 1)) != 0;
         }
 
         public bool GetTest()
         {
-            return (wordData & (1 << 3 - 1)) != 0;
+            return (_wordData & (1 << 3 - 1)) != 0;
         }
 
         public bool GetEStop()
         {
-            return (wordData & (1 << 4 - 1)) != 0;
+            return (_wordData & (1 << 4 - 1)) != 0;
         }
 
         public bool GetFMSAttached()
         {
-            return (wordData & (1 << 5 - 1)) != 0;
+            return (_wordData & (1 << 5 - 1)) != 0;
         }
 
         public bool GetDSAttached()
         {
-            return (wordData & (1 << 6 - 1)) != 0;
+            return (_wordData & (1 << 6 - 1)) != 0;
         }
-
-
     }
 }

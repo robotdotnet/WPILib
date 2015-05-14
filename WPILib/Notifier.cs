@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,9 +42,8 @@ namespace WPILib
             m_param = param;
             lock (s_queue_semaphore)
             {
-                if(s_ref_count == 0)
+                if (s_ref_count == 0)
                 {
-                    
                     int status = 0;
                     s_notifier = HALNotifier.initializeNotifier(s_notifier_process_queue, ref status);
                 }
@@ -94,7 +95,7 @@ namespace WPILib
                         looking = false;
                     }
                     last = last.m_next_event;
-                }              
+                }
             }
             m_queued = true;
         }
@@ -115,7 +116,7 @@ namespace WPILib
                 {
                     for (Notifier n = s_timer_queue_head; n != null; n = n.m_next_event)
                     {
-                        if(n.m_next_event == this)
+                        if (n.m_next_event == this)
                         {
                             n.m_next_event = this.m_next_event;
                         }
@@ -137,7 +138,6 @@ namespace WPILib
 
         public void StartPeriodic(double period)
         {
-            
             lock (s_queue_semaphore)
             {
                 m_periodic = true;
@@ -160,16 +160,15 @@ namespace WPILib
             }
             catch (ThreadInterruptedException e)
             {
-
             }
         }
 
         static public void ProcessQueue(int mask)//, object param)
         {
             Notifier current;
-            while(true)
+            while (true)
             {
-                lock(s_queue_semaphore)
+                lock (s_queue_semaphore)
                 {
                     double current_time = Timer.GetFPGATimestamp();
                     current = s_timer_queue_head;
@@ -192,13 +191,12 @@ namespace WPILib
                     }
                     catch (ThreadInterruptedException e)
                     {
-
                     }
                 }
                 current.m_handler.Update(current.m_param);//.Update(current.m_param);
                 current.m_handler_semaphore.Release();
             }
-            lock(s_queue_semaphore)
+            lock (s_queue_semaphore)
             {
                 UpdateAlarm();
             }

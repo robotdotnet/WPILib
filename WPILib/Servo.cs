@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -7,9 +9,8 @@ namespace WPILib
 {
     public class Servo : PWM
     {
-
-        private static double kMaxServoAngle = 180.0;
-        private static double kMinServoAngle = 0.0;
+        private static double s_kMaxServoAngle = 180.0;
+        private static double s_kMinServoAngle = 0.0;
 
         protected static double kDefaultMaxServoPWM = 2.4;
         protected static double kDefaultMinServoPWM = 0.6;
@@ -20,15 +21,14 @@ namespace WPILib
             SetPeriodMultiplier(PeriodMultiplier.k4x_val);
 
             HAL.Report(ResourceType.kResourceType_Servo, (byte)GetChannel());
-
         }
 
-        public Servo (int channel) : base(channel)
+        public Servo(int channel) : base(channel)
         {
             InitServo();
         }
 
-        public void Set (double value)
+        public void Set(double value)
         {
             SetPosition(value);
         }
@@ -40,23 +40,21 @@ namespace WPILib
 
         public void SetAngle(double degrees)
         {
-            if (degrees < kMinServoAngle)
-                degrees = kMinServoAngle;
-            else if (degrees > kMaxServoAngle)
-                degrees = kMaxServoAngle;
-            SetPosition(((degrees - kMinServoAngle)) / GetServoAngleRange());
+            if (degrees < s_kMinServoAngle)
+                degrees = s_kMinServoAngle;
+            else if (degrees > s_kMaxServoAngle)
+                degrees = s_kMaxServoAngle;
+            SetPosition(((degrees - s_kMinServoAngle)) / GetServoAngleRange());
         }
 
         public double GetAngle()
         {
-            return GetPosition() * GetServoAngleRange() + kMinServoAngle;
+            return GetPosition() * GetServoAngleRange() + s_kMinServoAngle;
         }
 
         private double GetServoAngleRange()
         {
-            return kMaxServoAngle - kMinServoAngle;
+            return s_kMaxServoAngle - s_kMinServoAngle;
         }
-
-
     }
 }

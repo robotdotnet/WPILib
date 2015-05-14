@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 
 namespace WPILib
 {
@@ -20,19 +22,18 @@ namespace WPILib
 
         public static readonly int PDPChannels = 16;
 
-        private static int _defaultSolenoidModule = 0;
+        private static int s_defaultSolenoidModule = 0;
 
-        public static int DefaultSolenoidModule { get { return _defaultSolenoidModule; } }
+        public static int DefaultSolenoidModule { get { return s_defaultSolenoidModule; } }
 
         public static void SetDefaultSolenoidModule(int moduleNumber)
         {
             CheckSolenoidModule(moduleNumber);
-            _defaultSolenoidModule = moduleNumber;
+            s_defaultSolenoidModule = moduleNumber;
         }
 
         protected static void CheckSolenoidModule(int moduleNumber)
         {
-
         }
 
         /**
@@ -140,7 +141,6 @@ namespace WPILib
 
         public virtual void Free()
         {
-
         }
     }
 }

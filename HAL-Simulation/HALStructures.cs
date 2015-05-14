@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +8,8 @@ using System.Runtime.InteropServices;
 
 namespace HAL_FRC
 {
-
     //Semaphore
-    
+
     [StructLayout(LayoutKind.Sequential)]
     internal struct MUTEX_ID
     {
@@ -24,7 +25,7 @@ namespace HAL_FRC
     {
         public object lockObject;
     }
-    
+
 
     //HAL
     [StructLayout(LayoutKind.Sequential)]
@@ -33,7 +34,7 @@ namespace HAL_FRC
         public byte pin;
         public byte module;
     }
-    
+
     //Analog
     [StructLayout(LayoutKind.Sequential)]
     internal struct AnalogPort
@@ -109,7 +110,4 @@ namespace HAL_FRC
     {
         public uint deviceNumber;
     }
-    
-
-    
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using WPILib.Interfaces;
@@ -198,7 +200,6 @@ namespace WPILib
 
         public void TankDrive(double leftValue, double rightValue, bool squaredInputs)
         {
-
             if (!kTank_Reported)
             {
                 HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_Tank, (byte)GetNumMotors());
@@ -342,7 +343,5 @@ namespace WPILib
             if (m_rearRightMotor != null) motors++;
             return motors;
         }
-
-
     }
 }

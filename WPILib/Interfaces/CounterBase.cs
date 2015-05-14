@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -18,6 +20,5 @@ namespace WPILib.Interfaces
         void SetMaxPeriod(double maxPeriod);
         bool GetStopped();
         bool GetDirection();
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,7 +8,6 @@ namespace HAL_FRC
 {
     public enum AccelerometerRange
     {
-
         /// kRange_2G -> 0
         kRange_2G = 0,
 
@@ -19,7 +20,6 @@ namespace HAL_FRC
 
     public class HALAccelerometer
     {
-
         /// Return Type: void
         ///param0: boolean
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setAccelerometerActive")]
@@ -45,6 +45,5 @@ namespace HAL_FRC
         /// Return Type: double
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getAccelerometerZ")]
         public static extern double getAccelerometerZ();
-
     }
 }

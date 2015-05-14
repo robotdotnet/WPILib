@@ -1,8 +1,8 @@
-﻿namespace HAL_FRC
+﻿
+namespace HAL_FRC
 {
     public enum CTR_Code
     {
-
         CTR_OKAY,
 
         CTR_RxTimeout,
@@ -405,6 +405,5 @@
         ///param: int
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetRevFeedbackSensor")]
         public static extern CTR_Code c_TalonSRX_SetRevFeedbackSensor(System.IntPtr handle, int param);
-
     }
 }

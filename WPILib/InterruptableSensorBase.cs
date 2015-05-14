@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -73,7 +75,6 @@ namespace WPILib
             catch (CheckedAllocationException e)
             {
                 throw new AllocationException("No interrupts are left to be allocated");
-
             }
             IsSynchronousInterrupt = watcher;
 

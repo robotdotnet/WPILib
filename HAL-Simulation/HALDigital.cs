@@ -1,12 +1,12 @@
-﻿using System.Runtime.InteropServices;
+﻿
+
+using System.Runtime.InteropServices;
 using System;
 
 namespace HAL_FRC
 {
-
     public enum Mode
     {
-
         /// kTwoPulse -> 0
         kTwoPulse = 0,
 
@@ -27,7 +27,7 @@ namespace HAL_FRC
         ///status: int*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeDigitalPort")]
         //public static extern System.IntPtr initializeDigitalPort(System.IntPtr port_pointer, ref int status);
-	
+
         public static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
         {
             DigitalPort p = new DigitalPort();
@@ -671,7 +671,6 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMDutyCycleIntHack")]
         public static extern void setPWMDutyCycleIntHack(System.IntPtr pwmGenerator, int dutyCycle, ref int status);
-
     }
 
     /*
@@ -681,5 +680,4 @@ namespace HAL_FRC
         
     }
      * */
-    
 }

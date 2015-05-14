@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -115,7 +117,6 @@ namespace HAL_FRC
                 }
                 catch (ThreadInterruptedException ex)
                 {
-
                 }
             }
             return 0;

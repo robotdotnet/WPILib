@@ -1,4 +1,5 @@
-﻿namespace HAL_FRC
+﻿
+namespace HAL_FRC
 {
     public enum ResourceType
     {

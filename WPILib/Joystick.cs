@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using WPILib.Interfaces;
@@ -31,13 +33,13 @@ namespace WPILib
 
     public class Joystick : GenericHID
     {
-        static byte kDefaultXAxis = 0;
-        static byte kDefaultYAxis = 1;
-        static byte kDefaultZAxis = 2;
-        static byte kDefaultTwistAxis = 2;
-        static byte kDefaultThrottleAxis = 3;
-        static byte kDefaultTriggerButton = 1;
-        static byte kDefaultTopButton = 2;
+        private static byte s_kDefaultXAxis = 0;
+        private static byte s_kDefaultYAxis = 1;
+        private static byte s_kDefaultZAxis = 2;
+        private static byte s_kDefaultTwistAxis = 2;
+        private static byte s_kDefaultThrottleAxis = 3;
+        private static byte s_kDefaultTriggerButton = 1;
+        private static byte s_kDefaultTopButton = 2;
 
         private DriverStation _ds;
         private int _port;
@@ -50,16 +52,16 @@ namespace WPILib
         public Joystick(int port)
             : this(port, (int)AxisType.kNumAxis, (int)ButtonType.kNumButton)
         {
-            _axes[(int)AxisType.kX] = kDefaultXAxis;
+            _axes[(int)AxisType.kX] = s_kDefaultXAxis;
 
-            _axes[(int)AxisType.kX] = kDefaultXAxis;
-            _axes[(int)AxisType.kY] = kDefaultYAxis;
-            _axes[(int)AxisType.kZ] = kDefaultZAxis;
-            _axes[(int)AxisType.kTwist] = kDefaultTwistAxis;
-            _axes[(int)AxisType.kThrottle] = kDefaultThrottleAxis;
+            _axes[(int)AxisType.kX] = s_kDefaultXAxis;
+            _axes[(int)AxisType.kY] = s_kDefaultYAxis;
+            _axes[(int)AxisType.kZ] = s_kDefaultZAxis;
+            _axes[(int)AxisType.kTwist] = s_kDefaultTwistAxis;
+            _axes[(int)AxisType.kThrottle] = s_kDefaultThrottleAxis;
 
-            _buttons[(int)ButtonType.kTrigger] = kDefaultTriggerButton;
-            _buttons[(int)ButtonType.kTop] = kDefaultTopButton;
+            _buttons[(int)ButtonType.kTrigger] = s_kDefaultTriggerButton;
+            _buttons[(int)ButtonType.kTop] = s_kDefaultTopButton;
 
             HAL.Report(ResourceType.kResourceType_Joystick, (byte)port);
         }
@@ -199,7 +201,7 @@ namespace WPILib
         {
             return _axes[(int)axis];
         }
-        
+
         public void SetAxisChannel(AxisType axis, int channel)
         {
             _axes[(int)axis] = (byte)channel;
@@ -220,7 +222,7 @@ namespace WPILib
 
         public void SetOutput(int outputNumber, bool value)
         {
-            _outputs = (_outputs & ~(1 << (outputNumber-1))) | ((value?1:0) << (outputNumber - 1));
+            _outputs = (_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
             HAL.SetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
         }
 

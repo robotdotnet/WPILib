@@ -1,11 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿
+
+using System.Runtime.InteropServices;
 
 namespace HAL_FRC
 {
-
     public enum Mode
     {
-
         /// kTwoPulse -> 0
         kTwoPulse = 0,
 
@@ -26,7 +26,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "initializeDigitalPort")]
         public static extern System.IntPtr initializeDigitalPort(System.IntPtr port_pointer, ref int status);
-	
+
 
         /// Return Type: boolean
         ///digital_port_pointer: void*
@@ -660,13 +660,10 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMDutyCycleIntHack")]
         public static extern void setPWMDutyCycleIntHack(System.IntPtr pwmGenerator, int dutyCycle, ref int status);
-
     }
 
     [StructLayout(LayoutKind.Explicit)]
     public struct MUTEX_ID
     {
-        
     }
-    
 }

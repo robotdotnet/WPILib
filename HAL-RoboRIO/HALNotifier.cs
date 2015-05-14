@@ -1,4 +1,5 @@
-﻿namespace HAL_FRC
+﻿
+namespace HAL_FRC
 {
     /// Return Type: void
     ///param0: unsigned int
@@ -27,6 +28,5 @@
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "updateNotifierAlarm")]
         public static extern void updateNotifierAlarm(System.IntPtr notifier_pointer, uint triggerTime, ref int status);
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -82,7 +84,6 @@ namespace WPILib
                 return;
             int status = 0;
             HALDigital.setPWMDutyCycle(_pwmGenerator, dutyCycle, ref status);
-
         }
     }
 }

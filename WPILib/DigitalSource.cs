@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using HAL_FRC;
@@ -31,7 +33,6 @@ namespace WPILib
             int status = 0;
             _port = HALDigital.initializeDigitalPort(portPointer, ref status);
             HALDigital.allocateDIO(_port, input, ref status);
-                       
         }
 
         public override void Free()

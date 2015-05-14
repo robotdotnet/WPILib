@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,7 +8,6 @@ namespace HAL_FRC
 {
     public enum AnalogTriggerType
     {
-
         /// kInWindow -> 0
         kInWindow = 0,
 
@@ -22,7 +23,6 @@ namespace HAL_FRC
 
     public class HALAnalog
     {
-
         /// Return Type: void*
         ///port_pointer: void*
         ///status: int*
@@ -343,6 +343,5 @@ namespace HAL_FRC
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setAnalogTriggerLimitsVoltageIntHack")]
         public static extern void setAnalogTriggerLimitsVoltageIntHack(System.IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
-
     }
 }

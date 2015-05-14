@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +11,6 @@ namespace WPILib.Util
         public CheckedAllocationException(string message)
             : base(message)
         {
-
         }
     }
 
@@ -18,7 +19,6 @@ namespace WPILib.Util
         public AllocationException(string message)
             : base(message)
         {
-
         }
     }
 
@@ -27,7 +27,6 @@ namespace WPILib.Util
         public AnalogTriggerException(string message)
             : base(message)
         {
-
         }
     }
 
@@ -36,7 +35,6 @@ namespace WPILib.Util
         public BoundaryException(string message)
             : base(message)
         {
-
         }
 
         public static void AssertWithinBounds(double value, double lower, double upper)

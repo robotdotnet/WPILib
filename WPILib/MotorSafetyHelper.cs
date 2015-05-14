@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -15,7 +17,7 @@ namespace WPILib
         private double _stopTime;
         private MotorSafety _safeObject;
         private MotorSafetyHelper _nextHelper;
-        private static MotorSafetyHelper _headHelper = null;
+        private static MotorSafetyHelper s_headHelper = null;
 
         public MotorSafetyHelper(MotorSafety safeObject)
         {
@@ -23,8 +25,8 @@ namespace WPILib
             _enabled = true;
             _expiration = DEFAULT_SAFETY_EXPIRATION;
             _stopTime = Timer.GetFPGATimestamp();
-            _nextHelper = _headHelper;
-            _headHelper = this;
+            _nextHelper = s_headHelper;
+            s_headHelper = this;
         }
 
         public void Feed()
@@ -73,7 +75,7 @@ namespace WPILib
 
         public static void CheckMotors()
         {
-            for (MotorSafetyHelper msh = _headHelper; msh != null; msh = msh._nextHelper)
+            for (MotorSafetyHelper msh = s_headHelper; msh != null; msh = msh._nextHelper)
             {
                 msh.Check();
             }
