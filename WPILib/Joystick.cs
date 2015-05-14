@@ -1,8 +1,6 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.Interfaces;
 using HAL_FRC;
 
@@ -10,36 +8,36 @@ namespace WPILib
 {
     public enum AxisType
     {
-        kX = 0,
-        kY,
-        kZ,
-        kTwist,
-        kThrottle,
-        kNumAxis,
+        X = 0,
+        Y,
+        Z,
+        Twist,
+        Throttle,
+        NumAxis,
     }
 
     public enum ButtonType
     {
-        kTrigger = 0,
-        kTop,
-        kNumButton,
+        Trigger = 0,
+        Top,
+        NumButton,
     }
 
     public enum RumbleType
     {
-        kLeftRumble = 0,
-        kRightRumble = 1,
+        LeftRumble = 0,
+        RightRumble = 1,
     }
 
     public class Joystick : GenericHID
     {
-        private static byte s_kDefaultXAxis = 0;
-        private static byte s_kDefaultYAxis = 1;
-        private static byte s_kDefaultZAxis = 2;
-        private static byte s_kDefaultTwistAxis = 2;
-        private static byte s_kDefaultThrottleAxis = 3;
-        private static byte s_kDefaultTriggerButton = 1;
-        private static byte s_kDefaultTopButton = 2;
+        private static byte s_defaultXAxis = 0;
+        private static byte s_defaultYAxis = 1;
+        private static byte s_defaultZAxis = 2;
+        private static byte s_defaultTwistAxis = 2;
+        private static byte s_defaultThrottleAxis = 3;
+        private static byte s_defaultTriggerButton = 1;
+        private static byte s_defaultTopButton = 2;
 
         private DriverStation _ds;
         private int _port;
@@ -50,18 +48,18 @@ namespace WPILib
         private ushort _rightRumble;
 
         public Joystick(int port)
-            : this(port, (int)AxisType.kNumAxis, (int)ButtonType.kNumButton)
+            : this(port, (int)AxisType.NumAxis, (int)ButtonType.NumButton)
         {
-            _axes[(int)AxisType.kX] = s_kDefaultXAxis;
+            _axes[(int)AxisType.X] = s_defaultXAxis;
 
-            _axes[(int)AxisType.kX] = s_kDefaultXAxis;
-            _axes[(int)AxisType.kY] = s_kDefaultYAxis;
-            _axes[(int)AxisType.kZ] = s_kDefaultZAxis;
-            _axes[(int)AxisType.kTwist] = s_kDefaultTwistAxis;
-            _axes[(int)AxisType.kThrottle] = s_kDefaultThrottleAxis;
+            _axes[(int)AxisType.X] = s_defaultXAxis;
+            _axes[(int)AxisType.Y] = s_defaultYAxis;
+            _axes[(int)AxisType.Z] = s_defaultZAxis;
+            _axes[(int)AxisType.Twist] = s_defaultTwistAxis;
+            _axes[(int)AxisType.Throttle] = s_defaultThrottleAxis;
 
-            _buttons[(int)ButtonType.kTrigger] = s_kDefaultTriggerButton;
-            _buttons[(int)ButtonType.kTop] = s_kDefaultTopButton;
+            _buttons[(int)ButtonType.Trigger] = s_defaultTriggerButton;
+            _buttons[(int)ButtonType.Top] = s_defaultTopButton;
 
             HAL.Report(ResourceType.kResourceType_Joystick, (byte)port);
         }
@@ -78,27 +76,27 @@ namespace WPILib
 
         public override double GetX(Hand hand)
         {
-            return GetRawAxis(_axes[(int)AxisType.kX]);
+            return GetRawAxis(_axes[(int)AxisType.X]);
         }
 
         public override double GetY(Hand hand)
         {
-            return GetRawAxis(_axes[(int)AxisType.kY]);
+            return GetRawAxis(_axes[(int)AxisType.Y]);
         }
 
         public override double GetZ(Hand hand)
         {
-            return GetRawAxis(_axes[(int)AxisType.kZ]);
+            return GetRawAxis(_axes[(int)AxisType.Z]);
         }
 
         public override double GetTwist()
         {
-            return GetRawAxis(_axes[(int)AxisType.kTwist]);
+            return GetRawAxis(_axes[(int)AxisType.Twist]);
         }
 
         public override double GetThrottle()
         {
-            return GetRawAxis(_axes[(int)AxisType.kThrottle]);
+            return GetRawAxis(_axes[(int)AxisType.Throttle]);
         }
 
         public override double GetRawAxis(int axis)
@@ -110,15 +108,15 @@ namespace WPILib
         {
             switch (axis)
             {
-                case AxisType.kX:
+                case AxisType.X:
                     return GetX();
-                case AxisType.kY:
+                case AxisType.Y:
                     return GetY();
-                case AxisType.kZ:
+                case AxisType.Z:
                     return GetZ();
-                case AxisType.kTwist:
+                case AxisType.Twist:
                     return GetTwist();
-                case AxisType.kThrottle:
+                case AxisType.Throttle:
                     return GetThrottle();
                 default:
                     return 0.0;
@@ -132,12 +130,12 @@ namespace WPILib
 
         public override bool GetTrigger(Hand hand)
         {
-            return GetRawButton(_buttons[(int)ButtonType.kTrigger]);
+            return GetRawButton(_buttons[(int)ButtonType.Trigger]);
         }
 
         public override bool GetTop(Hand hand)
         {
-            return GetRawButton(_buttons[(int)ButtonType.kTop]);
+            return GetRawButton(_buttons[(int)ButtonType.Top]);
         }
 
         public override bool GetBumper(Hand hand)
@@ -168,9 +166,9 @@ namespace WPILib
         {
             switch (button)
             {
-                case ButtonType.kTrigger:
+                case ButtonType.Trigger:
                     return GetTrigger();
-                case ButtonType.kTop:
+                case ButtonType.Top:
                     return GetTop();
                 default:
                     return false;
@@ -213,7 +211,7 @@ namespace WPILib
                 value = 0;
             else if (value > 1)
                 value = 1;
-            if (type == RumbleType.kLeftRumble)
+            if (type == RumbleType.LeftRumble)
                 _leftRumble = (ushort)(value * 65535);
             else
                 _rightRumble = (ushort)(value * 65535);

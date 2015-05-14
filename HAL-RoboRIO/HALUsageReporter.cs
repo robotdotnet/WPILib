@@ -1,4 +1,4 @@
-﻿
+﻿// ReSharper disable InconsistentNaming
 namespace HAL_FRC
 {
     public enum ResourceType
@@ -98,3 +98,4 @@ namespace HAL_FRC
         kSmartDashboard_Instance = 1,
     };
 }
+// ReSharper restore InconsistentNaming

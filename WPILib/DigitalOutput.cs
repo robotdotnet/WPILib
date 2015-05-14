@@ -1,8 +1,6 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using HAL_FRC;
 
 namespace WPILib
@@ -31,24 +29,24 @@ namespace WPILib
         public void Set(bool value)
         {
             int status = 0;
-            HALDigital.setDIO(_port, (short)(value ? 0 : 1), ref status);
+            HALDigital.setDIO(m_port, (short)(value ? 0 : 1), ref status);
         }
 
         public int GetChannel()
         {
-            return _channel;
+            return m_channel;
         }
 
         public void Pulse(int channel, float pulseLength)
         {
             int status = 0;
-            HALDigital.pulse(_port, pulseLength, ref status);
+            HALDigital.pulse(m_port, pulseLength, ref status);
         }
 
         public bool IsPulsing()
         {
             int status = 0;
-            bool value = HALDigital.isPulsing(_port, ref status);
+            bool value = HALDigital.isPulsing(m_port, ref status);
             return value;
         }
 
@@ -65,7 +63,7 @@ namespace WPILib
             int status = 0;
             _pwmGenerator = HALDigital.allocatePWM(ref status);
             HALDigital.setPWMDutyCycle(_pwmGenerator, initialDutyCycle, ref status);
-            HALDigital.setPWMOutputChannel(_pwmGenerator, (uint)_channel, ref status);
+            HALDigital.setPWMOutputChannel(_pwmGenerator, (uint)m_channel, ref status);
         }
 
         public void DisablePWM()

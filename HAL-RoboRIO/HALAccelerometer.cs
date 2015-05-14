@@ -1,21 +1,15 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HAL_FRC
+﻿namespace HAL_FRC
 {
     public enum AccelerometerRange
     {
         /// kRange_2G -> 0
-        kRange_2G = 0,
+        Range_2G = 0,
 
         /// kRange_4G -> 1
-        kRange_4G = 1,
+        Range_4G = 1,
 
         /// kRange_8G -> 2
-        kRange_8G = 2,
+        Range_8G = 2,
     }
 
     public class HALAccelerometer

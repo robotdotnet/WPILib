@@ -1,8 +1,6 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using HAL_FRC;
 
 namespace WPILib
@@ -38,7 +36,7 @@ namespace WPILib
             while (true)
             {
                 // Call the appropriate function depending upon the current robot mode
-                if (isDisabled())
+                if (IsDisabled())
                 {
                     // call DisabledInit() if we are now just entering disabled mode from
                     // either a different mode or from power-on
@@ -58,7 +56,7 @@ namespace WPILib
                         DisabledPeriodic();
                     }
                 }
-                else if (isTest())
+                else if (IsTest())
                 {
                     // call TestInit() if we are now just entering test mode from either
                     // a different mode or from power-on
@@ -77,7 +75,7 @@ namespace WPILib
                         TestPeriodic();
                     }
                 }
-                else if (isAutonomous())
+                else if (IsAutonomous())
                 {
                     // call Autonomous_Init() if this is the first time
                     // we've entered autonomous_mode

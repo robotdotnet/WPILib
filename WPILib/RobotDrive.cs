@@ -1,31 +1,28 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.Interfaces;
-using WPILib.Util;
 using HAL_FRC;
 
 namespace WPILib
 {
     public enum MotorType
     {
-        kFrontLeft = 0,
-        kFrontRight,
-        kRearLeft,
-        kRearRight,
+        FrontLeft = 0,
+        FrontRight,
+        RearLeft,
+        RearRight,
     }
 
     public class RobotDrive : MotorSafety
     {
-        protected MotorSafetyHelper _safetyHelper;
+        protected MotorSafetyHelper m_safetyHelper;
 
-        public static double kDefaultExpirationTime = 0.1;
-        public static double kDefaultSensitivity = 0.5;
-        public static double kDefaultMaxOutput = 1.0;
+        public static double DefaultExpirationTime = 0.1;
+        public static double DefaultSensitivity = 0.5;
+        public static double DefaultMaxOutput = 1.0;
 
-        protected static int kMaxNumberOfMotors = 4;
+        protected static int s_maxNumberOfMotors = 4;
         protected int[] m_invertedMotors = new int[4];
         protected double m_sensitivity;
         protected double m_maxOutput;
@@ -35,45 +32,45 @@ namespace WPILib
         protected SpeedController m_rearRightMotor;
         protected bool m_allocatedSpeedControllers;
         protected byte m_syncGroup = 0;
-        protected static bool kArcadeRatioCurve_Reported = false;
-        protected static bool kTank_Reported = false;
-        protected static bool kArcadeStandard_Reported = false;
-        protected static bool kMecanumCartesian_Reported = false;
-        protected static bool kMecanumPolar_Reported = false;
+        protected static bool s_arcadeRatioCurveReported = false;
+        protected static bool s_tankReported = false;
+        protected static bool s_arcadeStandardReported = false;
+        protected static bool s_mecanumCartesianReported = false;
+        protected static bool s_mecanumPolarReported = false;
 
         public RobotDrive(int leftMotorChannel, int rightMotorChannel)
         {
-            m_sensitivity = kDefaultSensitivity;
-            m_maxOutput = kDefaultMaxOutput;
+            m_sensitivity = DefaultSensitivity;
+            m_maxOutput = DefaultMaxOutput;
             m_frontLeftMotor = null;
             m_rearLeftMotor = new Talon(leftMotorChannel);
             m_frontRightMotor = null;
             m_rearRightMotor = new Talon(rightMotorChannel);
-            for (int i = 0; i < kMaxNumberOfMotors; i++)
+            for (int i = 0; i < s_maxNumberOfMotors; i++)
             {
                 m_invertedMotors[i] = 1;
             }
             m_allocatedSpeedControllers = true;
             SetupMotorSafety();
-            drive(0, 0);
+            Drive(0, 0);
         }
 
         public RobotDrive(int frontLeftMotor, int rearLeftMotor,
                        int frontRightMotor, int rearRightMotor)
         {
-            m_sensitivity = kDefaultSensitivity;
-            m_maxOutput = kDefaultMaxOutput;
+            m_sensitivity =DefaultSensitivity;
+            m_maxOutput =DefaultMaxOutput;
             m_rearLeftMotor = new Talon(rearLeftMotor);
             m_rearRightMotor = new Talon(rearRightMotor);
             m_frontLeftMotor = new Talon(frontLeftMotor);
             m_frontRightMotor = new Talon(frontRightMotor);
-            for (int i = 0; i < kMaxNumberOfMotors; i++)
+            for (int i = 0; i <s_maxNumberOfMotors; i++)
             {
                 m_invertedMotors[i] = 1;
             }
             m_allocatedSpeedControllers = true;
             SetupMotorSafety();
-            drive(0, 0);
+            Drive(0, 0);
         }
 
         public RobotDrive(SpeedController leftMotor, SpeedController rightMotor)
@@ -87,15 +84,15 @@ namespace WPILib
             m_rearLeftMotor = leftMotor;
             m_frontRightMotor = null;
             m_rearRightMotor = rightMotor;
-            m_sensitivity = kDefaultSensitivity;
-            m_maxOutput = kDefaultMaxOutput;
-            for (int i = 0; i < kMaxNumberOfMotors; i++)
+            m_sensitivity =DefaultSensitivity;
+            m_maxOutput =DefaultMaxOutput;
+            for (int i = 0; i <s_maxNumberOfMotors; i++)
             {
                 m_invertedMotors[i] = 1;
             }
             m_allocatedSpeedControllers = false;
             SetupMotorSafety();
-            drive(0, 0);
+            Drive(0, 0);
         }
 
         public RobotDrive(SpeedController frontLeftMotor, SpeedController rearLeftMotor,
@@ -110,25 +107,25 @@ namespace WPILib
             m_rearLeftMotor = rearLeftMotor;
             m_frontRightMotor = frontRightMotor;
             m_rearRightMotor = rearRightMotor;
-            m_sensitivity = kDefaultSensitivity;
-            m_maxOutput = kDefaultMaxOutput;
-            for (int i = 0; i < kMaxNumberOfMotors; i++)
+            m_sensitivity =DefaultSensitivity;
+            m_maxOutput =DefaultMaxOutput;
+            for (int i = 0; i <s_maxNumberOfMotors; i++)
             {
                 m_invertedMotors[i] = 1;
             }
             m_allocatedSpeedControllers = false;
             SetupMotorSafety();
-            drive(0, 0);
+            Drive(0, 0);
         }
 
-        public void drive(double outputMagnitude, double curve)
+        public void Drive(double outputMagnitude, double curve)
         {
             double leftOutput, rightOutput;
 
-            if (!kArcadeRatioCurve_Reported)
+            if (!s_arcadeRatioCurveReported)
             {
                 HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeRatioCurve, (byte)GetNumMotors());
-                kArcadeRatioCurve_Reported = true;
+               s_arcadeRatioCurveReported = true;
             }
             if (curve < 0)
             {
@@ -200,10 +197,10 @@ namespace WPILib
 
         public void TankDrive(double leftValue, double rightValue, bool squaredInputs)
         {
-            if (!kTank_Reported)
+            if (!s_tankReported)
             {
                 HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_Tank, (byte)GetNumMotors());
-                kTank_Reported = true;
+               s_tankReported = true;
             }
 
             // square the inputs (while preserving the sign) to increase fine control while permitting full power
@@ -245,22 +242,22 @@ namespace WPILib
 
             if (m_frontLeftMotor != null)
             {
-                m_frontLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.kFrontLeft] * m_maxOutput, m_syncGroup);
+                m_frontLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
             }
-            m_rearLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.kRearLeft] * m_maxOutput, m_syncGroup);
+            m_rearLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
 
             if (m_frontRightMotor != null)
             {
-                m_frontRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.kFrontRight] * m_maxOutput, m_syncGroup);
+                m_frontRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
             }
-            m_rearRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.kRearRight] * m_maxOutput, m_syncGroup);
+            m_rearRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
 
             if (this.m_syncGroup != 0)
             {
                 //CANJaguar.updateSyncGroup(m_syncGroup);
             }
 
-            if (_safetyHelper != null) _safetyHelper.Feed();
+            if (m_safetyHelper != null) m_safetyHelper.Feed();
         }
 
         protected static double Limit(double num)
@@ -278,17 +275,17 @@ namespace WPILib
 
         public bool IsAlive()
         {
-            return _safetyHelper.IsAlive();
+            return m_safetyHelper.IsAlive();
         }
 
         public void SetExpiration(double timeout)
         {
-            _safetyHelper.SetExpiration(timeout);
+            m_safetyHelper.SetExpiration(timeout);
         }
 
         public double GetExpiration()
         {
-            return _safetyHelper.GetExpiration();
+            return m_safetyHelper.GetExpiration();
         }
 
         public void StopMotor()
@@ -309,7 +306,7 @@ namespace WPILib
             {
                 m_rearRightMotor.Set(0.0);
             }
-            if (_safetyHelper != null) _safetyHelper.Feed();
+            if (m_safetyHelper != null) m_safetyHelper.Feed();
         }
 
         public string GetDescription()
@@ -319,19 +316,19 @@ namespace WPILib
 
         public bool IsSafetyEnabled()
         {
-            return _safetyHelper.IsSafetyEnabled();
+            return m_safetyHelper.IsSafetyEnabled();
         }
 
         public void SetSafetyEnabled(bool enabled)
         {
-            _safetyHelper.SetSafetyEnabled(enabled);
+            m_safetyHelper.SetSafetyEnabled(enabled);
         }
 
         private void SetupMotorSafety()
         {
-            _safetyHelper = new MotorSafetyHelper(this);
-            _safetyHelper.SetExpiration(kDefaultExpirationTime);
-            _safetyHelper.SetSafetyEnabled(true);
+            m_safetyHelper = new MotorSafetyHelper(this);
+            m_safetyHelper.SetExpiration(DefaultExpirationTime);
+            m_safetyHelper.SetSafetyEnabled(true);
         }
 
         protected int GetNumMotors()

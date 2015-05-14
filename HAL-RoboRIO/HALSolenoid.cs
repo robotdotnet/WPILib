@@ -1,10 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HAL_FRC
+﻿namespace HAL_FRC
 {
     public class HALSolenoid
     {
@@ -12,7 +6,7 @@ namespace HAL_FRC
         ///port_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "initializeSolenoidPort")]
-        public static extern System.IntPtr initializeSolenoidPort(System.IntPtr port_pointer, ref int status);
+        public static extern System.IntPtr initializeSolenoidPort(System.IntPtr portPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -27,7 +21,7 @@ namespace HAL_FRC
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getSolenoid")]
         [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getSolenoid(System.IntPtr solenoid_port_pointer, ref int status);
+        public static extern bool getSolenoid(System.IntPtr solenoidPortPointer, ref int status);
 
 
         /// Return Type: void
@@ -35,14 +29,14 @@ namespace HAL_FRC
         ///value: boolean
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setSolenoid")]
-        public static extern void setSolenoid(System.IntPtr solenoid_port_pointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool value, ref int status);
+        public static extern void setSolenoid(System.IntPtr solenoidPortPointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool value, ref int status);
 
 
         /// Return Type: int
         ///solenoid_port_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPCMSolenoidBlackList")]
-        public static extern int getPCMSolenoidBlackList(System.IntPtr solenoid_port_pointer, ref int status);
+        public static extern int getPCMSolenoidBlackList(System.IntPtr solenoidPortPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -50,7 +44,7 @@ namespace HAL_FRC
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPCMSolenoidVoltageStickyFault")]
         [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getPCMSolenoidVoltageStickyFault(System.IntPtr solenoid_port_pointer, ref int status);
+        public static extern bool getPCMSolenoidVoltageStickyFault(System.IntPtr solenoidPortPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -58,13 +52,13 @@ namespace HAL_FRC
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPCMSolenoidVoltageFault")]
         [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getPCMSolenoidVoltageFault(System.IntPtr solenoid_port_pointer, ref int status);
+        public static extern bool getPCMSolenoidVoltageFault(System.IntPtr solenoidPortPointer, ref int status);
 
 
         /// Return Type: void
         ///solenoid_port_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "clearAllPCMStickyFaults_sol")]
-        public static extern void clearAllPCMStickyFaults_sol(System.IntPtr solenoid_port_pointer, ref int status);
+        public static extern void clearAllPCMStickyFaults_sol(System.IntPtr solenoidPortPointer, ref int status);
     }
 }

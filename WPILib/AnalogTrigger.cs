@@ -1,17 +1,15 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using HAL_FRC;
 using WPILib.Util;
+using HAL_FRC;
 
 namespace WPILib
 {
     public class AnalogTrigger
     {
-        protected IntPtr _port;
-        protected int _index;
+        protected IntPtr m_port;
+        protected int m_index;
 
         protected void InitTrigger(int channel)
         {
@@ -19,8 +17,8 @@ namespace WPILib
             int status = 0;
             uint index = 0;
 
-            _port = HALAnalog.initializeAnalogTrigger(portPointer, ref index, ref status);
-            _index = (int)index;
+            m_port = HALAnalog.initializeAnalogTrigger(portPointer, ref index, ref status);
+            m_index = (int)index;
 
             HAL.Report(ResourceType.kResourceType_AnalogTrigger, (byte)channel);
         }
@@ -40,8 +38,8 @@ namespace WPILib
         public void Free()
         {
             int status = 0;
-            HALAnalog.cleanAnalogTrigger(_port, ref status);
-            _port = IntPtr.Zero;
+            HALAnalog.cleanAnalogTrigger(m_port, ref status);
+            m_port = IntPtr.Zero;
         }
 
         public void SetLimitsRaw(int lower, int upper)
@@ -49,7 +47,7 @@ namespace WPILib
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            HALAnalog.setAnalogTriggerLimitsRaw(_port, lower, upper, ref status);
+            HALAnalog.setAnalogTriggerLimitsRaw(m_port, lower, upper, ref status);
         }
 
         public void SetLimitsVoltage(double lower, double upper)
@@ -57,31 +55,31 @@ namespace WPILib
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            HALAnalog.setAnalogTriggerLimitsVoltage(_port, lower, upper, ref status);
+            HALAnalog.setAnalogTriggerLimitsVoltage(m_port, lower, upper, ref status);
         }
 
         public void SetAveraged(bool useAveragedValue)
         {
             int status = 0;
-            HALAnalog.setAnalogTriggerFiltered(_port, useAveragedValue, ref status);
+            HALAnalog.setAnalogTriggerFiltered(m_port, useAveragedValue, ref status);
         }
 
         public int GetIndex()
         {
-            return _index;
+            return m_index;
         }
 
         public bool GetInWindow()
         {
             int status = 0;
-            bool value = HALAnalog.getAnalogTriggerInWindow(_port, ref status);
+            bool value = HALAnalog.getAnalogTriggerInWindow(m_port, ref status);
             return value;
         }
 
         public bool GetTriggerState()
         {
             int status = 0;
-            bool value = HALAnalog.getAnalogTriggerTriggerState(_port, ref status);
+            bool value = HALAnalog.getAnalogTriggerTriggerState(m_port, ref status);
             return value;
         }
 

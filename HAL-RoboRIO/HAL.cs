@@ -1,24 +1,21 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HAL_FRC
+﻿namespace HAL_FRC
 {
     public enum HALAllianceStationID
     {
-        kHALAllianceStationID_red1,
+// ReSharper disable InconsistentNaming
+        HALAllianceStationID_red1,
 
-        kHALAllianceStationID_red2,
+        HALAllianceStationID_red2,
 
-        kHALAllianceStationID_red3,
+        HALAllianceStationID_red3,
 
-        kHALAllianceStationID_blue1,
+        HALAllianceStationID_blue1,
 
-        kHALAllianceStationID_blue2,
+        HALAllianceStationID_blue2,
 
-        kHALAllianceStationID_blue3,
+
+        HALAllianceStationID_blue3,
+// ReSharper restore InconsistentNaming
     }
 
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
@@ -132,7 +129,7 @@ namespace HAL_FRC
         ///errorsLength: int
         ///wait_ms: int
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALSetErrorData")]
-        public static extern int SetErrorData([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string errors, int errorsLength, int wait_ms);
+        public static extern int SetErrorData([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string errors, int errorsLength, int waitMs);
 
 
         /// Return Type: int
@@ -298,9 +295,9 @@ namespace HAL_FRC
             return povs.povs;
         }
 
-        public static int SetErrorData(string errors, int wait_ms)
+        public static int SetErrorData(string errors, int waitMs)
         {
-            return SetErrorData(errors, errors.Length, wait_ms);
+            return SetErrorData(errors, errors.Length, waitMs);
         }
 
         public static void Initialize(int mode = 0)
@@ -324,19 +321,19 @@ namespace HAL_FRC
         public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0,
             string feature = null)
         {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
+            return HALReport((byte)resource, instanceNumber, context, feature);
         }
 
         public static uint Report(byte resource, Instances instanceNumber, byte context = 0,
             string feature = null)
         {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
+            return HALReport(resource, (byte)instanceNumber, context, feature);
         }
 
         public static uint Report(byte resource, byte instanceNumber, byte context = 0,
             string feature = null)
         {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
+            return HALReport(resource, instanceNumber, context, feature);
         }
 
         /*

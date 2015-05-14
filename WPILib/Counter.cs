@@ -1,10 +1,7 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.Interfaces;
-using WPILib.Util;
 using HAL_FRC;
 
 namespace WPILib
@@ -37,27 +34,27 @@ namespace WPILib
 
         public Counter()
         {
-            InitCounter(Mode.kTwoPulse);
+            InitCounter(Mode.TwoPulse);
         }
 
         public Counter(DigitalSource source)
         {
             if (source == null)
                 throw new NullReferenceException("Digital Source given was null");
-            InitCounter(Mode.kTwoPulse);
+            InitCounter(Mode.TwoPulse);
             SetUpSource(source);
         }
 
         public Counter(int channel)
         {
-            InitCounter(Mode.kTwoPulse);
+            InitCounter(Mode.TwoPulse);
             //SetUpSource(channel);
         }
 
         public Counter(EncodingType encodingType, DigitalSource upSource, DigitalSource downSource, bool inverted)
         {
-            InitCounter(Mode.kExternalDirection);
-            if (encodingType != EncodingType.k2X_val && encodingType != EncodingType.k1X_val)
+            InitCounter(Mode.ExternalDirection);
+            if (encodingType != EncodingType.K2X && encodingType != EncodingType.K1X)
             {
                 throw new SystemException("Counters only support 1X and 2X decoding!");
             }
@@ -68,7 +65,7 @@ namespace WPILib
                 throw new NullReferenceException("Down Source given was null");
             //SetDownSource(downSource);
             int status = 0;
-            if (encodingType == EncodingType.k1X_val)
+            if (encodingType == EncodingType.K1X)
             {
                 //SetUpSourceEdge(true, false);
                 HALDigital.setCounterAverageSize(_counterPtr, 1, ref status);

@@ -1,24 +1,19 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using HAL_FRC;
+﻿using HAL_FRC;
 
 namespace WPILib
 {
     public class Servo : PWM
     {
-        private static double s_kMaxServoAngle = 180.0;
-        private static double s_kMinServoAngle = 0.0;
+        private static double s_MaxServoAngle = 180.0;
+        private static double s_MinServoAngle = 0.0;
 
-        protected static double kDefaultMaxServoPWM = 2.4;
-        protected static double kDefaultMinServoPWM = 0.6;
+        protected static double s_defaultMaxServoPWM = 2.4;
+        protected static double s_defaultMinServoPWM = 0.6;
 
         private void InitServo()
         {
-            SetBounds(kDefaultMaxServoPWM, 0, 0, 0, kDefaultMinServoPWM);
-            SetPeriodMultiplier(PeriodMultiplier.k4x_val);
+            SetBounds(s_defaultMaxServoPWM, 0, 0, 0, s_defaultMinServoPWM);
+            SetPeriodMultiplier(PeriodMultiplier.K4X);
 
             HAL.Report(ResourceType.kResourceType_Servo, (byte)GetChannel());
         }
@@ -40,21 +35,21 @@ namespace WPILib
 
         public void SetAngle(double degrees)
         {
-            if (degrees < s_kMinServoAngle)
-                degrees = s_kMinServoAngle;
-            else if (degrees > s_kMaxServoAngle)
-                degrees = s_kMaxServoAngle;
-            SetPosition(((degrees - s_kMinServoAngle)) / GetServoAngleRange());
+            if (degrees < s_MinServoAngle)
+                degrees = s_MinServoAngle;
+            else if (degrees > s_MaxServoAngle)
+                degrees = s_MaxServoAngle;
+            SetPosition(((degrees - s_MinServoAngle)) / GetServoAngleRange());
         }
 
         public double GetAngle()
         {
-            return GetPosition() * GetServoAngleRange() + s_kMinServoAngle;
+            return GetPosition() * GetServoAngleRange() + s_MinServoAngle;
         }
 
         private double GetServoAngleRange()
         {
-            return s_kMaxServoAngle - s_kMinServoAngle;
+            return s_MaxServoAngle - s_MinServoAngle;
         }
     }
 }

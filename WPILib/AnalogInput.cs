@@ -1,8 +1,6 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.Interfaces;
 using WPILib.Util;
 using HAL_FRC;
@@ -179,8 +177,8 @@ namespace WPILib
             int value = 0;
             int status = 0;
             HALAnalog.getAccumulatorOutput(_port, ref value, ref count, ref status);
-            result.value = value + _accumulatorOffset;
-            result.count = count;
+            result.m_value = value + _accumulatorOffset;
+            result.m_count = count;
         }
 
 

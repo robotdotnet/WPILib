@@ -1,8 +1,6 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using HAL_FRC;
 
@@ -10,12 +8,12 @@ namespace WPILib
 {
     public class SampleRobot : RobotBase
     {
-        private bool _RobotMainOverriden;
+        private bool _robotMainOverriden;
 
         public SampleRobot()
             : base()
         {
-            _RobotMainOverriden = true;
+            _robotMainOverriden = true;
         }
 
         protected virtual void RobotInit()
@@ -45,7 +43,7 @@ namespace WPILib
 
         public void RobotMain()
         {
-            _RobotMainOverriden = false;
+            _robotMainOverriden = false;
         }
 
         public override void StartCompetition()
@@ -53,38 +51,38 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Simple);
             RobotMain();
 
-            if (!_RobotMainOverriden)
+            if (!_robotMainOverriden)
             {
                 RobotInit();
                 while (true)
                 {
-                    if (isDisabled())
+                    if (IsDisabled())
                     {
                         m_ds.InDisabled(true);
                         Disabled();
                         m_ds.InDisabled(false);
-                        while (isDisabled())
+                        while (IsDisabled())
                         {
                             Thread.Sleep(1);
                         }
                     }
-                    else if (isAutonomous())
+                    else if (IsAutonomous())
                     {
                         m_ds.InAutonomous(true);
                         Autonomous();
                         m_ds.InAutonomous(false);
-                        while (isAutonomous() && !isDisabled())
+                        while (IsAutonomous() && !IsDisabled())
                         {
                             Thread.Sleep(1);
                         }
                     }
-                    else if (isTest())
+                    else if (IsTest())
                     {
                         //LiveWindow.setEnabled(true);
                         m_ds.InTest(true);
                         Test();
                         m_ds.InTest(false);
-                        while (isTest() && isEnabled())
+                        while (IsTest() && IsEnabled())
                             Thread.Sleep(1);
                         //LiveWindow.setEnabled(false);
                     }
@@ -93,7 +91,7 @@ namespace WPILib
                         m_ds.InOperatorControl(true);
                         OperatorControl();
                         m_ds.InOperatorControl(false);
-                        while (isOperatorControl() && !isDisabled())
+                        while (IsOperatorControl() && !IsDisabled())
                         {
                             Thread.Sleep(1);
                         }

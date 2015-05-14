@@ -1,9 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Runtime.InteropServices;
 
 namespace HAL_FRC
 {
@@ -11,11 +6,11 @@ namespace HAL_FRC
     {
         /// Return Type: MUTEX_ID->void*
         [DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexRecursive")]
-        public static extern System.IntPtr initializeMutexRecursive();
+        public static extern System.IntPtr InitializeMutexRecursive();
 
 
         /// Return Type: MUTEX_ID->void*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexNormal")]
+        [DllImport("libHALAthena_shared.so", EntryPoint = "nitializeMutexNormal")]
         public static extern System.IntPtr initializeMutexNormal();
 
 
@@ -46,7 +41,7 @@ namespace HAL_FRC
         /// Return Type: SEMAPHORE_ID->void*
         ///initial_value: unsigned int
         [DllImport("libHALAthena_shared.so", EntryPoint = "initializeSemaphore")]
-        public static extern System.IntPtr initializeSemaphore(uint initial_value);
+        public static extern System.IntPtr initializeSemaphore(uint initialValue);
 
 
         /// Return Type: void

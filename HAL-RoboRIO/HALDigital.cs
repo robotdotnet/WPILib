@@ -7,16 +7,16 @@ namespace HAL_FRC
     public enum Mode
     {
         /// kTwoPulse -> 0
-        kTwoPulse = 0,
+        TwoPulse = 0,
 
         /// kSemiperiod -> 1
-        kSemiperiod = 1,
+        Semiperiod = 1,
 
         /// kPulseLength -> 2
-        kPulseLength = 2,
+        PulseLength = 2,
 
         /// kExternalDirection -> 3
-        kExternalDirection = 3,
+        ExternalDirection = 3,
     }
 
     public class HALDigital
@@ -25,21 +25,21 @@ namespace HAL_FRC
         ///port_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "initializeDigitalPort")]
-        public static extern System.IntPtr initializeDigitalPort(System.IntPtr port_pointer, ref int status);
+        public static extern System.IntPtr initializeDigitalPort(System.IntPtr portPointer, ref int status);
 
 
         /// Return Type: boolean
         ///digital_port_pointer: void*
         [DllImport("libHALAthena_shared.so", EntryPoint = "checkPWMChannel")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool checkPWMChannel(System.IntPtr digital_port_pointer);
+        public static extern bool checkPWMChannel(System.IntPtr digitalPortPointer);
 
 
         /// Return Type: boolean
         ///digital_port_pointer: void*
         [DllImport("libHALAthena_shared.so", EntryPoint = "checkRelayChannel")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool checkRelayChannel(System.IntPtr digital_port_pointer);
+        public static extern bool checkRelayChannel(System.IntPtr digitalPortPointer);
 
 
         /// Return Type: void
@@ -47,7 +47,7 @@ namespace HAL_FRC
         ///value: unsigned short
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setPWM")]
-        public static extern void setPWM(System.IntPtr digital_port_pointer, ushort value, ref int status);
+        public static extern void setPWM(System.IntPtr digitalPortPointer, ushort value, ref int status);
 
 
         /// Return Type: boolean
@@ -55,28 +55,28 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "allocatePWMChannel")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool allocatePWMChannel(System.IntPtr digital_port_pointer, ref int status);
+        public static extern bool allocatePWMChannel(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: void
         ///digital_port_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "freePWMChannel")]
-        public static extern void freePWMChannel(System.IntPtr digital_port_pointer, ref int status);
+        public static extern void freePWMChannel(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: unsigned short
         ///digital_port_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getPWM")]
-        public static extern ushort getPWM(System.IntPtr digital_port_pointer, ref int status);
+        public static extern ushort getPWM(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: void
         ///digital_port_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "latchPWMZero")]
-        public static extern void latchPWMZero(System.IntPtr digital_port_pointer, ref int status);
+        public static extern void latchPWMZero(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: void
@@ -84,7 +84,7 @@ namespace HAL_FRC
         ///squelchMask: unsigned int
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMPeriodScale")]
-        public static extern void setPWMPeriodScale(System.IntPtr digital_port_pointer, uint squelchMask, ref int status);
+        public static extern void setPWMPeriodScale(System.IntPtr digitalPortPointer, uint squelchMask, ref int status);
 
 
         /// Return Type: void*
@@ -128,7 +128,7 @@ namespace HAL_FRC
         ///on: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setRelayForward")]
-        public static extern void setRelayForward(System.IntPtr digital_port_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool on, ref int status);
+        public static extern void setRelayForward(System.IntPtr digitalPortPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool on, ref int status);
 
 
         /// Return Type: void
@@ -136,7 +136,7 @@ namespace HAL_FRC
         ///on: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setRelayReverse")]
-        public static extern void setRelayReverse(System.IntPtr digital_port_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool on, ref int status);
+        public static extern void setRelayReverse(System.IntPtr digitalPortPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool on, ref int status);
 
 
         /// Return Type: boolean
@@ -144,7 +144,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getRelayForward")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getRelayForward(System.IntPtr digital_port_pointer, ref int status);
+        public static extern bool getRelayForward(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -152,7 +152,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getRelayReverse")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getRelayReverse(System.IntPtr digital_port_pointer, ref int status);
+        public static extern bool getRelayReverse(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -161,14 +161,14 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "allocateDIO")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool allocateDIO(System.IntPtr digital_port_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool input, ref int status);
+        public static extern bool allocateDIO(System.IntPtr digitalPortPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool input, ref int status);
 
 
         /// Return Type: void
         ///digital_port_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "freeDIO")]
-        public static extern void freeDIO(System.IntPtr digital_port_pointer, ref int status);
+        public static extern void freeDIO(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: void
@@ -176,7 +176,7 @@ namespace HAL_FRC
         ///value: short
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setDIO")]
-        public static extern void setDIO(System.IntPtr digital_port_pointer, short value, ref int status);
+        public static extern void setDIO(System.IntPtr digitalPortPointer, short value, ref int status);
 
 
         /// Return Type: boolean
@@ -184,7 +184,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getDIO")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getDIO(System.IntPtr digital_port_pointer, ref int status);
+        public static extern bool getDIO(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -192,7 +192,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getDIODirection")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getDIODirection(System.IntPtr digital_port_pointer, ref int status);
+        public static extern bool getDIODirection(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: void
@@ -200,7 +200,7 @@ namespace HAL_FRC
         ///pulseLength: double
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "pulse")]
-        public static extern void pulse(System.IntPtr digital_port_pointer, double pulseLength, ref int status);
+        public static extern void pulse(System.IntPtr digitalPortPointer, double pulseLength, ref int status);
 
 
         /// Return Type: boolean
@@ -208,7 +208,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "isPulsing")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool isPulsing(System.IntPtr digital_port_pointer, ref int status);
+        public static extern bool isPulsing(System.IntPtr digitalPortPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -230,7 +230,7 @@ namespace HAL_FRC
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "freeCounter")]
-        public static extern void freeCounter(System.IntPtr counter_pointer, ref int status);
+        public static extern void freeCounter(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
@@ -238,7 +238,7 @@ namespace HAL_FRC
         ///size: int
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterAverageSize")]
-        public static extern void setCounterAverageSize(System.IntPtr counter_pointer, int size, ref int status);
+        public static extern void setCounterAverageSize(System.IntPtr counterPointer, int size, ref int status);
 
 
         /// Return Type: void
@@ -247,7 +247,7 @@ namespace HAL_FRC
         ///analogTrigger: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpSource")]
-        public static extern void setCounterUpSource(System.IntPtr counter_pointer, uint pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool analogTrigger, ref int status);
+        public static extern void setCounterUpSource(System.IntPtr counterPointer, uint pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool analogTrigger, ref int status);
 
 
         /// Return Type: void
@@ -256,14 +256,14 @@ namespace HAL_FRC
         ///fallingEdge: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpSourceEdge")]
-        public static extern void setCounterUpSourceEdge(System.IntPtr counter_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
+        public static extern void setCounterUpSourceEdge(System.IntPtr counterPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
 
 
         /// Return Type: void
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "clearCounterUpSource")]
-        public static extern void clearCounterUpSource(System.IntPtr counter_pointer, ref int status);
+        public static extern void clearCounterUpSource(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
@@ -272,7 +272,7 @@ namespace HAL_FRC
         ///analogTrigger: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterDownSource")]
-        public static extern void setCounterDownSource(System.IntPtr counter_pointer, uint pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool analogTrigger, ref int status);
+        public static extern void setCounterDownSource(System.IntPtr counterPointer, uint pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool analogTrigger, ref int status);
 
 
         /// Return Type: void
@@ -281,28 +281,28 @@ namespace HAL_FRC
         ///fallingEdge: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterDownSourceEdge")]
-        public static extern void setCounterDownSourceEdge(System.IntPtr counter_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
+        public static extern void setCounterDownSourceEdge(System.IntPtr counterPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool risingEdge, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool fallingEdge, ref int status);
 
 
         /// Return Type: void
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "clearCounterDownSource")]
-        public static extern void clearCounterDownSource(System.IntPtr counter_pointer, ref int status);
+        public static extern void clearCounterDownSource(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpDownMode")]
-        public static extern void setCounterUpDownMode(System.IntPtr counter_pointer, ref int status);
+        public static extern void setCounterUpDownMode(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterExternalDirectionMode")]
-        public static extern void setCounterExternalDirectionMode(System.IntPtr counter_pointer, ref int status);
+        public static extern void setCounterExternalDirectionMode(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
@@ -310,7 +310,7 @@ namespace HAL_FRC
         ///highSemiPeriod: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterSemiPeriodMode")]
-        public static extern void setCounterSemiPeriodMode(System.IntPtr counter_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool highSemiPeriod, ref int status);
+        public static extern void setCounterSemiPeriodMode(System.IntPtr counterPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool highSemiPeriod, ref int status);
 
 
         /// Return Type: void
@@ -318,14 +318,14 @@ namespace HAL_FRC
         ///threshold: double
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterPulseLengthMode")]
-        public static extern void setCounterPulseLengthMode(System.IntPtr counter_pointer, double threshold, ref int status);
+        public static extern void setCounterPulseLengthMode(System.IntPtr counterPointer, double threshold, ref int status);
 
 
         /// Return Type: int
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterSamplesToAverage")]
-        public static extern int getCounterSamplesToAverage(System.IntPtr counter_pointer, ref int status);
+        public static extern int getCounterSamplesToAverage(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
@@ -333,28 +333,28 @@ namespace HAL_FRC
         ///samplesToAverage: int
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterSamplesToAverage")]
-        public static extern void setCounterSamplesToAverage(System.IntPtr counter_pointer, int samplesToAverage, ref int status);
+        public static extern void setCounterSamplesToAverage(System.IntPtr counterPointer, int samplesToAverage, ref int status);
 
 
         /// Return Type: void
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "resetCounter")]
-        public static extern void resetCounter(System.IntPtr counter_pointer, ref int status);
+        public static extern void resetCounter(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: int
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getCounter")]
-        public static extern int getCounter(System.IntPtr counter_pointer, ref int status);
+        public static extern int getCounter(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: double
         ///counter_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterPeriod")]
-        public static extern double getCounterPeriod(System.IntPtr counter_pointer, ref int status);
+        public static extern double getCounterPeriod(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
@@ -362,7 +362,7 @@ namespace HAL_FRC
         ///maxPeriod: double
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterMaxPeriod")]
-        public static extern void setCounterMaxPeriod(System.IntPtr counter_pointer, double maxPeriod, ref int status);
+        public static extern void setCounterMaxPeriod(System.IntPtr counterPointer, double maxPeriod, ref int status);
 
 
         /// Return Type: void
@@ -370,7 +370,7 @@ namespace HAL_FRC
         ///enabled: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpdateWhenEmpty")]
-        public static extern void setCounterUpdateWhenEmpty(System.IntPtr counter_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool enabled, ref int status);
+        public static extern void setCounterUpdateWhenEmpty(System.IntPtr counterPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool enabled, ref int status);
 
 
         /// Return Type: boolean
@@ -378,7 +378,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterStopped")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCounterStopped(System.IntPtr counter_pointer, ref int status);
+        public static extern bool getCounterStopped(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -386,7 +386,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterDirection")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCounterDirection(System.IntPtr counter_pointer, ref int status);
+        public static extern bool getCounterDirection(System.IntPtr counterPointer, ref int status);
 
 
         /// Return Type: void
@@ -394,7 +394,7 @@ namespace HAL_FRC
         ///reverseDirection: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterReverseDirection")]
-        public static extern void setCounterReverseDirection(System.IntPtr counter_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool reverseDirection, ref int status);
+        public static extern void setCounterReverseDirection(System.IntPtr counterPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool reverseDirection, ref int status);
 
 
         /// Return Type: void*
@@ -408,35 +408,35 @@ namespace HAL_FRC
         ///index: int*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "initializeEncoder")]
-        public static extern System.IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool port_b_analog_trigger, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool reverseDirection, ref int index, ref int status);
+        public static extern System.IntPtr initializeEncoder(byte portAModule, uint portAPin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool portAAnalogTrigger, byte portBModule, uint portBPin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool portBAnalogTrigger, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool reverseDirection, ref int index, ref int status);
 
 
         /// Return Type: void
         ///encoder_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "freeEncoder")]
-        public static extern void freeEncoder(System.IntPtr encoder_pointer, ref int status);
+        public static extern void freeEncoder(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: void
         ///encoder_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "resetEncoder")]
-        public static extern void resetEncoder(System.IntPtr encoder_pointer, ref int status);
+        public static extern void resetEncoder(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: int
         ///encoder_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoder")]
-        public static extern int getEncoder(System.IntPtr encoder_pointer, ref int status);
+        public static extern int getEncoder(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: double
         ///encoder_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderPeriod")]
-        public static extern double getEncoderPeriod(System.IntPtr encoder_pointer, ref int status);
+        public static extern double getEncoderPeriod(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: void
@@ -444,7 +444,7 @@ namespace HAL_FRC
         ///maxPeriod: double
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderMaxPeriod")]
-        public static extern void setEncoderMaxPeriod(System.IntPtr encoder_pointer, double maxPeriod, ref int status);
+        public static extern void setEncoderMaxPeriod(System.IntPtr encoderPointer, double maxPeriod, ref int status);
 
 
         /// Return Type: boolean
@@ -452,7 +452,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderStopped")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getEncoderStopped(System.IntPtr encoder_pointer, ref int status);
+        public static extern bool getEncoderStopped(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: boolean
@@ -460,7 +460,7 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderDirection")]
         [return: MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getEncoderDirection(System.IntPtr encoder_pointer, ref int status);
+        public static extern bool getEncoderDirection(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: void
@@ -468,7 +468,7 @@ namespace HAL_FRC
         ///reverseDirection: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderReverseDirection")]
-        public static extern void setEncoderReverseDirection(System.IntPtr encoder_pointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool reverseDirection, ref int status);
+        public static extern void setEncoderReverseDirection(System.IntPtr encoderPointer, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool reverseDirection, ref int status);
 
 
         /// Return Type: void
@@ -476,14 +476,14 @@ namespace HAL_FRC
         ///samplesToAverage: unsigned int
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderSamplesToAverage")]
-        public static extern void setEncoderSamplesToAverage(System.IntPtr encoder_pointer, uint samplesToAverage, ref int status);
+        public static extern void setEncoderSamplesToAverage(System.IntPtr encoderPointer, uint samplesToAverage, ref int status);
 
 
         /// Return Type: unsigned int
         ///encoder_pointer: void*
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderSamplesToAverage")]
-        public static extern uint getEncoderSamplesToAverage(System.IntPtr encoder_pointer, ref int status);
+        public static extern uint getEncoderSamplesToAverage(System.IntPtr encoderPointer, ref int status);
 
 
         /// Return Type: void
@@ -494,7 +494,7 @@ namespace HAL_FRC
         ///edgeSensitive: boolean
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderIndexSource")]
-        public static extern void setEncoderIndexSource(System.IntPtr encoder_pointer, uint pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool analogTrigger, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool activeHigh, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool edgeSensitive, ref int status);
+        public static extern void setEncoderIndexSource(System.IntPtr encoderPointer, uint pin, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool analogTrigger, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool activeHigh, [MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)] bool edgeSensitive, ref int status);
 
 
         /// Return Type: unsigned short
@@ -561,7 +561,7 @@ namespace HAL_FRC
         ///sample_on_trailing: int
         ///clk_idle_high: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetOpts")]
-        public static extern void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high);
+        public static extern void spiSetOpts(byte port, int msbFirst, int sampleOnTrailing, int clkIdleHigh);
 
 
         /// Return Type: void
@@ -660,10 +660,5 @@ namespace HAL_FRC
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMDutyCycleIntHack")]
         public static extern void setPWMDutyCycleIntHack(System.IntPtr pwmGenerator, int dutyCycle, ref int status);
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    public struct MUTEX_ID
-    {
     }
 }

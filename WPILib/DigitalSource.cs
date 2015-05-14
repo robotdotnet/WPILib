@@ -1,28 +1,26 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using HAL_FRC;
 using WPILib.Util;
+using HAL_FRC;
 
 namespace WPILib
 {
     public class DigitalSource : InterruptableSensorBase
     {
-        protected static Resource channels = new Resource(DigitalChannels);
-        protected IntPtr _port;
-        protected int _channel;
+        protected static Resource s_channels = new Resource(DigitalChannels);
+        protected IntPtr m_port;
+        protected int m_channel;
 
         protected void InitDigitalPort(int channel, bool input)
         {
-            this._channel = channel;
+            this.m_channel = channel;
 
             CheckDigitalChannel(channel);
 
             try
             {
-                channels.Allocate(channel);
+                s_channels.Allocate(channel);
             }
             catch (CheckedAllocationException ex)
             {
@@ -31,21 +29,21 @@ namespace WPILib
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
-            _port = HALDigital.initializeDigitalPort(portPointer, ref status);
-            HALDigital.allocateDIO(_port, input, ref status);
+            m_port = HALDigital.initializeDigitalPort(portPointer, ref status);
+            HALDigital.allocateDIO(m_port, input, ref status);
         }
 
         public override void Free()
         {
-            channels.Free(_channel);
+            s_channels.Free(m_channel);
             int status = 0;
-            HALDigital.freeDIO(_port, ref status);
-            _channel = 0;
+            HALDigital.freeDIO(m_port, ref status);
+            m_channel = 0;
         }
 
         public override int GetChannelForRouting()
         {
-            return _channel;
+            return m_channel;
         }
 
         public override byte GetModuleForRouting()

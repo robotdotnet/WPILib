@@ -1,16 +1,10 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPILib.Interfaces
+﻿namespace WPILib.Interfaces
 {
     public enum PIDSourceParameter
     {
-        kDistance = 0,
-        kRate = 1,
-        kAngle = 2,
+        Distance = 0,
+        Rate = 1,
+        Angle = 2,
     }
     public interface PIDSource
     {

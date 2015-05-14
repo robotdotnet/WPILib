@@ -1,16 +1,10 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPILib.Interfaces
+﻿namespace WPILib.Interfaces
 {
     public enum EncodingType
     {
-        k1X_val = 0,
-        k2X_val = 1,
-        k4X_val = 2,
+        K1X = 0,
+        K2X = 1,
+        K4X = 2,
     }
     public interface CounterBase
     {

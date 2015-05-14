@@ -1,34 +1,28 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPILib.Interfaces
+﻿namespace WPILib.Interfaces
 {
     public enum Hand
     {
-        kLeft,
-        kRight,
+        Left,
+        Right,
     }
     public abstract class GenericHID
     {
         public double GetX()
         {
-            return GetX(Hand.kRight);
+            return GetX(Hand.Right);
         }
 
         public abstract double GetX(Hand hand);
 
         public double GetY()
         {
-            return GetY(Hand.kRight);
+            return GetY(Hand.Right);
         }
         public abstract double GetY(Hand hand);
 
         public double GetZ()
         {
-            return GetZ(Hand.kRight);
+            return GetZ(Hand.Right);
         }
 
         public abstract double GetZ(Hand hand);
@@ -39,7 +33,7 @@ namespace WPILib.Interfaces
 
         public bool GetTrigger()
         {
-            return GetTrigger(Hand.kRight);
+            return GetTrigger(Hand.Right);
         }
 
         public abstract bool GetTrigger(Hand hand);
@@ -50,7 +44,7 @@ namespace WPILib.Interfaces
      */
         public bool GetTop()
         {
-            return GetTop(Hand.kRight);
+            return GetTop(Hand.Right);
         }
 
         /**
@@ -66,7 +60,7 @@ namespace WPILib.Interfaces
          */
         public bool GetBumper()
         {
-            return GetBumper(Hand.kRight);
+            return GetBumper(Hand.Right);
         }
 
         /**

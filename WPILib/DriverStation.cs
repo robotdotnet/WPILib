@@ -1,9 +1,7 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 using HAL_FRC;
 
@@ -11,9 +9,9 @@ namespace WPILib
 {
     public class DriverStation
     {
-        public const int kJoystickPorts = 6;
-        public const int kMaxJoystickAxes = 12;
-        public const int kMaxJoystickPOVs = 12;
+        public const int JoystickPorts = 6;
+        public const int MaxJoystickAxes = 12;
+        public const int MaxJoystickPOVs = 12;
 
         public enum Alliance
         {
@@ -22,16 +20,16 @@ namespace WPILib
             Invalid
         };
 
-        private const double JOYSTICK_UNPLUGGED_MESSAGE_INTERVAL = 1.0;
+        private const double JoystickUnpluggedMessageInterval = 1.0;
         private double _nextMessageTime = 0.0;
 
         //Figure out driver station task
 
         private static DriverStation s_instance = new DriverStation();
 
-        private short[][] _joystickAxes = new short[kJoystickPorts][];
-        private short[][] _joystickPOVs = new short[kJoystickPorts][];
-        private HALJoystickButtons[] _joystickButtons = new HALJoystickButtons[kJoystickPorts];
+        private short[][] _joystickAxes = new short[JoystickPorts][];
+        private short[][] _joystickPOVs = new short[JoystickPorts][];
+        private HALJoystickButtons[] _joystickButtons = new HALJoystickButtons[JoystickPorts];
 
         private Thread _thread;
         private Object _dataSem;
@@ -55,7 +53,7 @@ namespace WPILib
         {
             _dataSem = new object();
             _mutex = new object();
-            for (int i = 0; i < kJoystickPorts; i++)
+            for (int i = 0; i < JoystickPorts; i++)
             {
                 _joystickButtons[i] = new HALJoystickButtons();
                 _joystickAxes[i] = new short[12];
@@ -133,7 +131,7 @@ namespace WPILib
         {
             lock (_mutex)
             {
-                for (byte stick = 0; stick < kJoystickPorts; stick++)
+                for (byte stick = 0; stick < JoystickPorts; stick++)
                 {
                     _joystickAxes[stick] = HAL.GetJoystickAxes(stick);
                     _joystickPOVs[stick] = HAL.GetJoystickPOVs(stick);
@@ -155,18 +153,18 @@ namespace WPILib
             if (currentTime > _nextMessageTime)
             {
                 ReportError(message, false);
-                _nextMessageTime = currentTime + JOYSTICK_UNPLUGGED_MESSAGE_INTERVAL;
+                _nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
             }
         }
 
         public double GetStickAxis(int stick, int axis)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            if (axis < 0 || axis >= kMaxJoystickAxes)
+            if (axis < 0 || axis >= MaxJoystickAxes)
             {
                 throw new SystemException("Joystick axis is out of range");
             }
@@ -194,7 +192,7 @@ namespace WPILib
 
         public int GetStickAxisCount(int stick)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
@@ -206,12 +204,12 @@ namespace WPILib
 
         public int GetStickPOV(int stick, int pov)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            if (pov < 0 || pov >= kMaxJoystickPOVs)
+            if (pov < 0 || pov >= MaxJoystickPOVs)
             {
                 throw new SystemException("Joystick POV is out of range");
             }
@@ -231,7 +229,7 @@ namespace WPILib
 
         public int GetStickPOVCount(int stick)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
@@ -243,7 +241,7 @@ namespace WPILib
 
         public int GetStickButtons(int stick)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
@@ -256,7 +254,7 @@ namespace WPILib
 
         public bool GetStickButton(int stick, byte button)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
@@ -281,7 +279,7 @@ namespace WPILib
 
         public int GetStickButtonCount(int stick)
         {
-            if (stick < 0 || stick >= kJoystickPorts)
+            if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
@@ -385,14 +383,14 @@ namespace WPILib
 
             switch (allianceStationID)
             {
-                case HALAllianceStationID.kHALAllianceStationID_red1:
-                case HALAllianceStationID.kHALAllianceStationID_red2:
-                case HALAllianceStationID.kHALAllianceStationID_red3:
+                case HALAllianceStationID.HALAllianceStationID_red1:
+                case HALAllianceStationID.HALAllianceStationID_red2:
+                case HALAllianceStationID.HALAllianceStationID_red3:
                     return Alliance.Red;
 
-                case HALAllianceStationID.kHALAllianceStationID_blue1:
-                case HALAllianceStationID.kHALAllianceStationID_blue2:
-                case HALAllianceStationID.kHALAllianceStationID_blue3:
+                case HALAllianceStationID.HALAllianceStationID_blue1:
+                case HALAllianceStationID.HALAllianceStationID_blue2:
+                case HALAllianceStationID.HALAllianceStationID_blue3:
                     return Alliance.Blue;
 
                 default:
@@ -407,16 +405,16 @@ namespace WPILib
 
             switch (allianceStationID)
             {
-                case HALAllianceStationID.kHALAllianceStationID_red1:
-                case HALAllianceStationID.kHALAllianceStationID_blue1:
+                case HALAllianceStationID.HALAllianceStationID_red1:
+                case HALAllianceStationID.HALAllianceStationID_blue1:
                     return 1;
 
-                case HALAllianceStationID.kHALAllianceStationID_red2:
-                case HALAllianceStationID.kHALAllianceStationID_blue2:
+                case HALAllianceStationID.HALAllianceStationID_red2:
+                case HALAllianceStationID.HALAllianceStationID_blue2:
                     return 2;
 
-                case HALAllianceStationID.kHALAllianceStationID_red3:
-                case HALAllianceStationID.kHALAllianceStationID_blue3:
+                case HALAllianceStationID.HALAllianceStationID_red3:
+                case HALAllianceStationID.HALAllianceStationID_blue3:
                     return 3;
 
                 default:

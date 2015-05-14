@@ -1,15 +1,15 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace HAL_FRC
 {
     public enum HALAllianceStationID
     {
+// ReSharper disable InconsistentNaming
         kHALAllianceStationID_red1,
+
 
         kHALAllianceStationID_red2,
 
@@ -20,6 +20,7 @@ namespace HAL_FRC
         kHALAllianceStationID_blue2,
 
         kHALAllianceStationID_blue3,
+// ReSharper restore InconsistentNaming
     }
 
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
@@ -148,7 +149,7 @@ namespace HAL_FRC
         ///errorsLength: int
         ///wait_ms: int
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALSetErrorData")]
-        public static extern int SetErrorData([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string errors, int errorsLength, int wait_ms);
+        public static extern int SetErrorData([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string errors, int errorsLength, int waitMs);
 
 
         /// Return Type: int
@@ -210,12 +211,12 @@ namespace HAL_FRC
         ///sem: void*
         //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALSetNewDataSem")]
         //public static extern void SetNewDataSem(System.IntPtr sem);
-        internal static object newDataSem;
+        internal static object NewDataSem;
 
         public static void SetNewDataSem(IntPtr sem)
         {
             MULTIWAIT_ID p = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-            newDataSem = p.lockObject;
+            NewDataSem = p.lockObject;
         }
 
         /// Return Type: boolean
@@ -358,9 +359,9 @@ namespace HAL_FRC
             return povs.povs;
         }
 
-        public static int SetErrorData(string errors, int wait_ms)
+        public static int SetErrorData(string errors, int waitMs)
         {
-            return SetErrorData(errors, errors.Length, wait_ms);
+            return SetErrorData(errors, errors.Length, waitMs);
         }
 
         public static void Initialize(int mode = 0)

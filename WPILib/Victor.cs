@@ -1,9 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using WPILib.Interfaces;
+﻿using WPILib.Interfaces;
 using HAL_FRC;
 
 namespace WPILib
@@ -13,7 +8,7 @@ namespace WPILib
         private void InitVictor()
         {
             SetBounds(2.027, 1.525, 1.507, 1.49, 1.026);
-            SetPeriodMultiplier(PeriodMultiplier.k2x_val);
+            SetPeriodMultiplier(PeriodMultiplier.K2X);
             SetRaw(GetCenterPwm());
             SetZeroLatch();
 

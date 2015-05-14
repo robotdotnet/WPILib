@@ -1,9 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using HAL_FRC;
+﻿using HAL_FRC;
 
 namespace WPILib
 {
@@ -19,13 +14,13 @@ namespace WPILib
         public bool Get()
         {
             int status = 0;
-            bool value = HALDigital.getDIO(_port, ref status);
+            bool value = HALDigital.getDIO(m_port, ref status);
             return value;
         }
 
         public int GetChannel()
         {
-            return _channel;
+            return m_channel;
         }
 
         public override bool GetAnalogTriggerForRouting()

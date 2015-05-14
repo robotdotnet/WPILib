@@ -1,16 +1,14 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using WPILib.Interfaces;
 
 namespace WPILib
 {
     public class MotorSafetyHelper
     {
-        public const double DEFAULT_SAFETY_EXPIRATION = 0.1;
+        public const double DefaultSafetyExpiration = 0.1;
 
         private double _expiration;
         private bool _enabled;
@@ -23,7 +21,7 @@ namespace WPILib
         {
             _safeObject = safeObject;
             _enabled = true;
-            _expiration = DEFAULT_SAFETY_EXPIRATION;
+            _expiration = DefaultSafetyExpiration;
             _stopTime = Timer.GetFPGATimestamp();
             _nextHelper = s_headHelper;
             s_headHelper = this;

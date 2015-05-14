@@ -1,25 +1,20 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HAL_FRC;
 using WPILib.Interfaces;
 using System.Threading;
+using HAL_FRC;
 
 namespace WPILib
 {
-    //public delegate void TimerEventHandler(object param);
-
     public class Notifier
     {
-        static private Notifier s_timer_queue_head;
-        static private int s_ref_count = 0;
-        static private object s_queue_semaphore = new object();
+        static private Notifier s_timerQueueHead;
+        static private int s_refCount = 0;
+        static private object s_queueSemaphore = new object();
 
         protected static IntPtr s_notifier = IntPtr.Zero;
-        public double m_expiration_time = 0;
+        public double m_expirationTime = 0;
 
         public static void s_notifier_process_queue(uint param0, IntPtr param1)
         {
@@ -31,8 +26,8 @@ namespace WPILib
         public double m_period = 0;
         public bool m_periodic = false;
         public bool m_queued = false;
-        public Notifier m_next_event;
-        public Semaphore m_handler_semaphore = new Semaphore(1, 1);
+        public Notifier m_nextEvent;
+        public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
 
 
 
@@ -40,23 +35,23 @@ namespace WPILib
         {
             m_handler = handler;
             m_param = param;
-            lock (s_queue_semaphore)
+            lock (s_queueSemaphore)
             {
-                if (s_ref_count == 0)
+                if (s_refCount == 0)
                 {
                     int status = 0;
                     s_notifier = HALNotifier.initializeNotifier(s_notifier_process_queue, ref status);
                 }
-                s_ref_count++;
+                s_refCount++;
             }
         }
 
         public static void UpdateAlarm()
         {
-            if (s_timer_queue_head != null)
+            if (s_timerQueueHead != null)
             {
                 int status = 0;
-                HALNotifier.updateNotifierAlarm(s_notifier, (uint)(s_timer_queue_head.m_expiration_time * 1e6), ref status);
+                HALNotifier.updateNotifierAlarm(s_notifier, (uint)(s_timerQueueHead.m_expirationTime * 1e6), ref status);
             }
         }
 
@@ -64,16 +59,16 @@ namespace WPILib
         {
             if (reschedule)
             {
-                m_expiration_time += m_period;
+                m_expirationTime += m_period;
             }
             else
             {
-                m_expiration_time = Timer.GetFPGATimestamp() + m_period;
+                m_expirationTime = Timer.GetFPGATimestamp() + m_period;
             }
-            if (s_timer_queue_head == null || s_timer_queue_head.m_expiration_time >= this.m_expiration_time)
+            if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= this.m_expirationTime)
             {
-                this.m_next_event = s_timer_queue_head;
-                s_timer_queue_head = this;
+                this.m_nextEvent = s_timerQueueHead;
+                s_timerQueueHead = this;
                 if (!reschedule)
                 {
                     UpdateAlarm();
@@ -81,20 +76,20 @@ namespace WPILib
             }
             else
             {
-                Notifier last = s_timer_queue_head;
+                Notifier last = s_timerQueueHead;
                 Notifier cur;
                 bool looking = true;
 
                 while (looking)
                 {
-                    cur = last.m_next_event;
-                    if (cur == null || cur.m_expiration_time > this.m_expiration_time)
+                    cur = last.m_nextEvent;
+                    if (cur == null || cur.m_expirationTime > this.m_expirationTime)
                     {
-                        last.m_next_event = this;
-                        this.m_next_event = cur;
+                        last.m_nextEvent = this;
+                        this.m_nextEvent = cur;
                         looking = false;
                     }
-                    last = last.m_next_event;
+                    last = last.m_nextEvent;
                 }
             }
             m_queued = true;
@@ -105,20 +100,20 @@ namespace WPILib
             if (m_queued)
             {
                 m_queued = false;
-                if (s_timer_queue_head == null)
+                if (s_timerQueueHead == null)
                     return;
-                if (s_timer_queue_head == this)
+                if (s_timerQueueHead == this)
                 {
-                    s_timer_queue_head = this.m_next_event;
+                    s_timerQueueHead = this.m_nextEvent;
                     UpdateAlarm();
                 }
                 else
                 {
-                    for (Notifier n = s_timer_queue_head; n != null; n = n.m_next_event)
+                    for (Notifier n = s_timerQueueHead; n != null; n = n.m_nextEvent)
                     {
-                        if (n.m_next_event == this)
+                        if (n.m_nextEvent == this)
                         {
-                            n.m_next_event = this.m_next_event;
+                            n.m_nextEvent = this.m_nextEvent;
                         }
                     }
                 }
@@ -127,7 +122,7 @@ namespace WPILib
 
         public void StartSingle(double delay)
         {
-            lock (s_queue_semaphore)
+            lock (s_queueSemaphore)
             {
                 m_periodic = false;
                 m_period = delay;
@@ -138,7 +133,7 @@ namespace WPILib
 
         public void StartPeriodic(double period)
         {
-            lock (s_queue_semaphore)
+            lock (s_queueSemaphore)
             {
                 m_periodic = true;
                 m_period = period;
@@ -149,14 +144,14 @@ namespace WPILib
 
         public void Stop()
         {
-            lock (s_queue_semaphore)
+            lock (s_queueSemaphore)
             {
                 DeleteFromQueue();
             }
             try
             {
-                m_handler_semaphore.WaitOne();
-                m_handler_semaphore.Release();
+                m_handlerSemaphore.WaitOne();
+                m_handlerSemaphore.Release();
             }
             catch (ThreadInterruptedException e)
             {
@@ -168,15 +163,15 @@ namespace WPILib
             Notifier current;
             while (true)
             {
-                lock (s_queue_semaphore)
+                lock (s_queueSemaphore)
                 {
-                    double current_time = Timer.GetFPGATimestamp();
-                    current = s_timer_queue_head;
-                    if (current == null || current.m_expiration_time > current_time)
+                    double currentTime = Timer.GetFPGATimestamp();
+                    current = s_timerQueueHead;
+                    if (current == null || current.m_expirationTime > currentTime)
                     {
                         break;
                     }
-                    s_timer_queue_head = current.m_next_event;
+                    s_timerQueueHead = current.m_nextEvent;
                     if (current.m_periodic)
                     {
                         current.InsertInQueue(true);
@@ -187,16 +182,16 @@ namespace WPILib
                     }
                     try
                     {
-                        current.m_handler_semaphore.WaitOne();
+                        current.m_handlerSemaphore.WaitOne();
                     }
                     catch (ThreadInterruptedException e)
                     {
                     }
                 }
                 current.m_handler.Update(current.m_param);//.Update(current.m_param);
-                current.m_handler_semaphore.Release();
+                current.m_handlerSemaphore.Release();
             }
-            lock (s_queue_semaphore)
+            lock (s_queueSemaphore)
             {
                 UpdateAlarm();
             }

@@ -1,10 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HAL_FRC
+﻿namespace HAL_FRC
 {
     public class HALSolenoid
     {

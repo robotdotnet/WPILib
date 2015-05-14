@@ -1,9 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using WPILib.Interfaces;
+﻿using WPILib.Interfaces;
 using HAL_FRC;
 
 namespace WPILib
@@ -13,7 +8,7 @@ namespace WPILib
         private void InitTalonSRX()
         {
             SetBounds(2.004, 1.52, 1.50, 1.48, .997);
-            SetPeriodMultiplier(PeriodMultiplier.k1x_val);
+            SetPeriodMultiplier(PeriodMultiplier.K1X);
             SetRaw(GetCenterPwm());
             SetZeroLatch();
 

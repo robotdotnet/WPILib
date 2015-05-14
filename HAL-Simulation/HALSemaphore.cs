@@ -1,9 +1,7 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 
 namespace HAL_FRC
@@ -109,11 +107,11 @@ namespace HAL_FRC
         //public static extern byte takeMultiWait(System.IntPtr sem, System.IntPtr m, int timeout);
         public static byte takeMultiWait(IntPtr sem, IntPtr m, int timeout)
         {
-            lock (HAL.newDataSem)
+            lock (HAL.NewDataSem)
             {
                 try
                 {
-                    Monitor.Wait(HAL.newDataSem);
+                    Monitor.Wait(HAL.NewDataSem);
                 }
                 catch (ThreadInterruptedException ex)
                 {

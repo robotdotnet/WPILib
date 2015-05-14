@@ -1,10 +1,8 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using HAL_FRC;
 using WPILib.Util;
+using HAL_FRC;
 
 namespace WPILib
 {
@@ -12,9 +10,9 @@ namespace WPILib
     {
         public enum PeriodMultiplier
         {
-            k1x_val = 1,
-            k2x_val = 2,
-            k4x_val = 4,
+            K1X = 1,
+            K2X = 2,
+            K4X = 4,
         }
 
 
@@ -215,13 +213,13 @@ namespace WPILib
 
             switch (mult)
             {
-                case PeriodMultiplier.k1x_val:
+                case PeriodMultiplier.K1X:
                     HALDigital.setPWMPeriodScale(_port, 3, ref status);
                     break;
-                case PeriodMultiplier.k2x_val:
+                case PeriodMultiplier.K2X:
                     HALDigital.setPWMPeriodScale(_port, 1, ref status);
                     break;
-                case PeriodMultiplier.k4x_val:
+                case PeriodMultiplier.K4X:
                     HALDigital.setPWMPeriodScale(_port, 0, ref status);
                     break;
                 default:
