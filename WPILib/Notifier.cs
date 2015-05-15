@@ -27,7 +27,9 @@ namespace WPILib
         public bool m_periodic = false;
         public bool m_queued = false;
         public Notifier m_nextEvent;
-        public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
+        //public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
+
+        public IntPtr m_handlerSemaphore;
 
 
 
@@ -35,6 +37,7 @@ namespace WPILib
         {
             m_handler = handler;
             m_param = param;
+            m_handlerSemaphore = HALSemaphore.initializeSemaphore(1);
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
@@ -150,8 +153,8 @@ namespace WPILib
             }
             try
             {
-                m_handlerSemaphore.WaitOne();
-                m_handlerSemaphore.Release();
+                HALSemaphore.takeSemaphore(m_handlerSemaphore);
+                HALSemaphore.giveSemaphore(m_handlerSemaphore);
             }
             catch (ThreadInterruptedException e)
             {
@@ -182,14 +185,16 @@ namespace WPILib
                     }
                     try
                     {
-                        current.m_handlerSemaphore.WaitOne();
+                        //current.m_handlerSemaphore.WaitOne();
+                        HALSemaphore.takeSemaphore(current.m_handlerSemaphore);
                     }
                     catch (ThreadInterruptedException e)
                     {
                     }
                 }
                 current.m_handler.Update(current.m_param);//.Update(current.m_param);
-                current.m_handlerSemaphore.Release();
+                HALSemaphore.giveSemaphore(current.m_handlerSemaphore);
+                //current.m_handlerSemaphore.Release();
             }
             lock (s_queueSemaphore)
             {

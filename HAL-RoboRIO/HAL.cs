@@ -148,28 +148,28 @@
         ///joystickNum: byte
         ///axes: HALJoystickAxes*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALGetJoystickAxes")]
-        private static extern int GetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes);
+        public static extern int GetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes);
 
 
         /// Return Type: int
         ///joystickNum: byte
         ///povs: HALJoystickPOVs*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALGetJoystickPOVs")]
-        private static extern int GetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs);
+        public static extern int GetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs);
 
 
         /// Return Type: int
         ///joystickNum: byte
         ///buttons: HALJoystickButtons*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALGetJoystickButtons")]
-        private static extern int GetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons);
+        public static extern int GetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons);
 
 
         /// Return Type: int
         ///joystickNum: byte
         ///desc: HALJoystickDescriptor*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALGetJoystickDescriptor")]
-        private static extern int GetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
+        public static extern int GetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
 
 
         /// Return Type: int
