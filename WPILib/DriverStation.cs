@@ -94,11 +94,8 @@ namespace WPILib
             int safetyCounter = 0;
             while (m_threadKeepAlive)
             {
-                Console.WriteLine("TakeWaitMulti");
                 HALSemaphore.takeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
-                Console.WriteLine("GetData");
                 GetData();
-                Console.WriteLine("GiveWaitMulti");
                 HALSemaphore.giveMultiWait(m_waitForDataSem);
                 //HALSemaphore.giveMultiWait(dataSem);
 
@@ -162,18 +159,14 @@ namespace WPILib
                 _newControlData = true;
             }
              * */
-            Console.WriteLine("Starting For Loop");
-            /*
-            for (byte stick = 0; stick < 6; stick++)
+
+            for (byte stick = 0; stick < JoystickPorts; stick++)
             {
-                Console.WriteLine("Axes" + stick);
-                HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-                Console.WriteLine("POVs" + stick );
-                HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-                Console.WriteLine("Buttons" + stick);
-                HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-                Console.WriteLine("Done" + stick);
-                /*
+                HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]);
+                HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]);
+                HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]);
+            }
+            /*
                 Console.WriteLine("Axes");
                 _joystickAxes[stick] = HAL.GetJoystickAxes(stick);
                 Console.WriteLine("POVs");
@@ -183,6 +176,7 @@ namespace WPILib
                  * 
             }
                */
+                /*
             byte stick = 0;
 
             Console.WriteLine("Axes" + stick);
@@ -243,11 +237,8 @@ namespace WPILib
             Console.WriteLine("Buttons" + stick);
             Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
             Console.WriteLine("Done" + stick);
-            
-
-            Console.WriteLine("Trying to Give Semaphore");
+            */
             HALSemaphore.giveSemaphore(m_newControlData);
-            Console.WriteLine("Gave Semaphore");
         }
 
         public double GetBatteryVoltage()
