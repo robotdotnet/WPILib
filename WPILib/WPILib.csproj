@@ -41,6 +41,7 @@
     <Compile Include="AnalogInput.cs" />
     <Compile Include="AnalogTrigger.cs" />
     <Compile Include="AnalogTriggerOutput.cs" />
+    <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />
     <Compile Include="DigitalOutput.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Joystick.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="Notifier.cs" />
+    <Compile Include="PowerDistributionPanel.cs" />
     <Compile Include="PWM.cs" />
     <Compile Include="RobotBase.cs" />
     <Compile Include="RobotDrive.cs" />
