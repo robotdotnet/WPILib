@@ -4,6 +4,7 @@ using System;
 using WPILib.Interfaces;
 using System.Threading;
 using HAL_FRC;
+using System.Runtime.InteropServices;
 
 namespace WPILib
 {
@@ -16,10 +17,14 @@ namespace WPILib
         protected static IntPtr s_notifier = IntPtr.Zero;
         public double m_expirationTime = 0;
 
-        public static void s_notifier_process_queue(uint param0, IntPtr param1)
+        public void s_notifier_process_queue(uint param0, IntPtr param1)
         {
             Notifier.ProcessQueue((int)param0);
         }
+
+        //private NotifierDelegate _delegate;
+        private IntPtr NotifierDelegate;
+        private NotifierDelegate notDel;
 
         protected object m_param;
         protected TimerEventHandler m_handler;
@@ -37,13 +42,16 @@ namespace WPILib
         {
             m_handler = handler;
             m_param = param;
+
+            notDel = s_notifier_process_queue;
+            Marshal.GetFunctionPointerForDelegate(notDel);
             m_handlerSemaphore = HALSemaphore.initializeSemaphore(1);
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = HALNotifier.initializeNotifier(s_notifier_process_queue, ref status);
+                    s_notifier = HALNotifier.initializeNotifier(NotifierDelegate , ref status);
                 }
                 s_refCount++;
             }

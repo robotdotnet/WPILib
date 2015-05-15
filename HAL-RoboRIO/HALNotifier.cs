@@ -12,7 +12,7 @@ namespace HAL_FRC
         ///ProcessQueue: Anonymous_bc6469e1_81ca_4ce4_a849_7751f6a8b58e
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "initializeNotifier")]
-        public static extern System.IntPtr initializeNotifier(NotifierDelegate processQueue, ref int status);
+        public static extern System.IntPtr initializeNotifier(System.IntPtr processQueue, ref int status);
 
 
         /// Return Type: void
