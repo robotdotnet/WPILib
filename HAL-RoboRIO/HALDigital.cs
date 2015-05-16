@@ -1,5 +1,5 @@
 ﻿
-
+using System;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
@@ -23,11 +23,30 @@ namespace HAL_FRC
     public class HALDigital
     {
         /*
+         * 
+         * Reflection stuff. I know that this works. It will just require a major project refactoring to implement. But this will be a much better way, and will 
+         * work with the simulator much better, and not require the import hacks reuqired currently.
+        private delegate IntPtr RetIntPtrPerIntPtrStatus(IntPtr intptr, ref int status);
+
+
+        private static RetIntPtrPerIntPtrStatus initDigitalPort;
+
+
         internal static void SetupHAL(Assembly assembly)
         {
-            
+            Type type;
+
+            type = assembly.GetType("HAL_FRC.HALDigital");
+
+            initDigitalPort = (RetIntPtrPerIntPtrStatus)Delegate.CreateDelegate(typeof(RetIntPtrPerIntPtrStatus), type.GetMethod("initializeDigitalPort"));
+        }
+
+        public static IntPtr InitializeDigitalPort(IntPtr portPointer, ref int status)
+        {
+            return initDigitalPort(portPointer, ref status);
         }
          * */
+         
 
 
         /// Return Type: void*

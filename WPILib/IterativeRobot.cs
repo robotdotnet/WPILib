@@ -24,6 +24,11 @@ namespace WPILib
         {
         }
 
+        public void ObserveStarting()
+        {
+            HAL.NetworkCommunicationObserveUserProgramStarting();
+        }
+
         public override void StartCompetition()
         {
             HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Iterative);
@@ -35,6 +40,7 @@ namespace WPILib
             //LiveWindow.setEnabled(false);
             while (true)
             {
+                Console.WriteLine("RobotLoop");
                 // Call the appropriate function depending upon the current robot mode
                 if (IsDisabled())
                 {

@@ -2,6 +2,8 @@
 
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Threading;
 using HAL_FRC;
 
@@ -27,14 +29,14 @@ namespace WPILib
 
         private static DriverStation s_instance = new DriverStation();
 
-        private HALJoystickAxes[] _joystickAxes = new HALJoystickAxes[JoystickPorts];
-        private HALJoystickPOVs[] _joystickPOVs = new HALJoystickPOVs[JoystickPorts];
+        //private HALJoystickAxes[] _joystickAxes = new HALJoystickAxes[JoystickPorts];
+        //private HALJoystickPOVs[] _joystickPOVs = new HALJoystickPOVs[JoystickPorts];
 
-        //private short[][] _joystickAxes = new short[JoystickPorts][];
-        //private short[][] _joystickPOVs = new short[JoystickPorts][];
+        private short[][] _joystickAxes = new short[JoystickPorts][];
+        private short[][] _joystickPOVs = new short[JoystickPorts][];
         private HALJoystickButtons[] _joystickButtons = new HALJoystickButtons[JoystickPorts];
 
-// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly Thread m_thread;
         //private Object _dataSem;
         //private Object _mutex;
@@ -43,42 +45,62 @@ namespace WPILib
         private bool m_userInAutonomous = false;
         private bool m_userInTeleop = false;
         private bool m_userInTest = false;
-        //private bool _newControlData;
+        private bool m_newControlData;
 
-        private IntPtr m_newControlData;
+        //private IntPtr m_newControlData;
         private IntPtr m_packetDataAvailableMultiWait;
         private IntPtr m_packetDataAvailableMutex;
-        private IntPtr m_waitForDataSem;
-        private IntPtr m_waitForDataMutex;
+        //private IntPtr m_waitForDataSem;
+        //private IntPtr m_waitForDataMutex;
+
+        private object m_dataSem;
 
         public static DriverStation GetInstance()
         {
             return DriverStation.s_instance;
         }
 
+        private GCHandle handleAxes;
+        private GCHandle handlePOV;
+        private GCHandle handleBUttons;
+
         protected DriverStation()
         {
-            //_dataSem = new object();
+            m_dataSem = new object();
             //_mutex = new object();
+            /*
             for (int i = 0; i < JoystickPorts; i++)
             {
-                _joystickButtons[i].count = 0;// = new HALJoystickButtons();
-                _joystickAxes[i].count = 0;// = new short[12];
+                _joystickButtons[i].count = new HALJoystickButtons();
+                _joystickAxes[i].count = new short[12];
                 _joystickPOVs[i].count = 0;// = new short[12];
+            }
+             * */
+
+            for (int i = 0; i < JoystickPorts; i++)
+            {
+                _joystickButtons[i] = new HALJoystickButtons();
+                _joystickAxes[i] = new short[12];
+                _joystickPOVs[i] = new short[12];
             }
 
             m_packetDataAvailableMultiWait = HALSemaphore.initializeMultiWait();
-            m_newControlData = HALSemaphore.initializeSemaphore(0);
+            //m_newControlData = HALSemaphore.initializeSemaphore(0);
 
-            m_waitForDataSem = HALSemaphore.initializeMultiWait();
-            m_waitForDataMutex = HALSemaphore.initializeMutexNormal();
+            //m_waitForDataSem = HALSemaphore.initializeMultiWait();
+            //m_waitForDataMutex = HALSemaphore.initializeMutexNormal();
 
 
             m_packetDataAvailableMutex = HALSemaphore.initializeMutexNormal();
             //m_packetDataAvailableSem = HALSemaphore.initializeMultiWait();
             HAL.SetNewDataSem(m_packetDataAvailableMultiWait);
 
-            m_thread = new Thread(Task) { Priority = ThreadPriority.AboveNormal };
+            handleAxes = GCHandle.Alloc(_joystickAxes);
+            handleBUttons = GCHandle.Alloc(_joystickButtons);
+            handlePOV = GCHandle.Alloc(_joystickPOVs);
+
+
+            m_thread = new Thread(Task);// { Priority = ThreadPriority.AboveNormal };
             m_thread.Start();
         }
 
@@ -95,8 +117,17 @@ namespace WPILib
             while (m_threadKeepAlive)
             {
                 HALSemaphore.takeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
-                GetData();
-                HALSemaphore.giveMultiWait(m_waitForDataSem);
+                lock (this)
+                {
+                    Console.WriteLine("GetData");
+                    GetData();
+                    Console.WriteLine("AfterGetData");
+                }
+                lock (m_dataSem)
+                {
+                    Monitor.Pulse(m_dataSem);
+                }
+                //HALSemaphore.giveMultiWait(m_waitForDataSem);
                 //HALSemaphore.giveMultiWait(dataSem);
 
                 /*
@@ -124,12 +155,25 @@ namespace WPILib
                 if (m_userInTest)
                     HAL.NetworkCommunicationObserveUserProgramTest();
                 dsLoops++;
+
+                Console.WriteLine("DS Loop");
             }
         }
 
         public void WaitForData(long timeout = 0)
         {
-            HALSemaphore.takeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
+            lock (m_dataSem)
+            {
+                try
+                {
+                    Monitor.Wait(m_dataSem);
+                }
+                catch (ThreadInterruptedException ex)
+                {
+
+                }
+            }
+            //HALSemaphore.takeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
             /*
             lock (dataSem)
             {
@@ -145,6 +189,7 @@ namespace WPILib
              * */
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         protected void GetData()
         {
             /*
@@ -159,13 +204,25 @@ namespace WPILib
                 _newControlData = true;
             }
              * */
-
             for (byte stick = 0; stick < JoystickPorts; stick++)
             {
-                HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]);
-                HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]);
-                HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]);
+                Console.WriteLine("Getting Axes");
+                _joystickAxes[stick] = HAL.GetJoystickAxes(stick);
+                Console.WriteLine("Getting POVs");
+                _joystickPOVs[stick] = HAL.GetJoystickPOVs(stick);
+
+                int count = 0;
+                Console.WriteLine("Getting Buttons");
+                _joystickButtons[stick].buttons = HAL.GetJoystickButtons(stick, ref count);
+                _joystickButtons[stick].count = (byte)count;
+                //HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]);
+                //HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]);
+                Console.WriteLine("GotButtons");
+                //HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]);
             }
+
+            m_newControlData = true;
+
             /*
                 Console.WriteLine("Axes");
                 _joystickAxes[stick] = HAL.GetJoystickAxes(stick);
@@ -176,69 +233,69 @@ namespace WPILib
                  * 
             }
                */
-                /*
-            byte stick = 0;
+            /*
+        byte stick = 0;
 
-            Console.WriteLine("Axes" + stick);
-            Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-            Console.WriteLine("POVs" + stick);
-            Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-            Console.WriteLine("Buttons" + stick);
-            Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-            Console.WriteLine("Done" + stick);
+        Console.WriteLine("Axes" + stick);
+        Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
+        Console.WriteLine("POVs" + stick);
+        Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
+        Console.WriteLine("Buttons" + stick);
+        Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
+        Console.WriteLine("Done" + stick);
 
-            stick = 1;
+        stick = 1;
 
-            Console.WriteLine("Axes" + stick);
-            Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-            Console.WriteLine("POVs" + stick);
-            Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-            Console.WriteLine("Buttons" + stick);
-            Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-            Console.WriteLine("Done" + stick);
+        Console.WriteLine("Axes" + stick);
+        Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
+        Console.WriteLine("POVs" + stick);
+        Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
+        Console.WriteLine("Buttons" + stick);
+        Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
+        Console.WriteLine("Done" + stick);
 
-            stick = 2;
+        stick = 2;
 
-            Console.WriteLine("Axes" + stick);
-            Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-            Console.WriteLine("POVs" + stick);
-            Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-            Console.WriteLine("Buttons" + stick);
-            Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-            Console.WriteLine("Done" + stick);
+        Console.WriteLine("Axes" + stick);
+        Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
+        Console.WriteLine("POVs" + stick);
+        Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
+        Console.WriteLine("Buttons" + stick);
+        Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
+        Console.WriteLine("Done" + stick);
 
-            stick = 3;
+        stick = 3;
 
-            Console.WriteLine("Axes" + stick);
-            Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-            Console.WriteLine("POVs" + stick);
-            Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-            Console.WriteLine("Buttons" + stick);
-            Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-            Console.WriteLine("Done" + stick);
+        Console.WriteLine("Axes" + stick);
+        Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
+        Console.WriteLine("POVs" + stick);
+        Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
+        Console.WriteLine("Buttons" + stick);
+        Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
+        Console.WriteLine("Done" + stick);
 
-            stick = 4;
+        stick = 4;
 
-            Console.WriteLine("Axes" + stick);
-            Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-            Console.WriteLine("POVs" + stick);
-            Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-            Console.WriteLine("Buttons" + stick);
-            Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-            Console.WriteLine("Done" + stick);
+        Console.WriteLine("Axes" + stick);
+        Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
+        Console.WriteLine("POVs" + stick);
+        Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
+        Console.WriteLine("Buttons" + stick);
+        Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
+        Console.WriteLine("Done" + stick);
 
             
-            stick = 5;
+        stick = 5;
 
-            Console.WriteLine("Axes" + stick);
-            Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
-            Console.WriteLine("POVs" + stick);
-            Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
-            Console.WriteLine("Buttons" + stick);
-            Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
-            Console.WriteLine("Done" + stick);
-            */
-            HALSemaphore.giveSemaphore(m_newControlData);
+        Console.WriteLine("Axes" + stick);
+        Console.WriteLine(HAL.GetJoystickAxes(stick, ref _joystickAxes[stick]));
+        Console.WriteLine("POVs" + stick);
+        Console.WriteLine(HAL.GetJoystickPOVs(stick, ref _joystickPOVs[stick]));
+        Console.WriteLine("Buttons" + stick);
+        Console.WriteLine(HAL.GetJoystickButtons(stick, ref _joystickButtons[stick]));
+        Console.WriteLine("Done" + stick);
+        */
+            //HALSemaphore.giveSemaphore(m_newControlData);
         }
 
         public double GetBatteryVoltage()
@@ -257,6 +314,7 @@ namespace WPILib
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetStickAxis(int stick, int axis)
         {
             if (stick >= JoystickPorts)
@@ -264,7 +322,7 @@ namespace WPILib
                 throw new SystemException("Joystick Index is out of range");
             }
 
-            if (axis > _joystickAxes[stick].count)
+            if (axis > _joystickAxes[stick].Length)
             {
                 if (axis >= MaxJoystickAxes)
                     throw new SystemException("Joystick index is out of range, should be 0-5");
@@ -276,7 +334,7 @@ namespace WPILib
                 return 0.0;
             }
 
-            int value = _joystickAxes[stick].axes[axis];
+            int value = _joystickAxes[stick][axis];
 
             if (value < 0)
             {
@@ -319,6 +377,7 @@ namespace WPILib
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickAxisCount(int stick)
         {
             if (stick < 0 || stick >= JoystickPorts)
@@ -326,10 +385,11 @@ namespace WPILib
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            return _joystickAxes[stick].count;
+            return _joystickAxes[stick].Length;
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickPOV(int stick, int pov)
         {
             if (stick < 0 || stick >= JoystickPorts)
@@ -343,17 +403,18 @@ namespace WPILib
             }
 
 
-            if (pov >= _joystickPOVs[stick].count)
+            if (pov >= _joystickPOVs[stick].Length)
             {
                 ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
                                              " not available, check if controller is plugged in\n");
-                return 0;
+                return -1;
             }
 
-            return _joystickPOVs[stick].povs[pov];
+            return _joystickPOVs[stick][pov];
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickPOVCount(int stick)
         {
             if (stick < 0 || stick >= JoystickPorts)
@@ -361,10 +422,11 @@ namespace WPILib
                 throw new SystemException("Joystick index is out of range, should be 0-5");
             }
 
-            return _joystickPOVs[stick].count;
+            return _joystickPOVs[stick].Length;
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickButtons(int stick)
         {
             if (stick < 0 || stick >= JoystickPorts)
@@ -377,6 +439,9 @@ namespace WPILib
 
         }
 
+
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool GetStickButton(int stick, byte button)
         {
             if (stick < 0 || stick >= JoystickPorts)
@@ -400,6 +465,7 @@ namespace WPILib
 
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickButtonCount(int stick)
         {
             if (stick < 0 || stick >= JoystickPorts)
@@ -487,9 +553,13 @@ namespace WPILib
             return retval;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool IsNewControlData()
         {
-            return HALSemaphore.tryTakeSemaphore(m_newControlData) == 0;
+            bool result = m_newControlData;
+            m_newControlData = false;
+            return result;
+            //return HALSemaphore.tryTakeSemaphore(m_newControlData) == 0;
             /*
             lock (_mutex)
             {

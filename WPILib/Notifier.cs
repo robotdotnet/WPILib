@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Security.Permissions;
 using WPILib.Interfaces;
 using System.Threading;
 using HAL_FRC;
@@ -8,6 +9,8 @@ using System.Runtime.InteropServices;
 
 namespace WPILib
 {
+
+    public delegate void TimerEventHandlerDelegate(object o);
     public class Notifier
     {
         static private Notifier s_timerQueueHead;
@@ -17,41 +20,51 @@ namespace WPILib
         protected static IntPtr s_notifier = IntPtr.Zero;
         public double m_expirationTime = 0;
 
-        public void s_notifier_process_queue(uint param0, IntPtr param1)
-        {
-            Notifier.ProcessQueue((int)param0);
-        }
+        //public static void s_notifier_process_queue(uint param0, IntPtr param1)
+        //{
+            //Notifier.ProcessQueue((int)param0);
+        //}
 
-        //private NotifierDelegate _delegate;
-        private IntPtr notifierDelegate;
-        private NotifierDelegate notDel;
+        private NotifierDelegate _delegate;
+        //private IntPtr notifierDelegate;
+        //private NotifierDelegate notDel;
 
         protected object m_param;
-        protected TimerEventHandler m_handler;
+        protected TimerEventHandlerDelegate m_handler;
         public double m_period = 0;
         public bool m_periodic = false;
         public bool m_queued = false;
         public Notifier m_nextEvent;
-        //public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
+        public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
 
-        public IntPtr m_handlerSemaphore;
+        private GCHandle handle;
+
+        private IntPtr delegatePointer;
+
+        //public IntPtr m_handlerSemaphore;
 
 
 
-        public Notifier(TimerEventHandler handler, object param)
+        public Notifier(TimerEventHandlerDelegate handler, object param)
         {
             m_handler = handler;
             m_param = param;
 
-            notDel = s_notifier_process_queue;
-            notifierDelegate = Marshal.GetFunctionPointerForDelegate(notDel);
-            m_handlerSemaphore = HALSemaphore.initializeSemaphore(1);
+            _delegate = new NotifierDelegate(ProcessQueue);
+
+            //handle = GCHandle.Alloc(_delegate, GCHandleType.Pinned);
+
+            //delegatePointer = GCHandle.ToIntPtr(handle);
+
+            //notDel = s_notifier_process_queue;
+            //notifierDelegate = Marshal.GetFunctionPointerForDelegate(notDel);
+            //m_handlerSemaphore = HALSemaphore.initializeSemaphore(1);
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = HALNotifier.initializeNotifier(notifierDelegate , ref status);
+                    s_notifier = HALNotifier.initializeNotifier(_delegate, ref status);
                 }
                 s_refCount++;
             }
@@ -59,6 +72,7 @@ namespace WPILib
 
         public static void UpdateAlarm()
         {
+            Console.WriteLine("Updating Alarm");
             if (s_timerQueueHead != null)
             {
                 int status = 0;
@@ -161,19 +175,24 @@ namespace WPILib
             }
             try
             {
-                HALSemaphore.takeSemaphore(m_handlerSemaphore);
-                HALSemaphore.giveSemaphore(m_handlerSemaphore);
+                m_handlerSemaphore.WaitOne();
+                m_handlerSemaphore.Release();
+                //HALSemaphore.takeSemaphore(m_handlerSemaphore);
+                //HALSemaphore.giveSemaphore(m_handlerSemaphore);
             }
             catch (ThreadInterruptedException e)
             {
             }
         }
 
-        static public void ProcessQueue(int mask)//, object param)
+
+        [SecurityPermission(SecurityAction.Demand, UnmanagedCode=true)]
+        static public void ProcessQueue(uint mask, IntPtr param)//, object param)
         {
             Notifier current;
             while (true)
             {
+                Console.WriteLine("ProcessQueueStuck");
                 lock (s_queueSemaphore)
                 {
                     double currentTime = Timer.GetFPGATimestamp();
@@ -193,16 +212,16 @@ namespace WPILib
                     }
                     try
                     {
-                        //current.m_handlerSemaphore.WaitOne();
-                        HALSemaphore.takeSemaphore(current.m_handlerSemaphore);
+                        current.m_handlerSemaphore.WaitOne();
+                        //HALSemaphore.takeSemaphore(current.m_handlerSemaphore);
                     }
                     catch (ThreadInterruptedException e)
                     {
                     }
                 }
-                current.m_handler.Update(current.m_param);//.Update(current.m_param);
-                HALSemaphore.giveSemaphore(current.m_handlerSemaphore);
-                //current.m_handlerSemaphore.Release();
+                current.m_handler(current.m_param);//.Update(current.m_param);
+                //HALSemaphore.giveSemaphore(current.m_handlerSemaphore);
+                current.m_handlerSemaphore.Release();
             }
             lock (s_queueSemaphore)
             {

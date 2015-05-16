@@ -1,4 +1,8 @@
-﻿namespace HAL_FRC
+﻿using System;
+using System.Reflection;
+
+
+namespace HAL_FRC
 {
     public enum HALAllianceStationID
     {
@@ -267,6 +271,7 @@
         public static extern void Occur();
 
 
+        //Getting Joystick Axes
         public static short[] GetJoystickAxes(byte joystickNum)
         {
             var axes = new HALJoystickAxes();
@@ -274,13 +279,24 @@
             return axes.axes;
         }
 
+        public static uint GetJoystickButtons(byte joystickNum, ref int count)
+        {
+            HALJoystickButtons joystickButtons = new HALJoystickButtons();
+            GetJoystickButtons(joystickNum, ref joystickButtons);
+            count = joystickButtons.count;
+            return joystickButtons.buttons;
+        }
+
+        /*
         public static HALJoystickButtons GetJoystickButtons(byte joystickNum)
         {
+
+            Console.WriteLine("Getting Joystick Axes");
             var buttons = new HALJoystickButtons();
             GetJoystickButtons(joystickNum, ref buttons);
             return buttons;
         }
-
+        */
         public static HALJoystickDescriptor GetJoystickDescriptor(byte joystickNum)
         {
             var descriptor = new HALJoystickDescriptor();
@@ -288,8 +304,10 @@
             return descriptor;
         }
 
+        //GettingJoystickPOVs
         public static short[] GetJoystickPOVs(byte joystickNum)
         {
+
             var povs = new HALJoystickPOVs();
             GetJoystickPOVs(joystickNum, ref povs);
             return povs.povs;
@@ -303,9 +321,12 @@
         public static void Initialize(int mode = 0)
         {
             var rv = HALInitialize();
+
+            //HALDigital.SetupHAL(Assembly.LoadFrom("/home/lvuser/mono/HAL-RoboRIO.dll"));
             if (rv == 0)
             {
                 //Throw exception saying HAL not initialized
+                throw new Exception("HAL Initialize Failed");
             }
         }
 
