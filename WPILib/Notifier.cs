@@ -23,7 +23,7 @@ namespace WPILib
         }
 
         //private NotifierDelegate _delegate;
-        private IntPtr NotifierDelegate;
+        private IntPtr notifierDelegate;
         private NotifierDelegate notDel;
 
         protected object m_param;
@@ -44,14 +44,14 @@ namespace WPILib
             m_param = param;
 
             notDel = s_notifier_process_queue;
-            Marshal.GetFunctionPointerForDelegate(notDel);
+            notifierDelegate = Marshal.GetFunctionPointerForDelegate(notDel);
             m_handlerSemaphore = HALSemaphore.initializeSemaphore(1);
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = HALNotifier.initializeNotifier(NotifierDelegate , ref status);
+                    s_notifier = HALNotifier.initializeNotifier(notifierDelegate , ref status);
                 }
                 s_refCount++;
             }
@@ -88,19 +88,19 @@ namespace WPILib
             else
             {
                 Notifier last = s_timerQueueHead;
-                Notifier cur;
+                Notifier cur = last.m_nextEvent;
                 bool looking = true;
 
                 while (looking)
                 {
-                    cur = last.m_nextEvent;
+                    //cur = last.m_nextEvent;
                     if (cur == null || cur.m_expirationTime > this.m_expirationTime)
                     {
                         last.m_nextEvent = this;
                         this.m_nextEvent = cur;
                         looking = false;
                     }
-                    last = last.m_nextEvent;
+                    //last = last.m_nextEvent;
                 }
             }
             m_queued = true;

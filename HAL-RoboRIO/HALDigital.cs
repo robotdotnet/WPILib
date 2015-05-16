@@ -1,6 +1,7 @@
 ﻿
 
 using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace HAL_FRC
 {
@@ -21,6 +22,14 @@ namespace HAL_FRC
 
     public class HALDigital
     {
+        /*
+        internal static void SetupHAL(Assembly assembly)
+        {
+            
+        }
+         * */
+
+
         /// Return Type: void*
         ///port_pointer: void*
         ///status: int*
