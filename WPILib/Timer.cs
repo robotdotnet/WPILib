@@ -11,7 +11,7 @@ namespace WPILib
         public static double GetFPGATimestamp()
         {
             int status = 0;
-            return HAL.GetFPGATime(ref status) / 1000000.0;
+            return HAL.GetFPGATime(ref status) * 1.0e-6;
         }
 
         public static double GetMatchTime()

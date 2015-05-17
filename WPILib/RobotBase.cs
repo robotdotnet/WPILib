@@ -103,11 +103,12 @@ namespace WPILib
             HAL.Initialize();
         }
 
+        private static RobotBase robot;
         public static void main(string robotAssembly, string robotName)
         {
             InitializeHardwareConfiguration();
-            HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_Python);
-            RobotBase robot;
+            HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
+            
             try
             {
                 robot = (RobotBase)(Activator.CreateInstance(robotAssembly, robotName)).Unwrap();

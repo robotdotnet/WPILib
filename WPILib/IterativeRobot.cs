@@ -40,7 +40,7 @@ namespace WPILib
             //LiveWindow.setEnabled(false);
             while (true)
             {
-                Console.WriteLine("RobotLoop");
+                //Console.WriteLine("RobotLoop");
                 // Call the appropriate function depending upon the current robot mode
                 if (IsDisabled())
                 {

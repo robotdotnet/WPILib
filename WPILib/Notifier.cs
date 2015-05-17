@@ -37,9 +37,9 @@ namespace WPILib
         public Notifier m_nextEvent;
         public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
 
-        private GCHandle handle;
+        //private GCHandle handle;
 
-        private IntPtr delegatePointer;
+        //private IntPtr delegatePointer;
 
         //public IntPtr m_handlerSemaphore;
 
@@ -72,7 +72,7 @@ namespace WPILib
 
         public static void UpdateAlarm()
         {
-            Console.WriteLine("Updating Alarm");
+            //Console.WriteLine("Updating Alarm");
             if (s_timerQueueHead != null)
             {
                 int status = 0;
@@ -82,6 +82,7 @@ namespace WPILib
 
         public void InsertInQueue(bool reschedule)
         {
+            //Console.WriteLine("Running Insert In Queue");
             if (reschedule)
             {
                 m_expirationTime += m_period;
@@ -89,6 +90,10 @@ namespace WPILib
             else
             {
                 m_expirationTime = Timer.GetFPGATimestamp() + m_period;
+            }
+            if (m_expirationTime > ((111 << 32) / 1e6))
+            {
+                m_expirationTime -= ((111 << 32)/1e6);
             }
             if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= this.m_expirationTime)
             {
@@ -122,6 +127,7 @@ namespace WPILib
 
         public void DeleteFromQueue()
         {
+            //Console.WriteLine("Running Delete From Queue");
             if (m_queued)
             {
                 m_queued = false;
@@ -147,6 +153,7 @@ namespace WPILib
 
         public void StartSingle(double delay)
         {
+            //Console.WriteLine("Running Start Single");
             lock (s_queueSemaphore)
             {
                 m_periodic = false;
@@ -158,6 +165,7 @@ namespace WPILib
 
         public void StartPeriodic(double period)
         {
+            //Console.WriteLine("Running Started Periodic");
             lock (s_queueSemaphore)
             {
                 m_periodic = true;
@@ -169,6 +177,7 @@ namespace WPILib
 
         public void Stop()
         {
+            //Console.WriteLine("Running Stop");
             lock (s_queueSemaphore)
             {
                 DeleteFromQueue();
@@ -189,10 +198,12 @@ namespace WPILib
         [SecurityPermission(SecurityAction.Demand, UnmanagedCode=true)]
         static public void ProcessQueue(uint mask, IntPtr param)//, object param)
         {
+            Console.WriteLine(DriverStation.GetInstance().dsLoops);
+            //Console.WriteLine("Running Process Queue");
             Notifier current;
             while (true)
             {
-                Console.WriteLine("ProcessQueueStuck");
+                //Console.WriteLine("ProcessQueueStuck");
                 lock (s_queueSemaphore)
                 {
                     double currentTime = Timer.GetFPGATimestamp();
@@ -212,7 +223,9 @@ namespace WPILib
                     }
                     try
                     {
+                        Console.WriteLine("WaitOne");
                         current.m_handlerSemaphore.WaitOne();
+                        Console.WriteLine("WaitOneEnd");
                         //HALSemaphore.takeSemaphore(current.m_handlerSemaphore);
                     }
                     catch (ThreadInterruptedException e)
@@ -223,10 +236,12 @@ namespace WPILib
                 //HALSemaphore.giveSemaphore(current.m_handlerSemaphore);
                 current.m_handlerSemaphore.Release();
             }
+            //Console.WriteLine("Finished Loop Aquiring Semaphore");
             lock (s_queueSemaphore)
             {
                 UpdateAlarm();
             }
+            //Console.WriteLine("Finished loop gave back semaphore");
         }
     }
 }
