@@ -64,6 +64,7 @@
     <Compile Include="PWM.cs" />
     <Compile Include="RobotBase.cs" />
     <Compile Include="RobotDrive.cs" />
+    <Compile Include="RobotState.cs" />
     <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
     <Compile Include="Servo.cs" />

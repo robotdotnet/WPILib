@@ -36,6 +36,7 @@ namespace WPILib
 
         private void InitPwm(int channel)
         {
+            //Console.WriteLine("Calling Init PWM");
             CheckPwmChannel(channel);
             _channel = channel;
 

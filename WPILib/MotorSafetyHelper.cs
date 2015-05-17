@@ -16,11 +16,13 @@ namespace WPILib
         private MotorSafety _safeObject;
         private MotorSafetyHelper _nextHelper;
         private static MotorSafetyHelper s_headHelper = null;
+        private static DriverStation s_ds;
 
         public MotorSafetyHelper(MotorSafety safeObject)
         {
             _safeObject = safeObject;
-            _enabled = true;
+            s_ds = DriverStation.GetInstance();
+            _enabled = false;
             _expiration = DefaultSafetyExpiration;
             _stopTime = Timer.GetFPGATimestamp();
             _nextHelper = s_headHelper;
@@ -49,7 +51,7 @@ namespace WPILib
 
         public void Check()
         {
-            if (!_enabled)// || RobotState.isDisabled() || RobotState.isTest())
+            if (!_enabled || s_ds.IsDisabled() || s_ds.IsTest())
                 return;
             if (_stopTime < Timer.GetFPGATimestamp())
             {
