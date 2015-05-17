@@ -2,7 +2,7 @@
 
 using System;
 using WPILib.Util;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -41,13 +41,13 @@ namespace WPILib
             _channel = channel;
 
             int status = 0;
-            _port = HALDigital.initializeDigitalPort(HAL.GetPort((byte)channel), ref status);
-            if (!HALDigital.allocatePWMChannel(_port, ref status))
+            _port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)channel), ref status);
+            if (!HALDigital.AllocatePWMChannel(_port, ref status))
             {
                 throw new AllocationException("PWM channel " + channel + " is already allocated");
             }
 
-            HALDigital.setPWM(_port, 0, ref status);
+            HALDigital.SetPWM(_port, 0, ref status);
 
             _eliminateDeadband = false;
 
@@ -62,9 +62,9 @@ namespace WPILib
         public override void Free()
         {
             int status = 0;
-            HALDigital.setPWM(_port, 0, ref status);
-            HALDigital.freePWMChannel(_port, ref status);
-            HALDigital.freeDIO(_port, ref status);
+            HALDigital.SetPWM(_port, 0, ref status);
+            HALDigital.FreePWMChannel(_port, ref status);
+            HALDigital.FreeDIO(_port, ref status);
         }
 
         public void EnableDeadbandElimination(bool eliminateDeadband)
@@ -85,7 +85,7 @@ namespace WPILib
         {
             int status = 0;
 
-            double loopTime = HALDigital.getLoopTiming(ref status) / (SystemClockTicksPerMicrosecond * 1e3);
+            double loopTime = HALDigital.GetLoopTiming(ref status) / (SystemClockTicksPerMicrosecond * 1e3);
 
             _maxPwm = (int)((max - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
             _deadbandMaxPwm = (int)((deadbandMax - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
@@ -197,13 +197,13 @@ namespace WPILib
         public void SetRaw(int value)
         {
             int status = 0;
-            HALDigital.setPWM(_port, (ushort)value, ref status);
+            HALDigital.SetPWM(_port, (ushort)value, ref status);
         }
 
         public int GetRaw()
         {
             int status = 0;
-            int value = HALDigital.getPWM(_port, ref status);
+            int value = HALDigital.GetPWM(_port, ref status);
 
             return value;
         }
@@ -215,13 +215,13 @@ namespace WPILib
             switch (mult)
             {
                 case PeriodMultiplier.K1X:
-                    HALDigital.setPWMPeriodScale(_port, 3, ref status);
+                    HALDigital.SetPWMPeriodScale(_port, 3, ref status);
                     break;
                 case PeriodMultiplier.K2X:
-                    HALDigital.setPWMPeriodScale(_port, 1, ref status);
+                    HALDigital.SetPWMPeriodScale(_port, 1, ref status);
                     break;
                 case PeriodMultiplier.K4X:
-                    HALDigital.setPWMPeriodScale(_port, 0, ref status);
+                    HALDigital.SetPWMPeriodScale(_port, 0, ref status);
                     break;
                 default:
                     break;
@@ -231,7 +231,7 @@ namespace WPILib
         protected void SetZeroLatch()
         {
             int status = 0;
-            HALDigital.latchPWMZero(_port, ref status);
+            HALDigital.LatchPWMZero(_port, ref status);
         }
 
         protected int GetMaxPositivePwm()

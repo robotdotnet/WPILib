@@ -3,7 +3,7 @@
 using System;
 using WPILib.Interfaces;
 using WPILib.Util;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -21,7 +21,7 @@ namespace WPILib
         private void InitCounter(Mode mode)
         {
             int status = 0;
-            m_counter = HALDigital.initializeCounter(mode, ref m_index, ref status);
+            m_counter = HALDigital.InitializeCounter(mode, ref m_index, ref status);
 
             m_allocatedUpSource = false;
             m_allocatedDownSource = false;
@@ -70,12 +70,12 @@ namespace WPILib
             if (encodingType == EncodingType.K1X)
             {
                 SetUpSourceEdge(true, false);
-                HALDigital.setCounterAverageSize(m_counter, 1, ref status);
+                HALDigital.SetCounterAverageSize(m_counter, 1, ref status);
             }
             else
             {
                 SetDownSourceEdge(true, true);
-                HALDigital.setCounterAverageSize(m_counter, 2, ref status);
+                HALDigital.SetCounterAverageSize(m_counter, 2, ref status);
             }
 
             SetDownSourceEdge(inverted, true);
@@ -99,7 +99,7 @@ namespace WPILib
             ClearDownSource();
 
             int status = 0;
-            HALDigital.freeCounter(m_counter, ref status);
+            HALDigital.FreeCounter(m_counter, ref status);
 
             m_upSource = null;
             m_downSource = null;
@@ -125,7 +125,7 @@ namespace WPILib
             }
             m_upSource = source;
             int status = 0;
-            HALDigital.setCounterUpSource(m_counter, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
+            HALDigital.SetCounterUpSource(m_counter, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
         }
 
         public void SetUpSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
@@ -143,7 +143,7 @@ namespace WPILib
             if (m_upSource == null)
                 throw new SystemException("Up Source must be set before setting the edge!");
             int status = 0;
-            HALDigital.setCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            HALDigital.SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
         }
 
         public void ClearUpSource()
@@ -156,7 +156,7 @@ namespace WPILib
             m_upSource = null;
 
             int status = 0;
-            HALDigital.clearCounterUpSource(m_counter, ref status);
+            HALDigital.ClearCounterUpSource(m_counter, ref status);
         }
 
 
@@ -175,7 +175,7 @@ namespace WPILib
             }
             m_downSource = source;
             int status = 0;
-            HALDigital.setCounterDownSource(m_counter, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
+            HALDigital.SetCounterDownSource(m_counter, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
         }
 
         public void SetDownSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
@@ -193,7 +193,7 @@ namespace WPILib
             if (m_downSource == null)
                 throw new SystemException("Up Source must be set before setting the edge!");
             int status = 0;
-            HALDigital.setCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            HALDigital.SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
         }
 
         public void ClearDownSource()
@@ -206,31 +206,31 @@ namespace WPILib
             m_downSource = null;
 
             int status = 0;
-            HALDigital.clearCounterDownSource(m_counter, ref status);
+            HALDigital.ClearCounterDownSource(m_counter, ref status);
         }
 
         public void SetUpDownCounterMode()
         {
             int status = 0;
-            HALDigital.setCounterUpDownMode(m_counter, ref status);
+            HALDigital.SetCounterUpDownMode(m_counter, ref status);
         }
 
         public void SetExternalDirectionMode()
         {
             int status = 0;
-            HALDigital.setCounterExternalDirectionMode(m_counter, ref status);
+            HALDigital.SetCounterExternalDirectionMode(m_counter, ref status);
         }
 
         public void SetSemiPeriodMode(bool highSemiPeriod)
         {
             int status = 0;
-            HALDigital.setCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
+            HALDigital.SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
         }
 
         public int Get()
         {
             int status = 0;
-            int value = HALDigital.getCounter(m_counter, ref status);
+            int value = HALDigital.GetCounter(m_counter, ref status);
             return value;
         }
 
@@ -242,45 +242,45 @@ namespace WPILib
         public void Reset()
         {
             int status = 0;
-            HALDigital.resetCounter(m_counter, ref status);
+            HALDigital.ResetCounter(m_counter, ref status);
         }
 
         public void SetMaxPeriod(double maxPeriod)
         {
             int status = 0;
-            HALDigital.setCounterMaxPeriod(m_counter, maxPeriod, ref status);
+            HALDigital.SetCounterMaxPeriod(m_counter, maxPeriod, ref status);
         }
 
         public void SetUpdateWhenEmpty(bool enabled)
         {
             int status = 0;
-            HALDigital.setCounterUpdateWhenEmpty(m_counter, enabled, ref status);
+            HALDigital.SetCounterUpdateWhenEmpty(m_counter, enabled, ref status);
         }
 
         public bool GetStopped()
         {
             int status = 0;
-            bool value = HALDigital.getCounterStopped(m_counter, ref status);
+            bool value = HALDigital.GetCounterStopped(m_counter, ref status);
             return value;
         }
 
         public bool GetDirection()
         {
             int status = 0;
-            bool value = HALDigital.getCounterDirection(m_counter, ref status);
+            bool value = HALDigital.GetCounterDirection(m_counter, ref status);
             return value;
         }
 
         public void SetReverseDirection(bool reverseDirection)
         {
             int status = 0;
-            HALDigital.setCounterReverseDirection(m_counter, reverseDirection, ref status);
+            HALDigital.SetCounterReverseDirection(m_counter, reverseDirection, ref status);
         }
 
         public double GetPeriod()
         {
             int status = 0;
-            double value = HALDigital.getCounterPeriod(m_counter, ref status);
+            double value = HALDigital.GetCounterPeriod(m_counter, ref status);
             return value;
         }
 
@@ -292,7 +292,7 @@ namespace WPILib
         public void SetSamplesToAverage(int samplesToAverage)
         {
             int status = 0;
-            HALDigital.setCounterSamplesToAverage(m_counter, samplesToAverage, ref status);
+            HALDigital.SetCounterSamplesToAverage(m_counter, samplesToAverage, ref status);
             if (status == HALUtilities.PARAMETER_OUT_OF_RANGE)
             {
                 throw new BoundaryException(BoundaryException.GetMessage(samplesToAverage, 1, 127));
@@ -302,7 +302,7 @@ namespace WPILib
         public int GetSamplesToAverage()
         {
             int status = 0;
-            int value = HALDigital.getCounterSamplesToAverage(m_counter, ref status);
+            int value = HALDigital.GetCounterSamplesToAverage(m_counter, ref status);
             return value;
         }
 

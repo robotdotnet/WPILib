@@ -1,7 +1,7 @@
 ﻿using System;
 using WPILib.Interfaces;
 using WPILib.Util;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -37,7 +37,7 @@ namespace WPILib
                 case EncodingType.K4X:
                     m_encodingScale = 4;
                     int status = 0;
-                    m_encoder = HALDigital.initializeEncoder(m_aSource.GetModuleForRouting(),
+                    m_encoder = HALDigital.InitializeEncoder(m_aSource.GetModuleForRouting(),
                         (uint)m_aSource.GetChannelForRouting(),
                         m_aSource.GetAnalogTriggerForRouting(), m_bSource.GetModuleForRouting(),
                         (uint)m_bSource.GetChannelForRouting(),
@@ -208,7 +208,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                HALDigital.freeCounter(m_encoder, ref status);
+                HALDigital.FreeCounter(m_encoder, ref status);
             }
         }
 
@@ -222,7 +222,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                value = HALDigital.getEncoder(m_encoder, ref status);
+                value = HALDigital.GetEncoder(m_encoder, ref status);
             }
             return value;
         }
@@ -239,7 +239,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                HALDigital.resetEncoder(m_encoder, ref status);
+                HALDigital.ResetEncoder(m_encoder, ref status);
             }
         }
 
@@ -253,7 +253,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                measuredPeriod = HALDigital.getEncoderPeriod(m_encoder, ref status);
+                measuredPeriod = HALDigital.GetEncoderPeriod(m_encoder, ref status);
             }
             return measuredPeriod;
         }
@@ -267,7 +267,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                HALDigital.setEncoderMaxPeriod(m_encoder, maxPeriod, ref status);
+                HALDigital.SetEncoderMaxPeriod(m_encoder, maxPeriod, ref status);
             }
         }
 
@@ -280,7 +280,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                bool value = HALDigital.getEncoderStopped(m_encoder, ref status);
+                bool value = HALDigital.GetEncoderStopped(m_encoder, ref status);
                 return value;
             }
         }
@@ -294,7 +294,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                bool value = HALDigital.getEncoderDirection(m_encoder, ref status);
+                bool value = HALDigital.GetEncoderDirection(m_encoder, ref status);
                 return value;
             }
         }
@@ -343,7 +343,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                HALDigital.setEncoderReverseDirection(m_encoder, reverseDirection, ref status);
+                HALDigital.SetEncoderReverseDirection(m_encoder, reverseDirection, ref status);
             }
         }
 
@@ -353,7 +353,7 @@ namespace WPILib
             {
                 case EncodingType.K4X:
                     int status = 0;
-                    HALDigital.setEncoderSamplesToAverage(m_encoder, (uint) samplesToAverage, ref status);
+                    HALDigital.SetEncoderSamplesToAverage(m_encoder, (uint) samplesToAverage, ref status);
                     if (status == HALUtilities.PARAMETER_OUT_OF_RANGE)
                     {
                         throw new BoundaryException(BoundaryException.GetMessage(samplesToAverage, 1, 127));
@@ -374,7 +374,7 @@ namespace WPILib
             {
                 case EncodingType.K4X:
                     int status = 0;
-                    int value = (int)HALDigital.getEncoderSamplesToAverage(m_encoder, ref status);
+                    int value = (int)HALDigital.GetEncoderSamplesToAverage(m_encoder, ref status);
                     return value;
                 case EncodingType.K2X:
                     return m_counter.GetSamplesToAverage();
@@ -410,7 +410,7 @@ namespace WPILib
             bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
-            HALDigital.setEncoderIndexSource(m_encoder, (uint) channel, false, activeHigh, edgeSensitive, ref status);
+            HALDigital.SetEncoderIndexSource(m_encoder, (uint) channel, false, activeHigh, edgeSensitive, ref status);
         }
 
         public void SetIndexSource(int channel)
@@ -425,7 +425,7 @@ namespace WPILib
             bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
-            HALDigital.setEncoderIndexSource(m_encoder, (uint) source.GetChannelForRouting(),
+            HALDigital.SetEncoderIndexSource(m_encoder, (uint) source.GetChannelForRouting(),
                 source.GetAnalogTriggerForRouting(), activeHigh, edgeSensitive, ref status);
         }
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HAL_FRC;
+using HAL_Base;
 using WPILib.Util;
 
 namespace WPILib
@@ -30,7 +30,7 @@ namespace WPILib
         public bool Get()
         {
             int status = 0;
-            bool value = HALAnalog.getAnalogTriggerOutput(m_trigger.m_port, m_outputType, ref status);
+            bool value = HALAnalog.GetAnalogTriggerOutput(m_trigger.m_port, m_outputType, ref status);
             return value;
         }
 

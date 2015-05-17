@@ -1,5 +1,5 @@
 ﻿// ReSharper disable InconsistentNaming
-namespace HAL_FRC
+namespace HAL_Base
 {
     public enum ResourceType
     {

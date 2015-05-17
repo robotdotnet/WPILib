@@ -1,4 +1,4 @@
-﻿namespace HAL_FRC
+﻿namespace HAL_RoboRIO
 {
     public class HALPDP
     {

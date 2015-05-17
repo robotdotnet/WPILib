@@ -1,89 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using HAL_Base;
 
 
-namespace HAL_FRC
+namespace HAL_RoboRIO
 {
-    public enum HALAllianceStationID
-    {
-// ReSharper disable InconsistentNaming
-        HALAllianceStationID_red1,
-
-        HALAllianceStationID_red2,
-
-        HALAllianceStationID_red3,
-
-        HALAllianceStationID_blue1,
-
-        HALAllianceStationID_blue2,
-
-
-        HALAllianceStationID_blue3,
-// ReSharper restore InconsistentNaming
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALJoystickAxes
-    {
-        /// unsigned short
-        public ushort count;
-
-        /// short[12]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = System.Runtime.InteropServices.UnmanagedType.I2)]
-        public short[] axes;
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALJoystickPOVs
-    {
-        /// unsigned short
-        public ushort count;
-
-        /// short[12]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = System.Runtime.InteropServices.UnmanagedType.I2)]
-        public short[] povs;
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALJoystickButtons
-    {
-        /// unsigned int
-        public uint buttons;
-
-        /// byte
-        public byte count;
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
-    public struct HALJoystickDescriptor
-    {
-        /// byte
-        public byte isXbox;
-
-        /// byte
-        public byte type;
-
-        /// char[256]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string name;
-
-        /// byte
-        public byte axisCount;
-
-        /// byte
-        public byte axisTypes;
-
-        /// byte
-        public byte buttonCount;
-
-        /// byte
-        public byte povCount;
-    }
-
     public class HAL
     {
-        //public const string "libHALAthena_shared.so" = "libHALAthena_shared.so"; 
-
         /// Return Type: void*
         ///pin: byte
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPort")]
@@ -139,7 +62,7 @@ namespace HAL_FRC
         /// Return Type: int
         ///data: HALControlWord*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALGetControlWord")]
-        private static extern int GetControlWord(ref uint data);
+        public static extern int GetControlWord(ref uint data);
 
 
         /// Return Type: int
@@ -214,7 +137,7 @@ namespace HAL_FRC
         /// Return Type: int
         ///mode: int
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALInitialize")]
-        private static extern int HALInitialize(int mode = 0);
+        public static extern int HALInitialize(int mode = 0);
 
 
         /// Return Type: void
@@ -248,7 +171,7 @@ namespace HAL_FRC
         ///context: byte
         ///feature: char*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALReport")]
-        private static extern uint HALReport(byte resource, byte instanceNumber, byte context = 0, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string feature = null);
+        public static extern uint HALReport(byte resource, byte instanceNumber, byte context = 0, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string feature = null);
 
 
         /// Return Type: void
@@ -269,156 +192,5 @@ namespace HAL_FRC
         /// Return Type: void
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "Occur")]
         public static extern void Occur();
-
-
-        //Getting Joystick Axes
-        public static short[] GetJoystickAxes(byte joystickNum)
-        {
-            var axes = new HALJoystickAxes();
-            GetJoystickAxes(joystickNum, ref axes);
-            return axes.axes;
-        }
-
-        public static uint GetJoystickButtons(byte joystickNum, ref int count)
-        {
-            HALJoystickButtons joystickButtons = new HALJoystickButtons();
-            GetJoystickButtons(joystickNum, ref joystickButtons);
-            count = joystickButtons.count;
-            return joystickButtons.buttons;
-        }
-
-        /*
-        public static HALJoystickButtons GetJoystickButtons(byte joystickNum)
-        {
-
-            Console.WriteLine("Getting Joystick Axes");
-            var buttons = new HALJoystickButtons();
-            GetJoystickButtons(joystickNum, ref buttons);
-            return buttons;
-        }
-        */
-        public static HALJoystickDescriptor GetJoystickDescriptor(byte joystickNum)
-        {
-            var descriptor = new HALJoystickDescriptor();
-            GetJoystickDescriptor(joystickNum, ref descriptor);
-            return descriptor;
-        }
-
-        //GettingJoystickPOVs
-        public static short[] GetJoystickPOVs(byte joystickNum)
-        {
-
-            var povs = new HALJoystickPOVs();
-            GetJoystickPOVs(joystickNum, ref povs);
-            return povs.povs;
-        }
-
-        public static int SetErrorData(string errors, int waitMs)
-        {
-            return SetErrorData(errors, errors.Length, waitMs);
-        }
-
-        public static void Initialize(int mode = 0)
-        {
-            var rv = HALInitialize();
-
-            //HALDigital.SetupHAL(Assembly.LoadFrom("/home/lvuser/mono/HAL-RoboRIO.dll"));
-            if (rv == 0)
-            {
-                //Throw exception saying HAL not initialized
-                throw new Exception("HAL Initialize Failed");
-            }
-        }
-
-
-        //Move to WPILib
-
-        public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
-        }
-
-        public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport((byte)resource, instanceNumber, context, feature);
-        }
-
-        public static uint Report(byte resource, Instances instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport(resource, (byte)instanceNumber, context, feature);
-        }
-
-        public static uint Report(byte resource, byte instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport(resource, instanceNumber, context, feature);
-        }
-
-        /*
-        public static void CheckStatus(int status)
-        {
-            if (status < 0)
-            {
-                string message = GetHALErrorMessage(status);
-                throw new SystemException(" Code: " + status + ". " + message);
-            }
-            else if (status > 0)
-            {
-                string message = GetHALErrorMessage(status);
-                DriverStation.ReportError(message, true);
-            }
-        }
-         * */
-
-        public static HALControlWord GetControlWord()
-        {
-            //HALControlWord temp = new HALControlWord();
-            uint temp = 0;
-            GetControlWord(ref temp);
-            return new HALControlWord(temp);
-        }
-    }
-
-    public struct HALControlWord
-    {
-        private uint _wordData;
-
-        public HALControlWord(uint data)
-        {
-            _wordData = data;
-        }
-
-        public bool GetEnabled()
-        {
-            return (_wordData & (1 << 1 - 1)) != 0;
-        }
-
-        public bool GetAutonomous()
-        {
-            return (_wordData & (1 << 2 - 1)) != 0;
-        }
-
-        public bool GetTest()
-        {
-            return (_wordData & (1 << 3 - 1)) != 0;
-        }
-
-        public bool GetEStop()
-        {
-            return (_wordData & (1 << 4 - 1)) != 0;
-        }
-
-        public bool GetFMSAttached()
-        {
-            return (_wordData & (1 << 5 - 1)) != 0;
-        }
-
-        public bool GetDSAttached()
-        {
-            return (_wordData & (1 << 6 - 1)) != 0;
-        }
     }
 }

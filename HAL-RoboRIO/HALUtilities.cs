@@ -1,5 +1,5 @@
 ﻿
-namespace HAL_FRC
+namespace HAL_RoboRIO
 {
     public class HALUtilities
     {
@@ -20,6 +20,5 @@ namespace HAL_FRC
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "delaySeconds")]
         public static extern void delaySeconds(double s);
 
-        public static int PARAMETER_OUT_OF_RANGE = -1028;
     }
 }

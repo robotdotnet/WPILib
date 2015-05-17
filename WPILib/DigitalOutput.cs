@@ -1,13 +1,13 @@
 ﻿
 
 using System;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
     public class DigitalOutput : DigitalSource
     {
-        private IntPtr _pwmGenerator = IntPtr.Zero;
+        private IntPtr m_pwmGenerator = IntPtr.Zero;
 
         public DigitalOutput(int channel)
         {
@@ -18,7 +18,7 @@ namespace WPILib
 
         public override void Free()
         {
-            if (_pwmGenerator != IntPtr.Zero)
+            if (m_pwmGenerator != IntPtr.Zero)
             {
                 DisablePWM();
             }
@@ -29,7 +29,7 @@ namespace WPILib
         public void Set(bool value)
         {
             int status = 0;
-            HALDigital.setDIO(m_port, (short)(value ? 0 : 1), ref status);
+            HALDigital.SetDIO(m_port, (short)(value ? 0 : 1), ref status);
         }
 
         public int GetChannel()
@@ -40,48 +40,48 @@ namespace WPILib
         public void Pulse(int channel, float pulseLength)
         {
             int status = 0;
-            HALDigital.pulse(m_port, pulseLength, ref status);
+            HALDigital.Pulse(m_port, pulseLength, ref status);
         }
 
         public bool IsPulsing()
         {
             int status = 0;
-            bool value = HALDigital.isPulsing(m_port, ref status);
+            bool value = HALDigital.IsPulsing(m_port, ref status);
             return value;
         }
 
         public void SetPWMRate(double rate)
         {
             int status = 0;
-            HALDigital.setPWMRate(rate, ref status);
+            HALDigital.SetPWMRate(rate, ref status);
         }
 
         public void EnablePWM(double initialDutyCycle)
         {
-            if (_pwmGenerator != IntPtr.Zero)
+            if (m_pwmGenerator != IntPtr.Zero)
                 return;
             int status = 0;
-            _pwmGenerator = HALDigital.allocatePWM(ref status);
-            HALDigital.setPWMDutyCycle(_pwmGenerator, initialDutyCycle, ref status);
-            HALDigital.setPWMOutputChannel(_pwmGenerator, (uint)m_channel, ref status);
+            m_pwmGenerator = HALDigital.AllocatePWM(ref status);
+            HALDigital.SetPWMDutyCycle(m_pwmGenerator, initialDutyCycle, ref status);
+            HALDigital.SetPWMOutputChannel(m_pwmGenerator, (uint)m_channel, ref status);
         }
 
         public void DisablePWM()
         {
-            if (_pwmGenerator == IntPtr.Zero)
+            if (m_pwmGenerator == IntPtr.Zero)
                 return;
             int status = 0;
-            HALDigital.setPWMOutputChannel(_pwmGenerator, (uint)DigitalChannels, ref status);
-            HALDigital.freePWM(_pwmGenerator, ref status);
-            _pwmGenerator = IntPtr.Zero;
+            HALDigital.SetPWMOutputChannel(m_pwmGenerator, (uint)DigitalChannels, ref status);
+            HALDigital.FreePWM(m_pwmGenerator, ref status);
+            m_pwmGenerator = IntPtr.Zero;
         }
 
         public void UpdateDutyCycle(double dutyCycle)
         {
-            if (_pwmGenerator == IntPtr.Zero)
+            if (m_pwmGenerator == IntPtr.Zero)
                 return;
             int status = 0;
-            HALDigital.setPWMDutyCycle(_pwmGenerator, dutyCycle, ref status);
+            HALDigital.SetPWMDutyCycle(m_pwmGenerator, dutyCycle, ref status);
         }
     }
 }

@@ -4,7 +4,7 @@ using System;
 using System.Security.Permissions;
 using WPILib.Interfaces;
 using System.Threading;
-using HAL_FRC;
+using HAL_Base;
 using System.Runtime.InteropServices;
 
 namespace WPILib
@@ -64,7 +64,7 @@ namespace WPILib
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = HALNotifier.initializeNotifier(_delegate, ref status);
+                    s_notifier = HALNotifier.InitializeNotifier(_delegate, ref status);
                 }
                 s_refCount++;
             }
@@ -76,7 +76,7 @@ namespace WPILib
             if (s_timerQueueHead != null)
             {
                 int status = 0;
-                HALNotifier.updateNotifierAlarm(s_notifier, (uint)(s_timerQueueHead.m_expirationTime * 1e6), ref status);
+                HALNotifier.UpdateNotifierAlarm(s_notifier, (uint)(s_timerQueueHead.m_expirationTime * 1e6), ref status);
             }
         }
 

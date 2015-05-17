@@ -1,17 +1,7 @@
-﻿namespace HAL_FRC
+﻿using HAL_Base;
+
+namespace HAL_RoboRIO
 {
-    public enum AccelerometerRange
-    {
-        /// kRange_2G -> 0
-        Range_2G = 0,
-
-        /// kRange_4G -> 1
-        Range_4G = 1,
-
-        /// kRange_8G -> 2
-        Range_8G = 2,
-    }
-
     public class HALAccelerometer
     {
         /// Return Type: void

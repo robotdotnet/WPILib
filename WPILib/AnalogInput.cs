@@ -3,7 +3,7 @@
 using System;
 using WPILib.Interfaces;
 using WPILib.Util;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -34,7 +34,7 @@ namespace WPILib
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
-            _port = HALAnalog.initializeAnalogInputPort(portPointer, ref status);
+            _port = HALAnalog.InitializeAnalogInputPort(portPointer, ref status);
             HAL.Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
 
@@ -48,42 +48,42 @@ namespace WPILib
         public int GetValue()
         {
             int status = 0;
-            int value = HALAnalog.getAnalogValue(_port, ref status);
+            int value = HALAnalog.GetAnalogValue(_port, ref status);
             return value;
         }
 
         public int GetAverageValue()
         {
             int status = 0;
-            int value = HALAnalog.getAnalogAverageValue(_port, ref status);
+            int value = HALAnalog.GetAnalogAverageValue(_port, ref status);
             return value;
         }
 
         public double GetVoltage()
         {
             int status = 0;
-            double value = HALAnalog.getAnalogVoltage(_port, ref status);
+            double value = HALAnalog.GetAnalogVoltage(_port, ref status);
             return value;
         }
 
         public double GetAverageVoltage()
         {
             int status = 0;
-            double value = HALAnalog.getAnalogAverageVoltage(_port, ref status);
+            double value = HALAnalog.GetAnalogAverageVoltage(_port, ref status);
             return value;
         }
 
         public long GetLSBWeight()
         {
             int status = 0;
-            long value = HALAnalog.getAnalogLSBWeight(_port, ref status);
+            long value = HALAnalog.GetAnalogLSBWeight(_port, ref status);
             return value;
         }
 
         public int GetOffset()
         {
             int status = 0;
-            int value = HALAnalog.getAnalogOffset(_port, ref status);
+            int value = HALAnalog.GetAnalogOffset(_port, ref status);
             return value;
         }
 
@@ -95,26 +95,26 @@ namespace WPILib
         public void SetAverageBits(int bits)
         {
             int status = 0;
-            HALAnalog.setAnalogAverageBits(_port, (uint)bits, ref status);
+            HALAnalog.SetAnalogAverageBits(_port, (uint)bits, ref status);
         }
 
         public int GetAverageBits()
         {
             int status = 0;
-            uint value = HALAnalog.getAnalogAverageBits(_port, ref status);
+            uint value = HALAnalog.GetAnalogAverageBits(_port, ref status);
             return (int)value;
         }
 
         public void SetOversampleBits(int bits)
         {
             int status = 0;
-            HALAnalog.setAnalogOversampleBits(_port, (uint)bits, ref status);
+            HALAnalog.SetAnalogOversampleBits(_port, (uint)bits, ref status);
         }
 
         public int GetOversampleBits()
         {
             int status = 0;
-            uint value = HALAnalog.getAnalogOversampleBits(_port, ref status);
+            uint value = HALAnalog.GetAnalogOversampleBits(_port, ref status);
             return (int)value;
         }
 
@@ -126,7 +126,7 @@ namespace WPILib
             }
             _accumulatorOffset = 0;
             int status = 0;
-            HALAnalog.initAccumulator(_port, ref status);
+            HALAnalog.InitAccumulator(_port, ref status);
         }
 
         public void SetAccumulatorInitialValue(long initialValue)
@@ -137,7 +137,7 @@ namespace WPILib
         public void ResetAccumulator()
         {
             int status = 0;
-            HALAnalog.resetAccumulator(_port, ref status);
+            HALAnalog.ResetAccumulator(_port, ref status);
 
             double sampleTime = 1.0 / GetGlobalSampleRate();
             double overSamples = 1 << GetOversampleBits();
@@ -148,20 +148,20 @@ namespace WPILib
         public void SetAccumulatorDeadband(int deadband)
         {
             int status = 0;
-            HALAnalog.setAccumulatorDeadband(_port, deadband, ref status);
+            HALAnalog.SetAccumulatorDeadband(_port, deadband, ref status);
         }
 
         public long GetAccumulatorValue()
         {
             int status = 0;
-            long value = HALAnalog.getAccumulatorValue(_port, ref status);
+            long value = HALAnalog.GetAccumulatorValue(_port, ref status);
             return value + _accumulatorOffset;
         }
 
         public long GetAccumulatorCount()
         {
             int status = 0;
-            long value = HALAnalog.getAccumulatorCount(_port, ref status);
+            long value = HALAnalog.GetAccumulatorCount(_port, ref status);
             return value;
         }
 
@@ -176,7 +176,7 @@ namespace WPILib
             uint count = 0;
             int value = 0;
             int status = 0;
-            HALAnalog.getAccumulatorOutput(_port, ref value, ref count, ref status);
+            HALAnalog.GetAccumulatorOutput(_port, ref value, ref count, ref status);
             result.m_value = value + _accumulatorOffset;
             result.m_count = count;
         }
@@ -197,13 +197,13 @@ namespace WPILib
         public static void SetGlobalSampleRate(double samplesPerSecond)
         {
             int status = 0;
-            HALAnalog.setAnalogSampleRate(samplesPerSecond, ref status);
+            HALAnalog.SetAnalogSampleRate(samplesPerSecond, ref status);
         }
 
         public static double GetGlobalSampleRate()
         {
             int status = 0;
-            double value = HALAnalog.getAnalogSampleRate(ref status);
+            double value = HALAnalog.GetAnalogSampleRate(ref status);
             return value;
         }
 
