@@ -25,3 +25,6 @@ Installation Instructions:
 19. Using the SSH window, run "mono /home/lvuser/mono/YourRobot.exe" replacing YourRobot with the name of your executable.
 20. Your code should now be running. 
 21. From here, you can create code similar to the way Java does. I will write better documentation on this later. But if you are helping this early you should be able to figure it out.
+
+
+Note that you should also be able to use the libary from VB as well. However since VP does not start in a class, the function you run becomes a little bit different. It Becomes "RobotBase.main(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name, System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName + "+MyRobot")" Where MyRobot is the name of the class you create. Make sure that the + stays inside of the string.
