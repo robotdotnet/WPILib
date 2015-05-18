@@ -88,12 +88,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd $(ProjectDir)
-IF ($(ConfigurationName)) == (Debug) GOTO SIM
-copy /y $(OutDir)*.dll C:\builds\wpilib\RoboRIO
-GOTO END
-:SIM
-copy /y $(OutDir)*.dll C:\builds\wpilib\Simulator
-:END</PostBuildEvent>
+copy /y $(OutDir)*.dll C:\builds\wpilib</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
