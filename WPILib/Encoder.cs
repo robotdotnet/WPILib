@@ -305,7 +305,7 @@ namespace WPILib
             switch (m_encodingType)
             {
                 case EncodingType.K4X:
-                    return 0.24;
+                    return 0.25;
                 case EncodingType.K2X:
                     return 0.5;
                 case EncodingType.K1X:
