@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using HAL_Base;
 
 namespace WPILib
@@ -105,7 +106,7 @@ namespace WPILib
         }
 
         private static RobotBase robot;
-        public static void main(string robotAssembly, string robotName)
+        public static void main(System.Reflection.Assembly robotAssembly)//, string robotName)
         {
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
@@ -115,10 +116,18 @@ namespace WPILib
                 HAL.IsSimulation = true;
             InitializeHardwareConfiguration();
             HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
-            
+            string robotName = "";
+            string robotAssemblyName = "";
             try
             {
-                robot = (RobotBase)(Activator.CreateInstance(robotAssembly, robotName)).Unwrap();
+                robotAssemblyName = robotAssembly.GetName().Name;
+                var robotClasses = from t in robotAssembly.GetTypes() where typeof(RobotBase).IsAssignableFrom(t) select t;
+                if (robotClasses.ToList().Count == 0)
+                    throw new Exception("Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
+                robotName = robotClasses.ToList()[0].FullName;
+                //var types = robotAssembly.GetTypes().Where(t => typeof(RobotBase).IsAssignableFrom(t));
+                //var type = types[0];
+                robot = (RobotBase)(Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
                 //robot = (RobotBase)(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(RobotName));
                 robot.Prestart();
             }
