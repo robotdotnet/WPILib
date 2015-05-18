@@ -58,10 +58,20 @@
       <Name>HAL-Base</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="libHALAthena_shared.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>cd $(ProjectDir)
+copy /y $(OutDir)HAL-RoboRIO.dll C:\builds\wpilib\HAL
+copy /y $(OutDir)*.so C:\builds\wpilib\HAL</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
