@@ -3,7 +3,7 @@ DotNet implementation of WPILib for FIRST Robotics Competition (FRC)
 
 Installation Instructions:
 
-1. Create directories C:\Builds\WPILib and C:\Builds\WPILib\HAL
+1. Create directories C:\Builds\WPILib and C:\Builds\WPILib\HAL on your development machine
 2. Open robotdotnet-wpilib solution.
 3. Build solution.
 4. Navigate to C:\Builds\WPILib\HAL
