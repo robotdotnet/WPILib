@@ -227,6 +227,12 @@ namespace WPILib
             HALDigital.SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
         }
 
+        public void SetPulseLengthMode(double threshold)
+        {
+            int status = 0;
+            HALDigital.SetCounterPulseLengthMode(m_counter, threshold, ref status);
+        }
+
         public int Get()
         {
             int status = 0;

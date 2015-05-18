@@ -5,15 +5,16 @@ using HAL_Base;
 
 namespace WPILib
 {
-    public enum IndexingType
-    {
-        ResetWhileHigh,
-        ResetWhileLow,
-        ResetOnFallingEdge,
-        ResetOnRisingEdge,
-    }
     public class Encoder : SensorBase, CounterBase, PIDSource
     {
+        public enum IndexingType
+        {
+            ResetWhileHigh,
+            ResetWhileLow,
+            ResetOnFallingEdge,
+            ResetOnRisingEdge,
+        }
+
         protected DigitalSource m_aSource;
         protected DigitalSource m_bSource;
         protected DigitalSource m_indexSource = null;
@@ -304,11 +305,11 @@ namespace WPILib
             switch (m_encodingType)
             {
                 case EncodingType.K4X:
-                    return 1.0;
+                    return 0.24;
                 case EncodingType.K2X:
                     return 0.5;
                 case EncodingType.K1X:
-                    return 0.25;
+                    return 1.0;
                 default:
                     return 0.0;
             }
