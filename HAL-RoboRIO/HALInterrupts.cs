@@ -1,11 +1,8 @@
-﻿
-namespace HAL_FRC
-{
-    /// Return Type: void
-    ///interruptAssertedMask: unsigned int
-    ///param: void*
-    public delegate void InterruptHandlerFunctionHAL(uint interruptAssertedMask, System.IntPtr param);
+﻿using HAL_Base;
 
+
+namespace HAL_RoboRIO
+{
     public class HALInterrupts
     {
         /// Return Type: void*

@@ -2,7 +2,7 @@
 
 using System;
 using WPILib.Util;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -29,15 +29,15 @@ namespace WPILib
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
-            m_port = HALDigital.initializeDigitalPort(portPointer, ref status);
-            HALDigital.allocateDIO(m_port, input, ref status);
+            m_port = HALDigital.InitializeDigitalPort(portPointer, ref status);
+            HALDigital.AllocateDIO(m_port, input, ref status);
         }
 
         public override void Free()
         {
             s_channels.Free(m_channel);
             int status = 0;
-            HALDigital.freeDIO(m_port, ref status);
+            HALDigital.FreeDIO(m_port, ref status);
             m_channel = 0;
         }
 

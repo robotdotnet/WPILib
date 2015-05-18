@@ -1,4 +1,4 @@
-﻿namespace HAL_FRC
+﻿namespace HAL_RoboRIO
 {
     public class HALSolenoid
     {
@@ -62,3 +62,4 @@
         public static extern void clearAllPCMStickyFaults_sol(System.IntPtr solenoidPortPointer, ref int status);
     }
 }
+

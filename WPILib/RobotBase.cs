@@ -2,7 +2,7 @@
 
 using System;
 using System.IO;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -100,12 +100,19 @@ namespace WPILib
 
         public static void InitializeHardwareConfiguration()
         {
+            //HAL.IsSimulation = false;
             HAL.Initialize();
         }
 
         private static RobotBase robot;
         public static void main(string robotAssembly, string robotName)
         {
+            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            {
+                HAL.IsSimulation = false;
+            }
+            else
+                HAL.IsSimulation = true;
             InitializeHardwareConfiguration();
             HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
             

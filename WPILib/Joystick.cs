@@ -2,7 +2,7 @@
 
 using System;
 using WPILib.Interfaces;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {

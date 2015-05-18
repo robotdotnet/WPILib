@@ -24,9 +24,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
@@ -80,13 +80,9 @@
     <Compile Include="VictorSP.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj" Condition="'$(Configuration)'=='Debug'">
-      <Project>{471a8c6b-aa80-492a-85a3-3ef67fc70988}</Project>
-      <Name>HAL-Simulation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj" Condition="'$(Configuration)'=='Release'">
-      <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>
-      <Name>HAL-RoboRIO</Name>
+    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+      <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
+      <Name>HAL-Base</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
-using HAL_FRC;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -69,14 +69,14 @@ namespace WPILib
             }
             
 
-            m_packetDataAvailableMultiWait = HALSemaphore.initializeMultiWait();
-            m_newControlData = HALSemaphore.initializeSemaphore(0);
+            m_packetDataAvailableMultiWait = HALSemaphore.InitializeMultiWait();
+            m_newControlData = HALSemaphore.InitializeSemaphore(0);
 
-            m_waitForDataSem = HALSemaphore.initializeMultiWait();
-            m_waitForDataMutex = HALSemaphore.initializeMutexNormal();
+            m_waitForDataSem = HALSemaphore.InitializeMultiWait();
+            m_waitForDataMutex = HALSemaphore.InitializeMutexNormal();
 
 
-            m_packetDataAvailableMutex = HALSemaphore.initializeMutexNormal();
+            m_packetDataAvailableMutex = HALSemaphore.InitializeMutexNormal();
             HAL.SetNewDataSem(m_packetDataAvailableMultiWait);
 
 
@@ -98,9 +98,9 @@ namespace WPILib
             int safetyCounter = 0;
             while (m_threadKeepAlive)
             {
-                HALSemaphore.takeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
+                HALSemaphore.TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
                 GetData();
-                HALSemaphore.giveMultiWait(m_waitForDataSem);
+                HALSemaphore.GiveMultiWait(m_waitForDataSem);
                 if (++safetyCounter >= 4)
                 {
                     MotorSafetyHelper.CheckMotors();
@@ -121,7 +121,7 @@ namespace WPILib
 
         public void WaitForData(long timeout = 0)
         {
-            HALSemaphore.takeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
+            HALSemaphore.TakeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
         }
 
         protected void GetData()
@@ -132,13 +132,13 @@ namespace WPILib
                 HAL.GetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
                 HAL.GetJoystickButtons(stick, ref m_joystickButtons[stick]);
             }
-            HALSemaphore.giveSemaphore(m_newControlData);
+            HALSemaphore.GiveSemaphore(m_newControlData);
         }
 
         public double GetBatteryVoltage()
         {
             int status = 0;
-            return HALPower.getVinVoltage(ref status);
+            return HALPower.GetVinVoltage(ref status);
         }
 
         private void ReportJoystickUnpluggedError(String message)
@@ -396,7 +396,7 @@ namespace WPILib
             //bool result = m_newControlData;
             //m_newControlData = false;
             //return result;
-            return HALSemaphore.tryTakeSemaphore(m_newControlData) == 0;
+            return HALSemaphore.TryTakeSemaphore(m_newControlData) == 0;
             /*
             lock (_mutex)
             {

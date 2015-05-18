@@ -1,4 +1,4 @@
-﻿using HAL_FRC;
+﻿using HAL_Base;
 
 namespace WPILib
 {
@@ -14,7 +14,7 @@ namespace WPILib
         public bool Get()
         {
             int status = 0;
-            bool value = HALDigital.getDIO(m_port, ref status);
+            bool value = HALDigital.GetDIO(m_port, ref status);
             return value;
         }
 
