@@ -15,7 +15,7 @@ namespace HAL_Base
 
             Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
 
-            InitializeMutexRecursive = (InitializeMutexRecursiveDelegate)Delegate.CreateDelegate(typeof(InitializeMutexRecursiveDelegate), type.GetMethod("InitializeMutexRecursive"));
+            InitializeMutexRecursive = (InitializeMutexRecursiveDelegate)Delegate.CreateDelegate(typeof(InitializeMutexRecursiveDelegate), type.GetMethod("initializeMutexRecursive"));
 
             InitializeMutexNormal = (InitializeMutexNormalDelegate)Delegate.CreateDelegate(typeof(InitializeMutexNormalDelegate), type.GetMethod("initializeMutexNormal"));
 

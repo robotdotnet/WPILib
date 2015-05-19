@@ -6,7 +6,7 @@ namespace HAL_RoboRIO
     {
         /// Return Type: MUTEX_ID->void*
         [DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexRecursive")]
-        public static extern System.IntPtr InitializeMutexRecursive();
+        public static extern System.IntPtr initializeMutexRecursive();
 
 
         /// Return Type: MUTEX_ID->void*
