@@ -4,55 +4,17 @@ using System.Reflection;
 
 namespace HAL_Base
 {
-    public class HALSolenoid
+    public partial class HALSolenoid
     {
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
+        public const uint SEMAPHORE_Q_FIFO = 0x01;
+        public const uint SEMAPHORE_Q_PRIORITY = 0x01;
+        public const uint SEMAPHORE_DELETE_SAFE = 0x04;
+        public const uint SEMAPHORE_INVERSION_SAFE = 0x08;
 
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+        public const int SEMAPHORE_NO_WAIT = 0;
+        public const int SEMAPHORE_WAIT_FOREVER = -1;
 
-            InitializeSolenoidPort = (InitializeSolenoidPortDelegate)Delegate.CreateDelegate(typeof(InitializeSolenoidPortDelegate), type.GetMethod("initializeSolenoidPort"));
-
-            CheckSolenoidModule = (CheckSolenoidModuleDelegate)Delegate.CreateDelegate(typeof(CheckSolenoidModuleDelegate), type.GetMethod("checkSolenoidModule"));
-
-            GetSolenoid = (GetSolenoidDelegate)Delegate.CreateDelegate(typeof(GetSolenoidDelegate), type.GetMethod("getSolenoid"));
-
-            SetSolenoid = (SetSolenoidDelegate)Delegate.CreateDelegate(typeof(SetSolenoidDelegate), type.GetMethod("setSolenoid"));
-
-            GetPCMSolenoidBlackList = (GetPCMSolenoidBlackListDelegate)Delegate.CreateDelegate(typeof(GetPCMSolenoidBlackListDelegate), type.GetMethod("getPCMSolenoidBlackList"));
-
-            GetPCMSolenoidVoltageStickyFault = (GetPCMSolenoidVoltageStickyFaultDelegate)Delegate.CreateDelegate(typeof(GetPCMSolenoidVoltageStickyFaultDelegate), type.GetMethod("getPCMSolenoidVoltageStickyFault"));
-
-            GetPCMSolenoidVoltageFault = (GetPCMSolenoidVoltageFaultDelegate)Delegate.CreateDelegate(typeof(GetPCMSolenoidVoltageFaultDelegate), type.GetMethod("getPCMSolenoidVoltageFault"));
-
-            ClearAllPCMStickyFaults_sol = (ClearAllPCMStickyFaults_solDelegate)Delegate.CreateDelegate(typeof(ClearAllPCMStickyFaults_solDelegate), type.GetMethod("clearAllPCMStickyFaults_sol"));
-        }
-
-        public delegate System.IntPtr InitializeSolenoidPortDelegate(System.IntPtr portPointer, ref int status);
-        public static InitializeSolenoidPortDelegate InitializeSolenoidPort;
-
-        public delegate bool CheckSolenoidModuleDelegate(byte module);
-        public static CheckSolenoidModuleDelegate CheckSolenoidModule;
-
-        public delegate bool GetSolenoidDelegate(System.IntPtr solenoidPortPointer, ref int status);
-        public static GetSolenoidDelegate GetSolenoid;
-
-        public delegate void SetSolenoidDelegate(System.IntPtr solenoidPortPointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool value, ref int status);
-        public static SetSolenoidDelegate SetSolenoid;
-
-        public delegate int GetPCMSolenoidBlackListDelegate(System.IntPtr solenoidPortPointer, ref int status);
-        public static GetPCMSolenoidBlackListDelegate GetPCMSolenoidBlackList;
-
-        public delegate bool GetPCMSolenoidVoltageStickyFaultDelegate(System.IntPtr solenoidPortPointer, ref int status);
-        public static GetPCMSolenoidVoltageStickyFaultDelegate GetPCMSolenoidVoltageStickyFault;
-
-        public delegate bool GetPCMSolenoidVoltageFaultDelegate(System.IntPtr solenoidPortPointer, ref int status);
-        public static GetPCMSolenoidVoltageFaultDelegate GetPCMSolenoidVoltageFault;
-
-        public delegate void ClearAllPCMStickyFaults_solDelegate(System.IntPtr solenoidPortPointer, ref int status);
-        public static ClearAllPCMStickyFaults_solDelegate ClearAllPCMStickyFaults_sol;
+        public const uint SEMAPHORE_EMPTY = 0;
+        public const uint SEMAPHORE_FULL = 1;
     }
 }

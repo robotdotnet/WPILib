@@ -215,19 +215,19 @@ namespace WPILib
                 _leftRumble = (ushort)(value * 65535);
             else
                 _rightRumble = (ushort)(value * 65535);
-            HAL.SetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
+            HAL.HALSetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
         }
 
         public void SetOutput(int outputNumber, bool value)
         {
             _outputs = (_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            HAL.SetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
+            HAL.HALSetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
         }
 
         public void SetOutputs(int value)
         {
             _outputs = value;
-            HAL.SetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
+            HAL.HALSetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
         }
     }
 }

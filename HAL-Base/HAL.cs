@@ -10,7 +10,7 @@ namespace HAL_Base
     /// </summary>
     public enum HALAllianceStationID
     {
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         HALAllianceStationID_red1,
 
         HALAllianceStationID_red2,
@@ -23,7 +23,7 @@ namespace HAL_Base
 
 
         HALAllianceStationID_blue3,
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
     }
 
     /// <summary>
@@ -87,8 +87,13 @@ namespace HAL_Base
         public byte povCount;
     }
 
-    public class HAL
+    public partial class HAL
     {
+        //public const uint dio_kNumSystems;//Find Value
+        public const uint solenoid_kNumDO7_0Elements = 8;
+        //public const uint interrupt_kNumSystems ;//Find value
+        public const uint kSystemClockTicksPerMicrosecond = 40;
+
 
         internal static Assembly HALAssembly;
 
@@ -106,177 +111,9 @@ namespace HAL_Base
             set { s_isSimulation = value; }
         }
 
-        /// <summary>
-        /// This function is called in order to setup the delegates for the HAL functions.
-        /// </summary>
-        internal static void SetupDelegates()
-        {
-            if (HALAssembly == null)
-            {
-                throw new Exception(
-                    "HAL Assembly was not set. This is probalby an error in the WPILib. If you see contact the robotdotnet team.");
-            }
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-
-            GetPort = (GetPortDelegate)Delegate.CreateDelegate(typeof(GetPortDelegate), type.GetMethod("GetPort"));
-
-            GetPortWithModule = (GetPortWithModuleDelegate)Delegate.CreateDelegate(typeof(GetPortWithModuleDelegate), type.GetMethod("GetPortWithModule"));
-
-            GetHALErrorMessage = (GetHALErrorMessageDelegate)Delegate.CreateDelegate(typeof(GetHALErrorMessageDelegate), type.GetMethod("GetHALErrorMessage"));
-
-            GetFPGAVersion = (GetFPGAVersionDelegate)Delegate.CreateDelegate(typeof(GetFPGAVersionDelegate), type.GetMethod("GetFPGAVersion"));
-
-            GetFPGARevision = (GetFPGARevisionDelegate)Delegate.CreateDelegate(typeof(GetFPGARevisionDelegate), type.GetMethod("GetFPGARevision"));
-
-            GetFPGATime = (GetFPGATimeDelegate)Delegate.CreateDelegate(typeof(GetFPGATimeDelegate), type.GetMethod("GetFPGATime"));
-
-            GetFPGAButton = (GetFPGAButtonDelegate)Delegate.CreateDelegate(typeof(GetFPGAButtonDelegate), type.GetMethod("GetFPGAButton"));
-
-            SetErrorDataHAL = (SetErrorDataDelegate)Delegate.CreateDelegate(typeof(SetErrorDataDelegate), type.GetMethod("SetErrorData"));
-
-            GetControlWordHAL = (GetControlWordDelegate)Delegate.CreateDelegate(typeof(GetControlWordDelegate), type.GetMethod("GetControlWord"));
-
-            GetAllianceStation = (GetAllianceStationDelegate)Delegate.CreateDelegate(typeof(GetAllianceStationDelegate), type.GetMethod("GetAllianceStation"));
-
-            GetJoystickAxes = (GetJoystickAxesDelegate)Delegate.CreateDelegate(typeof(GetJoystickAxesDelegate), type.GetMethod("GetJoystickAxes"));
-
-            GetJoystickPOVs = (GetJoystickPOVsDelegate)Delegate.CreateDelegate(typeof(GetJoystickPOVsDelegate), type.GetMethod("GetJoystickPOVs"));
-
-            GetJoystickButtons = (GetJoystickButtonsDelegate)Delegate.CreateDelegate(typeof(GetJoystickButtonsDelegate), type.GetMethod("GetJoystickButtons"));
-
-            GetJoystickDescriptor = (GetJoystickDescriptorDelegate)Delegate.CreateDelegate(typeof(GetJoystickDescriptorDelegate), type.GetMethod("GetJoystickDescriptor"));
-
-            SetJoystickOutputs = (SetJoystickOutputsDelegate)Delegate.CreateDelegate(typeof(SetJoystickOutputsDelegate), type.GetMethod("SetJoystickOutputs"));
-
-            GetMatchTime = (GetMatchTimeDelegate)Delegate.CreateDelegate(typeof(GetMatchTimeDelegate), type.GetMethod("GetMatchTime"));
-
-            SetNewDataSem = (SetNewDataSemDelegate)Delegate.CreateDelegate(typeof(SetNewDataSemDelegate), type.GetMethod("SetNewDataSem"));
-
-            GetSystemActive = (GetSystemActiveDelegate)Delegate.CreateDelegate(typeof(GetSystemActiveDelegate), type.GetMethod("GetSystemActive"));
-
-            GetBrownedOut = (GetBrownedOutDelegate)Delegate.CreateDelegate(typeof(GetBrownedOutDelegate), type.GetMethod("GetBrownedOut"));
-
-            HALInitialize = (HALInitializeDelegate)Delegate.CreateDelegate(typeof(HALInitializeDelegate), type.GetMethod("HALInitialize"));
-
-            NetworkCommunicationObserveUserProgramStarting = (NetworkCommunicationObserveUserProgramStartingDelegate)Delegate.CreateDelegate(typeof(NetworkCommunicationObserveUserProgramStartingDelegate), type.GetMethod("NetworkCommunicationObserveUserProgramStarting"));
-
-            NetworkCommunicationObserveUserProgramDisabled = (NetworkCommunicationObserveUserProgramDisabledDelegate)Delegate.CreateDelegate(typeof(NetworkCommunicationObserveUserProgramDisabledDelegate), type.GetMethod("NetworkCommunicationObserveUserProgramDisabled"));
-
-            NetworkCommunicationObserveUserProgramAutonomous = (NetworkCommunicationObserveUserProgramAutonomousDelegate)Delegate.CreateDelegate(typeof(NetworkCommunicationObserveUserProgramAutonomousDelegate), type.GetMethod("NetworkCommunicationObserveUserProgramAutonomous"));
-
-            NetworkCommunicationObserveUserProgramTeleop = (NetworkCommunicationObserveUserProgramTeleopDelegate)Delegate.CreateDelegate(typeof(NetworkCommunicationObserveUserProgramTeleopDelegate), type.GetMethod("NetworkCommunicationObserveUserProgramTeleop"));
-
-            NetworkCommunicationObserveUserProgramTest = (NetworkCommunicationObserveUserProgramTestDelegate)Delegate.CreateDelegate(typeof(NetworkCommunicationObserveUserProgramTestDelegate), type.GetMethod("NetworkCommunicationObserveUserProgramTest"));
-
-            HALReport = (HALReportDelegate)Delegate.CreateDelegate(typeof(HALReportDelegate), type.GetMethod("HALReport"));
-
-            NumericArrayResize = (NumericArrayResizeDelegate)Delegate.CreateDelegate(typeof(NumericArrayResizeDelegate), type.GetMethod("NumericArrayResize"));
-
-            RTSetCleanupProc = (RTSetCleanupProcDelegate)Delegate.CreateDelegate(typeof(RTSetCleanupProcDelegate), type.GetMethod("RTSetCleanupProc"));
-
-            EDVR_CreateReference = (EDVR_CreateReferenceDelegate)Delegate.CreateDelegate(typeof(EDVR_CreateReferenceDelegate), type.GetMethod("EDVR_CreateReference"));
-
-            Occur = (OccurDelegate)Delegate.CreateDelegate(typeof(OccurDelegate), type.GetMethod("Occur"));
-        }
-
-        public delegate System.IntPtr GetPortDelegate(byte pin);
-        public static GetPortDelegate GetPort;
-
-        public delegate System.IntPtr GetPortWithModuleDelegate(byte module, byte pin);
-        public static GetPortWithModuleDelegate GetPortWithModule;
-
-        public delegate string GetHALErrorMessageDelegate(int code);
-        public static GetHALErrorMessageDelegate GetHALErrorMessage;
-
-        public delegate ushort GetFPGAVersionDelegate(ref int status);
-        public static GetFPGAVersionDelegate GetFPGAVersion;
-
-        public delegate uint GetFPGARevisionDelegate(ref int status);
-        public static GetFPGARevisionDelegate GetFPGARevision;
-
-        public delegate uint GetFPGATimeDelegate(ref int status);
-        public static GetFPGATimeDelegate GetFPGATime;
-
-        public delegate bool GetFPGAButtonDelegate(ref int status);
-        public static GetFPGAButtonDelegate GetFPGAButton;
-
-        public delegate int SetErrorDataDelegate([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string errors, int errorsLength, int waitMs);
-        private static SetErrorDataDelegate SetErrorDataHAL;
-
-        public delegate int GetControlWordDelegate(ref uint data);
-        private static GetControlWordDelegate GetControlWordHAL;
-
-        public delegate int GetAllianceStationDelegate(ref HALAllianceStationID allianceStation);
-        public static GetAllianceStationDelegate GetAllianceStation;
-
-        public delegate int GetJoystickAxesDelegate(byte joystickNum, ref HALJoystickAxes axes);
-        public static GetJoystickAxesDelegate GetJoystickAxes;
-
-        public delegate int GetJoystickPOVsDelegate(byte joystickNum, ref HALJoystickPOVs povs);
-        public static GetJoystickPOVsDelegate GetJoystickPOVs;
-
-        public delegate int GetJoystickButtonsDelegate(byte joystickNum, ref HALJoystickButtons buttons);
-        public static GetJoystickButtonsDelegate GetJoystickButtons;
-
-        public delegate int GetJoystickDescriptorDelegate(byte joystickNum, ref HALJoystickDescriptor desc);
-        public static GetJoystickDescriptorDelegate GetJoystickDescriptor;
-
-        public delegate int SetJoystickOutputsDelegate(byte joystickNum, uint outputs, ushort leftRumble, ushort rightRumble);
-        public static SetJoystickOutputsDelegate SetJoystickOutputs;
-
-        public delegate int GetMatchTimeDelegate(ref float matchTime);
-        public static GetMatchTimeDelegate GetMatchTime;
-
-        public delegate void SetNewDataSemDelegate(System.IntPtr sem);
-        public static SetNewDataSemDelegate SetNewDataSem;
-
-        public delegate bool GetSystemActiveDelegate(ref int status);
-        public static GetSystemActiveDelegate GetSystemActive;
-
-        public delegate bool GetBrownedOutDelegate(ref int status);
-        public static GetBrownedOutDelegate GetBrownedOut;
-
-        public delegate int HALInitializeDelegate(int mode = 0);
-        public static HALInitializeDelegate HALInitialize;
-
-        public delegate void NetworkCommunicationObserveUserProgramStartingDelegate();
-        public static NetworkCommunicationObserveUserProgramStartingDelegate NetworkCommunicationObserveUserProgramStarting;
-
-        public delegate void NetworkCommunicationObserveUserProgramDisabledDelegate();
-        public static NetworkCommunicationObserveUserProgramDisabledDelegate NetworkCommunicationObserveUserProgramDisabled;
-
-        public delegate void NetworkCommunicationObserveUserProgramAutonomousDelegate();
-        public static NetworkCommunicationObserveUserProgramAutonomousDelegate NetworkCommunicationObserveUserProgramAutonomous;
-
-        public delegate void NetworkCommunicationObserveUserProgramTeleopDelegate();
-        public static NetworkCommunicationObserveUserProgramTeleopDelegate NetworkCommunicationObserveUserProgramTeleop;
-
-        public delegate void NetworkCommunicationObserveUserProgramTestDelegate();
-        public static NetworkCommunicationObserveUserProgramTestDelegate NetworkCommunicationObserveUserProgramTest;
-
-        public delegate uint HALReportDelegate(byte resource, byte instanceNumber, byte context = 0, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string feature = null);
-        public static HALReportDelegate HALReport;
-
-        public delegate void NumericArrayResizeDelegate();
-        public static NumericArrayResizeDelegate NumericArrayResize;
-
-        public delegate void RTSetCleanupProcDelegate();
-        public static RTSetCleanupProcDelegate RTSetCleanupProc;
-
-        public delegate void EDVR_CreateReferenceDelegate();
-        public static EDVR_CreateReferenceDelegate EDVR_CreateReference;
-
-        public delegate void OccurDelegate();
-        public static OccurDelegate Occur;
-
-
         public static int SetErrorData(string errors, int waitMs)
         {
-            return SetErrorDataHAL(errors, errors.Length, waitMs);
+            return HALSetErrorData(errors, errors.Length, waitMs);
         }
 
         /// <summary>
@@ -291,14 +128,14 @@ namespace HAL_Base
             }
             else
             {
-                HALAssembly = Assembly.LoadFrom("/home/lvuser/HAL/HAL-RoboRIO.dll");
+                HALAssembly = Assembly.LoadFrom("/home/lvuser/mono/HAL-RoboRIO.dll");
             }
 
             SetupDelegates();
-            HALAccelerometer.SetupDelegate();
-            HALAnalog.SetupDelegate();
-            HALCANTalon.SetupDelegate();
-            HALCompressor.SetupDelegate();
+            HALAccelerometer.SetupDelegates();
+            HALAnalog.SetupDelegates();
+            HALCanTalonSRX.SetupDelegates();
+            HALCompressor.SetupDelegates();
             HALDigital.SetupDelegates();
             HALInterrupts.SetupDelegates();
             HALNotifier.SetupDelegates();
@@ -310,7 +147,7 @@ namespace HAL_Base
             HALUtilities.SetupDelegates();
 
 
-            var rv = HALInitialize();
+            var rv = HALInitialize(mode);
             if (rv == 0)
             {
                 throw new Exception("HAL Initialize Failed");
@@ -362,9 +199,9 @@ namespace HAL_Base
 
         public static HALControlWord GetControlWord()
         {
-            uint temp = 0;
-            GetControlWordHAL(ref temp);
-            return new HALControlWord(temp);
+            HALControlWord temp = new HALControlWord();
+            HALGetControlWord(ref temp);
+            return temp;
         }
     }
 

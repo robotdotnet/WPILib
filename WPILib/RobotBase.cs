@@ -96,7 +96,7 @@ namespace WPILib
 
         protected virtual void Prestart()
         {
-            HAL.NetworkCommunicationObserveUserProgramStarting();
+            HAL.HALNetworkCommunicationObserveUserProgramStarting();
         }
 
         public static void InitializeHardwareConfiguration()

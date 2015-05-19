@@ -14,7 +14,7 @@ namespace WPILib
         Both = 0x101,
     }
 
-    public delegate void InterruptHandlerFunction();
+    public delegate void InterruptHandlerFunctionWPILib();
 
     public abstract class InterruptableSensorBase : SensorBase
     {
@@ -38,9 +38,9 @@ namespace WPILib
 
         
 
-        public void RequestInterrupts(InterruptHandlerFunction handler)
+        public void RequestInterrupts(InterruptHandlerFunctionWPILib handler)
         {
-            InterruptHandlerFunctionHAL function = new InterruptHandlerFunctionHAL(delegate(uint mask, IntPtr param)
+            InterruptHandlerFunction function = new InterruptHandlerFunction(delegate(uint mask, IntPtr param)
             {
                 handler();
             });

@@ -299,7 +299,7 @@ namespace WPILib
         {
             int status = 0;
             HALDigital.SetCounterSamplesToAverage(m_counter, samplesToAverage, ref status);
-            if (status == HALUtilities.PARAMETER_OUT_OF_RANGE)
+            if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
             {
                 throw new BoundaryException(BoundaryException.GetMessage(samplesToAverage, 1, 127));
             }

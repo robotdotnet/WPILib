@@ -26,7 +26,7 @@ namespace WPILib
 
         public void ObserveStarting()
         {
-            HAL.NetworkCommunicationObserveUserProgramStarting();
+            HAL.HALNetworkCommunicationObserveUserProgramStarting();
         }
 
         public override void StartCompetition()
@@ -35,7 +35,7 @@ namespace WPILib
 
             RobotInit();
 
-            HAL.NetworkCommunicationObserveUserProgramStarting();
+            HAL.HALNetworkCommunicationObserveUserProgramStarting();
 
             //LiveWindow.setEnabled(false);
             while (true)
@@ -58,7 +58,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady())
                     {
-                        HAL.NetworkCommunicationObserveUserProgramDisabled();
+                        HAL.HALNetworkCommunicationObserveUserProgramDisabled();
                         DisabledPeriodic();
                     }
                 }
@@ -77,7 +77,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady())
                     {
-                        HAL.NetworkCommunicationObserveUserProgramTest();
+                        HAL.HALNetworkCommunicationObserveUserProgramTest();
                         TestPeriodic();
                     }
                 }
@@ -99,7 +99,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady())
                     {
-                        HAL.NetworkCommunicationObserveUserProgramAutonomous();
+                        HAL.HALNetworkCommunicationObserveUserProgramAutonomous();
                         AutonomousPeriodic();
                     }
                 }
@@ -119,7 +119,7 @@ namespace WPILib
                     if (NextPeriodReady())
                     {
                         //HAL.NetworkCommunicationObserveUserProgramTeleop();
-                        HAL.NetworkCommunicationObserveUserProgramTeleop();
+                        HAL.HALNetworkCommunicationObserveUserProgramTeleop();
                         TeleopPeriodic();
                     }
                 }
