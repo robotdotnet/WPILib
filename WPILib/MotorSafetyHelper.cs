@@ -10,50 +10,54 @@ namespace WPILib
     {
         public const double DefaultSafetyExpiration = 0.1;
 
-        private double _expiration;
-        private bool _enabled;
-        private double _stopTime;
+        private double m_expiration;
+        private bool m_enabled;
+        private double m_stopTime;
         private MotorSafety _safeObject;
         private MotorSafetyHelper _nextHelper;
         private static MotorSafetyHelper s_headHelper = null;
         private static DriverStation s_ds;
+        private static object m_lockObject = new object();
 
         public MotorSafetyHelper(MotorSafety safeObject)
         {
             _safeObject = safeObject;
             s_ds = DriverStation.GetInstance();
-            _enabled = false;
-            _expiration = DefaultSafetyExpiration;
-            _stopTime = Timer.GetFPGATimestamp();
-            _nextHelper = s_headHelper;
-            s_headHelper = this;
+            m_enabled = false;
+            m_expiration = DefaultSafetyExpiration;
+            m_stopTime = Timer.GetFPGATimestamp();
+            lock (m_lockObject)
+            {
+                _nextHelper = s_headHelper;
+                s_headHelper = this;
+            }
         }
 
         public void Feed()
         {
-            _stopTime = Timer.GetFPGATimestamp() + _expiration;
+            m_stopTime = Timer.GetFPGATimestamp() + m_expiration;
         }
 
         public void SetExpiration(double expirationTime)
         {
-            _expiration = expirationTime;
+            m_expiration = expirationTime;
         }
 
         public double GetExpiration()
         {
-            return _expiration;
+            return m_expiration;
         }
 
         public bool IsAlive()
         {
-            return !_enabled || _stopTime > Timer.GetFPGATimestamp();
+            return !m_enabled || m_stopTime > Timer.GetFPGATimestamp();
         }
 
         public void Check()
         {
-            if (!_enabled || s_ds.IsDisabled() || s_ds.IsTest())
+            if (!m_enabled || s_ds.IsDisabled() || s_ds.IsTest())
                 return;
-            if (_stopTime < Timer.GetFPGATimestamp())
+            if (m_stopTime < Timer.GetFPGATimestamp())
             {
                 TextWriter errorWriter = Console.Error;
                 errorWriter.WriteLine(_safeObject.GetDescription() + "... Output not updated often enough.");
@@ -65,19 +69,22 @@ namespace WPILib
 
         public void SetSafetyEnabled(bool enabled)
         {
-            _enabled = enabled;
+            m_enabled = enabled;
         }
 
         public bool IsSafetyEnabled()
         {
-            return _enabled;
+            return m_enabled;
         }
 
         public static void CheckMotors()
         {
-            for (MotorSafetyHelper msh = s_headHelper; msh != null; msh = msh._nextHelper)
+            lock (m_lockObject)
             {
-                msh.Check();
+                for (MotorSafetyHelper msh = s_headHelper; msh != null; msh = msh._nextHelper)
+                {
+                    msh.Check();
+                }
             }
         }
     }

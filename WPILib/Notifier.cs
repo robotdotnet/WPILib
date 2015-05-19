@@ -17,7 +17,7 @@ namespace WPILib
         static private int s_refCount = 0;
         static private object s_queueSemaphore = new object();
 
-        protected static IntPtr s_notifier = IntPtr.Zero;
+        private static IntPtr s_notifier;// = IntPtr.Zero;
         public double m_expirationTime = 0;
 
         //public static void s_notifier_process_queue(uint param0, IntPtr param1)
@@ -29,13 +29,16 @@ namespace WPILib
         //private IntPtr notifierDelegate;
         //private NotifierDelegate notDel;
 
-        protected object m_param;
-        protected TimerEventHandlerDelegate m_handler;
-        public double m_period = 0;
-        public bool m_periodic = false;
-        public bool m_queued = false;
-        public Notifier m_nextEvent;
-        public Semaphore m_handlerSemaphore = new Semaphore(1, 1);
+        private object m_param;
+        private TimerEventHandlerDelegate m_handler;
+        private double m_period = 0;
+        private bool m_periodic = false;
+        private bool m_queued = false;
+        private Notifier m_nextEvent;
+        private IntPtr m_handlerSemaphore;
+
+
+        //private Semaphore m_handlerSemaphore = new Semaphore(1, 1);
 
         //private GCHandle handle;
 
@@ -49,8 +52,10 @@ namespace WPILib
         {
             m_handler = handler;
             m_param = param;
+            m_nextEvent = null;
+            m_handlerSemaphore = HALSemaphore.InitializeSemaphore(HALSemaphore.SEMAPHORE_FULL);
 
-            _delegate = new NotifierDelegate(ProcessQueue);
+            _delegate = ProcessQueue;
 
             //handle = GCHandle.Alloc(_delegate, GCHandleType.Pinned);
 
@@ -67,6 +72,19 @@ namespace WPILib
                     s_notifier = HALNotifier.InitializeNotifier(_delegate, ref status);
                 }
                 s_refCount++;
+            }
+        }
+
+        public void Free()
+        {
+            lock (s_queueSemaphore)
+            {
+                DeleteFromQueue();
+                if ((--s_refCount) == 0)
+                {
+                    int status = 0;
+                    HALNotifier.CleanNotifier(s_notifier, ref status);
+                }
             }
         }
 
@@ -112,14 +130,14 @@ namespace WPILib
 
                 while (looking)
                 {
-                    //cur = last.m_nextEvent;
+                    cur = last.m_nextEvent;
                     if (cur == null || cur.m_expirationTime > this.m_expirationTime)
                     {
                         last.m_nextEvent = this;
                         this.m_nextEvent = cur;
                         looking = false;
                     }
-                    //last = last.m_nextEvent;
+                    last = last.m_nextEvent;
                 }
             }
             m_queued = true;
@@ -182,6 +200,10 @@ namespace WPILib
             {
                 DeleteFromQueue();
             }
+
+            HALSemaphore.TakeSemaphore(m_handlerSemaphore);
+            HALSemaphore.GiveSemaphore(m_handlerSemaphore);
+            /*
             try
             {
                 m_handlerSemaphore.WaitOne();
@@ -192,6 +214,7 @@ namespace WPILib
             catch (ThreadInterruptedException e)
             {
             }
+             * */
         }
 
 
@@ -221,20 +244,12 @@ namespace WPILib
                     {
                         current.m_queued = false;
                     }
-                    try
-                    {
-                        Console.WriteLine("WaitOne");
-                        current.m_handlerSemaphore.WaitOne();
-                        Console.WriteLine("WaitOneEnd");
-                        //HALSemaphore.takeSemaphore(current.m_handlerSemaphore);
-                    }
-                    catch (ThreadInterruptedException e)
-                    {
-                    }
+                    HALSemaphore.TakeSemaphore(current.m_handlerSemaphore);
                 }
                 current.m_handler(current.m_param);//.Update(current.m_param);
+                HALSemaphore.GiveSemaphore(current.m_handlerSemaphore);
                 //HALSemaphore.giveSemaphore(current.m_handlerSemaphore);
-                current.m_handlerSemaphore.Release();
+                //current.m_handlerSemaphore.Release();
             }
             //Console.WriteLine("Finished Loop Aquiring Semaphore");
             lock (s_queueSemaphore)
