@@ -77,7 +77,7 @@ namespace WPILib
 
 
             m_packetDataAvailableMutex = HALSemaphore.InitializeMutexNormal();
-            HAL.SetNewDataSem(m_packetDataAvailableMultiWait);
+            HAL.HALSetNewDataSem(m_packetDataAvailableMultiWait);
 
 
 
@@ -107,13 +107,13 @@ namespace WPILib
                     safetyCounter = 0;
                 }
                 if (m_userInDisabled)
-                    HAL.NetworkCommunicationObserveUserProgramDisabled();
+                    HAL.HALNetworkCommunicationObserveUserProgramDisabled();
                 if (m_userInAutonomous)
-                    HAL.NetworkCommunicationObserveUserProgramAutonomous();
+                    HAL.HALNetworkCommunicationObserveUserProgramAutonomous();
                 if (m_userInTeleop)
-                    HAL.NetworkCommunicationObserveUserProgramTeleop();
+                    HAL.HALNetworkCommunicationObserveUserProgramTeleop();
                 if (m_userInTest)
-                    HAL.NetworkCommunicationObserveUserProgramTest();
+                    HAL.HALNetworkCommunicationObserveUserProgramTest();
                 dsLoops++;
                // Thread.Sleep(30);
             }
@@ -128,9 +128,9 @@ namespace WPILib
         {
             for (byte stick = 0; stick < JoystickPorts; stick++)
             {
-                HAL.GetJoystickAxes(stick, ref m_joystickAxes[stick]);
-                HAL.GetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
-                HAL.GetJoystickButtons(stick, ref m_joystickButtons[stick]);
+                HAL.HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
+                HAL.HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
+                HAL.HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
             }
             HALSemaphore.GiveSemaphore(m_newControlData);
         }
@@ -379,14 +379,14 @@ namespace WPILib
         public bool IsSysActive()
         {
             int status = 0;
-            bool retVal = HAL.GetSystemActive(ref status);
+            bool retVal = HAL.HALGetSystemActive(ref status);
             return retVal;
         }
 
         public bool IsBrownedOut()
         {
             int status = 0;
-            bool retval = HAL.GetBrownedOut(ref status);
+            bool retval = HAL.HALGetBrownedOut(ref status);
             return retval;
         }
 
@@ -410,7 +410,8 @@ namespace WPILib
         public Alliance GetAlliance()
         {
             HALAllianceStationID allianceStationID = new HALAllianceStationID();
-            HAL.GetAllianceStation(ref allianceStationID);
+
+            HAL.HALGetAllianceStation(ref allianceStationID);
 
             switch (allianceStationID)
             {
@@ -432,7 +433,7 @@ namespace WPILib
         public int GetLocation()
         {
             HALAllianceStationID allianceStationID = new HALAllianceStationID();
-            HAL.GetAllianceStation(ref allianceStationID);
+            HAL.HALGetAllianceStation(ref allianceStationID);
 
             switch (allianceStationID)
             {
@@ -468,7 +469,7 @@ namespace WPILib
         public double GetMatchTime()
         {
             float temp = 0;
-            HAL.GetMatchTime(ref temp);
+            HAL.HALGetMatchTime(ref temp);
             return temp;
         }
 

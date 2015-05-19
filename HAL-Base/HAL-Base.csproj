@@ -44,12 +44,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Generated\HALAccelerometerGenerated.cs" />
+    <Compile Include="Generated\HALAnalogGenerated.cs" />
+    <Compile Include="Generated\HALCanTalonSRXGenerated.cs" />
+    <Compile Include="Generated\HALCompressorGenerated.cs" />
+    <Compile Include="Generated\HALDigitalGenerated.cs" />
+    <Compile Include="Generated\HALGenerated.cs" />
+    <Compile Include="Generated\HALInterruptsGenerated.cs" />
+    <Compile Include="Generated\HALNotifierGenerated.cs" />
+    <Compile Include="Generated\HALPDPGenerated.cs" />
+    <Compile Include="Generated\HALPowerGenerated.cs" />
+    <Compile Include="Generated\HALSemaphoreGenerated.cs" />
+    <Compile Include="Generated\HALSerialPortGenerated.cs" />
+    <Compile Include="Generated\HALSolenoidGenerated.cs" />
+    <Compile Include="Generated\HALUtilitiesGenerated.cs" />
     <Compile Include="HAL.cs" />
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />
-    <Compile Include="HALCANTalon.cs" />
+    <Compile Include="HALCANTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />
+    <Compile Include="HALErrors.cs" />
     <Compile Include="HALInterrupts.cs" />
     <Compile Include="HALNotifier.cs" />
     <Compile Include="HALPDP.cs" />

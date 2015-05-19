@@ -355,7 +355,7 @@ namespace WPILib
                 case EncodingType.K4X:
                     int status = 0;
                     HALDigital.SetEncoderSamplesToAverage(m_encoder, (uint) samplesToAverage, ref status);
-                    if (status == HALUtilities.PARAMETER_OUT_OF_RANGE)
+                    if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
                     {
                         throw new BoundaryException(BoundaryException.GetMessage(samplesToAverage, 1, 127));
                     }

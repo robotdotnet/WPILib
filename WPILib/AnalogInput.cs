@@ -174,7 +174,7 @@ namespace WPILib
                     + " is not an accumulator channel.");
 
             uint count = 0;
-            int value = 0;
+            long value = 0;
             int status = 0;
             HALAnalog.GetAccumulatorOutput(_port, ref value, ref count, ref status);
             result.m_value = value + _accumulatorOffset;
