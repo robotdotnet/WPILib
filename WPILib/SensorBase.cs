@@ -24,8 +24,6 @@ namespace WPILib
 
         private static int s_defaultSolenoidModule = 0;
 
-        public static int DefaultSolenoidModule { get { return s_defaultSolenoidModule; } }
-
         public static void SetDefaultSolenoidModule(int moduleNumber)
         {
             CheckSolenoidModule(moduleNumber);
@@ -137,6 +135,11 @@ namespace WPILib
             {
                 throw new IndexOutOfRangeException("Requested PDP channel number is out of range.");
             }
+        }
+
+        public static int GetDefaultSolenoidModule()
+        {
+            return s_defaultSolenoidModule;
         }
 
         public virtual void Free()

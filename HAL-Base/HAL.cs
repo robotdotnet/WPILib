@@ -291,7 +291,7 @@ namespace HAL_Base
             }
             else
             {
-                HALAssembly = Assembly.LoadFrom("/home/lvuser/robotdotnet/HAL-RoboRIO.dll");
+                HALAssembly = Assembly.LoadFrom("/home/lvuser/HAL/HAL-RoboRIO.dll");
             }
 
             SetupDelegates();
