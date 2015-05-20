@@ -45,7 +45,13 @@
     <Compile Include="AnalogTrigger.cs" />
     <Compile Include="AnalogTriggerOutput.cs" />
     <Compile Include="BuiltInAccelerometer.cs" />
+    <Compile Include="Buttons\Button.cs" />
+    <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANTalon.cs" />
+    <Compile Include="Command\Command.cs" />
+    <Compile Include="Command\CommandGroup.cs" />
+    <Compile Include="Command\IllegalUseOfCommandException.cs" />
+    <Compile Include="Command\Subsystem.cs" />
     <Compile Include="Compressor.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
@@ -71,6 +77,7 @@
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
+    <Compile Include="NamedSendable.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="PIDController.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
@@ -81,6 +88,7 @@
     <Compile Include="RobotState.cs" />
     <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
+    <Compile Include="Sendable.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="Solenoid.cs" />
     <Compile Include="SolenoidBase.cs" />
@@ -101,6 +109,13 @@
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL-Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CAN\" />
+    <Folder Include="Communication\" />
+    <Folder Include="Internal\" />
+    <Folder Include="LiveWindow\" />
+    <Folder Include="SmartDashboard\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
