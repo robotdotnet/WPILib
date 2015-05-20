@@ -132,8 +132,6 @@ namespace WPILib
         {
             if (analogTrigger == null)
                 throw new NullReferenceException("Analog Trigger given was null");
-            if (triggerType == null)
-                throw new NullReferenceException("Analog Trigger Type given was null");
             SetUpSource(analogTrigger.CreateOutput(triggerType));
             m_allocatedUpSource = true;
         }
@@ -182,8 +180,6 @@ namespace WPILib
         {
             if (analogTrigger == null)
                 throw new NullReferenceException("Analog Trigger given was null");
-            if (triggerType == null)
-                throw new NullReferenceException("Analog Trigger Type given was null");
             SetDownSource(analogTrigger.CreateOutput(triggerType));
             m_allocatedDownSource = true;
         }

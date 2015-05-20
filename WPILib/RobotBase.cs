@@ -164,7 +164,6 @@ namespace WPILib
             catch (Exception ex)
             {
                 DriverStation.ReportError("ERROR Unhandled exception", true);
-                throw new Exception("AHHHH");
                 return;
             }
             finally
