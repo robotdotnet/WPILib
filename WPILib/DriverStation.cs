@@ -487,7 +487,7 @@ namespace WPILib
         }
 
 
-
+        
         public static short GetAxesData(int axis, ref HALJoystickAxes axes)
         {
             switch (axis)
@@ -553,5 +553,6 @@ namespace WPILib
                     return 0;
             }
         }
+         
     }
 }

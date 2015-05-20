@@ -58,6 +58,7 @@
     <Compile Include="GearTooth.cs" />
     <Compile Include="Gyro.cs" />
     <Compile Include="Interfaces\Accelerometer.cs" />
+    <Compile Include="Interfaces\Controller.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
     <Compile Include="Interfaces\GenericHID.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
@@ -71,6 +72,7 @@
     <Compile Include="Joystick.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="Notifier.cs" />
+    <Compile Include="PIDController.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
     <Compile Include="PWM.cs" />
     <Compile Include="Relay.cs" />
