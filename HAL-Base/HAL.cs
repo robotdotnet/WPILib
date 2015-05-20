@@ -53,7 +53,7 @@ namespace HAL_Base
         public Int16 axes9;
         public Int16 axes10;
         public Int16 axes11;
-        
+         
     }
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct HALJoystickPOVs
@@ -79,6 +79,7 @@ namespace HAL_Base
         public Int16 povs9;
         public Int16 povs10;
         public Int16 povs11;
+        
         
     }
 
@@ -233,39 +234,6 @@ namespace HAL_Base
             HALControlWord temp = new HALControlWord();
             HALGetControlWord(ref temp);
             return temp;
-        }
-
-        public static short GetAxesData(int axis, ref HALJoystickAxes axes)
-        {
-            switch (axis)
-            {
-                case 0:
-                    return axes.axes0;
-                case 1:
-                    return axes.axes1;
-                case 2:
-                    return axes.axes2;
-                case 3:
-                    return axes.axes3;
-                case 4:
-                    return axes.axes4;
-                case 5:
-                    return axes.axes5;
-                case 6:
-                    return axes.axes6;
-                case 7:
-                    return axes.axes7;
-                case 8:
-                    return axes.axes8;
-                case 9:
-                    return axes.axes9;
-                case 10:
-                    return axes.axes10;
-                case 11:
-                    return axes.axes11;
-                default:
-                    return 0;
-            }
         }
     }
 
