@@ -167,7 +167,7 @@ namespace WPILib
                 return 0.0;
             }
 
-            int value = GetAxesData(axis, ref m_joystickAxes[stick]);
+            int value = m_joystickAxes[stick].axes[axis];//GetAxesData(axis, ref m_joystickAxes[stick]);
 
             if (value < 0)
             {
@@ -213,7 +213,7 @@ namespace WPILib
                 return -1;
             }
 
-            return GetPOVData(pov, ref m_joystickPOVs[stick]);
+            return m_joystickPOVs[stick].povs[pov];//GetPOVData(pov, ref m_joystickPOVs[stick]);
 
         }
 
@@ -487,7 +487,7 @@ namespace WPILib
         }
 
 
-        
+        /*
         public static short GetAxesData(int axis, ref HALJoystickAxes axes)
         {
             switch (axis)
@@ -553,6 +553,7 @@ namespace WPILib
                     return 0;
             }
         }
+         * */
          
     }
 }
