@@ -103,6 +103,7 @@ namespace WPILib
         {
             //HAL.IsSimulation = false;
             HAL.Initialize();
+            RobotState.SetImplementation(DriverStation.GetInstance());
         }
 
         private static RobotBase robot;

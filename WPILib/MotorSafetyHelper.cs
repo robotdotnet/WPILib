@@ -55,7 +55,7 @@ namespace WPILib
 
         public void Check()
         {
-            if (!m_enabled || s_ds.IsDisabled() || s_ds.IsTest())
+            if (!m_enabled || RobotState.IsDisabled() || RobotState.IsTest())
                 return;
             if (m_stopTime < Timer.GetFPGATimestamp())
             {

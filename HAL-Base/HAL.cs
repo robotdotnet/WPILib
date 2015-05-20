@@ -35,20 +35,51 @@ namespace HAL_Base
         /// unsigned short
         public ushort count;
 
+        //For some reason, the code works with 12 Int16s, but not an array of 12 Int16s. Weird...
         /// short[12]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = System.Runtime.InteropServices.UnmanagedType.I2)]
-        public short[] axes;
-    }
+        //[System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12)]
+        //public Int16[] axes;
 
+        
+        public Int16 axes0;
+        public Int16 axes1;
+        public Int16 axes2;
+        public Int16 axes3;
+        public Int16 axes4;
+        public Int16 axes5;
+        public Int16 axes6;
+        public Int16 axes7;
+        public Int16 axes8;
+        public Int16 axes9;
+        public Int16 axes10;
+        public Int16 axes11;
+        
+    }
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
     public struct HALJoystickPOVs
     {
         /// unsigned short
         public ushort count;
 
+        //For some reason, the code works with 12 Int16s, but not an array of 12 Int16s. Weird...
         /// short[12]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = System.Runtime.InteropServices.UnmanagedType.I2)]
-        public short[] povs;
+        //[System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12)]
+        //public Int16[] povs;
+
+        
+        public Int16 povs0;
+        public Int16 povs1;
+        public Int16 povs2;
+        public Int16 povs3;
+        public Int16 povs4;
+        public Int16 povs5;
+        public Int16 povs6;
+        public Int16 povs7;
+        public Int16 povs8;
+        public Int16 povs9;
+        public Int16 povs10;
+        public Int16 povs11;
+        
     }
 
     [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
@@ -202,6 +233,39 @@ namespace HAL_Base
             HALControlWord temp = new HALControlWord();
             HALGetControlWord(ref temp);
             return temp;
+        }
+
+        public static short GetAxesData(int axis, ref HALJoystickAxes axes)
+        {
+            switch (axis)
+            {
+                case 0:
+                    return axes.axes0;
+                case 1:
+                    return axes.axes1;
+                case 2:
+                    return axes.axes2;
+                case 3:
+                    return axes.axes3;
+                case 4:
+                    return axes.axes4;
+                case 5:
+                    return axes.axes5;
+                case 6:
+                    return axes.axes6;
+                case 7:
+                    return axes.axes7;
+                case 8:
+                    return axes.axes8;
+                case 9:
+                    return axes.axes9;
+                case 10:
+                    return axes.axes10;
+                case 11:
+                    return axes.axes11;
+                default:
+                    return 0;
+            }
         }
     }
 
