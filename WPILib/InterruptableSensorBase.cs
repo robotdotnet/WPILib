@@ -14,11 +14,8 @@ namespace WPILib
         Both = 0x101,
     }
 
-    public delegate void InterruptHandlerFunctionWPILib();
-
     public abstract class InterruptableSensorBase : SensorBase
     {
-        //figure this out
         protected IntPtr m_interrupt = IntPtr.Zero;
 
         protected uint m_interruptIndex;
@@ -36,14 +33,9 @@ namespace WPILib
         public abstract int GetChannelForRouting();
         public abstract byte GetModuleForRouting();
 
-        
-
-        public void RequestInterrupts(InterruptHandlerFunctionWPILib handler)
+        public void RequestInterrupts(Action handler)
         {
-            InterruptHandlerFunction function = new InterruptHandlerFunction(delegate(uint mask, IntPtr param)
-            {
-                handler();
-            });
+            InterruptHandlerFunction function = (mask, param) => handler();
             if (m_interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
@@ -56,6 +48,7 @@ namespace WPILib
             HALInterrupts.AttachInterruptHandler(m_interrupt, function, IntPtr.Zero, ref status);
             //allocate Interupts
         }
+
 
         public void RequestInterrupts()
         {
