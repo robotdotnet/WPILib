@@ -11,14 +11,14 @@ namespace WPILib
     {
         //private static int AccumulatorSlot = 1;
         private static Resource s_channels = new Resource(AnalogInputChannels);
-        private IntPtr _port;
-        private int _channel;
+        private IntPtr m_port;
+        private int m_channel;
         private static int[] s_accumulatorChannels = { 0, 1 };
         private long _accumulatorOffset;
 
         public AnalogInput(int channel)
         {
-            _channel = channel;
+            m_channel = channel;
 
             CheckAnalogInputChannel(channel);
 
@@ -28,93 +28,93 @@ namespace WPILib
             }
             catch (CheckedAllocationException ex)
             {
-                throw new AllocationException("Analog input channel " + _channel
+                throw new AllocationException("Analog input channel " + m_channel
                      + " is already allocated");
             }
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
-            _port = HALAnalog.InitializeAnalogInputPort(portPointer, ref status);
+            m_port = HALAnalog.InitializeAnalogInputPort(portPointer, ref status);
             HAL.Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
 
         public override void Free()
         {
-            s_channels.Free(_channel);
-            _channel = 0;
+            s_channels.Free(m_channel);
+            m_channel = 0;
             _accumulatorOffset = 0;
         }
 
         public int GetValue()
         {
             int status = 0;
-            int value = HALAnalog.GetAnalogValue(_port, ref status);
+            int value = HALAnalog.GetAnalogValue(m_port, ref status);
             return value;
         }
 
         public int GetAverageValue()
         {
             int status = 0;
-            int value = HALAnalog.GetAnalogAverageValue(_port, ref status);
+            int value = HALAnalog.GetAnalogAverageValue(m_port, ref status);
             return value;
         }
 
         public double GetVoltage()
         {
             int status = 0;
-            double value = HALAnalog.GetAnalogVoltage(_port, ref status);
+            double value = HALAnalog.GetAnalogVoltage(m_port, ref status);
             return value;
         }
 
         public double GetAverageVoltage()
         {
             int status = 0;
-            double value = HALAnalog.GetAnalogAverageVoltage(_port, ref status);
+            double value = HALAnalog.GetAnalogAverageVoltage(m_port, ref status);
             return value;
         }
 
         public long GetLSBWeight()
         {
             int status = 0;
-            long value = HALAnalog.GetAnalogLSBWeight(_port, ref status);
+            long value = HALAnalog.GetAnalogLSBWeight(m_port, ref status);
             return value;
         }
 
         public int GetOffset()
         {
             int status = 0;
-            int value = HALAnalog.GetAnalogOffset(_port, ref status);
+            int value = HALAnalog.GetAnalogOffset(m_port, ref status);
             return value;
         }
 
         public int GetChannel()
         {
-            return _channel;
+            return m_channel;
         }
 
         public void SetAverageBits(int bits)
         {
             int status = 0;
-            HALAnalog.SetAnalogAverageBits(_port, (uint)bits, ref status);
+            HALAnalog.SetAnalogAverageBits(m_port, (uint)bits, ref status);
         }
 
         public int GetAverageBits()
         {
             int status = 0;
-            uint value = HALAnalog.GetAnalogAverageBits(_port, ref status);
+            uint value = HALAnalog.GetAnalogAverageBits(m_port, ref status);
             return (int)value;
         }
 
         public void SetOversampleBits(int bits)
         {
             int status = 0;
-            HALAnalog.SetAnalogOversampleBits(_port, (uint)bits, ref status);
+            HALAnalog.SetAnalogOversampleBits(m_port, (uint)bits, ref status);
         }
 
         public int GetOversampleBits()
         {
             int status = 0;
-            uint value = HALAnalog.GetAnalogOversampleBits(_port, ref status);
+            uint value = HALAnalog.GetAnalogOversampleBits(m_port, ref status);
             return (int)value;
         }
 
@@ -126,7 +126,7 @@ namespace WPILib
             }
             _accumulatorOffset = 0;
             int status = 0;
-            HALAnalog.InitAccumulator(_port, ref status);
+            HALAnalog.InitAccumulator(m_port, ref status);
         }
 
         public void SetAccumulatorInitialValue(long initialValue)
@@ -137,7 +137,7 @@ namespace WPILib
         public void ResetAccumulator()
         {
             int status = 0;
-            HALAnalog.ResetAccumulator(_port, ref status);
+            HALAnalog.ResetAccumulator(m_port, ref status);
 
             double sampleTime = 1.0 / GetGlobalSampleRate();
             double overSamples = 1 << GetOversampleBits();
@@ -145,23 +145,29 @@ namespace WPILib
             Timer.Delay(sampleTime * overSamples * averageSamples);
         }
 
+        public void SetAccumulatorCenter(int center)
+        {
+            int status = 0;
+            HALAnalog.SetAccumulatorCenter(m_port, center, ref status);
+        }
+
         public void SetAccumulatorDeadband(int deadband)
         {
             int status = 0;
-            HALAnalog.SetAccumulatorDeadband(_port, deadband, ref status);
+            HALAnalog.SetAccumulatorDeadband(m_port, deadband, ref status);
         }
 
         public long GetAccumulatorValue()
         {
             int status = 0;
-            long value = HALAnalog.GetAccumulatorValue(_port, ref status);
+            long value = HALAnalog.GetAccumulatorValue(m_port, ref status);
             return value + _accumulatorOffset;
         }
 
         public long GetAccumulatorCount()
         {
             int status = 0;
-            long value = HALAnalog.GetAccumulatorCount(_port, ref status);
+            long value = HALAnalog.GetAccumulatorCount(m_port, ref status);
             return value;
         }
 
@@ -170,15 +176,15 @@ namespace WPILib
             if (result == null)
                 throw new ArgumentNullException();
             if (!IsAccumulatorChannel())
-                throw new ArgumentException("Channel " + _channel
+                throw new ArgumentException("Channel " + m_channel
                     + " is not an accumulator channel.");
 
             uint count = 0;
             long value = 0;
             int status = 0;
-            HALAnalog.GetAccumulatorOutput(_port, ref value, ref count, ref status);
-            result.m_value = value + _accumulatorOffset;
-            result.m_count = count;
+            HALAnalog.GetAccumulatorOutput(m_port, ref value, ref count, ref status);
+            result.value = value + _accumulatorOffset;
+            result.count = count;
         }
 
 
@@ -186,7 +192,7 @@ namespace WPILib
         {
             for (int i = 0; i < s_accumulatorChannels.Length; i++)
             {
-                if (_channel == s_accumulatorChannels[i])
+                if (m_channel == s_accumulatorChannels[i])
                 {
                     return true;
                 }

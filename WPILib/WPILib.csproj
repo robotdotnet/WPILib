@@ -38,10 +38,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccumulatorResult.cs" />
+    <Compile Include="AnalogAccelerometer.cs" />
     <Compile Include="AnalogInput.cs" />
+    <Compile Include="AnalogOutput.cs" />
     <Compile Include="AnalogPotentiometer.cs" />
     <Compile Include="AnalogTrigger.cs" />
     <Compile Include="AnalogTriggerOutput.cs" />
+    <Compile Include="BuiltInAccelerometer.cs" />
+    <Compile Include="CANTalon.cs" />
     <Compile Include="Compressor.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
@@ -52,6 +56,8 @@
     <Compile Include="DriverStation.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="GearTooth.cs" />
+    <Compile Include="Gyro.cs" />
+    <Compile Include="Interfaces\Accelerometer.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
     <Compile Include="Interfaces\GenericHID.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
@@ -67,6 +73,7 @@
     <Compile Include="Notifier.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
     <Compile Include="PWM.cs" />
+    <Compile Include="Relay.cs" />
     <Compile Include="RobotBase.cs" />
     <Compile Include="RobotDrive.cs" />
     <Compile Include="RobotState.cs" />
