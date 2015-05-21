@@ -1,7 +1,7 @@
+[![Build Status](https://www.myget.org/BuildSource/Badge/robotdotnet-dev?identifier=75049e1c-38b1-4f09-882d-b061cad6461f)](https://wwwmyget.org)
+
 # robotdotnet-wpilib
 DotNet implementation of WPILib for FIRST Robotics Competition (FRC)
-
-<a href="https://www.myget.org/"><img src="https://www.myget.org/BuildSource/Badge/robotdotnet-dev?identifier=75049e1c-38b1-4f09-882d-b061cad6461f" alt="robotdotnet-dev MyGet Build Status" /></a>
 
 Installation Instructions:
 
