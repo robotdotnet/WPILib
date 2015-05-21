@@ -21,8 +21,18 @@ namespace HAL_Base
 
         CTR_SigNotUpdated,
     }
+
+    public enum TalonSRXParam
+    {
+
+    }
     public partial class HALCanTalonSRX
     {
-        
+        public const int kDefaultContorlPeriodMs = 10;
+
+        public static CTR_Code C_TalonSRX_SetParamEnum(System.IntPtr handle, TalonSRXParam paramEnum, double value)
+        {
+            return C_TalonSRX_SetParam(handle, (int)paramEnum, value);
+        }
     }
 }
