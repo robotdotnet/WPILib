@@ -7,7 +7,7 @@ using WPILib.Interfaces;
 namespace WPILib
 {
     using Impl = HAL_Base.HALCanTalonSRX;
-    public class CANTalon : MotorSafety, PIDOutput, SpeedController
+    public class CANTalon : MotorSafety, PIDOutput, SpeedController, IDisposable
     {
         private MotorSafetyHelper safetyHelper;
 
@@ -43,7 +43,7 @@ namespace WPILib
         private IntPtr impl;
         private static const double DelayForSolicitedSignals = 0.004;
         private int deviceNumber;
-        private Boolean controlEnabled;
+        private bool controlEnabled;
         private int profile;
         private double setPoint;
 
@@ -56,6 +56,22 @@ namespace WPILib
             setPoint = 0;
             Profile = 0;
             ApplyControlMode(ControlMode.PercentVbus);
+        }
+
+        private bool disposed = false;
+
+        ~CANTalon()
+        {
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                Impl.C_TalonSRX_Destroy(impl);
+                GC.SuppressFinalize(this);
+            }
         }
 
         private double GetParam(Impl.ParamID id)
@@ -97,9 +113,10 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use the Dispose method or a using block instead of Delete")]
         public void Delete()
         {
-            Impl.C_TalonSRX_Destroy(impl);
+            Dispose();
         }
 
         public void ReverseSensor(bool flip)
@@ -256,6 +273,12 @@ namespace WPILib
             Impl.C_TalonSRX_SetModeSelect(impl, (int)ControlMode.Disabled);
         }
 
+        [Obsolete("Use MotorControlMode property.")]
+        public ControlMode GetControlMode() { return MotorControlMode; }
+
+        [Obsolete("Use MotorControlMode property.")]
+        public void SetControlMode(ControlMode mode) { MotorControlMode = mode; }
+
         public ControlMode MotorControlMode
         {
             get { return controlMode; }
@@ -264,6 +287,18 @@ namespace WPILib
                 if (controlMode == value) return;
                 ApplyControlMode(value);
             }
+        }
+
+        [Obsolete("Use FeedBackDevice property instead.")]
+        public FeedbackDevice GetFeedbackDevice()
+        {
+            return FeedBackDevice;
+        }
+
+        [Obsolete("Use FeedBackDevice property instead.")]
+        public void SetFeedbackDevice(FeedbackDevice device)
+        {
+            FeedBackDevice = device;
         }
 
         public FeedbackDevice FeedBackDevice
@@ -278,6 +313,24 @@ namespace WPILib
             {
                 Impl.C_TalonSRX_SetFeedbackDeviceSelect(impl, (int)value);
             }
+        }
+
+        [Obsolete("Use ControlEnabled property instead.")]
+        public bool IsControlEnabled()
+        {
+            return ControlEnabled;
+        }
+
+        [Obsolete("Set ControlEnabled property to true instead.")]
+        public void EnableControl()
+        {
+            ControlEnabled = true;
+        }
+
+        [Obsolete("Set ControlEnabled property to false instead.")]
+        public void DisableControl()
+        {
+            ControlEnabled = false;
         }
 
         public bool ControlEnabled
@@ -309,6 +362,11 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use P property instead.")]
+        public double GetP() { return P; }
+        [Obsolete("Use P property instead.")]
+        public void SetP(double p) { P = p; }
+
         public double P
         {
             get
@@ -327,6 +385,11 @@ namespace WPILib
                     SetParam(Impl.ParamID.eProfileParamSlot1_P, value);
             }
         }
+
+        [Obsolete("Use I property instead.")]
+        public double GetI() { return I; }
+        [Obsolete("Use I property instead.")]
+        public void SetI(double i) { I = i; }
 
         public double I
         {
@@ -347,6 +410,11 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use D property instead.")]
+        public double GetD() { return D; }
+        [Obsolete("Use D property instead.")]
+        public void SetD(double d) { D = d; }
+
         public double D
         {
             get
@@ -365,6 +433,11 @@ namespace WPILib
                     SetParam(Impl.ParamID.eProfileParamSlot1_D, value);
             }
         }
+
+        [Obsolete("Use F property instead.")]
+        public double GetF() { return F; }
+        [Obsolete("Use F property instead.")]
+        public void SetF(double f) { F = f; }
 
         public double F
         {
@@ -385,6 +458,11 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use IZone property instead.")]
+        public double GetIZone() { return IZone; }
+        [Obsolete("Use IZone property instead.")]
+        public void SetIZone(double iZone) { IZone = iZone; }
+
         public double IZone
         {
             get
@@ -403,6 +481,7 @@ namespace WPILib
                     SetParam(Impl.ParamID.eProfileParamSlot1_IZone, value);
             }
         }
+
         public double GetIaccum()
         {
             EnsureInPIDMode();
@@ -414,6 +493,11 @@ namespace WPILib
             EnsureInPIDMode();
             SetParam(Impl.ParamID.ePidIaccum, 0.0);
         }
+
+        [Obsolete("Use CloseLoopRampRate property instead.")]
+        public double GetCloseLoopRampRate() { return CloseLoopRampRate; }
+        [Obsolete("Use CloseLoopRampRate property instead.")]
+        public void SetCloseLoopRampRate(double rate) { CloseLoopRampRate = rate; }
 
         public double CloseLoopRampRate
         {
@@ -452,6 +536,9 @@ namespace WPILib
             SetPID(p, i, d, 0, 0, 0, profile);
         }
 
+        [Obsolete("Use Setpoint property instead.")]
+        public double GetSetpoint() { return Setpoint; }
+
         public double Setpoint
         {
             get
@@ -464,6 +551,11 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use Profile property instead.")]
+        public int GetProfile() { return Profile; }
+        [Obsolete("Use Profile property instead.")]
+        public void SetProfile(int profile) { Profile = profile; }
+
         public int Profile
         {
             get { return profile; }
@@ -475,6 +567,13 @@ namespace WPILib
                 Impl.C_TalonSRX_SetProfileSlotSelect(impl, profile);
             }
         }
+
+
+
+        [Obsolete("Use the VoltageRampRate property instead.")]
+        public double GetVoltageRampRate() { return VoltageRampRate; }
+        [Obsolete("Use VoltageRampRate property instead.")]
+        public void SetVoltageRampRate(double rate) { VoltageRampRate = rate; }
 
         public double VoltageRampRate
         {
@@ -489,6 +588,9 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use FirmwareVersion property")]
+        public long GetFirmwareVersion() { return FirmwareVersion; }
+
         public long FirmwareVersion
         {
             get
@@ -499,10 +601,18 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use DeviceID property instead.")]
+        public int GetDeviceID() { return DeviceID; }
+
         public int DeviceID
         {
             get { return deviceNumber; }
         }
+
+        [Obsolete("Use ForwardSoftLimit property instead.")]
+        public int GetForwardSoftLimit() { return ForwardSoftLimit; }
+        [Obsolete("Use ForwardSoftLimit poperty instead.")]
+        public void SetForwardSoftLimit(int value) { ForwardSoftLimit = value; }
 
         public int ForwardSoftLimit
         {
@@ -517,6 +627,10 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use ForwardSoftLimitEnabled property instead.")]
+        public bool GetForwardSoftLimitEnabled() { return ForwardSoftLimitEnabled; }
+        [Obsolete("Use ForwardSoftLimitEnabled poperty instead.")]
+        public void SetForwardSoftLimitEnabled(bool value) { ForwardSoftLimitEnabled = value; }
         public bool ForwardSoftLimitEnabled
         {
             get
@@ -529,6 +643,12 @@ namespace WPILib
                 SetParam(Impl.ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
             }
         }
+
+        [Obsolete("Use ReverseSoftLimit property instead.")]
+        public int GetReverseSoftLimit() { return ReverseSoftLimit; }
+        [Obsolete("Use ReverseSoftLimit poperty instead.")]
+        public void SetReverseSoftLimit(int value) { ReverseSoftLimit = value; }
+
         public int ReverseSoftLimit
         {
             get
@@ -542,6 +662,10 @@ namespace WPILib
             }
         }
 
+        [Obsolete("Use ReverseSoftLimitEnabled property instead.")]
+        public bool GetReverseSoftLimitEnabled() { return ReverseSoftLimitEnabled; }
+        [Obsolete("Use ReverseSoftLimitEnabled poperty instead.")]
+        public void SetReverseSoftLimitEnabled(bool value) { ReverseSoftLimitEnabled = value; }
         public bool ReverseSoftLimitEnabled
         {
             get
@@ -565,6 +689,9 @@ namespace WPILib
             Impl.C_TalonSRX_SetOverrideLimitSwitchEn(impl, mask);
         }
 
+        [Obsolete("Use ForwardLimitSwitchNormallyOpen property instead.")]
+        public void ConfigFwdLimitSwitchNormallyOpen(bool value) { ForwardLimitSwitchNormallyOpen = value; }
+
         public bool ForwardLimitSwitchNormallyOpen
         {
             get
@@ -576,6 +703,9 @@ namespace WPILib
                 SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, value ? 0 : 1);
             }
         }
+
+        [Obsolete("Use ReverseLimitSwitchNormallyOpen property instead.")]
+        public void ConfigRevLimitSwitchNormallyOpen(bool value) { ReverseLimitSwitchNormallyOpen = value; }
 
         public bool ReverseLimitSwitchNormallyOpen
         {
@@ -739,7 +869,7 @@ namespace WPILib
             return safetyHelper.IsAlive();
         }
 
-        [Obsolete("Use Disable() instead, or set ControlEnabled to false.")]
+        [Obsolete("Set the ControlEnabled to false.")]
         public void StopMotor()
         {
             ControlEnabled = false;
