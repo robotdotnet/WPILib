@@ -1,6 +1,8 @@
 # robotdotnet-wpilib
 DotNet implementation of WPILib for FIRST Robotics Competition (FRC)
 
+https://www.myget.org/BuildSource/Badge/robotdotnet-dev?identifier=fd189f04-b3aa-4fc5-8ee8-d28f5c353384
+
 Installation Instructions:
 
 1. Create directories C:\Builds\WPILib and C:\Builds\WPILib\HAL on your development machine.
