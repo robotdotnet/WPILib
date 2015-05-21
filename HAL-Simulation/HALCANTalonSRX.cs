@@ -1,6 +1,9 @@
 ﻿
+using HAL_Base;
+
 namespace HAL_FRC
 {
+    /*
     public enum CTR_Code
     {
         CTR_OKAY,
@@ -17,7 +20,8 @@ namespace HAL_FRC
 
         CTR_SigNotUpdated,
     }
-    public class HALCANTalon
+     * */
+    public class HALCanTalonSRX
     {
         /// Return Type: void*
         ///deviceNumber: int

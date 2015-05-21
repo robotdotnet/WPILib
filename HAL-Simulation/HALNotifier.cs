@@ -1,10 +1,13 @@
 ﻿
+using HAL_Base;
+
 namespace HAL_FRC
 {
     /// Return Type: void
     ///param0: unsigned int
     ///param1: void*
-    public delegate void NotifierDelegate(uint param0, System.IntPtr param1);
+    
+    //public delegate void NotifierDelegate(uint param0, System.IntPtr param1);
 
     public class HALNotifier
     {

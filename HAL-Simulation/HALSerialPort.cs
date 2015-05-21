@@ -109,7 +109,7 @@
         ///count: int
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "serialRead")]
-        public static extern uint serialRead(byte port, System.IntPtr buffer, int count, ref int status);
+        public static extern uint serialRead(byte port, string buffer, int count, ref int status);
 
 
         /// Return Type: unsigned int

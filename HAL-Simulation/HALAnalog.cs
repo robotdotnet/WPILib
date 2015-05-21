@@ -1,5 +1,8 @@
-﻿namespace HAL_FRC
+﻿using HAL_Base;
+
+namespace HAL_FRC
 {
+    /*
     public enum AnalogTriggerType
     {
         /// kInWindow -> 0
@@ -14,6 +17,7 @@
         /// kFallingPulse -> 3
         kFallingPulse = 3,
     }
+     * */
 
     public class HALAnalog
     {
@@ -202,7 +206,7 @@
         ///analog_port_pointer: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getAccumulatorValue")]
-        public static extern int getAccumulatorValue(System.IntPtr analog_port_pointer, ref int status);
+        public static extern long getAccumulatorValue(System.IntPtr analog_port_pointer, ref int status);
 
 
         /// Return Type: unsigned int
@@ -218,7 +222,7 @@
         ///count: unsigned int*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getAccumulatorOutput")]
-        public static extern void getAccumulatorOutput(System.IntPtr analog_port_pointer, ref int value, ref uint count, ref int status);
+        public static extern void getAccumulatorOutput(System.IntPtr analog_port_pointer, ref long value, ref uint count, ref int status);
 
 
         /// Return Type: void*

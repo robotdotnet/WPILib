@@ -114,7 +114,7 @@
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL-Base</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj">
       <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>
