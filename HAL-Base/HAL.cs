@@ -360,11 +360,11 @@ namespace HAL_Base
         {
             if (IsSimulation)
             {
-                HALAssembly = Assembly.LoadFrom("/home/lvuser/mono/HAL-Simulation.dll");
+                HALAssembly = Assembly.LoadFrom("HAL-Simulation.dll");
             }
             else
             {
-                HALAssembly = Assembly.LoadFrom("/home/lvuser/mono/HAL-RoboRIO.dll");
+                HALAssembly = Assembly.LoadFrom("HAL-RoboRIO.dll");
             }
 
             SetupDelegates();

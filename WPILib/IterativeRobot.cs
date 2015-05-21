@@ -5,8 +5,6 @@ using HAL_Base;
 
 namespace WPILib
 {
-
-//Force Rebuild
     public class IterativeRobot : RobotBase
     {
         private bool _disabledInitialized;
