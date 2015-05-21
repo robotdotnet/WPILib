@@ -12,7 +12,7 @@ namespace WPILib
             SetRaw(GetCenterPwm());
             SetZeroLatch();
 
-            HAL.Report(ResourceType.kResourceType_Victor, (byte)GetChannel());
+            HAL.Report(ResourceType.kResourceType_VictorSP, (byte)GetChannel());
         }
 
         public VictorSP(int channel)

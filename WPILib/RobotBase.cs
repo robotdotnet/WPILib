@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Reflection;
 using HAL_Base;
 
 namespace WPILib
@@ -149,8 +150,8 @@ namespace WPILib
                 {
                     if (File.Exists(file))
                         File.Delete(file);
-
-                    File.WriteAllText(file, "RobotDotNet V1.0");
+                    var version = Assembly.GetExecutingAssembly().GetName().Version;
+                    File.WriteAllText(file, "RobotDotNet V" + version);
                 }
                 catch (IOException ex)
                 {

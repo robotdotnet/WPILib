@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WPILib.Interfaces;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -56,6 +57,8 @@ namespace WPILib
             setPoint = 0;
             Profile = 0;
             ApplyControlMode(ControlMode.PercentVbus);
+
+            HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)deviceNumber);
         }
 
         private bool disposed = false;
