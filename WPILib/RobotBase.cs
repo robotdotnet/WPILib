@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using HAL_Base;
 
 namespace WPILib
@@ -103,6 +104,7 @@ namespace WPILib
         {
             //HAL.IsSimulation = false;
             HAL.Initialize();
+            RobotState.SetImplementation(DriverStation.GetInstance());
         }
 
         private static RobotBase robot;
@@ -164,7 +166,6 @@ namespace WPILib
             catch (Exception ex)
             {
                 DriverStation.ReportError("ERROR Unhandled exception", true);
-                throw new Exception("AHHHH");
                 return;
             }
             finally

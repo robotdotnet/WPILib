@@ -4,10 +4,12 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.livewindow;
 
 namespace WPILib
 {
-    public class Solenoid : SolenoidBase
+    public class Solenoid : SolenoidBase, LiveWindowSendable, ITableListener
     {
         private int m_channel;
         private IntPtr m_solenoidPort;
@@ -61,6 +63,53 @@ namespace WPILib
         {
             int value = GetPCMSolenoidBlackList() & (1 << m_channel);
             return (value != 0);
+        }
+
+        public string GetSmartDashboardType()
+        {
+            return "Solenoid";
+        }
+
+        private ITable m_table;
+
+        public void InitTable(ITable subtable)
+        {
+            m_table = subtable;
+            UpdateTable();
+        }
+
+        public ITable GetTable()
+        {
+            return m_table;
+        }
+
+        public void UpdateTable()
+        {
+            if (m_table != null)
+            {
+                m_table.PutBoolean("Value", Get());
+            }
+        }
+
+        public void StartLiveWindowMode()
+        {
+            Set(false);
+            if (m_table != null)
+            {
+                m_table.AddTableListener("Value", this, true);
+            }
+        }
+
+        public void StopLiveWindowMode()
+        {
+            Set(false);
+            m_table.RemoveTableListener(this);
+        }
+
+
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            Set((bool)value);
         }
     }
 }

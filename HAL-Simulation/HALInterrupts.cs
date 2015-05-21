@@ -1,10 +1,12 @@
 ﻿
+using HAL_Base;
+
 namespace HAL_FRC
 {
     /// Return Type: void
     ///interruptAssertedMask: unsigned int
     ///param: void*
-    public delegate void InterruptHandlerFunctionHAL(uint interruptAssertedMask, System.IntPtr param);
+    //public delegate void InterruptHandlerFunctionHAL(uint interruptAssertedMask, System.IntPtr param);
 
     public class HALInterrupts
     {
@@ -76,7 +78,7 @@ namespace HAL_FRC
         ///param: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "attachInterruptHandler")]
-        public static extern void attachInterruptHandler(System.IntPtr interrupt_pointer, InterruptHandlerFunctionHAL handler, System.IntPtr param, ref int status);
+        public static extern void attachInterruptHandler(System.IntPtr interrupt_pointer, InterruptHandlerFunction handler, System.IntPtr param, ref int status);
 
 
         /// Return Type: void

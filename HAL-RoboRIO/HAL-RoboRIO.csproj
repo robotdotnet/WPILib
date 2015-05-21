@@ -58,16 +58,10 @@
       <Name>HAL-Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="libHALAthena_shared.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cd $(ProjectDir)
-copy /y $(OutDir)HAL-RoboRIO.dll C:\builds\wpilib\HAL
-copy /y $(OutDir)*.so C:\builds\wpilib\HAL</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>

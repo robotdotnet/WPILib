@@ -32,17 +32,30 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NetworkTablesDotNet">
+      <HintPath>..\packages\NetworkTablesDotNet.0.1.0\lib\net40\NetworkTablesDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccumulatorResult.cs" />
+    <Compile Include="AnalogAccelerometer.cs" />
     <Compile Include="AnalogInput.cs" />
+    <Compile Include="AnalogOutput.cs" />
     <Compile Include="AnalogPotentiometer.cs" />
     <Compile Include="AnalogTrigger.cs" />
     <Compile Include="AnalogTriggerOutput.cs" />
+    <Compile Include="BuiltInAccelerometer.cs" />
+    <Compile Include="Buttons\Button.cs" />
+    <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANTalon.cs" />
+    <Compile Include="command\Command.cs" />
+    <Compile Include="command\CommandGroup.cs" />
+    <Compile Include="command\IllegalUseOfCommandException.cs" />
+    <Compile Include="command\Scheduler.cs" />
+    <Compile Include="command\Subsystem.cs" />
     <Compile Include="Compressor.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
@@ -53,6 +66,9 @@
     <Compile Include="DriverStation.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="GearTooth.cs" />
+    <Compile Include="Gyro.cs" />
+    <Compile Include="Interfaces\Accelerometer.cs" />
+    <Compile Include="Interfaces\Controller.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
     <Compile Include="Interfaces\GenericHID.cs" />
     <Compile Include="Interfaces\MotorSafety.cs" />
@@ -64,15 +80,21 @@
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
+    <Compile Include="livewindow\LiveWindow.cs" />
+    <Compile Include="livewindow\LiveWindowSendable.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
+    <Compile Include="NamedSendable.cs" />
     <Compile Include="Notifier.cs" />
+    <Compile Include="PIDController.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
     <Compile Include="PWM.cs" />
+    <Compile Include="Relay.cs" />
     <Compile Include="RobotBase.cs" />
     <Compile Include="RobotDrive.cs" />
     <Compile Include="RobotState.cs" />
     <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
+    <Compile Include="Sendable.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="Solenoid.cs" />
     <Compile Include="SolenoidBase.cs" />
@@ -92,12 +114,22 @@
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL-Base</Name>
+      <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CAN\" />
+    <Folder Include="Communication\" />
+    <Folder Include="Internal\" />
+    <Folder Include="SmartDashboard\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>cd $(ProjectDir)
-copy /y $(OutDir)*.dll C:\builds\wpilib</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

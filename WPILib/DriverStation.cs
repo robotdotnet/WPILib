@@ -9,7 +9,7 @@ using HAL_Base;
 
 namespace WPILib
 {
-    public class DriverStation
+    public class DriverStation : RobotState.Interface
     {
         //Constants
         public const int JoystickPorts = 6;
@@ -49,9 +49,9 @@ namespace WPILib
 
 
 
-        
-        
-        
+
+
+
         public static DriverStation GetInstance()
         {
             return DriverStation.s_instance;
@@ -60,14 +60,14 @@ namespace WPILib
 
         protected DriverStation()
         {
-            
+
             for (int i = 0; i < JoystickPorts; i++)
             {
                 m_joystickButtons[i].count = 0;
                 m_joystickAxes[i].count = 0;
                 m_joystickPOVs[i].count = 0;
             }
-            
+
 
             m_packetDataAvailableMultiWait = HALSemaphore.InitializeMultiWait();
             m_newControlData = HALSemaphore.InitializeSemaphore(0);
@@ -91,8 +91,6 @@ namespace WPILib
             m_threadKeepAlive = false;
         }
 
-        public ulong dsLoops = 0;
-
         private void Task()
         {
             int safetyCounter = 0;
@@ -114,8 +112,6 @@ namespace WPILib
                     HAL.HALNetworkCommunicationObserveUserProgramTeleop();
                 if (m_userInTest)
                     HAL.HALNetworkCommunicationObserveUserProgramTest();
-                dsLoops++;
-               // Thread.Sleep(30);
             }
         }
 
@@ -171,7 +167,7 @@ namespace WPILib
                 return 0.0;
             }
 
-            int value = m_joystickAxes[stick].axes[axis];
+            int value = m_joystickAxes[stick].axes[axis];//GetAxesData(axis, ref m_joystickAxes[stick]);
 
             if (value < 0)
             {
@@ -181,36 +177,6 @@ namespace WPILib
             {
                 return value / 127.0d;
             }
-            /*
-            if (stick < 0 || stick >= JoystickPorts)
-            {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
-            }
-
-            if (axis < 0 || axis >= MaxJoystickAxes)
-            {
-                throw new SystemException("Joystick axis is out of range");
-            }
-
-            if (axis >= _joystickAxes[stick].Length)
-            {
-                ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
-                                             " not available, check if controller is plugged in\n");
-                return 0.0;
-            }
-
-
-            //sbyte value = (sbyte)_joystickAxes[stick][axis];
-
-            if (value < 0)
-            {
-                return value / 128.0;
-            }
-            else
-            {
-                return value / 127.0;
-            }
-             * */
 
         }
 
@@ -247,7 +213,7 @@ namespace WPILib
                 return -1;
             }
 
-            return m_joystickPOVs[stick].povs[pov];
+            return m_joystickPOVs[stick].povs[pov];//GetPOVData(pov, ref m_joystickPOVs[stick]);
 
         }
 
@@ -393,18 +359,7 @@ namespace WPILib
         [MethodImpl(MethodImplOptions.Synchronized)]
         public bool IsNewControlData()
         {
-            //bool result = m_newControlData;
-            //m_newControlData = false;
-            //return result;
             return HALSemaphore.TryTakeSemaphore(m_newControlData) == 0;
-            /*
-            lock (_mutex)
-            {
-                bool result = _newControlData;
-                _newControlData = false;
-                return result;
-            }
-             * */
         }
 
         public Alliance GetAlliance()
@@ -530,5 +485,75 @@ namespace WPILib
         {
             m_userInTest = entering;
         }
+
+
+        /*
+        public static short GetAxesData(int axis, ref HALJoystickAxes axes)
+        {
+            switch (axis)
+            {
+                case 0:
+                    return axes.axes0;
+                case 1:
+                    return axes.axes1;
+                case 2:
+                    return axes.axes2;
+                case 3:
+                    return axes.axes3;
+                case 4:
+                    return axes.axes4;
+                case 5:
+                    return axes.axes5;
+                case 6:
+                    return axes.axes6;
+                case 7:
+                    return axes.axes7;
+                case 8:
+                    return axes.axes8;
+                case 9:
+                    return axes.axes9;
+                case 10:
+                    return axes.axes10;
+                case 11:
+                    return axes.axes11;
+                default:
+                    return 0;
+            }
+        }
+
+        public short GetPOVData(int pov, ref HALJoystickPOVs povs)
+        {
+            switch (pov)
+            {
+                case 0:
+                    return povs.povs0;
+                case 1:
+                    return povs.povs1;
+                case 2:
+                    return povs.povs2;
+                case 3:
+                    return povs.povs3;
+                case 4:
+                    return povs.povs4;
+                case 5:
+                    return povs.povs5;
+                case 6:
+                    return povs.povs6;
+                case 7:
+                    return povs.povs7;
+                case 8:
+                    return povs.povs8;
+                case 9:
+                    return povs.povs9;
+                case 10:
+                    return povs.povs10;
+                case 11:
+                    return povs.povs11;
+                default:
+                    return 0;
+            }
+        }
+         * */
+         
     }
 }

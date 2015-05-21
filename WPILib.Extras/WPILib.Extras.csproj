@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{471A8C6B-AA80-492A-85A3-3EF67FC70988}</ProjectGuid>
+    <ProjectGuid>{C2E50521-7046-463E-86C9-CF567F8E62BD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAL_FRC</RootNamespace>
-    <AssemblyName>HAL-Simulation</AssemblyName>
+    <RootNamespace>WPILib.Extras</RootNamespace>
+    <AssemblyName>WPILib.Extras</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,32 +31,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HAL.cs" />
-    <Compile Include="HALAccelerometer.cs" />
-    <Compile Include="HALAnalog.cs" />
-    <Compile Include="HALCANTalonSRX.cs" />
-    <Compile Include="HALCompressor.cs" />
-    <Compile Include="HALDigital.cs" />
-    <Compile Include="HALInterrupts.cs" />
-    <Compile Include="HALNotifier.cs" />
-    <Compile Include="HALPDP.cs" />
-    <Compile Include="HALPower.cs" />
-    <Compile Include="HALSemaphore.cs" />
-    <Compile Include="HALSerialPort.cs" />
-    <Compile Include="HALSolenoid.cs" />
-    <Compile Include="HALStructures.cs" />
-    <Compile Include="HALUsageReporter.cs" />
-    <Compile Include="HALUtilities.cs" />
+    <Compile Include="XboxController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
-      <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
-      <Name>HAL-Base</Name>
+    <ProjectReference Include="..\WPILib\WPILib.csproj">
+      <Project>{cadad4a2-d72a-4906-a4f0-2fa2884f3349}</Project>
+      <Name>WPILib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

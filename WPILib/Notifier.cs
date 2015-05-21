@@ -199,34 +199,25 @@ namespace WPILib
             lock (s_queueSemaphore)
             {
                 DeleteFromQueue();
-            }
-
-            HALSemaphore.TakeSemaphore(m_handlerSemaphore);
-            HALSemaphore.GiveSemaphore(m_handlerSemaphore);
-            /*
+            }           
             try
             {
-                m_handlerSemaphore.WaitOne();
-                m_handlerSemaphore.Release();
-                //HALSemaphore.takeSemaphore(m_handlerSemaphore);
-                //HALSemaphore.giveSemaphore(m_handlerSemaphore);
+                HALSemaphore.TakeSemaphore(m_handlerSemaphore);
+                HALSemaphore.GiveSemaphore(m_handlerSemaphore);
             }
             catch (ThreadInterruptedException e)
             {
             }
-             * */
+
         }
 
 
         [SecurityPermission(SecurityAction.Demand, UnmanagedCode=true)]
-        static public void ProcessQueue(uint mask, IntPtr param)//, object param)
+        static public void ProcessQueue(uint mask, IntPtr param)
         {
-            Console.WriteLine(DriverStation.GetInstance().dsLoops);
-            //Console.WriteLine("Running Process Queue");
             Notifier current;
             while (true)
             {
-                //Console.WriteLine("ProcessQueueStuck");
                 lock (s_queueSemaphore)
                 {
                     double currentTime = Timer.GetFPGATimestamp();

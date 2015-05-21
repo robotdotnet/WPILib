@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-RoboRIO", "HAL-RoboRIO\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HAL-Base", "HAL-Base\HAL-Base.csproj", "{BFCE384E-CA2A-4604-AF76-777DA91DAFEE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{908F7050-052B-4851-B770-7EA3A45BA107}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib.Extras", "WPILib.Extras\WPILib.Extras.csproj", "{C2E50521-7046-463E-86C9-CF567F8E62BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +39,10 @@ Global
 		{BFCE384E-CA2A-4604-AF76-777DA91DAFEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFCE384E-CA2A-4604-AF76-777DA91DAFEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFCE384E-CA2A-4604-AF76-777DA91DAFEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2E50521-7046-463E-86C9-CF567F8E62BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2E50521-7046-463E-86C9-CF567F8E62BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2E50521-7046-463E-86C9-CF567F8E62BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2E50521-7046-463E-86C9-CF567F8E62BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

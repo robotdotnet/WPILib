@@ -47,5 +47,31 @@ namespace WPILib.Util
             return "Value must be between " + lower + " and " + upper + ", "
                 + value + " given";
         }
+
+
     }
+
+    public class InvalidValueException : SystemException
+    {
+        public InvalidValueException(string message) : base(message)
+        {
+            
+        }
+    }
+
+    public class BaseSystemNotInitializedException : SystemException
+    {
+        public BaseSystemNotInitializedException(string message) : base(message)
+        {
+            
+        }
+
+        public BaseSystemNotInitializedException(string offender, string affected)
+            : base("The " + offender + " for the " + affected + " was never set.")
+        {
+            
+        }
+
+    }
+
 }

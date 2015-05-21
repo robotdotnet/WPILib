@@ -1,12 +1,15 @@
 ﻿
 
 using System;
+using NetworkTablesDotNet.Tables;
 using WPILib.Util;
 using HAL_Base;
+using WPILib.livewindow;
+using NetworkTablesDotNet;
 
 namespace WPILib
 {
-    public class PWM : SensorBase
+    public class PWM : SensorBase, LiveWindowSendable, ITableListener
     {
         public enum PeriodMultiplier
         {
@@ -272,6 +275,55 @@ namespace WPILib
         protected int GetFullRangeScaleFactor()
         {
             return GetMaxPositivePwm() - GetMinNegativePwm();
+        }
+
+        public string GetSmartDashboardType()
+        {
+            return "Speed Controller";
+        }
+
+        private ITable m_table;
+
+        public void InitTable(ITable subtable)
+        {
+            m_table = subtable;
+            UpdateTable();
+        }
+
+        public void UpdateTable()
+        {
+            if (m_table != null)
+            {
+                m_table.PutNumber("Value", GetSpeed());
+            }
+        }
+
+        public ITable GetTable()
+        {
+            return m_table;
+        }
+
+        public void StartLiveWindowMode()
+        {
+            SetSpeed(0);
+            if (m_table != null)
+            {
+                m_table.AddTableListener("Value", this, true);
+            }
+        }
+
+        public void ValueChanged(ITable table, string key, object value, bool bin)
+        {
+            SetSpeed((double) value);
+        }
+
+        public void StopLiveWindowMode()
+        {
+            SetSpeed(0);
+            if (m_table != null)
+            {
+                m_table.RemoveTableListener(this);
+            }
         }
     }
 }
