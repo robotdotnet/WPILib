@@ -51,5 +51,10 @@ namespace WPILib
         {
             return s_MaxServoAngle - s_MinServoAngle;
         }
+
+        public string GetSmartDashboardType()
+        {
+            return "Servo";
+        }
     }
 }

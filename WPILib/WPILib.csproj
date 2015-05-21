@@ -32,6 +32,9 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NetworkTablesDotNet">
+      <HintPath>..\packages\NetworkTablesDotNet.0.1.0\lib\net40\NetworkTablesDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -48,11 +51,11 @@
     <Compile Include="Buttons\Button.cs" />
     <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANTalon.cs" />
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\CommandGroup.cs" />
-    <Compile Include="Commands\IllegalUseOfCommandException.cs" />
-    <Compile Include="Commands\Scheduler.cs" />
-    <Compile Include="Commands\Subsystem.cs" />
+    <Compile Include="command\Command.cs" />
+    <Compile Include="command\CommandGroup.cs" />
+    <Compile Include="command\IllegalUseOfCommandException.cs" />
+    <Compile Include="command\Scheduler.cs" />
+    <Compile Include="command\Subsystem.cs" />
     <Compile Include="Compressor.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
@@ -77,6 +80,8 @@
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
+    <Compile Include="livewindow\LiveWindow.cs" />
+    <Compile Include="livewindow\LiveWindowSendable.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="NamedSendable.cs" />
     <Compile Include="Notifier.cs" />
@@ -124,8 +129,10 @@
     <Folder Include="CAN\" />
     <Folder Include="Communication\" />
     <Folder Include="Internal\" />
-    <Folder Include="LiveWindow\" />
     <Folder Include="SmartDashboard\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
