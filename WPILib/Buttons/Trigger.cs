@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WPILib.Commands;
 
 namespace WPILib.Buttons
 {
@@ -12,6 +13,11 @@ namespace WPILib.Buttons
         private bool Grab()
         {
             return Get(); // Add table when we have it.
+        }
+
+        public void WhenActive(Command command)
+        {
+            
         }
     }
 }

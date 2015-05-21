@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace WPILib.Command
+namespace WPILib.Commands
 {
     public abstract class Subsystem : NamedSendable
     {

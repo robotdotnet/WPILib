@@ -48,10 +48,11 @@
     <Compile Include="Buttons\Button.cs" />
     <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANTalon.cs" />
-    <Compile Include="Command\Command.cs" />
-    <Compile Include="Command\CommandGroup.cs" />
-    <Compile Include="Command\IllegalUseOfCommandException.cs" />
-    <Compile Include="Command\Subsystem.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\CommandGroup.cs" />
+    <Compile Include="Commands\IllegalUseOfCommandException.cs" />
+    <Compile Include="Commands\Scheduler.cs" />
+    <Compile Include="Commands\Subsystem.cs" />
     <Compile Include="Compressor.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
