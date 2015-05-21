@@ -15,3 +15,5 @@ REM Build
 REM Package
 mkdir Build
 cmd /c %nuget% pack "WPILib\WPILib.csproj" -IncludeReferencedProjects -o Build -p Configuration=%config% %version%
+
+cmd /c %nuget% pack "WPILib-Extras\WPILib-Extras.csproj" -IncludeReferencedProjects -o Build -p Configuration=%config% %version%
