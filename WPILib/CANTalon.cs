@@ -47,29 +47,55 @@ namespace WPILib
         private int profile;
         private double setPoint;
 
-        private CANTalon()
-        {
-            safetyHelper = new MotorSafetyHelper(this);
-            controlEnabled = true;
-            setPoint = 0;
-        }
-
-        public CANTalon(int deviceNumber)
-            :this()
-        {
-            this.deviceNumber = deviceNumber;
-            throw new NotImplementedException("Need to add P/Invoke for TalonSRX_Create(int)");
-            Profile = 0;
-            ApplyControlMode(ControlMode.PercentVbus);
-        }
-
-        public CANTalon(int deviceNumber, int controlPeriodMs)
-            :this()
+        public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
             this.deviceNumber = deviceNumber;
             impl = Impl.C_TalonSRX_Create(deviceNumber, controlPeriodMs);
+            safetyHelper = new MotorSafetyHelper(this);
+            controlEnabled = true;
+            setPoint = 0;
             Profile = 0;
             ApplyControlMode(ControlMode.PercentVbus);
+        }
+
+        private double GetParam(Impl.ParamID id)
+        {
+            Impl.C_TalonSRX_RequestParam(impl, (int)id);
+            Timer.Delay(DelayForSolicitedSignals);
+            var value = 0.0;
+            Impl.C_TalonSRX_GetParamResponse(impl, (int)id, ref value);
+            return value;
+        }
+
+        private int GetParamInt32(Impl.ParamID id)
+        {
+            Impl.C_TalonSRX_RequestParam(impl, (int)id);
+            Timer.Delay(DelayForSolicitedSignals);
+            var value = 0;
+            Impl.C_TalonSRX_GetParamResponseInt32(impl, (int)id, ref value);
+            return value;
+        }
+
+        private void SetParam(Impl.ParamID id, double value)
+        {
+            var errorCode = Impl.C_TalonSRX_SetParam(impl, (int)id, value);
+            switch (errorCode)
+            {
+                case HAL_Base.CTR_Code.CTR_RxTimeout:
+                case HAL_Base.CTR_Code.CTR_TxTimeout:
+                    throw new TimeoutException();
+                case HAL_Base.CTR_Code.CTR_InvalidParamValue:
+                    throw new ArgumentOutOfRangeException("value");
+                    break;
+                case HAL_Base.CTR_Code.CTR_UnexpectedArbId:
+                    throw new ArgumentOutOfRangeException("id");
+                case HAL_Base.CTR_Code.CTR_TxFailed:
+                    break;
+                case HAL_Base.CTR_Code.CTR_SigNotUpdated:
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void Delete()
@@ -211,9 +237,9 @@ namespace WPILib
             return pos;
         }
 
-        public void SetPosition()
+        public void SetPosition(double pos)
         {
-            throw new NotImplementedException("Add P/Invoke for TalonSRX_SetSensorPosition(IntPtr, ref int)");
+            SetParam(Impl.ParamID.eSensorPosition, pos);
         }
 
         public double GetSpeed()
@@ -289,11 +315,17 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    return GetParam(Impl.ParamID.eProfileParamSlot0_P);
+                else
+                    return GetParam(Impl.ParamID.eProfileParamSlot1_P);
             }
             set
             {
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    SetParam(Impl.ParamID.eProfileParamSlot0_P, value);
+                else
+                    SetParam(Impl.ParamID.eProfileParamSlot1_P, value);
             }
         }
 
@@ -302,11 +334,17 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    return GetParam(Impl.ParamID.eProfileParamSlot0_I);
+                else
+                    return GetParam(Impl.ParamID.eProfileParamSlot1_I);
             }
             set
             {
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    SetParam(Impl.ParamID.eProfileParamSlot0_I, value);
+                else
+                    SetParam(Impl.ParamID.eProfileParamSlot1_I, value);
             }
         }
 
@@ -315,11 +353,17 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    return GetParam(Impl.ParamID.eProfileParamSlot0_D);
+                else
+                    return GetParam(Impl.ParamID.eProfileParamSlot1_D);
             }
             set
             {
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    SetParam(Impl.ParamID.eProfileParamSlot0_D, value);
+                else
+                    SetParam(Impl.ParamID.eProfileParamSlot1_D, value);
             }
         }
 
@@ -328,11 +372,17 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    return GetParam(Impl.ParamID.eProfileParamSlot0_F);
+                else
+                    return GetParam(Impl.ParamID.eProfileParamSlot1_F);
             }
             set
             {
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    SetParam(Impl.ParamID.eProfileParamSlot0_F, value);
+                else
+                    SetParam(Impl.ParamID.eProfileParamSlot1_F, value);
             }
         }
 
@@ -341,23 +391,29 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    return GetParam(Impl.ParamID.eProfileParamSlot0_IZone);
+                else
+                    return GetParam(Impl.ParamID.eProfileParamSlot1_IZone);
             }
             set
             {
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    SetParam(Impl.ParamID.eProfileParamSlot0_IZone, value);
+                else
+                    SetParam(Impl.ParamID.eProfileParamSlot1_IZone, value);
             }
         }
         public double GetIaccum()
         {
             EnsureInPIDMode();
-            throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+            return GetParamInt32(Impl.ParamID.ePidIaccum);
         }
 
         public void ClearIAccum()
         {
             EnsureInPIDMode();
-            throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+            SetParam(Impl.ParamID.ePidIaccum, 0.0);
         }
 
         public double CloseLoopRampRate
@@ -365,12 +421,17 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    return GetParam(Impl.ParamID.eProfileParamSlot0_CloseLoopRampRate);
+                else
+                    return GetParam(Impl.ParamID.eProfileParamSlot1_CloseLoopRampRate);
             }
             set
             {
-                int rate = (int)(value * 1023.0 / 12.0 / 1000.0);
-                throw new NotImplementedException("Need P/Invoke methods from HAL for PID");
+                if (profile == 0)
+                    SetParam(Impl.ParamID.eProfileParamSlot0_CloseLoopRampRate, value);
+                else
+                    SetParam(Impl.ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
             }
         }
 
@@ -420,11 +481,12 @@ namespace WPILib
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eRampThrottle);
             }
             set
             {
                 int rate = (int)(value * 1023.0 / 12.0 / 100.0);
+                Impl.C_TalonSRX_SetParam(impl, (int)Impl.ParamID.eRampThrottle, rate);
             }
         }
 
@@ -447,53 +509,52 @@ namespace WPILib
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForThreshold);
             }
             set
             {
 
-                throw new NotImplementedException("Need Soft Limit P/Invoke functions to support setting value.");
+                SetParam(Impl.ParamID.eProfileParamSoftLimitForThreshold, value);
             }
         }
 
-        public int ForwardSoftLimitEnabled
+        public bool ForwardSoftLimitEnabled
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForEnable) != 0;
             }
             set
             {
 
-                throw new NotImplementedException("Need Soft Limit P/Invoke functions to support setting value.");
+                SetParam(Impl.ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
             }
         }
         public int ReverseSoftLimit
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevThreshold);
             }
             set
             {
 
-                throw new NotImplementedException("Need Soft Limit P/Invoke functions to support setting value.");
+                SetParam(Impl.ParamID.eProfileParamSoftLimitRevThreshold, value);
             }
         }
 
-        public int ReverseSoftLimitEnabled
+        public bool ReverseSoftLimitEnabled
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevEnable) != 0;
             }
             set
             {
 
-                throw new NotImplementedException("Need Soft Limit P/Invoke functions to support setting value.");
+                SetParam(Impl.ParamID.eProfileParamSoftLimitRevEnable, value ? 1 : 0);
             }
         }
-
         public void ClearStickyFaults()
         {
             Impl.C_TalonSRX_ClearStickyFaults(impl);
@@ -509,11 +570,11 @@ namespace WPILib
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed) != 0;
             }
             set
             {
-                throw new NotImplementedException("Need params_t enumeration to support setting value.");
+                SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, value ? 0 : 1);
             }
         }
 
@@ -521,24 +582,17 @@ namespace WPILib
         {
             get
             {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
+                return GetParamInt32(Impl.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed) != 0;
             }
             set
             {
-                throw new NotImplementedException("Need params_t enumeration to support setting value.");
+                SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, value ? 0 : 1);
             }
         }
 
-        public bool BrakeModeEnabled
+        public void EnableBreakMode(bool brake)
         {
-            get
-            {
-                throw new NotImplementedException("Need params_t enumeration to support retrieving value.");
-            }
-            set
-            {
-                Impl.C_TalonSRX_SetOverrideBrakeType(impl, value ? 2 : 1);
-            }
+            Impl.C_TalonSRX_SetOverrideBrakeType(impl, brake ? 2 : 1);
         }
 
         public int FaultOverTemp
@@ -755,7 +809,7 @@ namespace WPILib
                 switch (controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        throw new NotImplementedException("Need Set method on HAL P/Invoke.");
+                        Impl.C_TalonSRX_SetDemand(impl, (int)(output * 1023));
                         break;
                     case ControlMode.Voltage:
                         int volts = (int)(output * 256);
