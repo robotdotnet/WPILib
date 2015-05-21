@@ -86,7 +86,6 @@ namespace WPILib
                     throw new TimeoutException();
                 case HAL_Base.CTR_Code.CTR_InvalidParamValue:
                     throw new ArgumentOutOfRangeException("value");
-                    break;
                 case HAL_Base.CTR_Code.CTR_UnexpectedArbId:
                     throw new ArgumentOutOfRangeException("id");
                 case HAL_Base.CTR_Code.CTR_TxFailed:
