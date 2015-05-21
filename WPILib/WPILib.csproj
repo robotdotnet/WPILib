@@ -42,6 +42,7 @@
     <Compile Include="AnalogPotentiometer.cs" />
     <Compile Include="AnalogTrigger.cs" />
     <Compile Include="AnalogTriggerOutput.cs" />
+    <Compile Include="CANTalon.cs" />
     <Compile Include="Compressor.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
