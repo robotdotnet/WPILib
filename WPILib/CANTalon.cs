@@ -41,7 +41,7 @@ namespace WPILib
 
         private ControlMode controlMode;
         private IntPtr impl;
-        private static const double DelayForSolicitedSignals = 0.004;
+        private const double DelayForSolicitedSignals = 0.004;
         private int deviceNumber;
         private bool controlEnabled;
         private int profile;
