@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib;
-using WPILib.Interfaces;
-
-namespace WPILib_Extras
+﻿namespace WPILib.Extras
 {
     public class XboxController : Joystick
     {
@@ -99,9 +92,10 @@ namespace WPILib_Extras
             set { SetRumble(RumbleType.RightRumble, value); }
         }
 
-        public XboxController(int port) : base(port)
+        public XboxController(int port)
+            : base(port)
         {
-            
+
         }
 
     }

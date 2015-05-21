@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WPILib-Extras")]
+[assembly: AssemblyTitle("WPILib.Extras")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WPILib-Extras")]
+[assembly: AssemblyProduct("WPILib.Extras")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("58027b22-434f-4f49-b4da-c1201083a1ff")]
+[assembly: Guid("79aa0aaa-3207-4c24-9a6a-a95e4f436f33")]
 
 // Version information for an assembly consists of the following four values:
 //
