@@ -14,4 +14,4 @@ REM Build
 
 REM Package
 mkdir Build
-cmd /c %nuget% pack "robotdotnet-wpilib\WPILib.csproj" -IncludeReferencedProjects -o Build -p Configuration=%config% %version%
+cmd /c %nuget% pack "robotdotnet-wpilib\WPILib\WPILib.csproj" -IncludeReferencedProjects -o Build -p Configuration=%config% %version%
