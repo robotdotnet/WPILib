@@ -9,6 +9,10 @@ if not "%PackageVersion%" == "" (
    set version=-Version %PackageVersion%
 )
 
+REM Package restore
+
+call %nuget% restore WPILib\packages.config -OutputDirectory %cd%\packages -NonInteractive
+
 REM Build
 %WINDIR%\Microsoft.NET\Framework\v4.0.30319\msbuild robotdotnet-wpilib.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
 
