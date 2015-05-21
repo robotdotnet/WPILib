@@ -98,6 +98,7 @@ namespace WPILib
         private void SetParam(Impl.ParamID id, double value)
         {
             var errorCode = Impl.C_TalonSRX_SetParam(impl, (int)id, value);
+            /*
             switch (errorCode)
             {
                 case HAL_Base.CTR_Code.CTR_RxTimeout:
@@ -114,6 +115,7 @@ namespace WPILib
                 default:
                     break;
             }
+             * */
         }
 
         [Obsolete("Use the Dispose method or a using block instead of Delete")]
