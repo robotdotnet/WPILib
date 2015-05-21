@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-
+using System.IO;
 
 namespace HAL_Base
 {
@@ -364,7 +364,7 @@ namespace HAL_Base
             }
             else
             {
-                HALAssembly = Assembly.LoadFrom("HAL-RoboRIO.dll");
+                HALAssembly = Assembly.LoadFrom("/home/lvuser/mono/HAL-RoboRIO.dll");
             }
 
             SetupDelegates();
