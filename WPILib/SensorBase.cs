@@ -4,7 +4,7 @@ using System;
 
 namespace WPILib
 {
-    public abstract class SensorBase
+    public abstract class SensorBase : IDisposable
     {
         public static readonly int SystemClockTicksPerMicrosecond = 40;
 
@@ -140,6 +140,11 @@ namespace WPILib
         public static int GetDefaultSolenoidModule()
         {
             return s_defaultSolenoidModule;
+        }
+
+        public void Dispose()
+        {
+            Free();
         }
 
         public virtual void Free()
