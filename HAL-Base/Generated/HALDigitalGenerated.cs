@@ -283,13 +283,13 @@ namespace HAL_Base
         public delegate void SpiInitializeDelegate(byte port, ref int status);
         public static SpiInitializeDelegate SpiInitialize;
 
-        public delegate int SpiTransactionDelegate(byte port, ref byte dataToSend, ref byte dataReceived, byte size);
+        public delegate int SpiTransactionDelegate(byte port, byte[] dataToSend, byte[] dataReceived, byte size);
         public static SpiTransactionDelegate SpiTransaction;
 
         public delegate int SpiWriteDelegate(byte port, ref byte dataToSend, byte sendSize);
         public static SpiWriteDelegate SpiWrite;
 
-        public delegate int SpiReadDelegate(byte port, ref byte buffer, byte count);
+        public delegate int SpiReadDelegate(byte port, byte[] buffer, byte count);
         public static SpiReadDelegate SpiRead;
 
         public delegate void SpiCloseDelegate(byte port);
@@ -325,13 +325,13 @@ namespace HAL_Base
         public delegate void I2CInitializeDelegate(byte port, ref int status);
         public static I2CInitializeDelegate I2CInitialize;
 
-        public delegate int I2CTransactionDelegate(byte port, byte deviceAddress, ref byte dataToSend, byte sendSize, ref byte dataReceived, byte receiveSize);
+        public delegate int I2CTransactionDelegate(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize, byte[] dataReceived, byte receiveSize);
         public static I2CTransactionDelegate I2CTransaction;
 
-        public delegate int I2CWriteDelegate(byte port, byte deviceAddress, ref byte dataToSend, byte sendSize);
+        public delegate int I2CWriteDelegate(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize);
         public static I2CWriteDelegate I2CWrite;
 
-        public delegate int I2CReadDelegate(byte port, byte deviceAddress, ref byte buffer, byte count);
+        public delegate int I2CReadDelegate(byte port, byte deviceAddress, byte[] buffer, byte count);
         public static I2CReadDelegate I2CRead;
 
         public delegate void I2CCloseDelegate(byte port);

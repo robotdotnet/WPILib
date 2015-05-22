@@ -1,4 +1,4 @@
-﻿//File automatically generated using robotdotnet-tools. Please do not modify.
+//File automatically generated using robotdotnet-tools. Please do not modify.
 using HAL_Base;
 namespace HAL_RoboRIO
 {
