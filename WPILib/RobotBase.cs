@@ -103,7 +103,6 @@ namespace WPILib
 
         public static void InitializeHardwareConfiguration()
         {
-            //HAL.IsSimulation = false;
             HAL.Initialize();
             RobotState.SetImplementation(DriverStation.GetInstance());
         }
@@ -128,15 +127,12 @@ namespace WPILib
                 if (robotClasses.ToList().Count == 0)
                     throw new Exception("Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
                 robotName = robotClasses.ToList()[0].FullName;
-                //var types = robotAssembly.GetTypes().Where(t => typeof(RobotBase).IsAssignableFrom(t));
-                //var type = types[0];
                 robot = (RobotBase)(Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
-                //robot = (RobotBase)(System.Reflection.Assembly.GetExecutingAssembly().CreateInstance(RobotName));
                 robot.Prestart();
             }
             catch (Exception ex)
             {
-                DriverStation.ReportError("EROR Unhandled exception instantiating robot " + robotName + " " + ex.ToString() + " at " + ex.StackTrace, false);//"ERROR Could not instantiate robot", true);
+                DriverStation.ReportError("ERROR Unhandled exception instantiating robot " + robotName + " " + ex.ToString() + " at " + ex.StackTrace, false);//"ERROR Could not instantiate robot", true);
                 //Log Robots dont quit
                 Console.Error.WriteLine("WARNING: Robots don't quit!");
                 Console.Error.WriteLine("Error: Could not instantiate robot " + robotName + "!");

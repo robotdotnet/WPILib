@@ -100,23 +100,7 @@ namespace HAL_Base
         {
             return HALReport(resource, instanceNumber, context, feature);
         }
-
-        /*
-        public static void CheckStatus(int status)
-        {
-            if (status < 0)
-            {
-                string message = GetHALErrorMessage(status);
-                throw new SystemException(" Code: " + status + ". " + message);
-            }
-            else if (status > 0)
-            {
-                string message = GetHALErrorMessage(status);
-                DriverStation.ReportError(message, true);
-            }
-        }
-         * */
-
+        
         public static HALControlWord GetControlWord()
         {
             HALControlWord temp = new HALControlWord();
