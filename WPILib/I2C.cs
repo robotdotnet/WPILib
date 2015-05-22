@@ -36,7 +36,7 @@ namespace WPILib
                 byte[] receiveBuffer = new byte[receiveSize];
                 bool aborted = true;
                 aborted = HAL_Base.HALDigital
-                    .I2CTransactionArray((byte)port, (byte)deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
+                    .I2CTransaction((byte)port, (byte)deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
                 if (receiveSize > 0 && receiveBuffer != null)
                     Array.Copy(receiveBuffer, dataRecieved, Math.Min(receiveSize, dataRecieved.Length));
                 return aborted;
@@ -55,7 +55,7 @@ namespace WPILib
                 byte[] buffer = new byte[2];
                 buffer[0] = (byte)registerAddress;
                 buffer[1] = (byte)data;
-                return HAL_Base.HALDigital.I2CWriteArray((byte)port, (byte)deviceAddress, buffer, (byte)buffer.Length) < 0;
+                return HAL_Base.HALDigital.I2CWrite((byte)port, (byte)deviceAddress, buffer, (byte)buffer.Length) < 0;
             }
         }
 
@@ -63,7 +63,7 @@ namespace WPILib
         {
             lock (synchronizeRoot)
             {
-                return HAL_Base.HALDigital.I2CWriteArray((byte)port, (byte)deviceAddress, data, (byte)data.Length) < 0;
+                return HAL_Base.HALDigital.I2CWrite((byte)port, (byte)deviceAddress, data, (byte)data.Length) < 0;
             }
         }
 
@@ -79,7 +79,7 @@ namespace WPILib
             WPILib.Util.BoundaryException.AssertWithinBounds(count, 1, 7);
             if (buffer == null) throw new ArgumentNullException("buffer");
             byte[] received = new byte[count];
-            int retVal = HAL_Base.HALDigital.I2CReadArray((byte)port, (byte)deviceAddress, received, (byte)count);
+            int retVal = HAL_Base.HALDigital.I2CRead((byte)port, (byte)deviceAddress, received, (byte)count);
             Array.Copy(received, buffer, Math.Min(buffer.Length, count));
             return retVal < 0;
         }

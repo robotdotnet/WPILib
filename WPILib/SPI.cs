@@ -105,9 +105,9 @@ namespace WPILib
             byte[] receivedBuffer = new byte[size];
             byte[] sendBuffer = new byte[size];
             if (initiate)
-                retVal = HAL_Base.HALDigital.SpiTransactionArray((byte)port, sendBuffer, receivedBuffer, (byte)size);
+                retVal = HAL_Base.HALDigital.SpiTransaction((byte)port, sendBuffer, receivedBuffer, (byte)size);
             else
-                retVal = HAL_Base.HALDigital.SpiReadArray((byte)port, receivedBuffer, (byte)size);
+                retVal = HAL_Base.HALDigital.SpiRead((byte)port, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(size, dataReceived.Length));
             return retVal;
         }
@@ -118,7 +118,7 @@ namespace WPILib
             byte[] sendBuffer = new byte[size];
             Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
             byte[] receivedBuffer = new byte[size];
-            retVal = HAL_Base.HALDigital.SpiTransactionArray((byte)port, sendBuffer, receivedBuffer, (byte)size);
+            retVal = HAL_Base.HALDigital.SpiTransaction((byte)port, sendBuffer, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(receivedBuffer.Length, dataReceived.Length));
             return retVal;
         }
