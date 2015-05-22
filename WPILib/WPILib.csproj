@@ -99,6 +99,7 @@
     <Compile Include="Servo.cs" />
     <Compile Include="Solenoid.cs" />
     <Compile Include="SolenoidBase.cs" />
+    <Compile Include="SPI.cs" />
     <Compile Include="Talon.cs" />
     <Compile Include="TalonSRX.cs" />
     <Compile Include="Timer.cs" />
