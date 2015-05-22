@@ -67,6 +67,7 @@
     <Compile Include="Encoder.cs" />
     <Compile Include="GearTooth.cs" />
     <Compile Include="Gyro.cs" />
+    <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\Accelerometer.cs" />
     <Compile Include="Interfaces\Controller.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
