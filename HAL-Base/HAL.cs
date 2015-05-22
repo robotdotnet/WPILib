@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace HAL_Base
 {
@@ -29,6 +30,11 @@ namespace HAL_Base
                 return s_isSimulation;
             }
             set { s_isSimulation = value; }
+        }
+
+        public static string GetErrorMessage(int code)
+        {
+            return Marshal.PtrToStringAnsi(GetHALErrorMessage(code));
         }
 
         public static int SetErrorData(string errors, int waitMs)

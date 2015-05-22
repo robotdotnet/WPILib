@@ -45,12 +45,12 @@ namespace WPILib
         {
             if (status < 0)
             {
-                string message = HAL.GetHALErrorMessage(status);
+                string message = HAL.GetErrorMessage(status);
                 throw new SystemException(" Code: " + status + ". " + message);
             }
             else if (status > 0)
             {
-                string message = HAL.GetHALErrorMessage(status);
+                string message = HAL.GetErrorMessage(status);
                 DriverStation.ReportError(message, true);
             }
         }

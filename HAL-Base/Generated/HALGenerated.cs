@@ -51,7 +51,7 @@ namespace HAL_Base
         public delegate System.IntPtr GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
-        public delegate string GetHALErrorMessageDelegate(int code);
+        public delegate System.IntPtr GetHALErrorMessageDelegate(int code);
         public static GetHALErrorMessageDelegate GetHALErrorMessage;
 
         public delegate ushort GetFPGAVersionDelegate(ref int status);

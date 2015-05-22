@@ -12,7 +12,7 @@ namespace HAL_RoboRIO
         public static extern System.IntPtr getPortWithModule(byte module, byte pin);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getHALErrorMessage")]
-        public static extern string getHALErrorMessage(int code);
+        public static extern System.IntPtr getHALErrorMessage(int code);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getFPGAVersion")]
         public static extern ushort getFPGAVersion(ref int status);
