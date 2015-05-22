@@ -292,6 +292,46 @@ namespace HAL_Base
         public byte povCount;
     }
 
+    public struct HALControlWord
+    {
+        private uint _wordData;
+
+        public HALControlWord(uint data)
+        {
+            _wordData = data;
+        }
+
+        public bool GetEnabled()
+        {
+            return (_wordData & (1 << 1 - 1)) != 0;
+        }
+
+        public bool GetAutonomous()
+        {
+            return (_wordData & (1 << 2 - 1)) != 0;
+        }
+
+        public bool GetTest()
+        {
+            return (_wordData & (1 << 3 - 1)) != 0;
+        }
+
+        public bool GetEStop()
+        {
+            return (_wordData & (1 << 4 - 1)) != 0;
+        }
+
+        public bool GetFMSAttached()
+        {
+            return (_wordData & (1 << 5 - 1)) != 0;
+        }
+
+        public bool GetDSAttached()
+        {
+            return (_wordData & (1 << 6 - 1)) != 0;
+        }
+    }
+
 #endregion
 
 #region Accelerometer
