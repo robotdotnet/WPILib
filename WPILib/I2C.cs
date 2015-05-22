@@ -23,7 +23,7 @@ namespace WPILib
             this.deviceAddress = deviceAddress;
             int status = 0;
             HAL_Base.HALDigital.I2CInitialize((byte)port, ref status);
-            //TODO: Check status
+            WPILib.Utility.CheckStatus(status);
             HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_I2C, (byte)deviceAddress);
         }
 
