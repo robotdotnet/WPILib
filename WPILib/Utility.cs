@@ -38,6 +38,7 @@ namespace WPILib
         {
             int status = 0;
             bool value = HAL.GetFPGAButton(ref status);
+            //CheckStatus(status); //Not calling check status right now because these functions are returning errors. 
             return value;
         }
 
