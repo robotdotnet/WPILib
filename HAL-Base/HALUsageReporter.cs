@@ -52,6 +52,10 @@ namespace HAL_Base
         kResourceType_HiTechnicAccel,
         kResourceType_HiTechnicCompass,
         kResourceType_SRF08,
+        kResourceType_AnalogOutput,
+        kResourceType_VictorSP,
+        kResourceType_TalonSRX,
+        kResourceType_CANTalonSRX,
     };
 
     public enum Instances
@@ -60,6 +64,7 @@ namespace HAL_Base
         kLanguage_CPlusPlus = 2,
         kLanguage_Java = 3,
         kLanguage_Python = 4,
+        kLanguage_DotNet = 5,
 
         kCANPlugin_BlackJagBridge = 1,
         kCANPlugin_2CAN = 2,

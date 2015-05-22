@@ -40,5 +40,19 @@ namespace WPILib
             bool value = HAL.GetFPGAButton(ref status);
             return value;
         }
+
+        public static void CheckStatus(int status)
+        {
+            if (status < 0)
+            {
+                string message = HAL.GetHALErrorMessage(status);
+                throw new SystemException(" Code: " + status + ". " + message);
+            }
+            else if (status > 0)
+            {
+                string message = HAL.GetHALErrorMessage(status);
+                DriverStation.ReportError(message, true);
+            }
+        }
     }
 }

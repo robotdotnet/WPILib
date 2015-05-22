@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WPILib.Interfaces;
+using HAL_Base;
 
 namespace WPILib
 {
@@ -56,6 +57,8 @@ namespace WPILib
             setPoint = 0;
             Profile = 0;
             ApplyControlMode(ControlMode.PercentVbus);
+
+            HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)deviceNumber);
         }
 
         private bool disposed = false;
@@ -95,6 +98,7 @@ namespace WPILib
         private void SetParam(Impl.ParamID id, double value)
         {
             var errorCode = Impl.C_TalonSRX_SetParam(impl, (int)id, value);
+            /*
             switch (errorCode)
             {
                 case HAL_Base.CTR_Code.CTR_RxTimeout:
@@ -111,6 +115,7 @@ namespace WPILib
                 default:
                     break;
             }
+             * */
         }
 
         [Obsolete("Use the Dispose method or a using block instead of Delete")]

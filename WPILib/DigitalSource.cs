@@ -31,6 +31,7 @@ namespace WPILib
             int status = 0;
             m_port = HALDigital.InitializeDigitalPort(portPointer, ref status);
             HALDigital.AllocateDIO(m_port, input, ref status);
+            Utility.CheckStatus(status);
         }
 
         public override void Free()

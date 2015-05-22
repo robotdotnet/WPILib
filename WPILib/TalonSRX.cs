@@ -12,7 +12,7 @@ namespace WPILib
             SetRaw(GetCenterPwm());
             SetZeroLatch();
 
-            HAL.Report(ResourceType.kResourceType_Talon, (byte)GetChannel());
+            HAL.Report(ResourceType.kResourceType_TalonSRX, (byte)GetChannel());
         }
 
         public TalonSRX(int channel)

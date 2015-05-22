@@ -1,4 +1,5 @@
 ﻿//File automatically generated using robotdotnet-tools. Please do not modify.
+using HAL_Base;
 namespace HAL_RoboRIO
 {
     public class HAL
@@ -30,22 +31,22 @@ namespace HAL_RoboRIO
         public static extern int HALSetErrorData(string errors, int errorsLength, int wait_ms);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetControlWord")]
-        public static extern int HALGetControlWord(ref object data);
+        public static extern int HALGetControlWord(ref HALControlWord data);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetAllianceStation")]
-        public static extern int HALGetAllianceStation(ref object allianceStation);
+        public static extern int HALGetAllianceStation(ref HALAllianceStationID allianceStation);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickAxes")]
-        public static extern int HALGetJoystickAxes(byte joystickNum, ref object axes);
+        public static extern int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickPOVs")]
-        public static extern int HALGetJoystickPOVs(byte joystickNum, ref object povs);
+        public static extern int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickButtons")]
-        public static extern int HALGetJoystickButtons(byte joystickNum, ref object buttons);
+        public static extern int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickDescriptor")]
-        public static extern int HALGetJoystickDescriptor(byte joystickNum, ref object desc);
+        public static extern int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALSetJoystickOutputs")]
         public static extern int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble, ushort rightRumble);

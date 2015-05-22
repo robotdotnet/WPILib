@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Diagnostics;
 using HAL_Base;
 
 namespace WPILib
@@ -435,8 +436,13 @@ namespace WPILib
             String errorString = error;
             if (printTrace)
             {
-                //errorString += " at ";
-                //Add stack trace code
+                errorString += " at ";
+                var stacktrace = new StackTrace();
+                var traces = stacktrace.GetFrames();
+                foreach (var s in traces)
+                {
+                    errorString += s + "\n";
+                }
             }
             TextWriter errorWriter = Console.Error;
             errorWriter.WriteLine(errorString);
@@ -485,75 +491,6 @@ namespace WPILib
         {
             m_userInTest = entering;
         }
-
-
-        /*
-        public static short GetAxesData(int axis, ref HALJoystickAxes axes)
-        {
-            switch (axis)
-            {
-                case 0:
-                    return axes.axes0;
-                case 1:
-                    return axes.axes1;
-                case 2:
-                    return axes.axes2;
-                case 3:
-                    return axes.axes3;
-                case 4:
-                    return axes.axes4;
-                case 5:
-                    return axes.axes5;
-                case 6:
-                    return axes.axes6;
-                case 7:
-                    return axes.axes7;
-                case 8:
-                    return axes.axes8;
-                case 9:
-                    return axes.axes9;
-                case 10:
-                    return axes.axes10;
-                case 11:
-                    return axes.axes11;
-                default:
-                    return 0;
-            }
-        }
-
-        public short GetPOVData(int pov, ref HALJoystickPOVs povs)
-        {
-            switch (pov)
-            {
-                case 0:
-                    return povs.povs0;
-                case 1:
-                    return povs.povs1;
-                case 2:
-                    return povs.povs2;
-                case 3:
-                    return povs.povs3;
-                case 4:
-                    return povs.povs4;
-                case 5:
-                    return povs.povs5;
-                case 6:
-                    return povs.povs6;
-                case 7:
-                    return povs.povs7;
-                case 8:
-                    return povs.povs8;
-                case 9:
-                    return povs.povs9;
-                case 10:
-                    return povs.povs10;
-                case 11:
-                    return povs.povs11;
-                default:
-                    return 0;
-            }
-        }
-         * */
          
     }
 }
