@@ -162,13 +162,15 @@ namespace WPILib
             //Add a keyboard exception
             catch (Exception ex)
             {
-                DriverStation.ReportError("ERROR Unhandled exception", true);
+                DriverStation.ReportError("ERROR Unhandled exception" + ex.ToString(), false);
                 return;
             }
             finally
             {
                 DriverStation.ReportError("ERROR StartCompetition() returned", false);
+                Environment.Exit(1);
             }
+            
         }
     }
 }
