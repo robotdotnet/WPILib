@@ -103,6 +103,7 @@
     <Compile Include="Talon.cs" />
     <Compile Include="TalonSRX.cs" />
     <Compile Include="Timer.cs" />
+    <Compile Include="Ultrasonic.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Util\Exceptions.cs" />
     <Compile Include="InterruptableSensorBase.cs" />
