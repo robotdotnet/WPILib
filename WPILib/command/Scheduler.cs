@@ -103,6 +103,14 @@ namespace WPILib.Commands
 
         }
 
+        public void AddButton(Button.ButtonScheduler button)
+        {
+            if (buttons == null)
+            {
+                //InitializeButton
+            }
+            //Add Button
+        }
 
 
         public string GetName()
