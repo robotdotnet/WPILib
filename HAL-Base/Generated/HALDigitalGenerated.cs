@@ -286,7 +286,7 @@ namespace HAL_Base
         public delegate int SpiTransactionDelegate(byte port, byte[] dataToSend, byte[] dataReceived, byte size);
         public static SpiTransactionDelegate SpiTransaction;
 
-        public delegate int SpiWriteDelegate(byte port, ref byte dataToSend, byte sendSize);
+        public delegate int SpiWriteDelegate(byte port, byte[] dataToSend, byte sendSize);
         public static SpiWriteDelegate SpiWrite;
 
         public delegate int SpiReadDelegate(byte port, byte[] buffer, byte count);

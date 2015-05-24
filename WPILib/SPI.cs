@@ -103,7 +103,7 @@ namespace WPILib
         {
             byte[] sendBuffer = new byte[size];
             Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
-            return HAL_Base.HALDigital.SpiWriteArray((byte)port, sendBuffer, (byte)size);
+            return HAL_Base.HALDigital.SpiWrite((byte)port, sendBuffer, (byte)size);
         }
 
         public int Read(bool initiate, byte[] dataReceived, int size)
