@@ -22,37 +22,39 @@ namespace WPILib
         private int m_reverseChannel;
         private byte m_forwardMask;
         private byte m_reverseMask;
+        private object m_lockObject = new object();
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void InitSolenoid()
         {
-            CheckSolenoidModule(m_moduleNumber);
-            CheckSolenoidChannel(m_forwardChannel);
-            CheckSolenoidChannel(m_reverseChannel);
-
-            try
+            lock (m_lockObject)
             {
-                m_allocated.Allocate(m_moduleNumber*SolenoidChannels + m_forwardChannel);
-            }
-            catch(CheckedAllocationException e)
-            {
-                throw new AllocationException("Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
-            }
-            try
-            {
-                m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
-            }
-            catch (CheckedAllocationException e)
-            {
-                throw new AllocationException("Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
-            }
+                CheckSolenoidModule(m_moduleNumber);
+                CheckSolenoidChannel(m_forwardChannel);
+                CheckSolenoidChannel(m_reverseChannel);
 
-            m_forwardMask = (byte)(1 << m_forwardChannel);
-            m_reverseMask = (byte)(1 << m_reverseChannel);
+                try
+                {
+                    m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                }
+                catch (CheckedAllocationException e)
+                {
+                    throw new AllocationException("Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
+                }
+                try
+                {
+                    m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                }
+                catch (CheckedAllocationException e)
+                {
+                    throw new AllocationException("Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
+                }
 
-            HAL.Report(ResourceType.kResourceType_Solenoid, (byte) m_forwardChannel, (byte) (m_moduleNumber));
-            HAL.Report(ResourceType.kResourceType_Solenoid, (byte) m_reverseChannel, (byte) (m_moduleNumber));
+                m_forwardMask = (byte)(1 << m_forwardChannel);
+                m_reverseMask = (byte)(1 << m_reverseChannel);
 
+                HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
+                HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
+            }
         }
 
         public DoubleSolenoid(int forwardChannel, int reverseChannel)
@@ -71,11 +73,13 @@ namespace WPILib
             InitSolenoid();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public override void Free()
         {
-            m_allocated.Free(m_moduleNumber*SolenoidChannels + m_forwardChannel);
-            m_allocated.Free(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+            lock (m_lockObject)
+            {
+                m_allocated.Free(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                m_allocated.Free(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+            }
         }
 
         public void Set(Value value)

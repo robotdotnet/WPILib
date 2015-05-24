@@ -12,29 +12,35 @@ namespace WPILib
         private IntPtr[] m_ports;
         protected int m_moduleNumber;
         protected Resource m_allocated = new Resource(63*SolenoidChannels);
+        private object m_lockObject = new object();
 
         public SolenoidBase(int moduleNumber)
         {
-            m_moduleNumber = moduleNumber;
-            m_ports = new IntPtr[SolenoidChannels];
-            for (int i = 0; i < SolenoidChannels; i++)
+            lock (m_lockObject)
             {
-                IntPtr port = HAL.GetPortWithModule((byte) moduleNumber, (byte) i);
-                int status = 0;
-                m_ports[i] = HALSolenoid.InitializeSolenoidPort(port, ref status);
+                m_moduleNumber = moduleNumber;
+                m_ports = new IntPtr[SolenoidChannels];
+                for (int i = 0; i < SolenoidChannels; i++)
+                {
+                    IntPtr port = HAL.GetPortWithModule((byte)moduleNumber, (byte)i);
+                    int status = 0;
+                    m_ports[i] = HALSolenoid.InitializeSolenoidPort(port, ref status);
+                }
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         protected void Set(int value, int mask)
         {
-            int status = 0;
-            for (int i = 0; i < SolenoidChannels; i++)
+            lock (m_lockObject)
             {
-                int localMask = 1 << i;
-                if ((mask & localMask) != 0)
+                int status = 0;
+                for (int i = 0; i < SolenoidChannels; i++)
                 {
-                    HALSolenoid.SetSolenoid(m_ports[i], ((value & localMask) != 0), ref status);
+                    int localMask = 1 << i;
+                    if ((mask & localMask) != 0)
+                    {
+                        HALSolenoid.SetSolenoid(m_ports[i], ((value & localMask) != 0), ref status);
+                    }
                 }
             }
         }

@@ -12,11 +12,14 @@ namespace WPILib.Commands
     public class Scheduler : NamedSendable
     {
         private static Scheduler s_instance;
+        private static object s_lockObject = new object();
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public static Scheduler GetInstance()
         {
-            return s_instance == null ? s_instance = new Scheduler() : s_instance;
+            lock (s_lockObject)
+            {
+                return s_instance == null ? s_instance = new Scheduler() : s_instance;
+            }
         }
 
         private Hashtable m_commandTable = new Hashtable();

@@ -44,6 +44,8 @@ namespace WPILib
         private bool m_userInTest = false;
         private double m_nextMessageTime = 0.0;
 
+        private object m_lockObject = new object();
+
         private const double JoystickUnpluggedMessageInterval = 1.0;
 
         //Public Fields
@@ -148,137 +150,141 @@ namespace WPILib
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetStickAxis(int stick, int axis)
         {
-            if (stick >= JoystickPorts)
+            lock (m_joystickAxes)
             {
-                throw new SystemException("Joystick Index is out of range");
-            }
+                if (stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick Index is out of range");
+                }
 
-            if (axis > m_joystickAxes[stick].count)
-            {
-                if (axis >= MaxJoystickAxes)
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                if (axis > m_joystickAxes[stick].count)
+                {
+                    if (axis >= MaxJoystickAxes)
+                        throw new SystemException("Joystick index is out of range, should be 0-5");
+                    else
+                    {
+                        ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
+                                                     " not available, check if controller is plugged in\n");
+                    }
+                    return 0.0;
+                }
+
+                int value = m_joystickAxes[stick].axes[axis];//GetAxesData(axis, ref m_joystickAxes[stick]);
+
+                if (value < 0)
+                {
+                    return value / 128.0d;
+                }
                 else
                 {
-                    ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
-                                                 " not available, check if controller is plugged in\n");
+                    return value / 127.0d;
                 }
-                return 0.0;
-            }
-
-            int value = m_joystickAxes[stick].axes[axis];//GetAxesData(axis, ref m_joystickAxes[stick]);
-
-            if (value < 0)
-            {
-                return value / 128.0d;
-            }
-            else
-            {
-                return value / 127.0d;
             }
 
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickAxisCount(int stick)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                }
+
+                return m_joystickAxes[stick].count;
             }
-
-            return m_joystickAxes[stick].count;
-
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickPOV(int stick, int pov)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                }
+
+                if (pov < 0 || pov >= MaxJoystickPOVs)
+                {
+                    throw new SystemException("Joystick POV is out of range");
+                }
+
+
+                if (pov >= m_joystickPOVs[stick].count)
+                {
+                    ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
+                                                 " not available, check if controller is plugged in\n");
+                    return -1;
+                }
+
+                return m_joystickPOVs[stick].povs[pov];//GetPOVData(pov, ref m_joystickPOVs[stick]);
             }
-
-            if (pov < 0 || pov >= MaxJoystickPOVs)
-            {
-                throw new SystemException("Joystick POV is out of range");
-            }
-
-
-            if (pov >= m_joystickPOVs[stick].count)
-            {
-                ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
-                                             " not available, check if controller is plugged in\n");
-                return -1;
-            }
-
-            return m_joystickPOVs[stick].povs[pov];//GetPOVData(pov, ref m_joystickPOVs[stick]);
-
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickPOVCount(int stick)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                }
+
+                return m_joystickPOVs[stick].count;
             }
-
-            return m_joystickPOVs[stick].count;
-
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickButtons(int stick)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                }
+                return (int)m_joystickButtons[stick].buttons;
             }
-
-
-            return (int)m_joystickButtons[stick].buttons;
-
         }
 
-
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool GetStickButton(int stick, byte button)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
-            }
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                }
 
-            if (button > m_joystickButtons[stick].count)
-            {
-                ReportJoystickUnpluggedError("WARNING: Joystick Button " + button + " on port " + stick +
-                                             " not available, check if controller is plugged in\n");
-                return false;
-            }
+                if (button > m_joystickButtons[stick].count)
+                {
+                    ReportJoystickUnpluggedError("WARNING: Joystick Button " + button + " on port " + stick +
+                                                 " not available, check if controller is plugged in\n");
+                    return false;
+                }
 
-            if (button <= 0)
-            {
-                ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
-                return false;
+                if (button <= 0)
+                {
+                    ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
+                    return false;
+                }
+                return ((0x1 << (button - 1)) & m_joystickButtons[stick].buttons) != 0;
             }
-            return ((0x1 << (button - 1)) & m_joystickButtons[stick].buttons) != 0;
-
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public int GetStickButtonCount(int stick)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new SystemException("Joystick index is out of range, should be 0-5");
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                }
+
+                return m_joystickButtons[stick].count;
             }
-
-            return m_joystickButtons[stick].count;
-
         }
 
         /**
@@ -357,7 +363,6 @@ namespace WPILib
             return retval;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool IsNewControlData()
         {
             return HALSemaphore.TryTakeSemaphore(m_newControlData) == 0;
@@ -491,6 +496,6 @@ namespace WPILib
         {
             m_userInTest = entering;
         }
-         
+
     }
 }

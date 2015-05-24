@@ -13,19 +13,22 @@ namespace WPILib
     {
         private int m_channel;
         private IntPtr m_solenoidPort;
+        private object m_lockObject = new object();
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         private void InitSolenoid()
         {
-            CheckSolenoidModule(m_moduleNumber);
-            CheckSolenoidChannel(m_channel);
+            lock (m_lockObject)
+            {
+                CheckSolenoidModule(m_moduleNumber);
+                CheckSolenoidChannel(m_channel);
 
-            int status = 0;
+                int status = 0;
 
-            IntPtr port = HAL.GetPortWithModule((byte) m_moduleNumber, (byte) m_channel);
-            m_solenoidPort = HALSolenoid.InitializeSolenoidPort(port, ref status);
+                IntPtr port = HAL.GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
+                m_solenoidPort = HALSolenoid.InitializeSolenoidPort(port, ref status);
 
-            HAL.Report(ResourceType.kResourceType_Solenoid, (byte) m_channel, (byte) m_moduleNumber);
+                HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
+            }
         }
 
         public Solenoid(int channel) : base(GetDefaultSolenoidModule())
@@ -40,7 +43,6 @@ namespace WPILib
             InitSolenoid();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public override void Free()
         {
         }
