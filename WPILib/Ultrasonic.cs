@@ -15,13 +15,12 @@ namespace WPILib
             Millimeters = 1
         }
 
-        private static const float PingTime = 10e-6f;
-        private static const double MaxUltrasonicTime = 0.1;
-        private static const double SpeedOfSoundInchesPerSec = 1130.0 * 12.0;
+        private const float PingTime = 10e-6f;
+        private const double MaxUltrasonicTime = 0.1;
+        private const double SpeedOfSoundInchesPerSec = 1130.0 * 12.0;
         private static readonly List<Ultrasonic> currentSensors = new List<Ultrasonic>();
         private static bool automaticRoundRobinEnabled = false;
         private static BackgroundWorker autoSensingWorker = null;
-        private static CancellationTokenSource cts;
         private static byte instances;
 
         private DigitalInput echoChannel = null;

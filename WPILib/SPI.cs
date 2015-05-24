@@ -99,6 +99,13 @@ namespace WPILib
             WPILib.Utility.CheckStatus(status);
         }
 
+        public int Write(byte[] dataToSend, int size)
+        {
+            byte[] sendBuffer = new byte[size];
+            Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
+            return HAL_Base.HALDigital.SpiWriteArray((byte)port, sendBuffer, (byte)size);
+        }
+
         public int Read(bool initiate, byte[] dataReceived, int size)
         {
             int retVal = 0;
