@@ -74,7 +74,7 @@ namespace WPILib
             m_controlLoop.StartPeriodic(m_period);
 
             s_instances++;
-            HAL.Report(ResourceType.kResourceType_PIDController, (byte)s_instances);
+            HLUsageReporting.ReportPIDController(s_instances);
 
             m_toleranceType = ToleranceType.NoTolerance;
         }
