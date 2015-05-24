@@ -95,6 +95,7 @@
     <Compile Include="Notifier.cs" />
     <Compile Include="PIDController.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
+    <Compile Include="Preferences.cs" />
     <Compile Include="PWM.cs" />
     <Compile Include="Relay.cs" />
     <Compile Include="RobotBase.cs" />
