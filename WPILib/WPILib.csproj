@@ -60,6 +60,7 @@
     <Compile Include="command\Scheduler.cs" />
     <Compile Include="command\Subsystem.cs" />
     <Compile Include="Compressor.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Interfaces\Potentiometer.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
     <Compile Include="Interfaces\TimerEventHandler.cs" />
+    <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
@@ -126,7 +128,6 @@
   <ItemGroup>
     <Folder Include="CAN\" />
     <Folder Include="Communication\" />
-    <Folder Include="Internal\" />
     <Folder Include="SmartDashboard\" />
   </ItemGroup>
   <ItemGroup>

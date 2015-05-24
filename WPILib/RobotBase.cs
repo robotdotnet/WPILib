@@ -105,6 +105,7 @@ namespace WPILib
         {
             HAL.Initialize();
             RobotState.SetImplementation(DriverStation.GetInstance());
+            Timer.SetImplementation(new Internal.HardwareTimer());
         }
 
         private static RobotBase robot;
