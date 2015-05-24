@@ -75,10 +75,10 @@
     <Compile Include="Interfaces\Accelerometer.cs" />
     <Compile Include="Interfaces\Controller.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
-    <Compile Include="Interfaces\GenericHID.cs" />
-    <Compile Include="Interfaces\MotorSafety.cs" />
-    <Compile Include="Interfaces\PIDOutput.cs" />
-    <Compile Include="Interfaces\PIDSource.cs" />
+    <Compile Include="GenericHID.cs" />
+    <Compile Include="MotorSafety.cs" />
+    <Compile Include="PIDOutput.cs" />
+    <Compile Include="PIDSource.cs" />
     <Compile Include="Interfaces\Potentiometer.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
     <Compile Include="Interfaces\TimerEventHandler.cs" />
