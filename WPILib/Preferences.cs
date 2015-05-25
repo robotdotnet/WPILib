@@ -36,17 +36,17 @@ namespace WPILib
 
         private object m_lockObject = new object();
 
-        private Hashtable values;
+        private Dictionary<string, string> values;
         private List<string> keys;
 
-        private Hashtable comments;
+        private Dictionary<string, Comment> comments;
         private Comment endComment;
 
         Thread thread;
 
         private Preferences()
         {
-            values = new Hashtable();
+            values = new Dictionary<string,string>();
             keys = new List<string>();
 
             lock(fileLock)
@@ -138,9 +138,9 @@ namespace WPILib
                 {
                     throw new NullReferenceException();
                 }
-                if (values.ContainsKey(key))
+                if (!values.ContainsKey(key))
                     return null;
-                return (string)values[key];
+                return values[key];
             }
         }
 
@@ -311,10 +311,10 @@ namespace WPILib
                     for (int i = 0; i < keys.Count; i++)
                     {
                         string key = keys[i];
-                        string value = (string)values[key];
+                        string value = values[key];
                         if (comments != null)
                         {
-                            Comment comment = (Comment)comments[key];
+                            Comment comment = comments[key];
                             if (comment != null)
                             {
                                 comment.Write(output);
@@ -376,7 +376,7 @@ namespace WPILib
 
                         while (true)
                         {
-                            char value = reader.ReadWithouthWhitespace();
+                            char value = reader.ReadWithoutWhitespace();
                             if (value == '\n' || value == ';')
                             {
                                 if (comment == null)
@@ -409,13 +409,13 @@ namespace WPILib
                             else
                             {
                                 buffer = new StringBuilder(30);
-                                for (; value != '='; value = reader.ReadWithouthWhitespace())
+                                for (; value != '='; value = reader.ReadWithoutWhitespace())
                                 {
                                     buffer.Append(value);
                                 }
                                 string name = buffer.ToString();
                                 bool shouldBreak = false;
-                                value = reader.ReadWithouthWhitespace();
+                                value = reader.ReadWithoutWhitespace();
 
                                 if (value == '"')
                                 {
@@ -429,7 +429,7 @@ namespace WPILib
                                 {
                                     try
                                     {
-                                        for (; value != '\n'; value = reader.ReadWithouthWhitespace())
+                                        for (; value != '\n'; value = reader.ReadWithoutWhitespace())
                                         {
                                             buffer.Append(value);
                                         }
@@ -449,7 +449,7 @@ namespace WPILib
                                 {
                                     if (comments == null)
                                     {
-                                        comments = new Hashtable();
+                                        comments = new Dictionary<string, Comment>();
                                     }
                                     comments.Add(name, comment);
                                     comment = null;
@@ -520,7 +520,7 @@ namespace WPILib
                     }
                 }
 
-                internal char ReadWithouthWhitespace()
+                internal char ReadWithoutWhitespace()
                 {
                     while (true)
                     {
