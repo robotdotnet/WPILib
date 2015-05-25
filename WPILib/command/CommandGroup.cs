@@ -15,6 +15,7 @@ namespace WPILib.Commands
         //private List<?> m_children = new List<?>();
 
         private int m_currentCommandIndex = -1;
+        private object syncRoot = new object();
         public CommandGroup()
         {
             
@@ -25,65 +26,75 @@ namespace WPILib.Commands
             
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddSequential(Command command)
         {
-            Validate("Can not add new command to command group");
-            if (command == null)
-                throw new ArgumentNullException("Given null command");
-            command.SetParent(this);
-            m_commands.Add(new Entry(command, Entry.IN_SEQUENCE));
-            foreach (Subsystem e in command.GetRequirements())
+            lock (syncRoot)
             {
-                Requires(e);
+                Validate("Can not add new command to command group");
+                if (command == null)
+                    throw new ArgumentNullException("Given null command");
+                command.SetParent(this);
+                m_commands.Add(new Entry(command, Entry.IN_SEQUENCE));
+                foreach (Subsystem e in command.GetRequirements())
+                {
+                    Requires(e);
+                } 
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddSequential(Command command, double timeout)
         {
-            Validate("Can not add new command to command group");
-            if (command == null)
-                throw new ArgumentNullException("Given null command");
-            if (timeout < 0)
-                throw new ArgumentOutOfRangeException("Can not be given a negative timeout");
-            command.SetParent(this);
-            //Figure out what to do about timeout
-            m_commands.Add(new Entry(command, Entry.IN_SEQUENCE, timeout));
-            foreach (Subsystem e in command.GetRequirements())
+            lock (syncRoot)
             {
-                Requires(e);
+                Validate("Can not add new command to command group");
+                if (command == null)
+                    throw new ArgumentNullException("Given null command");
+                if (timeout < 0)
+                    throw new ArgumentOutOfRangeException("Can not be given a negative timeout");
+                command.SetParent(this);
+                //Figure out what to do about timeout
+                m_commands.Add(new Entry(command, Entry.IN_SEQUENCE, timeout));
+                foreach (Subsystem e in command.GetRequirements())
+                {
+                    Requires(e);
+                } 
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddParallel(Command command)
         {
-            Validate("Can not add new command to command group");
-            if (command == null)
-                throw new ArgumentNullException("Given null command");
-            command.SetParent(this);
-            m_commands.Add(new Entry(command, Entry.BRANCH_CHILD));
-            foreach (Subsystem e in command.GetRequirements())
+            lock (syncRoot)
             {
-                Requires(e);
+
+                Validate("Can not add new command to command group");
+                if (command == null)
+                    throw new ArgumentNullException("Given null command");
+                command.SetParent(this);
+                m_commands.Add(new Entry(command, Entry.BRANCH_CHILD));
+                foreach (Subsystem e in command.GetRequirements())
+                {
+                    Requires(e);
+                } 
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddParallel(Command command, double timeout)
         {
-            Validate("Can not add new command to command group");
-            if (command == null)
-                throw new ArgumentNullException("Given null command");
-            if (timeout < 0)
-                throw new ArgumentOutOfRangeException("Can not be given a negative timeout");
-            command.SetParent(this);
-            //Figure out what to do about timeout
-            m_commands.Add(new Entry(command, Entry.BRANCH_CHILD, timeout));
-            foreach (Subsystem e in command.GetRequirements())
+            lock (syncRoot)
             {
-                Requires(e);
+
+                Validate("Can not add new command to command group");
+                if (command == null)
+                    throw new ArgumentNullException("Given null command");
+                if (timeout < 0)
+                    throw new ArgumentOutOfRangeException("Can not be given a negative timeout");
+                command.SetParent(this);
+                //Figure out what to do about timeout
+                m_commands.Add(new Entry(command, Entry.BRANCH_CHILD, timeout));
+                foreach (Subsystem e in command.GetRequirements())
+                {
+                    Requires(e);
+                } 
             }
         }
 
@@ -216,32 +227,35 @@ namespace WPILib.Commands
             //throw new NotImplementedException();
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public new bool IsInterruptible()
         {
-            if (!base.IsInterruptible())
+            lock (syncRoot)
             {
-                return false;
-            }
 
-            if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
-            {
-                Command cmd = m_commands[m_currentCommandIndex].command;
-                if (!cmd.IsInterruptible())
+                if (!base.IsInterruptible())
                 {
                     return false;
                 }
-            }
 
-            for (int i = 0; i < m_children.Count; i++)
-            {
-                if (!(m_children[i]).command.IsInterruptible())
+                if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
                 {
-                    return false;
+                    Command cmd = m_commands[m_currentCommandIndex].command;
+                    if (!cmd.IsInterruptible())
+                    {
+                        return false;
+                    }
                 }
-            }
 
-            return true;
+                for (int i = 0; i < m_children.Count; i++)
+                {
+                    if (!(m_children[i]).command.IsInterruptible())
+                    {
+                        return false;
+                    }
+                }
+
+                return true; 
+            }
         }
 
         private void CancelConflicts(Command command)

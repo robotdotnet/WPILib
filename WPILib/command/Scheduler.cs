@@ -13,10 +13,14 @@ namespace WPILib.Commands
     {
         private static Scheduler s_instance;
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        private static object syncRoot = new object();
+
         public static Scheduler GetInstance()
         {
-            return s_instance == null ? s_instance = new Scheduler() : s_instance;
+            lock (syncRoot)
+            {
+                return s_instance == null ? s_instance = new Scheduler() : s_instance; 
+            }
         }
 
         private Hashtable m_commandTable = new Hashtable();
