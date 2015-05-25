@@ -12,14 +12,13 @@ namespace WPILib.Commands
     public class Scheduler : NamedSendable
     {
         private static Scheduler s_instance;
-
-        private static object syncRoot = new object();
+        private static object s_lockObject = new object();
 
         public static Scheduler GetInstance()
         {
-            lock (syncRoot)
+            lock (s_lockObject)
             {
-                return s_instance == null ? s_instance = new Scheduler() : s_instance; 
+                return s_instance == null ? s_instance = new Scheduler() : s_instance;
             }
         }
 
@@ -104,9 +103,32 @@ namespace WPILib.Commands
 
         }
 
+        public void AddButton(Button.ButtonScheduler button)
+        {
+            if (buttons == null)
+            {
+                //InitializeButton
+            }
+            //Add Button
+        }
 
 
         public string GetName()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public NetworkTablesDotNet.Tables.ITable GetTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSmartDashboardType()
         {
             throw new NotImplementedException();
         }

@@ -60,6 +60,7 @@
     <Compile Include="command\Scheduler.cs" />
     <Compile Include="command\Subsystem.cs" />
     <Compile Include="Compressor.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />
@@ -70,17 +71,20 @@
     <Compile Include="Encoder.cs" />
     <Compile Include="GearTooth.cs" />
     <Compile Include="Gyro.cs" />
+    <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\Accelerometer.cs" />
     <Compile Include="Interfaces\Controller.cs" />
     <Compile Include="Interfaces\CounterBase.cs" />
-    <Compile Include="Interfaces\GenericHID.cs" />
-    <Compile Include="Interfaces\MotorSafety.cs" />
-    <Compile Include="Interfaces\PIDOutput.cs" />
-    <Compile Include="Interfaces\PIDSource.cs" />
+    <Compile Include="GenericHID.cs" />
+    <Compile Include="Internal\HardwareHLUsageReporting.cs" />
+    <Compile Include="MotorSafety.cs" />
+    <Compile Include="PIDOutput.cs" />
+    <Compile Include="PIDSource.cs" />
     <Compile Include="Interfaces\Potentiometer.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
     <Compile Include="Interfaces\TimerEventHandler.cs" />
+    <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
@@ -91,6 +95,7 @@
     <Compile Include="Notifier.cs" />
     <Compile Include="PIDController.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
+    <Compile Include="Preferences.cs" />
     <Compile Include="PWM.cs" />
     <Compile Include="Relay.cs" />
     <Compile Include="RobotBase.cs" />
@@ -126,7 +131,6 @@
   <ItemGroup>
     <Folder Include="CAN\" />
     <Folder Include="Communication\" />
-    <Folder Include="Internal\" />
     <Folder Include="SmartDashboard\" />
   </ItemGroup>
   <ItemGroup>

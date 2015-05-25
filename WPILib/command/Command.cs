@@ -352,5 +352,20 @@ namespace WPILib.Commands
         {
             return this.GetName();
         }
+
+        public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
+        {
+            throw new NotImplementedException();
+        }
+
+        public NetworkTablesDotNet.Tables.ITable GetTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSmartDashboardType()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

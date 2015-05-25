@@ -209,7 +209,7 @@ namespace HAL_RoboRIO
         public static extern int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "spiWrite")]
-        public static extern int spiWrite(byte port, ref byte dataToSend, byte sendSize);
+        public static extern int spiWrite(byte port, byte[] dataToSend, byte sendSize);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "spiRead")]
         public static extern int spiRead(byte port, byte[] buffer, byte count);

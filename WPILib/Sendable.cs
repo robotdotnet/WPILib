@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NetworkTablesDotNet.Tables;
 
 namespace WPILib
 {
     public interface Sendable
     {
-        //Implement when we have network tables
+        void InitTable(ITable subtable);
+        ITable GetTable();
+        string GetSmartDashboardType();
     }
 }

@@ -44,6 +44,7 @@ namespace WPILib
         private double m_period = DefaultPeriod;
         PIDSource m_pidInput;
         PIDOutput m_pidOutput;
+        private object m_lockObject = new object();
 
         private double m_tolerance = 0.05;
 
@@ -73,7 +74,7 @@ namespace WPILib
             m_controlLoop.StartPeriodic(m_period);
 
             s_instances++;
-            HAL.Report(ResourceType.kResourceType_PIDController, (byte)s_instances);
+            HLUsageReporting.ReportPIDController(s_instances);
 
             m_toleranceType = ToleranceType.NoTolerance;
         }
@@ -202,180 +203,201 @@ namespace WPILib
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetPID(double p, double i, double d)
         {
-            m_P = p;
-            m_I = i;
-            m_D = d;
+            lock (m_lockObject)
+            {
+                m_P = p;
+                m_I = i;
+                m_D = d;
+            }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetPID(double p, double i, double d, double f)
         {
-            m_P = p;
-            m_I = i;
-            m_D = d;
-            m_F = f;
+            lock (m_lockObject)
+            {
+                m_P = p;
+                m_I = i;
+                m_D = d;
+                m_F = f;
+            }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetP()
         {
-            return m_P;
+            lock (m_lockObject)
+                return m_P;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetI()
         {
-            return m_I;
+            lock (m_lockObject)
+                return m_I;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetD()
         {
-            return m_D;
+            lock (m_lockObject)
+                return m_D;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetF()
         {
-            return m_F;
+            lock (m_lockObject)
+                return m_F;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double Get()
         {
-            return m_result;
+            lock (m_lockObject)
+                return m_result;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetContinouous(bool continuous = true)
         {
-            m_continuous = continuous;
+            lock (m_lockObject)
+                m_continuous = continuous;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetInputRange(double minimumInput, double maximumInput)
         {
-            if (minimumInput > maximumInput)
-                throw new BoundaryException("Lower bound is greatter than upper bound");
-            m_minimumInput = minimumInput;
-            m_maximumInput = maximumInput;
-            SetSetpoint(m_setpoint);
+            lock (m_lockObject)
+            {
+                if (minimumInput > maximumInput)
+                    throw new BoundaryException("Lower bound is greatter than upper bound");
+                m_minimumInput = minimumInput;
+                m_maximumInput = maximumInput;
+                SetSetpoint(m_setpoint);
+            }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetOutputRange(double minimumOutput, double maximumOutput)
         {
-            if (minimumOutput > maximumOutput)
-                throw new BoundaryException("Lower bound is greatter than upper bound");
-            m_minimumOutput = minimumOutput;
-            m_maximumOutput = maximumOutput;
-            SetSetpoint(m_setpoint);
+            lock (m_lockObject)
+            {
+                if (minimumOutput > maximumOutput)
+                    throw new BoundaryException("Lower bound is greatter than upper bound");
+                m_minimumOutput = minimumOutput;
+                m_maximumOutput = maximumOutput;
+                SetSetpoint(m_setpoint);
+            }
         }
 
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetSetpoint(double setpoint)
         {
-            if (m_maximumInput > m_minimumInput)
+            lock (m_lockObject)
             {
-                if (setpoint > m_maximumInput)
+                if (m_maximumInput > m_minimumInput)
                 {
-                    m_setpoint = m_maximumInput;
-                }
-                else if (setpoint < m_minimumInput)
-                {
-                    m_setpoint = m_minimumInput;
+                    if (setpoint > m_maximumInput)
+                    {
+                        m_setpoint = m_maximumInput;
+                    }
+                    else if (setpoint < m_minimumInput)
+                    {
+                        m_setpoint = m_minimumInput;
+                    }
+                    else
+                    {
+                        m_setpoint = setpoint;
+                    }
                 }
                 else
                 {
                     m_setpoint = setpoint;
                 }
             }
-            else
-            {
-                m_setpoint = setpoint;
-            }
         }
 
-
-        
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetSetpoint()
         {
-            return m_setpoint;
+            lock (m_lockObject)
+                return m_setpoint;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public double GetError()
         {
-            return GetSetpoint() - m_pidInput.PidGet();
+            lock (m_lockObject)
+            {
+                return GetSetpoint() - m_pidInput.PidGet();
+            }
         }
 
         [Obsolete]
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void SetTolerance(double percent)
         {
-            m_toleranceType = ToleranceType.PercentTolerance;
-            m_tolerance = percent;
-        }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void SetPercentTolerance(double percent)
-        {
-            m_toleranceType = ToleranceType.PercentTolerance;
-            m_tolerance = percent;
-        }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void SetAbsoluteTolerance(double absTolerance)
-        {
-            m_toleranceType = ToleranceType.AbsoluteTolerance;
-            m_tolerance = absTolerance;
-        }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public bool OnTarget()
-        {
-            switch (m_toleranceType)
+            lock (m_lockObject)
             {
-                case ToleranceType.PercentTolerance:
-                    return Math.Abs(m_error) < (m_tolerance/100*(m_maximumInput - m_minimumInput));
-                case ToleranceType.AbsoluteTolerance:
-                    return Math.Abs(m_error) < m_tolerance;
-                default:
-                    return false;
+                m_toleranceType = ToleranceType.PercentTolerance;
+                m_tolerance = percent;
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void SetPercentTolerance(double percent)
+        {
+            lock (m_lockObject)
+            {
+                m_toleranceType = ToleranceType.PercentTolerance;
+                m_tolerance = percent;
+            }
+        }
+
+        public void SetAbsoluteTolerance(double absTolerance)
+        {
+            lock (m_lockObject)
+            {
+                m_toleranceType = ToleranceType.AbsoluteTolerance;
+                m_tolerance = absTolerance;
+            }
+        }
+
+        public bool OnTarget()
+        {
+            lock (m_lockObject)
+            {
+                switch (m_toleranceType)
+                {
+                    case ToleranceType.PercentTolerance:
+                        return Math.Abs(m_error) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
+                    case ToleranceType.AbsoluteTolerance:
+                        return Math.Abs(m_error) < m_tolerance;
+                    default:
+                        return false;
+                }
+            }
+        }
+
         public void Enable()
         {
-            m_enabled = true;
+            lock (m_lockObject)
+                m_enabled = true;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Disable()
         {
-            m_pidOutput.PidWrite(0);
-            m_enabled = false;
+            lock (m_lockObject)
+            {
+                m_pidOutput.PidWrite(0);
+                m_enabled = false;
+            }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool IsEnable()
         {
-            return m_enabled;
+            lock (m_lockObject)
+                return m_enabled;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Reset()
         {
-            Disable();
-            m_prevError = 0;
-            m_totalError = 0;
-            m_result = 0;
+            lock (m_lockObject)
+            {
+                Disable();
+                m_prevError = 0;
+                m_totalError = 0;
+                m_result = 0;
+            }
         }
 
 
