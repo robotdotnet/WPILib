@@ -80,7 +80,7 @@ namespace WPILib
             {
                 if (key == null)
                 {
-                    throw new NullReferenceException();
+                    throw new ArgumentNullException("key");
                 }
                 ImproperPreferenceKeyException.ConfirmString(key);
                 if (!values.ContainsKey(key))
@@ -96,7 +96,7 @@ namespace WPILib
         {
             if (value == null)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException("value");
             }
             if (value.IndexOf('"') != -1)
             {
@@ -136,7 +136,7 @@ namespace WPILib
             {
                 if (key == null)
                 {
-                    throw new NullReferenceException();
+                    throw new ArgumentNullException("key");
                 }
                 if (!values.ContainsKey(key))
                     return null;
@@ -155,7 +155,7 @@ namespace WPILib
             {
                 if (key == null)
                 {
-                    throw new NullReferenceException();
+                    throw new ArgumentNullException("key");
                 }
                 values.Remove(key);
                 keys.Remove(key);
