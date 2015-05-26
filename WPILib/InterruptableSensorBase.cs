@@ -29,13 +29,15 @@ namespace WPILib
             m_interrupt = IntPtr.Zero;
         }
 
+        private InterruptHandlerFunction function;
+
         public abstract bool GetAnalogTriggerForRouting();
         public abstract int GetChannelForRouting();
         public abstract byte GetModuleForRouting();
 
         public void RequestInterrupts(Action handler)
         {
-            InterruptHandlerFunction function = (mask, param) => handler();
+            function = (mask, param) => handler();
             if (m_interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
