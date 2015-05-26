@@ -303,8 +303,6 @@ namespace WPILib
                         File.Delete(FILE_NAME);
                     }
 
-                    File.Create(FILE_NAME);
-
                     output = new StreamWriter(FILE_NAME);
 
                     output.Write("[Preferences]\n");
@@ -414,6 +412,7 @@ namespace WPILib
                                     buffer.Append(value);
                                 }
                                 string name = buffer.ToString();
+                                buffer = new StringBuilder(30);
                                 bool shouldBreak = false;
                                 value = reader.ReadWithoutWhitespace();
 
