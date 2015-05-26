@@ -177,14 +177,15 @@ namespace WPILib
             }
             else
             {
-                try
+                int retVal = 0;
+
+                if (int.TryParse(value, out retVal))
                 {
-                    return int.Parse(value);
+                    return retVal;
                 }
-                catch (FormatException e)
+                else
                 {
-                    throw;
-                    //Figure out Incompatable Type Exception
+                    throw new FormatException(value + " was not in the right format (int)");
                 }
             }
         }
@@ -198,13 +199,14 @@ namespace WPILib
             }
             else
             {
-                try
+                double retVal = 0;
+                if (double.TryParse(value, out retVal))
                 {
-                    return double.Parse(value);
+                    return retVal;
                 }
-                catch (FormatException e)
+                else
                 {
-                    throw;
+                    throw new FormatException(value + " was not in the right format (double)");
                 }
             }
         }
@@ -216,13 +218,14 @@ namespace WPILib
                 return backup;
             else
             {
-                if (value.Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                    return true;
-                else if (value.Equals("false", StringComparison.CurrentCultureIgnoreCase))
-                    return false;
+                bool retVal;
+                if (bool.TryParse(value, out retVal))
+                {
+                    return retVal;
+                }
                 else
                 {
-                    throw new Exception();//Throw IncompatableTypeException
+                    throw new FormatException(value + " was not in the right format (bool)");
                 }
             }
         }
@@ -236,13 +239,14 @@ namespace WPILib
             }
             else
             {
-                try
+                float retVal = 0;
+                if (float.TryParse(value, out retVal))
                 {
-                    return float.Parse(value);
+                    return retVal;
                 }
-                catch (FormatException e)
+                else
                 {
-                    throw;
+                    throw new FormatException(value + " was not in the right format (float)");
                 }
             }
         }
@@ -256,14 +260,15 @@ namespace WPILib
             }
             else
             {
-                try
+                long retVal = 0;
+
+                if (long.TryParse(value, out retVal))
                 {
-                    return long.Parse(value);
+                    return retVal;
                 }
-                catch (FormatException e)
+                else
                 {
-                    throw;
-                    //Figure out Incompatable Type Exception
+                    throw new FormatException(value + " was not in the right format (long)");
                 }
             }
         }
