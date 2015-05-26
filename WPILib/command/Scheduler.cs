@@ -37,13 +37,13 @@ namespace WPILib.Commands
 
         private List<Command> additions = new List<Command>();
 
-        private List<Button> buttons;
+        private List<ButtonScheduler> buttons;
 
         private bool m_runningCommandsChanged;
 
         private Scheduler()
         {
-            HAL.Report(ResourceType.kResourceType_Command, Instances.kCommand_Scheduler);
+            HLUsageReporting.ReportScheduler();
         }
 
         public void Add(Command command)
@@ -52,7 +52,14 @@ namespace WPILib.Commands
                 additions.Add(command);
         }
 
-        //Add Button
+        public void AddButton(ButtonScheduler button)
+        {
+            if (buttons == null)
+            {
+                buttons = new List<ButtonScheduler>();
+            }
+            buttons.Add(button);
+        }
 
         private void _Add(Command command)
         {
@@ -95,8 +102,12 @@ namespace WPILib.Commands
                 {
                     m_commands.AddLast(command);
                 }
-
+                
                 //m_commandTable.Add(Command, command);
+
+                m_runningCommandsChanged = true;
+
+                command.StartRunning();
             }
 
 
@@ -104,14 +115,7 @@ namespace WPILib.Commands
 
         }
 
-        public void AddButton(ButtonScheduler button)
-        {
-            if (buttons == null)
-            {
-                //InitializeButton
-            }
-            //Add Button
-        }
+        
 
 
         public string GetName()
@@ -137,6 +141,7 @@ namespace WPILib.Commands
 
         public NetworkTablesDotNet.Tables.ITable GetTable()
         {
+            throw new NotImplementedException();
         }
 
         public string GetSmartDashboardType()
