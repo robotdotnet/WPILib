@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading;
 using HAL_Base;
 using System.IO;
+using NetworkTablesDotNet.NetworkTables;
+using NetworkTablesDotNet.Tables;
 
 namespace WPILib
 {
@@ -39,8 +41,8 @@ namespace WPILib
         private Dictionary<string, string> values;
         private List<string> keys;
 
-        private Dictionary<string, Comment> comments;
-        private Comment endComment;
+        private Dictionary<string, Comment> m_comments;
+        private Comment m_endComment;
 
         Thread thread;
 
@@ -88,7 +90,7 @@ namespace WPILib
                     values.Add(key, value);
                     keys.Add(key);
                 }
-                //NetworkTable.GetTable(TABLE_NAME).PutString(key, value);
+                NetworkTable.GetTable(TABLE_NAME).PutString(key, value);
             }
         }
 
@@ -315,9 +317,9 @@ namespace WPILib
                     {
                         string key = keys[i];
                         string value = values[key];
-                        if (comments != null)
+                        if (m_comments != null)
                         {
-                            Comment comment = comments[key];
+                            Comment comment = m_comments[key];
                             if (comment != null)
                             {
                                 comment.Write(output);
@@ -330,9 +332,9 @@ namespace WPILib
                         output.Write(VALUE_SUFFIX);
                     }
 
-                    if (endComment != null)
+                    if (m_endComment != null)
                     {
-                        endComment.Write(output);
+                        m_endComment.Write(output);
                     }
                 }
                 catch (IOException ex)
@@ -352,7 +354,7 @@ namespace WPILib
 
                         }
                     }
-                    //NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
+                    NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
                 }
             }
         }
@@ -448,14 +450,14 @@ namespace WPILib
                                 keys.Add(name);
                                 values.Add(name, result);
 
-                                //NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
+                                NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
                                 if (comment != null)
                                 {
-                                    if (comments == null)
+                                    if (m_comments == null)
                                     {
-                                        comments = new Dictionary<string, Comment>();
+                                        m_comments = new Dictionary<string, Comment>();
                                     }
-                                    comments.Add(name, comment);
+                                    m_comments.Add(name, comment);
                                     comment = null;
                                 }
 
@@ -491,14 +493,66 @@ namespace WPILib
 
                 if (comment != null)
                 {
-                    endComment = comment;
+                    m_endComment = comment;
                 }
             }
 
-            //NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
-            //NetworkTable.GetTable(TABLE_NAME).AddTableListener();//Figure this out
-
+            NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
+            TableListener listener = new TableListener(this, ref m_lockObject, ref values, ref keys);
+            NetworkTable.GetTable(TABLE_NAME).AddTableListener(listener);//Figure this out
         }
+
+        internal class TableListener : ITableListener
+        {
+
+            private Preferences pref;
+            private object m_lockObject;
+            private Dictionary<string, string> values;
+            private List<string> keys;
+
+            internal TableListener(Preferences pref, ref object lockObject, ref Dictionary<string, string> values, ref List<string> keys)
+            {
+                this.pref = pref;
+                m_lockObject = lockObject;
+                this.values = values;
+                this.keys = keys;
+            }
+
+            public void ValueChanged(ITable source, string key, object value, bool isNew)
+            {
+                if (key.Equals(SAVE_FIELD))
+                {
+                    if ((bool) value)
+                    {
+                        pref.Save();
+                    }
+                }
+                else
+                {
+                    lock (m_lockObject)
+                    {
+                        if (!ImproperPreferenceKeyException.IsAcceptable(key) || value.ToString().IndexOf('"') != -1)
+                        {
+                            if (values.ContainsKey(key) || keys.Contains(key))
+                            {
+                                values.Remove(key);
+                                keys.Remove(key);
+                                NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
+                            }
+                        }
+                        else
+                        {
+                            if (!values.ContainsKey(key))
+                            {
+                                values.Add(key, value.ToString());
+                                keys.Add(key);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         internal class EndOfStreamException : Exception
         {

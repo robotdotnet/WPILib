@@ -32,8 +32,9 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkTablesDotNet">
-      <HintPath>..\packages\NetworkTablesDotNet.0.1.0\lib\net40\NetworkTablesDotNet.dll</HintPath>
+    <Reference Include="NetworkTablesDotNet, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NetworkTablesDotNet.0.1.1\lib\net40\NetworkTablesDotNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -109,6 +110,7 @@
     <Compile Include="SampleRobot.cs" />
     <Compile Include="Sendable.cs" />
     <Compile Include="Servo.cs" />
+    <Compile Include="smartdashboard\SmartDashboard.cs" />
     <Compile Include="Solenoid.cs" />
     <Compile Include="SolenoidBase.cs" />
     <Compile Include="SPI.cs" />
@@ -135,7 +137,6 @@
   <ItemGroup>
     <Folder Include="CAN\" />
     <Folder Include="Communication\" />
-    <Folder Include="SmartDashboard\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
