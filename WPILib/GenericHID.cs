@@ -1,4 +1,4 @@
-﻿namespace WPILib.Interfaces
+﻿namespace WPILib
 {
     public enum Hand
     {

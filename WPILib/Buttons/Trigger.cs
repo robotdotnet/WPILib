@@ -11,7 +11,7 @@ namespace WPILib.Buttons
     {
         public abstract bool Get();
 
-        private bool Grab()
+        public bool Grab()
         {
             return Get() || (table != null && table.GetBoolean("pressed", false));
             //return Get(); // Add table when we have it.
@@ -19,37 +19,31 @@ namespace WPILib.Buttons
 
         public void WhenActive(Command command)
         {
-            
+            PressedButtonScheduler pbs = new PressedButtonScheduler(Grab(), this, command);
+            pbs.Start();
         }
 
         public void WhileActive(Command command)
         {
-            //FigureThisOut
+            HeldButtonScheduler hbs = new HeldButtonScheduler(Grab(), this, command);
+            hbs.Start();
         }
 
         public void WhenInactive(Command command)
         {
-
+            ReleasedButtonScheduler rbs = new ReleasedButtonScheduler(Grab(), this, command);
+            rbs.Start();
         }
 
         public void ToggleWhenActive(Command command)
         {
-
+            ToggleButtonScheduler tbs = new ToggleButtonScheduler(Grab(), this, command);
         }
 
         public void CancelWhenActive(Command command)
         {
-
-        }
-
-        public abstract class ButtonScheduler
-        {
-            public abstract void Execute();
-
-            protected void Start()
-            {
-                Scheduler.GetInstance().AddButton(this);
-            }
+            CancelButtonScheduler cbs = new CancelButtonScheduler(Grab(), this, command);
+            cbs.Start();
         }
 
         public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
@@ -72,5 +66,6 @@ namespace WPILib.Buttons
         }
 
         private ITable table;
+
     }
 }

@@ -52,6 +52,10 @@
     <Compile Include="AnalogTriggerOutput.cs" />
     <Compile Include="BuiltInAccelerometer.cs" />
     <Compile Include="Buttons\Button.cs" />
+    <Compile Include="Buttons\ButtonSchedulers.cs" />
+    <Compile Include="Buttons\InternalButton.cs" />
+    <Compile Include="Buttons\JoystickButton.cs" />
+    <Compile Include="Buttons\NetworkButton.cs" />
     <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANTalon.cs" />
     <Compile Include="command\Command.cs" />

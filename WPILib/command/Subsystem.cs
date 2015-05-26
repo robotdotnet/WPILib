@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
@@ -65,13 +66,13 @@ namespace WPILib.Commands
             return defaultCommand;
         }
 
-        void SetCurrentCommand(Command command)
+        internal void SetCurrentCommand(Command command)
         {
             currentCommand = command;
             currentCommandChanged = true;
         }
 
-        void ConfirmCommand()
+        internal void ConfirmCommand()
         {
             if (currentCommandChanged)
             {
@@ -90,19 +91,42 @@ namespace WPILib.Commands
             return name;
         }
 
+        private ITable table;
+
         public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
         {
-            throw new NotImplementedException();
+            this.table = subtable;
+            if (table != null)
+            {
+                if (defaultCommand != null)
+                {
+                    table.PutBoolean("hasDefault", true);
+                    table.PutString("default", defaultCommand.GetName());
+                }
+                else
+                {
+                    table.PutBoolean("hasDefault", false);
+                }
+                if (currentCommand != null)
+                {
+                    table.PutBoolean("hasCommand", true);
+                    table.PutString("command", currentCommand.GetName());
+                }
+                else
+                {
+                    table.PutBoolean("hasCommand", false);
+                }
+            }
         }
 
         public NetworkTablesDotNet.Tables.ITable GetTable()
         {
-            throw new NotImplementedException();
+            return table;
         }
 
         public string GetSmartDashboardType()
         {
-            throw new NotImplementedException();
+            return "Subsystem";
         }
     }
 }

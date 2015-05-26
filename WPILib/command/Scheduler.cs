@@ -6,6 +6,7 @@ using System.Text;
 using System.Runtime.CompilerServices;
 using HAL_Base;
 using WPILib.Buttons;
+using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
@@ -103,7 +104,7 @@ namespace WPILib.Commands
 
         }
 
-        public void AddButton(Button.ButtonScheduler button)
+        public void AddButton(ButtonScheduler button)
         {
             if (buttons == null)
             {
@@ -115,22 +116,32 @@ namespace WPILib.Commands
 
         public string GetName()
         {
-            throw new NotImplementedException();
+            return "Scheduler";
         }
 
+        public new string GetType()
+        {
+            return "Scheduler";
+        }
+
+        private List<string> commands;
+        private List<int> ids;
+        private List<int> toCancel;
+
+
+        public ITable table;
         public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
         {
-            throw new NotImplementedException();
+            table = subtable;
         }
 
         public NetworkTablesDotNet.Tables.ITable GetTable()
         {
-            throw new NotImplementedException();
         }
 
         public string GetSmartDashboardType()
         {
-            throw new NotImplementedException();
+            return "Scheduler";
         }
     }
 }
