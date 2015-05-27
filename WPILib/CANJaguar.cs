@@ -10,9 +10,9 @@ using WPILib.Util;
 
 namespace WPILib
 {
-    public class CANJaguar : MotorSafety, SpeedController, LiveWindowSendable
+    public class CANJaguar : MotorSafety, SpeedController, ITableListener, LiveWindowSendable
     {
-        public static int kMaxMessageDetaSize = 8;
+        public static int kMaxMessageDataSize = 8;
 
         public static int kControllerRate = 1000;
         public static double kApproxBusVoltage = 12.0;
@@ -231,7 +231,7 @@ namespace WPILib
 
         private void SetSpeedReference(int reference)
         {
-            SendMessage(HALCAN.LM_API_SPD_REF, new byte[] {(byte) reference}, 1);
+            SendMessage(HALCAN.LM_API_SPD_REF, new byte[] { (byte)reference }, 1);
             m_speedReference = reference;
             m_speedRefVerified = false;
         }
@@ -424,7 +424,7 @@ namespace WPILib
                 try
                 {
                     GetMessage(HALCAN.LM_API_STATUS_CMODE, HALCAN.CAN_MSGID_FULL_M, data);
-                    ControlMode mode = (ControlMode) data[0];
+                    ControlMode mode = (ControlMode)data[0];
 
                     if (m_controlMode == mode)
                     {
@@ -898,8 +898,268 @@ namespace WPILib
             }
         }
 
-        
-        
+        private static void SendMessageHelper(int messageID, byte[] data, int dataSize, int period)
+        {
+            int[] kTrustedMessages = {
+				HALCAN.LM_API_VOLT_T_EN, HALCAN.LM_API_VOLT_T_SET, HALCAN.LM_API_SPD_T_EN, HALCAN.LM_API_SPD_T_SET,
+				HALCAN.LM_API_VCOMP_T_EN, HALCAN.LM_API_VCOMP_T_SET, HALCAN.LM_API_POS_T_EN, HALCAN.LM_API_POS_T_SET,
+				HALCAN.LM_API_ICTRL_T_EN, HALCAN.LM_API_ICTRL_T_SET
+		    };
+            int status = 0;
+
+            for (byte i = 0; i < kTrustedMessages.Length; i++)
+            {
+                if ((kFullMessageIDMask & messageID) == kTrustedMessages[i])
+                {
+                    if (dataSize > kMaxMessageDataSize - 2)
+                    {
+                        throw new SystemException("CAN message has too much data.");
+                    }
+
+                    byte[] trustedData = new byte[dataSize + 2];
+                    trustedData[0] = 0;
+                    trustedData[1] = 0;
+                    for (byte j = 0; j < dataSize; j++)
+                    {
+                        trustedData[j + 2] = data[j];
+                    }
+
+                    HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, trustedData, (byte)(dataSize + 2), period, ref status);
+                    if (status < 0)
+                    {
+                        CANExceptionFactory.CheckStatus(status, messageID);
+                    }
+
+                    return;
+                }
+            }
+
+            HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, data, (byte)dataSize, period, ref status);
+
+            if (status < 0)
+            {
+                CANExceptionFactory.CheckStatus(status, messageID);
+            }
+
+
+        }
+
+        protected void SendMessage(int messageID, byte[] data, int dataSize, int period)
+        {
+            SendMessageHelper(messageID | m_deviceNumber, data, dataSize, period);
+        }
+
+        protected void SendMessage(int messageID, byte[] data, int dataSize)
+        {
+            SendMessage(messageID, data, dataSize, HALCAN.CAN_SEND_PERIOD_NO_REPEAT);
+        }
+
+        protected void RequestMessage(int messageID, int period)
+        {
+            SendMessageHelper(messageID | m_deviceNumber, null, 0, period);
+        }
+
+        protected void RequestMessage(int messageID)
+        {
+            RequestMessage(messageID, HALCAN.CAN_SEND_PERIOD_NO_REPEAT);
+        }
+
+        protected bool GetMessage(int messageID, int messageMask, byte[] data)
+        {
+            uint messageIDU = (uint)messageID;
+            messageIDU |= m_deviceNumber;
+            messageIDU &= (uint)HALCAN.CAN_MSGID_FULL_M;
+            byte dataSize = 0;
+            uint timeStamp = 0;
+            int status = 0;
+
+            HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage(ref messageIDU, (uint)messageMask, data, ref dataSize, ref timeStamp, ref status);
+
+            if (status == CANExceptionFactory.ERR_CANSessionMux_MessageNotFound)
+            {
+                return false;
+            }
+            else
+            {
+                Utility.CheckStatus(status);
+            }
+
+            return true;
+
+        }
+
+        protected void SetupPeriodicStatus()
+        {
+            byte[] data = new byte[8];
+            int dataSize;
+
+            byte[] kMessage0Data = new byte[] {
+			(byte)HALCAN.LM_PSTAT_VOLTBUS_B0, (byte)HALCAN.LM_PSTAT_VOLTBUS_B1,
+			(byte)HALCAN.LM_PSTAT_VOLTOUT_B0, (byte)HALCAN.LM_PSTAT_VOLTOUT_B1,
+			(byte)HALCAN.LM_PSTAT_CURRENT_B0, (byte)HALCAN.LM_PSTAT_CURRENT_B1,
+			(byte)HALCAN.LM_PSTAT_TEMP_B0, (byte)HALCAN.LM_PSTAT_TEMP_B1
+		    };
+
+            byte[] kMessage1Data = new byte[] {
+			(byte)HALCAN.LM_PSTAT_POS_B0, (byte)HALCAN.LM_PSTAT_POS_B1, (byte)HALCAN.LM_PSTAT_POS_B2, (byte)HALCAN.LM_PSTAT_POS_B3,
+			(byte)HALCAN.LM_PSTAT_SPD_B0, (byte)HALCAN.LM_PSTAT_SPD_B1, (byte)HALCAN.LM_PSTAT_SPD_B2, (byte)HALCAN.LM_PSTAT_SPD_B3
+		};
+
+            byte[] kMessage2Data = new byte[] {
+			(byte)HALCAN.LM_PSTAT_LIMIT_CLR,
+			(byte)HALCAN.LM_PSTAT_FAULT,
+			(byte)HALCAN.LM_PSTAT_END,
+			(byte)0,
+			(byte)0,
+			(byte)0,
+			(byte)0,
+			(byte)0,
+		};
+
+            dataSize = PackINT16(data, (short)(kSendMessagePeriod));
+            SendMessage(HALCAN.LM_API_PSTAT_PER_EN_S0, data, dataSize);
+            SendMessage(HALCAN.LM_API_PSTAT_PER_EN_S1, data, dataSize);
+            SendMessage(HALCAN.LM_API_PSTAT_PER_EN_S2, data, dataSize);
+
+            dataSize = 8;
+            SendMessage(HALCAN.LM_API_PSTAT_CFG_S0, kMessage0Data, dataSize);
+            SendMessage(HALCAN.LM_API_PSTAT_CFG_S1, kMessage1Data, dataSize);
+            SendMessage(HALCAN.LM_API_PSTAT_CFG_S2, kMessage2Data, dataSize);
+        }
+
+        protected void UpdatePeriodicStatus()
+        {
+            byte[] data = new byte[8];
+            int dataSize;
+
+            // Check if a new bus voltage/output voltage/current/temperature message
+            // has arrived and unpack the values into the cached member variables
+            try
+            {
+                GetMessage(HALCAN.LM_API_PSTAT_DATA_S0, HALCAN.CAN_MSGID_FULL_M, data);
+
+                m_busVoltage = UnpackFXP8_8(new byte[] { data[0], data[1] });
+                m_outputVoltage = UnpackPercentage(new byte[] { data[2], data[3] }) * m_busVoltage;
+                m_outputCurrent = UnpackFXP8_8(new byte[] { data[4], data[5] });
+                m_temperature = UnpackFXP8_8(new byte[] { data[6], data[7] });
+
+                m_receivedStatusMessage0 = true;
+            }
+            catch (CANMessageNotFoundException e) { }
+
+            // Check if a new position/speed message has arrived and do the same
+            try
+            {
+                GetMessage(HALCAN.LM_API_PSTAT_DATA_S1, HALCAN.CAN_MSGID_FULL_M, data);
+
+                m_position = UnpackFXP16_16(new byte[] { data[0], data[1], data[2], data[3] });
+                m_speed = UnpackFXP16_16(new byte[] { data[4], data[5], data[6], data[7] });
+
+                m_receivedStatusMessage1 = true;
+            }
+            catch (CANMessageNotFoundException e) { }
+
+            // Check if a new limits/faults message has arrived and do the same
+            try
+            {
+                GetMessage(HALCAN.LM_API_PSTAT_DATA_S2, HALCAN.CAN_MSGID_FULL_M, data);
+                m_limits = data[0];
+                m_faults = data[1];
+
+                m_receivedStatusMessage2 = true;
+            }
+            catch (CANMessageNotFoundException e) { }
+        }
+
+        public static void UpdateSyncGroup(byte syncGroup)
+        {
+            byte[] data = new byte[8];
+
+            data[0] = syncGroup;
+
+            SendMessageHelper(HALCAN.CAN_MSGID_API_SYNC, data, 1, HALCAN.CAN_SEND_PERIOD_NO_REPEAT);
+        }
+
+        private static void Swap16(int x, byte[] buffer) {
+		buffer[0] = (byte)(x & 0xff);
+		buffer[1] = (byte)((x>>8) & 0xff);
+	}
+
+	private static void Swap32(int x, byte[] buffer) {
+		buffer[0] = (byte)(x & 0xff);
+		buffer[1] = (byte)((x>>8) & 0xff);
+		buffer[2] = (byte)((x>>16) & 0xff);
+		buffer[3] = (byte)((x>>24) & 0xff);
+	}
+
+	private static byte PackPercentage(byte[] buffer, double value) {
+		if(value < -1.0) value = -1.0;
+		if(value > 1.0) value = 1.0;
+		short intValue = (short) (value * 32767.0);
+		Swap16(intValue, buffer);
+		return 2;
+	}
+
+	private static byte PackFXP8_8(byte[] buffer, double value) {
+		short intValue = (short) (value * 256.0);
+		Swap16(intValue, buffer);
+		return 2;
+	}
+
+	private static byte PackFXP16_16(byte[] buffer, double value) {
+		int intValue = (int) (value * 65536.0);
+		Swap32(intValue, buffer);
+		return 4;
+	}
+
+	private static byte PackINT16(byte[] buffer, short value) {
+		Swap16(value, buffer);
+		return 2;
+	}
+
+	private static byte PackINT32(byte[] buffer, int value) {
+		Swap32(value, buffer);
+		return 4;
+	}
+
+        private static short Unpack16(byte[] buffer, int offset) {
+		return (short) ((buffer[offset] & 0xFF) | (short) ((buffer[offset + 1] << 8)) & 0xFF00);
+	}
+
+        private static int Unpack32(byte[] buffer, int offset) {
+		return (buffer[offset] & 0xFF) | ((buffer[offset + 1] << 8) & 0xFF00) |
+			((buffer[offset + 2] << 16) & 0xFF0000) | (int)((buffer[offset + 3] << 24) & 0xFF000000);
+	}
+
+	private static double UnpackPercentage(byte[] buffer) {
+		return Unpack16(buffer,0) / 32767.0;
+	}
+
+	private static double UnpackFXP8_8(byte[] buffer) {
+		return Unpack16(buffer,0) / 256.0;
+	}
+
+	private static double UnpackFXP16_16(byte[] buffer) {
+		return Unpack32(buffer,0) / 65536.0;
+	}
+
+	private static short UnpackINT16(byte[] buffer) {
+		return Unpack16(buffer,0);
+	}
+
+	private static int UnpackINT32(byte[] buffer) {
+		return Unpack32(buffer,0);
+	}
+
+	/* Compare floats for equality as fixed point numbers */
+	public bool FXP8_EQ(double a, double b) {
+		return (int)(a * 256.0) == (int)(b * 256.0);
+	}
+
+	/* Compare floats for equality as fixed point numbers */
+	public bool FXP16_EQ(double a, double b) {
+		return (int)(a * 65536.0) == (int)(b * 65536.0);
+	}
 
         public void Set(double speed)
         {
@@ -914,32 +1174,45 @@ namespace WPILib
 
         public void InitTable(ITable subtable)
         {
-            throw new NotImplementedException();
+            m_table = subtable;
+            UpdateTable();
         }
 
+
+        private ITable m_table = null;
         public ITable GetTable()
         {
-            throw new NotImplementedException();
+            return m_table;
         }
 
         public string GetSmartDashboardType()
         {
-            throw new NotImplementedException();
+            return "Speed Controller";
         }
 
         public void UpdateTable()
         {
-            throw new NotImplementedException();
+            if (m_table != null)
+            {
+                m_table.PutNumber("Value", Get());
+            }
         }
 
         public void StartLiveWindowMode()
         {
-            throw new NotImplementedException();
+            Set(0.0);
+            m_table.AddTableListener("Value", this, true);
+        }
+
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            Set((double)value);
         }
 
         public void StopLiveWindowMode()
         {
-            throw new NotImplementedException();
+            Set(0.0);
+            m_table.RemoveTableListener(this);
         }
     }
 }
