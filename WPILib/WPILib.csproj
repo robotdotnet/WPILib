@@ -60,6 +60,8 @@
     <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANJaguar.cs" />
     <Compile Include="CANTalon.cs" />
+    <Compile Include="CAN\CANExceptionFactory.cs" />
+    <Compile Include="CAN\Exceptions.cs" />
     <Compile Include="command\Command.cs" />
     <Compile Include="command\CommandGroup.cs" />
     <Compile Include="command\IllegalUseOfCommandException.cs" />
@@ -136,7 +138,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CAN\" />
     <Folder Include="Communication\" />
   </ItemGroup>
   <ItemGroup>

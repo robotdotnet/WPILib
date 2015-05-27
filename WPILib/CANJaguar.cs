@@ -7,6 +7,7 @@ using WPILib.livewindow;
 using WPILib.Interfaces;
 using HAL_Base;
 using WPILib.Util;
+using WPILib.CAN;
 
 namespace WPILib
 {
@@ -927,7 +928,7 @@ namespace WPILib
                     HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, trustedData, (byte)(dataSize + 2), period, ref status);
                     if (status < 0)
                     {
-                        CANExceptionFactory.CheckStatus(status, messageID);
+                        Utility.CheckStatus(status);
                     }
 
                     return;
@@ -938,7 +939,7 @@ namespace WPILib
 
             if (status < 0)
             {
-                CANExceptionFactory.CheckStatus(status, messageID);
+                Utility.CheckStatus(status);
             }
 
 
