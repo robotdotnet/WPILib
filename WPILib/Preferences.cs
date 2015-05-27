@@ -11,7 +11,7 @@ using NetworkTablesDotNet.Tables;
 
 namespace WPILib
 {
-    public class Preferences
+    public class Preferences : ITableListener
     {
         private static string TABLE_NAME = "Preferences";
         private static string SAVE_FIELD = "~S A V E~";
@@ -502,57 +502,39 @@ namespace WPILib
             //NetworkTable.GetTable(TABLE_NAME).AddTableListener(listener);//Figure this out
         }
 
-        internal class TableListener : ITableListener
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
-
-            private Preferences pref;
-            private object m_lockObject;
-            private Dictionary<string, string> values;
-            private List<string> keys;
-
-            internal TableListener(Preferences pref, ref object lockObject, ref Dictionary<string, string> values, ref List<string> keys)
+            if (key.Equals(SAVE_FIELD))
             {
-                this.pref = pref;
-                m_lockObject = lockObject;
-                this.values = values;
-                this.keys = keys;
-            }
-
-            public void ValueChanged(ITable source, string key, object value, bool isNew)
-            {
-                if (key.Equals(SAVE_FIELD))
+                if ((bool)value)
                 {
-                    if ((bool) value)
-                    {
-                        pref.Save();
-                    }
+                    Save();
                 }
-                else
+            }
+            else
+            {
+                lock (m_lockObject)
                 {
-                    lock (m_lockObject)
+                    if (!ImproperPreferenceKeyException.IsAcceptable(key) || value.ToString().IndexOf('"') != -1)
                     {
-                        if (!ImproperPreferenceKeyException.IsAcceptable(key) || value.ToString().IndexOf('"') != -1)
+                        if (values.ContainsKey(key) || keys.Contains(key))
                         {
-                            if (values.ContainsKey(key) || keys.Contains(key))
-                            {
-                                values.Remove(key);
-                                keys.Remove(key);
-                                //NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
-                            }
+                            values.Remove(key);
+                            keys.Remove(key);
+                            //NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (!values.ContainsKey(key))
                         {
-                            if (!values.ContainsKey(key))
-                            {
-                                values.Add(key, value.ToString());
-                                keys.Add(key);
-                            }
+                            values.Add(key, value.ToString());
+                            keys.Add(key);
                         }
                     }
                 }
             }
         }
-
 
         internal class EndOfStreamException : Exception
         {
@@ -663,6 +645,5 @@ namespace WPILib
                 }
             }
         }
-
     }
 }
