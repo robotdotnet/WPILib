@@ -58,6 +58,7 @@
     <Compile Include="Buttons\JoystickButton.cs" />
     <Compile Include="Buttons\NetworkButton.cs" />
     <Compile Include="Buttons\Trigger.cs" />
+    <Compile Include="CANJaguar.cs" />
     <Compile Include="CANTalon.cs" />
     <Compile Include="command\Command.cs" />
     <Compile Include="command\CommandGroup.cs" />

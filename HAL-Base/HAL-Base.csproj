@@ -62,6 +62,7 @@
     <Compile Include="HAL.cs" />
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />
+    <Compile Include="HALCAN.cs" />
     <Compile Include="HALCANTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />
