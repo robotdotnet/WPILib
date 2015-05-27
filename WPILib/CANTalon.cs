@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using WPILib.Interfaces;
 using HAL_Base;
+using WPILib.livewindow;
+using NetworkTablesDotNet.Tables;
 
 namespace WPILib
 {
     using Impl = HAL_Base.HALCanTalonSRX;
-    public class CANTalon : MotorSafety, PIDOutput, SpeedController, IDisposable
+    public class CANTalon : MotorSafety, PIDOutput, SpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper safetyHelper;
 
@@ -964,6 +966,48 @@ namespace WPILib
         public void Disable()
         {
             ControlEnabled = false;
+        }
+
+        private ITable m_table;
+        public void UpdateTable()
+        {
+            if (m_table != null)
+            {
+                m_table.PutNumber("Value", Get());
+            }
+        }
+
+        public void StartLiveWindowMode()
+        {
+            Set(0.0);
+            m_table.AddTableListener("Value", this, true);
+        }
+
+        public void StopLiveWindowMode()
+        {
+            Set(0.0);
+            m_table.RemoveTableListener(this);
+        }
+
+        public string GetSmartDashboardType()
+        {
+            return "Speed Controller";
+        }
+
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            Set((double)value);
+        }
+
+        public void InitTable(ITable subtable)
+        {
+            m_table = subtable;
+            UpdateTable();
+        }
+
+        public ITable GetTable()
+        {
+            return m_table;
         }
     }
 }
