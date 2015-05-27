@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Generated\HALAccelerometerGenerated.cs" />
     <Compile Include="Generated\HALAnalogGenerated.cs" />
+    <Compile Include="Generated\HALCANGenerated.cs" />
     <Compile Include="Generated\HALCanTalonSRXGenerated.cs" />
     <Compile Include="Generated\HALCompressorGenerated.cs" />
     <Compile Include="Generated\HALDigitalGenerated.cs" />

@@ -10,7 +10,7 @@ using System.Text;
 namespace HAL_Base
 {
 
-#region HAL
+    #region HAL
     /// <summary>
     /// 
     /// </summary>
@@ -332,9 +332,9 @@ namespace HAL_Base
         }
     }
 
-#endregion
+    #endregion
 
-#region Accelerometer
+    #region Accelerometer
 
     public enum AccelerometerRange
     {
@@ -348,9 +348,9 @@ namespace HAL_Base
         Range_8G = 2,
     }
 
-#endregion 
+    #endregion
 
-#region Analog
+    #region Analog
     public enum AnalogTriggerType
     {
         /// kInWindow -> 0
@@ -365,9 +365,9 @@ namespace HAL_Base
         /// kFallingPulse -> 3
         FallingPulse = 3,
     }
-#endregion
+    #endregion
 
-#region CANTalonSRX
+    #region CANTalonSRX
     public enum CTR_Code
     {
         CTR_OKAY,
@@ -384,9 +384,9 @@ namespace HAL_Base
 
         CTR_SigNotUpdated,
     }
-#endregion
+    #endregion
 
-#region Digital
+    #region Digital
     public enum Mode
     {
         /// kTwoPulse -> 0
@@ -401,5 +401,92 @@ namespace HAL_Base
         /// kExternalDirection -> 3
         ExternalDirection = 3,
     }
-#endregion
+    #endregion
+
+    #region CAN
+
+    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    public struct CANStreamMessage
+    {
+        public uint messageID;
+        public uint timeStamp;
+        public CANDataArray data;
+        public byte dataSize;
+    }
+
+    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    public struct CANDataArray
+    {
+        private byte data0;
+        private byte data1;
+        private byte data2;
+        private byte data3;
+        private byte data4;
+        private byte data5;
+        private byte data6;
+        private byte data7;
+
+        public byte this[int i]
+        {
+            get
+            {
+                switch (i)
+                {
+                    case 0:
+                        return data0;
+                    case 1:
+                        return data1;
+                    case 2:
+                        return data2;
+                    case 3:
+                        return data3;
+                    case 4:
+                        return data4;
+                    case 5:
+                        return data5;
+                    case 6:
+                        return data6;
+                    case 7:
+                        return data7;
+                    default:
+                        throw new IndexOutOfRangeException();
+                }
+            }
+            set
+            {
+                switch (i)
+                {
+                    case 0:
+                        data0 = value;
+                        return;
+                    case 1:
+                        data1 = value;
+                        return;
+                    case 2:
+                        data2 = value;
+                        return;
+                    case 3:
+                        data3 = value;
+                        return;
+                    case 4:
+                        data4 = value;
+                        return;
+                    case 5:
+                        data5 = value;
+                        return;
+                    case 6:
+                        data6 = value;
+                        return;
+                    case 7:
+                        data7 = value;
+                        return;
+                    default:
+                        throw new IndexOutOfRangeException();
+                }
+            }
+        }
+    }
+
+
+    #endregion
 }
