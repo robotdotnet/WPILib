@@ -250,7 +250,7 @@ namespace WPILib.Commands
                 {
                     throw new IllegalUseOfCommandException("Can not start a command that is a part of a command group");
                 }
-                //Sheduler Add 
+                Scheduler.GetInstance().AddCommand(this);
             }
         }
 
@@ -261,8 +261,8 @@ namespace WPILib.Commands
 
                 m_running = true;
                 m_startTime = -1;
-
-                //TAdd Table 
+                if (m_table != null)
+                    m_table.PutBoolean("running", true);
             }
         }
 

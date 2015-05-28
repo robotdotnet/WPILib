@@ -20,13 +20,13 @@ namespace WPILib.Commands
         public Subsystem(string name)
         {
             this.name = name;
-            //Scheduler
+            Scheduler.GetInstance().RegisterSubsystem(this);
         }
 
         public Subsystem()
         {
             this.name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
-            //Scheduler
+            Scheduler.GetInstance().RegisterSubsystem(this);
             currentCommandChanged = true;
         }
 
