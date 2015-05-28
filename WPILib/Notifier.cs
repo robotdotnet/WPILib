@@ -17,17 +17,10 @@ namespace WPILib
         static private int s_refCount = 0;
         static private object s_queueSemaphore = new object();
 
-        private static IntPtr s_notifier;// = IntPtr.Zero;
+        private static IntPtr s_notifier;
         public double m_expirationTime = 0;
 
-        //public static void s_notifier_process_queue(uint param0, IntPtr param1)
-        //{
-            //Notifier.ProcessQueue((int)param0);
-        //}
-
         private NotifierDelegate _delegate;
-        //private IntPtr notifierDelegate;
-        //private NotifierDelegate notDel;
 
         private object m_param;
         private TimerEventHandlerDelegate m_handler;
@@ -36,17 +29,6 @@ namespace WPILib
         private bool m_queued = false;
         private Notifier m_nextEvent;
         private IntPtr m_handlerSemaphore;
-
-
-        //private Semaphore m_handlerSemaphore = new Semaphore(1, 1);
-
-        //private GCHandle handle;
-
-        //private IntPtr delegatePointer;
-
-        //public IntPtr m_handlerSemaphore;
-
-
 
         public Notifier(TimerEventHandlerDelegate handler, object param)
         {
@@ -57,13 +39,6 @@ namespace WPILib
 
             _delegate = ProcessQueue;
 
-            //handle = GCHandle.Alloc(_delegate, GCHandleType.Pinned);
-
-            //delegatePointer = GCHandle.ToIntPtr(handle);
-
-            //notDel = s_notifier_process_queue;
-            //notifierDelegate = Marshal.GetFunctionPointerForDelegate(notDel);
-            //m_handlerSemaphore = HALSemaphore.initializeSemaphore(1);
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
@@ -90,7 +65,6 @@ namespace WPILib
 
         public static void UpdateAlarm()
         {
-            //Console.WriteLine("Updating Alarm");
             if (s_timerQueueHead != null)
             {
                 int status = 0;
@@ -100,7 +74,6 @@ namespace WPILib
 
         public void InsertInQueue(bool reschedule)
         {
-            //Console.WriteLine("Running Insert In Queue");
             if (reschedule)
             {
                 m_expirationTime += m_period;
@@ -145,7 +118,6 @@ namespace WPILib
 
         public void DeleteFromQueue()
         {
-            //Console.WriteLine("Running Delete From Queue");
             if (m_queued)
             {
                 m_queued = false;
@@ -171,7 +143,6 @@ namespace WPILib
 
         public void StartSingle(double delay)
         {
-            //Console.WriteLine("Running Start Single");
             lock (s_queueSemaphore)
             {
                 m_periodic = false;
@@ -183,7 +154,6 @@ namespace WPILib
 
         public void StartPeriodic(double period)
         {
-            //Console.WriteLine("Running Started Periodic");
             lock (s_queueSemaphore)
             {
                 m_periodic = true;
@@ -195,7 +165,6 @@ namespace WPILib
 
         public void Stop()
         {
-            //Console.WriteLine("Running Stop");
             lock (s_queueSemaphore)
             {
                 DeleteFromQueue();
@@ -237,17 +206,13 @@ namespace WPILib
                     }
                     HALSemaphore.TakeSemaphore(current.m_handlerSemaphore);
                 }
-                current.m_handler(current.m_param);//.Update(current.m_param);
+                current.m_handler(current.m_param);
                 HALSemaphore.GiveSemaphore(current.m_handlerSemaphore);
-                //HALSemaphore.giveSemaphore(current.m_handlerSemaphore);
-                //current.m_handlerSemaphore.Release();
             }
-            //Console.WriteLine("Finished Loop Aquiring Semaphore");
             lock (s_queueSemaphore)
             {
                 UpdateAlarm();
             }
-            //Console.WriteLine("Finished loop gave back semaphore");
         }
     }
 }
