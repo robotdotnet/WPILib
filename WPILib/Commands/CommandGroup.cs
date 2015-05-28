@@ -10,9 +10,7 @@ namespace WPILib.Commands
     public class CommandGroup : Command
     {
         private List<Entry> m_commands = new List<Entry>();
-        private List<Entry> m_children = new List<Entry>();
-        //private Hashtable m_commands = new Hashtable();
-        //private List<?> m_children = new List<?>();
+        internal List<Entry> m_children = new List<Entry>();
 
         private int m_currentCommandIndex = -1;
         private object syncRoot = new object();
@@ -207,14 +205,14 @@ namespace WPILib.Commands
             return m_currentCommandIndex >= m_commands.Count && m_children.Count == 0;
         }
 
-        protected override void Initialize()
-        {
-            
-        }
 
         protected override void Execute()
         {
             
+        }
+
+        protected override void Initialize()
+        {
         }
 
         protected override void End()
@@ -280,7 +278,7 @@ namespace WPILib.Commands
 
 
 
-        private class Entry
+        internal class Entry
         {
             internal const int IN_SEQUENCE = 0;
             internal const int BRANCH_PEER = 1;

@@ -30,7 +30,7 @@ namespace WPILib.Commands
             currentCommandChanged = true;
         }
 
-        protected abstract void InitDefualtCommand();
+        protected abstract void InitDefaultCommand();
 
         protected void SetDefaultCommand(Command command)
         {
@@ -56,12 +56,12 @@ namespace WPILib.Commands
             }
         }
 
-        protected Command GetDefaultCommand()
+        internal Command GetDefaultCommand()
         {
             if (!initializedDefaultCommand)
             {
                 initializedDefaultCommand = true;
-                InitDefualtCommand();
+                InitDefaultCommand();
             }
             return defaultCommand;
         }

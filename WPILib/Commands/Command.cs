@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
-    public abstract class Command : NamedSendable
+    public abstract class Command : NamedSendable, ITableListener
     {
         private string m_name;
 
@@ -33,7 +34,7 @@ namespace WPILib.Commands
         public Command(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("NAme must not be null.");
+                throw new ArgumentNullException("Name must not be null.");
             m_name = name;
         }
 
@@ -348,6 +349,7 @@ namespace WPILib.Commands
             return m_runWhenDisabled;
         }
 
+        private ITable m_table;
         public override string ToString()
         {
             return this.GetName();
@@ -355,17 +357,38 @@ namespace WPILib.Commands
 
         public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
         {
-            throw new NotImplementedException();
+            if (this.m_table != null)
+                this.m_table.RemoveTableListener(this);
+            this.m_table = subtable;
+            if (m_table != null)
+            {
+                m_table.PutString("name", GetName());
+                m_table.PutBoolean("running", IsRunning());
+                m_table.PutBoolean("isParented", m_parent != null);
+                m_table.AddTableListener("running", this, false);
+            }
         }
 
         public NetworkTablesDotNet.Tables.ITable GetTable()
         {
-            throw new NotImplementedException();
+            return m_table;
         }
 
         public string GetSmartDashboardType()
         {
-            throw new NotImplementedException();
+            return "Command";
+        }
+
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            if ((bool) value)
+            {
+                Start();
+            }
+            else
+            {
+                Cancel();
+            }
         }
     }
 }
