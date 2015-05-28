@@ -111,7 +111,7 @@ namespace WPILib
         }
 
         private static RobotBase robot;
-        public static void main(System.Reflection.Assembly robotAssembly)//, string robotName)
+        public static void Main(Assembly robotAssembly)
         {
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {
