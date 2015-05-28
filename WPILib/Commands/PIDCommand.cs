@@ -47,19 +47,19 @@ namespace WPILib.Commands
             return controller;
         }
 
-        protected void _initialize()
+        protected new virtual void _Initialize()
         {
             controller.Enable();
         }
 
-        protected void _end()
+        protected new virtual void _End()
         {
             controller.Disable();
         }
 
-        protected void _interrupted()
+        protected new virtual void _Interrupted()
         {
-            _end();
+            _End();
         }
 
         public void SetSetpointRelative(double deltaSetpoint)

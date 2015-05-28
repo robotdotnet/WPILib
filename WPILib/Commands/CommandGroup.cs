@@ -10,7 +10,7 @@ namespace WPILib.Commands
     public class CommandGroup : Command
     {
         private List<Entry> m_commands = new List<Entry>();
-        internal List<Entry> m_children = new List<Entry>();
+        internal LinkedList<Entry> m_children = new LinkedList<Entry>();
 
         private int m_currentCommandIndex = -1;
         private object syncRoot = new object();
@@ -96,12 +96,12 @@ namespace WPILib.Commands
             }
         }
 
-        void _Initialize()
+        protected new virtual void _Initialize()
         {
             m_currentCommandIndex = -1;
         }
 
-        void _Execute()
+        protected new virtual void _Execute()
         {
             Entry entry = null;
             Command cmd = null;
@@ -156,28 +156,35 @@ namespace WPILib.Commands
                         m_currentCommandIndex++;
                         CancelConflicts(entry.command);
                         entry.command.StartRunning();
-                        m_children.Add(entry);
+                        m_children.AddLast(entry);
                         break;
                 }
             }
+            var iter = m_children.First;
 
-            for (int i = 0; i < m_children.Count; i++)
+            for (; iter != m_children.Last;)
             {
-                entry = m_children[i];
+                entry = iter.Value;
                 Command child = entry.command;
                 if (entry.IsTimedOut())
-                    child._Cancel();
+                {
+                    child.Cancel();
+                }
                 if (!child.Run())
                 {
                     child.Removed();
-                    m_children.RemoveAt(i--);
+                    var iterTemp = iter.Next;
+                    m_children.Remove(iter);
+                    iter = iterTemp;
+                }
+                else
+                {
+                    iter = iter.Next;
                 }
             }
-
-
         }
 
-        void _End()
+        protected new void _End()
         {
             if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
             {
@@ -195,7 +202,7 @@ namespace WPILib.Commands
             m_children.Clear();
         }
 
-        void _Interrupted()
+        protected new virtual void _Interrupted()
         {
             _End();
         }
@@ -217,12 +224,10 @@ namespace WPILib.Commands
 
         protected override void End()
         {
-            //throw new NotImplementedException();
         }
 
         protected override void Interrupted()
         {
-            //throw new NotImplementedException();
         }
 
         public new bool IsInterruptible()
@@ -244,34 +249,35 @@ namespace WPILib.Commands
                     }
                 }
 
-                for (int i = 0; i < m_children.Count; i++)
-                {
-                    if (!(m_children[i]).command.IsInterruptible())
-                    {
-                        return false;
-                    }
-                }
-
-                return true; 
+                return m_children.All(s => s.command.IsInterruptible());
             }
         }
 
         private void CancelConflicts(Command command)
         {
-            for (int i = 0; i < m_children.Count; i++)
-            {
-                Command child = m_children[i].command;
+            var childIter = m_children.First;
 
-                //Enumeration requirements = command.getRequirements();
+            for (; childIter != m_children.Last;)
+            {
+                Command child = childIter.Value.command;
+                bool erased = false;
+
                 foreach (var s in command.GetRequirements())
                 {
                     if (child.DoesRequire(s))
                     {
                         child._Cancel();
                         child.Removed();
-                        m_children.RemoveAt(i--);
+                        var childTemp = childIter.Next;
+                        m_children.Remove(childIter);
+                        childIter = childTemp;
+                        erased = true;
                         break;
                     }
+                }
+                if (!erased)
+                {
+                    childIter = childIter.Next;
                 }
             }
         }

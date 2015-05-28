@@ -152,14 +152,14 @@ namespace WPILib.Commands
 
         protected abstract void Initialize();
 
-        private void _Initialize()
+        protected virtual void _Initialize()
         {
 
         }
 
         protected abstract void Execute();
 
-        private void _Execute()
+        protected virtual void _Execute()
         {
 
         }
@@ -168,14 +168,14 @@ namespace WPILib.Commands
 
         protected abstract void End();
 
-        private void _End()
+        protected virtual void _End()
         {
 
         }
 
         protected abstract void Interrupted();
 
-        private void _Interrupted()
+        protected virtual void _Interrupted()
         {
 
         }
