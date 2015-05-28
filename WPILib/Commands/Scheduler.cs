@@ -14,8 +14,8 @@ namespace WPILib.Commands
     {
         private static Scheduler s_instance = null;
 
-        private SortedSet<Subsystem> m_subsystems = new SortedSet<Subsystem>();
-        private SortedSet<Command> m_commands = new SortedSet<Command>();
+        private HashSet<Subsystem> m_subsystems = new HashSet<Subsystem>();
+        private HashSet<Command> m_commands = new HashSet<Command>();
         private List<Command> m_additions = new List<Command>();
         private List<ButtonScheduler> m_buttons = new List<ButtonScheduler>();
 
