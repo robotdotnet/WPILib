@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using NetworkTablesDotNet.Tables;
 using WPILib.Interfaces;
+using WPILib.livewindow;
 using WPILib.Util;
 using HAL_Base;
 
 namespace WPILib
 {
 
-    public class PIDController : Controller
+    public class PIDController : Controller, LiveWindowSendable, ITableListener
     {
         public enum ToleranceType
         {
@@ -400,7 +402,78 @@ namespace WPILib
             }
         }
 
+        private ITable m_table;
 
+        public void UpdateTable()
+        {
+        }
+
+        public void StartLiveWindowMode()
+        {
+        }
+
+        public void StopLiveWindowMode()
+        {
+            
+        }
+
+        public void InitTable(ITable subtable)
+        {
+            if (m_table != null)
+            {
+                m_table.RemoveTableListener(this);
+            }
+            m_table = subtable;
+            if (m_table != null)
+            {
+                m_table.PutNumber("p", GetP());
+                m_table.PutNumber("i", GetI());
+                m_table.PutNumber("d", GetD());
+                m_table.PutNumber("f", GetF());
+                m_table.PutNumber("setpoint", GetSetpoint());
+                m_table.PutBoolean("enabled", IsEnable());
+                m_table.AddTableListener(this, false);
+            }
+        }
+
+        public ITable GetTable()
+        {
+            return m_table;
+        }
+
+        public string GetSmartDashboardType()
+        {
+            return "PIDController";
+        }
+
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            if (key == ("p") || key == ("i") || key == ("d") || key == ("f"))
+            {
+                if (GetP() != m_table.GetNumber("p", 0.0) || GetI() != m_table.GetNumber("i", 0.0) ||
+                        GetD() != m_table.GetNumber("d", 0.0) || GetF() != m_table.GetNumber("f", 0.0))
+                    SetPID(m_table.GetNumber("p", 0.0), m_table.GetNumber("i", 0.0), m_table.GetNumber("d", 0.0), m_table.GetNumber("f", 0.0));
+            }
+            else if (key == ("setpoint"))
+            {
+                if (GetSetpoint() != (double)value)
+                    SetSetpoint((double)value);
+            }
+            else if (key == ("enabled"))
+            {
+                if (IsEnable() != (bool)value)
+                {
+                    if ((bool)value)
+                    {
+                        Enable();
+                    }
+                    else
+                    {
+                        Disable();
+                    }
+                }
+            }
+        }
     }
 
 
