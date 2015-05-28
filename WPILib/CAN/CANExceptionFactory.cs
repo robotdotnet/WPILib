@@ -21,7 +21,7 @@ namespace WPILib.CAN
         public const int kRIOStatusFeatureNotSupported = kRioStatusOffset - 193;
         public const int kRIOStatusResourceNotInitialized = -52010;
 
-        public static void checkStatus(int status, int messageID)
+        public static void CheckStatus(int status, int messageID)
         {
             switch (status)
             {

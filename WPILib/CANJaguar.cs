@@ -13,23 +13,37 @@ namespace WPILib
 {
     public class CANJaguar : MotorSafety, SpeedController, ITableListener, LiveWindowSendable
     {
-        public static int kMaxMessageDataSize = 8;
+        public static readonly int kMaxMessageDataSize = 8;
 
-        public static int kControllerRate = 1000;
-        public static double kApproxBusVoltage = 12.0;
+        public static readonly int kControllerRate = 1000;
+        public static readonly double kApproxBusVoltage = 12.0;
 
         private MotorSafetyHelper m_safetyHelper;
-        private static Resource allocated = new Resource(63);
+        private static readonly Resource allocated = new Resource(63);
 
-        private static int kFullMessageIDMask = HALCAN.CAN_MSGID_API_M | HALCAN.CAN_MSGID_MFR_M | HALCAN.CAN_MSGID_DTYPE_M;
-        private static int kSendMessagePeriod = 20;
+        private static readonly int kFullMessageIDMask = HALCAN.CAN_MSGID_API_M | HALCAN.CAN_MSGID_MFR_M | HALCAN.CAN_MSGID_DTYPE_M;
+        private static readonly int kSendMessagePeriod = 20;
 
-        private enum EncoderTag
+        public struct EncoderTag
         {
-            Encoder,
-            QuadEncoder,
-            Potentiometer,
+
         }
+
+        public struct QuadEncoderTag
+        {
+
+        }
+
+        public struct PotentiometerTag
+        {
+
+        }
+
+        public static readonly EncoderTag kEncoder = new EncoderTag();
+
+        public readonly static QuadEncoderTag kQuadEncoder = new QuadEncoderTag();
+
+        public readonly static PotentiometerTag kPotentiometer = new PotentiometerTag();
 
 
         public enum ControlMode
@@ -41,10 +55,10 @@ namespace WPILib
             Voltage,
         }
 
-        public static int kCurrentFault = 1;
-        public static int kTemeperatureFault = 2;
-        public static int kButVoltageFault = 4;
-        public static int kGateDriverFault = 8;
+        public static readonly int kCurrentFault = 1;
+        public static readonly int kTemeperatureFault = 2;
+        public static readonly int kButVoltageFault = 4;
+        public static readonly int kGateDriverFault = 8;
 
         public static int kForwardLimit = 1;
         public static int kReverseLimit = 2;
@@ -78,9 +92,73 @@ namespace WPILib
 
             m_safetyHelper = new MotorSafetyHelper(this);
 
-            bool recievedFirmwareVersion = false;
+            bool receivedFirmwareVersion = false;
 
             byte[] data = new byte[8];
+
+            RequestMessage(HALCAN.CAN_IS_FRAME_REMOTE | HALCAN.CAN_MSGID_API_FIRMVER);
+            RequestMessage(HALCAN.LM_API_HWVER);
+
+            for (int i = 0; i < kReceiveStatusAttempts; i++)
+            {
+                Timer.Delay(0.001);
+                SetupPeriodicStatus();
+                UpdatePeriodicStatus();
+
+                if (!receivedFirmwareVersion)
+                {
+                    try
+                    {
+                        GetMessage(HALCAN.CAN_MSGID_API_FIRMVER, HALCAN.CAN_MSGID_FULL_M, data);
+                        m_firmwareVersion = UnpackINT32(data);
+                        receivedFirmwareVersion = true;
+                    }
+                    catch (CANMessageNotFoundException e)
+                    {
+
+                    }
+                }
+
+                if (m_receivedStatusMessage0 &&
+                    m_receivedStatusMessage1 &&
+                    m_receivedStatusMessage2 &&
+                    receivedFirmwareVersion)
+                {
+                    break;
+                }
+            }
+
+            if (!m_receivedStatusMessage0 ||
+                !m_receivedStatusMessage1 ||
+                !m_receivedStatusMessage2 ||
+                !receivedFirmwareVersion)
+            {
+                Free();
+                throw new CANMessageNotFoundException();
+            }
+
+            try
+            {
+                GetMessage(HALCAN.LM_API_HWVER, HALCAN.CAN_MSGID_FULL_M, data);
+                m_hardwareVersion = data[0];
+            }
+            catch (CANMessageNotFoundException e)
+            {
+                m_hardwareVersion = 0;
+            }
+
+            if (m_firmwareVersion >= 3330 || m_firmwareVersion < 108)
+            {
+                if (m_firmwareVersion < 3330)
+                {
+                    DriverStation.ReportError("Jag " + m_deviceNumber + " firmware " + m_firmwareVersion + " is too old (must be at least version 108 of the FIRST approved firmware)", false);
+                }
+                else
+                {
+                    DriverStation.ReportError("Jag" + m_deviceNumber + " firmware " + m_firmwareVersion + " is not FIRST approved (must be at least version 108 of the FIRST approved firmware)", false);
+                }
+                return;
+            }
 
 
         }
@@ -119,7 +197,7 @@ namespace WPILib
                 HALCAN.CAN_SEND_PERIOD_STOP_REPEATING, ref status);
         }
 
-        int GetDeviceNumber()
+        public int GetDeviceNumber()
         {
             return m_deviceNumber;
         }
@@ -185,37 +263,37 @@ namespace WPILib
 
         public void SetExpiration(double timeout)
         {
-            throw new NotImplementedException();
+            m_safetyHelper.SetExpiration(timeout);
         }
 
         public double GetExpiration()
         {
-            throw new NotImplementedException();
+            return m_safetyHelper.GetExpiration();
         }
 
         public bool IsAlive()
         {
-            throw new NotImplementedException();
+            return m_safetyHelper.IsAlive();
         }
 
         public void StopMotor()
         {
-            throw new NotImplementedException();
+            DisableControl();
         }
 
         public void SetSafetyEnabled(bool enabled)
         {
-            throw new NotImplementedException();
+            m_safetyHelper.SetSafetyEnabled(enabled);
         }
 
         public bool IsSafetyEnabled()
         {
-            throw new NotImplementedException();
+            return m_safetyHelper.IsSafetyEnabled();
         }
 
         public string GetDescription()
         {
-            throw new NotImplementedException();
+            return "CANJaguar ID " + m_deviceNumber;
         }
 
         public void PidWrite(double output)
@@ -928,7 +1006,7 @@ namespace WPILib
                     HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, trustedData, (byte)(dataSize + 2), period, ref status);
                     if (status < 0)
                     {
-                        Utility.CheckStatus(status);
+                        CANExceptionFactory.CheckStatus(status, messageID);
                     }
 
                     return;
@@ -939,7 +1017,7 @@ namespace WPILib
 
             if (status < 0)
             {
-                Utility.CheckStatus(status);
+                CANExceptionFactory.CheckStatus(status, messageID);
             }
 
 
@@ -965,7 +1043,7 @@ namespace WPILib
             RequestMessage(messageID, HALCAN.CAN_SEND_PERIOD_NO_REPEAT);
         }
 
-        protected bool GetMessage(int messageID, int messageMask, byte[] data)
+        protected void GetMessage(int messageID, int messageMask, byte[] data)
         {
             uint messageIDU = (uint)messageID;
             messageIDU |= m_deviceNumber;
@@ -976,16 +1054,10 @@ namespace WPILib
 
             HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage(ref messageIDU, (uint)messageMask, data, ref dataSize, ref timeStamp, ref status);
 
-            if (status == CANExceptionFactory.ERR_CANSessionMux_MessageNotFound)
+            if (status < 0)
             {
-                return false;
+                CANExceptionFactory.CheckStatus(status, messageID);
             }
-            else
-            {
-                Utility.CheckStatus(status);
-            }
-
-            return true;
 
         }
 
@@ -1081,86 +1153,102 @@ namespace WPILib
             SendMessageHelper(HALCAN.CAN_MSGID_API_SYNC, data, 1, HALCAN.CAN_SEND_PERIOD_NO_REPEAT);
         }
 
-        private static void Swap16(int x, byte[] buffer) {
-		buffer[0] = (byte)(x & 0xff);
-		buffer[1] = (byte)((x>>8) & 0xff);
-	}
+        private static void Swap16(int x, byte[] buffer)
+        {
+            buffer[0] = (byte)(x & 0xff);
+            buffer[1] = (byte)((x >> 8) & 0xff);
+        }
 
-	private static void Swap32(int x, byte[] buffer) {
-		buffer[0] = (byte)(x & 0xff);
-		buffer[1] = (byte)((x>>8) & 0xff);
-		buffer[2] = (byte)((x>>16) & 0xff);
-		buffer[3] = (byte)((x>>24) & 0xff);
-	}
+        private static void Swap32(int x, byte[] buffer)
+        {
+            buffer[0] = (byte)(x & 0xff);
+            buffer[1] = (byte)((x >> 8) & 0xff);
+            buffer[2] = (byte)((x >> 16) & 0xff);
+            buffer[3] = (byte)((x >> 24) & 0xff);
+        }
 
-	private static byte PackPercentage(byte[] buffer, double value) {
-		if(value < -1.0) value = -1.0;
-		if(value > 1.0) value = 1.0;
-		short intValue = (short) (value * 32767.0);
-		Swap16(intValue, buffer);
-		return 2;
-	}
+        private static byte PackPercentage(byte[] buffer, double value)
+        {
+            if (value < -1.0) value = -1.0;
+            if (value > 1.0) value = 1.0;
+            short intValue = (short)(value * 32767.0);
+            Swap16(intValue, buffer);
+            return 2;
+        }
 
-	private static byte PackFXP8_8(byte[] buffer, double value) {
-		short intValue = (short) (value * 256.0);
-		Swap16(intValue, buffer);
-		return 2;
-	}
+        private static byte PackFXP8_8(byte[] buffer, double value)
+        {
+            short intValue = (short)(value * 256.0);
+            Swap16(intValue, buffer);
+            return 2;
+        }
 
-	private static byte PackFXP16_16(byte[] buffer, double value) {
-		int intValue = (int) (value * 65536.0);
-		Swap32(intValue, buffer);
-		return 4;
-	}
+        private static byte PackFXP16_16(byte[] buffer, double value)
+        {
+            int intValue = (int)(value * 65536.0);
+            Swap32(intValue, buffer);
+            return 4;
+        }
 
-	private static byte PackINT16(byte[] buffer, short value) {
-		Swap16(value, buffer);
-		return 2;
-	}
+        private static byte PackINT16(byte[] buffer, short value)
+        {
+            Swap16(value, buffer);
+            return 2;
+        }
 
-	private static byte PackINT32(byte[] buffer, int value) {
-		Swap32(value, buffer);
-		return 4;
-	}
+        private static byte PackINT32(byte[] buffer, int value)
+        {
+            Swap32(value, buffer);
+            return 4;
+        }
 
-        private static short Unpack16(byte[] buffer, int offset) {
-		return (short) ((buffer[offset] & 0xFF) | (short) ((buffer[offset + 1] << 8)) & 0xFF00);
-	}
+        private static short Unpack16(byte[] buffer, int offset)
+        {
+            return (short)((buffer[offset] & 0xFF) | (short)((buffer[offset + 1] << 8)) & 0xFF00);
+        }
 
-        private static int Unpack32(byte[] buffer, int offset) {
-		return (buffer[offset] & 0xFF) | ((buffer[offset + 1] << 8) & 0xFF00) |
-			((buffer[offset + 2] << 16) & 0xFF0000) | (int)((buffer[offset + 3] << 24) & 0xFF000000);
-	}
+        private static int Unpack32(byte[] buffer, int offset)
+        {
+            return (buffer[offset] & 0xFF) | ((buffer[offset + 1] << 8) & 0xFF00) |
+                ((buffer[offset + 2] << 16) & 0xFF0000) | (int)((buffer[offset + 3] << 24) & 0xFF000000);
+        }
 
-	private static double UnpackPercentage(byte[] buffer) {
-		return Unpack16(buffer,0) / 32767.0;
-	}
+        private static double UnpackPercentage(byte[] buffer)
+        {
+            return Unpack16(buffer, 0) / 32767.0;
+        }
 
-	private static double UnpackFXP8_8(byte[] buffer) {
-		return Unpack16(buffer,0) / 256.0;
-	}
+        private static double UnpackFXP8_8(byte[] buffer)
+        {
+            return Unpack16(buffer, 0) / 256.0;
+        }
 
-	private static double UnpackFXP16_16(byte[] buffer) {
-		return Unpack32(buffer,0) / 65536.0;
-	}
+        private static double UnpackFXP16_16(byte[] buffer)
+        {
+            return Unpack32(buffer, 0) / 65536.0;
+        }
 
-	private static short UnpackINT16(byte[] buffer) {
-		return Unpack16(buffer,0);
-	}
+        private static short UnpackINT16(byte[] buffer)
+        {
+            return Unpack16(buffer, 0);
+        }
 
-	private static int UnpackINT32(byte[] buffer) {
-		return Unpack32(buffer,0);
-	}
+        private static int UnpackINT32(byte[] buffer)
+        {
+            return Unpack32(buffer, 0);
+        }
 
-	/* Compare floats for equality as fixed point numbers */
-	public bool FXP8_EQ(double a, double b) {
-		return (int)(a * 256.0) == (int)(b * 256.0);
-	}
+        /* Compare floats for equality as fixed point numbers */
+        public bool FXP8_EQ(double a, double b)
+        {
+            return (int)(a * 256.0) == (int)(b * 256.0);
+        }
 
-	/* Compare floats for equality as fixed point numbers */
-	public bool FXP16_EQ(double a, double b) {
-		return (int)(a * 65536.0) == (int)(b * 65536.0);
-	}
+        /* Compare floats for equality as fixed point numbers */
+        public bool FXP16_EQ(double a, double b)
+        {
+            return (int)(a * 65536.0) == (int)(b * 65536.0);
+        }
 
         public void Set(double speed)
         {
@@ -1215,5 +1303,800 @@ namespace WPILib
             Set(0.0);
             m_table.RemoveTableListener(this);
         }
+
+        /**
+         * Set the reference source device for position controller mode.
+         *
+         * Choose between using and encoder and using a potentiometer
+         * as the source of position feedback when in position control mode.
+         *
+         * @param reference Specify a position reference.
+         */
+        private void SetPositionReference(int reference)
+        {
+            SendMessage(HALCAN.LM_API_POS_REF, new[] { (byte)reference }, 1);
+
+            m_positionReference = reference;
+            m_posRefVerified = false;
+        }
+
+        /**
+        * Set the P constant for the closed loop modes.
+        *
+        * @param p The proportional gain of the Jaguar's PID controller.
+        */
+        public void SetP(double p)
+        {
+            byte[] data = new byte[8];
+            byte dataSize = PackFXP16_16(data, p);
+
+            switch (m_controlMode)
+            {
+                case ControlMode.Speed:
+                    SendMessage(HALCAN.LM_API_SPD_PC, data, dataSize);
+                    break;
+
+                case ControlMode.Position:
+                    SendMessage(HALCAN.LM_API_POS_PC, data, dataSize);
+                    break;
+
+                case ControlMode.Current:
+                    SendMessage(HALCAN.LM_API_ICTRL_PC, data, dataSize);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("PID constants only apply in Speed, Position, and Current mode");
+            }
+
+            m_p = p;
+            m_pVerified = false;
+        }
+
+        /**
+        * Set the I constant for the closed loop modes.
+        *
+        * @param i The integral gain of the Jaguar's PID controller.
+        */
+        public void SetI(double i)
+        {
+            byte[] data = new byte[8];
+            byte dataSize = PackFXP16_16(data, i);
+
+            switch (m_controlMode)
+            {
+                case ControlMode.Speed:
+                    SendMessage(HALCAN.LM_API_SPD_IC, data, dataSize);
+                    break;
+
+                case ControlMode.Position:
+                    SendMessage(HALCAN.LM_API_POS_IC, data, dataSize);
+                    break;
+
+                case ControlMode.Current:
+                    SendMessage(HALCAN.LM_API_ICTRL_IC, data, dataSize);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("PID constants only apply in Speed, Position, and Current mode");
+            }
+
+            m_i = i;
+            m_iVerified = false;
+        }
+
+        /**
+        * Set the D constant for the closed loop modes.
+        *
+        * @param d The derivative gain of the Jaguar's PID controller.
+        */
+        public void SetD(double d)
+        {
+            byte[] data = new byte[8];
+            byte dataSize = PackFXP16_16(data, d);
+
+            switch (m_controlMode)
+            {
+                case ControlMode.Speed:
+                    SendMessage(HALCAN.LM_API_SPD_DC, data, dataSize);
+                    break;
+
+                case ControlMode.Position:
+                    SendMessage(HALCAN.LM_API_POS_DC, data, dataSize);
+                    break;
+
+                case ControlMode.Current:
+                    SendMessage(HALCAN.LM_API_ICTRL_DC, data, dataSize);
+                    break;
+
+                default:
+                    throw new InvalidOperationException("PID constants only apply in Speed, Position, and Current mode");
+            }
+
+            m_d = d;
+            m_dVerified = false;
+        }
+
+        /**
+        * Set the P, I, and D constants for the closed loop modes.
+        *
+        * @param p The proportional gain of the Jaguar's PID controller.
+        * @param i The integral gain of the Jaguar's PID controller.
+        * @param d The differential gain of the Jaguar's PID controller.
+        */
+        public void SetPID(double p, double i, double d)
+        {
+            SetP(p);
+            SetI(i);
+            SetD(d);
+        }
+
+        /**
+        * Get the Proportional gain of the controller.
+        *
+        * @return The proportional gain.
+        */
+        public double GetP()
+        {
+            if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
+            {
+                throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
+            }
+            return m_p;
+        }
+
+        /**
+        * Get the Integral gain of the controller.
+        *
+        * @return The integral gain.
+        */
+        public double GetI()
+        {
+            if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
+            {
+                throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
+            }
+            return m_i;
+        }
+
+        /**
+        * Get the Derivative gain of the controller.
+        *
+        * @return The derivative gain.
+        */
+        public double GetD()
+        {
+            if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
+            {
+                throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
+            }
+            return m_d;
+        }
+
+        /**
+         * Enable controlling the motor voltage as a percentage of the bus voltage
+         * without any position or speed feedback.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         */
+        public void SetPercentMode()
+        {
+            ChangeControlMode(ControlMode.PercentVbus);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+        }
+
+        /**
+         * Enable controlling the motor voltage as a percentage of the bus voltage,
+         * and enable speed sensing from a non-quadrature encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         */
+        public void SetPercentMode(EncoderTag tag, int codesPerRev)
+        {
+            ChangeControlMode(ControlMode.PercentVbus);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+        }
+
+        /**
+         * Enable controlling the motor voltage as a percentage of the bus voltage,
+         * and enable position and speed sensing from a quadrature encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kQuadEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         */
+        public void SetPercentMode(QuadEncoderTag tag, int codesPerRev)
+        {
+            ChangeControlMode(ControlMode.PercentVbus);
+            SetPositionReference(HALCAN.LM_REF_ENCODER);
+            SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+        }
+
+        /**
+         * Enable controlling the motor voltage as a percentage of the bus voltage,
+         * and enable position sensing from a potentiometer and no speed feedback.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kPotentiometer}
+         */
+        public void SetPercentMode(PotentiometerTag tag)
+        {
+            ChangeControlMode(ControlMode.PercentVbus);
+            SetPositionReference(HALCAN.LM_REF_POT);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+            ConfigPotentiometerTurns(1);
+        }
+
+        /**
+         * Enable controlling the motor current with a PID loop.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetCurrentMode(double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Current);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the motor current with a PID loop, and enable speed
+         * sensing from a non-quadrature encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kEncoder}
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetCurrentMode(EncoderTag tag, int codesPerRev, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Current);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+            ConfigEncoderCodesPerRev(codesPerRev);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the motor current with a PID loop, and enable speed and
+         * position sensing from a quadrature encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kQuadEncoder}
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetCurrentMode(QuadEncoderTag tag, int codesPerRev, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Current);
+            SetPositionReference(HALCAN.LM_REF_ENCODER);
+            SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the motor current with a PID loop, and enable position
+         * sensing from a potentiometer.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kPotentiometer}
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetCurrentMode(PotentiometerTag tag, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Current);
+            SetPositionReference(HALCAN.LM_REF_POT);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+            ConfigPotentiometerTurns(1);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the speed with a feedback loop from a non-quadrature
+         * encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetSpeedMode(EncoderTag tag, int codesPerRev, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Speed);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the speed with a feedback loop from a quadrature encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kQuadEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetSpeedMode(QuadEncoderTag tag, int codesPerRev, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Speed);
+            SetPositionReference(HALCAN.LM_REF_ENCODER);
+            SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the position with a feedback loop using an encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kQuadEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         *
+         */
+        public void SetPositionMode(QuadEncoderTag tag, int codesPerRev, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Position);
+            SetPositionReference(HALCAN.LM_REF_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the position with a feedback loop using a potentiometer.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kPotentiometer}
+         * @param p The proportional gain of the Jaguar's PID controller.
+         * @param i The integral gain of the Jaguar's PID controller.
+         * @param d The differential gain of the Jaguar's PID controller.
+         */
+        public void SetPositionMode(PotentiometerTag tag, double p, double i, double d)
+        {
+            ChangeControlMode(ControlMode.Position);
+            SetPositionReference(HALCAN.LM_REF_POT);
+            ConfigPotentiometerTurns(1);
+            SetPID(p, i, d);
+        }
+
+        /**
+         * Enable controlling the motor voltage without any position or speed feedback.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         */
+        public void SetVoltageMode()
+        {
+            ChangeControlMode(ControlMode.Voltage);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+        }
+
+        /**
+         * Enable controlling the motor voltage with speed feedback from a
+         * non-quadrature encoder and no position feedback.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         */
+        public void SetVoltageMode(EncoderTag tag, int codesPerRev)
+        {
+            ChangeControlMode(ControlMode.Voltage);
+            SetPositionReference(HALCAN.LM_REF_NONE);
+            SetSpeedReference(HALCAN.LM_REF_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+        }
+
+        /**
+         * Enable controlling the motor voltage with position and speed feedback from a
+         * quadrature encoder.<br>
+         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
+         *
+         * @param tag The constant {@link CANJaguar#kQuadEncoder}
+         * @param codesPerRev The counts per revolution on the encoder
+         */
+        public void SetVoltageMode(QuadEncoderTag tag, int codesPerRev)
+        {
+            ChangeControlMode(ControlMode.Voltage);
+            SetPositionReference(HALCAN.LM_REF_ENCODER);
+            SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
+            ConfigEncoderCodesPerRev(codesPerRev);
+        }
+
+        /**
+         * Enable controlling the motor voltage with position feedback from a
+         * potentiometer and no speed feedback.
+         *
+         * @param tag The constant {@link CANJaguar#kPotentiometer}
+         */
+        public void SetVoltageMode(PotentiometerTag tag)
+        {
+            ChangeControlMode(ControlMode.Voltage);
+            SetPositionReference(HALCAN.LM_REF_POT);
+            SetSpeedReference(HALCAN.LM_REF_NONE);
+            ConfigPotentiometerTurns(1);
+        }
+
+        private void ChangeControlMode(ControlMode controlMode)
+        {
+            // Disable the previous mode
+            DisableControl();
+
+            // Update the local mode
+            m_controlMode = controlMode;
+            m_controlModeVerified = false;
+        }
+
+        /**
+        * Get the active control mode from the Jaguar.
+        *
+        * Ask the Jagaur what mode it is in.
+        *
+        * @return ControlMode that the Jag is in.
+        */
+        public ControlMode GetControlMode()
+        {
+            return m_controlMode;
+        }
+
+        /**
+        * Get the voltage at the battery input terminals of the Jaguar.
+        *
+        * @return The bus voltage in Volts.
+        */
+        public double GetBusVoltage()
+        {
+            UpdatePeriodicStatus();
+
+            return m_busVoltage;
+        }
+
+        /**
+        * Get the voltage being output from the motor terminals of the Jaguar.
+        *
+        * @return The output voltage in Volts.
+        */
+        public double GetOutputVoltage()
+        {
+            UpdatePeriodicStatus();
+
+            return m_outputVoltage;
+        }
+
+        /**
+        * Get the current through the motor terminals of the Jaguar.
+        *
+        * @return The output current in Amps.
+        */
+        public double GetOutputCurrent()
+        {
+            UpdatePeriodicStatus();
+
+            return m_outputCurrent;
+        }
+
+        /**
+        * Get the internal temperature of the Jaguar.
+        *
+        * @return The temperature of the Jaguar in degrees Celsius.
+        */
+        public double GetTemperature()
+        {
+            UpdatePeriodicStatus();
+
+            return m_temperature;
+        }
+
+        /**
+         * Get the position of the encoder or potentiometer.
+         *
+         * @return The position of the motor in rotations based on the configured feedback.
+         * @see CANJaguar#configPotentiometerTurns(int)
+         * @see CANJaguar#configEncoderCodesPerRev(int)
+         */
+        public double GetPosition()
+        {
+            UpdatePeriodicStatus();
+
+            return m_position;
+        }
+
+        /**
+        * Get the speed of the encoder.
+        *
+        * @return The speed of the motor in RPM based on the configured feedback.
+        */
+        public double GetSpeed()
+        {
+            UpdatePeriodicStatus();
+
+            return m_speed;
+        }
+
+        /**
+         * Get the status of the forward limit switch.
+         *
+         * @return true if the motor is allowed to turn in the forward direction.
+         */
+        public bool GetForwardLimitOk()
+        {
+            UpdatePeriodicStatus();
+
+            return (m_limits & kForwardLimit) != 0;
+        }
+
+        /**
+         * Get the status of the reverse limit switch.
+         *
+         * @return true if the motor is allowed to turn in the reverse direction.
+         */
+        public bool GetReverseLimitOk()
+        {
+            UpdatePeriodicStatus();
+
+            return (m_limits & kReverseLimit) != 0;
+        }
+
+        /**
+         * Get the status of any faults the Jaguar has detected.
+         *
+         * @return A bit-mask of faults defined by the "Faults" constants.
+         * @see #kCurrentFault
+         * @see #kBusVoltageFault
+         * @see #kTemperatureFault
+         * @see #kGateDriverFault
+         */
+        public short GetFaults()
+        {
+            UpdatePeriodicStatus();
+
+            return m_faults;
+        }
+
+        /**
+        * set the maximum voltage change rate.
+        *
+        * When in PercentVbus or Voltage output mode, the rate at which the voltage changes can
+        * be limited to reduce current spikes.  set this to 0.0 to disable rate limiting.
+        *
+        * @param rampRate The maximum rate of voltage change in Percent Voltage mode in V/s.
+        */
+        public void SetVoltageRampRate(double rampRate)
+        {
+            byte[] data = new byte[8];
+            int dataSize;
+            int message;
+
+            switch (m_controlMode)
+            {
+                case ControlMode.PercentVbus:
+                    dataSize = PackPercentage(data, rampRate / (m_maxOutputVoltage * kControllerRate));
+                    message = HALCAN.LM_API_VOLT_SET_RAMP;
+                    break;
+                case ControlMode.Voltage:
+                    dataSize = PackFXP8_8(data, rampRate / kControllerRate);
+                    message = HALCAN.LM_API_VCOMP_COMP_RAMP;
+                    break;
+                default:
+                    throw new InvalidOperationException("Voltage ramp rate only applies in Percentage and Voltage modes");
+            }
+
+            SendMessage(message, data, dataSize);
+        }
+
+        /**
+        * Get the version of the firmware running on the Jaguar.
+        *
+        * @return The firmware version.  0 if the device did not respond.
+        */
+        public int GetFirmwareVersion()
+        {
+            return m_firmwareVersion;
+        }
+
+        /**
+        * Get the version of the Jaguar hardware.
+        *
+        * @return The hardware version. 1: Jaguar,  2: Black Jaguar
+        */
+        public byte GetHardwareVersion()
+        {
+            return m_hardwareVersion;
+        }
+
+        /**
+        * Configure what the controller does to the H-Bridge when neutral (not driving the output).
+        *
+        * This allows you to override the jumper configuration for brake or coast.
+        *
+        * @param mode Select to use the jumper setting or to override it to coast or brake.
+        */
+        public void ConfigNeutralMode(NeutralMode mode)
+        {
+            byte[] data = new byte[8];
+
+            data[0] = (byte)mode;
+
+            SendMessage(HALCAN.LM_API_CFG_BRAKE_COAST, data, 1);
+
+            m_neutralMode = mode;
+            m_neutralModeVerified = false;
+        }
+
+        /**
+        * Configure how many codes per revolution are generated by your encoder.
+        *
+        * @param codesPerRev The number of counts per revolution in 1X mode.
+        */
+        public void ConfigEncoderCodesPerRev(int codesPerRev)
+        {
+            byte[] data = new byte[8];
+
+            int dataSize = PackINT16(data, (short)codesPerRev);
+            SendMessage(HALCAN.LM_API_CFG_ENC_LINES, data, dataSize);
+
+            m_encoderCodesPerRev = (short)codesPerRev;
+            m_encoderCodesPerRevVerified = false;
+        }
+
+        /**
+        * Configure the number of turns on the potentiometer.
+        *
+        * There is no special support for continuous turn potentiometers.
+        * Only integer numbers of turns are supported.
+        *
+        * @param turns The number of turns of the potentiometer
+        */
+        public void ConfigPotentiometerTurns(int turns)
+        {
+            byte[] data = new byte[8];
+
+            int dataSize = PackINT16(data, (short)turns);
+            SendMessage(HALCAN.LM_API_CFG_POT_TURNS, data, dataSize);
+
+            m_potentiometerTurns = (short)turns;
+            m_potentiometerTurnsVerified = false;
+        }
+
+        /**
+         * Configure Soft Position Limits when in Position Controller mode.<br>
+         *
+         * When controlling position, you can add additional limits on top of the limit switch inputs
+         * that are based on the position feedback.  If the position limit is reached or the
+         * switch is opened, that direction will be disabled.
+         *
+         * @param forwardLimitPosition The position that, if exceeded, will disable the forward direction.
+         * @param reverseLimitPosition The position that, if exceeded, will disable the reverse direction.
+         */
+        public void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition)
+        {
+            ConfigLimitMode(LimitMode.SoftPositionLimits);
+            ConfigForwardLimit(forwardLimitPosition);
+            ConfigReverseLimit(reverseLimitPosition);
+        }
+
+        /**
+         * Disable Soft Position Limits if previously enabled.<br>
+         *
+         * Soft Position Limits are disabled by default.
+         */
+        public void DisableSoftPositionLimits()
+        {
+            ConfigLimitMode(LimitMode.SwitchInputsOnly);
+        }
+
+        /**
+         * Set the limit mode for position control mode.<br>
+         *
+         * Use {@link #configSoftPositionLimits(double, double)} or {@link #disableSoftPositionLimits()} to set this
+         * automatically.
+         * @param mode The {@link LimitMode} to use to limit the rotation of the device.
+         * @see LimitMode#SwitchInputsOnly
+         * @see LimitMode#SoftPositionLimits
+         */
+        public void ConfigLimitMode(LimitMode mode)
+        {
+            byte[] data = new byte[8];
+            data[0] = (byte)mode;
+            SendMessage(HALCAN.LM_API_CFG_LIMIT_MODE, data, 1);
+        }
+
+        /**
+         * Set the position that, if exceeded, will disable the forward direction.
+         *
+         * Use {@link #configSoftPositionLimits(double, double)} to set this and the {@link LimitMode} automatically.
+         * @param forwardLimitPosition The position that, if exceeded, will disable the forward direction.
+         */
+        public void ConfigForwardLimit(double forwardLimitPosition)
+        {
+            byte[] data = new byte[8];
+
+            int dataSize = PackFXP16_16(data, forwardLimitPosition);
+            data[dataSize++] = 1;
+            SendMessage(HALCAN.LM_API_CFG_LIMIT_FWD, data, dataSize);
+
+            m_forwardLimit = forwardLimitPosition;
+            m_forwardLimitVerified = false;
+        }
+
+        /**
+         * Set the position that, if exceeded, will disable the reverse direction.
+         *
+         * Use {@link #configSoftPositionLimits(double, double)} to set this and the {@link LimitMode} automatically.
+         * @param reverseLimitPosition The position that, if exceeded, will disable the reverse direction.
+         */
+        public void ConfigReverseLimit(double reverseLimitPosition)
+        {
+            byte[] data = new byte[8];
+
+            int dataSize = PackFXP16_16(data, reverseLimitPosition);
+            data[dataSize++] = 1;
+            SendMessage(HALCAN.LM_API_CFG_LIMIT_REV, data, dataSize);
+
+            m_reverseLimit = reverseLimitPosition;
+            m_reverseLimitVerified = false;
+        }
+
+        /**
+        * Configure the maximum voltage that the Jaguar will ever output.
+        *
+        * This can be used to limit the maximum output voltage in all modes so that
+        * motors which cannot withstand full bus voltage can be used safely.
+        *
+        * @param voltage The maximum voltage output by the Jaguar.
+        */
+        public void ConfigMaxOutputVoltage(double voltage)
+        {
+            byte[] data = new byte[8];
+
+            int dataSize = PackFXP8_8(data, voltage);
+            SendMessage(HALCAN.LM_API_CFG_MAX_VOUT, data, dataSize);
+
+            m_maxOutputVoltage = voltage;
+            m_maxOutputVoltageVerified = false;
+        }
+
+        /**
+        * Configure how long the Jaguar waits in the case of a fault before resuming operation.
+        *
+        * Faults include over temerature, over current, and bus under voltage.
+        * The default is 3.0 seconds, but can be reduced to as low as 0.5 seconds.
+        *
+        * @param faultTime The time to wait before resuming operation, in seconds.
+        */
+        public void ConfigFaultTime(float faultTime)
+        {
+            byte[] data = new byte[8];
+
+            if (faultTime < 0.5f) faultTime = 0.5f;
+            else if (faultTime > 3.0f) faultTime = 3.0f;
+
+            int dataSize = PackINT16(data, (short)(faultTime * 1000.0));
+            SendMessage(HALCAN.LM_API_CFG_FAULT_TIME, data, dataSize);
+
+            m_faultTime = faultTime;
+            m_faultTimeVerified = false;
+        }
+
+
     }
 }

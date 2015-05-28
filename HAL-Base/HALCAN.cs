@@ -442,7 +442,7 @@ namespace HAL_Base
         public static readonly int CAN_SEND_PERIOD_STOP_REPEATING = -1;
 
         /* Flags in the upper bits of the messageID */
-        public static readonly uint CAN_IS_FRAME_REMOTE = 0x80000000;
+        public static readonly int CAN_IS_FRAME_REMOTE = -2147483648;
         public static readonly int CAN_IS_FRAME_11BIT = 0x40000000;
     }
 }

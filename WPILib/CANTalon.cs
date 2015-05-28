@@ -10,7 +10,7 @@ using NetworkTablesDotNet.Tables;
 namespace WPILib
 {
     using Impl = HAL_Base.HALCanTalonSRX;
-    public class CANTalon : MotorSafety, PIDOutput, SpeedController, LiveWindowSendable, ITableListener, IDisposable
+    public class CANTalon : MotorSafety, SpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper safetyHelper;
 
