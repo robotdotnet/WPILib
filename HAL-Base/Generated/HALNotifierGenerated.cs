@@ -18,7 +18,7 @@ namespace HAL_Base
             UpdateNotifierAlarm = (UpdateNotifierAlarmDelegate)Delegate.CreateDelegate(typeof(UpdateNotifierAlarmDelegate), type.GetMethod("updateNotifierAlarm"));
         }
 
-        public delegate System.IntPtr InitializeNotifierDelegate(NotifierDelegate ProcessQueue, ref int status);
+        public delegate System.IntPtr InitializeNotifierDelegate(Action<uint, IntPtr> ProcessQueue, ref int status);
         public static InitializeNotifierDelegate InitializeNotifier;
 
         public delegate void CleanNotifierDelegate(System.IntPtr notifier_pointer, ref int status);

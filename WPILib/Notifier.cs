@@ -20,7 +20,7 @@ namespace WPILib
         private static IntPtr s_notifier;
         public double m_expirationTime = 0;
 
-        private NotifierDelegate _delegate;
+        private Action<uint, IntPtr> _delegate;
 
         private object m_param;
         private TimerEventHandlerDelegate m_handler;

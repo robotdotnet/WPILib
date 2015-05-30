@@ -49,7 +49,7 @@ namespace HAL_Base
         public delegate void RequestInterruptsDelegate(System.IntPtr interrupt_pointer, byte routing_module, uint routing_pin, bool routing_analog_trigger, ref int status);
         public static RequestInterruptsDelegate RequestInterrupts;
 
-        public delegate void AttachInterruptHandlerDelegate(System.IntPtr interrupt_pointer, InterruptHandlerFunction handler, System.IntPtr param, ref int status);
+        public delegate void AttachInterruptHandlerDelegate(System.IntPtr interrupt_pointer, Action<uint, IntPtr> handler, System.IntPtr param, ref int status);
         public static AttachInterruptHandlerDelegate AttachInterruptHandler;
 
         public delegate void SetInterruptUpSourceEdgeDelegate(System.IntPtr interrupt_pointer, bool risingEdge, bool fallingEdge, ref int status);

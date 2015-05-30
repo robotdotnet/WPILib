@@ -1,4 +1,5 @@
 ﻿
+using System;
 using HAL_Base;
 
 namespace HAL_FRC
@@ -78,7 +79,7 @@ namespace HAL_FRC
         ///param: void*
         ///status: int*
         [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "attachInterruptHandler")]
-        public static extern void attachInterruptHandler(System.IntPtr interrupt_pointer, InterruptHandlerFunction handler, System.IntPtr param, ref int status);
+        public static extern void attachInterruptHandler(System.IntPtr interrupt_pointer, Action<uint, IntPtr> handler, System.IntPtr param, ref int status);
 
 
         /// Return Type: void

@@ -29,7 +29,7 @@ namespace WPILib
             m_interrupt = IntPtr.Zero;
         }
 
-        private InterruptHandlerFunction function;
+        private Action<uint, IntPtr> function;
 
         public abstract bool GetAnalogTriggerForRouting();
         public abstract int GetChannelForRouting();
