@@ -30,24 +30,28 @@ namespace WPILib
             m_interrupt = IntPtr.Zero;
         }
 
-        private Action<uint, IntPtr> function;
+        private Action<uint, IntPtr> m_function;
+        private object m_param;
 
         public abstract bool GetAnalogTriggerForRouting();
         public abstract int GetChannelForRouting();
         public abstract byte GetModuleForRouting();
 
-        public void RequestInterrupts(Action handler)
+        public void RequestInterrupts(Action<uint, object> handler, object param)
         {
-            function = (mask, param) => handler();
+            m_function = (mask, t) => handler(mask, this.m_param);
             if (m_interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
             }
             AllocateInterrupts(false);
 
+            this.m_param = param;
+
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
             SetUpSourceEdge(true, false);
+            HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
             //allocate Interupts
         }
 

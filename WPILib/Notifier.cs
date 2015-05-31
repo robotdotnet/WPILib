@@ -9,8 +9,6 @@ using System.Runtime.InteropServices;
 
 namespace WPILib
 {
-
-    //public delegate void TimerEventHandlerDelegate(object o);
     public class Notifier
     {
         static private Notifier s_timerQueueHead;
