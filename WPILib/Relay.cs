@@ -103,7 +103,7 @@ namespace WPILib
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Reverse)
                     {
-                        HALDigital.SetRelayForward(m_port, false, ref status);
+                        HALDigital.SetRelayReverse(m_port, false, ref status);
                     }
                     break;
                 case Value.On:
@@ -115,7 +115,7 @@ namespace WPILib
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Reverse)
                     {
-                        HALDigital.SetRelayForward(m_port, true, ref status);
+                        HALDigital.SetRelayReverse(m_port, true, ref status);
                     }
                     break;
                 case Value.Forward:
@@ -129,7 +129,7 @@ namespace WPILib
                     }
                     if (m_direction == Direction.Both)
                     {
-                        HALDigital.SetRelayForward(m_port, false, ref status);
+                        HALDigital.SetRelayReverse(m_port, false, ref status);
                     }
                     break;
                 case Value.Reverse:
@@ -143,7 +143,7 @@ namespace WPILib
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Reverse)
                     {
-                        HALDigital.SetRelayForward(m_port, true, ref status);
+                        HALDigital.SetRelayReverse(m_port, true, ref status);
                     }
                     break;
             }
