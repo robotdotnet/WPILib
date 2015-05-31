@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace WPILib
 {
 
-    public delegate void TimerEventHandlerDelegate(object o);
+    //public delegate void TimerEventHandlerDelegate(object o);
     public class Notifier
     {
         static private Notifier s_timerQueueHead;
@@ -23,14 +23,14 @@ namespace WPILib
         private Action<uint, IntPtr> _delegate;
 
         private object m_param;
-        private TimerEventHandlerDelegate m_handler;
+        private Action<object> m_handler;
         private double m_period = 0;
         private bool m_periodic = false;
         private bool m_queued = false;
         private Notifier m_nextEvent;
         private IntPtr m_handlerSemaphore;
 
-        public Notifier(TimerEventHandlerDelegate handler, object param)
+        public Notifier(Action<object> handler, object param)
         {
             m_handler = handler;
             m_param = param;

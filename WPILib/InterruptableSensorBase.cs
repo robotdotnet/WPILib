@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Runtime.InteropServices;
 using WPILib.Util;
 using HAL_Base;
 
@@ -47,7 +48,6 @@ namespace WPILib
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
             SetUpSourceEdge(true, false);
-            HALInterrupts.AttachInterruptHandler(m_interrupt, function, IntPtr.Zero, ref status);
             //allocate Interupts
         }
 
