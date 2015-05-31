@@ -28,6 +28,26 @@ namespace WPILib
         private Notifier m_nextEvent;
         private IntPtr m_handlerSemaphore;
 
+        public Notifier(Action handler)
+        {
+            m_handler = (o) => handler();
+            m_param = null;
+            m_nextEvent = null;
+            m_handlerSemaphore = HALSemaphore.InitializeSemaphore(HALSemaphore.SEMAPHORE_FULL);
+
+            _delegate = ProcessQueue;
+
+            lock (s_queueSemaphore)
+            {
+                if (s_refCount == 0)
+                {
+                    int status = 0;
+                    s_notifier = HALNotifier.InitializeNotifier(_delegate, ref status);
+                }
+                s_refCount++;
+            } 
+        }
+
         public Notifier(Action<object> handler, object param)
         {
             m_handler = handler;

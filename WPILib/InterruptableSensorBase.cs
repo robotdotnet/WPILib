@@ -37,6 +37,24 @@ namespace WPILib
         public abstract int GetChannelForRouting();
         public abstract byte GetModuleForRouting();
 
+
+        public void RequestInterrupts(Action handler)
+        {
+            m_function = (mask, t) => handler();
+            if (m_interrupt != IntPtr.Zero)
+            {
+                throw new AllocationException("The interrupt has already been allocated");
+            }
+            AllocateInterrupts(false);
+
+            this.m_param = null;
+
+            int status = 0;
+            HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
+            SetUpSourceEdge(true, false);
+            HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
+        }
+
         public void RequestInterrupts(Action<uint, object> handler, object param)
         {
             m_function = (mask, t) => handler(mask, this.m_param);
@@ -52,7 +70,6 @@ namespace WPILib
             HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
             SetUpSourceEdge(true, false);
             HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
-            //allocate Interupts
         }
 
 
@@ -69,7 +86,6 @@ namespace WPILib
             HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(),
                 GetAnalogTriggerForRouting(), ref status);
             SetUpSourceEdge(true, false);
-            //Setup Source Edge
         }
 
         protected void AllocateInterrupts(bool watcher)
@@ -175,7 +191,7 @@ namespace WPILib
             }
             else
             {
-                throw new InvalidOperationException("You must call RequestInterrupts beofre SetUpSourceEdge");
+                throw new InvalidOperationException("You must call RequestInterrupts before SetUpSourceEdge");
             }
         }
     }
