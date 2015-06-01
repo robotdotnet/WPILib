@@ -99,7 +99,6 @@
     <Compile Include="PIDSource.cs" />
     <Compile Include="Interfaces\Potentiometer.cs" />
     <Compile Include="Interfaces\SpeedController.cs" />
-    <Compile Include="Interfaces\TimerEventHandler.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
