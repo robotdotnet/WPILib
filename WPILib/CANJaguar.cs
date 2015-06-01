@@ -11,7 +11,7 @@ using WPILib.CAN;
 
 namespace WPILib
 {
-    public class CANJaguar : MotorSafety, SpeedController, ITableListener, LiveWindowSendable
+    public class CANJaguar : MotorSafety, CANSpeedController, ITableListener, LiveWindowSendable
     {
         public static readonly int kMaxMessageDataSize = 8;
 
@@ -45,7 +45,7 @@ namespace WPILib
 
         public readonly static PotentiometerTag kPotentiometer = new PotentiometerTag();
 
-
+        /*
         public enum ControlMode
         {
             PercentVbus,
@@ -54,6 +54,7 @@ namespace WPILib
             Position,
             Voltage,
         }
+         * */
 
         public static readonly int kCurrentFault = 1;
         public static readonly int kTemeperatureFault = 2;
@@ -63,6 +64,7 @@ namespace WPILib
         public static int kForwardLimit = 1;
         public static int kReverseLimit = 2;
 
+        /*
         public enum NeutralMode
         {
             Jumper,
@@ -75,6 +77,7 @@ namespace WPILib
             SwitchInputsOnly,
             SoftPositionLimits,
         }
+         * */
 
         public CANJaguar(int deviceNumber)
         {
@@ -1837,7 +1840,7 @@ namespace WPILib
          *
          * @return true if the motor is allowed to turn in the forward direction.
          */
-        public bool GetForwardLimitOk()
+        public bool GetForwardLimitOK()
         {
             UpdatePeriodicStatus();
 
@@ -1849,7 +1852,7 @@ namespace WPILib
          *
          * @return true if the motor is allowed to turn in the reverse direction.
          */
-        public bool GetReverseLimitOk()
+        public bool GetReverseLimitOK()
         {
             UpdatePeriodicStatus();
 
@@ -1865,11 +1868,11 @@ namespace WPILib
          * @see #kTemperatureFault
          * @see #kGateDriverFault
          */
-        public short GetFaults()
+        public ushort GetFaults()
         {
             UpdatePeriodicStatus();
 
-            return m_faults;
+            return (ushort)m_faults;
         }
 
         /**
@@ -1908,9 +1911,9 @@ namespace WPILib
         *
         * @return The firmware version.  0 if the device did not respond.
         */
-        public int GetFirmwareVersion()
+        public uint GetFirmwareVersion()
         {
-            return m_firmwareVersion;
+            return (uint)m_firmwareVersion;
         }
 
         /**

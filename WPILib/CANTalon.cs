@@ -10,11 +10,12 @@ using NetworkTablesDotNet.Tables;
 namespace WPILib
 {
     using Impl = HAL_Base.HALCanTalonSRX;
-    public class CANTalon : MotorSafety, SpeedController, LiveWindowSendable, ITableListener, IDisposable
+    public class CANTalon : MotorSafety, CANSpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper safetyHelper;
 
-        public enum ControlMode
+        
+        public enum TalonControlMode
         {
             PercentVbus = 0,
             Follower = 5,
@@ -24,7 +25,7 @@ namespace WPILib
             Current = 3,
             Disabled = 15
         }
-
+        
         public enum FeedbackDevice
         {
             QuadEncoder = 0,
@@ -41,14 +42,16 @@ namespace WPILib
             QuadEncoder = 2,
             AnalogTempVbat = 3
         }
+        
 
-        private ControlMode controlMode;
+        private TalonControlMode controlMode;
         private IntPtr impl;
         private const double DelayForSolicitedSignals = 0.004;
         private int deviceNumber;
         private bool controlEnabled;
         private int profile;
         private double setPoint;
+        
 
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
@@ -58,7 +61,7 @@ namespace WPILib
             controlEnabled = true;
             setPoint = 0;
             Profile = 0;
-            ApplyControlMode(ControlMode.PercentVbus);
+            ApplyControlMode(TalonControlMode.PercentVbus);
 
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)deviceNumber);
         }
@@ -84,7 +87,9 @@ namespace WPILib
             Impl.C_TalonSRX_RequestParam(impl, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
             var value = 0.0;
-            Impl.C_TalonSRX_GetParamResponse(impl, (int)id, ref value);
+            var status = Impl.C_TalonSRX_GetParamResponse(impl, (int)id, ref value);
+            if (status != CTR_Code.CTR_OKAY)
+                Utility.CheckStatus((int) status);
             return value;
         }
 
@@ -93,31 +98,17 @@ namespace WPILib
             Impl.C_TalonSRX_RequestParam(impl, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
             var value = 0;
-            Impl.C_TalonSRX_GetParamResponseInt32(impl, (int)id, ref value);
+            var status = Impl.C_TalonSRX_GetParamResponseInt32(impl, (int)id, ref value);
+            if (status != CTR_Code.CTR_OKAY)
+                Utility.CheckStatus((int)status);
             return value;
         }
 
         private void SetParam(Impl.ParamID id, double value)
         {
             var errorCode = Impl.C_TalonSRX_SetParam(impl, (int)id, value);
-            /*
-            switch (errorCode)
-            {
-                case HAL_Base.CTR_Code.CTR_RxTimeout:
-                case HAL_Base.CTR_Code.CTR_TxTimeout:
-                    throw new TimeoutException();
-                case HAL_Base.CTR_Code.CTR_InvalidParamValue:
-                    throw new ArgumentOutOfRangeException("value");
-                case HAL_Base.CTR_Code.CTR_UnexpectedArbId:
-                    throw new ArgumentOutOfRangeException("id");
-                case HAL_Base.CTR_Code.CTR_TxFailed:
-                    break;
-                case HAL_Base.CTR_Code.CTR_SigNotUpdated:
-                    break;
-                default:
-                    break;
-            }
-             * */
+            if (errorCode != CTR_Code.CTR_OKAY)
+                Utility.CheckStatus((int)errorCode);
         }
 
         [Obsolete("Use the Dispose method or a using block instead of Delete")]
@@ -197,7 +188,7 @@ namespace WPILib
             return velocity;
         }
 
-        public int getClosedLoopError()
+        public int GetClosedLoopError()
         {
             int error = 0;
             Impl.C_TalonSRX_GetCloseLoopErr(impl, ref error);
@@ -225,7 +216,7 @@ namespace WPILib
             return state != 0;
         }
 
-        public double GetTemp()
+        public double GetTemperature()
         {
             double temp = 0.0;
             Impl.C_TalonSRX_GetTemp(impl, ref temp);
@@ -272,21 +263,112 @@ namespace WPILib
             return vel;
         }
 
-        private void ApplyControlMode(ControlMode value)
+        public bool GetForwardLimitOK()
+        {
+            int limSwitch = FaultForwardLimit;
+            int softLim = FaultForwardSoftLimit;
+            return (softLim == 0 && limSwitch == 0);
+        }
+
+        public bool GetReverseLimitOK()
+        {
+            int limSwitch = FaultReverseLimit;
+            int softLim = FaultReverseSoftLimit;
+            return (softLim == 0 && limSwitch == 0);
+        }
+
+        public ushort GetFaults()
+        {
+            ushort retVal = 0;
+
+            int val;
+
+            CTR_Code status;
+
+            //Temp
+            val = 0;
+            status = Impl.C_TalonSRX_GetFault_OverTemp(impl, ref val); 
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                Utility.CheckStatus((int)status);
+            }
+
+            retVal |= (val != 0) ? (ushort) Faults.TemperatureFault : (ushort) 0;
+
+            //Voltage
+            val = 0;
+            status = Impl.C_TalonSRX_GetFault_UnderVoltage(impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                Utility.CheckStatus((int)status);
+            }
+
+            retVal |= (val != 0) ? (ushort)Faults.BusVoltageFault : (ushort)0;
+
+            //Fwd Limit Switch
+            val = 0;
+            status = Impl.C_TalonSRX_GetFault_ForLim(impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                Utility.CheckStatus((int)status);
+            }
+
+            retVal |= (val != 0) ? (ushort)Faults.FwdLimitSwitch : (ushort)0;
+
+            //Rev Limit Switch
+            val = 0;
+            status = Impl.C_TalonSRX_GetFault_RevLim(impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                Utility.CheckStatus((int)status);
+            }
+
+            retVal |= (val != 0) ? (ushort)Faults.RevLimitSwitch : (ushort)0;
+
+            //Fwd Soft Limit
+            val = 0;
+            status = Impl.C_TalonSRX_GetFault_ForSoftLim(impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                Utility.CheckStatus((int)status);
+            }
+
+            retVal |= (val != 0) ? (ushort)Faults.FwdSoftLimit : (ushort)0;
+
+            //Rev Soft Limit
+            val = 0;
+            status = Impl.C_TalonSRX_GetFault_RevSoftLim(impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                Utility.CheckStatus((int)status);
+            }
+
+            retVal |= (val != 0) ? (ushort)Faults.RevSoftLimit : (ushort)0;
+
+            return retVal;
+        }
+
+        private void ApplyControlMode(TalonControlMode value)
         {
             controlMode = value;
-            if (value == ControlMode.Disabled)
+            if (value == TalonControlMode.Disabled)
                 controlEnabled = false;
-            Impl.C_TalonSRX_SetModeSelect(impl, (int)ControlMode.Disabled);
+            Impl.C_TalonSRX_SetModeSelect(impl, (int)TalonControlMode.Disabled);
         }
 
         [Obsolete("Use MotorControlMode property.")]
-        public ControlMode GetControlMode() { return MotorControlMode; }
+        public TalonControlMode GetControlMode() { return MotorControlMode; }
 
         [Obsolete("Use MotorControlMode property.")]
-        public void SetControlMode(ControlMode mode) { MotorControlMode = mode; }
+        public void SetControlMode(TalonControlMode mode) { MotorControlMode = mode; }
 
-        public ControlMode MotorControlMode
+        public TalonControlMode MotorControlMode
         {
             get { return controlMode; }
             set
@@ -351,7 +433,7 @@ namespace WPILib
                 if (controlEnabled == value) return;
                 if (controlEnabled && !value)
                 {
-                    Impl.C_TalonSRX_SetModeSelect(impl, (int)ControlMode.Disabled);
+                    Impl.C_TalonSRX_SetModeSelect(impl, (int)TalonControlMode.Disabled);
                     controlEnabled = false;
                 }
                 else
@@ -363,7 +445,7 @@ namespace WPILib
 
         private void EnsureInPIDMode()
         {
-            if (!(MotorControlMode == ControlMode.Position || MotorControlMode == ControlMode.Speed))
+            if (!(MotorControlMode == TalonControlMode.Position || MotorControlMode == TalonControlMode.Speed))
             {
                 throw new InvalidOperationException("PID mode only applies to Position and Speed modes.");
             }
@@ -582,6 +664,116 @@ namespace WPILib
         [Obsolete("Use VoltageRampRate property instead.")]
         public void SetVoltageRampRate(double rate) { VoltageRampRate = rate; }
 
+        public void ConfigNeutralMode(NeutralMode mode)
+        {
+            CTR_Code status;
+            switch (mode)
+            {
+                default:
+                case NeutralMode.Jumper:
+                    status = Impl.C_TalonSRX_SetOverrideBrakeType(impl,
+                        HALCanTalonSRX.kBrakeOverride_UseDefaultsFromFlash);
+                    break;
+                case NeutralMode.Brake:
+                    status = Impl.C_TalonSRX_SetOverrideBrakeType(impl,
+                        HALCanTalonSRX.kBrakeOverride_OverrideBrake);
+                    break;
+                case NeutralMode.Coast:
+                    status = Impl.C_TalonSRX_SetOverrideBrakeType(impl,
+                        HALCanTalonSRX.kBrakeOverride_OverrideCoast);
+                    break;
+            }
+
+            if (status != CTR_Code.CTR_OKAY)
+                Utility.CheckStatus((int) status);
+        }
+
+        public void ConfigEncoderCodesPerRev(int codesPerRev)
+        {
+            
+        }
+
+        public void ConfigPotentiometerTurns(int turns)
+        {
+            
+        }
+
+        public void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition)
+        {
+            ConfigLimitMode(LimitMode.SoftPositionLimits);
+            ConfigForwardLimit(forwardLimitPosition);
+            ConfigReverseLimit(reverseLimitPosition);
+        }
+
+        public void DisableSoftPositionLimits()
+        {
+            ConfigLimitMode(LimitMode.SwitchInputsOnly);
+        }
+
+        public void ConfigLimitMode(LimitMode mode)
+        {
+            CTR_Code status;
+            switch (mode)
+            {
+                case LimitMode.SwitchInputsOnly:
+                    status = SetForwardSoftLimitEnabled(false);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int) status);
+                    status = SetReverseSoftLimitEnabled(false);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int) status);
+                    status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(impl,
+                        HALCanTalonSRX.kLimitSwitchOverride_EnableFwd_EnableRev);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    break;
+                case LimitMode.SoftPositionLimits:
+                    status = SetForwardSoftLimitEnabled(true);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    status = SetReverseSoftLimitEnabled(true);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(impl,
+                        HALCanTalonSRX.kLimitSwitchOverride_EnableFwd_EnableRev);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    break;
+                case LimitMode.SrxDisableSwitchInputs:
+                    status = SetForwardSoftLimitEnabled(false);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    status = SetReverseSoftLimitEnabled(false);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(impl,
+                        HALCanTalonSRX.kLimitSwitchOverride_DisableFwd_DisableRev);
+                    if (status != CTR_Code.CTR_OKAY)
+                        Utility.CheckStatus((int)status);
+                    break;
+            }
+        }
+
+        public void ConfigForwardLimit(double forwardLimitPosition)
+        {
+            ForwardSoftLimit = (forwardLimitPosition);
+        }
+
+        public void ConfigReverseLimit(double reverseLimitPosition)
+        {
+            ReverseSoftLimit = (reverseLimitPosition);
+        }
+
+        public void ConfigMaxOutputVoltage(double voltage)
+        {
+            Utility.CheckStatus(-9);
+        }
+
+        public void ConfigFaultTime(float faultTime)
+        {
+            Utility.CheckStatus(-9);
+        }
+
         public double VoltageRampRate
         {
             get
@@ -596,15 +788,15 @@ namespace WPILib
         }
 
         [Obsolete("Use FirmwareVersion property")]
-        public long GetFirmwareVersion() { return FirmwareVersion; }
+        public uint GetFirmwareVersion() { return FirmwareVersion; }
 
-        public long FirmwareVersion
+        public uint FirmwareVersion
         {
             get
             {
                 int version = 0;
                 Impl.C_TalonSRX_GetFirmVers(impl, ref version);
-                return version;
+                return (uint)version;
             }
         }
 
@@ -617,15 +809,15 @@ namespace WPILib
         }
 
         [Obsolete("Use ForwardSoftLimit property instead.")]
-        public int GetForwardSoftLimit() { return ForwardSoftLimit; }
+        public double GetForwardSoftLimit() { return ForwardSoftLimit; }
         [Obsolete("Use ForwardSoftLimit poperty instead.")]
-        public void SetForwardSoftLimit(int value) { ForwardSoftLimit = value; }
+        public void SetForwardSoftLimit(double value) { ForwardSoftLimit = value; }
 
-        public int ForwardSoftLimit
+        public double ForwardSoftLimit
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForThreshold);
+                return GetParam(Impl.ParamID.eProfileParamSoftLimitForThreshold);
             }
             set
             {
@@ -637,7 +829,10 @@ namespace WPILib
         [Obsolete("Use ForwardSoftLimitEnabled property instead.")]
         public bool GetForwardSoftLimitEnabled() { return ForwardSoftLimitEnabled; }
         [Obsolete("Use ForwardSoftLimitEnabled poperty instead.")]
-        public void SetForwardSoftLimitEnabled(bool value) { ForwardSoftLimitEnabled = value; }
+        public CTR_Code SetForwardSoftLimitEnabled(bool value)
+        {
+            return (CTR_Code) GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForEnable);
+        }
         public bool ForwardSoftLimitEnabled
         {
             get
@@ -652,15 +847,15 @@ namespace WPILib
         }
 
         [Obsolete("Use ReverseSoftLimit property instead.")]
-        public int GetReverseSoftLimit() { return ReverseSoftLimit; }
+        public double GetReverseSoftLimit() { return ReverseSoftLimit; }
         [Obsolete("Use ReverseSoftLimit poperty instead.")]
-        public void SetReverseSoftLimit(int value) { ReverseSoftLimit = value; }
+        public void SetReverseSoftLimit(double value) { ReverseSoftLimit = value; }
 
-        public int ReverseSoftLimit
+        public double ReverseSoftLimit
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevThreshold);
+                return GetParam(Impl.ParamID.eProfileParamSoftLimitRevThreshold);
             }
             set
             {
@@ -672,7 +867,10 @@ namespace WPILib
         [Obsolete("Use ReverseSoftLimitEnabled property instead.")]
         public bool GetReverseSoftLimitEnabled() { return ReverseSoftLimitEnabled; }
         [Obsolete("Use ReverseSoftLimitEnabled poperty instead.")]
-        public void SetReverseSoftLimitEnabled(bool value) { ReverseSoftLimitEnabled = value; }
+        public CTR_Code SetReverseSoftLimitEnabled(bool value)
+        {
+            return (CTR_Code) GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevEnable);
+        }
         public bool ReverseSoftLimitEnabled
         {
             get
@@ -726,7 +924,7 @@ namespace WPILib
             }
         }
 
-        public void EnableBreakMode(bool brake)
+        public void EnableBrakeMode(bool brake)
         {
             Impl.C_TalonSRX_SetOverrideBrakeType(impl, brake ? 2 : 1);
         }
@@ -899,7 +1097,7 @@ namespace WPILib
 
         public void PidWrite(double output)
         {
-            if (controlMode == ControlMode.PercentVbus)
+            if (controlMode == TalonControlMode.PercentVbus)
             {
                 Set(output);
             }
@@ -914,17 +1112,17 @@ namespace WPILib
             int value = 0;
             switch (controlMode)
             {
-                case ControlMode.Voltage:
+                case TalonControlMode.Voltage:
                     return GetOutputVoltage();
-                case ControlMode.Position:
+                case TalonControlMode.Position:
                     Impl.C_TalonSRX_GetSensorPosition(impl, ref value);
                     return value;
-                case ControlMode.Speed:
+                case TalonControlMode.Speed:
                     Impl.C_TalonSRX_GetSensorVelocity(impl, ref value);
                     return value;
-                case ControlMode.Current:
+                case TalonControlMode.Current:
                     return GetOutputCurrent();
-                case ControlMode.PercentVbus:
+                case TalonControlMode.PercentVbus:
                 default:
                     Impl.C_TalonSRX_GetAppliedThrottle(impl, ref value);
                     return value / 1023.0;
@@ -944,16 +1142,16 @@ namespace WPILib
                 setPoint = output;
                 switch (controlMode)
                 {
-                    case ControlMode.PercentVbus:
+                    case TalonControlMode.PercentVbus:
                         Impl.C_TalonSRX_SetDemand(impl, (int)(output * 1023));
                         break;
-                    case ControlMode.Voltage:
+                    case TalonControlMode.Voltage:
                         int volts = (int)(output * 256);
                         Impl.C_TalonSRX_SetDemand(impl, volts);
                         break;
-                    case ControlMode.Position:
-                    case ControlMode.Speed:
-                    case ControlMode.Follower:
+                    case TalonControlMode.Position:
+                    case TalonControlMode.Speed:
+                    case TalonControlMode.Follower:
                         Impl.C_TalonSRX_SetDemand(impl, (int)output);
                         break;
                     default:
@@ -961,6 +1159,14 @@ namespace WPILib
                 }
                 Impl.C_TalonSRX_SetModeSelect(impl, (int)MotorControlMode);
             }
+        }
+
+        public void SelectProfileSlot(int slotIdx)
+        {
+            profile = (slotIdx == 0) ? 0 : 1;
+            CTR_Code status = Impl.C_TalonSRX_SetProfileSlotSelect(impl, profile);
+            if (status != CTR_Code.CTR_OKAY)
+                Utility.CheckStatus((int)status);
         }
 
         public void Disable()
