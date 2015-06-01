@@ -72,10 +72,10 @@ namespace HAL_Base
         public delegate int SerialGetBytesReceivedDelegate(byte port, ref int status);
         public static SerialGetBytesReceivedDelegate SerialGetBytesReceived;
 
-        public delegate uint SerialReadDelegate(byte port, string buffer, int count, ref int status);
+        public delegate uint SerialReadDelegate(byte port, byte[] buffer, int count, ref int status);
         public static SerialReadDelegate SerialRead;
 
-        public delegate uint SerialWriteDelegate(byte port, string buffer, int count, ref int status);
+        public delegate uint SerialWriteDelegate(byte port, byte[] buffer, int count, ref int status);
         public static SerialWriteDelegate SerialWrite;
 
         public delegate void SerialFlushDelegate(byte port, ref int status);

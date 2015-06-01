@@ -119,6 +119,7 @@
     <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
     <Compile Include="Sendable.cs" />
+    <Compile Include="SerialPort.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="smartdashboard\SmartDashboard.cs" />
     <Compile Include="Solenoid.cs" />

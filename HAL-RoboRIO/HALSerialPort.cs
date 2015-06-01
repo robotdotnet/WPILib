@@ -45,10 +45,10 @@ namespace HAL_RoboRIO
         public static extern int serialGetBytesReceived(byte port, ref int status);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "serialRead")]
-        public static extern uint serialRead(byte port, string buffer, int count, ref int status);
+        public static extern uint serialRead(byte port, byte[] buffer, int count, ref int status);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "serialWrite")]
-        public static extern uint serialWrite(byte port, string buffer, int count, ref int status);
+        public static extern uint serialWrite(byte port, byte[] buffer, int count, ref int status);
 
         [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "serialFlush")]
         public static extern void serialFlush(byte port, ref int status);
