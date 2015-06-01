@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WPILib</RootNamespace>
     <AssemblyName>WPILib</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,11 +31,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkTablesDotNet, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NetworkTablesDotNet, Version=0.2.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NetworkTablesDotNet.0.1.1\lib\net40\NetworkTablesDotNet.dll</HintPath>
+      <HintPath>..\packages\NetworkTablesDotNet.0.2.1\lib\net45\NetworkTablesDotNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -90,15 +92,15 @@
     <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\Accelerometer.cs" />
-    <Compile Include="Interfaces\Controller.cs" />
-    <Compile Include="Interfaces\CounterBase.cs" />
+    <Compile Include="CounterBase.cs" />
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="MotorSafety.cs" />
     <Compile Include="PIDOutput.cs" />
     <Compile Include="PIDSource.cs" />
     <Compile Include="Interfaces\Potentiometer.cs" />
-    <Compile Include="Interfaces\SpeedController.cs" />
+    <Compile Include="smartdashboard\SendableChooser.cs" />
+    <Compile Include="SpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />

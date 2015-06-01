@@ -23,7 +23,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("Interface", "RobotState");
+                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
             }
         }
 
@@ -35,7 +35,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("Interface", "RobotState");
+                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
             }
         }
 
@@ -47,7 +47,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("Interface", "RobotState");
+                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
             }
         }
 
@@ -59,7 +59,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("Interface", "RobotState");
+                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
             }
         }
 
@@ -71,7 +71,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("Interface", "RobotState");
+                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
             }
         }
 

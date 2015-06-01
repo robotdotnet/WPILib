@@ -1,13 +1,13 @@
-﻿using NetworkTablesDotNet.Tables;
+﻿using System.Linq;
+using NetworkTablesDotNet.Tables;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Threading;
+//using System.Linq;
 
 namespace WPILib
 {
-    public class Ultrasonic : SensorBase, WPILib.Interfaces.PIDSource, livewindow.LiveWindowSendable
+    public class Ultrasonic : SensorBase, PIDSource, livewindow.LiveWindowSendable
     {
         public enum Unit
         {

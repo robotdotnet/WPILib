@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Util;
+﻿using WPILib.Util;
 
 namespace WPILib
 {
@@ -23,7 +19,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("");
+                throw new BaseSystemNotInitializedException(impl, typeof(HLUsageReporting));
             }
         }
 
@@ -35,7 +31,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("");
+                throw new BaseSystemNotInitializedException(impl, typeof(HLUsageReporting));
             }
         }
 
@@ -47,7 +43,7 @@ namespace WPILib
             }
             else
             {
-                throw new BaseSystemNotInitializedException("");
+                throw new BaseSystemNotInitializedException(impl, typeof(HLUsageReporting));
             }
         }
 

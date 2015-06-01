@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet.NetworkTables;
+﻿using NetworkTablesDotNet.NetworkTables;
 
 namespace WPILib.Buttons
 {
@@ -11,12 +7,11 @@ namespace WPILib.Buttons
         private NetworkTable m_table;
         private string m_field;
 
-        /*
-        public NetworkButton(string table, string field) : this
+        
+        public NetworkButton(string table, string field) : this(NetworkTable.GetTable(table), field)
         {
-            //Still needs to be implemented
         }
-         * */
+        
 
         public NetworkButton(NetworkTable table, string field)
         {
