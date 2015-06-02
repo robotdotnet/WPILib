@@ -18,8 +18,6 @@ namespace WPILib
         private static IntPtr s_notifier;
         public double m_expirationTime = 0;
 
-        private Action<uint, IntPtr> _delegate;
-
         private object m_param;
         private Action<object> m_handler;
         private double m_period = 0;
@@ -35,14 +33,13 @@ namespace WPILib
             m_nextEvent = null;
             m_handlerSemaphore = HALSemaphore.InitializeSemaphore(HALSemaphore.SEMAPHORE_FULL);
 
-            _delegate = ProcessQueue;
 
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = HALNotifier.InitializeNotifier(_delegate, ref status);
+                    s_notifier = HALNotifier.InitializeNotifier(ProcessQueue, ref status);
                 }
                 s_refCount++;
             } 
@@ -55,14 +52,12 @@ namespace WPILib
             m_nextEvent = null;
             m_handlerSemaphore = HALSemaphore.InitializeSemaphore(HALSemaphore.SEMAPHORE_FULL);
 
-            _delegate = ProcessQueue;
-
             lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = HALNotifier.InitializeNotifier(_delegate, ref status);
+                    s_notifier = HALNotifier.InitializeNotifier(ProcessQueue, ref status);
                 }
                 s_refCount++;
             }
