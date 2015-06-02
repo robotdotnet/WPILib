@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Interfaces;
-
-namespace WPILib
+﻿namespace WPILib
 {
     public enum ControlMode
     {
@@ -75,8 +69,10 @@ namespace WPILib
         double GetTemperature();
         double GetPosition();
         double GetSpeed();
+// ReSharper disable InconsistentNaming
         bool GetForwardLimitOK();
         bool GetReverseLimitOK();
+// ReSharper restore InconsistentNaming
         ushort GetFaults();
         void SetVoltageRampRate(double rampRate);
         uint GetFirmwareVersion();

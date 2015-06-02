@@ -17,12 +17,8 @@ namespace WPILib
             K2X = 2,
             K4X = 4,
         }
-
-
-        //Use enums for period multiplier
-        private int _channel;
-        private IntPtr _port;
-        //bytebuffer m_port
+        private int m_channel;
+        private IntPtr m_port;
 
         protected static readonly double DefaultPwmPeriod = 5.05;
 
@@ -30,29 +26,29 @@ namespace WPILib
 
         protected static readonly int DefaultPwmStepsDown = 1000;
         public static readonly int PwmDisabled = 0;
-        private bool _eliminateDeadband;
-        private int _maxPwm;
-        private int _deadbandMaxPwm;
-        private int _centerPwm;
-        private int _deadbandMinPwm;
-        private int _minPwm;
+        private bool m_eliminateDeadband;
+        private int m_maxPwm;
+        private int m_deadbandMaxPwm;
+        private int m_centerPwm;
+        private int m_deadbandMinPwm;
+        private int m_minPwm;
 
         private void InitPwm(int channel)
         {
-            //Console.WriteLine("Calling Init PWM");
             CheckPwmChannel(channel);
-            _channel = channel;
+            m_channel = channel;
 
             int status = 0;
-            _port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)channel), ref status);
-            if (!HALDigital.AllocatePWMChannel(_port, ref status))
+            m_port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)channel), ref status);
+            Utility.CheckStatus(status);
+            if (!HALDigital.AllocatePWMChannel(m_port, ref status))
             {
                 throw new AllocationException("PWM channel " + channel + " is already allocated");
             }
-
-            HALDigital.SetPWM(_port, 0, ref status);
-
-            _eliminateDeadband = false;
+            Utility.CheckStatus(status);
+            HALDigital.SetPWM(m_port, 0, ref status);
+            Utility.CheckStatus(status);
+            m_eliminateDeadband = false;
 
             HAL.Report(ResourceType.kResourceType_PWM, (byte)channel);
         }
@@ -65,23 +61,26 @@ namespace WPILib
         public override void Free()
         {
             int status = 0;
-            HALDigital.SetPWM(_port, 0, ref status);
-            HALDigital.FreePWMChannel(_port, ref status);
-            HALDigital.FreeDIO(_port, ref status);
+            HALDigital.SetPWM(m_port, 0, ref status);
+            Utility.CheckStatus(status);
+            HALDigital.FreePWMChannel(m_port, ref status);
+            Utility.CheckStatus(status);
+            HALDigital.FreeDIO(m_port, ref status);
+            Utility.CheckStatus(status);
         }
 
         public void EnableDeadbandElimination(bool eliminateDeadband)
         {
-            _eliminateDeadband = eliminateDeadband;
+            m_eliminateDeadband = eliminateDeadband;
         }
 
         public void SetBounds(int max, int deadbandMax, int center, int deadbandMin, int min)
         {
-            _maxPwm = max;
-            _deadbandMaxPwm = deadbandMax;
-            _centerPwm = center;
-            _deadbandMinPwm = deadbandMin;
-            _minPwm = min;
+            m_maxPwm = max;
+            m_deadbandMaxPwm = deadbandMax;
+            m_centerPwm = center;
+            m_deadbandMinPwm = deadbandMin;
+            m_minPwm = min;
         }
 
         protected void SetBounds(double max, double deadbandMax, double center, double deadbandMin, double min)
@@ -90,16 +89,16 @@ namespace WPILib
 
             double loopTime = HALDigital.GetLoopTiming(ref status) / (SystemClockTicksPerMicrosecond * 1e3);
 
-            _maxPwm = (int)((max - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
-            _deadbandMaxPwm = (int)((deadbandMax - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
-            _centerPwm = (int)((center - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
-            _deadbandMinPwm = (int)((deadbandMin - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
-            _minPwm = (int)((min - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
+            m_maxPwm = (int)((max - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
+            m_deadbandMaxPwm = (int)((deadbandMax - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
+            m_centerPwm = (int)((center - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
+            m_deadbandMinPwm = (int)((deadbandMin - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
+            m_minPwm = (int)((min - DefaultPwmCenter) / loopTime + DefaultPwmStepsDown - 1);
         }
 
         public int GetChannel()
         {
-            return _channel;
+            return m_channel;
         }
 
         public void SetPosition(double pos)
@@ -200,13 +199,15 @@ namespace WPILib
         public void SetRaw(int value)
         {
             int status = 0;
-            HALDigital.SetPWM(_port, (ushort)value, ref status);
+            HALDigital.SetPWM(m_port, (ushort)value, ref status);
+            Utility.CheckStatus(status);
         }
 
         public int GetRaw()
         {
             int status = 0;
-            int value = HALDigital.GetPWM(_port, ref status);
+            int value = HALDigital.GetPWM(m_port, ref status);
+            Utility.CheckStatus(status);
 
             return value;
         }
@@ -218,48 +219,50 @@ namespace WPILib
             switch (mult)
             {
                 case PeriodMultiplier.K1X:
-                    HALDigital.SetPWMPeriodScale(_port, 3, ref status);
+                    HALDigital.SetPWMPeriodScale(m_port, 3, ref status);
                     break;
                 case PeriodMultiplier.K2X:
-                    HALDigital.SetPWMPeriodScale(_port, 1, ref status);
+                    HALDigital.SetPWMPeriodScale(m_port, 1, ref status);
                     break;
                 case PeriodMultiplier.K4X:
-                    HALDigital.SetPWMPeriodScale(_port, 0, ref status);
+                    HALDigital.SetPWMPeriodScale(m_port, 0, ref status);
                     break;
                 default:
                     break;
             }
+            Utility.CheckStatus(status);
         }
 
         protected void SetZeroLatch()
         {
             int status = 0;
-            HALDigital.LatchPWMZero(_port, ref status);
+            HALDigital.LatchPWMZero(m_port, ref status);
+            Utility.CheckStatus(status);
         }
 
         protected int GetMaxPositivePwm()
         {
-            return _maxPwm;
+            return m_maxPwm;
         }
 
         protected int GetMinPositivePwm()
         {
-            return _eliminateDeadband ? _deadbandMaxPwm : _centerPwm + 1;
+            return m_eliminateDeadband ? m_deadbandMaxPwm : m_centerPwm + 1;
         }
 
         protected int GetCenterPwm()
         {
-            return _centerPwm;
+            return m_centerPwm;
         }
 
         protected int GetMaxNegativePwm()
         {
-            return _eliminateDeadband ? _deadbandMinPwm : _centerPwm - 1;
+            return m_eliminateDeadband ? m_deadbandMinPwm : m_centerPwm - 1;
         }
 
         protected int GetMinNegativePwm()
         {
-            return _minPwm;
+            return m_minPwm;
         }
 
         protected int GetPositiveScaleFactor()

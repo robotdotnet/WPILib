@@ -4,13 +4,13 @@ namespace WPILib
 {
     public class SafePWM : PWM, MotorSafety
     {
-        private MotorSafetyHelper _safetyHelper;
+        private MotorSafetyHelper m_safetyHelper;
 
         private void InitSafePWM()
         {
-            _safetyHelper = new MotorSafetyHelper(this);
-            _safetyHelper.SetExpiration(0.0);
-            _safetyHelper.SetSafetyEnabled(false);
+            m_safetyHelper = new MotorSafetyHelper(this);
+            m_safetyHelper.SetExpiration(0.0);
+            m_safetyHelper.SetSafetyEnabled(false);
         }
 
         public SafePWM(int channel)
@@ -21,17 +21,17 @@ namespace WPILib
 
         public void SetExpiration(double timeout)
         {
-            _safetyHelper.SetExpiration(timeout);
+            m_safetyHelper.SetExpiration(timeout);
         }
 
         public double GetExpiration()
         {
-            return _safetyHelper.GetExpiration();
+            return m_safetyHelper.GetExpiration();
         }
 
         public bool IsAlive()
         {
-            return _safetyHelper.IsAlive();
+            return m_safetyHelper.IsAlive();
         }
 
         public void StopMotor()
@@ -41,12 +41,12 @@ namespace WPILib
 
         public void SetSafetyEnabled(bool enabled)
         {
-            _safetyHelper.SetSafetyEnabled(enabled);
+            m_safetyHelper.SetSafetyEnabled(enabled);
         }
 
         public bool IsSafetyEnabled()
         {
-            return _safetyHelper.IsSafetyEnabled();
+            return m_safetyHelper.IsSafetyEnabled();
         }
 
         public string GetDescription()
@@ -56,7 +56,7 @@ namespace WPILib
 
         public void Feed()
         {
-            _safetyHelper.Feed();
+            m_safetyHelper.Feed();
         }
 
         public void Disable()

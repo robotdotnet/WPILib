@@ -6,43 +6,43 @@ namespace WPILib
     {
         private static Resource s_resourceList = null;
 
-        private readonly bool[] _numAllocated;
-        private readonly int _size;
-        private readonly Resource _nextResource;
+        private readonly bool[] m_numAllocated;
+        private readonly int m_size;
+        private readonly Resource m_nextResource;
 
 
         public static void Reset()
         {
-            for (Resource r = Resource.s_resourceList; r != null; r = r._nextResource)
+            for (Resource r = Resource.s_resourceList; r != null; r = r.m_nextResource)
             {
-                for (int i = 0; i < r._size; i++)
+                for (int i = 0; i < r.m_size; i++)
                 {
-                    r._numAllocated[i] = false;
+                    r.m_numAllocated[i] = false;
                 }
             }
         }
 
         public Resource(int size)
         {
-            _size = size;
-            _numAllocated = new bool[size];
+            m_size = size;
+            m_numAllocated = new bool[size];
 
-            for (int i = 0; i < _size; i++)
+            for (int i = 0; i < m_size; i++)
             {
-                _numAllocated[i] = false;
+                m_numAllocated[i] = false;
             }
 
-            _nextResource = Resource.s_resourceList;
+            m_nextResource = Resource.s_resourceList;
             Resource.s_resourceList = this;
         }
 
         public int Allocate()
         {
-            for (int i = 0; i < _size; i++)
+            for (int i = 0; i < m_size; i++)
             {
-                if (!_numAllocated[i])
+                if (!m_numAllocated[i])
                 {
-                    _numAllocated[i] = true;
+                    m_numAllocated[i] = true;
                     return i;
                 }
             }
@@ -51,25 +51,25 @@ namespace WPILib
 
         public int Allocate(int index)
         {
-            if (index >= _size || index < 0)
+            if (index >= m_size || index < 0)
             {
                 throw new CheckedAllocationException("Index " + index + " out of range");
             }
-            if (_numAllocated[index] == true)
+            if (m_numAllocated[index] == true)
             {
                 throw new CheckedAllocationException("Resource at index " + index + " already allocated");
             }
-            _numAllocated[index] = true;
+            m_numAllocated[index] = true;
             return index;
         }
 
         public void Free(int index)
         {
-            if (!_numAllocated[index])
+            if (!m_numAllocated[index])
             {
                 throw new AllocationException("No resource available to be freed");
             }
-            _numAllocated[index] = false;
+            m_numAllocated[index] = false;
         }
     }
 }

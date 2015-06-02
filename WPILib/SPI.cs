@@ -16,86 +16,86 @@ namespace WPILib
             MXP = 4
         }
 
-        private static byte devices = 0;
+        private static byte s_devices = 0;
 
-        private Port port;
-        private int bitOrder;
-        private int clockPolarity;
-        private int dataOnTrailing;
+        private Port m_port;
+        private int m_bitOrder;
+        private int m_clockPolarity;
+        private int m_dataOnTrailing;
 
         public SPI(Port port)
         {
             int status = 0;
-            this.port = port;
-            ++devices;
+            this.m_port = port;
+            ++s_devices;
             HAL_Base.HALDigital.SpiInitialize((byte)port, ref status);
             WPILib.Utility.CheckStatus(status);
-            HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_SPI, devices);
+            HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_SPI, s_devices);
         }
 
         public override void Free()
         {
             base.Free();
-            HAL_Base.HALDigital.SpiClose((byte)port);
+            HAL_Base.HALDigital.SpiClose((byte)m_port);
         }
 
         public void SetClockRate(int hz)
         {
-            HAL_Base.HALDigital.SpiSetSpeed((byte)port, (uint)hz);
+            HAL_Base.HALDigital.SpiSetSpeed((byte)m_port, (uint)hz);
         }
 
         private void UpdateOpts()
         {
-            HAL_Base.HALDigital.SpiSetOpts((byte)port, bitOrder, dataOnTrailing, clockPolarity);
+            HAL_Base.HALDigital.SpiSetOpts((byte)m_port, m_bitOrder, m_dataOnTrailing, m_clockPolarity);
         }
 
         public void SetMSBFirst()
         {
-            bitOrder = 1;
+            m_bitOrder = 1;
             UpdateOpts();
         }
 
         public void SetLSBFirst()
         {
-            bitOrder = 0;
+            m_bitOrder = 0;
             UpdateOpts();
         }
 
         public void SetClockActiveLow()
         {
-            clockPolarity = 1;
+            m_clockPolarity = 1;
             UpdateOpts();
         }
 
         public void SetClockActiveHigh()
         {
-            clockPolarity = 0;
+            m_clockPolarity = 0;
             UpdateOpts();
         }
 
         public void SetSampleDataOnFalling()
         {
-            dataOnTrailing = 1;
+            m_dataOnTrailing = 1;
             UpdateOpts();
         }
 
         public void SetSampleDataOnRising()
         {
-            dataOnTrailing = 0;
+            m_dataOnTrailing = 0;
             UpdateOpts();
         }
 
         public void SetChipSelectActiveHigh()
         {
             int status = 0;
-            HAL_Base.HALDigital.SpiSetChipSelectActiveHigh((byte)port, ref status);
+            HAL_Base.HALDigital.SpiSetChipSelectActiveHigh((byte)m_port, ref status);
             WPILib.Utility.CheckStatus(status);
         }
 
         public void SetChipSelectActiveLow()
         {
             int status = 0;
-            HAL_Base.HALDigital.SpiSetChipSelectActiveLow((byte)port, ref status);
+            HAL_Base.HALDigital.SpiSetChipSelectActiveLow((byte)m_port, ref status);
             WPILib.Utility.CheckStatus(status);
         }
 
@@ -103,7 +103,7 @@ namespace WPILib
         {
             byte[] sendBuffer = new byte[size];
             Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
-            return HAL_Base.HALDigital.SpiWrite((byte)port, sendBuffer, (byte)size);
+            return HAL_Base.HALDigital.SpiWrite((byte)m_port, sendBuffer, (byte)size);
         }
 
         public int Read(bool initiate, byte[] dataReceived, int size)
@@ -112,9 +112,9 @@ namespace WPILib
             byte[] receivedBuffer = new byte[size];
             byte[] sendBuffer = new byte[size];
             if (initiate)
-                retVal = HAL_Base.HALDigital.SpiTransaction((byte)port, sendBuffer, receivedBuffer, (byte)size);
+                retVal = HAL_Base.HALDigital.SpiTransaction((byte)m_port, sendBuffer, receivedBuffer, (byte)size);
             else
-                retVal = HAL_Base.HALDigital.SpiRead((byte)port, receivedBuffer, (byte)size);
+                retVal = HAL_Base.HALDigital.SpiRead((byte)m_port, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(size, dataReceived.Length));
             return retVal;
         }
@@ -125,7 +125,7 @@ namespace WPILib
             byte[] sendBuffer = new byte[size];
             Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
             byte[] receivedBuffer = new byte[size];
-            retVal = HAL_Base.HALDigital.SpiTransaction((byte)port, sendBuffer, receivedBuffer, (byte)size);
+            retVal = HAL_Base.HALDigital.SpiTransaction((byte)m_port, sendBuffer, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(receivedBuffer.Length, dataReceived.Length));
             return retVal;
         }

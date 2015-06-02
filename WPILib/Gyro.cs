@@ -31,6 +31,7 @@ namespace WPILib
             if (m_analog == null)
             {
                 Console.WriteLine("Null m_analog");
+                throw new ArgumentNullException("m_analog");
             }
             m_voltsPerDegreePerSecond = kDefaultVoltsPerDegreePerSecond;
             m_analog.SetAverageBits(kAverageBits);

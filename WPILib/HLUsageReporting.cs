@@ -4,46 +4,46 @@ namespace WPILib
 {
     public class HLUsageReporting
     {
-        private static Interface impl;
+        private static Interface s_impl;
 
         public static void SetImplementation(Interface i)
         {
-            impl = i;
+            s_impl = i;
         }
 
         public static void ReportScheduler()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                impl.ReportScheduler();
+                s_impl.ReportScheduler();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(HLUsageReporting));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(HLUsageReporting));
             }
         }
 
         public static void ReportPIDController(int num)
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                impl.ReportPIDController(num);
+                s_impl.ReportPIDController(num);
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(HLUsageReporting));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(HLUsageReporting));
             }
         }
 
         public static void ReportSmartDashboard()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                impl.ReportSmartDashboard();
+                s_impl.ReportSmartDashboard();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(HLUsageReporting));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(HLUsageReporting));
             }
         }
 
@@ -53,7 +53,7 @@ namespace WPILib
             void ReportPIDController(int num);
             void ReportSmartDashboard();
         }
-
+        
         public class Null : Interface
         {
             public void ReportScheduler()

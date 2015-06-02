@@ -10,44 +10,44 @@ namespace WPILib.Commands
     public abstract class PIDSubsystem : Subsystem, PIDSource, PIDOutput
     {
 
-        private PIDController controller;
+        private PIDController m_controller;
 
         public PIDSubsystem(string name, double p, double i, double d)
             : base(name)
         {
-            controller = new PIDController(p, i, d, this, this);
+            m_controller = new PIDController(p, i, d, this, this);
         }
 
         public PIDSubsystem(string name, double p, double i, double d, double f)
             : base(name)
         {
-            controller = new PIDController(p, i, d, f, this, this);
+            m_controller = new PIDController(p, i, d, f, this, this);
         }
 
         public PIDSubsystem(string name, double p, double i, double d, double f, double period)
             : base(name)
         {
-            controller = new PIDController(p, i, d, f, this, this, period);
+            m_controller = new PIDController(p, i, d, f, this, this, period);
         }
 
         public PIDSubsystem(double p, double i, double d)
         {
-            controller = new PIDController(p, i, d, this, this);
+            m_controller = new PIDController(p, i, d, this, this);
         }
 
         public PIDSubsystem(double p, double i, double d, double period, double f)
         {
-            controller = new PIDController(p, i, d, f, this, this, period);
+            m_controller = new PIDController(p, i, d, f, this, this, period);
         }
 
         public PIDSubsystem(double p, double i, double d, double period)
         {
-            controller = new PIDController(p, i, d, this, this, period);
+            m_controller = new PIDController(p, i, d, this, this, period);
         }
 
         public PIDController GetPIDController()
         {
-            return controller;
+            return m_controller;
         }
 
         public void SetPositionRelative(double deltaSetpoint)
@@ -57,12 +57,12 @@ namespace WPILib.Commands
 
         public void SetSetpoint(double setpoint)
         {
-            controller.SetSetpoint(setpoint);
+            m_controller.SetSetpoint(setpoint);
         }
 
         public double GetSetpoint()
         {
-            return controller.GetSetpoint();
+            return m_controller.GetSetpoint();
         }
 
         public double GetPosition()
@@ -72,27 +72,27 @@ namespace WPILib.Commands
 
         public void SetInputRange(double minimumInput, double maximumInput)
         {
-            controller.SetInputRange(minimumInput, maximumInput);
+            m_controller.SetInputRange(minimumInput, maximumInput);
         }
 
         public void SetOutputRange(double minimumOutput, double maximumOutput)
         {
-            controller.SetOutputRange(minimumOutput, maximumOutput);
+            m_controller.SetOutputRange(minimumOutput, maximumOutput);
         }
 
         public void SetAbsoluteTolerance(double t)
         {
-            controller.SetAbsoluteTolerance(t);
+            m_controller.SetAbsoluteTolerance(t);
         }
 
         public void SetPercentTolerance(double p)
         {
-            controller.SetPercentTolerance(p);
+            m_controller.SetPercentTolerance(p);
         }
 
         public bool OnTarget()
         {
-            return controller.OnTarget();
+            return m_controller.OnTarget();
         }
 
         protected abstract double ReturnPIDInput();
@@ -101,12 +101,12 @@ namespace WPILib.Commands
 
         public void Enable()
         {
-            controller.Enable();
+            m_controller.Enable();
         }
 
         public void Disable()
         {
-            controller.Disable();
+            m_controller.Disable();
         }
 
         public double PidGet()
@@ -126,7 +126,7 @@ namespace WPILib.Commands
 
         public new void InitTable(ITable table)
         {
-            controller.InitTable(table);
+            m_controller.InitTable(table);
             base.InitTable(table);
         }
     }

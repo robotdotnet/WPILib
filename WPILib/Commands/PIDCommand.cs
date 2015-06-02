@@ -9,7 +9,7 @@ namespace WPILib.Commands
 {
     public abstract class PIDCommand : Command, PIDSource, PIDOutput
     {
-        private PIDController controller;
+        private PIDController m_controller;
         public double PidGet()
         {
             return ReturnPIDInput();
@@ -23,38 +23,38 @@ namespace WPILib.Commands
         public PIDCommand(string name, double p, double i, double d)
             : base(name)
         {
-            controller = new PIDController(p, i, d, this, this);
+            m_controller = new PIDController(p, i, d, this, this);
         }
 
         public PIDCommand(double p, double i, double d)
         {
-            controller = new PIDController(p, i, d, this, this);
+            m_controller = new PIDController(p, i, d, this, this);
         }
 
         public PIDCommand(double p, double i, double d, double period)
         {
-            controller = new PIDController(p, i, d, this, this, period);
+            m_controller = new PIDController(p, i, d, this, this, period);
         }
 
         public PIDCommand(string name, double p, double i, double d, double period)
             : base(name)
         {
-            controller = new PIDController(p, i, d, this, this, period);
+            m_controller = new PIDController(p, i, d, this, this, period);
         }
 
         protected PIDController GetPIDController()
         {
-            return controller;
+            return m_controller;
         }
 
         protected new virtual void _Initialize()
         {
-            controller.Enable();
+            m_controller.Enable();
         }
 
         protected new virtual void _End()
         {
-            controller.Disable();
+            m_controller.Disable();
         }
 
         protected new virtual void _Interrupted()
@@ -69,12 +69,12 @@ namespace WPILib.Commands
 
         protected void SetSetpoint(double setpoint)
         {
-            controller.SetSetpoint(setpoint);
+            m_controller.SetSetpoint(setpoint);
         }
 
         protected double GetSetpoint()
         {
-            return controller.GetSetpoint();
+            return m_controller.GetSetpoint();
         }
 
         protected double GetPosition()
@@ -84,7 +84,7 @@ namespace WPILib.Commands
 
         protected void SetInputRange(double minimumInput, double maximumInput)
         {
-            controller.SetInputRange(minimumInput, maximumInput);
+            m_controller.SetInputRange(minimumInput, maximumInput);
         }
 
         protected abstract double ReturnPIDInput();
@@ -97,7 +97,7 @@ namespace WPILib.Commands
         }
         public new void InitTable(ITable table)
         {
-            controller.InitTable(table);
+            m_controller.InitTable(table);
             base.InitTable(table);
         }
     }

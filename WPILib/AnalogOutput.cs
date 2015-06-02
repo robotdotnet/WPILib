@@ -9,7 +9,7 @@ namespace WPILib
 {
     public class AnalogOutput : SensorBase
     {
-        private static Resource channels = new Resource(AnalogOutputChannels);
+        private static Resource s_channels = new Resource(AnalogOutputChannels);
         private IntPtr m_port;
         private int m_channel;
 
@@ -24,7 +24,7 @@ namespace WPILib
             }
             try
             {
-                channels.Allocate(channel);
+                s_channels.Allocate(channel);
             }
             catch (CheckedAllocationException e)
             {
@@ -32,17 +32,17 @@ namespace WPILib
                         + " is already allocated");
             }
 
-            IntPtr port_pointer = HAL.GetPort((byte) channel);
+            IntPtr portPointer = HAL.GetPort((byte) channel);
 
             int status = 0;
-            m_port = HALAnalog.InitializeAnalogOutputPort(port_pointer, ref status);
+            m_port = HALAnalog.InitializeAnalogOutputPort(portPointer, ref status);
 
             HAL.Report(ResourceType.kResourceType_AnalogChannel, (byte) channel, 1);
         }
 
         public override void Free()
         {
-            channels.Free(m_channel);
+            s_channels.Free(m_channel);
             m_channel = 0;
             //base.Free();
         }

@@ -1,12 +1,10 @@
 ﻿using NetworkTablesDotNet.Tables;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using WPILib.Interfaces;
+using WPILib.livewindow;
 
 namespace WPILib
 {
-    public abstract class ADXL345 : SensorBase, Interfaces.Accelerometer, livewindow.LiveWindowSendable
+    public abstract class ADXL345 : SensorBase, Accelerometer, LiveWindowSendable
     {
         protected const byte PowerCtlRegister = 0x2D;
         protected const byte DataFormatRegister = 0x31;
@@ -90,27 +88,27 @@ namespace WPILib
             return "3AxisAccelerometer";
         }
 
-        private ITable table;
+        private ITable m_table;
 
         public void InitTable(ITable subtable)
         {
-            table = subtable;
+            m_table = subtable;
             UpdateTable();
         }
 
         public void UpdateTable()
         {
-            if (table != null)
+            if (m_table != null)
             {
-                table.PutNumber("X", GetX());
-                table.PutNumber("Y", GetY());
-                table.PutNumber("Z", GetZ());
+                m_table.PutNumber("X", GetX());
+                m_table.PutNumber("Y", GetY());
+                m_table.PutNumber("Z", GetZ());
             }
         }
 
         public ITable GetTable()
         {
-            return table;
+            return m_table;
         }
 
         public void StartLiveWindowMode()

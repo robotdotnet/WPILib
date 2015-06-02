@@ -13,12 +13,14 @@ namespace WPILib
 {
     public class Preferences : ITableListener
     {
+// ReSharper disable InconsistentNaming
         private static string TABLE_NAME = "Preferences";
         private static string SAVE_FIELD = "~S A V E~";
         private static string FILE_NAME = "/home/lvuser/wpilib-preferences.ini";
         private static char[] VALUE_PREFIX = { '=', '\"' };
         private static char[] VALUE_SUFFIX = { '\"', '\n' };
         private static char[] NEW_LINE = { '\n' };
+// ReSharper restore InconsistentNaming
 
         private static Preferences s_instance;
 
@@ -34,31 +36,29 @@ namespace WPILib
             }
         }
 
-        private object fileLock = new object();
+        private object m_fileLock = new object();
 
         private object m_lockObject = new object();
 
-        private Dictionary<string, string> values;
-        private List<string> keys;
+        private Dictionary<string, string> m_values;
+        private List<string> m_keys;
 
         private Dictionary<string, Comment> m_comments;
         private Comment m_endComment;
 
-        Thread thread;
-
         private Preferences()
         {
-            values = new Dictionary<string,string>();
-            keys = new List<string>();
+            m_values = new Dictionary<string,string>();
+            m_keys = new List<string>();
 
-            lock(fileLock)
+            lock(m_fileLock)
             {
-                thread = new Thread(Read);
+                Thread thread = new Thread(Read);
                 thread.Start();
 
                 try
                 {
-                    Monitor.Wait(fileLock);
+                    Monitor.Wait(m_fileLock);
                     
                 }
                 catch(ThreadInterruptedException ex)
@@ -73,7 +73,7 @@ namespace WPILib
         public List<string> GetKeys()
         {
             lock (m_lockObject)
-                return keys;
+                return m_keys;
         }
 
         private void Put(string key, string value)
@@ -85,10 +85,10 @@ namespace WPILib
                     throw new ArgumentNullException("key");
                 }
                 ImproperPreferenceKeyException.ConfirmString(key);
-                if (!values.ContainsKey(key))
+                if (!m_values.ContainsKey(key))
                 {
-                    values.Add(key, value);
-                    keys.Add(key);
+                    m_values.Add(key, value);
+                    m_keys.Add(key);
                 }
                 //NetworkTable.GetTable(TABLE_NAME).PutString(key, value);
             }
@@ -140,15 +140,15 @@ namespace WPILib
                 {
                     throw new ArgumentNullException("key");
                 }
-                if (!values.ContainsKey(key))
+                if (!m_values.ContainsKey(key))
                     return null;
-                return values[key];
+                return m_values[key];
             }
         }
 
         public bool ContainsKey(string key)
         {
-            return values.ContainsKey(key);
+            return m_values.ContainsKey(key);
         }
 
         public void Remove(string key)
@@ -159,8 +159,8 @@ namespace WPILib
                 {
                     throw new ArgumentNullException("key");
                 }
-                values.Remove(key);
-                keys.Remove(key);
+                m_values.Remove(key);
+                m_keys.Remove(key);
             }
         }
 
@@ -275,16 +275,16 @@ namespace WPILib
             }
         }
 
-        Thread saveThread;
+        Thread m_saveThread;
         public void Save()
         {
-            lock (fileLock)
+            lock (m_fileLock)
             {
-                saveThread = new Thread(Write);
-                saveThread.Start();
+                m_saveThread = new Thread(Write);
+                m_saveThread.Start();
                 try
                 {
-                    Monitor.Wait(fileLock);
+                    Monitor.Wait(m_fileLock);
                 }
                 catch(ThreadInterruptedException ex)
                 {
@@ -297,9 +297,9 @@ namespace WPILib
         {
             lock(m_lockObject)
             {
-                lock(fileLock)
+                lock(m_fileLock)
                 {
-                    Monitor.PulseAll(fileLock);
+                    Monitor.PulseAll(m_fileLock);
                 }
 
                 StreamWriter output = null;
@@ -313,10 +313,9 @@ namespace WPILib
                     output = new StreamWriter(FILE_NAME);
 
                     output.Write("[Preferences]\n");
-                    for (int i = 0; i < keys.Count; i++)
+                    foreach (string key in m_keys)
                     {
-                        string key = keys[i];
-                        string value = values[key];
+                        string value = m_values[key];
                         if (m_comments != null)
                         {
                             Comment comment = m_comments[key];
@@ -363,9 +362,9 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                lock (fileLock)
+                lock (m_fileLock)
                 {
-                    Monitor.PulseAll(fileLock);
+                    Monitor.PulseAll(m_fileLock);
                 }
 
                 Comment comment = null;
@@ -447,8 +446,8 @@ namespace WPILib
                                 }
                                 string result = buffer.ToString();
 
-                                keys.Add(name);
-                                values.Add(name, result);
+                                m_keys.Add(name);
+                                m_values.Add(name, result);
 
                                 //NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
                                 if (comment != null)
@@ -517,19 +516,19 @@ namespace WPILib
                 {
                     if (!ImproperPreferenceKeyException.IsAcceptable(key) || value.ToString().IndexOf('"') != -1)
                     {
-                        if (values.ContainsKey(key) || keys.Contains(key))
+                        if (m_values.ContainsKey(key) || m_keys.Contains(key))
                         {
-                            values.Remove(key);
-                            keys.Remove(key);
+                            m_values.Remove(key);
+                            m_keys.Remove(key);
                             //NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
                         }
                     }
                     else
                     {
-                        if (!values.ContainsKey(key))
+                        if (!m_values.ContainsKey(key))
                         {
-                            values.Add(key, value.ToString());
-                            keys.Add(key);
+                            m_values.Add(key, value.ToString());
+                            m_keys.Add(key);
                         }
                     }
                 }
@@ -540,16 +539,16 @@ namespace WPILib
         {
             internal class Reader
             {
-                StreamReader stream;
+                StreamReader m_stream;
 
                 internal Reader(StreamReader stream)
                 {
-                    this.stream = stream;
+                    this.m_stream = stream;
                 }
 
                 internal char Read()
                 {
-                    int input = stream.Read();
+                    int input = m_stream.Read();
                     if (input == -1)
                     {
                         throw new EndOfStreamException();
@@ -590,9 +589,8 @@ namespace WPILib
 
             public static void ConfirmString(string value)
             {
-                for (int i = 0; i < value.Length; i++)
+                foreach (char letter in value)
                 {
-                    char letter = value[i];
                     switch(letter)
                     {
                         case '=':
@@ -609,9 +607,8 @@ namespace WPILib
 
             public static bool IsAcceptable(string value)
             {
-                for (int i = 0; i < value.Length; i++)
+                foreach (char letter in value)
                 {
-                    char letter = value[i];
                     switch (letter)
                     {
                         case '=':
@@ -630,18 +627,18 @@ namespace WPILib
 
         private class Comment
         {
-            private List<char> bytes = new List<char>();
+            private List<char> m_bytes = new List<char>();
 
             internal void AddBytes(char[] bytes)
             {
-                this.bytes.AddRange(bytes);
+                m_bytes.AddRange(bytes);
             }
 
             internal void Write(StreamWriter writer)
             {
-                for (int i = 0; i < bytes.Count; i++)
+                foreach (char t in m_bytes)
                 {
-                    writer.Write(bytes[i]);
+                    writer.Write(t);
                 }
             }
         }

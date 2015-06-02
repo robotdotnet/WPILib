@@ -46,7 +46,7 @@ namespace WPILib.Commands
         private bool m_locked = false;
         private bool m_runWhenDisabled = false;
 
-        private object syncRoot = new object();
+        private object m_syncRoot = new object();
 
         private CommandGroup m_parent;
 
@@ -121,7 +121,7 @@ namespace WPILib.Commands
         /// <seealso cref="Command.IsTimedOut()"/>
         protected void SetTimeout(double seconds)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (seconds < 0)
@@ -137,7 +137,7 @@ namespace WPILib.Commands
         /// <returns>The time since this command was initialize (in seconds).</returns>
         public double TimeSinceInitialized()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 return m_startTime < 0 ? 0 : Timer.GetFPGATimestamp() - m_startTime;
@@ -156,7 +156,7 @@ namespace WPILib.Commands
         /// <seealso cref="Subsystem"/>
         protected void Requires(Subsystem subsystem)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 Validate("Can not add new requirement to command");
@@ -180,7 +180,7 @@ namespace WPILib.Commands
         /// </summary>
         internal void Removed()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (m_initialized)
@@ -210,7 +210,7 @@ namespace WPILib.Commands
         /// <returns>Whether or not the command should stay within the <see cref="Scheduler"/>.</returns>
         internal bool Run()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (!m_runWhenDisabled && m_parent == null && RobotState.IsDisabled())
@@ -278,7 +278,7 @@ namespace WPILib.Commands
 
         protected bool IsTimedOut()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 return m_timeout != -1 && TimeSinceInitialized() >= m_timeout;
             }
@@ -286,7 +286,7 @@ namespace WPILib.Commands
 
         internal IEnumerable<Subsystem> GetRequirements()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 return m_requirements == null ? Enumerable.Empty<Subsystem>() : m_requirements;
@@ -295,7 +295,7 @@ namespace WPILib.Commands
 
         internal void LockChanges()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 m_locked = true;
             }
@@ -303,7 +303,7 @@ namespace WPILib.Commands
 
         internal void Validate(String message)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (m_locked)
@@ -315,7 +315,7 @@ namespace WPILib.Commands
 
         internal void SetParent(CommandGroup parent)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (this.m_parent != null)
@@ -333,7 +333,7 @@ namespace WPILib.Commands
 
         public void Start()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 LockChanges();
@@ -347,7 +347,7 @@ namespace WPILib.Commands
 
         internal void StartRunning()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 m_running = true;
@@ -359,7 +359,7 @@ namespace WPILib.Commands
 
         public bool IsRunning()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 return m_running;
             }
@@ -367,7 +367,7 @@ namespace WPILib.Commands
 
         public void Cancel()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (m_parent != null)
@@ -380,7 +380,7 @@ namespace WPILib.Commands
 
         internal void _Cancel()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (IsRunning())
@@ -392,7 +392,7 @@ namespace WPILib.Commands
 
         public bool IsCanceled()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 return m_canceled;
             }
@@ -400,7 +400,7 @@ namespace WPILib.Commands
 
         public bool IsInterruptible()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 return m_interruptible;
             }
@@ -408,7 +408,7 @@ namespace WPILib.Commands
 
         protected void SetInterruptable(bool interruptible)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 this.m_interruptible = interruptible;
             }
@@ -416,7 +416,7 @@ namespace WPILib.Commands
 
         public bool DoesRequire(Subsystem system)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 return m_requirements != null && m_requirements.Contains(system);
             }
@@ -424,7 +424,7 @@ namespace WPILib.Commands
 
         public CommandGroup GetGroup()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 return m_parent;
             }

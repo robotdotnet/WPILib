@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Linq;
 using WPILib.Interfaces;
 using WPILib.Util;
 using HAL_Base;
@@ -14,7 +15,7 @@ namespace WPILib
         private IntPtr m_port;
         private int m_channel;
         private static int[] s_accumulatorChannels = { 0, 1 };
-        private long _accumulatorOffset;
+        private long m_accumulatorOffset;
 
         public AnalogInput(int channel)
         {
@@ -42,7 +43,7 @@ namespace WPILib
         {
             s_channels.Free(m_channel);
             m_channel = 0;
-            _accumulatorOffset = 0;
+            m_accumulatorOffset = 0;
         }
 
         public int GetValue()
@@ -124,14 +125,14 @@ namespace WPILib
             {
                 throw new AllocationException("This is not an accumulator");
             }
-            _accumulatorOffset = 0;
+            m_accumulatorOffset = 0;
             int status = 0;
             HALAnalog.InitAccumulator(m_port, ref status);
         }
 
         public void SetAccumulatorInitialValue(long initialValue)
         {
-            _accumulatorOffset = initialValue;
+            m_accumulatorOffset = initialValue;
         }
 
         public void ResetAccumulator()
@@ -161,7 +162,7 @@ namespace WPILib
         {
             int status = 0;
             long value = HALAnalog.GetAccumulatorValue(m_port, ref status);
-            return value + _accumulatorOffset;
+            return value + m_accumulatorOffset;
         }
 
         public long GetAccumulatorCount()
@@ -183,21 +184,14 @@ namespace WPILib
             long value = 0;
             int status = 0;
             HALAnalog.GetAccumulatorOutput(m_port, ref value, ref count, ref status);
-            result.value = value + _accumulatorOffset;
+            result.value = value + m_accumulatorOffset;
             result.count = count;
         }
 
 
         public bool IsAccumulatorChannel()
         {
-            for (int i = 0; i < s_accumulatorChannels.Length; i++)
-            {
-                if (m_channel == s_accumulatorChannels[i])
-                {
-                    return true;
-                }
-            }
-            return false;
+            return s_accumulatorChannels.Any(t => m_channel == t);
         }
 
         public static void SetGlobalSampleRate(double samplesPerSecond)

@@ -8,8 +8,18 @@ namespace WPILib
 {
     public class AnalogTrigger
     {
-        internal IntPtr m_port;
-        internal int m_index;
+        private IntPtr m_port;
+        private int m_index;
+
+        internal IntPtr Port
+        {
+            get { return m_port; }
+        }
+
+        internal int Index
+        {
+            get { return m_index; }
+        }
 
         protected void InitTrigger(int channel)
         {

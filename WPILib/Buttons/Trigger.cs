@@ -32,7 +32,7 @@ namespace WPILib.Buttons
         /// <returns>whether Get() return true or the internal table for SmartDashboard use is pressed</returns>
         public bool Grab()
         {
-            return Get() || (table != null && table.GetBoolean("pressed", false));
+            return Get() || (m_table != null && m_table.GetBoolean("pressed", false));
         }
 
         /// <summary>
@@ -90,16 +90,16 @@ namespace WPILib.Buttons
 
         public void InitTable(ITable subtable)
         {
-            this.table = subtable;
-            if (table != null)
+            this.m_table = subtable;
+            if (m_table != null)
             {
-                table.PutBoolean("pressed", Get());
+                m_table.PutBoolean("pressed", Get());
             }
         }
 
         public ITable GetTable()
         {
-            return table;
+            return m_table;
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace WPILib.Buttons
             return "Button";
         }
 
-        private ITable table;
+        private ITable m_table;
 
     }
 }

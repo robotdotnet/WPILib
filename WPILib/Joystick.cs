@@ -39,69 +39,69 @@ namespace WPILib
         private static byte s_defaultTriggerButton = 1;
         private static byte s_defaultTopButton = 2;
 
-        private DriverStation _ds;
-        private int _port;
-        private byte[] _axes;
-        private byte[] _buttons;
-        private int _outputs;
-        private ushort _leftRumble;
-        private ushort _rightRumble;
+        private DriverStation m_ds;
+        private int m_port;
+        private byte[] m_axes;
+        private byte[] m_buttons;
+        private int m_outputs;
+        private ushort m_leftRumble;
+        private ushort m_rightRumble;
 
         public Joystick(int port)
             : this(port, (int)AxisType.NumAxis, (int)ButtonType.NumButton)
         {
-            _axes[(int)AxisType.X] = s_defaultXAxis;
+            m_axes[(int)AxisType.X] = s_defaultXAxis;
 
-            _axes[(int)AxisType.X] = s_defaultXAxis;
-            _axes[(int)AxisType.Y] = s_defaultYAxis;
-            _axes[(int)AxisType.Z] = s_defaultZAxis;
-            _axes[(int)AxisType.Twist] = s_defaultTwistAxis;
-            _axes[(int)AxisType.Throttle] = s_defaultThrottleAxis;
+            m_axes[(int)AxisType.X] = s_defaultXAxis;
+            m_axes[(int)AxisType.Y] = s_defaultYAxis;
+            m_axes[(int)AxisType.Z] = s_defaultZAxis;
+            m_axes[(int)AxisType.Twist] = s_defaultTwistAxis;
+            m_axes[(int)AxisType.Throttle] = s_defaultThrottleAxis;
 
-            _buttons[(int)ButtonType.Trigger] = s_defaultTriggerButton;
-            _buttons[(int)ButtonType.Top] = s_defaultTopButton;
+            m_buttons[(int)ButtonType.Trigger] = s_defaultTriggerButton;
+            m_buttons[(int)ButtonType.Top] = s_defaultTopButton;
 
             HAL.Report(ResourceType.kResourceType_Joystick, (byte)port);
         }
 
         protected Joystick(int port, int numAxisTypes, int numButtonTypes)
         {
-            _ds = DriverStation.GetInstance();
-            _axes = new byte[numAxisTypes];
-            _buttons = new byte[numButtonTypes];
-            _port = port;
+            m_ds = DriverStation.GetInstance();
+            m_axes = new byte[numAxisTypes];
+            m_buttons = new byte[numButtonTypes];
+            m_port = port;
         }
 
 
 
         public override double GetX(Hand hand)
         {
-            return GetRawAxis(_axes[(int)AxisType.X]);
+            return GetRawAxis(m_axes[(int)AxisType.X]);
         }
 
         public override double GetY(Hand hand)
         {
-            return GetRawAxis(_axes[(int)AxisType.Y]);
+            return GetRawAxis(m_axes[(int)AxisType.Y]);
         }
 
         public override double GetZ(Hand hand)
         {
-            return GetRawAxis(_axes[(int)AxisType.Z]);
+            return GetRawAxis(m_axes[(int)AxisType.Z]);
         }
 
         public override double GetTwist()
         {
-            return GetRawAxis(_axes[(int)AxisType.Twist]);
+            return GetRawAxis(m_axes[(int)AxisType.Twist]);
         }
 
         public override double GetThrottle()
         {
-            return GetRawAxis(_axes[(int)AxisType.Throttle]);
+            return GetRawAxis(m_axes[(int)AxisType.Throttle]);
         }
 
         public override double GetRawAxis(int axis)
         {
-            return _ds.GetStickAxis(_port, axis);
+            return m_ds.GetStickAxis(m_port, axis);
         }
 
         public double GetAxis(AxisType axis)
@@ -125,17 +125,17 @@ namespace WPILib
 
         public int GetAxisCount()
         {
-            return _ds.GetStickAxisCount(_port);
+            return m_ds.GetStickAxisCount(m_port);
         }
 
         public override bool GetTrigger(Hand hand)
         {
-            return GetRawButton(_buttons[(int)ButtonType.Trigger]);
+            return GetRawButton(m_buttons[(int)ButtonType.Trigger]);
         }
 
         public override bool GetTop(Hand hand)
         {
-            return GetRawButton(_buttons[(int)ButtonType.Top]);
+            return GetRawButton(m_buttons[(int)ButtonType.Top]);
         }
 
         public override bool GetBumper(Hand hand)
@@ -145,21 +145,21 @@ namespace WPILib
 
         public override bool GetRawButton(int button)
         {
-            return _ds.GetStickButton(_port, (byte)button);
+            return m_ds.GetStickButton(m_port, (byte)button);
         }
         public int GetButtonCount()
         {
-            return _ds.GetStickButtonCount(_port);
+            return m_ds.GetStickButtonCount(m_port);
         }
 
         public override int GetPOV(int pov)
         {
-            return _ds.GetStickPOV(_port, pov);
+            return m_ds.GetStickPOV(m_port, pov);
         }
 
         public int GetPOVCount()
         {
-            return _ds.GetStickPOVCount(_port);
+            return m_ds.GetStickPOVCount(m_port);
         }
 
         public bool GetButton(ButtonType button)
@@ -197,12 +197,12 @@ namespace WPILib
 
         public int GetAxisChannel(AxisType axis)
         {
-            return _axes[(int)axis];
+            return m_axes[(int)axis];
         }
 
         public void SetAxisChannel(AxisType axis, int channel)
         {
-            _axes[(int)axis] = (byte)channel;
+            m_axes[(int)axis] = (byte)channel;
         }
 
         public void SetRumble(RumbleType type, float value)
@@ -212,22 +212,22 @@ namespace WPILib
             else if (value > 1)
                 value = 1;
             if (type == RumbleType.LeftRumble)
-                _leftRumble = (ushort)(value * 65535);
+                m_leftRumble = (ushort)(value * 65535);
             else
-                _rightRumble = (ushort)(value * 65535);
-            HAL.HALSetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
+                m_rightRumble = (ushort)(value * 65535);
+            HAL.HALSetJoystickOutputs((byte)m_port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutput(int outputNumber, bool value)
         {
-            _outputs = (_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            HAL.HALSetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
+            m_outputs = (m_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
+            HAL.HALSetJoystickOutputs((byte)m_port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutputs(int value)
         {
-            _outputs = value;
-            HAL.HALSetJoystickOutputs((byte)_port, (uint)_outputs, _leftRumble, _rightRumble);
+            m_outputs = value;
+            HAL.HALSetJoystickOutputs((byte)m_port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
     }
 }
