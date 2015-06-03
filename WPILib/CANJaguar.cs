@@ -13,16 +13,21 @@ namespace WPILib
 {
     public class CANJaguar : MotorSafety, CANSpeedController, ITableListener, LiveWindowSendable
     {
+
+// ReSharper disable InconsistentNaming
         public static readonly int kMaxMessageDataSize = 8;
+
 
         public static readonly int kControllerRate = 1000;
         public static readonly double kApproxBusVoltage = 12.0;
 
         private MotorSafetyHelper m_safetyHelper;
-        private static readonly Resource allocated = new Resource(63);
+        private static readonly Resource s_allocated = new Resource(63);
 
         private static readonly int kFullMessageIDMask = HALCAN.CAN_MSGID_API_M | HALCAN.CAN_MSGID_MFR_M | HALCAN.CAN_MSGID_DTYPE_M;
-        private static readonly int kSendMessagePeriod = 20;
+        private const int kSendMessagePeriod = 20;
+
+// ReSharper restore InconsistentNaming
 
         public struct EncoderTag
         {
@@ -39,22 +44,13 @@ namespace WPILib
 
         }
 
+// ReSharper disable InconsistentNaming
         public static readonly EncoderTag kEncoder = new EncoderTag();
+
 
         public readonly static QuadEncoderTag kQuadEncoder = new QuadEncoderTag();
 
         public readonly static PotentiometerTag kPotentiometer = new PotentiometerTag();
-
-        /*
-        public enum ControlMode
-        {
-            PercentVbus,
-            Current,
-            Speed,
-            Position,
-            Voltage,
-        }
-         * */
 
         public static readonly int kCurrentFault = 1;
         public static readonly int kTemeperatureFault = 2;
@@ -63,27 +59,13 @@ namespace WPILib
 
         public static int kForwardLimit = 1;
         public static int kReverseLimit = 2;
-
-        /*
-        public enum NeutralMode
-        {
-            Jumper,
-            Break,
-            Coast,
-        }
-
-        public enum LimitMode
-        {
-            SwitchInputsOnly,
-            SoftPositionLimits,
-        }
-         * */
+// ReSharper restore InconsistentNaming
 
         public CANJaguar(int deviceNumber)
         {
             try
             {
-                allocated.Allocate(deviceNumber - 1);
+                s_allocated.Allocate(deviceNumber - 1);
             }
             catch (CheckedAllocationException e1)
             {
@@ -168,7 +150,7 @@ namespace WPILib
 
         public void Free()
         {
-            allocated.Free(m_deviceNumber - 1);
+            s_allocated.Free(m_deviceNumber - 1);
             m_safetyHelper = null;
             int status = 0;
 
@@ -260,7 +242,8 @@ namespace WPILib
         bool m_receivedStatusMessage1 = false;
         bool m_receivedStatusMessage2 = false;
 
-        static readonly int kReceiveStatusAttempts = 50;
+// ReSharper disable once InconsistentNaming
+        private const int kReceiveStatusAttempts = 50;
 
         bool m_controlEnabled = true;
 
@@ -1048,14 +1031,14 @@ namespace WPILib
 
         protected void GetMessage(int messageID, int messageMask, byte[] data)
         {
-            uint messageIDU = (uint)messageID;
-            messageIDU |= m_deviceNumber;
-            messageIDU &= (uint)HALCAN.CAN_MSGID_FULL_M;
+            uint messageIdu = (uint)messageID;
+            messageIdu |= m_deviceNumber;
+            messageIdu &= (uint)HALCAN.CAN_MSGID_FULL_M;
             byte dataSize = 0;
             uint timeStamp = 0;
             int status = 0;
 
-            HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage(ref messageIDU, (uint)messageMask, data, ref dataSize, ref timeStamp, ref status);
+            HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage(ref messageIdu, (uint)messageMask, data, ref dataSize, ref timeStamp, ref status);
 
             if (status < 0)
             {
@@ -1193,12 +1176,14 @@ namespace WPILib
             return 4;
         }
 
+// ReSharper disable once InconsistentNaming
         private static byte PackINT16(byte[] buffer, short value)
         {
             Swap16(value, buffer);
             return 2;
         }
 
+// ReSharper disable once InconsistentNaming
         private static byte PackINT32(byte[] buffer, int value)
         {
             Swap32(value, buffer);
@@ -1231,11 +1216,13 @@ namespace WPILib
             return Unpack32(buffer, 0) / 65536.0;
         }
 
+// ReSharper disable once InconsistentNaming
         private static short UnpackINT16(byte[] buffer)
         {
             return Unpack16(buffer, 0);
         }
 
+// ReSharper disable once InconsistentNaming
         private static int UnpackINT32(byte[] buffer)
         {
             return Unpack32(buffer, 0);

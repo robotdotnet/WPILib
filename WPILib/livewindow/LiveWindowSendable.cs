@@ -1,5 +1,4 @@
-﻿
-namespace WPILib.livewindow
+﻿namespace WPILib.livewindow
 {
     /// <summary>
     /// Live Window Sendable is a special type of object sendable to the live window.

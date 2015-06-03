@@ -75,10 +75,9 @@ namespace WPILib.Commands
 
             if (!m_commands.Contains(command))
             {
-                foreach (var s in command.GetRequirements())
+                if (command.GetRequirements().Any(s => s.GetCurrentCommand() != null && !s.GetCurrentCommand().IsInterruptible()))
                 {
-                    if (s.GetCurrentCommand() != null && !s.GetCurrentCommand().IsInterruptible())
-                        return;
+                    return;
                 }
 
                 m_adding = true;

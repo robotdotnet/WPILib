@@ -28,10 +28,12 @@ namespace WPILib
 
         private static int s_instances = 0;
 
+// ReSharper disable InconsistentNaming
         private double m_P;     // factor for "proportional" control
         private double m_I;     // factor for "integral" control
         private double m_D;     // factor for "derivative" control
         private double m_F;                 // factor for feedforward term
+// ReSharper restore InconsistentNaming
         private double m_maximumOutput = 1.0; // |maximum output|
         private double m_minimumOutput = -1.0;  // |minimum output|
         private double m_maximumInput = 0.0;    // maximum input - limit setpoint to this

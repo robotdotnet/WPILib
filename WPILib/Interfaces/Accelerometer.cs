@@ -3,10 +3,12 @@ namespace WPILib.Interfaces
 {
     public enum Range
     {
+// ReSharper disable InconsistentNaming
         k2G,
         k4G,
         k8G,
         k16G,
+// ReSharper restore InconsistentNaming
     }
 
     /// <summary>

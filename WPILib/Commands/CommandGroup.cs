@@ -10,10 +10,15 @@ namespace WPILib.Commands
     public class CommandGroup : Command
     {
         private List<Entry> m_commands = new List<Entry>();
-        internal LinkedList<Entry> m_children = new LinkedList<Entry>();
+        private LinkedList<Entry> m_children = new LinkedList<Entry>();
+
+        internal LinkedList<Entry> Children
+        {
+            get { return m_children; }
+        }
 
         private int m_currentCommandIndex = -1;
-        private object syncRoot = new object();
+        private object m_syncRoot = new object();
         public CommandGroup()
         {
             
@@ -26,7 +31,7 @@ namespace WPILib.Commands
 
         public void AddSequential(Command command)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 Validate("Can not add new command to command group");
                 if (command == null)
@@ -42,7 +47,7 @@ namespace WPILib.Commands
 
         public void AddSequential(Command command, double timeout)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
                 Validate("Can not add new command to command group");
                 if (command == null)
@@ -61,7 +66,7 @@ namespace WPILib.Commands
 
         public void AddParallel(Command command)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 Validate("Can not add new command to command group");
@@ -78,7 +83,7 @@ namespace WPILib.Commands
 
         public void AddParallel(Command command, double timeout)
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 Validate("Can not add new command to command group");
@@ -232,7 +237,7 @@ namespace WPILib.Commands
 
         public new bool IsInterruptible()
         {
-            lock (syncRoot)
+            lock (m_syncRoot)
             {
 
                 if (!base.IsInterruptible())
@@ -262,18 +267,14 @@ namespace WPILib.Commands
                 Command child = childIter.Value.command;
                 bool erased = false;
 
-                foreach (var s in command.GetRequirements())
+                if (command.GetRequirements().Any(child.DoesRequire))
                 {
-                    if (child.DoesRequire(s))
-                    {
-                        child._Cancel();
-                        child.Removed();
-                        var childTemp = childIter.Next;
-                        m_children.Remove(childIter);
-                        childIter = childTemp;
-                        erased = true;
-                        break;
-                    }
+                    child._Cancel();
+                    child.Removed();
+                    var childTemp = childIter.Next;
+                    m_children.Remove(childIter);
+                    childIter = childTemp;
+                    erased = true;
                 }
                 if (!erased)
                 {
@@ -286,9 +287,12 @@ namespace WPILib.Commands
 
         internal class Entry
         {
+
+// ReSharper disable InconsistentNaming
             internal const int IN_SEQUENCE = 0;
             internal const int BRANCH_PEER = 1;
             internal const int BRANCH_CHILD = 2;
+
 
             internal Command command;
             internal int state;
@@ -318,6 +322,7 @@ namespace WPILib.Commands
                     return time == 0 ? false : time >= timeout;
                 }
             }
+// ReSharper restore InconsistentNaming
 
         }
     }

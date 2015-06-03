@@ -16,11 +16,10 @@ namespace WPILib
         private double m_expiration;
         private bool m_enabled;
         private double m_stopTime;
-        private MotorSafety _safeObject;
-        private MotorSafetyHelper _nextHelper;
+        private MotorSafety m_safeObject;
+        private MotorSafetyHelper m_nextHelper;
         private static MotorSafetyHelper s_headHelper = null;
-        private static DriverStation s_ds;
-        private static object m_lockObject = new object();
+        private static object s_lockObject = new object();
 
         /// <summary>
         /// The constructor for a MotorSafetyHelper object
@@ -34,14 +33,13 @@ namespace WPILib
         /// to call the Stop() method on the motor</param>
         public MotorSafetyHelper(MotorSafety safeObject)
         {
-            _safeObject = safeObject;
-            s_ds = DriverStation.GetInstance();
+            m_safeObject = safeObject;
             m_enabled = false;
             m_expiration = DefaultSafetyExpiration;
             m_stopTime = Timer.GetFPGATimestamp();
-            lock (m_lockObject)
+            lock (s_lockObject)
             {
-                _nextHelper = s_headHelper;
+                m_nextHelper = s_headHelper;
                 s_headHelper = this;
             }
         }
@@ -95,10 +93,10 @@ namespace WPILib
             if (m_stopTime < Timer.GetFPGATimestamp())
             {
                 TextWriter errorWriter = Console.Error;
-                errorWriter.WriteLine(_safeObject.GetDescription() + "... Output not updated often enough.");
+                errorWriter.WriteLine(m_safeObject.GetDescription() + "... Output not updated often enough.");
                 errorWriter.Close();
 
-                _safeObject.StopMotor();
+                m_safeObject.StopMotor();
             }
         }
 
@@ -128,9 +126,9 @@ namespace WPILib
         /// </summary>
         public static void CheckMotors()
         {
-            lock (m_lockObject)
+            lock (s_lockObject)
             {
-                for (MotorSafetyHelper msh = s_headHelper; msh != null; msh = msh._nextHelper)
+                for (MotorSafetyHelper msh = s_headHelper; msh != null; msh = msh.m_nextHelper)
                 {
                     msh.Check();
                 }

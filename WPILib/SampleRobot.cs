@@ -8,12 +8,12 @@ namespace WPILib
 {
     public class SampleRobot : RobotBase
     {
-        private bool _robotMainOverriden;
+        private bool m_robotMainOverriden;
 
         public SampleRobot()
             : base()
         {
-            _robotMainOverriden = true;
+            m_robotMainOverriden = true;
         }
 
         protected virtual void RobotInit()
@@ -43,7 +43,7 @@ namespace WPILib
 
         public void RobotMain()
         {
-            _robotMainOverriden = false;
+            m_robotMainOverriden = false;
         }
 
         public override void StartCompetition()
@@ -51,7 +51,7 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Simple);
             RobotMain();
 
-            if (!_robotMainOverriden)
+            if (!m_robotMainOverriden)
             {
                 RobotInit();
                 while (true)

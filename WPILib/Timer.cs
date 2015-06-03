@@ -4,11 +4,11 @@ namespace WPILib
 {
     public class Timer
     {
-        private static StaticInterface impl;
+        private static StaticInterface s_impl;
 
         public static void SetImplementation(StaticInterface ti)
         {
-            impl = ti;
+            s_impl = ti;
         }
 
         /// <summary>
@@ -18,13 +18,13 @@ namespace WPILib
         /// <returns>Robot running time in seconds</returns>
         public static double GetFPGATimestamp()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.GetFPGATimestamp();
+                return s_impl.GetFPGATimestamp();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(Timer));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
             }
         }
 
@@ -40,13 +40,13 @@ namespace WPILib
         /// <returns>Match time in seconds since the beginning of autonomous</returns>
         public static double GetMatchTime()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.GetMatchTime();
+                return s_impl.GetMatchTime();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(Timer));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
             }
         }
 
@@ -60,13 +60,13 @@ namespace WPILib
         /// <param name="seconds">Length of time to pause</param>
         public static void Delay(double seconds)
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                impl.Delay(seconds);
+                s_impl.Delay(seconds);
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(Timer));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
             }
         }
 
@@ -78,15 +78,15 @@ namespace WPILib
             Interface NewTimer();
         }
 
-        private Interface timer;
+        private Interface m_timer;
 
         public Timer()
         {
-            if (impl != null)
-                timer = impl.NewTimer();
+            if (s_impl != null)
+                m_timer = s_impl.NewTimer();
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(Timer));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
             }
         }
 
@@ -98,7 +98,7 @@ namespace WPILib
         /// <returns>Current time value for this timer in seconds</returns>
         public double Get()
         {
-            return timer.Get();
+            return m_timer.Get();
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace WPILib
         /// </summary>
         public void Reset()
         {
-            timer.Reset();
+            m_timer.Reset();
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace WPILib
         /// </summary>
         public void Start()
         {
-            timer.Start();
+            m_timer.Start();
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace WPILib
         /// </summary>
         public void Stop()
         {
-            timer.Stop();
+            m_timer.Stop();
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace WPILib
         /// <returns>If the period has passed.</returns>
         public bool HasPeriodPassed(double period)
         {
-            return timer.HasPeriodPassed(period);
+            return m_timer.HasPeriodPassed(period);
         }
         public interface Interface
         {

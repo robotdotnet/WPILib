@@ -25,10 +25,10 @@ namespace WPILib.smartdashboard
 
         private static readonly string OPTIONS = "options";
 
-        private StringArray choices = new StringArray();
-        private List values = new List();
-        private string defaultChoice = null;
-        private object defaultValue = null;
+        private StringArray m_choices = new StringArray();
+        private List m_values = new List();
+        private string m_defaultChoice = null;
+        private object m_defaultValue = null;
 
         /// <summary>
         /// Instantiates a <see cref="SendableChooser"/>
@@ -45,28 +45,28 @@ namespace WPILib.smartdashboard
         /// <param name="obj">The option</param>
         public void AddObject(string name, object obj)
         {
-            if (defaultChoice == null)
+            if (m_defaultChoice == null)
             {
                 AddDefault(name, obj);
                 return;
             }
 
-            for (int i = 0; i < choices.Size(); i++)
+            for (int i = 0; i < m_choices.Size(); i++)
             {
-                if (choices.Get(i).Equals(name))
+                if (m_choices.Get(i).Equals(name))
                 {
-                    choices.Set(i, name);
-                    values.Set(i, obj);
+                    m_choices.Set(i, name);
+                    m_values.Set(i, obj);
                     return;
                 }
             }
 
-            choices.Add(name);
-            values.Add(obj);
+            m_choices.Add(name);
+            m_values.Add(obj);
 
             if (m_table != null)
             {
-                m_table.PutValue(OPTIONS, choices);
+                m_table.PutValue(OPTIONS, m_choices);
             }
         }
 
@@ -85,11 +85,11 @@ namespace WPILib.smartdashboard
                 throw new NullReferenceException("Name cannot be null");
             }
 
-            defaultChoice = name;
-            defaultValue = obj;
+            m_defaultChoice = name;
+            m_defaultValue = obj;
             if (m_table != null)
             {
-                m_table.PutString(DEFAULT, defaultChoice);
+                m_table.PutString(DEFAULT, m_defaultChoice);
             }
             AddObject(name, obj);
         }
@@ -102,14 +102,14 @@ namespace WPILib.smartdashboard
         public object GetSelected()
         {
             string selected = m_table.GetString(SELECTED, null);
-            for (int i = 0; i < values.Size(); ++i)
+            for (int i = 0; i < m_values.Size(); ++i)
             {
-                if (choices.Get(i).Equals(selected))
+                if (m_choices.Get(i).Equals(selected))
                 {
-                    return values.Get(i);
+                    return m_values.Get(i);
                 }
             }
-            return defaultValue;
+            return m_defaultValue;
         }
 
         private ITable m_table;
@@ -118,10 +118,10 @@ namespace WPILib.smartdashboard
             this.m_table = subtable;
             if (m_table != null)
             {
-                m_table.PutValue(OPTIONS, choices);
-                if (defaultChoice != null)
+                m_table.PutValue(OPTIONS, m_choices);
+                if (m_defaultChoice != null)
                 {
-                    m_table.PutString(DEFAULT, defaultChoice);
+                    m_table.PutString(DEFAULT, m_defaultChoice);
                 }
             }
         }

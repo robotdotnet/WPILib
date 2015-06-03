@@ -8,26 +8,26 @@ namespace WPILib.Commands
 {
     public abstract class Subsystem : NamedSendable
     {
-        private bool initializedDefaultCommand = false;
-        private Command currentCommand;
-        private bool currentCommandChanged;
+        private bool m_initializedDefaultCommand = false;
+        private Command m_currentCommand;
+        private bool m_currentCommandChanged;
 
-        private Command defaultCommand;
-        private string name;
+        private Command m_defaultCommand;
+        private string m_name;
 
-        private static List<Subsystem> allSubsystems = new List<Subsystem>();
+        private static List<Subsystem> s_allSubsystems = new List<Subsystem>();
 
         public Subsystem(string name)
         {
-            this.name = name;
+            this.m_name = name;
             Scheduler.GetInstance().RegisterSubsystem(this);
         }
 
         public Subsystem()
         {
-            this.name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
+            this.m_name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
             Scheduler.GetInstance().RegisterSubsystem(this);
-            currentCommandChanged = true;
+            m_currentCommandChanged = true;
         }
 
         protected abstract void InitDefaultCommand();
@@ -36,7 +36,7 @@ namespace WPILib.Commands
         {
             if (command == null)
             {
-                defaultCommand = null;
+                m_defaultCommand = null;
             }
             else
             {
@@ -52,76 +52,76 @@ namespace WPILib.Commands
                 {
                     throw new IllegalUseOfCommandException("A default command must require the subsystem");
                 }
-                defaultCommand = command;
+                m_defaultCommand = command;
             }
         }
 
         internal Command GetDefaultCommand()
         {
-            if (!initializedDefaultCommand)
+            if (!m_initializedDefaultCommand)
             {
-                initializedDefaultCommand = true;
+                m_initializedDefaultCommand = true;
                 InitDefaultCommand();
             }
-            return defaultCommand;
+            return m_defaultCommand;
         }
 
         internal void SetCurrentCommand(Command command)
         {
-            currentCommand = command;
-            currentCommandChanged = true;
+            m_currentCommand = command;
+            m_currentCommandChanged = true;
         }
 
         internal void ConfirmCommand()
         {
-            if (currentCommandChanged)
+            if (m_currentCommandChanged)
             {
                 //Add Table
-                currentCommandChanged = false;
+                m_currentCommandChanged = false;
             }
         }
 
         public Command GetCurrentCommand()
         {
-            return currentCommand;
+            return m_currentCommand;
         }
 
         public string GetName()
         {
-            return name;
+            return m_name;
         }
 
-        private ITable table;
+        private ITable m_table;
 
         public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
         {
-            this.table = subtable;
-            if (table != null)
+            this.m_table = subtable;
+            if (m_table != null)
             {
-                if (defaultCommand != null)
+                if (m_defaultCommand != null)
                 {
-                    table.PutBoolean("hasDefault", true);
-                    table.PutString("default", defaultCommand.GetName());
+                    m_table.PutBoolean("hasDefault", true);
+                    m_table.PutString("default", m_defaultCommand.GetName());
                 }
                 else
                 {
-                    table.PutBoolean("hasDefault", false);
+                    m_table.PutBoolean("hasDefault", false);
                 }
-                if (currentCommand != null)
+                if (m_currentCommand != null)
                 {
-                    table.PutBoolean("hasCommand", true);
-                    table.PutString("command", currentCommand.GetName());
+                    m_table.PutBoolean("hasCommand", true);
+                    m_table.PutString("command", m_currentCommand.GetName());
                 }
                 else
                 {
-                    table.PutBoolean("hasCommand", false);
+                    m_table.PutBoolean("hasCommand", false);
                 }
             }
         }
 
         public NetworkTablesDotNet.Tables.ITable GetTable()
         {
-            return table;
+            return m_table;
         }
 
         public string GetSmartDashboardType()

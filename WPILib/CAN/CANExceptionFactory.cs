@@ -8,7 +8,9 @@ namespace WPILib.CAN
 {
     class CANExceptionFactory
     {
+// ReSharper disable InconsistentNaming
         public const int ERR_CANSessionMux_InvalidBuffer = -44086;
+
         public const int ERR_CANSessionMux_MessageNotFound = -44087;
         public const int ERR_CANSessionMux_NotAllowed = -44088;
         public const int ERR_CANSessionMux_NotInitialized = -44089;
@@ -20,6 +22,7 @@ namespace WPILib.CAN
         public const int kRIOStatusOperationTimedOut = -52007;
         public const int kRIOStatusFeatureNotSupported = kRioStatusOffset - 193;
         public const int kRIOStatusResourceNotInitialized = -52010;
+// ReSharper restore InconsistentNaming
 
         public static void CheckStatus(int status, int messageID)
         {

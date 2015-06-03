@@ -132,7 +132,7 @@ namespace WPILib.Util
     public class UncleanStatusException : InvalidOperationException
     {
 
-        private int statusCode;
+        private int m_statusCode;
 
         /// <summary>
         /// Create a new UncleanStatusException
@@ -142,7 +142,7 @@ namespace WPILib.Util
         public UncleanStatusException(int status, String message)
             : base(message)
         {
-            statusCode = status;
+            m_statusCode = status;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace WPILib.Util
         /// <returns>The status code that caused the exception</returns>
         public int GetStatus()
         {
-            return statusCode;
+            return m_statusCode;
         }
     }
 

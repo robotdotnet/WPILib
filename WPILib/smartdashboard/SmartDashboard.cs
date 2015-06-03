@@ -10,8 +10,8 @@ namespace WPILib.smartdashboard
 {
     public class SmartDashboard
     {
-        private static NetworkTable table = NetworkTable.GetTable("SmartDashboard");
-        private static Dictionary<ITable, Sendable> tablesToData = new Dictionary<ITable, Sendable>();
+        private static NetworkTable s_table = NetworkTable.GetTable("SmartDashboard");
+        private static Dictionary<ITable, Sendable> s_tablesToData = new Dictionary<ITable, Sendable>();
 
         static SmartDashboard()
         {
@@ -20,10 +20,10 @@ namespace WPILib.smartdashboard
 
         public static void PutData(string key, Sendable data)
         {
-            ITable dataTable = table.GetSubTable(key);
+            ITable dataTable = s_table.GetSubTable(key);
             dataTable.PutString("~TYPE~", data.GetSmartDashboardType());
             data.InitTable(dataTable);
-            tablesToData.Add(dataTable, data);
+            s_tablesToData.Add(dataTable, data);
         }
 
         public static void PutData(NamedSendable value)
@@ -33,10 +33,10 @@ namespace WPILib.smartdashboard
 
         public static Sendable GetData(string key)
         {
-            ITable subtable = table.GetSubTable(key);
+            ITable subtable = s_table.GetSubTable(key);
             try
             {
-                return tablesToData[subtable];
+                return s_tablesToData[subtable];
             }
             catch (KeyNotFoundException e)
             {

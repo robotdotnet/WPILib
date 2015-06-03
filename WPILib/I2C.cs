@@ -13,14 +13,14 @@ namespace WPILib
             MXP = 1
         }
 
-        private object synchronizeRoot = new object();
-        private Port port;
-        private int deviceAddress;
+        private object m_synchronizeRoot = new object();
+        private Port m_port;
+        private int m_deviceAddress;
 
         public I2C(Port port, int deviceAddress)
         {
-            this.port = port;
-            this.deviceAddress = deviceAddress;
+            this.m_port = port;
+            this.m_deviceAddress = deviceAddress;
             int status = 0;
             HAL_Base.HALDigital.I2CInitialize((byte)port, ref status);
             WPILib.Utility.CheckStatus(status);
@@ -29,14 +29,14 @@ namespace WPILib
 
         public bool Transaction(byte[] dataToSend, int sendSize, byte[] dataRecieved, int receiveSize)
         {
-            lock (synchronizeRoot)
+            lock (m_synchronizeRoot)
             {
                 byte[] sendBuffer = new byte[sendSize];
                 Array.Copy(dataToSend, sendBuffer, Math.Min(sendSize, dataToSend.Length));
                 byte[] receiveBuffer = new byte[receiveSize];
                 bool aborted = true;
                 aborted = HAL_Base.HALDigital
-                    .I2CTransaction((byte)port, (byte)deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
+                    .I2CTransaction((byte)m_port, (byte)m_deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
                 if (receiveSize > 0 && receiveBuffer != null)
                     Array.Copy(receiveBuffer, dataRecieved, Math.Min(receiveSize, dataRecieved.Length));
                 return aborted;
@@ -50,20 +50,20 @@ namespace WPILib
 
         public bool Write(int registerAddress, int data)
         {
-            lock (synchronizeRoot)
+            lock (m_synchronizeRoot)
             {
                 byte[] buffer = new byte[2];
                 buffer[0] = (byte)registerAddress;
                 buffer[1] = (byte)data;
-                return HAL_Base.HALDigital.I2CWrite((byte)port, (byte)deviceAddress, buffer, (byte)buffer.Length) < 0;
+                return HAL_Base.HALDigital.I2CWrite((byte)m_port, (byte)m_deviceAddress, buffer, (byte)buffer.Length) < 0;
             }
         }
 
         public bool WriteBulk(byte[] data)
         {
-            lock (synchronizeRoot)
+            lock (m_synchronizeRoot)
             {
-                return HAL_Base.HALDigital.I2CWrite((byte)port, (byte)deviceAddress, data, (byte)data.Length) < 0;
+                return HAL_Base.HALDigital.I2CWrite((byte)m_port, (byte)m_deviceAddress, data, (byte)data.Length) < 0;
             }
         }
 
@@ -79,7 +79,7 @@ namespace WPILib
             WPILib.Util.BoundaryException.AssertWithinBounds(count, 1, 7);
             if (buffer == null) throw new ArgumentNullException("buffer");
             byte[] received = new byte[count];
-            int retVal = HAL_Base.HALDigital.I2CRead((byte)port, (byte)deviceAddress, received, (byte)count);
+            int retVal = HAL_Base.HALDigital.I2CRead((byte)m_port, (byte)m_deviceAddress, received, (byte)count);
             Array.Copy(received, buffer, Math.Min(buffer.Length, count));
             return retVal < 0;
         }

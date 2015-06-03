@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -84,8 +85,7 @@ namespace WPILib
 
 
 
-            m_thread = new Thread(Task) { Priority = ThreadPriority.Highest };
-            m_thread.IsBackground = true;
+            m_thread = new Thread(Task) {Priority = ThreadPriority.Highest, IsBackground = true};
             m_thread.Start();
         }
 
@@ -444,10 +444,7 @@ namespace WPILib
                 errorString += " at ";
                 var stacktrace = new StackTrace();
                 var traces = stacktrace.GetFrames();
-                foreach (var s in traces)
-                {
-                    errorString += s + "\n";
-                }
+                errorString = traces.Aggregate(errorString, (current, s) => current + (s + "\n"));
             }
             TextWriter errorWriter = Console.Error;
             errorWriter.WriteLine(errorString);

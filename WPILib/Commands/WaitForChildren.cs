@@ -20,7 +20,7 @@ namespace WPILib.Commands
 
         protected override bool IsFinished()
         {
-            return GetGroup() == null || GetGroup().m_children.Count == 0;
+            return GetGroup() == null || GetGroup().Children.Count == 0;
         }
 
         protected override void End()

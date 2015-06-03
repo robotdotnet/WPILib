@@ -13,6 +13,7 @@ namespace WPILib
     {
         public const int RobotTaskPriority = 101;
 
+// ReSharper disable once InconsistentNaming
         protected readonly DriverStation m_ds;
 
         protected RobotBase()
@@ -110,15 +111,10 @@ namespace WPILib
 
         }
 
-        private static RobotBase robot;
+        private static RobotBase s_robot;
         public static void Main(Assembly robotAssembly)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
-            {
-                HAL.IsSimulation = false;
-            }
-            else
-                HAL.IsSimulation = true;
+            HAL.IsSimulation = Environment.OSVersion.Platform != PlatformID.Unix;
             InitializeHardwareConfiguration();
             HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
             string robotName = "";
@@ -126,12 +122,12 @@ namespace WPILib
             try
             {
                 robotAssemblyName = robotAssembly.GetName().Name;
-                var robotClasses = from t in robotAssembly.GetTypes() where typeof(RobotBase).IsAssignableFrom(t) select t;
-                if (robotClasses.ToList().Count == 0)
+                var robotClasses = (from t in robotAssembly.GetTypes() where typeof(RobotBase).IsAssignableFrom(t) select t).ToList();
+                if (robotClasses.Count == 0)
                     throw new Exception("Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
-                robotName = robotClasses.ToList()[0].FullName;
-                robot = (RobotBase)(Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
-                robot.Prestart();
+                robotName = robotClasses[0].FullName;
+                s_robot = (RobotBase)(Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
+                s_robot.Prestart();
             }
             catch (Exception ex)
             {
@@ -160,7 +156,7 @@ namespace WPILib
 
             try
             {
-                robot.StartCompetition();
+                s_robot.StartCompetition();
             }
             //Add a keyboard exception
             catch (Exception ex)

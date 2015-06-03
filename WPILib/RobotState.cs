@@ -8,70 +8,70 @@ namespace WPILib
 {
     public class RobotState
     {
-        private static Interface impl;
+        private static Interface s_impl;
 
         public static void SetImplementation(Interface i)
         {
-            impl = i;
+            s_impl = i;
         }
 
         public static bool IsDisabled()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.IsDisabled();
+                return s_impl.IsDisabled();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
             }
         }
 
         public static bool IsEnabled()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.IsEnabled();
+                return s_impl.IsEnabled();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
             }
         }
 
         public static bool IsOperatorControl()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.IsOperatorControl();
+                return s_impl.IsOperatorControl();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
             }
         }
 
         public static bool IsAutonomous()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.IsAutonomous();
+                return s_impl.IsAutonomous();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
             }
         }
 
         public static bool IsTest()
         {
-            if (impl != null)
+            if (s_impl != null)
             {
-                return impl.IsTest();
+                return s_impl.IsTest();
             }
             else
             {
-                throw new BaseSystemNotInitializedException(impl, typeof(RobotBase));
+                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
             }
         }
 
