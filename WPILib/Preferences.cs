@@ -88,7 +88,7 @@ namespace WPILib
                     m_values.Add(key, value);
                     m_keys.Add(key);
                 }
-                //NetworkTable.GetTable(TABLE_NAME).PutString(key, value);
+                NetworkTable.GetTable(TABLE_NAME).PutString(key, value);
             }
         }
 
