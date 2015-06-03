@@ -966,10 +966,10 @@ namespace WPILib
         private static void SendMessageHelper(int messageID, byte[] data, int dataSize, int period)
         {
             int[] kTrustedMessages = {
-				HALCAN.LM_API_VOLT_T_EN, HALCAN.LM_API_VOLT_T_SET, HALCAN.LM_API_SPD_T_EN, HALCAN.LM_API_SPD_T_SET,
-				HALCAN.LM_API_VCOMP_T_EN, HALCAN.LM_API_VCOMP_T_SET, HALCAN.LM_API_POS_T_EN, HALCAN.LM_API_POS_T_SET,
-				HALCAN.LM_API_ICTRL_T_EN, HALCAN.LM_API_ICTRL_T_SET
-		    };
+                HALCAN.LM_API_VOLT_T_EN, HALCAN.LM_API_VOLT_T_SET, HALCAN.LM_API_SPD_T_EN, HALCAN.LM_API_SPD_T_SET,
+                HALCAN.LM_API_VCOMP_T_EN, HALCAN.LM_API_VCOMP_T_SET, HALCAN.LM_API_POS_T_EN, HALCAN.LM_API_POS_T_SET,
+                HALCAN.LM_API_ICTRL_T_EN, HALCAN.LM_API_ICTRL_T_SET
+            };
             int status = 0;
 
             for (byte i = 0; i < kTrustedMessages.Length; i++)
@@ -1053,27 +1053,27 @@ namespace WPILib
             int dataSize;
 
             byte[] kMessage0Data = new byte[] {
-			(byte)HALCAN.LM_PSTAT_VOLTBUS_B0, (byte)HALCAN.LM_PSTAT_VOLTBUS_B1,
-			(byte)HALCAN.LM_PSTAT_VOLTOUT_B0, (byte)HALCAN.LM_PSTAT_VOLTOUT_B1,
-			(byte)HALCAN.LM_PSTAT_CURRENT_B0, (byte)HALCAN.LM_PSTAT_CURRENT_B1,
-			(byte)HALCAN.LM_PSTAT_TEMP_B0, (byte)HALCAN.LM_PSTAT_TEMP_B1
-		    };
+            (byte)HALCAN.LM_PSTAT_VOLTBUS_B0, (byte)HALCAN.LM_PSTAT_VOLTBUS_B1,
+            (byte)HALCAN.LM_PSTAT_VOLTOUT_B0, (byte)HALCAN.LM_PSTAT_VOLTOUT_B1,
+            (byte)HALCAN.LM_PSTAT_CURRENT_B0, (byte)HALCAN.LM_PSTAT_CURRENT_B1,
+            (byte)HALCAN.LM_PSTAT_TEMP_B0, (byte)HALCAN.LM_PSTAT_TEMP_B1
+            };
 
             byte[] kMessage1Data = new byte[] {
-			(byte)HALCAN.LM_PSTAT_POS_B0, (byte)HALCAN.LM_PSTAT_POS_B1, (byte)HALCAN.LM_PSTAT_POS_B2, (byte)HALCAN.LM_PSTAT_POS_B3,
-			(byte)HALCAN.LM_PSTAT_SPD_B0, (byte)HALCAN.LM_PSTAT_SPD_B1, (byte)HALCAN.LM_PSTAT_SPD_B2, (byte)HALCAN.LM_PSTAT_SPD_B3
-		};
+            (byte)HALCAN.LM_PSTAT_POS_B0, (byte)HALCAN.LM_PSTAT_POS_B1, (byte)HALCAN.LM_PSTAT_POS_B2, (byte)HALCAN.LM_PSTAT_POS_B3,
+            (byte)HALCAN.LM_PSTAT_SPD_B0, (byte)HALCAN.LM_PSTAT_SPD_B1, (byte)HALCAN.LM_PSTAT_SPD_B2, (byte)HALCAN.LM_PSTAT_SPD_B3
+        };
 
             byte[] kMessage2Data = new byte[] {
-			(byte)HALCAN.LM_PSTAT_LIMIT_CLR,
-			(byte)HALCAN.LM_PSTAT_FAULT,
-			(byte)HALCAN.LM_PSTAT_END,
-			(byte)0,
-			(byte)0,
-			(byte)0,
-			(byte)0,
-			(byte)0,
-		};
+            (byte)HALCAN.LM_PSTAT_LIMIT_CLR,
+            (byte)HALCAN.LM_PSTAT_FAULT,
+            (byte)HALCAN.LM_PSTAT_END,
+            (byte)0,
+            (byte)0,
+            (byte)0,
+            (byte)0,
+            (byte)0,
+        };
 
             dataSize = PackINT16(data, (short)(kSendMessagePeriod));
             SendMessage(HALCAN.LM_API_PSTAT_PER_EN_S0, data, dataSize);
@@ -1089,7 +1089,6 @@ namespace WPILib
         protected void UpdatePeriodicStatus()
         {
             byte[] data = new byte[8];
-            int dataSize;
 
             // Check if a new bus voltage/output voltage/current/temperature message
             // has arrived and unpack the values into the cached member variables
@@ -1855,11 +1854,11 @@ namespace WPILib
          * @see #kTemperatureFault
          * @see #kGateDriverFault
          */
-        public ushort GetFaults()
+        public Faults GetFaults()
         {
             UpdatePeriodicStatus();
 
-            return (ushort)m_faults;
+            return (Faults)m_faults;
         }
 
         /**

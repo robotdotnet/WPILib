@@ -1,17 +1,20 @@
-﻿namespace WPILib
+﻿using System;
+namespace WPILib
 {
+
     public enum ControlMode
     {
         PercentVbus = 0,
-        Current = 1,
-        Speed = 2,
-        Position = 3,
+        Follower = 5,
         Voltage = 4,
-        Follower = 5 // Not supported in Jaguar.
+        Position = 1,
+        Speed = 2,
+        Current = 3,
+        Disabled = 15
+    }
 
-    };
-
-    public enum Faults
+    [Flags]
+    public enum Faults : ushort
     {
         CurrentFault = 1,
         TemperatureFault = 2,
@@ -73,7 +76,7 @@
         bool GetForwardLimitOK();
         bool GetReverseLimitOK();
 // ReSharper restore InconsistentNaming
-        ushort GetFaults();
+        Faults GetFaults();
         void SetVoltageRampRate(double rampRate);
         uint GetFirmwareVersion();
         void ConfigNeutralMode(NeutralMode mode);

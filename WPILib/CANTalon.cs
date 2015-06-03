@@ -13,18 +13,6 @@ namespace WPILib
     public class CANTalon : MotorSafety, CANSpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;
-
-        
-        public enum TalonControlMode
-        {
-            PercentVbus = 0,
-            Follower = 5,
-            Voltage = 4,
-            Position = 1,
-            Speed = 2,
-            Current = 3,
-            Disabled = 15
-        }
         
         public enum FeedbackDevice
         {
@@ -44,7 +32,7 @@ namespace WPILib
         }
         
 
-        private TalonControlMode m_controlMode;
+        private ControlMode m_controlMode;
         private IntPtr m_impl;
         private const double DelayForSolicitedSignals = 0.004;
         private int m_deviceNumber;
@@ -61,8 +49,8 @@ namespace WPILib
             m_controlEnabled = true;
             m_setPoint = 0;
             Profile = 0;
-            ApplyControlMode(TalonControlMode.PercentVbus);
-
+            ApplyControlMode(ControlMode.PercentVbus);
+            LiveWindow.AddActuator("CANTalonSRX", deviceNumber, this);
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)deviceNumber);
         }
 
@@ -277,9 +265,9 @@ namespace WPILib
             return (softLim == 0 && limSwitch == 0);
         }
 
-        public ushort GetFaults()
+        public Faults GetFaults()
         {
-            ushort retVal = 0;
+            Faults retVal = 0;
 
             int val;
 
@@ -294,7 +282,7 @@ namespace WPILib
                 Utility.CheckStatus((int)status);
             }
 
-            retVal |= (val != 0) ? (ushort) Faults.TemperatureFault : (ushort) 0;
+            retVal |= (val != 0) ? Faults.TemperatureFault : 0;
 
             //Voltage
             val = 0;
@@ -305,7 +293,7 @@ namespace WPILib
                 Utility.CheckStatus((int)status);
             }
 
-            retVal |= (val != 0) ? (ushort)Faults.BusVoltageFault : (ushort)0;
+            retVal |= (val != 0) ? Faults.BusVoltageFault : 0;
 
             //Fwd Limit Switch
             val = 0;
@@ -316,7 +304,7 @@ namespace WPILib
                 Utility.CheckStatus((int)status);
             }
 
-            retVal |= (val != 0) ? (ushort)Faults.FwdLimitSwitch : (ushort)0;
+            retVal |= (val != 0) ? Faults.FwdLimitSwitch : 0;
 
             //Rev Limit Switch
             val = 0;
@@ -327,7 +315,7 @@ namespace WPILib
                 Utility.CheckStatus((int)status);
             }
 
-            retVal |= (val != 0) ? (ushort)Faults.RevLimitSwitch : (ushort)0;
+            retVal |= (val != 0) ? Faults.RevLimitSwitch : 0;
 
             //Fwd Soft Limit
             val = 0;
@@ -338,7 +326,7 @@ namespace WPILib
                 Utility.CheckStatus((int)status);
             }
 
-            retVal |= (val != 0) ? (ushort)Faults.FwdSoftLimit : (ushort)0;
+            retVal |= (val != 0) ? Faults.FwdSoftLimit : 0;
 
             //Rev Soft Limit
             val = 0;
@@ -349,26 +337,26 @@ namespace WPILib
                 Utility.CheckStatus((int)status);
             }
 
-            retVal |= (val != 0) ? (ushort)Faults.RevSoftLimit : (ushort)0;
+            retVal |= (val != 0) ? Faults.RevSoftLimit : 0;
 
             return retVal;
         }
 
-        private void ApplyControlMode(TalonControlMode value)
+        private void ApplyControlMode(ControlMode value)
         {
             m_controlMode = value;
-            if (value == TalonControlMode.Disabled)
+            if (value == ControlMode.Disabled)
                 m_controlEnabled = false;
-            Impl.C_TalonSRX_SetModeSelect(m_impl, (int)TalonControlMode.Disabled);
+            Impl.C_TalonSRX_SetModeSelect(m_impl, (int)ControlMode.Disabled);
         }
 
         [Obsolete("Use MotorControlMode property.")]
-        public TalonControlMode GetControlMode() { return MotorControlMode; }
+        public ControlMode GetControlMode() { return MotorControlMode; }
 
         [Obsolete("Use MotorControlMode property.")]
-        public void SetControlMode(TalonControlMode mode) { MotorControlMode = mode; }
+        public void SetControlMode(ControlMode mode) { MotorControlMode = mode; }
 
-        public TalonControlMode MotorControlMode
+        public ControlMode MotorControlMode
         {
             get { return m_controlMode; }
             set
@@ -433,7 +421,7 @@ namespace WPILib
                 if (m_controlEnabled == value) return;
                 if (m_controlEnabled && !value)
                 {
-                    Impl.C_TalonSRX_SetModeSelect(m_impl, (int)TalonControlMode.Disabled);
+                    Impl.C_TalonSRX_SetModeSelect(m_impl, (int)ControlMode.Disabled);
                     m_controlEnabled = false;
                 }
                 else
@@ -445,7 +433,7 @@ namespace WPILib
 
         private void EnsureInPIDMode()
         {
-            if (!(MotorControlMode == TalonControlMode.Position || MotorControlMode == TalonControlMode.Speed))
+            if (!(MotorControlMode == ControlMode.Position || MotorControlMode == ControlMode.Speed))
             {
                 throw new InvalidOperationException("PID mode only applies to Position and Speed modes.");
             }
@@ -1099,7 +1087,7 @@ namespace WPILib
 
         public void PidWrite(double output)
         {
-            if (m_controlMode == TalonControlMode.PercentVbus)
+            if (m_controlMode == ControlMode.PercentVbus)
             {
                 Set(output);
             }
@@ -1114,17 +1102,17 @@ namespace WPILib
             int value = 0;
             switch (m_controlMode)
             {
-                case TalonControlMode.Voltage:
+                case ControlMode.Voltage:
                     return GetOutputVoltage();
-                case TalonControlMode.Position:
+                case ControlMode.Position:
                     Impl.C_TalonSRX_GetSensorPosition(m_impl, ref value);
                     return value;
-                case TalonControlMode.Speed:
+                case ControlMode.Speed:
                     Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref value);
                     return value;
-                case TalonControlMode.Current:
+                case ControlMode.Current:
                     return GetOutputCurrent();
-                case TalonControlMode.PercentVbus:
+                case ControlMode.PercentVbus:
                 default:
                     Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
                     return value / 1023.0;
@@ -1144,16 +1132,16 @@ namespace WPILib
                 m_setPoint = output;
                 switch (m_controlMode)
                 {
-                    case TalonControlMode.PercentVbus:
+                    case ControlMode.PercentVbus:
                         Impl.C_TalonSRX_SetDemand(m_impl, (int)(output * 1023));
                         break;
-                    case TalonControlMode.Voltage:
+                    case ControlMode.Voltage:
                         int volts = (int)(output * 256);
                         Impl.C_TalonSRX_SetDemand(m_impl, volts);
                         break;
-                    case TalonControlMode.Position:
-                    case TalonControlMode.Speed:
-                    case TalonControlMode.Follower:
+                    case ControlMode.Position:
+                    case ControlMode.Speed:
+                    case ControlMode.Follower:
                         Impl.C_TalonSRX_SetDemand(m_impl, (int)output);
                         break;
                     default:
