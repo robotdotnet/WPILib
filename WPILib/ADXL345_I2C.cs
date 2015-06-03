@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WPILib.livewindow;
 
 namespace WPILib
 {
@@ -17,7 +18,7 @@ namespace WPILib
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
             SetRange(range);
             HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_I2C);
-            //TODO: Add LiveWindow
+            LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
         }
 
         protected override void WriteRange(byte value)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using WPILib.livewindow;
 
 namespace WPILib
 {
@@ -25,6 +26,7 @@ namespace WPILib
             m_spi.Write(commands, 2);
             SetRange(range);
             HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_SPI);
+            LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
 
         protected override void WriteRange(byte value)
