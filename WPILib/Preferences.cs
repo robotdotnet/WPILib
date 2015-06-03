@@ -44,8 +44,6 @@ namespace WPILib
         private Dictionary<string, Comment> m_comments;
         private Comment m_endComment;
 
-        Thread thread;
-
         private Preferences()
         {
             values = new Dictionary<string,string>();
@@ -53,9 +51,7 @@ namespace WPILib
 
             lock(fileLock)
             {
-                thread = new Thread(Read);
-                thread.Start();
-
+                ThreadPool.QueueUserWorkItem(o => Read());
                 try
                 {
                     Monitor.Wait(fileLock);
@@ -275,13 +271,11 @@ namespace WPILib
             }
         }
 
-        Thread saveThread;
         public void Save()
         {
             lock (fileLock)
             {
-                saveThread = new Thread(Write);
-                saveThread.Start();
+                ThreadPool.QueueUserWorkItem(o => Write());
                 try
                 {
                     Monitor.Wait(fileLock);
