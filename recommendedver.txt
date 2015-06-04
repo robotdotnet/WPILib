@@ -1,4 +1,4 @@
-HAL:326
+HAL:jenkins-stable-2015.326
 MONO:4.0.1
 DEPLOY:0.5
 TEMPLATE:0.5
