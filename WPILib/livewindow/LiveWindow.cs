@@ -46,7 +46,7 @@ namespace WPILib.livewindow
     /// <summary>
     /// The LiveWindow class is trhe public interface for putting sensor and actuators on the LiveWindow.
     /// </summary>
-    class LiveWindow
+    public class LiveWindow
     {
         private static List<LiveWindowSendable> s_sensors = new List<LiveWindowSendable>();
         private static Dictionary<LiveWindowSendable, LiveWindowComponent> s_components = new Dictionary<LiveWindowSendable, LiveWindowComponent>();

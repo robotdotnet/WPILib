@@ -1,11 +1,7 @@
-﻿
-
-using System;
+﻿using System;
 using System.Security.Permissions;
-using WPILib.Interfaces;
 using System.Threading;
 using HAL_Base;
-using System.Runtime.InteropServices;
 
 namespace WPILib
 {
@@ -32,7 +28,6 @@ namespace WPILib
             m_param = null;
             m_nextEvent = null;
             m_handlerSemaphore = HALSemaphore.InitializeSemaphore(HALSemaphore.SEMAPHORE_FULL);
-
 
             lock (s_queueSemaphore)
             {
