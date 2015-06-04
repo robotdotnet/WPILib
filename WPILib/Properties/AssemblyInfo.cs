@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WPILib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A DotNet implementation of the WPILib for FIRST Robotics Competition (FRC)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("RobotDotNet")]
 [assembly: AssemblyProduct("WPILib")]
 [assembly: AssemblyCopyright("Copyright \u00A9  2015")]
 [assembly: AssemblyTrademark("")]

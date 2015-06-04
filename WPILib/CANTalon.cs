@@ -51,7 +51,7 @@ namespace WPILib
             Profile = 0;
             ApplyControlMode(ControlMode.PercentVbus);
             LiveWindow.AddActuator("CANTalonSRX", deviceNumber, this);
-            HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)deviceNumber);
+            HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
         private const bool disposed = false;

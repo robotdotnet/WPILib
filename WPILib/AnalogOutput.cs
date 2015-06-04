@@ -37,7 +37,7 @@ namespace WPILib
             int status = 0;
             m_port = HALAnalog.InitializeAnalogOutputPort(portPointer, ref status);
 
-            HAL.Report(ResourceType.kResourceType_AnalogChannel, (byte) channel, 1);
+            HAL.Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
         }
 
         public override void Free()

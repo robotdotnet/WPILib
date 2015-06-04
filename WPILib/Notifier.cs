@@ -105,6 +105,7 @@ namespace WPILib
             }
             else
             {
+                /*
                 Notifier last = s_timerQueueHead;
                 Notifier cur = last.m_nextEvent;
                 bool looking = true;
@@ -119,6 +120,16 @@ namespace WPILib
                         looking = false;
                     }
                     last = last.m_nextEvent;
+                }
+                 * */
+                for (Notifier n = s_timerQueueHead;; n = n.m_nextEvent)
+                {
+                    if (n.m_nextEvent == null || n.m_nextEvent.m_expirationTime > this.m_expirationTime)
+                    {
+                        this.m_nextEvent = n.m_nextEvent;
+                        n.m_nextEvent = this;
+                        break;
+                    }
                 }
             }
             m_queued = true;
