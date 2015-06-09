@@ -1,11 +1,9 @@
-﻿
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Reflection;
 using HAL_Base;
+using WPILib.Internal;
 using static HAL_Base.HAL;
 
 namespace WPILib
@@ -54,8 +52,8 @@ namespace WPILib
         {
             Initialize();
             RobotState.Implementation = DriverStation.Instance;
-            Timer.Implementation = new Internal.HardwareTimer();
-            HLUsageReporting.Implementation = new Internal.HardwareHLUsageReporting();
+            Timer.Implementation = new HardwareTimer();
+            HLUsageReporting.Implementation = new HardwareHLUsageReporting();
 
         }
 

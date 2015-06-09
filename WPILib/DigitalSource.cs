@@ -1,8 +1,8 @@
 ﻿
 
 using System;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Util;
 
 namespace WPILib
 {
@@ -14,7 +14,7 @@ namespace WPILib
 
         protected void InitDigitalPort(int channel, bool input)
         {
-            this.m_channel = channel;
+            m_channel = channel;
 
             CheckDigitalChannel(channel);
 

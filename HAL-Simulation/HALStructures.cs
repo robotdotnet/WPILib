@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace HAL_FRC
 {
@@ -12,7 +13,7 @@ namespace HAL_FRC
     [StructLayout(LayoutKind.Sequential)]
     internal struct SEMAPHORE_ID
     {
-        public System.Threading.Semaphore semaphore;
+        public Semaphore semaphore;
         //public object lockObject;
     }
     [StructLayout(LayoutKind.Sequential)]

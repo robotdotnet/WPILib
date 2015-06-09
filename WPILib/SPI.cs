@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL_Base;
 using static WPILib.Utility;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
@@ -30,7 +31,7 @@ namespace WPILib
             ++s_devices;
             SpiInitialize((byte)port, ref status);
             CheckStatus(status);
-            Report(HAL_Base.ResourceType.kResourceType_SPI, s_devices);
+            Report(ResourceType.kResourceType_SPI, s_devices);
         }
 
         public override void Dispose()

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
-using WPILib.Interfaces;
 using HAL_Base;
-using WPILib.Util;
+using NetworkTablesDotNet.Tables;
 using WPILib.CAN;
+using WPILib.livewindow;
+using WPILib.Util;
 
 namespace WPILib
 {
@@ -250,10 +246,7 @@ namespace WPILib
             get { return m_safetyHelper.Expiration; }
         }
 
-        public bool Alive
-        {
-            get { return m_safetyHelper.Alive; }
-        }
+        public bool Alive => m_safetyHelper.Alive;
 
         public void StopMotor()
         {
@@ -266,10 +259,7 @@ namespace WPILib
             get { return m_safetyHelper.SafetyEnabled; }
         }
 
-        public string Description
-        {
-            get { return "CANJaguar ID " + m_deviceNumber; }
-        }
+        public string Description => "CANJaguar ID " + m_deviceNumber;
 
         public double PidWrite
         {
@@ -1248,22 +1238,13 @@ namespace WPILib
 
         private ITable m_table = null;
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
-        public string SmartDashboardType
-        {
-            get { return "Speed Controller"; }
-        }
+        public string SmartDashboardType => "Speed Controller";
 
         public void UpdateTable()
         {
-            if (m_table != null)
-            {
-                m_table.PutNumber("Value", Value);
-            }
+            m_table?.PutNumber("Value", Value);
         }
 
         public void StartLiveWindowMode()
@@ -1943,10 +1924,7 @@ namespace WPILib
         * @return The firmware version.  0 if the device did not respond.
         */
 
-        public uint FirmwareVersion
-        {
-            get { return (uint) m_firmwareVersion; }
-        }
+        public uint FirmwareVersion => (uint) m_firmwareVersion;
 
         /**
         * Get the version of the Jaguar hardware.

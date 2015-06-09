@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using NetworkTablesDotNet.Tables;
 using static WPILib.Timer;
 
@@ -109,10 +107,7 @@ namespace WPILib.Commands
         /// then the default is the name of the class.
         /// </summary>
         /// <value>The name of the command</value>
-        public string Name
-        {
-            get { return m_name; }
-        }
+        public string Name => m_name;
 
         /// <summary>
         /// Sets the timeout of this command.
@@ -290,7 +285,7 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
 
-                return m_requirements == null ? Enumerable.Empty<Subsystem>() : m_requirements;
+                return m_requirements ?? Enumerable.Empty<Subsystem>();
             }
         }
 
@@ -319,7 +314,7 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
 
-                if (this.m_parent != null)
+                if (m_parent != null)
                 {
                     throw new IllegalUseOfCommandException(
                         "Can not give command to a command group after already being put in a command group");
@@ -353,8 +348,7 @@ namespace WPILib.Commands
 
                 m_running = true;
                 m_startTime = -1;
-                if (m_table != null)
-                    m_table.PutBoolean("running", true);
+                m_table?.PutBoolean("running", true);
             }
         }
 
@@ -411,7 +405,7 @@ namespace WPILib.Commands
         {
             lock (m_syncRoot)
             {
-                this.m_interruptible = interruptible;
+                m_interruptible = interruptible;
             }
         }
 
@@ -444,14 +438,13 @@ namespace WPILib.Commands
         private ITable m_table;
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
 
-        public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
+        public void InitTable(ITable subtable)
         {
-            if (this.m_table != null)
-                this.m_table.RemoveTableListener(this);
-            this.m_table = subtable;
+            m_table?.RemoveTableListener(this);
+            m_table = subtable;
             if (m_table != null)
             {
                 m_table.PutString("name", Name);
@@ -461,15 +454,9 @@ namespace WPILib.Commands
             }
         }
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
-        public string SmartDashboardType
-        {
-            get { return "Command"; }
-        }
+        public string SmartDashboardType => "Command";
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {

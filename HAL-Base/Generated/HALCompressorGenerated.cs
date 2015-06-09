@@ -1,4 +1,5 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -29,46 +30,46 @@ namespace HAL_Base
             ClearAllPCMStickyFaults = (ClearAllPCMStickyFaultsDelegate)Delegate.CreateDelegate(typeof(ClearAllPCMStickyFaultsDelegate), type.GetMethod("clearAllPCMStickyFaults"));
         }
 
-        public delegate System.IntPtr InitializeCompressorDelegate(byte module);
+        public delegate IntPtr InitializeCompressorDelegate(byte module);
         public static InitializeCompressorDelegate InitializeCompressor;
 
         public delegate bool CheckCompressorModuleDelegate(byte module);
         public static CheckCompressorModuleDelegate CheckCompressorModule;
 
-        public delegate bool GetCompressorDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorDelegate GetCompressor;
 
-        public delegate void SetClosedLoopControlDelegate(System.IntPtr pcm_pointer, bool value, ref int status);
+        public delegate void SetClosedLoopControlDelegate(IntPtr pcm_pointer, bool value, ref int status);
         public static SetClosedLoopControlDelegate SetClosedLoopControl;
 
-        public delegate bool GetClosedLoopControlDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetClosedLoopControlDelegate(IntPtr pcm_pointer, ref int status);
         public static GetClosedLoopControlDelegate GetClosedLoopControl;
 
-        public delegate bool GetPressureSwitchDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetPressureSwitchDelegate(IntPtr pcm_pointer, ref int status);
         public static GetPressureSwitchDelegate GetPressureSwitch;
 
-        public delegate float GetCompressorCurrentDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate float GetCompressorCurrentDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorCurrentDelegate GetCompressorCurrent;
 
-        public delegate bool GetCompressorCurrentTooHighFaultDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorCurrentTooHighFaultDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorCurrentTooHighFaultDelegate GetCompressorCurrentTooHighFault;
 
-        public delegate bool GetCompressorCurrentTooHighStickyFaultDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorCurrentTooHighStickyFaultDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorCurrentTooHighStickyFaultDelegate GetCompressorCurrentTooHighStickyFault;
 
-        public delegate bool GetCompressorShortedStickyFaultDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorShortedStickyFaultDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorShortedStickyFaultDelegate GetCompressorShortedStickyFault;
 
-        public delegate bool GetCompressorShortedFaultDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorShortedFaultDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorShortedFaultDelegate GetCompressorShortedFault;
 
-        public delegate bool GetCompressorNotConnectedStickyFaultDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorNotConnectedStickyFaultDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorNotConnectedStickyFaultDelegate GetCompressorNotConnectedStickyFault;
 
-        public delegate bool GetCompressorNotConnectedFaultDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate bool GetCompressorNotConnectedFaultDelegate(IntPtr pcm_pointer, ref int status);
         public static GetCompressorNotConnectedFaultDelegate GetCompressorNotConnectedFault;
 
-        public delegate void ClearAllPCMStickyFaultsDelegate(System.IntPtr pcm_pointer, ref int status);
+        public delegate void ClearAllPCMStickyFaultsDelegate(IntPtr pcm_pointer, ref int status);
         public static ClearAllPCMStickyFaultsDelegate ClearAllPCMStickyFaults;
     }
 }

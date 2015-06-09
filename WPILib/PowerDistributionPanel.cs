@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Interfaces;
-using HAL_Base;
+﻿using HAL_Base;
 
 namespace WPILib
 {

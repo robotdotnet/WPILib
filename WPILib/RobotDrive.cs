@@ -529,9 +529,11 @@ namespace WPILib
 
         private void SetupMotorSafety()
         {
-            m_safetyHelper = new MotorSafetyHelper(this);
-            m_safetyHelper.Expiration = DefaultExpirationTime;
-            m_safetyHelper.SafetyEnabled = true;
+            m_safetyHelper = new MotorSafetyHelper(this)
+            {
+                Expiration = DefaultExpirationTime,
+                SafetyEnabled = true
+            };
         }
 
         protected int GetNumMotors()

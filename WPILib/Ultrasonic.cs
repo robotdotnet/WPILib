@@ -1,13 +1,16 @@
-﻿using System.Linq;
-using NetworkTablesDotNet.Tables;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.livewindow;
+
 //using System.Linq;
 
 namespace WPILib
 {
-    public class Ultrasonic : SensorBase, IPIDSource, livewindow.LiveWindowSendable
+    public class Ultrasonic : SensorBase, IPIDSource, LiveWindowSendable
     {
         public enum Unit
         {
@@ -49,23 +52,22 @@ namespace WPILib
             {
                 bool originalMode = s_automaticRoundRobinEnabled;
                 SetAutomaticMode(false);
-                m_counter = new Counter();
-                m_counter.MaxPeriod = 1.0;
+                m_counter = new Counter {MaxPeriod = 1.0};
                 m_counter.SetSemiPeriodMode(true);
                 m_counter.Reset();
                 Enabled = true;
                 s_currentSensors.Add(this);
                 SetAutomaticMode(originalMode);
                 ++s_instances;
-                HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_Ultrasonic, s_instances);
+                HAL.Report(ResourceType.kResourceType_Ultrasonic, s_instances);
                 //TODO: Add to LiveWindow
             }
         }
 
         public Ultrasonic(int pingChannel, int echoChannel, Unit units = Unit.Inches)
         {
-            this.m_pingChannel = new DigitalOutput(pingChannel);
-            this.m_echoChannel = new DigitalInput(echoChannel);
+            m_pingChannel = new DigitalOutput(pingChannel);
+            m_echoChannel = new DigitalInput(echoChannel);
             m_allocatedChannels = true;
             DistanceUnits = units;
             Initialize();
@@ -73,10 +75,10 @@ namespace WPILib
 
         public Ultrasonic(DigitalOutput pingChannel, DigitalInput echoChannel, Unit units = Unit.Inches)
         {
-            if (pingChannel == null) throw new ArgumentNullException("pingChannel");
-            if (echoChannel == null) throw new ArgumentNullException("echoChannel");
-            this.m_pingChannel = pingChannel;
-            this.m_echoChannel = echoChannel;
+            if (pingChannel == null) throw new ArgumentNullException(nameof(pingChannel));
+            if (echoChannel == null) throw new ArgumentNullException(nameof(echoChannel));
+            m_pingChannel = pingChannel;
+            m_echoChannel = echoChannel;
             m_allocatedChannels = false;
             DistanceUnits = units;
             Initialize();
@@ -91,10 +93,10 @@ namespace WPILib
                 SetAutomaticMode(false);
                 if (m_allocatedChannels)
                 {
-                    if (m_pingChannel != null) m_pingChannel.Dispose();
-                    if (m_echoChannel != null) m_echoChannel.Dispose();
+                    m_pingChannel?.Dispose();
+                    m_echoChannel?.Dispose();
                 }
-                if (m_counter != null) m_counter.Dispose();
+                m_counter?.Dispose();
                 m_pingChannel = null;
                 m_echoChannel = null;
                 m_counter = null;
@@ -189,10 +191,7 @@ namespace WPILib
         
         public bool Enabled { get; set; }
 
-        public string SmartDashboardType
-        {
-            get { return "Ultrasonic"; }
-        }
+        public string SmartDashboardType => "Ultrasonic";
 
         private ITable m_table;
 
@@ -202,14 +201,11 @@ namespace WPILib
             UpdateTable();
         }
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
         public void UpdateTable()
         {
-            if (m_table != null) m_table.PutNumber("Value", GetRangeInches());
+            m_table?.PutNumber("Value", GetRangeInches());
         }
 
         public void StartLiveWindowMode() { }

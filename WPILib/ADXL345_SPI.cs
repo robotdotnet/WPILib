@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using HAL_Base;
+using WPILib.Interfaces;
 using WPILib.livewindow;
 
 namespace WPILib
@@ -13,7 +12,7 @@ namespace WPILib
 
         private SPI m_spi;
 
-        public ADXL345_SPI(SPI.Port port, Interfaces.Range range)
+        public ADXL345_SPI(SPI.Port port, Range range)
         {
             m_spi = new SPI(port);
             m_spi.SetClockRate(500000);
@@ -25,7 +24,7 @@ namespace WPILib
             commands[1] = (byte)PowerCtl.Measure;
             m_spi.Write(commands, 2);
             Range = range;
-            HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_SPI);
+            HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_SPI);
             LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
 
@@ -35,7 +34,7 @@ namespace WPILib
             m_spi.Write(commands, commands.Length);
         }
 
-        public override double GetAcceleration(ADXL345.Axes axis)
+        public override double GetAcceleration(Axes axis)
         {
             byte[] transferBuffer = new byte[3];
             transferBuffer[0] = (byte)((Address_Read | Address_MultiByte | DataRegister) + (byte)axis);
@@ -43,9 +42,9 @@ namespace WPILib
             return BitConverter.ToInt16(transferBuffer, 1) * GsPerLSB;
         }
 
-        public override ADXL345.AllAxes GetAccelerations()
+        public override AllAxes GetAccelerations()
         {
-            ADXL345.AllAxes data = new ADXL345.AllAxes();
+            AllAxes data = new AllAxes();
             byte[] dataBuffer = new byte[7];
             if (m_spi != null)
             {

@@ -1,7 +1,6 @@
 ﻿
 
 using System;
-using WPILib.Interfaces;
 using HAL_Base;
 
 namespace WPILib
@@ -89,10 +88,7 @@ namespace WPILib
             return GetRawAxis(m_axes[(int)AxisType.Z]);
         }
 
-        public override double Twist
-        {
-            get { return GetRawAxis(m_axes[(int) AxisType.Twist]); }
-        }
+        public override double Twist => GetRawAxis(m_axes[(int) AxisType.Twist]);
 
         public override double Throttle => GetRawAxis(m_axes[(int) AxisType.Throttle]);
 

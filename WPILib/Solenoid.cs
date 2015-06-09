@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
 using WPILib.livewindow;
@@ -110,10 +108,7 @@ namespace WPILib
         /// <summary>
         /// Live Window code, only does anything if live window is activated.
         /// </summary>
-        public string SmartDashboardType
-        {
-            get { return "Solenoid"; }
-        }
+        public string SmartDashboardType => "Solenoid";
 
         private ITable m_table;
 
@@ -123,10 +118,7 @@ namespace WPILib
             UpdateTable();
         }
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
         public void UpdateTable()
         {

@@ -1,4 +1,5 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -97,184 +98,184 @@ namespace HAL_Base
             SetPWMDutyCycleIntHack = (SetPWMDutyCycleIntHackDelegate)Delegate.CreateDelegate(typeof(SetPWMDutyCycleIntHackDelegate), type.GetMethod("setPWMDutyCycleIntHack"));
         }
 
-        public delegate System.IntPtr InitializeDigitalPortDelegate(System.IntPtr port_pointer, ref int status);
+        public delegate IntPtr InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeDigitalPortDelegate InitializeDigitalPort;
 
-        public delegate bool CheckPWMChannelDelegate(System.IntPtr digital_port_pointer);
+        public delegate bool CheckPWMChannelDelegate(IntPtr digital_port_pointer);
         public static CheckPWMChannelDelegate CheckPWMChannel;
 
-        public delegate bool CheckRelayChannelDelegate(System.IntPtr digital_port_pointer);
+        public delegate bool CheckRelayChannelDelegate(IntPtr digital_port_pointer);
         public static CheckRelayChannelDelegate CheckRelayChannel;
 
-        public delegate void SetPWMDelegate(System.IntPtr digital_port_pointer, ushort value, ref int status);
+        public delegate void SetPWMDelegate(IntPtr digital_port_pointer, ushort value, ref int status);
         public static SetPWMDelegate SetPWM;
 
-        public delegate bool AllocatePWMChannelDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate bool AllocatePWMChannelDelegate(IntPtr digital_port_pointer, ref int status);
         public static AllocatePWMChannelDelegate AllocatePWMChannel;
 
-        public delegate void FreePWMChannelDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate void FreePWMChannelDelegate(IntPtr digital_port_pointer, ref int status);
         public static FreePWMChannelDelegate FreePWMChannel;
 
-        public delegate ushort GetPWMDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate ushort GetPWMDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetPWMDelegate GetPWM;
 
-        public delegate void LatchPWMZeroDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate void LatchPWMZeroDelegate(IntPtr digital_port_pointer, ref int status);
         public static LatchPWMZeroDelegate LatchPWMZero;
 
-        public delegate void SetPWMPeriodScaleDelegate(System.IntPtr digital_port_pointer, uint squelchMask, ref int status);
+        public delegate void SetPWMPeriodScaleDelegate(IntPtr digital_port_pointer, uint squelchMask, ref int status);
         public static SetPWMPeriodScaleDelegate SetPWMPeriodScale;
 
-        public delegate System.IntPtr AllocatePWMDelegate(ref int status);
+        public delegate IntPtr AllocatePWMDelegate(ref int status);
         public static AllocatePWMDelegate AllocatePWM;
 
-        public delegate void FreePWMDelegate(System.IntPtr pwmGenerator, ref int status);
+        public delegate void FreePWMDelegate(IntPtr pwmGenerator, ref int status);
         public static FreePWMDelegate FreePWM;
 
         public delegate void SetPWMRateDelegate(double rate, ref int status);
         public static SetPWMRateDelegate SetPWMRate;
 
-        public delegate void SetPWMDutyCycleDelegate(System.IntPtr pwmGenerator, double dutyCycle, ref int status);
+        public delegate void SetPWMDutyCycleDelegate(IntPtr pwmGenerator, double dutyCycle, ref int status);
         public static SetPWMDutyCycleDelegate SetPWMDutyCycle;
 
-        public delegate void SetPWMOutputChannelDelegate(System.IntPtr pwmGenerator, uint pin, ref int status);
+        public delegate void SetPWMOutputChannelDelegate(IntPtr pwmGenerator, uint pin, ref int status);
         public static SetPWMOutputChannelDelegate SetPWMOutputChannel;
 
-        public delegate void SetRelayForwardDelegate(System.IntPtr digital_port_pointer, bool on, ref int status);
+        public delegate void SetRelayForwardDelegate(IntPtr digital_port_pointer, bool on, ref int status);
         public static SetRelayForwardDelegate SetRelayForward;
 
-        public delegate void SetRelayReverseDelegate(System.IntPtr digital_port_pointer, bool on, ref int status);
+        public delegate void SetRelayReverseDelegate(IntPtr digital_port_pointer, bool on, ref int status);
         public static SetRelayReverseDelegate SetRelayReverse;
 
-        public delegate bool GetRelayForwardDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetRelayForwardDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetRelayForwardDelegate GetRelayForward;
 
-        public delegate bool GetRelayReverseDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetRelayReverseDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetRelayReverseDelegate GetRelayReverse;
 
-        public delegate bool AllocateDIODelegate(System.IntPtr digital_port_pointer, bool input, ref int status);
+        public delegate bool AllocateDIODelegate(IntPtr digital_port_pointer, bool input, ref int status);
         public static AllocateDIODelegate AllocateDIO;
 
-        public delegate void FreeDIODelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate void FreeDIODelegate(IntPtr digital_port_pointer, ref int status);
         public static FreeDIODelegate FreeDIO;
 
-        public delegate void SetDIODelegate(System.IntPtr digital_port_pointer, short value, ref int status);
+        public delegate void SetDIODelegate(IntPtr digital_port_pointer, short value, ref int status);
         public static SetDIODelegate SetDIO;
 
-        public delegate bool GetDIODelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetDIODelegate(IntPtr digital_port_pointer, ref int status);
         public static GetDIODelegate GetDIO;
 
-        public delegate bool GetDIODirectionDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetDIODirectionDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetDIODirectionDelegate GetDIODirection;
 
-        public delegate void PulseDelegate(System.IntPtr digital_port_pointer, double pulseLength, ref int status);
+        public delegate void PulseDelegate(IntPtr digital_port_pointer, double pulseLength, ref int status);
         public static PulseDelegate Pulse;
 
-        public delegate bool IsPulsingDelegate(System.IntPtr digital_port_pointer, ref int status);
+        public delegate bool IsPulsingDelegate(IntPtr digital_port_pointer, ref int status);
         public static IsPulsingDelegate IsPulsing;
 
         public delegate bool IsAnyPulsingDelegate(ref int status);
         public static IsAnyPulsingDelegate IsAnyPulsing;
 
-        public delegate System.IntPtr InitializeCounterDelegate(Mode mode, ref uint index, ref int status);
+        public delegate IntPtr InitializeCounterDelegate(Mode mode, ref uint index, ref int status);
         public static InitializeCounterDelegate InitializeCounter;
 
-        public delegate void FreeCounterDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate void FreeCounterDelegate(IntPtr counter_pointer, ref int status);
         public static FreeCounterDelegate FreeCounter;
 
-        public delegate void SetCounterAverageSizeDelegate(System.IntPtr counter_pointer, int size, ref int status);
+        public delegate void SetCounterAverageSizeDelegate(IntPtr counter_pointer, int size, ref int status);
         public static SetCounterAverageSizeDelegate SetCounterAverageSize;
 
-        public delegate void SetCounterUpSourceDelegate(System.IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status);
+        public delegate void SetCounterUpSourceDelegate(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status);
         public static SetCounterUpSourceDelegate SetCounterUpSource;
 
-        public delegate void SetCounterUpSourceEdgeDelegate(System.IntPtr counter_pointer, bool risingEdge, bool fallingEdge, ref int status);
+        public delegate void SetCounterUpSourceEdgeDelegate(IntPtr counter_pointer, bool risingEdge, bool fallingEdge, ref int status);
         public static SetCounterUpSourceEdgeDelegate SetCounterUpSourceEdge;
 
-        public delegate void ClearCounterUpSourceDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate void ClearCounterUpSourceDelegate(IntPtr counter_pointer, ref int status);
         public static ClearCounterUpSourceDelegate ClearCounterUpSource;
 
-        public delegate void SetCounterDownSourceDelegate(System.IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status);
+        public delegate void SetCounterDownSourceDelegate(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status);
         public static SetCounterDownSourceDelegate SetCounterDownSource;
 
-        public delegate void SetCounterDownSourceEdgeDelegate(System.IntPtr counter_pointer, bool risingEdge, bool fallingEdge, ref int status);
+        public delegate void SetCounterDownSourceEdgeDelegate(IntPtr counter_pointer, bool risingEdge, bool fallingEdge, ref int status);
         public static SetCounterDownSourceEdgeDelegate SetCounterDownSourceEdge;
 
-        public delegate void ClearCounterDownSourceDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate void ClearCounterDownSourceDelegate(IntPtr counter_pointer, ref int status);
         public static ClearCounterDownSourceDelegate ClearCounterDownSource;
 
-        public delegate void SetCounterUpDownModeDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate void SetCounterUpDownModeDelegate(IntPtr counter_pointer, ref int status);
         public static SetCounterUpDownModeDelegate SetCounterUpDownMode;
 
-        public delegate void SetCounterExternalDirectionModeDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate void SetCounterExternalDirectionModeDelegate(IntPtr counter_pointer, ref int status);
         public static SetCounterExternalDirectionModeDelegate SetCounterExternalDirectionMode;
 
-        public delegate void SetCounterSemiPeriodModeDelegate(System.IntPtr counter_pointer, bool highSemiPeriod, ref int status);
+        public delegate void SetCounterSemiPeriodModeDelegate(IntPtr counter_pointer, bool highSemiPeriod, ref int status);
         public static SetCounterSemiPeriodModeDelegate SetCounterSemiPeriodMode;
 
-        public delegate void SetCounterPulseLengthModeDelegate(System.IntPtr counter_pointer, double threshold, ref int status);
+        public delegate void SetCounterPulseLengthModeDelegate(IntPtr counter_pointer, double threshold, ref int status);
         public static SetCounterPulseLengthModeDelegate SetCounterPulseLengthMode;
 
-        public delegate int GetCounterSamplesToAverageDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate int GetCounterSamplesToAverageDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterSamplesToAverageDelegate GetCounterSamplesToAverage;
 
-        public delegate void SetCounterSamplesToAverageDelegate(System.IntPtr counter_pointer, int samplesToAverage, ref int status);
+        public delegate void SetCounterSamplesToAverageDelegate(IntPtr counter_pointer, int samplesToAverage, ref int status);
         public static SetCounterSamplesToAverageDelegate SetCounterSamplesToAverage;
 
-        public delegate void ResetCounterDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate void ResetCounterDelegate(IntPtr counter_pointer, ref int status);
         public static ResetCounterDelegate ResetCounter;
 
-        public delegate int GetCounterDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate int GetCounterDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterDelegate GetCounter;
 
-        public delegate double GetCounterPeriodDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate double GetCounterPeriodDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterPeriodDelegate GetCounterPeriod;
 
-        public delegate void SetCounterMaxPeriodDelegate(System.IntPtr counter_pointer, double maxPeriod, ref int status);
+        public delegate void SetCounterMaxPeriodDelegate(IntPtr counter_pointer, double maxPeriod, ref int status);
         public static SetCounterMaxPeriodDelegate SetCounterMaxPeriod;
 
-        public delegate void SetCounterUpdateWhenEmptyDelegate(System.IntPtr counter_pointer, bool enabled, ref int status);
+        public delegate void SetCounterUpdateWhenEmptyDelegate(IntPtr counter_pointer, bool enabled, ref int status);
         public static SetCounterUpdateWhenEmptyDelegate SetCounterUpdateWhenEmpty;
 
-        public delegate bool GetCounterStoppedDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate bool GetCounterStoppedDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterStoppedDelegate GetCounterStopped;
 
-        public delegate bool GetCounterDirectionDelegate(System.IntPtr counter_pointer, ref int status);
+        public delegate bool GetCounterDirectionDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterDirectionDelegate GetCounterDirection;
 
-        public delegate void SetCounterReverseDirectionDelegate(System.IntPtr counter_pointer, bool reverseDirection, ref int status);
+        public delegate void SetCounterReverseDirectionDelegate(IntPtr counter_pointer, bool reverseDirection, ref int status);
         public static SetCounterReverseDirectionDelegate SetCounterReverseDirection;
 
-        public delegate System.IntPtr InitializeEncoderDelegate(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, bool port_b_analog_trigger, bool reverseDirection, ref int index, ref int status);
+        public delegate IntPtr InitializeEncoderDelegate(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, bool port_b_analog_trigger, bool reverseDirection, ref int index, ref int status);
         public static InitializeEncoderDelegate InitializeEncoder;
 
-        public delegate void ResetEncoderDelegate(System.IntPtr encoder_pointer, ref int status);
+        public delegate void ResetEncoderDelegate(IntPtr encoder_pointer, ref int status);
         public static ResetEncoderDelegate ResetEncoder;
 
-        public delegate int GetEncoderDelegate(System.IntPtr encoder_pointer, ref int status);
+        public delegate int GetEncoderDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderDelegate GetEncoder;
 
-        public delegate double GetEncoderPeriodDelegate(System.IntPtr encoder_pointer, ref int status);
+        public delegate double GetEncoderPeriodDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderPeriodDelegate GetEncoderPeriod;
 
-        public delegate void SetEncoderMaxPeriodDelegate(System.IntPtr encoder_pointer, double maxPeriod, ref int status);
+        public delegate void SetEncoderMaxPeriodDelegate(IntPtr encoder_pointer, double maxPeriod, ref int status);
         public static SetEncoderMaxPeriodDelegate SetEncoderMaxPeriod;
 
-        public delegate bool GetEncoderStoppedDelegate(System.IntPtr encoder_pointer, ref int status);
+        public delegate bool GetEncoderStoppedDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderStoppedDelegate GetEncoderStopped;
 
-        public delegate bool GetEncoderDirectionDelegate(System.IntPtr encoder_pointer, ref int status);
+        public delegate bool GetEncoderDirectionDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderDirectionDelegate GetEncoderDirection;
 
-        public delegate void SetEncoderReverseDirectionDelegate(System.IntPtr encoder_pointer, bool reverseDirection, ref int status);
+        public delegate void SetEncoderReverseDirectionDelegate(IntPtr encoder_pointer, bool reverseDirection, ref int status);
         public static SetEncoderReverseDirectionDelegate SetEncoderReverseDirection;
 
-        public delegate void SetEncoderSamplesToAverageDelegate(System.IntPtr encoder_pointer, uint samplesToAverage, ref int status);
+        public delegate void SetEncoderSamplesToAverageDelegate(IntPtr encoder_pointer, uint samplesToAverage, ref int status);
         public static SetEncoderSamplesToAverageDelegate SetEncoderSamplesToAverage;
 
-        public delegate uint GetEncoderSamplesToAverageDelegate(System.IntPtr encoder_pointer, ref int status);
+        public delegate uint GetEncoderSamplesToAverageDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderSamplesToAverageDelegate GetEncoderSamplesToAverage;
 
-        public delegate void SetEncoderIndexSourceDelegate(System.IntPtr encoder_pointer, uint pin, bool analogTrigger, bool activeHigh, bool edgeSensitive, ref int status);
+        public delegate void SetEncoderIndexSourceDelegate(IntPtr encoder_pointer, uint pin, bool analogTrigger, bool activeHigh, bool edgeSensitive, ref int status);
         public static SetEncoderIndexSourceDelegate SetEncoderIndexSource;
 
         public delegate ushort GetLoopTimingDelegate(ref int status);
@@ -316,10 +317,10 @@ namespace HAL_Base
         public delegate void SpiSetHandleDelegate(byte port, int handle);
         public static SpiSetHandleDelegate SpiSetHandle;
 
-        public delegate System.IntPtr SpiGetSemaphoreDelegate(byte port);
+        public delegate IntPtr SpiGetSemaphoreDelegate(byte port);
         public static SpiGetSemaphoreDelegate SpiGetSemaphore;
 
-        public delegate void SpiSetSemaphoreDelegate(byte port, System.IntPtr semaphore);
+        public delegate void SpiSetSemaphoreDelegate(byte port, IntPtr semaphore);
         public static SpiSetSemaphoreDelegate SpiSetSemaphore;
 
         public delegate void I2CInitializeDelegate(byte port, ref int status);
@@ -340,7 +341,7 @@ namespace HAL_Base
         public delegate void SetPWMRateIntHackDelegate(int rate, ref int status);
         public static SetPWMRateIntHackDelegate SetPWMRateIntHack;
 
-        public delegate void SetPWMDutyCycleIntHackDelegate(System.IntPtr pwmGenerator, int dutyCycle, ref int status);
+        public delegate void SetPWMDutyCycleIntHackDelegate(IntPtr pwmGenerator, int dutyCycle, ref int status);
         public static SetPWMDutyCycleIntHackDelegate SetPWMDutyCycleIntHack;
     }
 }

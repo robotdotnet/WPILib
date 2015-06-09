@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using HAL_Base;
+using WPILib.Interfaces;
 using WPILib.livewindow;
 
 namespace WPILib
@@ -12,12 +11,12 @@ namespace WPILib
 
         private I2C m_i2C;
 
-        public ADXL345_I2C(I2C.Port port, Interfaces.Range range)
+        public ADXL345_I2C(I2C.Port port, Range range)
         {
             m_i2C = new I2C(port, Address);
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
             Range = range;
-            HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_I2C);
+            HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
             LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
         }
 

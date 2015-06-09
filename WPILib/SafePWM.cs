@@ -1,6 +1,4 @@
-﻿using WPILib.Interfaces;
-
-namespace WPILib
+﻿namespace WPILib
 {
     public class SafePWM : PWM, IMotorSafety
     {
@@ -8,9 +6,11 @@ namespace WPILib
 
         private void InitSafePWM()
         {
-            m_safetyHelper = new MotorSafetyHelper(this);
-            m_safetyHelper.Expiration = 0.0;
-            m_safetyHelper.SafetyEnabled = false;
+            m_safetyHelper = new MotorSafetyHelper(this)
+            {
+                Expiration = 0.0,
+                SafetyEnabled = false
+            };
         }
 
         public SafePWM(int channel)

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace HAL_Base
@@ -18,19 +16,10 @@ namespace HAL_Base
 
         internal static Assembly HALAssembly;
 
-        private static bool s_isSimulation = false;
-
         /// <summary>
         /// Gets or Sets if the code is in simulation mode
         /// </summary>
-        public static bool IsSimulation
-        {
-            get
-            {
-                return s_isSimulation;
-            }
-            set { s_isSimulation = value; }
-        }
+        public static bool IsSimulation { get; set; } = false;
 
         public static string GetErrorMessage(int code)
         {
@@ -48,14 +37,7 @@ namespace HAL_Base
         /// <param name="mode">Initialization Mode</param>
         public static void Initialize(int mode = 0)
         {
-            if (IsSimulation)
-            {
-                HALAssembly = Assembly.LoadFrom("HAL-Simulation.dll");
-            }
-            else
-            {
-                HALAssembly = Assembly.LoadFrom("/home/lvuser/mono/HAL-RoboRIO.dll");
-            }
+            HALAssembly = Assembly.LoadFrom(IsSimulation ? "HAL-Simulation.dll" : "/home/lvuser/mono/HAL-RoboRIO.dll");
 
             SetupDelegates();
             HALAccelerometer.SetupDelegates();

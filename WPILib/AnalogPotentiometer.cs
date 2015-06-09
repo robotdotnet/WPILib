@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Util;
 using WPILib.Interfaces;
-using HAL_Base;
 
 namespace WPILib
 {
@@ -16,8 +11,8 @@ namespace WPILib
 
         private void InitPot(AnalogInput input, double fullRange, double offset)
         {
-            this.m_fullRange = fullRange;
-            this.m_offset = offset;
+            m_fullRange = fullRange;
+            m_offset = offset;
             m_analogInput = input;
         }
 

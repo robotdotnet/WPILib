@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Security.Permissions;
 using System.Threading;
-using HAL_Base;
 using static WPILib.Timer;
 using static HAL_Base.HALSemaphore;
 using static HAL_Base.HALNotifier;
@@ -27,7 +26,7 @@ namespace WPILib
 
         public Notifier(Action handler)
         {
-            m_handler = (o) => handler();
+            m_handler = o => handler();
             m_param = null;
             m_nextEvent = null;
             m_handlerSemaphore = InitializeSemaphore(SEMAPHORE_FULL);

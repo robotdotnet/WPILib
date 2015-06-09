@@ -1,7 +1,7 @@
 ﻿using System;
 using NetworkTablesDotNet.NetworkTables2.Type;
-using NetworkTablesDotNet.Tables;
 using NetworkTablesDotNet.NetworkTables2.Util;
+using NetworkTablesDotNet.Tables;
 using WPILib.Commands;
 
 namespace WPILib.smartdashboard
@@ -64,10 +64,7 @@ namespace WPILib.smartdashboard
             m_choices.Add(name);
             m_values.Add(obj);
 
-            if (m_table != null)
-            {
-                m_table.PutValue(OPTIONS, m_choices);
-            }
+            m_table?.PutValue(OPTIONS, m_choices);
         }
 
         /// <summary>
@@ -87,10 +84,7 @@ namespace WPILib.smartdashboard
 
             m_defaultChoice = name;
             m_defaultValue = obj;
-            if (m_table != null)
-            {
-                m_table.PutString(DEFAULT, m_defaultChoice);
-            }
+            m_table?.PutString(DEFAULT, m_defaultChoice);
             AddObject(name, obj);
         }
 
@@ -115,7 +109,7 @@ namespace WPILib.smartdashboard
         private ITable m_table;
         public void InitTable(ITable subtable)
         {
-            this.m_table = subtable;
+            m_table = subtable;
             if (m_table != null)
             {
                 m_table.PutValue(OPTIONS, m_choices);
@@ -126,14 +120,8 @@ namespace WPILib.smartdashboard
             }
         }
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
-        public string SmartDashboardType
-        {
-            get { return "String Chooser"; }
-        }
+        public string SmartDashboardType => "String Chooser";
     }
 }

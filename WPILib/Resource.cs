@@ -1,5 +1,4 @@
-﻿using System;
-using WPILib.Util;
+﻿using WPILib.Util;
 
 namespace WPILib
 {
@@ -14,7 +13,7 @@ namespace WPILib
 
         public static void Reset()
         {
-            for (Resource r = Resource.s_resourceList; r != null; r = r.m_nextResource)
+            for (Resource r = s_resourceList; r != null; r = r.m_nextResource)
             {
                 for (int i = 0; i < r.m_size; i++)
                 {
@@ -33,8 +32,8 @@ namespace WPILib
                 m_numAllocated[i] = false;
             }
 
-            m_nextResource = Resource.s_resourceList;
-            Resource.s_resourceList = this;
+            m_nextResource = s_resourceList;
+            s_resourceList = this;
         }
 
         public int Allocate()

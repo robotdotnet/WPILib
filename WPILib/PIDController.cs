@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using NetworkTablesDotNet.Tables;
-using WPILib.Interfaces;
 using WPILib.livewindow;
 using WPILib.Util;
-using HAL_Base;
 
 namespace WPILib
 {

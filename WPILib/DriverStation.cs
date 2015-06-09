@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Diagnostics;
 using HAL_Base;
 using static WPILib.Timer;
 using static HAL_Base.HAL;

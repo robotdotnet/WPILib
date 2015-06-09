@@ -49,16 +49,16 @@ namespace WPILib
                 byte retVal = 0;
                 switch (value)
                 {
-                    case WPILib.Interfaces.Range.k2G:
+                    case Range.k2G:
                         retVal = 0;
                         break;
-                    case WPILib.Interfaces.Range.k4G:
+                    case Range.k4G:
                         retVal = 1;
                         break;
-                    case WPILib.Interfaces.Range.k8G:
+                    case Range.k8G:
                         retVal = 2;
                         break;
-                    case WPILib.Interfaces.Range.k16G:
+                    case Range.k16G:
                         retVal = 3;
                         break;
                 }
@@ -66,30 +66,18 @@ namespace WPILib
             }
         }
 
-        public double X
-        {
-            get { return GetAcceleration(Axes.X); }
-        }
+        public double X => GetAcceleration(Axes.X);
 
-        public double Y
-        {
-            get { return GetAcceleration(Axes.Y); }
-        }
+        public double Y => GetAcceleration(Axes.Y);
 
-        public double Z
-        {
-            get { return GetAcceleration(Axes.Z); }
-        }
+        public double Z => GetAcceleration(Axes.Z);
 
         public abstract double GetAcceleration(Axes axis);
 
         public abstract AllAxes GetAccelerations();
 
 
-        public string SmartDashboardType
-        {
-            get { return "3AxisAccelerometer"; }
-        }
+        public string SmartDashboardType => "3AxisAccelerometer";
 
         private ITable m_table;
 
@@ -109,10 +97,7 @@ namespace WPILib
             }
         }
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
         public void StartLiveWindowMode()
         {

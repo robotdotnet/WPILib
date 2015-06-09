@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
@@ -13,19 +10,18 @@ namespace WPILib.Commands
         private bool m_currentCommandChanged;
 
         private Command m_defaultCommand;
-        private string m_name;
 
         private static List<Subsystem> s_allSubsystems = new List<Subsystem>();
 
         public Subsystem(string name)
         {
-            this.m_name = name;
+            Name = name;
             Scheduler.GetInstance().RegisterSubsystem(this);
         }
 
         public Subsystem()
         {
-            this.m_name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
+            Name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
             Scheduler.GetInstance().RegisterSubsystem(this);
             m_currentCommandChanged = true;
         }
@@ -86,16 +82,13 @@ namespace WPILib.Commands
             return m_currentCommand;
         }
 
-        public string Name
-        {
-            get { return m_name; }
-        }
+        public string Name { get; }
 
         private ITable m_table;
 
-        public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
+        public void InitTable(ITable subtable)
         {
-            this.m_table = subtable;
+            m_table = subtable;
             if (m_table != null)
             {
                 if (m_defaultCommand != null)
@@ -119,14 +112,8 @@ namespace WPILib.Commands
             }
         }
 
-        public ITable Table
-        {
-            get { return m_table; }
-        }
+        public ITable Table => m_table;
 
-        public string SmartDashboardType
-        {
-            get { return "Subsystem"; }
-        }
+        public string SmartDashboardType => "Subsystem";
     }
 }

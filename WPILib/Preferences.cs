@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading;
 using HAL_Base;
-using System.IO;
 using NetworkTablesDotNet.NetworkTables;
 using NetworkTablesDotNet.Tables;
 
@@ -30,9 +28,7 @@ namespace WPILib
         {
             lock(s_lockObject)
             {
-                if (s_instance == null)
-                    s_instance = new Preferences();
-                return s_instance;
+                return s_instance ?? (s_instance = new Preferences());
             }
         }
 
@@ -316,10 +312,7 @@ namespace WPILib
                         if (m_comments != null)
                         {
                             Comment comment = m_comments[key];
-                            if (comment != null)
-                            {
-                                comment.Write(output);
-                            }
+                            comment?.Write(output);
                         }
 
                         output.Write(key);
@@ -328,10 +321,7 @@ namespace WPILib
                         output.Write(VALUE_SUFFIX);
                     }
 
-                    if (m_endComment != null)
-                    {
-                        m_endComment.Write(output);
-                    }
+                    m_endComment?.Write(output);
                 }
                 catch (IOException ex)
                 {
@@ -540,7 +530,7 @@ namespace WPILib
 
                 internal Reader(StreamReader stream)
                 {
-                    this.m_stream = stream;
+                    m_stream = stream;
                 }
 
                 internal char Read()

@@ -2,9 +2,8 @@
 
 using System;
 using System.Linq;
-using WPILib.Interfaces;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Util;
 
 namespace WPILib
 {

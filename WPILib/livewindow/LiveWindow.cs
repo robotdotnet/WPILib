@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet;
 using NetworkTablesDotNet.NetworkTables;
 using NetworkTablesDotNet.Tables;
 using WPILib.Commands;

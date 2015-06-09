@@ -1,11 +1,8 @@
-﻿
-
-using System;
-using NetworkTablesDotNet.Tables;
-using WPILib.Util;
+﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.livewindow;
-using NetworkTablesDotNet;
+using WPILib.Util;
 using static WPILib.Utility;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;

@@ -1,9 +1,6 @@
-﻿
-
-using System;
-using WPILib.Interfaces;
-using WPILib.Util;
+﻿using System;
 using HAL_Base;
+using WPILib.Util;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
 

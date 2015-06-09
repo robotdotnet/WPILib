@@ -1,9 +1,8 @@
 ﻿
 
 using System;
-using System.Runtime.InteropServices;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Util;
 
 namespace WPILib
 {
@@ -47,7 +46,7 @@ namespace WPILib
             }
             AllocateInterrupts(false);
 
-            this.m_param = null;
+            m_param = null;
 
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
@@ -57,14 +56,14 @@ namespace WPILib
 
         public void RequestInterrupts(Action<uint, object> handler, object param)
         {
-            m_function = (mask, t) => handler(mask, this.m_param);
+            m_function = (mask, t) => handler(mask, m_param);
             if (m_interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
             }
             AllocateInterrupts(false);
 
-            this.m_param = param;
+            m_param = param;
 
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);

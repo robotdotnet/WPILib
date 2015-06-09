@@ -1,7 +1,6 @@
 ﻿using System;
 using HAL_Base;
 
-
 namespace WPILib
 {
     /// <summary>

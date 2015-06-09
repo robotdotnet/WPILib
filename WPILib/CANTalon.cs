@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Interfaces;
 using HAL_Base;
-using WPILib.livewindow;
 using NetworkTablesDotNet.Tables;
+using WPILib.livewindow;
 
 namespace WPILib
 {
-    using Impl = HAL_Base.HALCanTalonSRX;
+    using Impl = HALCanTalonSRX;
     public class CANTalon : IMotorSafety, CANSpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;
@@ -43,7 +39,7 @@ namespace WPILib
 
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
-            this.m_deviceNumber = deviceNumber;
+            m_deviceNumber = deviceNumber;
             m_impl = Impl.C_TalonSRX_Create(deviceNumber, controlPeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
@@ -54,23 +50,12 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
-        private const bool disposed = false;
-
-        ~CANTalon()
-        {
-            Dispose();
-        }
-
         public void Dispose()
         {
-            if (!disposed)
-            {
-                Impl.C_TalonSRX_Destroy(m_impl);
-                GC.SuppressFinalize(this);
-            }
+            Impl.C_TalonSRX_Destroy(m_impl);
         }
 
-        private double GetParam(Impl.ParamID id)
+        private double GetParam(HALCanTalonSRX.ParamID id)
         {
             Impl.C_TalonSRX_RequestParam(m_impl, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
@@ -81,7 +66,7 @@ namespace WPILib
             return value;
         }
 
-        private int GetParamInt32(Impl.ParamID id)
+        private int GetParamInt32(HALCanTalonSRX.ParamID id)
         {
             Impl.C_TalonSRX_RequestParam(m_impl, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
@@ -92,7 +77,7 @@ namespace WPILib
             return value;
         }
 
-        private void SetParam(Impl.ParamID id, double value)
+        private void SetParam(HALCanTalonSRX.ParamID id, double value)
         {
             var errorCode = Impl.C_TalonSRX_SetParam(m_impl, (int)id, value);
             if (errorCode != CTR_Code.CTR_OKAY)
@@ -256,7 +241,7 @@ namespace WPILib
 
         public void SetPosition(double pos)
         {
-            SetParam(Impl.ParamID.eSensorPosition, pos);
+            SetParam(HALCanTalonSRX.ParamID.eSensorPosition, pos);
         }
 
         public double Speed
@@ -472,16 +457,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_P);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_P);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_P);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_P);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_P, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_P, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_P, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_P, value);
             }
         }
 
@@ -491,16 +476,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_I);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_I);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_I);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_I);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_I, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_I, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_I, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_I, value);
             }
         }
 
@@ -510,16 +495,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_D);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_D);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_D);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_D);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_D, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_D, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_D, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_D, value);
             }
         }
 
@@ -534,16 +519,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_F);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_F);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_F);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_F);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_F, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_F, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_F, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_F, value);
             }
         }
 
@@ -558,29 +543,29 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_IZone);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_IZone);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_IZone, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_IZone, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone, value);
             }
         }
 
         public double GetIaccum()
         {
             EnsureInPIDMode();
-            return GetParamInt32(Impl.ParamID.ePidIaccum);
+            return GetParamInt32(HALCanTalonSRX.ParamID.ePidIaccum);
         }
 
         public void ClearIAccum()
         {
             EnsureInPIDMode();
-            SetParam(Impl.ParamID.ePidIaccum, 0.0);
+            SetParam(HALCanTalonSRX.ParamID.ePidIaccum, 0.0);
         }
 
         [Obsolete("Use CloseLoopRampRate property instead.")]
@@ -594,16 +579,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_CloseLoopRampRate);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_CloseLoopRampRate);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_CloseLoopRampRate, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
             }
         }
 
@@ -611,7 +596,7 @@ namespace WPILib
         {
             if (profile != 0 && profile != 1)
                 throw new ArgumentOutOfRangeException("Talon PID profile must be 0 or 1.");
-            this.m_profile = profile;
+            m_profile = profile;
             P = p;
             I = i;
             D = value;
@@ -786,12 +771,12 @@ namespace WPILib
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eRampThrottle);
+                return GetParamInt32(HALCanTalonSRX.ParamID.eRampThrottle);
             }
             set
             {
                 int rate = (int)(value * 1023.0 / 12.0 / 100.0);
-                Impl.C_TalonSRX_SetParam(m_impl, (int)Impl.ParamID.eRampThrottle, rate);
+                Impl.C_TalonSRX_SetParam(m_impl, (int)HALCanTalonSRX.ParamID.eRampThrottle, rate);
             }
         }
 
@@ -808,10 +793,7 @@ namespace WPILib
         [Obsolete("Use DeviceID property instead.")]
         public int GetDeviceID() { return DeviceID; }
 
-        public int DeviceID
-        {
-            get { return m_deviceNumber; }
-        }
+        public int DeviceID => m_deviceNumber;
 
         [Obsolete("Use ForwardSoftLimit property instead.")]
         public double GetForwardSoftLimit() { return ForwardSoftLimit; }
@@ -822,12 +804,12 @@ namespace WPILib
         {
             get
             {
-                return GetParam(Impl.ParamID.eProfileParamSoftLimitForThreshold);
+                return GetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold);
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitForThreshold, value);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold, value);
             }
         }
 
@@ -836,18 +818,18 @@ namespace WPILib
         [Obsolete("Use ForwardSoftLimitEnabled poperty instead.")]
         public CTR_Code SetForwardSoftLimitEnabled(bool value)
         {
-            return (CTR_Code)GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForEnable);
+            return (CTR_Code)GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable);
         }
         public bool ForwardSoftLimitEnabled
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForEnable) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable) != 0;
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
             }
         }
 
@@ -860,12 +842,12 @@ namespace WPILib
         {
             get
             {
-                return GetParam(Impl.ParamID.eProfileParamSoftLimitRevThreshold);
+                return GetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold);
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitRevThreshold, value);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold, value);
             }
         }
 
@@ -874,18 +856,18 @@ namespace WPILib
         [Obsolete("Use ReverseSoftLimitEnabled poperty instead.")]
         public CTR_Code SetReverseSoftLimitEnabled(bool value)
         {
-            return (CTR_Code)GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevEnable);
+            return (CTR_Code)GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable);
         }
         public bool ReverseSoftLimitEnabled
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevEnable) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable) != 0;
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitRevEnable, value ? 1 : 0);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable, value ? 1 : 0);
             }
         }
         public void ClearStickyFaults()
@@ -906,11 +888,11 @@ namespace WPILib
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed) != 0;
             }
             set
             {
-                SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, value ? 0 : 1);
+                SetParam(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, value ? 0 : 1);
             }
         }
 
@@ -921,11 +903,11 @@ namespace WPILib
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed) != 0;
             }
             set
             {
-                SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, value ? 0 : 1);
+                SetParam(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, value ? 0 : 1);
             }
         }
 
@@ -1121,7 +1103,7 @@ namespace WPILib
                     case ControlMode.PercentVbus:
                     default:
                         Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
-                        return value/1023.0;
+                        return value / 1023.0;
                 }
             }
             set
@@ -1133,21 +1115,21 @@ namespace WPILib
                     switch (m_controlMode)
                     {
                         case ControlMode.PercentVbus:
-                            Impl.C_TalonSRX_SetDemand(m_impl, (int) (value*1023));
+                            Impl.C_TalonSRX_SetDemand(m_impl, (int)(value * 1023));
                             break;
                         case ControlMode.Voltage:
-                            int volts = (int) (value*256);
+                            int volts = (int)(value * 256);
                             Impl.C_TalonSRX_SetDemand(m_impl, volts);
                             break;
                         case ControlMode.Position:
                         case ControlMode.Speed:
                         case ControlMode.Follower:
-                            Impl.C_TalonSRX_SetDemand(m_impl, (int) value);
+                            Impl.C_TalonSRX_SetDemand(m_impl, (int)value);
                             break;
                         default:
                             break;
                     }
-                    Impl.C_TalonSRX_SetModeSelect(m_impl, (int) MotorControlMode);
+                    Impl.C_TalonSRX_SetModeSelect(m_impl, (int)MotorControlMode);
                 }
             }
         }

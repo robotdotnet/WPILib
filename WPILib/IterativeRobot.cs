@@ -1,7 +1,4 @@
-﻿
-
-using System;
-using HAL_Base;
+﻿using HAL_Base;
 using static HAL_Base.HAL;
 using static System.Console;
 

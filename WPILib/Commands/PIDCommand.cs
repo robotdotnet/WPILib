@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet.Tables;
-using WPILib.Interfaces;
+﻿using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
@@ -11,10 +6,7 @@ namespace WPILib.Commands
     {
         private PIDController m_controller;
 
-        public double PidGet
-        {
-            get { return ReturnPIDInput(); }
-        }
+        public double PidGet => ReturnPIDInput();
 
         public double PidWrite
         {

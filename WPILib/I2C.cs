@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using WPILib.Util;
 using static WPILib.Utility;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
@@ -69,15 +70,15 @@ namespace WPILib
 
         public bool Read(int registerAddress, int count, byte[] buffer)
         {
-            Util.BoundaryException.AssertWithinBounds(count, 1, 7);
-            if (buffer == null) throw new ArgumentNullException("buffer");
+            BoundaryException.AssertWithinBounds(count, 1, 7);
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             return Transaction(new byte[1] { (byte)registerAddress }, 1, buffer, count);
         }
 
         public bool ReadOnly(byte[] buffer, int count)
         {
-            Util.BoundaryException.AssertWithinBounds(count, 1, 7);
-            if (buffer == null) throw new ArgumentNullException("buffer");
+            BoundaryException.AssertWithinBounds(count, 1, 7);
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             byte[] received = new byte[count];
             int retVal = I2CRead((byte)m_port, (byte)m_deviceAddress, received, (byte)count);
             Array.Copy(received, buffer, Math.Min(buffer.Length, count));

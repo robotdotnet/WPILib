@@ -1,8 +1,8 @@
 ﻿
 
 using System;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Util;
 
 namespace WPILib
 {
