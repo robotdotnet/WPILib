@@ -8,7 +8,7 @@ using HAL_Base;
 
 namespace WPILib
 {
-    public class AnalogPotentiometer : Potentiometer
+    public class AnalogPotentiometer : Potentiometer, IDisposable
     {
         private double m_fullRange, m_offset;
         private AnalogInput m_analogInput;
@@ -56,19 +56,16 @@ namespace WPILib
 
         public double Get()
         {
-            return (m_analogInput.GetVoltage()/ControllerPower.GetVoltage5V())*m_fullRange + m_offset;
+            return (m_analogInput.Voltage / ControllerPower.Voltage5V) * m_fullRange + m_offset;
         }
 
-        public double PidGet()
-        {
-            return Get();
-        }
+        public double PidGet => Get();
 
-        public void Free()
+        public void Dispose()
         {
             if (m_initAnalogInput)
             {
-                m_analogInput.Free();
+                m_analogInput.Dispose();
                 m_analogInput = null;
                 m_initAnalogInput = false;
             }

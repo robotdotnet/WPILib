@@ -19,12 +19,12 @@ namespace WPILib
             m_trigger = trigger;
             m_outputType = outputType;
 
-            HAL.Report(ResourceType.kResourceType_AnalogTriggerOutput, (byte) trigger.GetIndex(), (byte) outputType);
+            HAL.Report(ResourceType.kResourceType_AnalogTriggerOutput, (byte) trigger.Index, (byte) outputType);
         }
 
-        public override void Free()
+        public override void Dispose()
         {
-            //base.Free();
+            //base.Dispose();
         }
 
         public bool Get()
@@ -34,19 +34,10 @@ namespace WPILib
             return value;
         }
 
-        public override int GetChannelForRouting()
-        {
-            return (m_trigger.Index << 2) + (int)m_outputType;
-        }
+        public override int ChannelForRouting => (m_trigger.Index << 2) + (int) m_outputType;
 
-        public override byte GetModuleForRouting()
-        {
-            return (byte) (m_trigger.Index >> 2);
-        }
+        public override byte ModuleForRouting => (byte) (m_trigger.Index >> 2);
 
-        public override bool GetAnalogTriggerForRouting()
-        {
-            return true;
-        }
+        public override bool AnalogTriggerForRouting => true;
     }
 }

@@ -10,7 +10,7 @@ using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
-    public class Scheduler : NamedSendable
+    public class Scheduler : INamedSendable
     {
         private static Scheduler s_instance = null;
 
@@ -197,11 +197,9 @@ namespace WPILib.Commands
         }
 
 
-
-
-        public string GetName()
+        public string Name
         {
-            return "Scheduler";
+            get { return "Scheduler"; }
         }
 
         public new string GetType()
@@ -214,14 +212,14 @@ namespace WPILib.Commands
             m_table = subtable;
         }
 
-        public ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "Scheduler";
+            get { return "Scheduler"; }
         }
     }
 }

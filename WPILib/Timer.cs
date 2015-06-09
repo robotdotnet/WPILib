@@ -4,32 +4,28 @@ namespace WPILib
 {
     public class Timer
     {
-        private static StaticInterface s_impl;
+        //private static StaticInterface s_impl;
 
-        public static void SetImplementation(StaticInterface ti)
-        {
-            s_impl = ti;
-        }
+        public static IStaticInterface Implementation { private get; set; }
 
         /// <summary>
         /// Return the system clock time in seconds. Return the time from the
         /// FPGA hardware clock in seconds since the FPGA started.
         /// </summary>
-        /// <returns>Robot running time in seconds</returns>
-        public static double GetFPGATimestamp()
+        public static double FPGATimestamp
         {
-            if (s_impl != null)
+            get
             {
-                return s_impl.GetFPGATimestamp();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
+                if (Implementation != null)
+                {
+                    return Implementation.FPGATimestamp;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof (Timer));
             }
         }
 
         /// <summary>
-        /// Return the approximate match time
+        /// Return the approximate match time since the beginning of autonomous
         /// <para />The FMS does not currently send the official match time to the robots
         /// <para />This returns the time since the enable signal sent from the Driver Station
         /// <para />At the beginning of autonomous, the time is reset to 0.0 seconds
@@ -37,16 +33,15 @@ namespace WPILib
         /// <para />If the robot is disabled, this returns 0.0 seconds
         /// <para />Warning: This is not an official time (so it cannot be used to argue with referees)
         /// </summary>
-        /// <returns>Match time in seconds since the beginning of autonomous</returns>
-        public static double GetMatchTime()
+        public static double MatchTime
         {
-            if (s_impl != null)
+            get
             {
-                return s_impl.GetMatchTime();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
+                if (Implementation != null)
+                {
+                    return Implementation.MatchTime;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof(Timer));
             }
         }
 
@@ -60,20 +55,20 @@ namespace WPILib
         /// <param name="seconds">Length of time to pause</param>
         public static void Delay(double seconds)
         {
-            if (s_impl != null)
+            if (Implementation != null)
             {
-                s_impl.Delay(seconds);
+                Implementation.Delay(seconds);
             }
             else
             {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
+                throw new BaseSystemNotInitializedException(Implementation, typeof(Timer));
             }
         }
 
-        public interface StaticInterface
+        public interface IStaticInterface
         {
-            double GetFPGATimestamp();
-            double GetMatchTime();
+            double FPGATimestamp { get; }
+            double MatchTime { get; }
             void Delay(double seconds);
             Interface NewTimer();
         }
@@ -82,11 +77,11 @@ namespace WPILib
 
         public Timer()
         {
-            if (s_impl != null)
-                m_timer = s_impl.NewTimer();
+            if (Implementation != null)
+                m_timer = Implementation.NewTimer();
             else
             {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(Timer));
+                throw new BaseSystemNotInitializedException(Implementation, typeof(Timer));
             }
         }
 

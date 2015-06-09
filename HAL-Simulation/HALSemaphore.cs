@@ -187,7 +187,7 @@ namespace HAL_FRC
                 {
                     Monitor.Wait(temp.lockObject);
                 }
-                catch (ThreadInterruptedException ex)
+                catch (ThreadInterruptedException)
                 {
                 }
             }
@@ -206,7 +206,7 @@ namespace HAL_FRC
                 {
                     Monitor.PulseAll(temp.lockObject);
                 }
-                catch (ThreadInterruptedException e)
+                catch (ThreadInterruptedException)
                 {
                     
                 }

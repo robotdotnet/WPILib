@@ -22,7 +22,7 @@ namespace WPILib
             {
                 s_channels.Allocate(channel);
             }
-            catch (CheckedAllocationException ex)
+            catch (CheckedAllocationException)
             {
                 throw new AllocationException("Digital input " + channel + " is already allocated");
             }
@@ -34,27 +34,18 @@ namespace WPILib
             Utility.CheckStatus(status);
         }
 
-        public override void Free()
+        public override void Dispose()
         {
-            s_channels.Free(m_channel);
+            s_channels.Dispose(m_channel);
             int status = 0;
             HALDigital.FreeDIO(m_port, ref status);
             m_channel = 0;
         }
 
-        public override int GetChannelForRouting()
-        {
-            return m_channel;
-        }
+        public override int ChannelForRouting => m_channel;
 
-        public override byte GetModuleForRouting()
-        {
-            return 0;
-        }
+        public override byte ModuleForRouting => 0;
 
-        public override bool GetAnalogTriggerForRouting()
-        {
-            return false;
-        }
+        public override bool AnalogTriggerForRouting => false;
     }
 }

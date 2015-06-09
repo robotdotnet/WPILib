@@ -42,40 +42,43 @@ namespace WPILib
 
         protected abstract void WriteRange(byte value);
 
-        public void SetRange(Interfaces.Range range)
+        public Range Range
         {
-            byte value = 0;
-            switch (range)
+            set
             {
-                case WPILib.Interfaces.Range.k2G:
-                    value = 0;
-                    break;
-                case WPILib.Interfaces.Range.k4G:
-                    value = 1;
-                    break;
-                case WPILib.Interfaces.Range.k8G:
-                    value = 2;
-                    break;
-                case WPILib.Interfaces.Range.k16G:
-                    value = 3;
-                    break;
+                byte retVal = 0;
+                switch (value)
+                {
+                    case WPILib.Interfaces.Range.k2G:
+                        retVal = 0;
+                        break;
+                    case WPILib.Interfaces.Range.k4G:
+                        retVal = 1;
+                        break;
+                    case WPILib.Interfaces.Range.k8G:
+                        retVal = 2;
+                        break;
+                    case WPILib.Interfaces.Range.k16G:
+                        retVal = 3;
+                        break;
+                }
+                WriteRange(retVal);
             }
-            WriteRange(value);
         }
 
-        public double GetX()
+        public double X
         {
-            return GetAcceleration(Axes.X);
+            get { return GetAcceleration(Axes.X); }
         }
 
-        public double GetY()
+        public double Y
         {
-            return GetAcceleration(Axes.Y);
+            get { return GetAcceleration(Axes.Y); }
         }
 
-        public double GetZ()
+        public double Z
         {
-            return GetAcceleration(Axes.Z);
+            get { return GetAcceleration(Axes.Z); }
         }
 
         public abstract double GetAcceleration(Axes axis);
@@ -83,9 +86,9 @@ namespace WPILib
         public abstract AllAxes GetAccelerations();
 
 
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "3AxisAccelerometer";
+            get { return "3AxisAccelerometer"; }
         }
 
         private ITable m_table;
@@ -100,15 +103,15 @@ namespace WPILib
         {
             if (m_table != null)
             {
-                m_table.PutNumber("X", GetX());
-                m_table.PutNumber("Y", GetY());
-                m_table.PutNumber("Z", GetZ());
+                m_table.PutNumber("X", X);
+                m_table.PutNumber("Y", Y);
+                m_table.PutNumber("Z", Z);
             }
         }
 
-        public ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
         public void StartLiveWindowMode()

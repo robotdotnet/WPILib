@@ -16,26 +16,26 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_DigitalOutput, (byte)channel);
         }
 
-        public override void Free()
+        public override void Dispose()
         {
             if (m_pwmGenerator != IntPtr.Zero)
             {
                 DisablePWM();
             }
 
-            base.Free();
+            base.Dispose();
         }
 
-        public void Set(bool value)
+        public bool Value
         {
-            int status = 0;
-            HALDigital.SetDIO(m_port, (short)(value ? 0 : 1), ref status);
+            set
+            {
+                int status = 0;
+                HALDigital.SetDIO(m_port, (short) (value ? 0 : 1), ref status);
+            }
         }
 
-        public int GetChannel()
-        {
-            return m_channel;
-        }
+        public int Channel => m_channel;
 
         public void Pulse(int channel, float pulseLength)
         {
@@ -43,17 +43,23 @@ namespace WPILib
             HALDigital.Pulse(m_port, pulseLength, ref status);
         }
 
-        public bool IsPulsing()
+        public bool Pulsing
         {
-            int status = 0;
-            bool value = HALDigital.IsPulsing(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                bool value = HALDigital.IsPulsing(m_port, ref status);
+                return value;
+            }
         }
 
-        public void SetPWMRate(double rate)
+        public double PWMRate
         {
-            int status = 0;
-            HALDigital.SetPWMRate(rate, ref status);
+            set
+            {
+                int status = 0;
+                HALDigital.SetPWMRate(value, ref status);
+            }
         }
 
         public void EnablePWM(double initialDutyCycle)
@@ -76,12 +82,15 @@ namespace WPILib
             m_pwmGenerator = IntPtr.Zero;
         }
 
-        public void UpdateDutyCycle(double dutyCycle)
+        public double DutyCycle
         {
-            if (m_pwmGenerator == IntPtr.Zero)
-                return;
-            int status = 0;
-            HALDigital.SetPWMDutyCycle(m_pwmGenerator, dutyCycle, ref status);
+            set
+            {
+                if (m_pwmGenerator == IntPtr.Zero)
+                    return;
+                int status = 0;
+                HALDigital.SetPWMDutyCycle(m_pwmGenerator, value, ref status);
+            }
         }
     }
 }

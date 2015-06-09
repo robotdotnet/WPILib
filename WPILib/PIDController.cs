@@ -12,7 +12,7 @@ using HAL_Base;
 namespace WPILib
 {
 
-    public class PIDController : Controller, LiveWindowSendable, ITableListener
+    public class PIDController : IController, LiveWindowSendable, ITableListener, IDisposable
     {
         public enum ToleranceType
         {
@@ -46,8 +46,8 @@ namespace WPILib
         private double m_error = 0.0;
         private double m_result = 0.0;
         private double m_period = DefaultPeriod;
-        PIDSource m_pidInput;
-        PIDOutput m_pidOutput;
+        IPIDSource m_ipidInput;
+        IPIDOutput m_ipidOutput;
         private object m_lockObject = new object();
 
         private double m_tolerance = 0.05;
@@ -56,7 +56,7 @@ namespace WPILib
 
 
         public PIDController(double Kp, double Ki, double Kd, double Kf,
-            PIDSource source, PIDOutput output,
+            IPIDSource source, IPIDOutput output,
             double period)
         {
             if (source == null)
@@ -71,8 +71,8 @@ namespace WPILib
             m_D = Kd;
             m_F = Kf;
 
-            m_pidInput = source;
-            m_pidOutput = output;
+            m_ipidInput = source;
+            m_ipidOutput = output;
             m_period = period;
 
             m_controlLoop.StartPeriodic(m_period);
@@ -84,7 +84,7 @@ namespace WPILib
         }
 
         public PIDController(double Kp, double Ki, double Kd,
-            PIDSource source, PIDOutput output,
+            IPIDSource source, IPIDOutput output,
             double period)
             : this(Kp, Ki, Kd, 0.0, source, output, period)
         {
@@ -92,28 +92,30 @@ namespace WPILib
         }
 
         public PIDController(double Kp, double Ki, double Kd,
-            PIDSource source, PIDOutput output)
+            IPIDSource source, IPIDOutput output)
             : this(Kp, Ki, Kd, source, output, DefaultPeriod)
         {
 
         }
 
         public PIDController(double Kp, double Ki, double Kd, double Kf,
-            PIDSource source, PIDOutput output)
+            IPIDSource source, IPIDOutput output)
             : this(Kp, Ki, Kd, Kf, source, output, DefaultPeriod)
         {
 
         }
 
-        public void Free()
+        public void Dispose()
         {
             m_controlLoop.Stop();
             lock (this)
             {
-                m_pidOutput = null;
-                m_pidInput = null;
+                m_ipidOutput = null;
+                m_ipidInput = null;
+                m_controlLoop.Dispose();
                 m_controlLoop = null;
             }
+            Table?.RemoveTableListener(this);
         }
 
 
@@ -126,85 +128,83 @@ namespace WPILib
         private void Calculate()
         {
             bool enabled;
-            PIDSource pidInput;
+            IPIDSource ipidInput;
 
             lock (this)
             {
-                if (m_pidInput == null)
+                if (m_ipidInput == null)
                 {
                     return;
                 }
-                if (m_pidOutput == null)
+                if (m_ipidOutput == null)
                 {
                     return;
                 }
                 enabled = m_enabled; // take snapshot of these values...
-                pidInput = m_pidInput;
+                ipidInput = m_ipidInput;
             }
 
-            if (enabled)
+            if (!enabled) return;
+            double input;
+            double result;
+            IPIDOutput ipidOutput = null;
+            lock (this)
             {
-                double input;
-                double result;
-                PIDOutput pidOutput = null;
-                lock (this)
+                input = ipidInput.PidGet;
+            }
+            lock (this)
+            {
+                m_error = m_setpoint - input;
+                if (m_continuous)
                 {
-                    input = pidInput.PidGet();
-                }
-                lock (this)
-                {
-                    m_error = m_setpoint - input;
-                    if (m_continuous)
+                    if (Math.Abs(m_error) > (m_maximumInput - m_minimumInput) / 2)
                     {
-                        if (Math.Abs(m_error) > (m_maximumInput - m_minimumInput) / 2)
+                        if (m_error > 0)
                         {
-                            if (m_error > 0)
-                            {
-                                m_error = m_error - m_maximumInput + m_minimumInput;
-                            }
-                            else
-                            {
-                                m_error = m_error + m_maximumInput - m_minimumInput;
-                            }
-                        }
-                    }
-
-                    if (m_I != 0.0)
-                    {
-                        double potentialIGain = (m_totalError + m_error) * m_I;
-                        if (potentialIGain < m_maximumOutput)
-                        {
-                            if (potentialIGain > m_minimumInput)
-                            {
-                                m_totalError += m_error;
-                            }
-                            else
-                            {
-                                m_totalError = m_minimumOutput / m_I;
-                            }
+                            m_error = m_error - m_maximumInput + m_minimumInput;
                         }
                         else
                         {
-                            m_totalError = m_maximumOutput / m_I;
+                            m_error = m_error + m_maximumInput - m_minimumInput;
                         }
                     }
-
-                    m_result = m_P * m_error + m_I * m_totalError + m_D * (m_error - m_prevError) + m_setpoint * m_F;
-                    m_prevError = m_error;
-
-                    if (m_result > m_maximumOutput)
-                    {
-                        m_result = m_maximumOutput;
-                    }
-                    else if (m_result < m_minimumOutput)
-                    {
-                        m_result = m_minimumOutput;
-                    }
-                    pidOutput = m_pidOutput;
-                    result = m_result;
                 }
-                pidOutput.PidWrite(result);
+
+                if (m_I != 0.0)
+                {
+                    double potentialIGain = (m_totalError + m_error) * m_I;
+                    if (potentialIGain < m_maximumOutput)
+                    {
+                        if (potentialIGain > m_minimumInput)
+                        {
+                            m_totalError += m_error;
+                        }
+                        else
+                        {
+                            m_totalError = m_minimumOutput / m_I;
+                        }
+                    }
+                    else
+                    {
+                        m_totalError = m_maximumOutput / m_I;
+                    }
+                }
+
+                m_result = m_P * m_error + m_I * m_totalError + m_D * (m_error - m_prevError) + m_setpoint * m_F;
+                m_prevError = m_error;
+
+                if (m_result > m_maximumOutput)
+                {
+                    m_result = m_maximumOutput;
+                }
+                else if (m_result < m_minimumOutput)
+                {
+                    m_result = m_minimumOutput;
+                }
+                ipidOutput = m_ipidOutput;
+                result = m_result;
             }
+            ipidOutput.PidWrite = result;
         }
 
         public void SetPID(double p, double i, double d)
@@ -228,28 +228,60 @@ namespace WPILib
             }
         }
 
-        public double GetP()
+        public double P
         {
-            lock (m_lockObject)
-                return m_P;
+            get
+            {
+                lock (m_lockObject)
+                    return m_P;
+            }
+            set
+            {
+                lock (m_lockObject)
+                    m_P = value;
+            }
         }
 
-        public double GetI()
+        public double I
         {
-            lock (m_lockObject)
-                return m_I;
+            get
+            {
+                lock (m_lockObject)
+                    return m_I;
+            }
+            set
+            {
+                lock (m_lockObject)
+                    m_I = value;
+            }
         }
 
-        public double GetD()
+        public double D
         {
-            lock (m_lockObject)
-                return m_D;
+            get
+            {
+                lock (m_lockObject)
+                    return m_D;
+            }
+            set
+            {
+                lock (m_lockObject)
+                    m_D = value;
+            }
         }
 
-        public double GetF()
+        public double F
         {
-            lock (m_lockObject)
-                return m_F;
+            get
+            {
+                lock (m_lockObject)
+                    return m_F;
+            }
+            set
+            {
+                lock (m_lockObject)
+                    m_F = value;
+            }
         }
 
         public double Get()
@@ -258,10 +290,13 @@ namespace WPILib
                 return m_result;
         }
 
-        public void SetContinouous(bool continuous = true)
+        public bool Continouous
         {
-            lock (m_lockObject)
-                m_continuous = continuous;
+            set
+            {
+                lock (m_lockObject)
+                    m_continuous = value;
+            }
         }
 
         public void SetInputRange(double minimumInput, double maximumInput)
@@ -272,7 +307,7 @@ namespace WPILib
                     throw new BoundaryException("Lower bound is greatter than upper bound");
                 m_minimumInput = minimumInput;
                 m_maximumInput = maximumInput;
-                SetSetpoint(m_setpoint);
+                Setpoint = m_setpoint;
             }
         }
 
@@ -284,47 +319,52 @@ namespace WPILib
                     throw new BoundaryException("Lower bound is greatter than upper bound");
                 m_minimumOutput = minimumOutput;
                 m_maximumOutput = maximumOutput;
-                SetSetpoint(m_setpoint);
+                Setpoint = m_setpoint;
             }
         }
 
-        public void SetSetpoint(double setpoint)
+        public double Setpoint
         {
-            lock (m_lockObject)
+            get
             {
-                if (m_maximumInput > m_minimumInput)
+                lock (m_lockObject)
+                    return m_setpoint;
+            }
+            set
+            {
+                lock (m_lockObject)
                 {
-                    if (setpoint > m_maximumInput)
+                    if (m_maximumInput > m_minimumInput)
                     {
-                        m_setpoint = m_maximumInput;
-                    }
-                    else if (setpoint < m_minimumInput)
-                    {
-                        m_setpoint = m_minimumInput;
+                        if (value > m_maximumInput)
+                        {
+                            m_setpoint = m_maximumInput;
+                        }
+                        else if (value < m_minimumInput)
+                        {
+                            m_setpoint = m_minimumInput;
+                        }
+                        else
+                        {
+                            m_setpoint = value;
+                        }
                     }
                     else
                     {
-                        m_setpoint = setpoint;
+                        m_setpoint = value;
                     }
-                }
-                else
-                {
-                    m_setpoint = setpoint;
                 }
             }
         }
 
-        public double GetSetpoint()
+        public double Error
         {
-            lock (m_lockObject)
-                return m_setpoint;
-        }
-
-        public double GetError()
-        {
-            lock (m_lockObject)
+            get
             {
-                return GetSetpoint() - m_pidInput.PidGet();
+                lock (m_lockObject)
+                {
+                    return Setpoint - m_ipidInput.PidGet;
+                }
             }
         }
 
@@ -356,18 +396,21 @@ namespace WPILib
             }
         }
 
-        public bool OnTarget()
+        public bool OnTarget
         {
-            lock (m_lockObject)
+            get
             {
-                switch (m_toleranceType)
+                lock (m_lockObject)
                 {
-                    case ToleranceType.PercentTolerance:
-                        return Math.Abs(m_error) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
-                    case ToleranceType.AbsoluteTolerance:
-                        return Math.Abs(m_error) < m_tolerance;
-                    default:
-                        return false;
+                    switch (m_toleranceType)
+                    {
+                        case ToleranceType.PercentTolerance:
+                            return Math.Abs(m_error) < (m_tolerance/100*(m_maximumInput - m_minimumInput));
+                        case ToleranceType.AbsoluteTolerance:
+                            return Math.Abs(m_error) < m_tolerance;
+                        default:
+                            return false;
+                    }
                 }
             }
         }
@@ -382,15 +425,18 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_pidOutput.PidWrite(0);
+                m_ipidOutput.PidWrite = 0;
                 m_enabled = false;
             }
         }
 
-        public bool IsEnable()
+        public bool Enabled
         {
-            lock (m_lockObject)
-                return m_enabled;
+            get
+            {
+                lock (m_lockObject)
+                    return m_enabled;
+            }
         }
 
         public void Reset()
@@ -404,66 +450,55 @@ namespace WPILib
             }
         }
 
-        private ITable m_table;
-
         public void UpdateTable()
         {
         }
 
         public void StartLiveWindowMode()
         {
+            Disable();
         }
 
         public void StopLiveWindowMode()
         {
-            
         }
 
         public void InitTable(ITable subtable)
         {
-            if (m_table != null)
+            Table?.RemoveTableListener(this);
+            Table = subtable;
+            if (Table != null)
             {
-                m_table.RemoveTableListener(this);
-            }
-            m_table = subtable;
-            if (m_table != null)
-            {
-                m_table.PutNumber("p", GetP());
-                m_table.PutNumber("i", GetI());
-                m_table.PutNumber("d", GetD());
-                m_table.PutNumber("f", GetF());
-                m_table.PutNumber("setpoint", GetSetpoint());
-                m_table.PutBoolean("enabled", IsEnable());
-                m_table.AddTableListener(this, false);
+                Table.PutNumber("p", P);
+                Table.PutNumber("i", I);
+                Table.PutNumber("d", D);
+                Table.PutNumber("f", F);
+                Table.PutNumber("setpoint", Setpoint);
+                Table.PutBoolean("enabled", Enabled);
+                Table.AddTableListener(this, false);
             }
         }
 
-        public ITable GetTable()
-        {
-            return m_table;
-        }
+        public ITable Table { get; private set; }
 
-        public string GetSmartDashboardType()
-        {
-            return "PIDController";
-        }
+        public string SmartDashboardType => "PIDController";
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             if (key == ("p") || key == ("i") || key == ("d") || key == ("f"))
             {
-                if (GetP() != m_table.GetNumber("p", 0.0) || GetI() != m_table.GetNumber("i", 0.0) ||
-                        GetD() != m_table.GetNumber("d", 0.0) || GetF() != m_table.GetNumber("f", 0.0))
-                    SetPID(m_table.GetNumber("p", 0.0), m_table.GetNumber("i", 0.0), m_table.GetNumber("d", 0.0), m_table.GetNumber("f", 0.0));
+                if (P != Table.GetNumber("p", 0.0) || I != Table.GetNumber("i", 0.0) ||
+                        D != Table.GetNumber("d", 0.0) || F != Table.GetNumber("f", 0.0))
+                    SetPID(Table.GetNumber("p", 0.0), Table.GetNumber("i", 0.0), Table.GetNumber("d", 0.0), Table.GetNumber("f", 0.0));
             }
             else if (key == ("setpoint"))
             {
-                if (GetSetpoint() != (double)value)
-                    SetSetpoint((double)value);
+                if (Setpoint != (double)value)
+                    Setpoint = (double)value;
             }
             else if (key == ("enabled"))
             {
-                if (IsEnable() != (bool)value)
+                if (Enabled != (bool)value)
                 {
                     if ((bool)value)
                     {

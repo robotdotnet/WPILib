@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HAL_Base;
+using System.Runtime.CompilerServices;
+using static HAL_Base.HAL;
 
 namespace WPILib
 {
     /// <summary>
     /// Contains global utility functions
     /// </summary>
-    public class Utility
+    public static class Utility
     {
-        private Utility()
-        {
-
-        }
-
         /// <summary>
         /// Return the FPGA Version number. For now, expect this to be 2015.
         /// </summary>
-        /// <returns>FPGA Version Number</returns>
-        internal int GetFPGAVersion()
+        internal static int FPGAVersion
         {
-            int status = 0;
-            int value = HAL.GetFPGAVersion(ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                int value = GetFPGAVersion(ref status);
+                return value;
+            }
         }
 
         /// <summary>
@@ -32,48 +27,55 @@ namespace WPILib
         /// <para /> The 12 most significant bits are the Major Revision. the next 8 bits are
         /// <para /> the Minor Revision. The 12 least significant bits are the Build Number.
         /// </summary>
-        /// <returns>FPGA Revision Number</returns>
-        internal long GetFPGARevision()
+        internal static long FPGARevision
         {
-            int status = 0;
-            int value = (int)HAL.GetFPGARevision(ref status);
-            return (long)value;
+            get
+            {
+                int status = 0;
+                uint value = GetFPGARevision(ref status);
+                return value;
+            }
         }
 
         /// <summary>
         /// Read the microsecond timer from the FPGA
         /// </summary>
-        /// <returns>The current time in microseconds according to the FPGA.</returns>
-        public static long GetFPGATime()
+        public static long FPGATime
         {
-            int status = 0;
-            long value = HAL.GetFPGATime(ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                long value = GetFPGATime(ref status);
+                return value;
+            }
         }
 
         /// <summary>
         /// Get the state of the "USER" button on the RoboRIO
         /// </summary>
         /// <returns>True if the button is currently pressed down</returns>
-        public static bool GetUserButton()
+        public static bool UserButton
         {
-            int status = 0;
-            bool value = HAL.GetFPGAButton(ref status);
-            //CheckStatus(status); //Not calling check status right now because these functions are returning errors. 
-            return value;
+            get
+            {
+                int status = 0;
+                bool value = GetFPGAButton(ref status);
+                //CheckStatus(status); //Not calling check status right now because these functions are returning errors. 
+                return value;
+            }
         }
 
-        internal static void CheckStatus(int status)
+        internal static void CheckStatus(int status, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
+            //TODO: Use Caller attributes
             if (status < 0)
             {
-                string message = HAL.GetErrorMessage(status);
-                throw new SystemException(" Code: " + status + ". " + message);
+                throw new SystemException($" Code : {status}. {GetErrorMessage(status)}");
             }
             else if (status > 0)
             {
-                string message = HAL.GetErrorMessage(status);
-                DriverStation.ReportError(message, true);
+                DriverStation.ReportError(GetErrorMessage(status), true);
             }
         }
     }

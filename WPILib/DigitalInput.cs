@@ -11,21 +11,18 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
         }
 
-        public bool Get()
+        public bool Value
         {
-            int status = 0;
-            bool value = HALDigital.GetDIO(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                bool value = HALDigital.GetDIO(m_port, ref status);
+                return value;
+            }
         }
 
-        public int GetChannel()
-        {
-            return m_channel;
-        }
+        public int Channel => m_channel;
 
-        public override bool GetAnalogTriggerForRouting()
-        {
-            return false;
-        }
+        public override bool AnalogTriggerForRouting => false;
     }
 }

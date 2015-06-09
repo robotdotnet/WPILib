@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace WPILib
 {
-    public class Ultrasonic : SensorBase, PIDSource, livewindow.LiveWindowSendable
+    public class Ultrasonic : SensorBase, IPIDSource, livewindow.LiveWindowSendable
     {
         public enum Unit
         {
@@ -37,7 +37,7 @@ namespace WPILib
                 foreach (var sensor in s_currentSensors)
                 {
                     if (sensor.Enabled)
-                        sensor.m_pingChannel.Pulse(sensor.m_pingChannel.GetChannel(), PingTime);
+                        sensor.m_pingChannel.Pulse(sensor.m_pingChannel.Channel, PingTime);
                 }
                 Timer.Delay(.1);
             }
@@ -50,7 +50,7 @@ namespace WPILib
                 bool originalMode = s_automaticRoundRobinEnabled;
                 SetAutomaticMode(false);
                 m_counter = new Counter();
-                m_counter.SetMaxPeriod(1.0);
+                m_counter.MaxPeriod = 1.0;
                 m_counter.SetSemiPeriodMode(true);
                 m_counter.Reset();
                 Enabled = true;
@@ -82,19 +82,19 @@ namespace WPILib
             Initialize();
         }
 
-        public override void Free()
+        public override void Dispose()
         {
-            base.Free();
+            base.Dispose();
             lock (m_syncRoot)
             {
                 bool previousAutoMode = s_automaticRoundRobinEnabled;
                 SetAutomaticMode(false);
                 if (m_allocatedChannels)
                 {
-                    if (m_pingChannel != null) m_pingChannel.Free();
-                    if (m_echoChannel != null) m_echoChannel.Free();
+                    if (m_pingChannel != null) m_pingChannel.Dispose();
+                    if (m_echoChannel != null) m_echoChannel.Dispose();
                 }
-                if (m_counter != null) m_counter.Free();
+                if (m_counter != null) m_counter.Dispose();
                 m_pingChannel = null;
                 m_echoChannel = null;
                 m_counter = null;
@@ -135,17 +135,17 @@ namespace WPILib
         {
             SetAutomaticMode(false);
             m_counter.Reset();
-            m_pingChannel.Pulse(m_pingChannel.GetChannel(), PingTime);
+            m_pingChannel.Pulse(m_pingChannel.Channel, PingTime);
         }
 
         public bool IsRangeValid()
         {
-            return m_counter.Get() > 1;
+            return m_counter.Value > 1;
         }
 
         public double GetRangeInches()
         {
-            if (IsRangeValid()) return m_counter.GetPeriod() * SpeedOfSoundInchesPerSec / 2;
+            if (IsRangeValid()) return m_counter.Period * SpeedOfSoundInchesPerSec / 2;
             return 0;
         }
 
@@ -154,16 +154,19 @@ namespace WPILib
             return GetRangeInches() * 25.4;
         }
 
-        public double PidGet()
+        public double PidGet
         {
-            switch (DistanceUnits)
+            get
             {
-                case Unit.Inches:
-                    return GetRangeInches();
-                case Unit.Millimeters:
-                    return GetRangeMM();
-                default:
-                    return 0.0;
+                switch (DistanceUnits)
+                {
+                    case Unit.Inches:
+                        return GetRangeInches();
+                    case Unit.Millimeters:
+                        return GetRangeMM();
+                    default:
+                        return 0.0;
+                }
             }
         }
 
@@ -186,9 +189,9 @@ namespace WPILib
         
         public bool Enabled { get; set; }
 
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "Ultrasonic";
+            get { return "Ultrasonic"; }
         }
 
         private ITable m_table;
@@ -199,9 +202,9 @@ namespace WPILib
             UpdateTable();
         }
 
-        public ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
         public void UpdateTable()

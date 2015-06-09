@@ -16,7 +16,7 @@ namespace WPILib
         {
             m_i2C = new I2C(port, Address);
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
-            SetRange(range);
+            Range = range;
             HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_I2C);
             LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
         }

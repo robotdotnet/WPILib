@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
+using static WPILib.Utility;
 
 namespace WPILib.Internal
 {
-    public class HardwareTimer : Timer.StaticInterface
+    public class HardwareTimer : Timer.IStaticInterface
     {
 
-        public double GetFPGATimestamp()
-        {
-            return Utility.GetFPGATime() / 1000000.0;
-        }
+        public double FPGATimestamp => FPGATime / 1000000.0;
 
-        public double GetMatchTime()
-        {
-            return DriverStation.GetInstance().GetMatchTime();
-        }
+        public double MatchTime => DriverStation.Instance.MatchTime;
 
         public void Delay(double seconds)
         {
@@ -25,7 +16,7 @@ namespace WPILib.Internal
             {
                 Thread.Sleep((int)(seconds * 1e3));
             }
-            catch(ThreadInterruptedException e)
+            catch (ThreadInterruptedException)
             {
 
             }
@@ -49,18 +40,15 @@ namespace WPILib.Internal
                 Reset();
             }
 
-            private long GetMsClock()
-            {
-                return Utility.GetFPGATime() / 1000;
-            }
+            private static long MsClock => FPGATime / 1000;
 
             public double Get()
             {
-                lock(m_lockObject)
+                lock (m_lockObject)
                 {
                     if (m_running)
                     {
-                        return ((double)((GetMsClock() - m_startTime) + m_accumulatedTime)) / 1000.0;
+                        return ((MsClock - m_startTime) + m_accumulatedTime) / 1000.0;
                     }
                     else
                     {
@@ -74,22 +62,22 @@ namespace WPILib.Internal
                 lock (m_lockObject)
                 {
                     m_accumulatedTime = 0;
-                    m_startTime = GetMsClock();
+                    m_startTime = MsClock;
                 }
             }
 
             public void Start()
             {
-                lock(m_lockObject)
+                lock (m_lockObject)
                 {
-                    m_startTime = GetMsClock();
+                    m_startTime = MsClock;
                     m_running = true;
                 }
             }
 
             public void Stop()
             {
-                lock(m_lockObject)
+                lock (m_lockObject)
                 {
                     double temp = Get();
                     m_accumulatedTime = temp;

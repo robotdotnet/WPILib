@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
 using WPILib.livewindow;
+using static HAL_Base.HAL;
+using static HAL_Base.HALSolenoid;
 
 namespace WPILib
 {
@@ -33,11 +33,11 @@ namespace WPILib
 
                 int status = 0;
 
-                IntPtr port = HAL.GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
-                m_solenoidPort = HALSolenoid.InitializeSolenoidPort(port, ref status);
+                IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
+                m_solenoidPort = InitializeSolenoidPort(port, ref status);
 
                 //TODO: Live Window Actuator
-                HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
+                Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
             }
         }
 
@@ -46,7 +46,7 @@ namespace WPILib
         /// </summary>
         /// <param name="channel">The channel on the PCM to control (0..7).</param>
         public Solenoid(int channel)
-            : base(GetDefaultSolenoidModule())
+            : base(DefaultSolenoidModule)
         {
             m_channel = channel;
             InitSolenoid();
@@ -67,7 +67,7 @@ namespace WPILib
         /// <summary>
         /// Destructor
         /// </summary>
-        public override void Free()
+        public override void Dispose()
         {
         }
 
@@ -110,9 +110,9 @@ namespace WPILib
         /// <summary>
         /// Live Window code, only does anything if live window is activated.
         /// </summary>
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "Solenoid";
+            get { return "Solenoid"; }
         }
 
         private ITable m_table;
@@ -123,26 +123,20 @@ namespace WPILib
             UpdateTable();
         }
 
-        public ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
         public void UpdateTable()
         {
-            if (m_table != null)
-            {
-                m_table.PutBoolean("Value", Get());
-            }
+            m_table?.PutBoolean("Value", Get());
         }
 
         public void StartLiveWindowMode()
         {
             Set(false);
-            if (m_table != null)
-            {
-                m_table.AddTableListener("Value", this, true);
-            }
+            m_table?.AddTableListener("Value", this, true);
         }
 
         public void StopLiveWindowMode()

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using NetworkTablesDotNet.Tables;
+using static WPILib.Timer;
 
 namespace WPILib.Commands
 {
@@ -32,7 +33,7 @@ namespace WPILib.Commands
     /// <seealso cref="Subsystem"/>
     /// <seealso cref="CommandGroup"/>
     /// <seealso cref="IllegalUseOfCommandException"/>
-    public abstract class Command : NamedSendable, ITableListener
+    public abstract class Command : INamedSendable, ITableListener
     {
         private string m_name;
 
@@ -107,10 +108,10 @@ namespace WPILib.Commands
         /// If no name was specified in the constructor, 
         /// then the default is the name of the class.
         /// </summary>
-        /// <returns>The name of the command</returns>
-        public string GetName()
+        /// <value>The name of the command</value>
+        public string Name
         {
-            return m_name;
+            get { return m_name; }
         }
 
         /// <summary>
@@ -140,7 +141,7 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
 
-                return m_startTime < 0 ? 0 : Timer.GetFPGATimestamp() - m_startTime;
+                return m_startTime < 0 ? 0 : FPGATimestamp - m_startTime;
             }
         }
 
@@ -213,7 +214,7 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
 
-                if (!m_runWhenDisabled && m_parent == null && RobotState.IsDisabled())
+                if (!m_runWhenDisabled && m_parent == null && RobotState.Disabled)
                 {
                     Cancel();
                 }
@@ -273,7 +274,7 @@ namespace WPILib.Commands
 
         private void StartTiming()
         {
-            m_startTime = Timer.GetFPGATimestamp();
+            m_startTime = FPGATimestamp;
         }
 
         protected bool IsTimedOut()
@@ -443,7 +444,7 @@ namespace WPILib.Commands
         private ITable m_table;
         public override string ToString()
         {
-            return this.GetName();
+            return this.Name;
         }
 
         public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
@@ -453,21 +454,21 @@ namespace WPILib.Commands
             this.m_table = subtable;
             if (m_table != null)
             {
-                m_table.PutString("name", GetName());
+                m_table.PutString("name", Name);
                 m_table.PutBoolean("running", IsRunning());
                 m_table.PutBoolean("isParented", m_parent != null);
                 m_table.AddTableListener("running", this, false);
             }
         }
 
-        public NetworkTablesDotNet.Tables.ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "Command";
+            get { return "Command"; }
         }
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)

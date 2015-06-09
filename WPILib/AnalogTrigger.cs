@@ -6,20 +6,11 @@ using HAL_Base;
 
 namespace WPILib
 {
-    public class AnalogTrigger
+    public class AnalogTrigger : IDisposable
     {
-        private IntPtr m_port;
-        private int m_index;
+        internal IntPtr Port { get; private set; }
 
-        internal IntPtr Port
-        {
-            get { return m_port; }
-        }
-
-        internal int Index
-        {
-            get { return m_index; }
-        }
+        internal int Index { get; private set; }
 
         protected void InitTrigger(int channel)
         {
@@ -27,8 +18,8 @@ namespace WPILib
             int status = 0;
             uint index = 0;
 
-            m_port = HALAnalog.InitializeAnalogTrigger(portPointer, ref index, ref status);
-            m_index = (int)index;
+            Port = HALAnalog.InitializeAnalogTrigger(portPointer, ref index, ref status);
+            Index = (int)index;
 
             HAL.Report(ResourceType.kResourceType_AnalogTrigger, (byte)channel);
         }
@@ -42,14 +33,14 @@ namespace WPILib
         {
             if (channel == null)
                 throw new NullReferenceException("The Analog Input given was null");
-            InitTrigger(channel.GetChannel());
+            InitTrigger(channel.Channel);
         }
 
-        public void Free()
+        public void Dispose()
         {
             int status = 0;
-            HALAnalog.CleanAnalogTrigger(m_port, ref status);
-            m_port = IntPtr.Zero;
+            HALAnalog.CleanAnalogTrigger(Port, ref status);
+            Port = IntPtr.Zero;
         }
 
         public void SetLimitsRaw(int lower, int upper)
@@ -57,7 +48,7 @@ namespace WPILib
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            HALAnalog.SetAnalogTriggerLimitsRaw(m_port, lower, upper, ref status);
+            HALAnalog.SetAnalogTriggerLimitsRaw(Port, lower, upper, ref status);
         }
 
         public void SetLimitsVoltage(double lower, double upper)
@@ -65,32 +56,36 @@ namespace WPILib
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            HALAnalog.SetAnalogTriggerLimitsVoltage(m_port, lower, upper, ref status);
+            HALAnalog.SetAnalogTriggerLimitsVoltage(Port, lower, upper, ref status);
         }
 
-        public void SetAveraged(bool useAveragedValue)
+        public bool Averaged
         {
-            int status = 0;
-            HALAnalog.SetAnalogTriggerFiltered(m_port, useAveragedValue, ref status);
+            set
+            {
+                int status = 0;
+                HALAnalog.SetAnalogTriggerFiltered(Port, value, ref status);
+            }
         }
 
-        public int GetIndex()
+        public bool InWindow
         {
-            return m_index;
+            get
+            {
+                int status = 0;
+                bool value = HALAnalog.GetAnalogTriggerInWindow(Port, ref status);
+                return value;
+            }
         }
 
-        public bool GetInWindow()
+        public bool TriggerState
         {
-            int status = 0;
-            bool value = HALAnalog.GetAnalogTriggerInWindow(m_port, ref status);
-            return value;
-        }
-
-        public bool GetTriggerState()
-        {
-            int status = 0;
-            bool value = HALAnalog.GetAnalogTriggerTriggerState(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                bool value = HALAnalog.GetAnalogTriggerTriggerState(Port, ref status);
+                return value;
+            }
         }
 
         public AnalogTriggerOutput CreateOutput(AnalogTriggerType type)

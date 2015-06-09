@@ -17,7 +17,7 @@ namespace WPILib.smartdashboard
     /// laptop. Once autonomous starts, simply ask the <see cref="SendableChooser"/> what
     /// the selected value is.
     /// </summary>
-    public class SendableChooser : Sendable
+    public class SendableChooser : ISendable
     {
         private static readonly string DEFAULT = "default";
 
@@ -126,14 +126,14 @@ namespace WPILib.smartdashboard
             }
         }
 
-        public ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "String Chooser";
+            get { return "String Chooser"; }
         }
     }
 }

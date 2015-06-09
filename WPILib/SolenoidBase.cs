@@ -1,5 +1,8 @@
 ﻿using System;
 using HAL_Base;
+using static WPILib.Utility;
+using static HAL_Base.HAL;
+using static HAL_Base.HALSolenoid;
 
 namespace WPILib
 {
@@ -25,10 +28,10 @@ namespace WPILib
                 m_ports = new IntPtr[SolenoidChannels];
                 for (int i = 0; i < SolenoidChannels; i++)
                 {
-                    IntPtr port = HAL.GetPortWithModule((byte)moduleNumber, (byte)i);
+                    IntPtr port = GetPortWithModule((byte)moduleNumber, (byte)i);
                     int status = 0;
-                    m_ports[i] = HALSolenoid.InitializeSolenoidPort(port, ref status);
-                    Utility.CheckStatus(status);
+                    m_ports[i] = InitializeSolenoidPort(port, ref status);
+                    CheckStatus(status);
                 }
             }
         }
@@ -48,10 +51,10 @@ namespace WPILib
                     int localMask = 1 << i;
                     if ((mask & localMask) != 0)
                     {
-                        HALSolenoid.SetSolenoid(m_ports[i], ((value & localMask) != 0), ref status);
+                        SetSolenoid(m_ports[i], ((value & localMask) != 0), ref status);
                     }
                 }
-                Utility.CheckStatus(status);
+                CheckStatus(status);
             }
         }
 
@@ -65,9 +68,9 @@ namespace WPILib
             int status = 0;
             for (int i = 0; i < SolenoidChannels; i++)
             {
-                value |= (byte)((HALSolenoid.GetSolenoid(m_ports[i], ref status) ? 1 : 0) << i);
+                value |= (byte)((GetSolenoid(m_ports[i], ref status) ? 1 : 0) << i);
             }
-            Utility.CheckStatus(status);
+            CheckStatus(status);
             return value;
         }
 
@@ -83,7 +86,7 @@ namespace WPILib
         {
             int status = 0;
             byte retVal = (byte)HALSolenoid.GetPCMSolenoidBlackList(m_ports[0], ref status);
-            Utility.CheckStatus(status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -95,7 +98,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALSolenoid.GetPCMSolenoidVoltageStickyFault(m_ports[0], ref status);
-            Utility.CheckStatus(status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -107,7 +110,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALSolenoid.GetPCMSolenoidVoltageFault(m_ports[0], ref status);
-            Utility.CheckStatus(status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -124,8 +127,8 @@ namespace WPILib
         public void ClearAllPCMStickyFaults()
         {
             int status = 0;
-            HALSolenoid.ClearAllPCMStickyFaults_sol(m_ports[0], ref status);
-            Utility.CheckStatus(status);
+            ClearAllPCMStickyFaults_sol(m_ports[0], ref status);
+            CheckStatus(status);
         }
     }
 }

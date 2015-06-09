@@ -75,7 +75,7 @@ namespace WPILib.livewindow
                 Console.WriteLine("Initializing table for '" + subsystem + "' '" + name + "'");
                 s_liveWindowTable.GetSubTable(subsystem).PutString("~TYPE~", "LW Subsystem");
                 ITable table = s_liveWindowTable.GetSubTable(subsystem).GetSubTable(name);
-                table.PutString("~TYPE~", component.GetSmartDashboardType());
+                table.PutString("~TYPE~", component.SmartDashboardType);
                 table.PutString("Name", name);
                 table.PutString("Subsystem", subsystem);
                 component.InitTable(table);

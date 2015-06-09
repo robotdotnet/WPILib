@@ -6,7 +6,7 @@ namespace WPILib
     /// The base interface for objects that can be sent over the network
     /// through network tables.
     /// </summary>
-    public interface Sendable
+    public interface ISendable
     {
         /// <summary>
         /// Initialized a table for this sendable object.
@@ -17,13 +17,13 @@ namespace WPILib
         /// <summary>
         /// Returns the table that is currently associated with the sendable
         /// </summary>
-        /// <returns>The table that is currently associated with the sendable</returns>
-        ITable GetTable();
+        /// <value>The table that is currently associated with the sendable</value>
+        ITable Table { get; }
 
         /// <summary>
         /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
         /// </summary>
-        /// <returns>The string representation of the named data type that will be used by the smart dashboard for this sendable</returns>
-        string GetSmartDashboardType();
+        /// <value>The string representation of the named data type that will be used by the smart dashboard for this sendable</value>
+        string SmartDashboardType { get; }
     }
 }

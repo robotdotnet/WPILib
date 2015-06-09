@@ -19,27 +19,26 @@ namespace WPILib.Interfaces
         /// <summary>
         /// Common interface for setting the measuring range of an accelerometer
         /// </summary>
-        /// <param name="range">The maximu acceleration, positive or negative, that the 
-        /// accelerometer will measure. Not all accelerometers support all ranges</param>
-        void SetRange(Range range);
+        /// <value>The maximu acceleration, positive or negative, that the 
+        ///   accelerometer will measure. Not all accelerometers support all ranges</value>
+        Range Range { set; }
 
         /// <summary>
         /// Common interface for getting the x axis acceleration
         /// </summary>
-        /// <returns>The acceleration along the x axis in g-forces</returns>
-        double GetX();
+        /// <value>The acceleration along the x axis in g-forces</value>
+        double X { get; }
 
         /// <summary>
         /// Common interface for getting the y axis acceleration
         /// </summary>
-        /// <returns>The acceleration along the y axis in g-forces</returns>
-        double GetY();
+        /// <value>The acceleration along the y axis in g-forces</value>
+        double Y { get; }
 
         /// <summary>
         /// Common interface for getting the z axis acceleration
         /// </summary>
-        /// <returns>The acceleration along the z axis in g-forces</returns>
-        double GetZ();
-
+        /// <value>The acceleration along the z axis in g-forces</value>
+        double Z { get; }
     }
 }

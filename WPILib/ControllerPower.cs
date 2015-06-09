@@ -1,106 +1,148 @@
 ﻿using HAL_Base;
+using static  HAL_Base.HALPower;
 
 namespace WPILib
 {
-    public class ControllerPower
+    public static class ControllerPower
     {
-        public static double GetInputVoltage()
+        public static double InputVoltage
         {
-            int status = 0;
-            double retVal = HALPower.GetVinVoltage(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetVinVoltage(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetInputCurrrent()
+        public static double InputCurrrent
         {
-            int status = 0;
-            double retVal = HALPower.GetVinCurrent(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetVinCurrent(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetVoltage3V3()
+        public static double Voltage3V3
         {
-            int status = 0;
-            double retVal = HALPower.GetUserVoltage3V3(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetUserVoltage3V3(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetCurrent3V3()
+        public static double Current3V3
         {
-            int status = 0;
-            double retVal = HALPower.GetUserCurrent3V3(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetUserCurrent3V3(ref status);
+                return retVal;
+            }
         }
 
-        public static bool GetEnabled3V3()
+        public static bool Enabled3V3
         {
-            int status = 0;
-            bool retVal = HALPower.GetUserActive3V3(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                bool retVal = GetUserActive3V3(ref status);
+                return retVal;
+            }
         }
 
-        public static int GetFaultCount3V3()
+        public static int FaultCount3V3
         {
-            int status = 0;
-            int retVal = HALPower.GetUserCurrentFaults3V3(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                int retVal = GetUserCurrentFaults3V3(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetVoltage5V()
+        public static double Voltage5V
         {
-            int status = 0;
-            double retVal = HALPower.GetUserVoltage5V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetUserVoltage5V(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetCurrent5V()
+        public static double Current5V
         {
-            int status = 0;
-            double retVal = HALPower.GetUserCurrent5V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetUserCurrent5V(ref status);
+                return retVal;
+            }
         }
 
-        public static bool GetEnabled5V()
+        public static bool Enabled5V
         {
-            int status = 0;
-            bool retVal = HALPower.GetUserActive5V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                bool retVal = GetUserActive5V(ref status);
+                return retVal;
+            }
         }
 
-        public static int GetFaultCount5V()
+        public static int FaultCount5V
         {
-            int status = 0;
-            int retVal = HALPower.GetUserCurrentFaults5V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                int retVal = GetUserCurrentFaults5V(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetVoltage6V()
+        public static double Voltage6V
         {
-            int status = 0;
-            double retVal = HALPower.GetUserVoltage6V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetUserVoltage6V(ref status);
+                return retVal;
+            }
         }
 
-        public static double GetCurrent6V()
+        public static double Current6V
         {
-            int status = 0;
-            double retVal = HALPower.GetUserCurrent6V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                double retVal = GetUserCurrent6V(ref status);
+                return retVal;
+            }
         }
 
-        public static bool GetEnabled6V()
+        public static bool Enabled6V
         {
-            int status = 0;
-            bool retVal = HALPower.GetUserActive6V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                bool retVal = GetUserActive6V(ref status);
+                return retVal;
+            }
         }
 
-        public static int GetFaultCount6V()
+        public static int FaultCount6V
         {
-            int status = 0;
-            int retVal = HALPower.GetUserCurrentFaults6V(ref status);
-            return retVal;
+            get
+            {
+                int status = 0;
+                int retVal = GetUserCurrentFaults6V(ref status);
+                return retVal;
+            }
         }
-
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Live Window Sendable is a special type of object sendable to the live window.
     /// </summary>
-    public interface LiveWindowSendable : Sendable
+    public interface LiveWindowSendable : ISendable
     {
         /// <summary>
         /// Update the table for this sendable object with the latest

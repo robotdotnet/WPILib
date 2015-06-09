@@ -24,7 +24,7 @@ namespace WPILib
             commands[0] = PowerCtlRegister;
             commands[1] = (byte)PowerCtl.Measure;
             m_spi.Write(commands, 2);
-            SetRange(range);
+            Range = range;
             HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_SPI);
             LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }

@@ -11,7 +11,7 @@ namespace WPILib
     
     public class DoubleSolenoid : SolenoidBase
     {
-        public enum Value
+        public enum Positions
         {
             Off,
             Forward,
@@ -36,7 +36,7 @@ namespace WPILib
                 {
                     m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
                 }
-                catch (CheckedAllocationException e)
+                catch (CheckedAllocationException)
                 {
                     throw new AllocationException("Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
                 }
@@ -44,7 +44,7 @@ namespace WPILib
                 {
                     m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
                 }
-                catch (CheckedAllocationException e)
+                catch (CheckedAllocationException)
                 {
                     throw new AllocationException("Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
                 }
@@ -58,7 +58,7 @@ namespace WPILib
         }
 
         public DoubleSolenoid(int forwardChannel, int reverseChannel)
-            : base(GetDefaultSolenoidModule())
+            : base(DefaultSolenoidModule)
         {
             m_forwardChannel = forwardChannel;
             m_reverseChannel = reverseChannel;
@@ -73,54 +73,62 @@ namespace WPILib
             InitSolenoid();
         }
 
-        public override void Free()
+        public override void Dispose()
         {
             lock (m_lockObject)
             {
-                m_allocated.Free(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                m_allocated.Free(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                m_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                m_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_reverseChannel);
             }
         }
 
-        public void Set(Value value)
+        public Positions Value
         {
-            byte rawValue = 0;
-
-            switch (value)
+            set
             {
-                case Value.Off:
-                    rawValue = 0x00;
-                    break;
-                case Value.Forward:
-                    rawValue = m_forwardMask;
-                    break;
-                case Value.Reverse:
-                    rawValue = m_reverseMask;
-                    break;
+                byte rawValue = 0;
+
+                switch (value)
+                {
+                    case Positions.Off:
+                        rawValue = 0x00;
+                        break;
+                    case Positions.Forward:
+                        rawValue = m_forwardMask;
+                        break;
+                    case Positions.Reverse:
+                        rawValue = m_reverseMask;
+                        break;
+                }
+
+                Set(rawValue, m_forwardMask | m_reverseMask);
             }
+            get
+            {
+                byte value = GetAll();
 
-            Set(rawValue, m_forwardMask | m_reverseMask);
+                if ((value & m_forwardMask) != 0) return Positions.Forward;
+                if ((value & m_reverseMask) != 0) return Positions.Reverse;
+                return Positions.Off;
+            }
         }
 
-        public Value Get()
+        public bool FwdSolenoidBlackListed
         {
-            byte value = GetAll();
-
-            if ((value & m_forwardMask) != 0) return Value.Forward;
-            if ((value & m_reverseMask) != 0) return Value.Reverse;
-            return Value.Off;
+            get
+            {
+                int blackList = GetPCMSolenoidBlackList();
+                return ((blackList & m_forwardMask) != 0);
+            }
         }
 
-        public bool IsFwdSolenoidBlackListed()
+        public bool RevSolenoidBlackListed
         {
-            int blackList = GetPCMSolenoidBlackList();
-            return ((blackList & m_forwardMask) != 0);
-        }
-
-        public bool IsRevSolenoidBlackListed()
-        {
-            int blackList = GetPCMSolenoidBlackList();
-            return ((blackList & m_reverseMask) != 0);
+            get
+            {
+                int blackList = GetPCMSolenoidBlackList();
+                return ((blackList & m_reverseMask) != 0);
+            }
         }
     }
 }

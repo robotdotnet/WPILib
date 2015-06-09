@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static WPILib.Timer;
 
 namespace WPILib.Commands
 {
@@ -9,7 +10,7 @@ namespace WPILib.Commands
     {
         private double m_time;
 
-        public WaitUntilCommand(double time) : base("WaitUntil(" + time + ")")
+        public WaitUntilCommand(double time) : base($"WaitUntil({time})")
         {
             m_time = time;
         }
@@ -23,10 +24,7 @@ namespace WPILib.Commands
         {
         }
 
-        protected override bool IsFinished()
-        {
-            return Timer.GetMatchTime() >= m_time;
-        }
+        protected override bool IsFinished() => MatchTime >= m_time;
 
         protected override void End()
         {

@@ -1,13 +1,12 @@
-﻿
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Diagnostics;
 using HAL_Base;
+using static WPILib.Timer;
+using static HAL_Base.HAL;
+using static HAL_Base.HALSemaphore;
 
 namespace WPILib
 {
@@ -27,23 +26,20 @@ namespace WPILib
         };
 
         //Private Fields
-        private static DriverStation s_instance = new DriverStation();
         private HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
         private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
         private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
-        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
-        private Thread m_thread;
         private IntPtr m_newControlData;
         private IntPtr m_packetDataAvailableMultiWait;
         private IntPtr m_packetDataAvailableMutex;
         private IntPtr m_waitForDataSem;
         private IntPtr m_waitForDataMutex;
         private bool m_threadKeepAlive = true;
-        private bool m_userInDisabled = false;
-        private bool m_userInAutonomous = false;
-        private bool m_userInTeleop = false;
-        private bool m_userInTest = false;
-        private double m_nextMessageTime = 0.0;
+        private bool m_userInDisabled;
+        private bool m_userInAutonomous;
+        private bool m_userInTeleop;
+        private bool m_userInTest;
+        private double m_nextMessageTime;
 
         private object m_lockObject = new object();
 
@@ -52,19 +48,11 @@ namespace WPILib
         //Public Fields
 
 
-
-
-
-
-        public static DriverStation GetInstance()
-        {
-            return DriverStation.s_instance;
-        }
+        public static DriverStation Instance { get; } = new DriverStation();
 
 
         protected DriverStation()
         {
-
             for (int i = 0; i < JoystickPorts; i++)
             {
                 m_joystickButtons[i].count = 0;
@@ -73,65 +61,59 @@ namespace WPILib
             }
 
 
-            m_packetDataAvailableMultiWait = HALSemaphore.InitializeMultiWait();
-            m_newControlData = HALSemaphore.InitializeSemaphore(0);
+            m_packetDataAvailableMultiWait = InitializeMultiWait();
+            m_newControlData = InitializeSemaphore(0);
 
-            m_waitForDataSem = HALSemaphore.InitializeMultiWait();
-            m_waitForDataMutex = HALSemaphore.InitializeMutexNormal();
-
-
-            m_packetDataAvailableMutex = HALSemaphore.InitializeMutexNormal();
-            HAL.HALSetNewDataSem(m_packetDataAvailableMultiWait);
+            m_waitForDataSem = InitializeMultiWait();
+            m_waitForDataMutex = InitializeMutexNormal();
 
 
+            m_packetDataAvailableMutex = InitializeMutexNormal();
+            HALSetNewDataSem(m_packetDataAvailableMultiWait);
 
-            m_thread = new Thread(Task) {Priority = ThreadPriority.Highest, IsBackground = true};
-            m_thread.Start();
+
+
+            var thread = new Thread(Task) { Priority = ThreadPriority.Highest, IsBackground = true };
+            thread.Start();
         }
 
-        public void Release()
-        {
-            m_threadKeepAlive = false;
-        }
+        public void Release() => m_threadKeepAlive = false;
 
         private void Task()
         {
             int safetyCounter = 0;
             while (m_threadKeepAlive)
             {
-                HALSemaphore.TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
+                TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
                 GetData();
-                HALSemaphore.GiveMultiWait(m_waitForDataSem);
+                GiveMultiWait(m_waitForDataSem);
                 if (++safetyCounter >= 4)
                 {
                     MotorSafetyHelper.CheckMotors();
                     safetyCounter = 0;
                 }
                 if (m_userInDisabled)
-                    HAL.HALNetworkCommunicationObserveUserProgramDisabled();
+                    HALNetworkCommunicationObserveUserProgramDisabled();
                 if (m_userInAutonomous)
-                    HAL.HALNetworkCommunicationObserveUserProgramAutonomous();
+                    HALNetworkCommunicationObserveUserProgramAutonomous();
                 if (m_userInTeleop)
-                    HAL.HALNetworkCommunicationObserveUserProgramTeleop();
+                    HALNetworkCommunicationObserveUserProgramTeleop();
                 if (m_userInTest)
-                    HAL.HALNetworkCommunicationObserveUserProgramTest();
+                    HALNetworkCommunicationObserveUserProgramTest();
             }
         }
 
-        public void WaitForData(long timeout = 0)
-        {
-            HALSemaphore.TakeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
-        }
+        public void WaitForData(long timeout = 0) => TakeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
 
         protected void GetData()
         {
             for (byte stick = 0; stick < JoystickPorts; stick++)
             {
-                HAL.HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
-                HAL.HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
-                HAL.HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
+                HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
+                HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
+                HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
             }
-            HALSemaphore.GiveSemaphore(m_newControlData);
+            GiveSemaphore(m_newControlData);
         }
 
         public double GetBatteryVoltage()
@@ -140,9 +122,9 @@ namespace WPILib
             return HALPower.GetVinVoltage(ref status);
         }
 
-        private void ReportJoystickUnpluggedError(String message)
+        private void ReportJoystickUnpluggedError(string message)
         {
-            double currentTime = Timer.GetFPGATimestamp();
+            double currentTime = FPGATimestamp;
             if (currentTime > m_nextMessageTime)
             {
                 ReportError(message, false);
@@ -286,93 +268,61 @@ namespace WPILib
                 return m_joystickButtons[stick].count;
             }
         }
-
-        /**
-     * Gets a value indicating whether the Driver Station requires the
-     * robot to be enabled.
-     *
-     * @return True if the robot is enabled, false otherwise.
-     */
-
-        public bool IsEnabled()
+        public bool Enabled
         {
-            HALControlWord controlWord = HAL.GetControlWord();
-            return controlWord.GetEnabled() && controlWord.GetDSAttached();
+            get
+            {
+                HALControlWord controlWord = GetControlWord();
+                return controlWord.GetEnabled() && controlWord.GetDSAttached();
+            }
         }
 
-        /**
-         * Gets a value indicating whether the Driver Station requires the
-         * robot to be disabled.
-         *
-         * @return True if the robot should be disabled, false otherwise.
-         */
+        public bool Disabled => !Enabled;
 
-        public bool IsDisabled()
+        public bool Autonomous
         {
-            return !IsEnabled();
+            get
+            {
+                HALControlWord controlWord = GetControlWord();
+                return controlWord.GetAutonomous();
+            }
         }
 
-        /**
-         * Gets a value indicating whether the Driver Station requires the
-         * robot to be running in autonomous mode.
-         *
-         * @return True if autonomous mode should be enabled, false otherwise.
-         */
-
-        public bool IsAutonomous()
+        public bool Test
         {
-            HALControlWord controlWord = HAL.GetControlWord();
-            return controlWord.GetAutonomous();
+            get
+            {
+                HALControlWord controlWord = GetControlWord();
+                return controlWord.GetTest();
+            }
         }
 
-        /**
-         * Gets a value indicating whether the Driver Station requires the
-         * robot to be running in test mode.
-         * @return True if test mode should be enabled, false otherwise.
-         */
-
-        public bool IsTest()
-        {
-            HALControlWord controlWord = HAL.GetControlWord();
-            return controlWord.GetTest();
-        }
-
-        /**
-         * Gets a value indicating whether the Driver Station requires the
-         * robot to be running in operator-controlled mode.
-         *
-         * @return True if operator-controlled mode should be enabled, false otherwise.
-         */
-
-        public bool IsOperatorControl()
-        {
-            return !(IsAutonomous() || IsTest());
-        }
+        public bool OperatorControl => !(Autonomous || Test);
 
         public bool IsSysActive()
         {
             int status = 0;
-            bool retVal = HAL.HALGetSystemActive(ref status);
+            bool retVal = HALGetSystemActive(ref status);
             return retVal;
         }
 
-        public bool IsBrownedOut()
+        public bool BrownedOut
         {
-            int status = 0;
-            bool retval = HAL.HALGetBrownedOut(ref status);
-            return retval;
+            get
+            {
+                int status = 0;
+                bool retval = HALGetBrownedOut(ref status);
+                return retval;
+            }
         }
 
-        public bool IsNewControlData()
-        {
-            return HALSemaphore.TryTakeSemaphore(m_newControlData) == 0;
-        }
+        public bool NewControlData => TryTakeSemaphore(m_newControlData) == 0;
 
         public Alliance GetAlliance()
         {
             HALAllianceStationID allianceStationID = new HALAllianceStationID();
 
-            HAL.HALGetAllianceStation(ref allianceStationID);
+            HALGetAllianceStation(ref allianceStationID);
 
             switch (allianceStationID)
             {
@@ -394,7 +344,7 @@ namespace WPILib
         public int GetLocation()
         {
             HALAllianceStationID allianceStationID = new HALAllianceStationID();
-            HAL.HALGetAllianceStation(ref allianceStationID);
+            HALGetAllianceStation(ref allianceStationID);
 
             switch (allianceStationID)
             {
@@ -415,79 +365,60 @@ namespace WPILib
             }
         }
 
-        public bool IsFMSAttached()
-        {
-            HALControlWord controlWord = HAL.GetControlWord();
-            return controlWord.GetFMSAttached();
-        }
+        public bool FMSAttached => GetControlWord().GetFMSAttached();
 
-        public bool IsDSAttached()
-        {
-            HALControlWord controlWord = HAL.GetControlWord();
-            return controlWord.GetDSAttached();
-        }
+        public bool DSAtached => GetControlWord().GetDSAttached();
 
-        public double GetMatchTime()
+        public double MatchTime
         {
-            float temp = 0;
-            HAL.HALGetMatchTime(ref temp);
-            return temp;
+            get
+            {
+                float temp = 0;
+                HALGetMatchTime(ref temp);
+                return temp;
+            }
         }
 
 
 
-        public static void ReportError(String error, bool printTrace)
+        public static void ReportError(string error, bool printTrace)
         {
-            String errorString = error;
+            string errorString = error;
             if (printTrace)
             {
                 errorString += " at ";
                 var stacktrace = new StackTrace();
                 var traces = stacktrace.GetFrames();
-                errorString = traces.Aggregate(errorString, (current, s) => current + (s + "\n"));
+                errorString = traces?.Aggregate(errorString, (current, s) => current + (s + "\n"));
             }
             TextWriter errorWriter = Console.Error;
             errorWriter.WriteLine(errorString);
             errorWriter.Close();
 
 
-            HALControlWord controlWord = HAL.GetControlWord();
+            HALControlWord controlWord = GetControlWord();
             if (controlWord.GetDSAttached())
             {
-                HAL.SetErrorData(errorString, 0);
+                SetErrorData(errorString, 0);
             }
         }
 
-        /** Only to be used to tell the Driver Station what code you claim to be executing
-     *   for diagnostic purposes only
-     * @param entering If true, starting disabled code; if false, leaving disabled code */
 
         public void InDisabled(bool entering)
         {
             m_userInDisabled = entering;
         }
 
-        /** Only to be used to tell the Driver Station what code you claim to be executing
-        *   for diagnostic purposes only
-         * @param entering If true, starting autonomous code; if false, leaving autonomous code */
 
         public void InAutonomous(bool entering)
         {
             m_userInAutonomous = entering;
         }
 
-        /** Only to be used to tell the Driver Station what code you claim to be executing
-        *   for diagnostic purposes only
-         * @param entering If true, starting teleop code; if false, leaving teleop code */
-
         public void InOperatorControl(bool entering)
         {
             m_userInTeleop = entering;
         }
-
-        /** Only to be used to tell the Driver Station what code you claim to be executing
-         *   for diagnostic purposes only
-         * @param entering If true, starting test code; if false, leaving test code */
 
         public void InTest(bool entering)
         {

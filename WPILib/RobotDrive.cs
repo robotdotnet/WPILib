@@ -1,7 +1,4 @@
-﻿
-
-using System;
-using WPILib.Interfaces;
+﻿using System;
 using HAL_Base;
 
 namespace WPILib
@@ -14,7 +11,7 @@ namespace WPILib
         RearRight,
     }
 
-    public class RobotDrive : MotorSafety
+    public class RobotDrive : IMotorSafety, IDisposable
     {
         protected MotorSafetyHelper m_safetyHelper;
 
@@ -26,17 +23,17 @@ namespace WPILib
         protected int[] m_invertedMotors = new int[4];
         protected double m_sensitivity;
         protected double m_maxOutput;
-        protected SpeedController m_frontLeftMotor;
-        protected SpeedController m_frontRightMotor;
-        protected SpeedController m_rearLeftMotor;
-        protected SpeedController m_rearRightMotor;
+        protected ISpeedController m_frontLeftMotor;
+        protected ISpeedController m_frontRightMotor;
+        protected ISpeedController m_rearLeftMotor;
+        protected ISpeedController m_rearRightMotor;
         protected bool m_allocatedSpeedControllers;
-        protected byte m_syncGroup = 0;
-        protected static bool s_arcadeRatioCurveReported = false;
-        protected static bool s_tankReported = false;
-        protected static bool s_arcadeStandardReported = false;
-        protected static bool s_mecanumCartesianReported = false;
-        protected static bool s_mecanumPolarReported = false;
+        protected byte m_syncGroup;
+        protected static bool s_arcadeRatioCurveReported;
+        protected static bool s_tankReported;
+        protected static bool s_arcadeStandardReported;
+        protected static bool s_mecanumCartesianReported;
+        protected static bool s_mecanumPolarReported;
 
         public RobotDrive(int leftMotorChannel, int rightMotorChannel)
         {
@@ -73,7 +70,7 @@ namespace WPILib
             Drive(0, 0);
         }
 
-        public RobotDrive(SpeedController leftMotor, SpeedController rightMotor)
+        public RobotDrive(ISpeedController leftMotor, ISpeedController rightMotor)
         {
             if (leftMotor == null || rightMotor == null)
             {
@@ -95,8 +92,8 @@ namespace WPILib
             Drive(0, 0);
         }
 
-        public RobotDrive(SpeedController frontLeftMotor, SpeedController rearLeftMotor,
-                      SpeedController frontRightMotor, SpeedController rearRightMotor)
+        public RobotDrive(ISpeedController frontLeftMotor, ISpeedController rearLeftMotor,
+                      ISpeedController frontRightMotor, ISpeedController rearRightMotor)
         {
             if (frontLeftMotor == null || rearLeftMotor == null || frontRightMotor == null || rearRightMotor == null)
             {
@@ -363,7 +360,7 @@ namespace WPILib
                 CANJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
-            if (m_safetyHelper != null) m_safetyHelper.Feed();
+            m_safetyHelper?.Feed();
         }
 
         public void mecanumDrive_Polar(double magnitude, double direction, double rotation)
@@ -393,12 +390,12 @@ namespace WPILib
             m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_invertedMotors[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
             m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_invertedMotors[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
 
-            if (this.m_syncGroup != 0)
+            if (m_syncGroup != 0)
             {
                 CANJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
-            if (m_safetyHelper != null) m_safetyHelper.Feed();
+            m_safetyHelper?.Feed();
         }
 
         public void SetLeftRightMotorOutputs(double leftOutput, double rightOutput)
@@ -408,24 +405,18 @@ namespace WPILib
                 throw new NullReferenceException("Null motor provided");
             }
 
-            if (m_frontLeftMotor != null)
-            {
-                m_frontLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
-            }
+            m_frontLeftMotor?.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
             m_rearLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
 
-            if (m_frontRightMotor != null)
-            {
-                m_frontRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
-            }
+            m_frontRightMotor?.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
             m_rearRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
 
-            if (this.m_syncGroup != 0)
+            if (m_syncGroup != 0)
             {
                 CANJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
-            if (m_safetyHelper != null) m_safetyHelper.Feed();
+            m_safetyHelper?.Feed();
         }
 
         protected static double Limit(double num)
@@ -473,100 +464,74 @@ namespace WPILib
             m_invertedMotors[(int)motor] = isInverted ? -1 : 1;
         }
 
-        public void SetSensitivity(double sensitivity)
+        public double Sensitivity
         {
-            m_sensitivity = sensitivity;
+            set { m_sensitivity = value; }
         }
 
-        public void SetMaxOutput(double maxOutput)
+        public double MaxOutput
         {
-            m_maxOutput = maxOutput;
+            set { m_maxOutput = value; }
         }
 
-        public void SetCANJaguarSyncGroup(byte syncGroup)
+        public byte CANJaguarSyncGroup
         {
-            m_syncGroup = syncGroup;
+            set { m_syncGroup = value; }
         }
 
-        public void Free()
+        public void Dispose()
         {
             if (m_allocatedSpeedControllers)
             {
                 if (m_frontLeftMotor != null)
                 {
-                    ((PWM)m_frontLeftMotor).Free();
+                    ((PWM)m_frontLeftMotor).Dispose();
                 }
                 if (m_frontRightMotor != null)
                 {
-                    ((PWM)m_frontRightMotor).Free();
+                    ((PWM)m_frontRightMotor).Dispose();
                 }
                 if (m_rearLeftMotor != null)
                 {
-                    ((PWM)m_rearLeftMotor).Free();
+                    ((PWM)m_rearLeftMotor).Dispose();
                 }
                 if (m_rearRightMotor != null)
                 {
-                    ((PWM)m_rearRightMotor).Free();
+                    ((PWM)m_rearRightMotor).Dispose();
                 }
             }
         }
 
-        public bool IsAlive()
-        {
-            return m_safetyHelper.IsAlive();
-        }
+        public bool Alive => m_safetyHelper.Alive;
 
-        public void SetExpiration(double timeout)
+        public double Expiration
         {
-            m_safetyHelper.SetExpiration(timeout);
-        }
-
-        public double GetExpiration()
-        {
-            return m_safetyHelper.GetExpiration();
+            set { m_safetyHelper.Expiration = value; }
+            get { return m_safetyHelper.Expiration; }
         }
 
         public void StopMotor()
         {
-            if (m_frontLeftMotor != null)
-            {
-                m_frontLeftMotor.Set(0.0);
-            }
-            if (m_frontRightMotor != null)
-            {
-                m_frontRightMotor.Set(0.0);
-            }
-            if (m_rearLeftMotor != null)
-            {
-                m_rearLeftMotor.Set(0.0);
-            }
-            if (m_rearRightMotor != null)
-            {
-                m_rearRightMotor.Set(0.0);
-            }
-            if (m_safetyHelper != null) m_safetyHelper.Feed();
+            m_frontLeftMotor.Value = 0.0;
+            m_frontRightMotor.Value = 0.0;
+            m_rearLeftMotor.Value = 0.0;
+            m_rearRightMotor.Value = 0.0;
+            m_safetyHelper?.Feed();
         }
 
-        public string GetDescription()
-        {
-            return "Robot Drive";
-        }
+        public string Description => "Robot Drive";
 
-        public bool IsSafetyEnabled()
+        public bool SafetyEnabled
         {
-            return m_safetyHelper.IsSafetyEnabled();
-        }
-
-        public void SetSafetyEnabled(bool enabled)
-        {
-            m_safetyHelper.SetSafetyEnabled(enabled);
+            set { m_safetyHelper.SafetyEnabled = value; }
+            get { return m_safetyHelper.SafetyEnabled; }
         }
 
         private void SetupMotorSafety()
         {
             m_safetyHelper = new MotorSafetyHelper(this);
-            m_safetyHelper.SetExpiration(DefaultExpirationTime);
-            m_safetyHelper.SetSafetyEnabled(true);
+            m_safetyHelper.Expiration = DefaultExpirationTime;
+            m_safetyHelper.SafetyEnabled = true;
         }
 
         protected int GetNumMotors()

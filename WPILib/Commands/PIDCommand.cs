@@ -7,36 +7,37 @@ using WPILib.Interfaces;
 
 namespace WPILib.Commands
 {
-    public abstract class PIDCommand : Command, PIDSource, PIDOutput
+    public abstract class IpidCommand : Command, IPIDSource, IPIDOutput
     {
         private PIDController m_controller;
-        public double PidGet()
+
+        public double PidGet
         {
-            return ReturnPIDInput();
+            get { return ReturnPIDInput(); }
         }
 
-        public void PidWrite(double output)
+        public double PidWrite
         {
-            UsePIDOutput(output);
+            set { UsePIDOutput(value); }
         }
 
-        public PIDCommand(string name, double p, double i, double d)
+        public IpidCommand(string name, double p, double i, double d)
             : base(name)
         {
             m_controller = new PIDController(p, i, d, this, this);
         }
 
-        public PIDCommand(double p, double i, double d)
+        public IpidCommand(double p, double i, double d)
         {
             m_controller = new PIDController(p, i, d, this, this);
         }
 
-        public PIDCommand(double p, double i, double d, double period)
+        public IpidCommand(double p, double i, double d, double period)
         {
             m_controller = new PIDController(p, i, d, this, this, period);
         }
 
-        public PIDCommand(string name, double p, double i, double d, double period)
+        public IpidCommand(string name, double p, double i, double d, double period)
             : base(name)
         {
             m_controller = new PIDController(p, i, d, this, this, period);
@@ -69,12 +70,12 @@ namespace WPILib.Commands
 
         protected void SetSetpoint(double setpoint)
         {
-            m_controller.SetSetpoint(setpoint);
+            m_controller.Setpoint = setpoint;
         }
 
         protected double GetSetpoint()
         {
-            return m_controller.GetSetpoint();
+            return m_controller.Setpoint;
         }
 
         protected double GetPosition()
@@ -91,10 +92,8 @@ namespace WPILib.Commands
 
         protected abstract void UsePIDOutput(double output);
 
-        public new string GetSmartDashboardType()
-        {
-            return "PIDCommand";
-        }
+        public new string SmartDashboardType => "PIDCommand";
+
         public new void InitTable(ITable table)
         {
             m_controller.InitTable(table);

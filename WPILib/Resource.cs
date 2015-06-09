@@ -1,4 +1,5 @@
-﻿using WPILib.Util;
+﻿using System;
+using WPILib.Util;
 
 namespace WPILib
 {
@@ -63,7 +64,7 @@ namespace WPILib
             return index;
         }
 
-        public void Free(int index)
+        public void Dispose(int index)
         {
             if (!m_numAllocated[index])
             {

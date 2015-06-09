@@ -16,7 +16,7 @@ namespace WPILib.Buttons
     /// of the Trigger class.
     /// 
     /// </summary>
-    public abstract class Trigger : Sendable
+    public abstract class Trigger : ISendable
     {
         /// <summary>
         /// Returns whether or not the trigger is active
@@ -97,19 +97,19 @@ namespace WPILib.Buttons
             }
         }
 
-        public ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
         /// <summary>
         /// These methods continue to return the "Button" SmartDashboard type until we decided
         /// to create a Trigger widget type for the dashboard.
         /// </summary>
-        /// <returns></returns>
-        public string GetSmartDashboardType()
+        /// <value></value>
+        public string SmartDashboardType
         {
-            return "Button";
+            get { return "Button"; }
         }
 
         private ITable m_table;

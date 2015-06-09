@@ -5,7 +5,7 @@
     /// are PID controllers and there variants, but this includes anything that is
     /// controlling an actuator in a separate thread.
     /// </summary>
-    public interface Controller
+    public interface IController
     {
         /// <summary>
         /// Alllows the control loop to run

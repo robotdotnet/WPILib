@@ -6,7 +6,7 @@ using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
-    public abstract class Subsystem : NamedSendable
+    public abstract class Subsystem : INamedSendable
     {
         private bool m_initializedDefaultCommand = false;
         private Command m_currentCommand;
@@ -86,9 +86,9 @@ namespace WPILib.Commands
             return m_currentCommand;
         }
 
-        public string GetName()
+        public string Name
         {
-            return m_name;
+            get { return m_name; }
         }
 
         private ITable m_table;
@@ -101,7 +101,7 @@ namespace WPILib.Commands
                 if (m_defaultCommand != null)
                 {
                     m_table.PutBoolean("hasDefault", true);
-                    m_table.PutString("default", m_defaultCommand.GetName());
+                    m_table.PutString("default", m_defaultCommand.Name);
                 }
                 else
                 {
@@ -110,7 +110,7 @@ namespace WPILib.Commands
                 if (m_currentCommand != null)
                 {
                     m_table.PutBoolean("hasCommand", true);
-                    m_table.PutString("command", m_currentCommand.GetName());
+                    m_table.PutString("command", m_currentCommand.Name);
                 }
                 else
                 {
@@ -119,14 +119,14 @@ namespace WPILib.Commands
             }
         }
 
-        public NetworkTablesDotNet.Tables.ITable GetTable()
+        public ITable Table
         {
-            return m_table;
+            get { return m_table; }
         }
 
-        public string GetSmartDashboardType()
+        public string SmartDashboardType
         {
-            return "Subsystem";
+            get { return "Subsystem"; }
         }
     }
 }
