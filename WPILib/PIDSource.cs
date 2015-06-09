@@ -13,12 +13,12 @@
     /// <summary>
     /// This interface allows for PIDController to automatically read from this object
     /// </summary>
-    public interface PIDSource
+    public interface IPIDSource
     {
         /// <summary>
         /// Get the result to use in PIDController
         /// </summary>
-        /// <returns>The result to use in PIDController</returns>
-        double PidGet();
+        /// <value>The result to use in PIDController</value>
+        double PidGet { get; }
     }
 }

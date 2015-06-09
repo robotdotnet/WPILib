@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+using System.Runtime.InteropServices;
 
 //These are all of the structures used by HAL-RoboRIO and HAL-Simulation. 
 //Changes to these will always require a rebuild of the local HALs, which we want to avoid doing.
@@ -35,7 +32,7 @@ namespace HAL_Base
     /// <summary>
     /// Joystick Axes Struct
     /// </summary>
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickAxes
     {
         /// unsigned short
@@ -44,7 +41,7 @@ namespace HAL_Base
         /// short[] hack
         public HALJoystickAxesArray axes;
     }
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickPOVs
     {
         /// unsigned short
@@ -54,7 +51,7 @@ namespace HAL_Base
         public HALJoystickPOVArray povs;
     }
 
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickAxesArray
     {
         public Int16 axes0;
@@ -155,7 +152,7 @@ namespace HAL_Base
 
     }
 
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickPOVArray
     {
         private Int16 pov0;
@@ -256,7 +253,7 @@ namespace HAL_Base
 
     }
 
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickButtons
     {
         /// unsigned int
@@ -266,7 +263,7 @@ namespace HAL_Base
         public byte count;
     }
 
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     public struct HALJoystickDescriptor
     {
         /// byte
@@ -276,7 +273,7 @@ namespace HAL_Base
         public byte type;
 
         /// char[256]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst = 256)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string name;
 
         /// byte
@@ -405,7 +402,7 @@ namespace HAL_Base
 
     #region CAN
 
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct CANStreamMessage
     {
         public uint messageID;
@@ -414,7 +411,7 @@ namespace HAL_Base
         public byte dataSize;
     }
 
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential)]
     public struct CANDataArray
     {
         private byte data0;

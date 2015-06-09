@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Interfaces;
 using HAL_Base;
 
 namespace WPILib
 {
-    public class AnalogAccelerometer : SensorBase, PIDSource
+    public class AnalogAccelerometer : SensorBase, IPIDSource
     {
         private AnalogInput m_analogChannel;
         private double m_voltsPerG = 1.0;
@@ -16,7 +12,7 @@ namespace WPILib
 
         private void InitAccelerometer()
         {
-            HAL.Report(ResourceType.kResourceType_Accelerometer, (byte) m_analogChannel.GetChannel());
+            HAL.Report(ResourceType.kResourceType_Accelerometer, (byte) m_analogChannel.Channel);
         }
 
         public AnalogAccelerometer(int channel)
@@ -35,34 +31,28 @@ namespace WPILib
             InitAccelerometer();
         }
 
-        public override void Free()
+        public override void Dispose()
         {
             if (m_analogChannel != null && m_allocatedChannel)
             {
-                m_analogChannel.Free();
+                m_analogChannel.Dispose();
             }
             m_analogChannel = null;
-            //base.Free();
+            //base.Dispose();
         }
 
-        public double GetAcceleration()
+        public double Acceleration => (m_analogChannel.AverageVoltage - m_zeroGVoltage)/m_voltsPerG;
+
+        public double Sensitivity
         {
-            return (m_analogChannel.GetAverageVoltage() - m_zeroGVoltage)/m_voltsPerG;
+            set { m_voltsPerG = value; }
         }
 
-        public void SetSensitivity(double sensitivity)
+        public double Zero
         {
-            m_voltsPerG = sensitivity;
+            set { m_zeroGVoltage = value; }
         }
 
-        public void SetZero(double zero)
-        {
-            m_zeroGVoltage = zero;
-        }
-
-        public double PidGet()
-        {
-            return GetAcceleration();
-        }
+        public double PidGet => Acceleration;
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Util;
 
 namespace WPILib
 {
@@ -47,7 +44,7 @@ namespace WPILib
                     HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
                 }
             }
-            catch (CheckedAllocationException e)
+            catch (CheckedAllocationException)
             {
                 throw new AllocationException("Relay channel " + m_channel + " is already allocated");
             }
@@ -70,15 +67,15 @@ namespace WPILib
 
         }
 
-        public override void Free()
+        public override void Dispose()
         {
             if (m_direction == Direction.Both || m_direction == Direction.Forward)
             {
-                s_relayChannels.Free(m_channel * 2);
+                s_relayChannels.Dispose(m_channel * 2);
             }
             if (m_direction == Direction.Both || m_direction == Direction.Reverse)
             {
-                s_relayChannels.Free(m_channel * 2 + 1);
+                s_relayChannels.Dispose(m_channel * 2 + 1);
             }
 
             int status = 0;
@@ -195,7 +192,7 @@ namespace WPILib
         {
             if (m_direction == direction)
                 return;
-            Free();
+            Dispose();
             m_direction = direction;
             InitRelay();
         }

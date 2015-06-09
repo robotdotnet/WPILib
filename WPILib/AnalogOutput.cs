@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using HAL_Base;
 using WPILib.Util;
 
@@ -26,7 +23,7 @@ namespace WPILib
             {
                 s_channels.Allocate(channel);
             }
-            catch (CheckedAllocationException e)
+            catch (CheckedAllocationException)
             {
                 throw new AllocationException("Analog output channel " + m_channel
                         + " is already allocated");
@@ -40,28 +37,28 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
         }
 
-        public override void Free()
+        public override void Dispose()
         {
-            s_channels.Free(m_channel);
+            s_channels.Dispose(m_channel);
             m_channel = 0;
-            //base.Free();
+            //base.Dispose();
         }
 
-        public void SetVoltage(double voltage)
+        public double Voltage
         {
-            int status = 0;
-            HALAnalog.SetAnalogOutput(m_port, voltage, ref status);
+            set
+            {
+                int status = 0;
+                HALAnalog.SetAnalogOutput(m_port, value, ref status);
+            }
+            get
+            {
+                int status = 0;
+
+                double voltage = HALAnalog.GetAnalogOutput(m_port, ref status);
+
+                return voltage;
+            }
         }
-
-        public double GetVoltage()
-        {
-            int status = 0;
-
-            double voltage = HALAnalog.GetAnalogOutput(m_port, ref status);
-
-            return voltage;
-        }
-
-
     }
 }

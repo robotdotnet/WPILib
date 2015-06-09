@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HAL_Base;
+﻿using HAL_Base;
 
 namespace WPILib
 {
@@ -10,11 +6,14 @@ namespace WPILib
     {
         private const double GearToothThreshold = 55e-6;
 
-        public void EnableDirectionSensing(bool directionSensitive)
+        public bool DirectionSensing
         {
-            if (directionSensitive)
+            set
             {
-                SetPulseLengthMode(GearToothThreshold);
+                if (value)
+                {
+                    SetPulseLengthMode(GearToothThreshold);
+                }
             }
         }
 
@@ -24,7 +23,7 @@ namespace WPILib
 
         public GearTooth(int channel, bool directionSensitive) : base(channel)
         {
-            EnableDirectionSensing(directionSensitive);
+            DirectionSensing = directionSensitive;
             if (directionSensitive)
             {
                 HAL.Report(ResourceType.kResourceType_GearTooth, (byte) channel, 0, "D");
@@ -37,7 +36,7 @@ namespace WPILib
 
         public GearTooth(DigitalSource source, bool directionSensitive) : base(source)
         {
-            EnableDirectionSensing(directionSensitive);
+            DirectionSensing = directionSensitive;
         }
 
         public GearTooth(DigitalSource source) : this(source, false)

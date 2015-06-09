@@ -1,4 +1,5 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -23,28 +24,28 @@ namespace HAL_Base
             ClearAllPCMStickyFaults_sol = (ClearAllPCMStickyFaults_solDelegate)Delegate.CreateDelegate(typeof(ClearAllPCMStickyFaults_solDelegate), type.GetMethod("clearAllPCMStickyFaults_sol"));
         }
 
-        public delegate System.IntPtr InitializeSolenoidPortDelegate(System.IntPtr port_pointer, ref int status);
+        public delegate IntPtr InitializeSolenoidPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeSolenoidPortDelegate InitializeSolenoidPort;
 
         public delegate bool CheckSolenoidModuleDelegate(byte module);
         public static CheckSolenoidModuleDelegate CheckSolenoidModule;
 
-        public delegate bool GetSolenoidDelegate(System.IntPtr solenoid_port_pointer, ref int status);
+        public delegate bool GetSolenoidDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static GetSolenoidDelegate GetSolenoid;
 
-        public delegate void SetSolenoidDelegate(System.IntPtr solenoid_port_pointer, bool value, ref int status);
+        public delegate void SetSolenoidDelegate(IntPtr solenoid_port_pointer, bool value, ref int status);
         public static SetSolenoidDelegate SetSolenoid;
 
-        public delegate int GetPCMSolenoidBlackListDelegate(System.IntPtr solenoid_port_pointer, ref int status);
+        public delegate int GetPCMSolenoidBlackListDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static GetPCMSolenoidBlackListDelegate GetPCMSolenoidBlackList;
 
-        public delegate bool GetPCMSolenoidVoltageStickyFaultDelegate(System.IntPtr solenoid_port_pointer, ref int status);
+        public delegate bool GetPCMSolenoidVoltageStickyFaultDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static GetPCMSolenoidVoltageStickyFaultDelegate GetPCMSolenoidVoltageStickyFault;
 
-        public delegate bool GetPCMSolenoidVoltageFaultDelegate(System.IntPtr solenoid_port_pointer, ref int status);
+        public delegate bool GetPCMSolenoidVoltageFaultDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static GetPCMSolenoidVoltageFaultDelegate GetPCMSolenoidVoltageFault;
 
-        public delegate void ClearAllPCMStickyFaults_solDelegate(System.IntPtr solenoid_port_pointer, ref int status);
+        public delegate void ClearAllPCMStickyFaults_solDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static ClearAllPCMStickyFaults_solDelegate ClearAllPCMStickyFaults_sol;
     }
 }

@@ -8,11 +8,11 @@
     }
     public interface CounterBase
     {
-        int Get();
+        int Value { get; }
         void Reset();
-        double GetPeriod();
-        void SetMaxPeriod(double maxPeriod);
-        bool GetStopped();
-        bool GetDirection();
+        double Period { get; }
+        double MaxPeriod { set; }
+        bool Stopped { get; }
+        bool Direction { get; }
     }
 }

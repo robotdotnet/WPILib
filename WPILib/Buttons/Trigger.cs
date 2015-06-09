@@ -1,5 +1,5 @@
-﻿using WPILib.Commands;
-using NetworkTablesDotNet.Tables;
+﻿using NetworkTablesDotNet.Tables;
+using WPILib.Commands;
 
 namespace WPILib.Buttons
 {
@@ -16,7 +16,7 @@ namespace WPILib.Buttons
     /// of the Trigger class.
     /// 
     /// </summary>
-    public abstract class Trigger : Sendable
+    public abstract class Trigger : ISendable
     {
         /// <summary>
         /// Returns whether or not the trigger is active
@@ -90,27 +90,18 @@ namespace WPILib.Buttons
 
         public void InitTable(ITable subtable)
         {
-            this.m_table = subtable;
-            if (m_table != null)
-            {
-                m_table.PutBoolean("pressed", Get());
-            }
+            m_table = subtable;
+            m_table?.PutBoolean("pressed", Get());
         }
 
-        public ITable GetTable()
-        {
-            return m_table;
-        }
+        public ITable Table => m_table;
 
         /// <summary>
         /// These methods continue to return the "Button" SmartDashboard type until we decided
         /// to create a Trigger widget type for the dashboard.
         /// </summary>
-        /// <returns></returns>
-        public string GetSmartDashboardType()
-        {
-            return "Button";
-        }
+        /// <value></value>
+        public string SmartDashboardType => "Button";
 
         private ITable m_table;
 

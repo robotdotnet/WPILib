@@ -7,7 +7,7 @@ namespace WPILib
     /// Cross the Road Electronics (CTRE) Talon SRX Speed Controller with PWM control
     /// <para />See <see cref="CANTalon"/> for CAN control of Talon SRX
     /// </summary>
-    public class TalonSRX : SafePWM, SpeedController
+    public class TalonSRX : SafePWM, ISpeedController
     {
         /// <summary>
         /// Common initialization code called by all constructors.
@@ -26,12 +26,12 @@ namespace WPILib
         private void InitTalonSRX()
         {
             SetBounds(2.004, 1.52, 1.50, 1.48, .997);
-            SetPeriodMultiplier(PeriodMultiplier.K1X);
-            SetRaw(GetCenterPwm());
+            PeriodMultiplier = PeriodMultiplier.K1X;
+            Raw = CenterPwm;
             SetZeroLatch();
 
             //TODO: Add Live Actuator
-            HAL.Report(ResourceType.kResourceType_TalonSRX, (byte)GetChannel());
+            HAL.Report(ResourceType.kResourceType_TalonSRX, (byte)Channel);
         }
 
         /// <summary>
@@ -47,19 +47,24 @@ namespace WPILib
         /// <summary>
         /// Write out the PID value as seen in the PIDOutput base object.
         /// </summary>
-        /// <param name="output">Write out the PWM value at it was found in the PID Controller</param>
-        public void PidWrite(double output)
+        /// <value>Write out the PWM value at it was found in the PID Controller</value>
+        public double PidWrite
         {
-            Set(output);
+            set { Value = value; }
         }
 
         /// <summary>
         /// Get the recently set value of the PWM.
         /// </summary>
-        /// <returns>The most recently set value for the PWM between -1.0 and 1.0</returns>
-        public double Get()
+        /// <value>The most recently set value for the PWM between -1.0 and 1.0</value>
+        public double Value
         {
-            return GetSpeed();
+            get { return Speed; }
+            set
+            {
+                Speed = value;
+                Feed();
+            }
         }
 
         /// <summary>
@@ -68,25 +73,12 @@ namespace WPILib
         /// The PWM value is set using a range of -1.0 to 1.0, appropriately
         /// scaling the value for the FPGA.
         /// </summary>
-        /// <param name="speed">The speed to set. Value should be between -1.0 and 1.0</param>
+        /// <param name="value">The speed to set. Value should be between -1.0 and 1.0</param>
         /// <param name="syncGroup">The update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.</param>
         [Obsolete("For compatibility with CAN Jaguar")]
-        public void Set(double speed, byte syncGroup)
+        public void Set(double value, byte syncGroup)
         {
-            SetSpeed(speed);
-            Feed();
-        }
-
-        /// <summary>
-        /// Set the PWM value.
-        /// <para> </para>
-        /// The PWM value is set using a range of -1.0 to 1.0, appropriately
-        /// scaling the value for the FPGA.
-        /// </summary>
-        /// <param name="speed">The speed value between -1.0 and 1.0 to set.</param>
-        public void Set(double speed)
-        {
-            SetSpeed(speed);
+            Speed = value;
             Feed();
         }
     }

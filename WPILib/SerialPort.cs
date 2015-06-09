@@ -1,77 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using HAL_Base;
+using static HAL_Base.HALSerialPort;
+using static HAL_Base.HAL;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class SerialPort
+    public enum Port
+    {
+        Onboard = 0,
+        MXP = 1,
+        USB = 2,
+    }
+
+    public enum Parity
+    {
+        None = 0,
+        Odd = 1,
+        Even = 2,
+        Mark = 3,
+        Space = 4,
+    }
+
+    public enum StopBits
+    {
+        One = 10,
+        OnePointFive = 15,
+        Two = 20,
+    }
+
+    public enum FlowControl
+    {
+        None = 0,
+        XonXoff = 1,
+        RtsCts = 2,
+        DtrDsr = 4,
+    }
+
+    public enum WriteBufferMode
+    {
+        FlushOnAccess = 1,
+        FlushWhenFull = 2,
+    }
+
+    public class SerialPort : IDisposable
     {
         private byte m_port;
 
-        public enum Port
-        {
-            Onboard = 0,
-            MXP = 1,
-            USB = 2,
-        }
-
-        public enum Parity
-        {
-            None = 0,
-            Odd = 1,
-            Even = 2,
-            Mark = 3,
-            Space = 4,
-        }
-
-        public enum StopBits
-        {
-            One = 10,
-            OnePointFive = 15,
-            Two = 20,
-        }
-
-        public enum FlowControl
-        {
-            None = 0,
-            XonXoff = 1,
-            RtsCts = 2,
-            DtrDsr = 4,
-        }
-
-        public enum WriteBufferMode
-        {
-            FlushOnAccess = 1,
-            FlushWhenFull = 2,
-        }
+        
 
         public SerialPort(int baudRate, Port port, int dataBits, Parity parity, StopBits stopBits)
         {
             int status = 0;
             m_port = (byte)port;
 
-            HALSerialPort.SerialInitializePort(m_port, ref status);
-            Utility.CheckStatus(status);
-            HALSerialPort.SerialSetBaudRate(m_port, (uint) baudRate, ref status);
-            Utility.CheckStatus(status);
-            HALSerialPort.SerialSetDataBits(m_port, (byte)dataBits, ref status);
-            Utility.CheckStatus(status);
-            HALSerialPort.SerialSetParity(m_port, (byte)parity, ref status);
-            Utility.CheckStatus(status);
-            HALSerialPort.SerialSetStopBits(m_port, (byte)stopBits, ref status);
-            Utility.CheckStatus(status);
+            SerialInitializePort(m_port, ref status);
+            CheckStatus(status);
+            SerialSetBaudRate(m_port, (uint) baudRate, ref status);
+            CheckStatus(status);
+            SerialSetDataBits(m_port, (byte)dataBits, ref status);
+            CheckStatus(status);
+            SerialSetParity(m_port, (byte)parity, ref status);
+            CheckStatus(status);
+            SerialSetStopBits(m_port, (byte)stopBits, ref status);
+            CheckStatus(status);
 
-            SetReadBufferSize(1);
+            ReadBufferSize = 1;
 
-            SetTimeout(0.5f);
+            Timeout = 0.5f;
 
-            SetWriteBufferMode(WriteBufferMode.FlushOnAccess);
+            WriteBufferMode = WriteBufferMode.FlushOnAccess;
 
             DisableTermination();
 
-            HAL.Report(ResourceType.kResourceType_SerialPort, (byte) 0);
+            Report(ResourceType.kResourceType_SerialPort, (byte) 0);
 
         }
 
@@ -93,25 +96,28 @@ namespace WPILib
             
         }
 
-        public void Free()
+        public void Dispose()
         {
             int status = 0;
-            HALSerialPort.SerialClose(m_port, ref status);
-            Utility.CheckStatus(status);
+            SerialClose(m_port, ref status);
+            CheckStatus(status);
         }
 
-        public void SetFlowControl(FlowControl flowControl)
+        public FlowControl FlowControl
         {
-            int status = 0;
-            HALSerialPort.SerialSetFlowControl(m_port, (byte) flowControl, ref status);
-            Utility.CheckStatus(status);
+            set
+            {
+                int status = 0;
+                SerialSetFlowControl(m_port, (byte) value, ref status);
+                CheckStatus(status);
+            }
         }
 
         public void EnableTermination(char terminator)
         {
             int status = 0;
-            HALSerialPort.SerialEnableTermination(m_port, (byte) terminator, ref status);
-            Utility.CheckStatus(status);
+            SerialEnableTermination(m_port, (byte) terminator, ref status);
+            CheckStatus(status);
         }
 
         public void EnableTermination()
@@ -122,22 +128,25 @@ namespace WPILib
         public void DisableTermination()
         {
             int status = 0;
-            HALSerialPort.SerialDisableTermination(m_port, ref status);
-            Utility.CheckStatus(status);
+            SerialDisableTermination(m_port, ref status);
+            CheckStatus(status);
         }
 
-        public int GetBytesReceived()
+        public int BytesReceived
         {
-            int retVal = 0;
-            int status = 0;
-            retVal = HALSerialPort.SerialGetBytesReceived(m_port, ref status);
-            Utility.CheckStatus(status);
-            return retVal;
+            get
+            {
+                int retVal = 0;
+                int status = 0;
+                retVal = SerialGetBytesReceived(m_port, ref status);
+                CheckStatus(status);
+                return retVal;
+            }
         }
 
         public string ReadString()
         {
-            return ReadString(GetBytesReceived());
+            return ReadString(BytesReceived);
         }
 
         public string ReadString(int count)
@@ -145,7 +154,7 @@ namespace WPILib
             byte[] output = Read(count);
             try
             {
-                return System.Text.Encoding.ASCII.GetString(output);
+                return Encoding.ASCII.GetString(output);
             }
             catch
             {
@@ -157,8 +166,8 @@ namespace WPILib
         {
             int status = 0;
             byte[] data = new byte[count];
-            int gotten = (int)HALSerialPort.SerialRead(m_port, data, count, ref status);
-            Utility.CheckStatus(status);
+            int gotten = (int)SerialRead(m_port, data, count, ref status);
+            CheckStatus(status);
             byte[] retVal = new byte[gotten];
             for (int i = 0; i < gotten; i++)
             {
@@ -170,8 +179,8 @@ namespace WPILib
         public int Write(byte[] buffer, int count)
         {
             int status = 0;
-            int retVal = (int)HALSerialPort.SerialWrite(m_port, buffer, count, ref status);
-            Utility.CheckStatus(status);
+            int retVal = (int)SerialWrite(m_port, buffer, count, ref status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -181,46 +190,58 @@ namespace WPILib
             return Write(dataB, dataB.Length);
         }
 
-        public void SetTimeout(double timeout)
+        public double Timeout
         {
-            int status = 0;
-            HALSerialPort.SerialSetTimeout(m_port, (float)timeout, ref status);
-            Utility.CheckStatus(status);
+            set
+            {
+                int status = 0;
+                SerialSetTimeout(m_port, (float) value, ref status);
+                CheckStatus(status);
+            }
         }
 
-        public void SetReadBufferSize(int size)
+        public int ReadBufferSize
         {
-            int status = 0;
-            HALSerialPort.SerialSetReadBufferSize(m_port, (uint) size, ref status);
-            Utility.CheckStatus(status);
+            set
+            {
+                int status = 0;
+                SerialSetReadBufferSize(m_port, (uint) value, ref status);
+                CheckStatus(status);
+            }
         }
 
-        public void SetWriteBufferSize(int size)
+        public int WriteBufferSize
         {
-            int status = 0;
-            HALSerialPort.SerialSetWriteBufferSize(m_port, (uint)size, ref status);
-            Utility.CheckStatus(status);
+            set
+            {
+                int status = 0;
+                SerialSetWriteBufferSize(m_port, (uint) value, ref status);
+                CheckStatus(status);
+            }
         }
 
-        public void SetWriteBufferMode(WriteBufferMode mode)
+        public WriteBufferMode WriteBufferMode
         {
-            int status = 0;
-            HALSerialPort.SerialSetWriteMode(m_port, (byte)mode, ref status);
-            Utility.CheckStatus(status);
+            set
+            {
+                int status = 0;
+                SerialSetWriteMode(m_port, (byte) value, ref status);
+                CheckStatus(status);
+            }
         }
 
         public void Flush()
         {
             int status = 0;
-            HALSerialPort.SerialFlush(m_port, ref status);
-            Utility.CheckStatus(status);
+            SerialFlush(m_port, ref status);
+            CheckStatus(status);
         }
 
         public void Reset()
         {
             int status = 0;
-            HALSerialPort.SerialClear(m_port, ref status);
-            Utility.CheckStatus(status);
+            SerialClear(m_port, ref status);
+            CheckStatus(status);
         }
     }
 }

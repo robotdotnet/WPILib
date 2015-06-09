@@ -1,9 +1,8 @@
 ﻿
 
 using System;
-using System.Runtime.InteropServices;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Util;
 
 namespace WPILib
 {
@@ -25,7 +24,7 @@ namespace WPILib
 
         protected bool m_isSynchronousInterrupt = false;
 
-        public InterruptableSensorBase()
+        protected InterruptableSensorBase()
         {
             m_interrupt = IntPtr.Zero;
         }
@@ -33,9 +32,9 @@ namespace WPILib
         private Action<uint, IntPtr> m_function;
         private object m_param;
 
-        public abstract bool GetAnalogTriggerForRouting();
-        public abstract int GetChannelForRouting();
-        public abstract byte GetModuleForRouting();
+        public abstract bool AnalogTriggerForRouting { get; }
+        public abstract int ChannelForRouting { get; }
+        public abstract byte ModuleForRouting { get; }
 
 
         public void RequestInterrupts(Action handler)
@@ -47,27 +46,27 @@ namespace WPILib
             }
             AllocateInterrupts(false);
 
-            this.m_param = null;
+            m_param = null;
 
             int status = 0;
-            HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
+            HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
             SetUpSourceEdge(true, false);
             HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
         }
 
         public void RequestInterrupts(Action<uint, object> handler, object param)
         {
-            m_function = (mask, t) => handler(mask, this.m_param);
+            m_function = (mask, t) => handler(mask, m_param);
             if (m_interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
             }
             AllocateInterrupts(false);
 
-            this.m_param = param;
+            m_param = param;
 
             int status = 0;
-            HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(), GetAnalogTriggerForRouting(), ref status);
+            HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
             SetUpSourceEdge(true, false);
             HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
         }
@@ -83,8 +82,8 @@ namespace WPILib
             AllocateInterrupts(true);
 
             int status = 0;
-            HALInterrupts.RequestInterrupts(m_interrupt, GetModuleForRouting(), (uint)GetChannelForRouting(),
-                GetAnalogTriggerForRouting(), ref status);
+            HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting,
+                AnalogTriggerForRouting, ref status);
             SetUpSourceEdge(true, false);
         }
 
@@ -94,7 +93,7 @@ namespace WPILib
             {
                 m_interruptIndex = (uint)s_interrupts.Allocate();
             }
-            catch (CheckedAllocationException e)
+            catch (CheckedAllocationException)
             {
                 throw new AllocationException("No interrupts are left to be allocated");
             }
@@ -114,7 +113,7 @@ namespace WPILib
             HALInterrupts.CleanInterrupts(m_interrupt, ref status);
 
             m_interrupt = IntPtr.Zero;
-            s_interrupts.Free((int)m_interruptIndex);
+            s_interrupts.Dispose((int)m_interruptIndex);
         }
 
         public WaitResult WaitForInterrupt(double timeout, bool ignorePrevious)
@@ -161,25 +160,32 @@ namespace WPILib
             HALInterrupts.DisableInterrupts(m_interrupt, ref status);
         }
 
-        public double ReadRisingTimestanp()
+        public double RisingTimestanp
         {
-            if (m_interrupt == IntPtr.Zero)
+            get
             {
-                throw new InvalidOperationException("The interrupt is not allocated.");
+                if (m_interrupt == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("The interrupt is not allocated.");
+                }
+                int status = 0;
+                double timestamp = HALInterrupts.ReadRisingTimestamp(m_interrupt, ref status);
+                return timestamp;
             }
-            int status = 0;
-            double timestamp = HALInterrupts.ReadRisingTimestamp(m_interrupt, ref status);
-            return timestamp;
         }
-        public double ReadFallingTimestanp()
+
+        public double FallingTimestanp
         {
-            if (m_interrupt == IntPtr.Zero)
+            get
             {
-                throw new InvalidOperationException("The interrupt is not allocated.");
+                if (m_interrupt == IntPtr.Zero)
+                {
+                    throw new InvalidOperationException("The interrupt is not allocated.");
+                }
+                int status = 0;
+                double timestamp = HALInterrupts.ReadFallingTimestamp(m_interrupt, ref status);
+                return timestamp;
             }
-            int status = 0;
-            double timestamp = HALInterrupts.ReadFallingTimestamp(m_interrupt, ref status);
-            return timestamp;
         }
 
         public void SetUpSourceEdge(bool risingEdge, bool fallingEdge)

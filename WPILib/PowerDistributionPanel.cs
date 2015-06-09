@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Interfaces;
-using HAL_Base;
+﻿using HAL_Base;
 
 namespace WPILib
 {
     public class PowerDistributionPanel : SensorBase
     {
-        public PowerDistributionPanel()
+        public double Voltage
         {
-            
+            get
+            {
+                int status = 0;
+                double value = HALPDP.GetPDPVoltage(ref status);
+                return value;
+            }
         }
 
-        public double GetVoltage()
+        public double Temperature
         {
-            int status = 0;
-            double value = HALPDP.GetPDPVoltage(ref status);
-            return value;
-        }
-
-        public double GetTemperature()
-        {
-            int status = 0;
-            double value = HALPDP.GetPDPTemperature(ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                double value = HALPDP.GetPDPTemperature(ref status);
+                return value;
+            }
         }
 
         public double GetChannel(int channel)
@@ -35,25 +31,34 @@ namespace WPILib
             return value;
         }
 
-        public double GetTotalCurrent()
+        public double TotalCurrent
         {
-            int status = 0;
-            double value = HALPDP.GetPDPTotalCurrent(ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                double value = HALPDP.GetPDPTotalCurrent(ref status);
+                return value;
+            }
         }
 
-        public double GetTotalPower()
+        public double TotalPower
         {
-            int status = 0;
-            double value = HALPDP.GetPDPTotalPower(ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                double value = HALPDP.GetPDPTotalPower(ref status);
+                return value;
+            }
         }
 
-        public double GetTotalEnergy()
+        public double TotalEnergy
         {
-            int status = 0;
-            double value = HALPDP.GetPDPTotalEnergy(ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                double value = HALPDP.GetPDPTotalEnergy(ref status);
+                return value;
+            }
         }
 
         public void ResetEnergyTotal()

@@ -1,7 +1,6 @@
-﻿
-
-using System;
-using HAL_Base;
+﻿using HAL_Base;
+using static HAL_Base.HAL;
+using static System.Console;
 
 namespace WPILib
 {
@@ -12,7 +11,7 @@ namespace WPILib
         private bool m_teleopInitialized;
         private bool m_testInitialized;
 
-        public IterativeRobot() : base()
+        public IterativeRobot()
         {
             m_autonomousInitialized = false;
             m_disabledInitialized = false;
@@ -24,25 +23,23 @@ namespace WPILib
         {
         }
 
-        public void ObserveStarting()
-        {
-            HAL.HALNetworkCommunicationObserveUserProgramStarting();
-        }
-
+        /// <summary>
+        /// Provide an alternate "main loop" via startCompetition().
+        /// </summary>
         public override void StartCompetition()
         {
-            HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Iterative);
+            Report(ResourceType.kResourceType_Framework, Instances.kFramework_Iterative);
 
             RobotInit();
 
-            HAL.HALNetworkCommunicationObserveUserProgramStarting();
+            HALNetworkCommunicationObserveUserProgramStarting();
 
             //LiveWindow.setEnabled(false);
             while (true)
             {
                 //Console.WriteLine("RobotLoop");
                 // Call the appropriate function depending upon the current robot mode
-                if (IsDisabled())
+                if (IsDisabled)
                 {
                     // call DisabledInit() if we are now just entering disabled mode from
                     // either a different mode or from power-on
@@ -56,13 +53,13 @@ namespace WPILib
                         m_teleopInitialized = false;
                         m_testInitialized = false;
                     }
-                    if (NextPeriodReady())
+                    if (NextPeriodReady)
                     {
-                        HAL.HALNetworkCommunicationObserveUserProgramDisabled();
+                        HALNetworkCommunicationObserveUserProgramDisabled();
                         DisabledPeriodic();
                     }
                 }
-                else if (IsTest())
+                else if (IsTest)
                 {
                     // call TestInit() if we are now just entering test mode from either
                     // a different mode or from power-on
@@ -75,13 +72,13 @@ namespace WPILib
                         m_teleopInitialized = false;
                         m_disabledInitialized = false;
                     }
-                    if (NextPeriodReady())
+                    if (NextPeriodReady)
                     {
-                        HAL.HALNetworkCommunicationObserveUserProgramTest();
+                        HALNetworkCommunicationObserveUserProgramTest();
                         TestPeriodic();
                     }
                 }
-                else if (IsAutonomous())
+                else if (IsAutonomous)
                 {
                     // call Autonomous_Init() if this is the first time
                     // we've entered autonomous_mode
@@ -97,9 +94,9 @@ namespace WPILib
                         m_teleopInitialized = false;
                         m_disabledInitialized = false;
                     }
-                    if (NextPeriodReady())
+                    if (NextPeriodReady)
                     {
-                        HAL.HALNetworkCommunicationObserveUserProgramAutonomous();
+                        HALNetworkCommunicationObserveUserProgramAutonomous();
                         AutonomousPeriodic();
                     }
                 }
@@ -116,60 +113,90 @@ namespace WPILib
                         m_autonomousInitialized = false;
                         m_disabledInitialized = false;
                     }
-                    if (NextPeriodReady())
+                    if (NextPeriodReady)
                     {
                         //HAL.NetworkCommunicationObserveUserProgramTeleop();
-                        HAL.HALNetworkCommunicationObserveUserProgramTeleop();
+                        HALNetworkCommunicationObserveUserProgramTeleop();
                         TeleopPeriodic();
                     }
                 }
                 m_ds.WaitForData();
-                //m_ds.waitForData();
             }
 // ReSharper disable once FunctionNeverReturns
         }
 
-        private bool NextPeriodReady()
-        {
-            return m_ds.IsNewControlData();
-        }
+        private bool NextPeriodReady => m_ds.NewControlData;
 
         public virtual void RobotInit()
         {
-            Console.WriteLine("Default Init Running");
+            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(RobotInit)} method... Overload me!");
         }
 
         public virtual void DisabledInit()
         {
-            //Console.WriteLine("Default Disabled Init Running");
-        }
-
-        public virtual void DisabledPeriodic()
-        {
+            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(DisabledInit)} method... Overload me!");
         }
 
         public virtual void TestInit()
         {
-        }
-
-        public virtual void TestPeriodic()
-        {
+            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(TestInit)} method... Overload me!");
         }
 
         public virtual void AutonomousInit()
         {
-        }
-
-        public virtual void AutonomousPeriodic()
-        {
+            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(AutonomousInit)} method... Overload me!");
         }
 
         public virtual void TeleopInit()
         {
+            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(TeleopInit)} method... Overload me!");
         }
+
+        private bool dpFirstRun = true;
+
+        public virtual void DisabledPeriodic()
+        {
+            if (dpFirstRun)
+            {
+                WriteLine($"Default {nameof(IterativeRobot)}.{nameof(DisabledPeriodic)} method... Overload me!");
+                dpFirstRun = false;
+            }
+            Timer.Delay(0.001);
+        }
+
+        private bool apFirstRun = true;
+
+        public virtual void AutonomousPeriodic()
+        {
+            if (apFirstRun)
+            {
+                WriteLine($"Default {nameof(IterativeRobot)}.{nameof(AutonomousPeriodic)} method... Overload me!");
+                apFirstRun = false;
+            }
+            Timer.Delay(0.001);
+        }
+
+        private bool tpFirstRun = true;
 
         public virtual void TeleopPeriodic()
         {
+            if (tpFirstRun)
+            {
+                WriteLine($"Default {nameof(IterativeRobot)}.{nameof(TeleopPeriodic)} method... Overload me!");
+                tpFirstRun = false;
+            }
+            Timer.Delay(0.001);
+        }
+
+        private bool tmpFirstRun = true;
+
+        public virtual void TestPeriodic()
+        {
+            if (tmpFirstRun)
+            {
+                WriteLine($"Default {nameof(IterativeRobot)}.{nameof(TestPeriodic)} method... Overload me!");
+                tmpFirstRun = false;
+            }
         }
     }
 }

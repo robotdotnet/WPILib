@@ -1,13 +1,11 @@
 ﻿namespace WPILib
 {
-    public interface MotorSafety
+    public interface IMotorSafety
     {
-        void SetExpiration(double timeout);
-        double GetExpiration();
-        bool IsAlive();
+        double Expiration { set; get; }
+        bool Alive { get; }
         void StopMotor();
-        void SetSafetyEnabled(bool enabled);
-        bool IsSafetyEnabled();
-        string GetDescription();
+        bool SafetyEnabled { set; get; }
+        string Description { get; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 namespace WPILib.Interfaces
 {
-    interface Potentiometer : PIDSource
+    interface Potentiometer : IPIDSource
     {
         double Get();
     }

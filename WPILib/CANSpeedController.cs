@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace WPILib
 {
 
@@ -54,40 +55,34 @@ namespace WPILib
         SrxDisableSwitchInputs = 2,
     };
 
-    public interface CANSpeedController : SpeedController
+    public interface CANSpeedController : ISpeedController
     {
-        new double Get();
-        new void Set(double value, byte syncGroup = 0);
-        new void Disable();
-        void SetP(double p);
-        void SetI(double i);
-        void SetD(double d);
+        double P { set; get; }
+        double I { set; get; }
+        double D { set; get; }
         void SetPID(double p, double i, double d);
-        double GetP();
-        double GetI();
-        double GetD();
-        double GetBusVoltage();
-        double GetOutputVoltage();
-        double GetOutputCurrent();
-        double GetTemperature();
-        double GetPosition();
-        double GetSpeed();
+        double BusVoltage { get; }
+        double OutputVoltage { get; }
+        double OutputCurrent { get; }
+        double Temperature { get; }
+        double Position { get; }
+        double Speed { get; }
 // ReSharper disable InconsistentNaming
-        bool GetForwardLimitOK();
-        bool GetReverseLimitOK();
+        bool ForwardLimitOK { get; }
+        bool ReverseLimitOK { get; }
 // ReSharper restore InconsistentNaming
-        Faults GetFaults();
-        void SetVoltageRampRate(double rampRate);
-        uint GetFirmwareVersion();
-        void ConfigNeutralMode(NeutralMode mode);
-        void ConfigEncoderCodesPerRev(int codesPerRev);
-        void ConfigPotentiometerTurns(int turns);
+        Faults Faults { get; }
+        double VoltageRampRate { set; }
+        uint FirmwareVersion { get; }
+        NeutralMode ConfigNeutralMode { set; }
+        int EncoderCodesPerRev { set; }
+        int PotentiometerTurns { set; }
         void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition);
         void DisableSoftPositionLimits();
-        void ConfigLimitMode(LimitMode mode);
-        void ConfigForwardLimit(double forwardLimitPosition);
-        void ConfigReverseLimit(double reverseLimitPosition);
-        void ConfigMaxOutputVoltage(double voltage);
-        void ConfigFaultTime(float faultTime);
+        LimitMode LimitMode { set; }
+        double ForwardLimit { set; }
+        double ReverseLimit { set; }
+        double MaxOutputVoltage { set; }
+        float FaultTime { set; }
     }
 }

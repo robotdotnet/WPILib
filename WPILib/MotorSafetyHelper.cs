@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using static WPILib.Timer;
 
 namespace WPILib
 {
@@ -13,12 +14,10 @@ namespace WPILib
     {
         public const double DefaultSafetyExpiration = 0.1;
 
-        private double m_expiration;
-        private bool m_enabled;
         private double m_stopTime;
-        private MotorSafety m_safeObject;
+        private IMotorSafety m_safeObject;
         private MotorSafetyHelper m_nextHelper;
-        private static MotorSafetyHelper s_headHelper = null;
+        private static MotorSafetyHelper s_headHelper;
         private static object s_lockObject = new object();
 
         /// <summary>
@@ -31,12 +30,12 @@ namespace WPILib
         /// </summary>
         /// <param name="safeObject">A pointer to the motor object implementing MotorSafety. This is used
         /// to call the Stop() method on the motor</param>
-        public MotorSafetyHelper(MotorSafety safeObject)
+        public MotorSafetyHelper(IMotorSafety safeObject)
         {
             m_safeObject = safeObject;
-            m_enabled = false;
-            m_expiration = DefaultSafetyExpiration;
-            m_stopTime = Timer.GetFPGATimestamp();
+            SafetyEnabled = false;
+            Expiration = DefaultSafetyExpiration;
+            m_stopTime = FPGATimestamp;
             lock (s_lockObject)
             {
                 m_nextHelper = s_headHelper;
@@ -50,35 +49,20 @@ namespace WPILib
         /// </summary>
         public void Feed()
         {
-            m_stopTime = Timer.GetFPGATimestamp() + m_expiration;
+            m_stopTime = FPGATimestamp + Expiration;
         }
 
         /// <summary>
         /// Set the expiration time for the corresponding motor safety object.
         /// </summary>
-        /// <param name="expirationTime">The timeout value in seconds.</param>
-        public void SetExpiration(double expirationTime)
-        {
-            m_expiration = expirationTime;
-        }
-
-        /// <summary>
-        /// Retrieve the timeout value for the corresponding motor safety object.
-        /// </summary>
-        /// <returns>The timeout value in seconds.</returns>
-        public double GetExpiration()
-        {
-            return m_expiration;
-        }
+        /// <value>The timeout value in seconds.</value>
+        public double Expiration { set; get; }
 
         /// <summary>
         /// Determine if the motor is still operating or has timed out.
         /// </summary>
-        /// <returns>A true value if the motor is still operating normally and hasn't timed out.</returns>
-        public bool IsAlive()
-        {
-            return !m_enabled || m_stopTime > Timer.GetFPGATimestamp();
-        }
+        /// <value>A true value if the motor is still operating normally and hasn't timed out.</value>
+        public bool Alive => !SafetyEnabled || m_stopTime > FPGATimestamp;
 
         /// <summary>
         /// Check if this motor has exceeded its timeout.
@@ -88,12 +72,12 @@ namespace WPILib
         /// </summary>
         public void Check()
         {
-            if (!m_enabled || RobotState.IsDisabled() || RobotState.IsTest())
+            if (!SafetyEnabled || RobotState.Disabled || RobotState.Test)
                 return;
-            if (m_stopTime < Timer.GetFPGATimestamp())
+            if (m_stopTime < FPGATimestamp)
             {
                 TextWriter errorWriter = Console.Error;
-                errorWriter.WriteLine(m_safeObject.GetDescription() + "... Output not updated often enough.");
+                errorWriter.WriteLine(m_safeObject.Description + "... Output not updated often enough.");
                 errorWriter.Close();
 
                 m_safeObject.StopMotor();
@@ -104,21 +88,8 @@ namespace WPILib
         /// Enable/disable motor safety for this device.
         /// <para />Turn on and off the motor safety option for this PWM device.
         /// </summary>
-        /// <param name="enabled">True if motor safety is enforced for this object</param>
-        public void SetSafetyEnabled(bool enabled)
-        {
-            m_enabled = enabled;
-        }
-
-        /// <summary>
-        /// Return the state of the motor safety enabled flag.
-        /// <para />Return if the motor safety is currently enabled for this device.
-        /// </summary>
-        /// <returns>True if motor safety is enforced for this device</returns>
-        public bool IsSafetyEnabled()
-        {
-            return m_enabled;
-        }
+        /// <value>True if motor safety is enforced for this object</value>
+        public bool SafetyEnabled { set; get; }
 
         /// <summary>
         /// Check the motors to see if any have timed out.

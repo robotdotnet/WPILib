@@ -1,4 +1,5 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -10,9 +11,9 @@ namespace HAL_Base
         internal static void SetupDelegates()
         {
             string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
+            var types = HALAssembly.GetTypes();
             var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+            Type type = HALAssembly.GetType(q.ToList()[0].FullName);
             GetPort = (GetPortDelegate)Delegate.CreateDelegate(typeof(GetPortDelegate), type.GetMethod("getPort"));
             GetPortWithModule = (GetPortWithModuleDelegate)Delegate.CreateDelegate(typeof(GetPortWithModuleDelegate), type.GetMethod("getPortWithModule"));
             GetHALErrorMessage = (GetHALErrorMessageDelegate)Delegate.CreateDelegate(typeof(GetHALErrorMessageDelegate), type.GetMethod("getHALErrorMessage"));
@@ -45,13 +46,13 @@ namespace HAL_Base
             Occur = (OccurDelegate)Delegate.CreateDelegate(typeof(OccurDelegate), type.GetMethod("Occur"));
         }
 
-        public delegate System.IntPtr GetPortDelegate(byte pin);
+        public delegate IntPtr GetPortDelegate(byte pin);
         public static GetPortDelegate GetPort;
 
-        public delegate System.IntPtr GetPortWithModuleDelegate(byte module, byte pin);
+        public delegate IntPtr GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
-        public delegate System.IntPtr GetHALErrorMessageDelegate(int code);
+        public delegate IntPtr GetHALErrorMessageDelegate(int code);
         public static GetHALErrorMessageDelegate GetHALErrorMessage;
 
         public delegate ushort GetFPGAVersionDelegate(ref int status);
@@ -93,7 +94,7 @@ namespace HAL_Base
         public delegate int HALGetMatchTimeDelegate(ref float matchTime);
         public static HALGetMatchTimeDelegate HALGetMatchTime;
 
-        public delegate void HALSetNewDataSemDelegate(System.IntPtr sem);
+        public delegate void HALSetNewDataSemDelegate(IntPtr sem);
         public static HALSetNewDataSemDelegate HALSetNewDataSem;
 
         public delegate bool HALGetSystemActiveDelegate(ref int status);

@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
-using WPILib.Interfaces;
 using HAL_Base;
-using WPILib.Util;
+using NetworkTablesDotNet.Tables;
 using WPILib.CAN;
+using WPILib.livewindow;
+using WPILib.Util;
 
 namespace WPILib
 {
-    public class CANJaguar : MotorSafety, CANSpeedController, ITableListener, LiveWindowSendable
+    public class CANJaguar : IMotorSafety, CANSpeedController, ITableListener, LiveWindowSendable, IDisposable
     {
 
 // ReSharper disable InconsistentNaming
@@ -98,7 +94,7 @@ namespace WPILib
                         m_firmwareVersion = UnpackINT32(data);
                         receivedFirmwareVersion = true;
                     }
-                    catch (CANMessageNotFoundException e)
+                    catch (CANMessageNotFoundException)
                     {
 
                     }
@@ -118,7 +114,7 @@ namespace WPILib
                 !m_receivedStatusMessage2 ||
                 !receivedFirmwareVersion)
             {
-                Free();
+                Dispose();
                 throw new CANMessageNotFoundException();
             }
 
@@ -127,7 +123,7 @@ namespace WPILib
                 GetMessage(HALCAN.LM_API_HWVER, HALCAN.CAN_MSGID_FULL_M, data);
                 m_hardwareVersion = data[0];
             }
-            catch (CANMessageNotFoundException e)
+            catch (CANMessageNotFoundException)
             {
                 m_hardwareVersion = 0;
             }
@@ -148,9 +144,9 @@ namespace WPILib
 
         }
 
-        public void Free()
+        public void Dispose()
         {
-            s_allocated.Free(m_deviceNumber - 1);
+            s_allocated.Dispose(m_deviceNumber - 1);
             m_safetyHelper = null;
             int status = 0;
 
@@ -182,10 +178,7 @@ namespace WPILib
                 HALCAN.CAN_SEND_PERIOD_STOP_REPEATING, ref status);
         }
 
-        public int GetDeviceNumber()
-        {
-            return m_deviceNumber;
-        }
+        public int DeviceNumber => m_deviceNumber;
 
 
         byte m_deviceNumber;
@@ -247,50 +240,39 @@ namespace WPILib
 
         bool m_controlEnabled = true;
 
-        public void SetExpiration(double timeout)
+        public double Expiration
         {
-            m_safetyHelper.SetExpiration(timeout);
+            set { m_safetyHelper.Expiration = value; }
+            get { return m_safetyHelper.Expiration; }
         }
 
-        public double GetExpiration()
-        {
-            return m_safetyHelper.GetExpiration();
-        }
-
-        public bool IsAlive()
-        {
-            return m_safetyHelper.IsAlive();
-        }
+        public bool Alive => m_safetyHelper.Alive;
 
         public void StopMotor()
         {
             DisableControl();
         }
 
-        public void SetSafetyEnabled(bool enabled)
+        public bool SafetyEnabled
         {
-            m_safetyHelper.SetSafetyEnabled(enabled);
+            set { m_safetyHelper.SafetyEnabled = value; }
+            get { return m_safetyHelper.SafetyEnabled; }
         }
 
-        public bool IsSafetyEnabled()
-        {
-            return m_safetyHelper.IsSafetyEnabled();
-        }
+        public string Description => "CANJaguar ID " + m_deviceNumber;
 
-        public string GetDescription()
+        public double PidWrite
         {
-            return "CANJaguar ID " + m_deviceNumber;
-        }
-
-        public void PidWrite(double output)
-        {
-            if (m_controlMode == ControlMode.PercentVbus)
+            set
             {
-                Set(output);
-            }
-            else
-            {
-                throw new InvalidOperationException("PID only supported in PercentVbus mode");
+                if (m_controlMode == ControlMode.PercentVbus)
+                {
+                    Value = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("PID only supported in PercentVbus mode");
+                }
             }
         }
 
@@ -355,12 +337,13 @@ namespace WPILib
             m_controlEnabled = false;
         }
 
-        public double Get()
+        public double Value
         {
-            return m_value;
+            get { return m_value; }
+            set { Set(value, 0); }
         }
 
-        public void Set(double speed, byte syncGroup)
+        public void Set(double value, byte syncGroup)
         {
             int messageID;
             byte[] data = new byte[8];
@@ -372,23 +355,23 @@ namespace WPILib
                 {
                     case ControlMode.PercentVbus:
                         messageID = HALCAN.LM_API_VOLT_T_SET;
-                        dataSize = PackPercentage(data, speed);
+                        dataSize = PackPercentage(data, value);
                         break;
                     case ControlMode.Speed:
                         messageID = HALCAN.LM_API_SPD_T_SET;
-                        dataSize = PackFXP16_16(data, speed);
+                        dataSize = PackFXP16_16(data, value);
                         break;
                     case ControlMode.Position:
                         messageID = HALCAN.LM_API_POS_T_SET;
-                        dataSize = PackFXP16_16(data, speed);
+                        dataSize = PackFXP16_16(data, value);
                         break;
                     case ControlMode.Current:
                         messageID = HALCAN.LM_API_ICTRL_T_SET;
-                        dataSize = PackFXP8_8(data, speed);
+                        dataSize = PackFXP8_8(data, value);
                         break;
                     case ControlMode.Voltage:
                         messageID = HALCAN.LM_API_VCOMP_T_SET;
-                        dataSize = PackFXP8_8(data, speed);
+                        dataSize = PackFXP8_8(data, value);
                         break;
                     default:
                         return;
@@ -401,12 +384,9 @@ namespace WPILib
                 }
 
                 SendMessage(messageID, data, dataSize, kSendMessagePeriod);
-                if (m_safetyHelper != null)
-                {
-                    m_safetyHelper.Feed();
-                }
+                m_safetyHelper?.Feed();
             }
-            m_value = speed;
+            m_value = value;
             Verify();
         }
 
@@ -472,14 +452,14 @@ namespace WPILib
                         {
                             GetMessage(message, HALCAN.CAN_MSGID_FULL_M, data);
                         }
-                        catch (CANMessageNotFoundException e)
+                        catch (CANMessageNotFoundException)
                         {
 
                         }
                     }
                 }
             }
-            catch (CANMessageNotFoundException e)
+            catch (CANMessageNotFoundException)
             {
                 RequestMessage(HALCAN.LM_API_STATUS_POWER);
             }
@@ -500,7 +480,7 @@ namespace WPILib
                         EnableControl();
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     RequestMessage(HALCAN.LM_API_STATUS_CMODE);
                 }
@@ -524,7 +504,7 @@ namespace WPILib
                         SetSpeedReference(m_speedReference);
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_SPD_REF);
@@ -549,7 +529,7 @@ namespace WPILib
                         SetPositionReference(m_positionReference);
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_POS_REF);
@@ -591,10 +571,10 @@ namespace WPILib
                     else
                     {
                         // It's wrong - set it again
-                        SetP(m_p);
+                        P = m_p;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(message);
@@ -636,10 +616,10 @@ namespace WPILib
                     else
                     {
                         // It's wrong - set it again
-                        SetI(m_i);
+                        I = m_i;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(message);
@@ -681,10 +661,10 @@ namespace WPILib
                     else
                     {
                         // It's wrong - set it again
-                        SetD(m_d);
+                        D = m_d;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(message);
@@ -706,10 +686,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigNeutralMode(m_neutralMode);
+                        ConfigNeutralMode = m_neutralMode;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_BRAKE_COAST);
@@ -731,10 +711,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigEncoderCodesPerRev(m_encoderCodesPerRev);
+                        EncoderCodesPerRev = m_encoderCodesPerRev;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_ENC_LINES);
@@ -756,10 +736,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigPotentiometerTurns(m_potentiometerTurns);
+                        PotentiometerTurns = m_potentiometerTurns;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_POT_TURNS);
@@ -781,10 +761,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigLimitMode(m_limitMode);
+                        LimitMode = m_limitMode;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_LIMIT_MODE);
@@ -806,10 +786,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigForwardLimit(m_forwardLimit);
+                        ForwardLimit = m_forwardLimit;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_LIMIT_FWD);
@@ -831,10 +811,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigReverseLimit(m_reverseLimit);
+                        ReverseLimit = m_reverseLimit;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_LIMIT_REV);
@@ -859,11 +839,11 @@ namespace WPILib
                     else
                     {
                         // It's wrong - set it again
-                        ConfigMaxOutputVoltage(m_maxOutputVoltage);
+                        MaxOutputVoltage = m_maxOutputVoltage;
                     }
 
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_MAX_VOUT);
@@ -887,11 +867,11 @@ namespace WPILib
                         else
                         {
                             // It's wrong - set it again
-                            SetVoltageRampRate(m_voltageRampRate);
+                            VoltageRampRate = (m_voltageRampRate);
                         }
 
                     }
-                    catch (CANMessageNotFoundException e)
+                    catch (CANMessageNotFoundException)
                     {
                         // Verification is needed but not available - request it again.
                         RequestMessage(HALCAN.LM_API_VOLT_SET_RAMP);
@@ -913,11 +893,11 @@ namespace WPILib
                     else
                     {
                         // It's wrong - set it again
-                        SetVoltageRampRate(m_voltageRampRate);
+                        VoltageRampRate = (m_voltageRampRate);
                     }
 
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_VCOMP_COMP_RAMP);
@@ -939,10 +919,10 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigFaultTime(m_faultTime);
+                        FaultTime = m_faultTime;
                     }
                 }
-                catch (CANMessageNotFoundException e)
+                catch (CANMessageNotFoundException)
                 {
                     // Verification is needed but not available - request it again.
                     RequestMessage(HALCAN.LM_API_CFG_FAULT_TIME);
@@ -957,9 +937,10 @@ namespace WPILib
                 // request periodic status messages again and attempt to unpack any
                 // available ones.
                 SetupPeriodicStatus();
-                GetTemperature();
-                GetPosition();
-                GetFaults();
+                //The properties are called just to update their periodic status.
+                var tmp = Temperature;
+                var tmp2 = Position;
+                var tmp3 = Faults;
             }
         }
 
@@ -1103,7 +1084,7 @@ namespace WPILib
 
                 m_receivedStatusMessage0 = true;
             }
-            catch (CANMessageNotFoundException e) { }
+            catch (CANMessageNotFoundException) { }
 
             // Check if a new position/speed message has arrived and do the same
             try
@@ -1115,7 +1096,7 @@ namespace WPILib
 
                 m_receivedStatusMessage1 = true;
             }
-            catch (CANMessageNotFoundException e) { }
+            catch (CANMessageNotFoundException) { }
 
             // Check if a new limits/faults message has arrived and do the same
             try
@@ -1126,7 +1107,7 @@ namespace WPILib
 
                 m_receivedStatusMessage2 = true;
             }
-            catch (CANMessageNotFoundException e) { }
+            catch (CANMessageNotFoundException) { }
         }
 
         public static void UpdateSyncGroup(byte syncGroup)
@@ -1140,16 +1121,19 @@ namespace WPILib
 
         private static void Swap16(int x, byte[] buffer)
         {
-            buffer[0] = (byte)(x & 0xff);
-            buffer[1] = (byte)((x >> 8) & 0xff);
+            var tmpBuffer = BitConverter.GetBytes(x);
+            buffer[0] = tmpBuffer[0];
+            buffer[1] = tmpBuffer[1];
+            return;
         }
 
         private static void Swap32(int x, byte[] buffer)
         {
-            buffer[0] = (byte)(x & 0xff);
-            buffer[1] = (byte)((x >> 8) & 0xff);
-            buffer[2] = (byte)((x >> 16) & 0xff);
-            buffer[3] = (byte)((x >> 24) & 0xff);
+            var tmpBuffer = BitConverter.GetBytes(x);
+            buffer[0] = tmpBuffer[0];
+            buffer[1] = tmpBuffer[1];
+            buffer[2] = tmpBuffer[2];
+            buffer[3] = tmpBuffer[3];
         }
 
         private static byte PackPercentage(byte[] buffer, double value)
@@ -1239,11 +1223,6 @@ namespace WPILib
             return (int)(a * 65536.0) == (int)(b * 65536.0);
         }
 
-        public void Set(double speed)
-        {
-            Set(speed, 0);
-        }
-
         [Obsolete]
         public void Disable()
         {
@@ -1258,38 +1237,30 @@ namespace WPILib
 
 
         private ITable m_table = null;
-        public ITable GetTable()
-        {
-            return m_table;
-        }
 
-        public string GetSmartDashboardType()
-        {
-            return "Speed Controller";
-        }
+        public ITable Table => m_table;
+
+        public string SmartDashboardType => "Speed Controller";
 
         public void UpdateTable()
         {
-            if (m_table != null)
-            {
-                m_table.PutNumber("Value", Get());
-            }
+            m_table?.PutNumber("Value", Value);
         }
 
         public void StartLiveWindowMode()
         {
-            Set(0.0);
+            Value = 0.0;
             m_table.AddTableListener("Value", this, true);
         }
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
-            Set((double)value);
+            Value = (double)value;
         }
 
         public void StopLiveWindowMode()
         {
-            Set(0.0);
+            Value = 0.0;
             m_table.RemoveTableListener(this);
         }
 
@@ -1314,31 +1285,44 @@ namespace WPILib
         *
         * @param p The proportional gain of the Jaguar's PID controller.
         */
-        public void SetP(double p)
+
+        public double P
         {
-            byte[] data = new byte[8];
-            byte dataSize = PackFXP16_16(data, p);
-
-            switch (m_controlMode)
+            set
             {
-                case ControlMode.Speed:
-                    SendMessage(HALCAN.LM_API_SPD_PC, data, dataSize);
-                    break;
+                byte[] data = new byte[8];
+                byte dataSize = PackFXP16_16(data, value);
 
-                case ControlMode.Position:
-                    SendMessage(HALCAN.LM_API_POS_PC, data, dataSize);
-                    break;
+                switch (m_controlMode)
+                {
+                    case ControlMode.Speed:
+                        SendMessage(HALCAN.LM_API_SPD_PC, data, dataSize);
+                        break;
 
-                case ControlMode.Current:
-                    SendMessage(HALCAN.LM_API_ICTRL_PC, data, dataSize);
-                    break;
+                    case ControlMode.Position:
+                        SendMessage(HALCAN.LM_API_POS_PC, data, dataSize);
+                        break;
 
-                default:
-                    throw new InvalidOperationException("PID constants only apply in Speed, Position, and Current mode");
+                    case ControlMode.Current:
+                        SendMessage(HALCAN.LM_API_ICTRL_PC, data, dataSize);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException(
+                            "PID constants only apply in Speed, Position, and Current mode");
+                }
+
+                m_p = value;
+                m_pVerified = false;
             }
-
-            m_p = p;
-            m_pVerified = false;
+            get
+            {
+                if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
+                {
+                    throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
+                }
+                return m_p;
+            }
         }
 
         /**
@@ -1346,31 +1330,44 @@ namespace WPILib
         *
         * @param i The integral gain of the Jaguar's PID controller.
         */
-        public void SetI(double i)
+
+        public double I
         {
-            byte[] data = new byte[8];
-            byte dataSize = PackFXP16_16(data, i);
-
-            switch (m_controlMode)
+            set
             {
-                case ControlMode.Speed:
-                    SendMessage(HALCAN.LM_API_SPD_IC, data, dataSize);
-                    break;
+                byte[] data = new byte[8];
+                byte dataSize = PackFXP16_16(data, value);
 
-                case ControlMode.Position:
-                    SendMessage(HALCAN.LM_API_POS_IC, data, dataSize);
-                    break;
+                switch (m_controlMode)
+                {
+                    case ControlMode.Speed:
+                        SendMessage(HALCAN.LM_API_SPD_IC, data, dataSize);
+                        break;
 
-                case ControlMode.Current:
-                    SendMessage(HALCAN.LM_API_ICTRL_IC, data, dataSize);
-                    break;
+                    case ControlMode.Position:
+                        SendMessage(HALCAN.LM_API_POS_IC, data, dataSize);
+                        break;
 
-                default:
-                    throw new InvalidOperationException("PID constants only apply in Speed, Position, and Current mode");
+                    case ControlMode.Current:
+                        SendMessage(HALCAN.LM_API_ICTRL_IC, data, dataSize);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException(
+                            "PID constants only apply in Speed, Position, and Current mode");
+                }
+
+                m_i = value;
+                m_iVerified = false;
             }
-
-            m_i = i;
-            m_iVerified = false;
+            get
+            {
+                if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
+                {
+                    throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
+                }
+                return m_i;
+            }
         }
 
         /**
@@ -1378,31 +1375,44 @@ namespace WPILib
         *
         * @param d The derivative gain of the Jaguar's PID controller.
         */
-        public void SetD(double d)
+
+        public double D
         {
-            byte[] data = new byte[8];
-            byte dataSize = PackFXP16_16(data, d);
-
-            switch (m_controlMode)
+            set
             {
-                case ControlMode.Speed:
-                    SendMessage(HALCAN.LM_API_SPD_DC, data, dataSize);
-                    break;
+                byte[] data = new byte[8];
+                byte dataSize = PackFXP16_16(data, value);
 
-                case ControlMode.Position:
-                    SendMessage(HALCAN.LM_API_POS_DC, data, dataSize);
-                    break;
+                switch (m_controlMode)
+                {
+                    case ControlMode.Speed:
+                        SendMessage(HALCAN.LM_API_SPD_DC, data, dataSize);
+                        break;
 
-                case ControlMode.Current:
-                    SendMessage(HALCAN.LM_API_ICTRL_DC, data, dataSize);
-                    break;
+                    case ControlMode.Position:
+                        SendMessage(HALCAN.LM_API_POS_DC, data, dataSize);
+                        break;
 
-                default:
-                    throw new InvalidOperationException("PID constants only apply in Speed, Position, and Current mode");
+                    case ControlMode.Current:
+                        SendMessage(HALCAN.LM_API_ICTRL_DC, data, dataSize);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException(
+                            "PID constants only apply in Speed, Position, and Current mode");
+                }
+
+                m_d = value;
+                m_dVerified = false;
             }
-
-            m_d = d;
-            m_dVerified = false;
+            get
+            {
+                if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
+                {
+                    throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
+                }
+                return m_d;
+            }
         }
 
         /**
@@ -1414,9 +1424,9 @@ namespace WPILib
         */
         public void SetPID(double p, double i, double d)
         {
-            SetP(p);
-            SetI(i);
-            SetD(d);
+            P = p;
+            I = i;
+            D = d;
         }
 
         /**
@@ -1424,42 +1434,18 @@ namespace WPILib
         *
         * @return The proportional gain.
         */
-        public double GetP()
-        {
-            if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
-            {
-                throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
-            }
-            return m_p;
-        }
 
         /**
         * Get the Integral gain of the controller.
         *
         * @return The integral gain.
         */
-        public double GetI()
-        {
-            if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
-            {
-                throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
-            }
-            return m_i;
-        }
 
         /**
         * Get the Derivative gain of the controller.
         *
         * @return The derivative gain.
         */
-        public double GetD()
-        {
-            if (m_controlMode == (ControlMode.PercentVbus) || m_controlMode == (ControlMode.Voltage))
-            {
-                throw new InvalidOperationException("PID does not apply in Percent or Voltage control modes");
-            }
-            return m_d;
-        }
 
         /**
          * Enable controlling the motor voltage as a percentage of the bus voltage
@@ -1486,7 +1472,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.PercentVbus);
             SetPositionReference(HALCAN.LM_REF_NONE);
             SetSpeedReference(HALCAN.LM_REF_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
         }
 
         /**
@@ -1502,7 +1488,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.PercentVbus);
             SetPositionReference(HALCAN.LM_REF_ENCODER);
             SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
         }
 
         /**
@@ -1517,7 +1503,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.PercentVbus);
             SetPositionReference(HALCAN.LM_REF_POT);
             SetSpeedReference(HALCAN.LM_REF_NONE);
-            ConfigPotentiometerTurns(1);
+            PotentiometerTurns = 1;
         }
 
         /**
@@ -1551,7 +1537,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Current);
             SetPositionReference(HALCAN.LM_REF_NONE);
             SetSpeedReference(HALCAN.LM_REF_NONE);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
             SetPID(p, i, d);
         }
 
@@ -1570,7 +1556,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Current);
             SetPositionReference(HALCAN.LM_REF_ENCODER);
             SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
             SetPID(p, i, d);
         }
 
@@ -1589,7 +1575,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Current);
             SetPositionReference(HALCAN.LM_REF_POT);
             SetSpeedReference(HALCAN.LM_REF_NONE);
-            ConfigPotentiometerTurns(1);
+            PotentiometerTurns = 1;
             SetPID(p, i, d);
         }
 
@@ -1609,7 +1595,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Speed);
             SetPositionReference(HALCAN.LM_REF_NONE);
             SetSpeedReference(HALCAN.LM_REF_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
             SetPID(p, i, d);
         }
 
@@ -1628,7 +1614,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Speed);
             SetPositionReference(HALCAN.LM_REF_ENCODER);
             SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
             SetPID(p, i, d);
         }
 
@@ -1647,7 +1633,7 @@ namespace WPILib
         {
             ChangeControlMode(ControlMode.Position);
             SetPositionReference(HALCAN.LM_REF_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
             SetPID(p, i, d);
         }
 
@@ -1664,7 +1650,7 @@ namespace WPILib
         {
             ChangeControlMode(ControlMode.Position);
             SetPositionReference(HALCAN.LM_REF_POT);
-            ConfigPotentiometerTurns(1);
+            PotentiometerTurns = 1;
             SetPID(p, i, d);
         }
 
@@ -1692,7 +1678,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Voltage);
             SetPositionReference(HALCAN.LM_REF_NONE);
             SetSpeedReference(HALCAN.LM_REF_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
         }
 
         /**
@@ -1708,7 +1694,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Voltage);
             SetPositionReference(HALCAN.LM_REF_ENCODER);
             SetSpeedReference(HALCAN.LM_REF_QUAD_ENCODER);
-            ConfigEncoderCodesPerRev(codesPerRev);
+            EncoderCodesPerRev = codesPerRev;
         }
 
         /**
@@ -1722,7 +1708,7 @@ namespace WPILib
             ChangeControlMode(ControlMode.Voltage);
             SetPositionReference(HALCAN.LM_REF_POT);
             SetSpeedReference(HALCAN.LM_REF_NONE);
-            ConfigPotentiometerTurns(1);
+            PotentiometerTurns = 1;
         }
 
         private void ChangeControlMode(ControlMode controlMode)
@@ -1752,11 +1738,15 @@ namespace WPILib
         *
         * @return The bus voltage in Volts.
         */
-        public double GetBusVoltage()
-        {
-            UpdatePeriodicStatus();
 
-            return m_busVoltage;
+        public double BusVoltage
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return m_busVoltage;
+            }
         }
 
         /**
@@ -1764,11 +1754,15 @@ namespace WPILib
         *
         * @return The output voltage in Volts.
         */
-        public double GetOutputVoltage()
-        {
-            UpdatePeriodicStatus();
 
-            return m_outputVoltage;
+        public double OutputVoltage
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return m_outputVoltage;
+            }
         }
 
         /**
@@ -1776,11 +1770,15 @@ namespace WPILib
         *
         * @return The output current in Amps.
         */
-        public double GetOutputCurrent()
-        {
-            UpdatePeriodicStatus();
 
-            return m_outputCurrent;
+        public double OutputCurrent
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return m_outputCurrent;
+            }
         }
 
         /**
@@ -1788,11 +1786,15 @@ namespace WPILib
         *
         * @return The temperature of the Jaguar in degrees Celsius.
         */
-        public double GetTemperature()
-        {
-            UpdatePeriodicStatus();
 
-            return m_temperature;
+        public double Temperature
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return m_temperature;
+            }
         }
 
         /**
@@ -1802,11 +1804,15 @@ namespace WPILib
          * @see CANJaguar#configPotentiometerTurns(int)
          * @see CANJaguar#configEncoderCodesPerRev(int)
          */
-        public double GetPosition()
-        {
-            UpdatePeriodicStatus();
 
-            return m_position;
+        public double Position
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return m_position;
+            }
         }
 
         /**
@@ -1814,11 +1820,15 @@ namespace WPILib
         *
         * @return The speed of the motor in RPM based on the configured feedback.
         */
-        public double GetSpeed()
-        {
-            UpdatePeriodicStatus();
 
-            return m_speed;
+        public double Speed
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return m_speed;
+            }
         }
 
         /**
@@ -1826,11 +1836,15 @@ namespace WPILib
          *
          * @return true if the motor is allowed to turn in the forward direction.
          */
-        public bool GetForwardLimitOK()
-        {
-            UpdatePeriodicStatus();
 
-            return (m_limits & kForwardLimit) != 0;
+        public bool ForwardLimitOK
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return (m_limits & kForwardLimit) != 0;
+            }
         }
 
         /**
@@ -1838,11 +1852,15 @@ namespace WPILib
          *
          * @return true if the motor is allowed to turn in the reverse direction.
          */
-        public bool GetReverseLimitOK()
-        {
-            UpdatePeriodicStatus();
 
-            return (m_limits & kReverseLimit) != 0;
+        public bool ReverseLimitOK
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return (m_limits & kReverseLimit) != 0;
+            }
         }
 
         /**
@@ -1854,11 +1872,15 @@ namespace WPILib
          * @see #kTemperatureFault
          * @see #kGateDriverFault
          */
-        public Faults GetFaults()
-        {
-            UpdatePeriodicStatus();
 
-            return (Faults)m_faults;
+        public Faults Faults
+        {
+            get
+            {
+                UpdatePeriodicStatus();
+
+                return (Faults) m_faults;
+            }
         }
 
         /**
@@ -1869,27 +1891,31 @@ namespace WPILib
         *
         * @param rampRate The maximum rate of voltage change in Percent Voltage mode in V/s.
         */
-        public void SetVoltageRampRate(double rampRate)
+        public double VoltageRampRate
         {
-            byte[] data = new byte[8];
-            int dataSize;
-            int message;
-
-            switch (m_controlMode)
+            set
             {
-                case ControlMode.PercentVbus:
-                    dataSize = PackPercentage(data, rampRate / (m_maxOutputVoltage * kControllerRate));
-                    message = HALCAN.LM_API_VOLT_SET_RAMP;
-                    break;
-                case ControlMode.Voltage:
-                    dataSize = PackFXP8_8(data, rampRate / kControllerRate);
-                    message = HALCAN.LM_API_VCOMP_COMP_RAMP;
-                    break;
-                default:
-                    throw new InvalidOperationException("Voltage ramp rate only applies in Percentage and Voltage modes");
-            }
+                byte[] data = new byte[8];
+                int dataSize;
+                int message;
 
-            SendMessage(message, data, dataSize);
+                switch (m_controlMode)
+                {
+                    case ControlMode.PercentVbus:
+                        dataSize = PackPercentage(data, value/(m_maxOutputVoltage*kControllerRate));
+                        message = HALCAN.LM_API_VOLT_SET_RAMP;
+                        break;
+                    case ControlMode.Voltage:
+                        dataSize = PackFXP8_8(data, value/kControllerRate);
+                        message = HALCAN.LM_API_VCOMP_COMP_RAMP;
+                        break;
+                    default:
+                        throw new InvalidOperationException(
+                            "Voltage ramp rate only applies in Percentage and Voltage modes");
+                }
+
+                SendMessage(message, data, dataSize);
+            }
         }
 
         /**
@@ -1897,10 +1923,8 @@ namespace WPILib
         *
         * @return The firmware version.  0 if the device did not respond.
         */
-        public uint GetFirmwareVersion()
-        {
-            return (uint)m_firmwareVersion;
-        }
+
+        public uint FirmwareVersion => (uint) m_firmwareVersion;
 
         /**
         * Get the version of the Jaguar hardware.
@@ -1919,16 +1943,20 @@ namespace WPILib
         *
         * @param mode Select to use the jumper setting or to override it to coast or brake.
         */
-        public void ConfigNeutralMode(NeutralMode mode)
+
+        public NeutralMode ConfigNeutralMode
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            data[0] = (byte)mode;
+                data[0] = (byte) value;
 
-            SendMessage(HALCAN.LM_API_CFG_BRAKE_COAST, data, 1);
+                SendMessage(HALCAN.LM_API_CFG_BRAKE_COAST, data, 1);
 
-            m_neutralMode = mode;
-            m_neutralModeVerified = false;
+                m_neutralMode = value;
+                m_neutralModeVerified = false;
+            }
         }
 
         /**
@@ -1936,15 +1964,19 @@ namespace WPILib
         *
         * @param codesPerRev The number of counts per revolution in 1X mode.
         */
-        public void ConfigEncoderCodesPerRev(int codesPerRev)
+
+        public int EncoderCodesPerRev
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            int dataSize = PackINT16(data, (short)codesPerRev);
-            SendMessage(HALCAN.LM_API_CFG_ENC_LINES, data, dataSize);
+                int dataSize = PackINT16(data, (short) value);
+                SendMessage(HALCAN.LM_API_CFG_ENC_LINES, data, dataSize);
 
-            m_encoderCodesPerRev = (short)codesPerRev;
-            m_encoderCodesPerRevVerified = false;
+                m_encoderCodesPerRev = (short) value;
+                m_encoderCodesPerRevVerified = false;
+            }
         }
 
         /**
@@ -1955,15 +1987,19 @@ namespace WPILib
         *
         * @param turns The number of turns of the potentiometer
         */
-        public void ConfigPotentiometerTurns(int turns)
+
+        public int PotentiometerTurns
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            int dataSize = PackINT16(data, (short)turns);
-            SendMessage(HALCAN.LM_API_CFG_POT_TURNS, data, dataSize);
+                int dataSize = PackINT16(data, (short) value);
+                SendMessage(HALCAN.LM_API_CFG_POT_TURNS, data, dataSize);
 
-            m_potentiometerTurns = (short)turns;
-            m_potentiometerTurnsVerified = false;
+                m_potentiometerTurns = (short) value;
+                m_potentiometerTurnsVerified = false;
+            }
         }
 
         /**
@@ -1978,9 +2014,9 @@ namespace WPILib
          */
         public void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition)
         {
-            ConfigLimitMode(LimitMode.SoftPositionLimits);
-            ConfigForwardLimit(forwardLimitPosition);
-            ConfigReverseLimit(reverseLimitPosition);
+            LimitMode = LimitMode.SoftPositionLimits;
+            ForwardLimit = forwardLimitPosition;
+            ReverseLimit = reverseLimitPosition;
         }
 
         /**
@@ -1990,7 +2026,7 @@ namespace WPILib
          */
         public void DisableSoftPositionLimits()
         {
-            ConfigLimitMode(LimitMode.SwitchInputsOnly);
+            LimitMode = LimitMode.SwitchInputsOnly;
         }
 
         /**
@@ -2002,11 +2038,15 @@ namespace WPILib
          * @see LimitMode#SwitchInputsOnly
          * @see LimitMode#SoftPositionLimits
          */
-        public void ConfigLimitMode(LimitMode mode)
+
+        public LimitMode LimitMode
         {
-            byte[] data = new byte[8];
-            data[0] = (byte)mode;
-            SendMessage(HALCAN.LM_API_CFG_LIMIT_MODE, data, 1);
+            set
+            {
+                byte[] data = new byte[8];
+                data[0] = (byte) value;
+                SendMessage(HALCAN.LM_API_CFG_LIMIT_MODE, data, 1);
+            }
         }
 
         /**
@@ -2015,16 +2055,20 @@ namespace WPILib
          * Use {@link #configSoftPositionLimits(double, double)} to set this and the {@link LimitMode} automatically.
          * @param forwardLimitPosition The position that, if exceeded, will disable the forward direction.
          */
-        public void ConfigForwardLimit(double forwardLimitPosition)
+
+        public double ForwardLimit
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            int dataSize = PackFXP16_16(data, forwardLimitPosition);
-            data[dataSize++] = 1;
-            SendMessage(HALCAN.LM_API_CFG_LIMIT_FWD, data, dataSize);
+                int dataSize = PackFXP16_16(data, value);
+                data[dataSize++] = 1;
+                SendMessage(HALCAN.LM_API_CFG_LIMIT_FWD, data, dataSize);
 
-            m_forwardLimit = forwardLimitPosition;
-            m_forwardLimitVerified = false;
+                m_forwardLimit = value;
+                m_forwardLimitVerified = false;
+            }
         }
 
         /**
@@ -2033,16 +2077,20 @@ namespace WPILib
          * Use {@link #configSoftPositionLimits(double, double)} to set this and the {@link LimitMode} automatically.
          * @param reverseLimitPosition The position that, if exceeded, will disable the reverse direction.
          */
-        public void ConfigReverseLimit(double reverseLimitPosition)
+
+        public double ReverseLimit
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            int dataSize = PackFXP16_16(data, reverseLimitPosition);
-            data[dataSize++] = 1;
-            SendMessage(HALCAN.LM_API_CFG_LIMIT_REV, data, dataSize);
+                int dataSize = PackFXP16_16(data, value);
+                data[dataSize++] = 1;
+                SendMessage(HALCAN.LM_API_CFG_LIMIT_REV, data, dataSize);
 
-            m_reverseLimit = reverseLimitPosition;
-            m_reverseLimitVerified = false;
+                m_reverseLimit = value;
+                m_reverseLimitVerified = false;
+            }
         }
 
         /**
@@ -2053,15 +2101,19 @@ namespace WPILib
         *
         * @param voltage The maximum voltage output by the Jaguar.
         */
-        public void ConfigMaxOutputVoltage(double voltage)
+
+        public double MaxOutputVoltage
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            int dataSize = PackFXP8_8(data, voltage);
-            SendMessage(HALCAN.LM_API_CFG_MAX_VOUT, data, dataSize);
+                int dataSize = PackFXP8_8(data, value);
+                SendMessage(HALCAN.LM_API_CFG_MAX_VOUT, data, dataSize);
 
-            m_maxOutputVoltage = voltage;
-            m_maxOutputVoltageVerified = false;
+                m_maxOutputVoltage = value;
+                m_maxOutputVoltageVerified = false;
+            }
         }
 
         /**
@@ -2072,20 +2124,22 @@ namespace WPILib
         *
         * @param faultTime The time to wait before resuming operation, in seconds.
         */
-        public void ConfigFaultTime(float faultTime)
+
+        public float FaultTime
         {
-            byte[] data = new byte[8];
+            set
+            {
+                byte[] data = new byte[8];
 
-            if (faultTime < 0.5f) faultTime = 0.5f;
-            else if (faultTime > 3.0f) faultTime = 3.0f;
+                if (value < 0.5f) value = 0.5f;
+                else if (value > 3.0f) value = 3.0f;
 
-            int dataSize = PackINT16(data, (short)(faultTime * 1000.0));
-            SendMessage(HALCAN.LM_API_CFG_FAULT_TIME, data, dataSize);
+                int dataSize = PackINT16(data, (short) (value*1000.0));
+                SendMessage(HALCAN.LM_API_CFG_FAULT_TIME, data, dataSize);
 
-            m_faultTime = faultTime;
-            m_faultTimeVerified = false;
+                m_faultTime = value;
+                m_faultTimeVerified = false;
+            }
         }
-
-
     }
 }

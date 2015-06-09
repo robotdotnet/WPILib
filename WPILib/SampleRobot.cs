@@ -56,33 +56,33 @@ namespace WPILib
                 RobotInit();
                 while (true)
                 {
-                    if (IsDisabled())
+                    if (IsDisabled)
                     {
                         m_ds.InDisabled(true);
                         Disabled();
                         m_ds.InDisabled(false);
-                        while (IsDisabled())
+                        while (IsDisabled)
                         {
                             Thread.Sleep(1);
                         }
                     }
-                    else if (IsAutonomous())
+                    else if (IsAutonomous)
                     {
                         m_ds.InAutonomous(true);
                         Autonomous();
                         m_ds.InAutonomous(false);
-                        while (IsAutonomous() && !IsDisabled())
+                        while (IsAutonomous && !IsDisabled)
                         {
                             Thread.Sleep(1);
                         }
                     }
-                    else if (IsTest())
+                    else if (IsTest)
                     {
                         //LiveWindow.setEnabled(true);
                         m_ds.InTest(true);
                         Test();
                         m_ds.InTest(false);
-                        while (IsTest() && IsEnabled())
+                        while (IsTest && IsEnabled)
                             Thread.Sleep(1);
                         //LiveWindow.setEnabled(false);
                     }
@@ -91,7 +91,7 @@ namespace WPILib
                         m_ds.InOperatorControl(true);
                         OperatorControl();
                         m_ds.InOperatorControl(false);
-                        while (IsOperatorControl() && !IsDisabled())
+                        while (IsOperatorControl && !IsDisabled)
                         {
                             Thread.Sleep(1);
                         }

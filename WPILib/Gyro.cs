@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using HAL_Base;
 using WPILib.Util;
-using WPILib.Interfaces;
-using System.Threading;
 
 namespace WPILib
 {
-    public class Gyro : SensorBase, PIDSource
+    public class Gyro : SensorBase, IPIDSource
     {
         private static int kOversampleBits = 10;
         private static int kAverageBits = 0;
@@ -18,7 +13,6 @@ namespace WPILib
         private static double kDefaultVoltsPerDegreePerSecond = 0.007;
 
         protected AnalogInput m_analog;
-        private double m_voltsPerDegreePerSecond;
         private double m_offset;
         private int m_center;
         bool m_channelAllocated = false;
@@ -33,12 +27,12 @@ namespace WPILib
                 Console.WriteLine("Null m_analog");
                 throw new ArgumentNullException("m_analog");
             }
-            m_voltsPerDegreePerSecond = kDefaultVoltsPerDegreePerSecond;
-            m_analog.SetAverageBits(kAverageBits);
-            m_analog.SetOversampleBits(kOversampleBits);
+            Sensitivity = kDefaultVoltsPerDegreePerSecond;
+            m_analog.AverageBits = kAverageBits;
+            m_analog.OversampleBits = kOversampleBits;
             double sampleRate = kSamplesPerSecond
                     * (1 << (kAverageBits + kOversampleBits));
-            AnalogInput.SetGlobalSampleRate(sampleRate);
+            AnalogInput.GlobalSampleRate = sampleRate;
             Timer.Delay(1.0);
 
             m_analog.InitAccumulator();
@@ -48,20 +42,20 @@ namespace WPILib
 
             m_analog.GetAccumulatorOutput(m_result);
 
-            m_center = (int)((double)m_result.value / (double)m_result.count + .5);
+            m_center = (int)((double)m_result.Value / (double)m_result.Count + .5);
 
-            m_offset = ((double)m_result.value / (double)m_result.count)
+            m_offset = ((double)m_result.Value / (double)m_result.Count)
                     - m_center;
 
             
-            m_analog.SetAccumulatorCenter(m_center);
+            m_analog.AccumulatorCenter = m_center;
             m_analog.ResetAccumulator();
 
-            SetDeadband(0.0);
+            Deadband = 0.0;
 
-            SetPIDSourceParameter(PIDSourceParameter.Angle);
+            PIDSourceParameter = PIDSourceParameter.Angle;
 
-            HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.GetChannel());
+            HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
 
         }
 
@@ -80,90 +74,95 @@ namespace WPILib
             InitGyro();
         }
 
-        public void Reset()
-        {
-            if (m_analog != null)
-            {
-                m_analog.ResetAccumulator();
-            }
-        }
+        public void Reset() => m_analog?.ResetAccumulator();
 
-        public override void Free()
+        public override void Dispose()
         {
             if (m_analog != null && m_channelAllocated)
             {
-                m_analog.Free();
+                m_analog.Dispose();
             }
             m_analog = null;
-            //base.Free();
+            //base.Dispose();
         }
 
-        public double GetAngle()
+        public double Angle
         {
-            if (m_analog == null)
+            get
             {
-                return 0.0;
-            }
-            else
-            {
-                m_analog.GetAccumulatorOutput(m_result);
-
-                long value = m_result.value - (long)(m_result.count * m_offset);
-
-                double scaledValue = value
-                        * 1e-9
-                        * m_analog.GetLSBWeight()
-                        * (1 << m_analog.GetAverageBits())
-                        / (AnalogInput.GetGlobalSampleRate() * m_voltsPerDegreePerSecond);
-
-                return scaledValue;
-            }
-        }
-
-        public double GetRate()
-        {
-            if (m_analog == null)
-            {
-                return 0.0;
-            }
-            else
-            {
-                return (m_analog.GetAverageValue() - (m_center + m_offset))
-                        * 1e-9
-                        * m_analog.GetLSBWeight()
-                        / ((1 << m_analog.GetOversampleBits()) * m_voltsPerDegreePerSecond);
-            }
-        }
-
-        public void SetSensitivity(double voltsPerDegreePerSecond)
-        {
-            m_voltsPerDegreePerSecond = voltsPerDegreePerSecond;
-        }
-
-        void SetDeadband(double volts)
-        {
-            int deadband = (int)(volts * 1e9 / m_analog.GetLSBWeight() * (1 << m_analog.GetOversampleBits()));
-            m_analog.SetAccumulatorDeadband(deadband);
-        }
-
-        public void SetPIDSourceParameter(PIDSourceParameter pidSource)
-        {
-            BoundaryException.AssertWithinBounds((int)pidSource, 1, 2);
-            m_pidSource = pidSource;
-        }
-
-        public double PidGet()
-        {
-            switch (m_pidSource)
-            {
-                case PIDSourceParameter.Rate:
-                    return GetRate();
-                case PIDSourceParameter.Angle:
-                    return GetAngle();
-                default:
+                if (m_analog == null)
+                {
                     return 0.0;
+                }
+                else
+                {
+                    m_analog.GetAccumulatorOutput(m_result);
+
+                    long value = m_result.Value - (long) (m_result.Count*m_offset);
+
+                    double scaledValue = value
+                                         *1e-9
+                                         *m_analog.LSBWeight
+                                         *(1 << m_analog.AverageBits)
+                                         /(AnalogInput.GlobalSampleRate*Sensitivity);
+
+                    return scaledValue;
+                }
             }
         }
 
+        public double Rate
+        {
+            get
+            {
+                if (m_analog == null)
+                {
+                    return 0.0;
+                }
+                else
+                {
+                    return (m_analog.AverageValue - (m_center + m_offset))
+                           *1e-9
+                           *m_analog.LSBWeight
+                           /((1 << m_analog.OversampleBits)*Sensitivity);
+                }
+            }
+        }
+
+        public double Sensitivity { get; set; }
+
+        private double Deadband
+        {
+            set
+            {
+                int deadband = (int) (value*1e9/m_analog.LSBWeight*(1 << m_analog.OversampleBits));
+                m_analog.AccumulatorDeadband = deadband;
+            }
+        }
+
+        public PIDSourceParameter PIDSourceParameter
+        {
+            set
+            {
+                BoundaryException.AssertWithinBounds((int) value, 1, 2);
+                m_pidSource = value;
+            }
+        }
+
+        public double PidGet
+        {
+            get
+            {
+                switch (m_pidSource)
+                {
+                    case PIDSourceParameter.Rate:
+                        return Rate;
+                    case PIDSourceParameter.Angle:
+                        return Angle;
+                    default:
+                        return 0.0;
+                }
+            }
+        }
     }
 }

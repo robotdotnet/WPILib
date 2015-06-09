@@ -1,87 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Util;
+﻿using WPILib.Util;
 
 namespace WPILib
 {
-    public class RobotState
+    public static class RobotState
     {
-        private static Interface s_impl;
+        public static Interface Implementation { private get; set; }
 
-        public static void SetImplementation(Interface i)
+        public static bool Disabled
         {
-            s_impl = i;
-        }
-
-        public static bool IsDisabled()
-        {
-            if (s_impl != null)
+            get
             {
-                return s_impl.IsDisabled();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
+                if (Implementation != null)
+                {
+                    return Implementation.Disabled;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof (RobotBase));
             }
         }
 
-        public static bool IsEnabled()
+        public static bool Enabled
         {
-            if (s_impl != null)
+            get
             {
-                return s_impl.IsEnabled();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
+                if (Implementation != null)
+                {
+                    return Implementation.Enabled;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof (RobotBase));
             }
         }
 
-        public static bool IsOperatorControl()
+        public static bool OperatorControl
         {
-            if (s_impl != null)
+            get
             {
-                return s_impl.IsOperatorControl();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
+                if (Implementation != null)
+                {
+                    return Implementation.OperatorControl;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof (RobotBase));
             }
         }
 
-        public static bool IsAutonomous()
+        public static bool Autonomous
         {
-            if (s_impl != null)
+            get
             {
-                return s_impl.IsAutonomous();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
+                if (Implementation != null)
+                {
+                    return Implementation.Autonomous;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof (RobotBase));
             }
         }
 
-        public static bool IsTest()
+        public static bool Test
         {
-            if (s_impl != null)
+            get
             {
-                return s_impl.IsTest();
-            }
-            else
-            {
-                throw new BaseSystemNotInitializedException(s_impl, typeof(RobotBase));
+                if (Implementation != null)
+                {
+                    return Implementation.Test;
+                }
+                throw new BaseSystemNotInitializedException(Implementation, typeof (RobotBase));
             }
         }
 
         public interface Interface
         {
-            bool IsDisabled();
-            bool IsEnabled();
-            bool IsOperatorControl();
-            bool IsAutonomous();
-            bool IsTest();
+            bool Disabled { get; }
+            bool Enabled { get; }
+            bool OperatorControl { get; }
+            bool Autonomous { get; }
+            bool Test{ get; }
         }
     }
 }

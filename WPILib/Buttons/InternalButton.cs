@@ -26,17 +26,17 @@ namespace WPILib.Buttons
         /// <param name="inverted">If false, then this button is pressed when set to true, otherwise it is pressed when set to false.</param>
         public InternalButton(bool inverted)
         {
-            this.m_pressed = this.m_inverted = inverted;
+            m_pressed = m_inverted = inverted;
         }
 
         public void SetInverted(bool inverted)
         {
-            this.m_inverted = inverted;
+            m_inverted = inverted;
         }
 
         public void SetPressed(bool pressed)
         {
-            this.m_pressed = pressed;
+            m_pressed = pressed;
         }
 
         public override bool Get()

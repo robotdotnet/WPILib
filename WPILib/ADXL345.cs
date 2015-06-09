@@ -42,51 +42,42 @@ namespace WPILib
 
         protected abstract void WriteRange(byte value);
 
-        public void SetRange(Interfaces.Range range)
+        public Range Range
         {
-            byte value = 0;
-            switch (range)
+            set
             {
-                case WPILib.Interfaces.Range.k2G:
-                    value = 0;
-                    break;
-                case WPILib.Interfaces.Range.k4G:
-                    value = 1;
-                    break;
-                case WPILib.Interfaces.Range.k8G:
-                    value = 2;
-                    break;
-                case WPILib.Interfaces.Range.k16G:
-                    value = 3;
-                    break;
+                byte retVal = 0;
+                switch (value)
+                {
+                    case Range.k2G:
+                        retVal = 0;
+                        break;
+                    case Range.k4G:
+                        retVal = 1;
+                        break;
+                    case Range.k8G:
+                        retVal = 2;
+                        break;
+                    case Range.k16G:
+                        retVal = 3;
+                        break;
+                }
+                WriteRange(retVal);
             }
-            WriteRange(value);
         }
 
-        public double GetX()
-        {
-            return GetAcceleration(Axes.X);
-        }
+        public double X => GetAcceleration(Axes.X);
 
-        public double GetY()
-        {
-            return GetAcceleration(Axes.Y);
-        }
+        public double Y => GetAcceleration(Axes.Y);
 
-        public double GetZ()
-        {
-            return GetAcceleration(Axes.Z);
-        }
+        public double Z => GetAcceleration(Axes.Z);
 
         public abstract double GetAcceleration(Axes axis);
 
         public abstract AllAxes GetAccelerations();
 
 
-        public string GetSmartDashboardType()
-        {
-            return "3AxisAccelerometer";
-        }
+        public string SmartDashboardType => "3AxisAccelerometer";
 
         private ITable m_table;
 
@@ -100,16 +91,13 @@ namespace WPILib
         {
             if (m_table != null)
             {
-                m_table.PutNumber("X", GetX());
-                m_table.PutNumber("Y", GetY());
-                m_table.PutNumber("Z", GetZ());
+                m_table.PutNumber("X", X);
+                m_table.PutNumber("Y", Y);
+                m_table.PutNumber("Z", Z);
             }
         }
 
-        public ITable GetTable()
-        {
-            return m_table;
-        }
+        public ITable Table => m_table;
 
         public void StartLiveWindowMode()
         {

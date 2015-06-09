@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
-    public abstract class Subsystem : NamedSendable
+    public abstract class Subsystem : INamedSendable
     {
         private bool m_initializedDefaultCommand = false;
         private Command m_currentCommand;
         private bool m_currentCommandChanged;
 
         private Command m_defaultCommand;
-        private string m_name;
 
         private static List<Subsystem> s_allSubsystems = new List<Subsystem>();
 
         public Subsystem(string name)
         {
-            this.m_name = name;
+            Name = name;
             Scheduler.GetInstance().RegisterSubsystem(this);
         }
 
         public Subsystem()
         {
-            this.m_name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
+            Name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
             Scheduler.GetInstance().RegisterSubsystem(this);
             m_currentCommandChanged = true;
         }
@@ -86,22 +82,19 @@ namespace WPILib.Commands
             return m_currentCommand;
         }
 
-        public string GetName()
-        {
-            return m_name;
-        }
+        public string Name { get; }
 
         private ITable m_table;
 
-        public void InitTable(NetworkTablesDotNet.Tables.ITable subtable)
+        public void InitTable(ITable subtable)
         {
-            this.m_table = subtable;
+            m_table = subtable;
             if (m_table != null)
             {
                 if (m_defaultCommand != null)
                 {
                     m_table.PutBoolean("hasDefault", true);
-                    m_table.PutString("default", m_defaultCommand.GetName());
+                    m_table.PutString("default", m_defaultCommand.Name);
                 }
                 else
                 {
@@ -110,7 +103,7 @@ namespace WPILib.Commands
                 if (m_currentCommand != null)
                 {
                     m_table.PutBoolean("hasCommand", true);
-                    m_table.PutString("command", m_currentCommand.GetName());
+                    m_table.PutString("command", m_currentCommand.Name);
                 }
                 else
                 {
@@ -119,14 +112,8 @@ namespace WPILib.Commands
             }
         }
 
-        public NetworkTablesDotNet.Tables.ITable GetTable()
-        {
-            return m_table;
-        }
+        public ITable Table => m_table;
 
-        public string GetSmartDashboardType()
-        {
-            return "Subsystem";
-        }
+        public string SmartDashboardType => "Subsystem";
     }
 }

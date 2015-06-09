@@ -1,16 +1,16 @@
-﻿using WPILib.Interfaces;
-
-namespace WPILib
+﻿namespace WPILib
 {
-    public class SafePWM : PWM, MotorSafety
+    public class SafePWM : PWM, IMotorSafety
     {
         private MotorSafetyHelper m_safetyHelper;
 
         private void InitSafePWM()
         {
-            m_safetyHelper = new MotorSafetyHelper(this);
-            m_safetyHelper.SetExpiration(0.0);
-            m_safetyHelper.SetSafetyEnabled(false);
+            m_safetyHelper = new MotorSafetyHelper(this)
+            {
+                Expiration = 0.0,
+                SafetyEnabled = false
+            };
         }
 
         public SafePWM(int channel)
@@ -19,49 +19,26 @@ namespace WPILib
             InitSafePWM();
         }
 
-        public void SetExpiration(double timeout)
+        public double Expiration
         {
-            m_safetyHelper.SetExpiration(timeout);
+            set { m_safetyHelper.Expiration = value; }
+            get { return m_safetyHelper.Expiration; }
         }
 
-        public double GetExpiration()
+        public bool Alive => m_safetyHelper.Alive;
+
+        public void StopMotor() => Disable();
+
+        public bool SafetyEnabled
         {
-            return m_safetyHelper.GetExpiration();
+            set { m_safetyHelper.SafetyEnabled = value; }
+            get { return m_safetyHelper.SafetyEnabled; }
         }
 
-        public bool IsAlive()
-        {
-            return m_safetyHelper.IsAlive();
-        }
+        public string Description => $"PWM {Channel}";
 
-        public void StopMotor()
-        {
-            Disable();
-        }
+        public void Feed() => m_safetyHelper.Feed();
 
-        public void SetSafetyEnabled(bool enabled)
-        {
-            m_safetyHelper.SetSafetyEnabled(enabled);
-        }
-
-        public bool IsSafetyEnabled()
-        {
-            return m_safetyHelper.IsSafetyEnabled();
-        }
-
-        public string GetDescription()
-        {
-            return "PWM " + GetChannel();
-        }
-
-        public void Feed()
-        {
-            m_safetyHelper.Feed();
-        }
-
-        public void Disable()
-        {
-            SetRaw(PwmDisabled);
-        }
+        public void Disable() => Raw = PwmDisabled;
     }
 }

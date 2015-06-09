@@ -1,4 +1,5 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
+
 using System;
 using System.Linq;
 using System.Reflection;
@@ -58,19 +59,19 @@ namespace HAL_Base
             SetAnalogTriggerLimitsVoltageIntHack = (SetAnalogTriggerLimitsVoltageIntHackDelegate)Delegate.CreateDelegate(typeof(SetAnalogTriggerLimitsVoltageIntHackDelegate), type.GetMethod("setAnalogTriggerLimitsVoltageIntHack"));
         }
 
-        public delegate System.IntPtr InitializeAnalogOutputPortDelegate(System.IntPtr port_pointer, ref int status);
+        public delegate IntPtr InitializeAnalogOutputPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeAnalogOutputPortDelegate InitializeAnalogOutputPort;
 
-        public delegate void SetAnalogOutputDelegate(System.IntPtr analog_port_pointer, double voltage, ref int status);
+        public delegate void SetAnalogOutputDelegate(IntPtr analog_port_pointer, double voltage, ref int status);
         public static SetAnalogOutputDelegate SetAnalogOutput;
 
-        public delegate double GetAnalogOutputDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate double GetAnalogOutputDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogOutputDelegate GetAnalogOutput;
 
         public delegate bool CheckAnalogOutputChannelDelegate(uint pin);
         public static CheckAnalogOutputChannelDelegate CheckAnalogOutputChannel;
 
-        public delegate System.IntPtr InitializeAnalogInputPortDelegate(System.IntPtr port_pointer, ref int status);
+        public delegate IntPtr InitializeAnalogInputPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeAnalogInputPortDelegate InitializeAnalogInputPort;
 
         public delegate bool CheckAnalogModuleDelegate(byte module);
@@ -85,106 +86,106 @@ namespace HAL_Base
         public delegate float GetAnalogSampleRateDelegate(ref int status);
         public static GetAnalogSampleRateDelegate GetAnalogSampleRate;
 
-        public delegate void SetAnalogAverageBitsDelegate(System.IntPtr analog_port_pointer, uint bits, ref int status);
+        public delegate void SetAnalogAverageBitsDelegate(IntPtr analog_port_pointer, uint bits, ref int status);
         public static SetAnalogAverageBitsDelegate SetAnalogAverageBits;
 
-        public delegate uint GetAnalogAverageBitsDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate uint GetAnalogAverageBitsDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogAverageBitsDelegate GetAnalogAverageBits;
 
-        public delegate void SetAnalogOversampleBitsDelegate(System.IntPtr analog_port_pointer, uint bits, ref int status);
+        public delegate void SetAnalogOversampleBitsDelegate(IntPtr analog_port_pointer, uint bits, ref int status);
         public static SetAnalogOversampleBitsDelegate SetAnalogOversampleBits;
 
-        public delegate uint GetAnalogOversampleBitsDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate uint GetAnalogOversampleBitsDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogOversampleBitsDelegate GetAnalogOversampleBits;
 
-        public delegate short GetAnalogValueDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate short GetAnalogValueDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogValueDelegate GetAnalogValue;
 
-        public delegate int GetAnalogAverageValueDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate int GetAnalogAverageValueDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogAverageValueDelegate GetAnalogAverageValue;
 
-        public delegate int GetAnalogVoltsToValueDelegate(System.IntPtr analog_port_pointer, double voltage, ref int status);
+        public delegate int GetAnalogVoltsToValueDelegate(IntPtr analog_port_pointer, double voltage, ref int status);
         public static GetAnalogVoltsToValueDelegate GetAnalogVoltsToValue;
 
-        public delegate float GetAnalogVoltageDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate float GetAnalogVoltageDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogVoltageDelegate GetAnalogVoltage;
 
-        public delegate float GetAnalogAverageVoltageDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate float GetAnalogAverageVoltageDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogAverageVoltageDelegate GetAnalogAverageVoltage;
 
-        public delegate uint GetAnalogLSBWeightDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate uint GetAnalogLSBWeightDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogLSBWeightDelegate GetAnalogLSBWeight;
 
-        public delegate int GetAnalogOffsetDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate int GetAnalogOffsetDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogOffsetDelegate GetAnalogOffset;
 
-        public delegate bool IsAccumulatorChannelDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate bool IsAccumulatorChannelDelegate(IntPtr analog_port_pointer, ref int status);
         public static IsAccumulatorChannelDelegate IsAccumulatorChannel;
 
-        public delegate void InitAccumulatorDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate void InitAccumulatorDelegate(IntPtr analog_port_pointer, ref int status);
         public static InitAccumulatorDelegate InitAccumulator;
 
-        public delegate void ResetAccumulatorDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate void ResetAccumulatorDelegate(IntPtr analog_port_pointer, ref int status);
         public static ResetAccumulatorDelegate ResetAccumulator;
 
-        public delegate void SetAccumulatorCenterDelegate(System.IntPtr analog_port_pointer, int center, ref int status);
+        public delegate void SetAccumulatorCenterDelegate(IntPtr analog_port_pointer, int center, ref int status);
         public static SetAccumulatorCenterDelegate SetAccumulatorCenter;
 
-        public delegate void SetAccumulatorDeadbandDelegate(System.IntPtr analog_port_pointer, int deadband, ref int status);
+        public delegate void SetAccumulatorDeadbandDelegate(IntPtr analog_port_pointer, int deadband, ref int status);
         public static SetAccumulatorDeadbandDelegate SetAccumulatorDeadband;
 
-        public delegate long GetAccumulatorValueDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate long GetAccumulatorValueDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAccumulatorValueDelegate GetAccumulatorValue;
 
-        public delegate uint GetAccumulatorCountDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate uint GetAccumulatorCountDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAccumulatorCountDelegate GetAccumulatorCount;
 
-        public delegate void GetAccumulatorOutputDelegate(System.IntPtr analog_port_pointer, ref long value, ref uint count, ref int status);
+        public delegate void GetAccumulatorOutputDelegate(IntPtr analog_port_pointer, ref long value, ref uint count, ref int status);
         public static GetAccumulatorOutputDelegate GetAccumulatorOutput;
 
-        public delegate System.IntPtr InitializeAnalogTriggerDelegate(System.IntPtr port_pointer, ref uint index, ref int status);
+        public delegate IntPtr InitializeAnalogTriggerDelegate(IntPtr port_pointer, ref uint index, ref int status);
         public static InitializeAnalogTriggerDelegate InitializeAnalogTrigger;
 
-        public delegate void CleanAnalogTriggerDelegate(System.IntPtr analog_trigger_pointer, ref int status);
+        public delegate void CleanAnalogTriggerDelegate(IntPtr analog_trigger_pointer, ref int status);
         public static CleanAnalogTriggerDelegate CleanAnalogTrigger;
 
-        public delegate void SetAnalogTriggerLimitsRawDelegate(System.IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
+        public delegate void SetAnalogTriggerLimitsRawDelegate(IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
         public static SetAnalogTriggerLimitsRawDelegate SetAnalogTriggerLimitsRaw;
 
-        public delegate void SetAnalogTriggerLimitsVoltageDelegate(System.IntPtr analog_trigger_pointer, double lower, double upper, ref int status);
+        public delegate void SetAnalogTriggerLimitsVoltageDelegate(IntPtr analog_trigger_pointer, double lower, double upper, ref int status);
         public static SetAnalogTriggerLimitsVoltageDelegate SetAnalogTriggerLimitsVoltage;
 
-        public delegate void SetAnalogTriggerAveragedDelegate(System.IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status);
+        public delegate void SetAnalogTriggerAveragedDelegate(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status);
         public static SetAnalogTriggerAveragedDelegate SetAnalogTriggerAveraged;
 
-        public delegate void SetAnalogTriggerFilteredDelegate(System.IntPtr analog_trigger_pointer, bool useFilteredValue, ref int status);
+        public delegate void SetAnalogTriggerFilteredDelegate(IntPtr analog_trigger_pointer, bool useFilteredValue, ref int status);
         public static SetAnalogTriggerFilteredDelegate SetAnalogTriggerFiltered;
 
-        public delegate bool GetAnalogTriggerInWindowDelegate(System.IntPtr analog_trigger_pointer, ref int status);
+        public delegate bool GetAnalogTriggerInWindowDelegate(IntPtr analog_trigger_pointer, ref int status);
         public static GetAnalogTriggerInWindowDelegate GetAnalogTriggerInWindow;
 
-        public delegate bool GetAnalogTriggerTriggerStateDelegate(System.IntPtr analog_trigger_pointer, ref int status);
+        public delegate bool GetAnalogTriggerTriggerStateDelegate(IntPtr analog_trigger_pointer, ref int status);
         public static GetAnalogTriggerTriggerStateDelegate GetAnalogTriggerTriggerState;
 
-        public delegate bool GetAnalogTriggerOutputDelegate(System.IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status);
+        public delegate bool GetAnalogTriggerOutputDelegate(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status);
         public static GetAnalogTriggerOutputDelegate GetAnalogTriggerOutput;
 
         public delegate int GetAnalogSampleRateIntHackDelegate(ref int status);
         public static GetAnalogSampleRateIntHackDelegate GetAnalogSampleRateIntHack;
 
-        public delegate int GetAnalogVoltageIntHackDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate int GetAnalogVoltageIntHackDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogVoltageIntHackDelegate GetAnalogVoltageIntHack;
 
-        public delegate int GetAnalogAverageVoltageIntHackDelegate(System.IntPtr analog_port_pointer, ref int status);
+        public delegate int GetAnalogAverageVoltageIntHackDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogAverageVoltageIntHackDelegate GetAnalogAverageVoltageIntHack;
 
         public delegate void SetAnalogSampleRateIntHackDelegate(int samplesPerSecond, ref int status);
         public static SetAnalogSampleRateIntHackDelegate SetAnalogSampleRateIntHack;
 
-        public delegate int GetAnalogVoltsToValueIntHackDelegate(System.IntPtr analog_port_pointer, int voltage, ref int status);
+        public delegate int GetAnalogVoltsToValueIntHackDelegate(IntPtr analog_port_pointer, int voltage, ref int status);
         public static GetAnalogVoltsToValueIntHackDelegate GetAnalogVoltsToValueIntHack;
 
-        public delegate void SetAnalogTriggerLimitsVoltageIntHackDelegate(System.IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
+        public delegate void SetAnalogTriggerLimitsVoltageIntHackDelegate(IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
         public static SetAnalogTriggerLimitsVoltageIntHackDelegate SetAnalogTriggerLimitsVoltageIntHack;
     }
 }

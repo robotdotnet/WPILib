@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Interfaces;
 using HAL_Base;
-using WPILib.livewindow;
 using NetworkTablesDotNet.Tables;
+using WPILib.livewindow;
 
 namespace WPILib
 {
-    using Impl = HAL_Base.HALCanTalonSRX;
-    public class CANTalon : MotorSafety, CANSpeedController, LiveWindowSendable, ITableListener, IDisposable
+    using Impl = HALCanTalonSRX;
+    public class CANTalon : IMotorSafety, CANSpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;
-        
+
         public enum FeedbackDevice
         {
             QuadEncoder = 0,
@@ -30,7 +26,7 @@ namespace WPILib
             QuadEncoder = 2,
             AnalogTempVbat = 3
         }
-        
+
 
         private ControlMode m_controlMode;
         private IntPtr m_impl;
@@ -39,11 +35,11 @@ namespace WPILib
         private bool m_controlEnabled;
         private int m_profile;
         private double m_setPoint;
-        
+
 
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
-            this.m_deviceNumber = deviceNumber;
+            m_deviceNumber = deviceNumber;
             m_impl = Impl.C_TalonSRX_Create(deviceNumber, controlPeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
@@ -54,34 +50,23 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
-        private const bool disposed = false;
-
-        ~CANTalon()
-        {
-            Dispose();
-        }
-
         public void Dispose()
         {
-            if (!disposed)
-            {
-                Impl.C_TalonSRX_Destroy(m_impl);
-                GC.SuppressFinalize(this);
-            }
+            Impl.C_TalonSRX_Destroy(m_impl);
         }
 
-        private double GetParam(Impl.ParamID id)
+        private double GetParam(HALCanTalonSRX.ParamID id)
         {
             Impl.C_TalonSRX_RequestParam(m_impl, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
             var value = 0.0;
             var status = Impl.C_TalonSRX_GetParamResponse(m_impl, (int)id, ref value);
             if (status != CTR_Code.CTR_OKAY)
-                Utility.CheckStatus((int) status);
+                Utility.CheckStatus((int)status);
             return value;
         }
 
-        private int GetParamInt32(Impl.ParamID id)
+        private int GetParamInt32(HALCanTalonSRX.ParamID id)
         {
             Impl.C_TalonSRX_RequestParam(m_impl, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
@@ -92,7 +77,7 @@ namespace WPILib
             return value;
         }
 
-        private void SetParam(Impl.ParamID id, double value)
+        private void SetParam(HALCanTalonSRX.ParamID id, double value)
         {
             var errorCode = Impl.C_TalonSRX_SetParam(m_impl, (int)id, value);
             if (errorCode != CTR_Code.CTR_OKAY)
@@ -204,142 +189,169 @@ namespace WPILib
             return state != 0;
         }
 
-        public double GetTemperature()
+        public double Temperature
         {
-            double temp = 0.0;
-            Impl.C_TalonSRX_GetTemp(m_impl, ref temp);
-            return temp;
+            get
+            {
+                double temp = 0.0;
+                Impl.C_TalonSRX_GetTemp(m_impl, ref temp);
+                return temp;
+            }
         }
 
-        public double GetOutputCurrent()
+        public double OutputCurrent
         {
-            double current = 0.0;
-            Impl.C_TalonSRX_GetCurrent(m_impl, ref current);
-            return current;
+            get
+            {
+                double current = 0.0;
+                Impl.C_TalonSRX_GetCurrent(m_impl, ref current);
+                return current;
+            }
         }
 
-        public double GetOutputVoltage()
+        public double OutputVoltage
         {
-            int throttle = 0;
-            Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref throttle);
-            return GetBusVoltage() * (throttle / 1023.0);
+            get
+            {
+                int throttle = 0;
+                Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref throttle);
+                return BusVoltage * (throttle / 1023.0);
+            }
         }
 
-        public double GetBusVoltage()
+        public double BusVoltage
         {
-            double voltage = 0.0;
-            Impl.C_TalonSRX_GetBatteryV(m_impl, ref voltage);
-            return voltage;
+            get
+            {
+                double voltage = 0.0;
+                Impl.C_TalonSRX_GetBatteryV(m_impl, ref voltage);
+                return voltage;
+            }
         }
 
-        public double GetPosition()
+        public double Position
         {
-            int pos = 0;
-            Impl.C_TalonSRX_GetSensorPosition(m_impl, ref pos);
-            return pos;
+            get
+            {
+                int pos = 0;
+                Impl.C_TalonSRX_GetSensorPosition(m_impl, ref pos);
+                return pos;
+            }
         }
 
         public void SetPosition(double pos)
         {
-            SetParam(Impl.ParamID.eSensorPosition, pos);
+            SetParam(HALCanTalonSRX.ParamID.eSensorPosition, pos);
         }
 
-        public double GetSpeed()
+        public double Speed
         {
-            int vel = 0;
-            Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref vel);
-            return vel;
+            get
+            {
+                int vel = 0;
+                Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref vel);
+                return vel;
+            }
         }
 
-        public bool GetForwardLimitOK()
+        public bool ForwardLimitOK
         {
-            int limSwitch = FaultForwardLimit;
-            int softLim = FaultForwardSoftLimit;
-            return (softLim == 0 && limSwitch == 0);
+            get
+            {
+                int limSwitch = FaultForwardLimit;
+                int softLim = FaultForwardSoftLimit;
+                return (softLim == 0 && limSwitch == 0);
+            }
         }
 
-        public bool GetReverseLimitOK()
+        public bool ReverseLimitOK
         {
-            int limSwitch = FaultReverseLimit;
-            int softLim = FaultReverseSoftLimit;
-            return (softLim == 0 && limSwitch == 0);
+            get
+            {
+                int limSwitch = FaultReverseLimit;
+                int softLim = FaultReverseSoftLimit;
+                return (softLim == 0 && limSwitch == 0);
+            }
         }
 
-        public Faults GetFaults()
+        public Faults Faults
         {
-            Faults retVal = 0;
-
-            int val;
-
-            CTR_Code status;
-
-            //Temp
-            val = 0;
-            status = Impl.C_TalonSRX_GetFault_OverTemp(m_impl, ref val); 
-
-            if (status != CTR_Code.CTR_OKAY)
+            get
             {
-                Utility.CheckStatus((int)status);
+                Faults retVal = 0;
+
+                int val;
+
+                CTR_Code status;
+
+                //Temp
+                val = 0;
+                status = Impl.C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
+
+                if (status != CTR_Code.CTR_OKAY)
+                {
+                    Utility.CheckStatus((int)status);
+                }
+
+                retVal |= (val != 0) ? Faults.TemperatureFault : 0;
+
+                //Voltage
+                val = 0;
+                status = Impl.C_TalonSRX_GetFault_UnderVoltage(m_impl, ref val);
+
+                if (status != CTR_Code.CTR_OKAY)
+                {
+                    Utility.CheckStatus((int)status);
+                }
+
+                retVal |= (val != 0) ? Faults.BusVoltageFault : 0;
+
+                //Fwd Limit Switch
+                val = 0;
+                status = Impl.C_TalonSRX_GetFault_ForLim(m_impl, ref val);
+
+                if (status != CTR_Code.CTR_OKAY)
+                {
+                    Utility.CheckStatus((int)status);
+                }
+
+                retVal |= (val != 0) ? Faults.FwdLimitSwitch : 0;
+
+                //Rev Limit Switch
+                val = 0;
+                status = Impl.C_TalonSRX_GetFault_RevLim(m_impl, ref val);
+
+                if (status != CTR_Code.CTR_OKAY)
+                {
+                    Utility.CheckStatus((int)status);
+                }
+
+                retVal |= (val != 0) ? Faults.RevLimitSwitch : 0;
+
+                //Fwd Soft Limit
+                val = 0;
+                status = Impl.C_TalonSRX_GetFault_ForSoftLim(m_impl, ref val);
+
+                if (status != CTR_Code.CTR_OKAY)
+                {
+                    Utility.CheckStatus((int)status);
+                }
+
+                retVal |= (val != 0) ? Faults.FwdSoftLimit : 0;
+
+                //Rev Soft Limit
+                val = 0;
+                status = Impl.C_TalonSRX_GetFault_RevSoftLim(m_impl, ref val);
+
+                if (status != CTR_Code.CTR_OKAY)
+                {
+                    Utility.CheckStatus((int)status);
+                }
+
+                retVal |= (val != 0) ? Faults.RevSoftLimit : 0;
+
+                return retVal;
             }
-
-            retVal |= (val != 0) ? Faults.TemperatureFault : 0;
-
-            //Voltage
-            val = 0;
-            status = Impl.C_TalonSRX_GetFault_UnderVoltage(m_impl, ref val);
-
-            if (status != CTR_Code.CTR_OKAY)
-            {
-                Utility.CheckStatus((int)status);
-            }
-
-            retVal |= (val != 0) ? Faults.BusVoltageFault : 0;
-
-            //Fwd Limit Switch
-            val = 0;
-            status = Impl.C_TalonSRX_GetFault_ForLim(m_impl, ref val);
-
-            if (status != CTR_Code.CTR_OKAY)
-            {
-                Utility.CheckStatus((int)status);
-            }
-
-            retVal |= (val != 0) ? Faults.FwdLimitSwitch : 0;
-
-            //Rev Limit Switch
-            val = 0;
-            status = Impl.C_TalonSRX_GetFault_RevLim(m_impl, ref val);
-
-            if (status != CTR_Code.CTR_OKAY)
-            {
-                Utility.CheckStatus((int)status);
-            }
-
-            retVal |= (val != 0) ? Faults.RevLimitSwitch : 0;
-
-            //Fwd Soft Limit
-            val = 0;
-            status = Impl.C_TalonSRX_GetFault_ForSoftLim(m_impl, ref val);
-
-            if (status != CTR_Code.CTR_OKAY)
-            {
-                Utility.CheckStatus((int)status);
-            }
-
-            retVal |= (val != 0) ? Faults.FwdSoftLimit : 0;
-
-            //Rev Soft Limit
-            val = 0;
-            status = Impl.C_TalonSRX_GetFault_RevSoftLim(m_impl, ref val);
-
-            if (status != CTR_Code.CTR_OKAY)
-            {
-                Utility.CheckStatus((int)status);
-            }
-
-            retVal |= (val != 0) ? Faults.RevSoftLimit : 0;
-
-            return retVal;
         }
 
         private void ApplyControlMode(ControlMode value)
@@ -439,34 +451,24 @@ namespace WPILib
             }
         }
 
-        [Obsolete("Use P property instead.")]
-        public double GetP() { return P; }
-        [Obsolete("Use P property instead.")]
-        public void SetP(double p) { P = p; }
-
         public double P
         {
             get
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_P);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_P);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_P);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_P);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_P, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_P, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_P, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_P, value);
             }
         }
-
-        [Obsolete("Use I property instead.")]
-        public double GetI() { return I; }
-        [Obsolete("Use I property instead.")]
-        public void SetI(double i) { I = i; }
 
         public double I
         {
@@ -474,23 +476,18 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_I);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_I);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_I);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_I);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_I, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_I, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_I, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_I, value);
             }
         }
-
-        [Obsolete("Use D property instead.")]
-        public double GetD() { return D; }
-        [Obsolete("Use D property instead.")]
-        public void SetD(double d) { D = d; }
 
         public double D
         {
@@ -498,16 +495,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_D);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_D);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_D);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_D);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_D, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_D, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_D, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_D, value);
             }
         }
 
@@ -522,16 +519,16 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_F);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_F);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_F);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_F);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_F, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_F, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_F, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_F, value);
             }
         }
 
@@ -546,29 +543,29 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_IZone);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_IZone);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_IZone, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_IZone, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone, value);
             }
         }
 
         public double GetIaccum()
         {
             EnsureInPIDMode();
-            return GetParamInt32(Impl.ParamID.ePidIaccum);
+            return GetParamInt32(HALCanTalonSRX.ParamID.ePidIaccum);
         }
 
         public void ClearIAccum()
         {
             EnsureInPIDMode();
-            SetParam(Impl.ParamID.ePidIaccum, 0.0);
+            SetParam(HALCanTalonSRX.ParamID.ePidIaccum, 0.0);
         }
 
         [Obsolete("Use CloseLoopRampRate property instead.")]
@@ -582,27 +579,27 @@ namespace WPILib
             {
                 EnsureInPIDMode();
                 if (m_profile == 0)
-                    return GetParam(Impl.ParamID.eProfileParamSlot0_CloseLoopRampRate);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate);
                 else
-                    return GetParam(Impl.ParamID.eProfileParamSlot1_CloseLoopRampRate);
+                    return GetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate);
             }
             set
             {
                 if (m_profile == 0)
-                    SetParam(Impl.ParamID.eProfileParamSlot0_CloseLoopRampRate, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate, value);
                 else
-                    SetParam(Impl.ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
+                    SetParam(HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
             }
         }
 
-        public void SetPID(double p, double i, double d, double f, int izone, double closeLoopRampRate, int profile)
+        public void SetPID(double p, double i, double value, double f, int izone, double closeLoopRampRate, int profile)
         {
             if (profile != 0 && profile != 1)
                 throw new ArgumentOutOfRangeException("Talon PID profile must be 0 or 1.");
-            this.m_profile = profile;
+            m_profile = profile;
             P = p;
             I = i;
-            D = d;
+            D = value;
             F = f;
             IZone = izone;
             CloseLoopRampRate = closeLoopRampRate;
@@ -624,7 +621,7 @@ namespace WPILib
             }
             set
             {
-                Set(value);
+                Value = value;
             }
         }
 
@@ -652,133 +649,136 @@ namespace WPILib
         [Obsolete("Use VoltageRampRate property instead.")]
         public void SetVoltageRampRate(double rate) { VoltageRampRate = rate; }
 
-        public void ConfigNeutralMode(NeutralMode mode)
+        public NeutralMode ConfigNeutralMode
         {
-            CTR_Code status;
-            switch (mode)
+            set
             {
-                default:
-                case NeutralMode.Jumper:
-                    status = Impl.C_TalonSRX_SetOverrideBrakeType(m_impl,
-                        HALCanTalonSRX.kBrakeOverride_UseDefaultsFromFlash);
-                    break;
-                case NeutralMode.Brake:
-                    status = Impl.C_TalonSRX_SetOverrideBrakeType(m_impl,
-                        HALCanTalonSRX.kBrakeOverride_OverrideBrake);
-                    break;
-                case NeutralMode.Coast:
-                    status = Impl.C_TalonSRX_SetOverrideBrakeType(m_impl,
-                        HALCanTalonSRX.kBrakeOverride_OverrideCoast);
-                    break;
+                CTR_Code status;
+                switch (value)
+                {
+                    default:
+                    case NeutralMode.Jumper:
+                        status = Impl.C_TalonSRX_SetOverrideBrakeType(m_impl,
+                            HALCanTalonSRX.kBrakeOverride_UseDefaultsFromFlash);
+                        break;
+                    case NeutralMode.Brake:
+                        status = Impl.C_TalonSRX_SetOverrideBrakeType(m_impl,
+                            HALCanTalonSRX.kBrakeOverride_OverrideBrake);
+                        break;
+                    case NeutralMode.Coast:
+                        status = Impl.C_TalonSRX_SetOverrideBrakeType(m_impl,
+                            HALCanTalonSRX.kBrakeOverride_OverrideCoast);
+                        break;
+                }
+
+                if (status != CTR_Code.CTR_OKAY)
+                    Utility.CheckStatus((int)status);
             }
-
-            if (status != CTR_Code.CTR_OKAY)
-                Utility.CheckStatus((int) status);
         }
 
-        public void ConfigEncoderCodesPerRev(int codesPerRev)
+        public int EncoderCodesPerRev
         {
-            
+            set { }
         }
 
-        public void ConfigPotentiometerTurns(int turns)
+        public int PotentiometerTurns
         {
-            
+            set { }
         }
 
         public void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition)
         {
-            ConfigLimitMode(LimitMode.SoftPositionLimits);
-            ConfigForwardLimit(forwardLimitPosition);
-            ConfigReverseLimit(reverseLimitPosition);
+            LimitMode = LimitMode.SoftPositionLimits;
+            ForwardLimit = forwardLimitPosition;
+            ReverseLimit = reverseLimitPosition;
         }
 
         public void DisableSoftPositionLimits()
         {
-            ConfigLimitMode(LimitMode.SwitchInputsOnly);
+            LimitMode = LimitMode.SwitchInputsOnly;
         }
 
-        public void ConfigLimitMode(LimitMode mode)
+        public LimitMode LimitMode
         {
-            CTR_Code status;
-            switch (mode)
+            set
             {
-                case LimitMode.SwitchInputsOnly:
+                CTR_Code status;
+                switch (value)
+                {
+                    case LimitMode.SwitchInputsOnly:
 #pragma warning disable 618
-                    status = SetForwardSoftLimitEnabled(false);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int) status);
-                    status = SetReverseSoftLimitEnabled(false);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int) status);
-                    status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
-                        HALCanTalonSRX.kLimitSwitchOverride_EnableFwd_EnableRev);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    break;
-                case LimitMode.SoftPositionLimits:
-                    status = SetForwardSoftLimitEnabled(true);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    status = SetReverseSoftLimitEnabled(true);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
-                        HALCanTalonSRX.kLimitSwitchOverride_EnableFwd_EnableRev);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    break;
-                case LimitMode.SrxDisableSwitchInputs:
-                    status = SetForwardSoftLimitEnabled(false);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    status = SetReverseSoftLimitEnabled(false);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
-                        HALCanTalonSRX.kLimitSwitchOverride_DisableFwd_DisableRev);
-                    if (status != CTR_Code.CTR_OKAY)
-                        Utility.CheckStatus((int)status);
-                    break;
+                        status = SetForwardSoftLimitEnabled(false);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        status = SetReverseSoftLimitEnabled(false);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
+                            HALCanTalonSRX.kLimitSwitchOverride_EnableFwd_EnableRev);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        break;
+                    case LimitMode.SoftPositionLimits:
+                        status = SetForwardSoftLimitEnabled(true);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        status = SetReverseSoftLimitEnabled(true);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
+                            HALCanTalonSRX.kLimitSwitchOverride_EnableFwd_EnableRev);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        break;
+                    case LimitMode.SrxDisableSwitchInputs:
+                        status = SetForwardSoftLimitEnabled(false);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        status = SetReverseSoftLimitEnabled(false);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        status = Impl.C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
+                            HALCanTalonSRX.kLimitSwitchOverride_DisableFwd_DisableRev);
+                        if (status != CTR_Code.CTR_OKAY)
+                            Utility.CheckStatus((int)status);
+                        break;
 #pragma warning restore 618
+                }
             }
         }
 
-        public void ConfigForwardLimit(double forwardLimitPosition)
+        public double ForwardLimit
         {
-            ForwardSoftLimit = (forwardLimitPosition);
+            set { ForwardSoftLimit = (value); }
         }
 
-        public void ConfigReverseLimit(double reverseLimitPosition)
+        public double ReverseLimit
         {
-            ReverseSoftLimit = (reverseLimitPosition);
+            set { ReverseSoftLimit = (value); }
         }
 
-        public void ConfigMaxOutputVoltage(double voltage)
+        public double MaxOutputVoltage
         {
-            Utility.CheckStatus(-9);
+            set { Utility.CheckStatus(-9); }
         }
 
-        public void ConfigFaultTime(float faultTime)
+        public float FaultTime
         {
-            Utility.CheckStatus(-9);
+            set { Utility.CheckStatus(-9); }
         }
 
         public double VoltageRampRate
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eRampThrottle);
+                return GetParamInt32(HALCanTalonSRX.ParamID.eRampThrottle);
             }
             set
             {
                 int rate = (int)(value * 1023.0 / 12.0 / 100.0);
-                Impl.C_TalonSRX_SetParam(m_impl, (int)Impl.ParamID.eRampThrottle, rate);
+                Impl.C_TalonSRX_SetParam(m_impl, (int)HALCanTalonSRX.ParamID.eRampThrottle, rate);
             }
         }
-
-        [Obsolete("Use FirmwareVersion property")]
-        public uint GetFirmwareVersion() { return FirmwareVersion; }
 
         public uint FirmwareVersion
         {
@@ -793,10 +793,7 @@ namespace WPILib
         [Obsolete("Use DeviceID property instead.")]
         public int GetDeviceID() { return DeviceID; }
 
-        public int DeviceID
-        {
-            get { return m_deviceNumber; }
-        }
+        public int DeviceID => m_deviceNumber;
 
         [Obsolete("Use ForwardSoftLimit property instead.")]
         public double GetForwardSoftLimit() { return ForwardSoftLimit; }
@@ -807,12 +804,12 @@ namespace WPILib
         {
             get
             {
-                return GetParam(Impl.ParamID.eProfileParamSoftLimitForThreshold);
+                return GetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold);
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitForThreshold, value);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold, value);
             }
         }
 
@@ -821,18 +818,18 @@ namespace WPILib
         [Obsolete("Use ForwardSoftLimitEnabled poperty instead.")]
         public CTR_Code SetForwardSoftLimitEnabled(bool value)
         {
-            return (CTR_Code) GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForEnable);
+            return (CTR_Code)GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable);
         }
         public bool ForwardSoftLimitEnabled
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitForEnable) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable) != 0;
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
             }
         }
 
@@ -845,12 +842,12 @@ namespace WPILib
         {
             get
             {
-                return GetParam(Impl.ParamID.eProfileParamSoftLimitRevThreshold);
+                return GetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold);
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitRevThreshold, value);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold, value);
             }
         }
 
@@ -859,18 +856,18 @@ namespace WPILib
         [Obsolete("Use ReverseSoftLimitEnabled poperty instead.")]
         public CTR_Code SetReverseSoftLimitEnabled(bool value)
         {
-            return (CTR_Code) GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevEnable);
+            return (CTR_Code)GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable);
         }
         public bool ReverseSoftLimitEnabled
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eProfileParamSoftLimitRevEnable) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable) != 0;
             }
             set
             {
 
-                SetParam(Impl.ParamID.eProfileParamSoftLimitRevEnable, value ? 1 : 0);
+                SetParam(HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable, value ? 1 : 0);
             }
         }
         public void ClearStickyFaults()
@@ -891,11 +888,11 @@ namespace WPILib
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed) != 0;
             }
             set
             {
-                SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, value ? 0 : 1);
+                SetParam(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, value ? 0 : 1);
             }
         }
 
@@ -906,11 +903,11 @@ namespace WPILib
         {
             get
             {
-                return GetParamInt32(Impl.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed) != 0;
+                return GetParamInt32(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed) != 0;
             }
             set
             {
-                SetParam(Impl.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, value ? 0 : 1);
+                SetParam(HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, value ? 0 : 1);
             }
         }
 
@@ -1049,20 +1046,13 @@ namespace WPILib
             }
         }
 
-        public void SetExpiration(double timeout)
+        public double Expiration
         {
-            m_safetyHelper.SetExpiration(timeout);
+            set { m_safetyHelper.Expiration = value; }
+            get { return m_safetyHelper.Expiration; }
         }
 
-        public double GetExpiration()
-        {
-            return m_safetyHelper.GetExpiration();
-        }
-
-        public bool IsAlive()
-        {
-            return m_safetyHelper.IsAlive();
-        }
+        public bool Alive => m_safetyHelper.Alive;
 
         [Obsolete("Set the ControlEnabled to false.")]
         public void StopMotor()
@@ -1070,85 +1060,84 @@ namespace WPILib
             ControlEnabled = false;
         }
 
-        public void SetSafetyEnabled(bool enabled)
+        public bool SafetyEnabled
         {
-            m_safetyHelper.SetSafetyEnabled(enabled);
+            set { m_safetyHelper.SafetyEnabled = value; }
+            get { return m_safetyHelper.SafetyEnabled; }
         }
 
-        public bool IsSafetyEnabled()
-        {
-            return m_safetyHelper.IsSafetyEnabled();
-        }
+        public string Description => $"CAN TalonSRX ID {m_deviceNumber}";
 
-        public string GetDescription()
+        public double PidWrite
         {
-            return "CAN TalonSRX ID " + m_deviceNumber;
-        }
-
-        public void PidWrite(double output)
-        {
-            if (m_controlMode == ControlMode.PercentVbus)
+            set
             {
-                Set(output);
-            }
-            else
-            {
-                throw new InvalidOperationException("PID on RoboRIO only supported in Voltage Bus (PWM-like) mode");
+                if (m_controlMode == ControlMode.PercentVbus)
+                {
+                    Value = value;
+                }
+                else
+                {
+                    throw new InvalidOperationException("PID on RoboRIO only supported in Voltage Bus (PWM-like) mode");
+                }
             }
         }
 
-        public double Get()
+        public double Value
         {
-            int value = 0;
-            switch (m_controlMode)
+            get
             {
-                case ControlMode.Voltage:
-                    return GetOutputVoltage();
-                case ControlMode.Position:
-                    Impl.C_TalonSRX_GetSensorPosition(m_impl, ref value);
-                    return value;
-                case ControlMode.Speed:
-                    Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref value);
-                    return value;
-                case ControlMode.Current:
-                    return GetOutputCurrent();
-                case ControlMode.PercentVbus:
-                default:
-                    Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
-                    return value / 1023.0;
-            }
-        }
-
-        public void Set(double output, byte unused)
-        {
-            Set(output);
-        }
-
-        public void Set(double output)
-        {
-            m_safetyHelper.Feed();
-            if (m_controlEnabled)
-            {
-                m_setPoint = output;
+                int value = 0;
                 switch (m_controlMode)
                 {
-                    case ControlMode.PercentVbus:
-                        Impl.C_TalonSRX_SetDemand(m_impl, (int)(output * 1023));
-                        break;
                     case ControlMode.Voltage:
-                        int volts = (int)(output * 256);
-                        Impl.C_TalonSRX_SetDemand(m_impl, volts);
-                        break;
+                        return OutputVoltage;
                     case ControlMode.Position:
+                        Impl.C_TalonSRX_GetSensorPosition(m_impl, ref value);
+                        return value;
                     case ControlMode.Speed:
-                    case ControlMode.Follower:
-                        Impl.C_TalonSRX_SetDemand(m_impl, (int)output);
-                        break;
+                        Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref value);
+                        return value;
+                    case ControlMode.Current:
+                        return OutputCurrent;
+                    case ControlMode.PercentVbus:
                     default:
-                        break;
+                        Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
+                        return value / 1023.0;
                 }
-                Impl.C_TalonSRX_SetModeSelect(m_impl, (int)MotorControlMode);
             }
+            set
+            {
+                m_safetyHelper.Feed();
+                if (m_controlEnabled)
+                {
+                    m_setPoint = value;
+                    switch (m_controlMode)
+                    {
+                        case ControlMode.PercentVbus:
+                            Impl.C_TalonSRX_SetDemand(m_impl, (int)(value * 1023));
+                            break;
+                        case ControlMode.Voltage:
+                            int volts = (int)(value * 256);
+                            Impl.C_TalonSRX_SetDemand(m_impl, volts);
+                            break;
+                        case ControlMode.Position:
+                        case ControlMode.Speed:
+                        case ControlMode.Follower:
+                            Impl.C_TalonSRX_SetDemand(m_impl, (int)value);
+                            break;
+                        default:
+                            break;
+                    }
+                    Impl.C_TalonSRX_SetModeSelect(m_impl, (int)MotorControlMode);
+                }
+            }
+        }
+
+        [Obsolete("This is only here to make CAN Jaguars happy")]
+        public void Set(double value, byte syncGroup)
+        {
+            Value = value;
         }
 
         public void SelectProfileSlot(int slotIdx)
@@ -1164,46 +1153,36 @@ namespace WPILib
             ControlEnabled = false;
         }
 
-        private ITable m_table;
         public void UpdateTable()
         {
-            if (m_table != null)
-            {
-                m_table.PutNumber("Value", Get());
-            }
+            Table?.PutNumber("Value", Value);
         }
 
         public void StartLiveWindowMode()
         {
-            Set(0.0);
-            m_table.AddTableListener("Value", this, true);
+            Value = 0.0;
+            Table.AddTableListener("Value", this, true);
         }
 
         public void StopLiveWindowMode()
         {
-            Set(0.0);
-            m_table.RemoveTableListener(this);
+            Value = 0.0;
+            Table.RemoveTableListener(this);
         }
 
-        public string GetSmartDashboardType()
-        {
-            return "Speed Controller";
-        }
+        public string SmartDashboardType => "Speed Controller";
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
-            Set((double)value);
+            Value = (double)value;
         }
 
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
+            Table = subtable;
             UpdateTable();
         }
 
-        public ITable GetTable()
-        {
-            return m_table;
-        }
+        public ITable Table { get; private set; }
     }
 }

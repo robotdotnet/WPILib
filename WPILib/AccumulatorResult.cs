@@ -2,7 +2,7 @@
 {
     public class AccumulatorResult
     {
-        public long value;
-        public long count;
+        public long Value;
+        public long Count;
     }
 }

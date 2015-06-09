@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Runtime.CompilerServices;
-using HAL_Base;
-using WPILib.Buttons;
 using NetworkTablesDotNet.Tables;
+using WPILib.Buttons;
 
 namespace WPILib.Commands
 {
-    public class Scheduler : NamedSendable
+    public class Scheduler : INamedSendable
     {
         private static Scheduler s_instance = null;
 
@@ -40,9 +36,7 @@ namespace WPILib.Commands
 
         public static Scheduler GetInstance()
         {
-            if (s_instance == null)
-                s_instance = new Scheduler();
-            return s_instance;
+            return s_instance ?? (s_instance = new Scheduler());
         }
 
         public void AddCommand(Command command)
@@ -197,12 +191,7 @@ namespace WPILib.Commands
         }
 
 
-
-
-        public string GetName()
-        {
-            return "Scheduler";
-        }
+        public string Name => "Scheduler";
 
         public new string GetType()
         {
@@ -214,14 +203,8 @@ namespace WPILib.Commands
             m_table = subtable;
         }
 
-        public ITable GetTable()
-        {
-            return m_table;
-        }
+        public ITable Table => m_table;
 
-        public string GetSmartDashboardType()
-        {
-            return "Scheduler";
-        }
+        public string SmartDashboardType => "Scheduler";
     }
 }
