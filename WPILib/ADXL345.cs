@@ -1,10 +1,10 @@
 ﻿using NetworkTablesDotNet.Tables;
 using WPILib.Interfaces;
-using WPILib.livewindow;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    public abstract class ADXL345 : SensorBase, Accelerometer, LiveWindowSendable
+    public abstract class ADXL345 : SensorBase, Accelerometer, ILiveWindowSendable
     {
         protected const byte PowerCtlRegister = 0x2D;
         protected const byte DataFormatRegister = 0x31;

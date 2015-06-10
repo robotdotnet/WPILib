@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NetworkTablesDotNet.NetworkTables;
 using NetworkTablesDotNet.Tables;
 
-namespace WPILib.smartdashboard
+namespace WPILib.SmartDashboards
 {
     public class SmartDashboard
     {

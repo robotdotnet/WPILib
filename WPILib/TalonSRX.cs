@@ -5,7 +5,7 @@ namespace WPILib
 {
     /// <summary>
     /// Cross the Road Electronics (CTRE) Talon SRX Speed Controller with PWM control
-    /// <para />See <see cref="IcanTalon"/> for CAN control of Talon SRX
+    /// <para />See <see cref="CANTalon"/> for CAN control of Talon SRX
     /// </summary>
     public class TalonSRX : SafePWM, ISpeedController
     {
@@ -27,7 +27,7 @@ namespace WPILib
         {
             SetBounds(2.004, 1.52, 1.50, 1.48, .997);
             PeriodMultiplier = PeriodMultiplier.K1X;
-            Raw = CenterPwm;
+            SetRaw(CenterPwm);
             SetZeroLatch();
 
             //TODO: Add Live Actuator
@@ -59,7 +59,7 @@ namespace WPILib
         /// <param name="value">The most recently set value for the PWM between -1.0 and 1.0</param>
         public void Set(double value)
         {
-            Speed = value;
+            SetSpeed(value);
             Feed();
         }
 
@@ -69,7 +69,7 @@ namespace WPILib
         /// <returns>The most recently set value for the PWM between -1.0 and 1.0</returns>
         public double Get()
         {
-            return Speed;
+            return GetSpeed();
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace WPILib
         [Obsolete("For compatibility with CAN Jaguar")]
         public void Set(double value, byte syncGroup)
         {
-            Speed = value;
+            SetSpeed(value);
             Feed();
         }
     }

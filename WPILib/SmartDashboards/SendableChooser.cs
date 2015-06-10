@@ -4,7 +4,7 @@ using NetworkTablesDotNet.NetworkTables2.Util;
 using NetworkTablesDotNet.Tables;
 using WPILib.Commands;
 
-namespace WPILib.smartdashboard
+namespace WPILib.SmartDashboards
 {
     /// <summary>
     /// The <see cref="SendableChooser"/> class is a useful tool for presenting a 

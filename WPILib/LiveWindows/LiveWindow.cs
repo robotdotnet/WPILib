@@ -4,7 +4,7 @@ using NetworkTablesDotNet.NetworkTables;
 using NetworkTablesDotNet.Tables;
 using WPILib.Commands;
 
-namespace WPILib.livewindow
+namespace WPILib.LiveWindows
 {
     /// <summary>
     /// A LiveWindow component is a device (sensor or actuator) that should be added to the
@@ -45,8 +45,8 @@ namespace WPILib.livewindow
     /// </summary>
     public class LiveWindow
     {
-        private static List<LiveWindowSendable> s_sensors = new List<LiveWindowSendable>();
-        private static Dictionary<LiveWindowSendable, LiveWindowComponent> s_components = new Dictionary<LiveWindowSendable, LiveWindowComponent>();
+        private static List<ILiveWindowSendable> s_sensors = new List<ILiveWindowSendable>();
+        private static Dictionary<ILiveWindowSendable, LiveWindowComponent> s_components = new Dictionary<ILiveWindowSendable, LiveWindowComponent>();
         private static ITable s_liveWindowTable;
         private static ITable s_statusTable;
         private static bool s_liveWindowEnabled = false;
@@ -141,7 +141,7 @@ namespace WPILib.livewindow
         /// <param name="subsystem">The subsystem this component is part of.</param>
         /// <param name="name">The name of this component.</param>
         /// <param name="component">A LiveWindowSendable component that represents a sensor.</param>
-        public static void AddSensor(string subsystem, string name, LiveWindowSendable component)
+        public static void AddSensor(string subsystem, string name, ILiveWindowSendable component)
         {
             s_components.Add(component, new LiveWindowComponent(subsystem, name, true));
         }
@@ -152,7 +152,7 @@ namespace WPILib.livewindow
         /// <param name="subsystem">The subsystem this component is part of.</param>
         /// <param name="name">The name of this component.</param>
         /// <param name="component">A LiveWindowSendable component that represents an actuator.</param>
-        public static void AddActuator(string subsystem, string name, LiveWindowSendable component)
+        public static void AddActuator(string subsystem, string name, ILiveWindowSendable component)
         {
             s_components.Add(component, new LiveWindowComponent(subsystem, name, false));
         }
@@ -177,7 +177,7 @@ namespace WPILib.livewindow
         /// <param name="moduleType">A string indicating the type if the module used in the naming (above)</param>
         /// <param name="channel">The channel number the device is connected to</param>
         /// <param name="component">A reference to the object being added</param>
-        public static void AddSensor(string moduleType, int channel, LiveWindowSendable component)
+        public static void AddSensor(string moduleType, int channel, ILiveWindowSendable component)
         {
             AddSensor("Ungrouped", moduleType + "[" + channel + "]", component);
             if (s_sensors.Contains(component))
@@ -195,7 +195,7 @@ namespace WPILib.livewindow
         /// <param name="moduleType">A string that defines the module name in the label for the value</param>
         /// <param name="channel">The channel number the device is connected to (usually PWM)</param>
         /// <param name="component">A reference to the object being added</param>
-        public static void AddActuator(string moduleType, int channel, LiveWindowSendable component)
+        public static void AddActuator(string moduleType, int channel, ILiveWindowSendable component)
         {
             AddSensor("Ungrouped", moduleType + "[" + channel + "]", component);
 
@@ -210,7 +210,7 @@ namespace WPILib.livewindow
         /// <param name="moduleNumber">The number of the particular module type</param>
         /// <param name="channel">The channel number the device is connected to (usually PWM)</param>
         /// <param name="component">A reference to the object being added</param>
-        public static void AddActuator(string moduleType, int moduleNumber, int channel, LiveWindowSendable component)
+        public static void AddActuator(string moduleType, int moduleNumber, int channel, ILiveWindowSendable component)
         {
             AddSensor("Ungrouped", moduleType + "[" + moduleNumber + "," + channel + "]", component);
         }

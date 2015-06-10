@@ -357,7 +357,7 @@ namespace WPILib
 
             if (m_syncGroup != 0)
             {
-                IcanJaguar.UpdateSyncGroup(m_syncGroup);
+                CANJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
             m_safetyHelper?.Feed();
@@ -392,7 +392,7 @@ namespace WPILib
 
             if (m_syncGroup != 0)
             {
-                IcanJaguar.UpdateSyncGroup(m_syncGroup);
+                CANJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
             m_safetyHelper?.Feed();
@@ -413,7 +413,7 @@ namespace WPILib
 
             if (m_syncGroup != 0)
             {
-                IcanJaguar.UpdateSyncGroup(m_syncGroup);
+                CANJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
             m_safetyHelper?.Feed();

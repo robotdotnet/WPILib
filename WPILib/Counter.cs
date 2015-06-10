@@ -1,6 +1,6 @@
 ﻿using System;
 using HAL_Base;
-using WPILib.Util;
+using WPILib.Exceptions;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
 

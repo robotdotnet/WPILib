@@ -3,7 +3,7 @@
 using System;
 using System.Linq;
 using HAL_Base;
-using WPILib.Util;
+using WPILib.Exceptions;
 
 namespace WPILib
 {

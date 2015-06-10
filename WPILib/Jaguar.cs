@@ -5,7 +5,7 @@ namespace WPILib
 {
     /// <summary>
     /// Texas Instruments / Vex Robotics Jaguar Speed Controller as a PWM Device.
-    /// <para />See <see cref="IcanJaguar"/> for CAN control
+    /// <para />See <see cref="CANJaguar"/> for CAN control
     /// </summary>
     public class Jaguar : SafePWM, ISpeedController
     {
@@ -25,7 +25,7 @@ namespace WPILib
              */
             SetBounds(2.31, 1.55, 1.507, 1.454, .697);
             PeriodMultiplier = PeriodMultiplier.K1X;
-            Raw = CenterPwm;
+            SetRaw(CenterPwm);
             SetZeroLatch();
 
             HAL.Report(ResourceType.kResourceType_Jaguar, (byte)Channel);
@@ -58,7 +58,7 @@ namespace WPILib
         /// <param name="value">The most recently set value for the PWM between -1.0 and 1.0</param>
         public void Set(double value)
         {
-            Speed = value;
+            SetSpeed(value);
             Feed();
         }
 
@@ -68,7 +68,7 @@ namespace WPILib
         /// <returns>The most recently set value for the PWM between -1.0 and 1.0</returns>
         public double Get()
         {
-            return Speed;
+            return GetSpeed();
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace WPILib
         [Obsolete("For compatibility with CAN Jaguar")]
         public void Set(double value, byte syncGroup)
         {
-            Speed = value;
+            SetSpeed(value);
             Feed();
         }
     }

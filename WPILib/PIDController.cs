@@ -1,12 +1,12 @@
 ﻿using System;
 using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
-using WPILib.Util;
+using WPILib.Exceptions;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
 
-    public class PIDController : IController, LiveWindowSendable, ITableListener, IDisposable
+    public class PIDController : IController, ILiveWindowSendable, ITableListener, IDisposable
     {
         public enum ToleranceType
         {

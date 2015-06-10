@@ -1,9 +1,9 @@
-﻿namespace WPILib.livewindow
+﻿namespace WPILib.LiveWindows
 {
     /// <summary>
     /// Live Window Sendable is a special type of object sendable to the live window.
     /// </summary>
-    public interface LiveWindowSendable : ISendable
+    public interface ILiveWindowSendable : ISendable
     {
         /// <summary>
         /// Update the table for this sendable object with the latest

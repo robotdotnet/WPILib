@@ -1,4 +1,4 @@
-﻿using WPILib.Util;
+﻿using WPILib.Exceptions;
 
 namespace WPILib.CAN
 {

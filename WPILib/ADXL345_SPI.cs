@@ -1,7 +1,7 @@
 ﻿using System;
 using HAL_Base;
 using WPILib.Interfaces;
-using WPILib.livewindow;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {

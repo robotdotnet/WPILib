@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
+using WPILib.LiveWindows;
 
 //using System.Linq;
 
 namespace WPILib
 {
-    public class Ultrasonic : SensorBase, IPIDSource, LiveWindowSendable
+    public class Ultrasonic : SensorBase, IPIDSource, ILiveWindowSendable
     {
         public enum Unit
         {

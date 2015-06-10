@@ -26,24 +26,24 @@ namespace WPILib
 
         public void Set(double value)
         {
-            Position = value;
+            SetPosition(value);
         }
 
         public double Get()
         {
-            return Position;
+            return GetPosition();
         }
 
         public double Angle
         {
-            get { return Position*ServoAngleRange + s_MinServoAngle; }
+            get { return GetPosition()*ServoAngleRange + s_MinServoAngle; }
             set
             {
                 if (value < s_MinServoAngle)
                     value = s_MinServoAngle;
                 else if (value > s_MaxServoAngle)
                     value = s_MaxServoAngle;
-                Position = ((value - s_MinServoAngle))/ServoAngleRange;
+                SetPosition(((value - s_MinServoAngle))/ServoAngleRange);
             }
         }
 

@@ -39,6 +39,6 @@
 
         public void Feed() => m_safetyHelper.Feed();
 
-        public void Disable() => Raw = PwmDisabled;
+        public void Disable() => SetRaw(PwmDisabled);
     }
 }

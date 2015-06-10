@@ -1,12 +1,12 @@
 ﻿using System;
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
     using Impl = HALCanTalonSRX;
-    public class IcanTalon : IMotorSafety, ICANSpeedController, LiveWindowSendable, ITableListener, IDisposable
+    public class CANTalon : IMotorSafety, ICANSpeedController, ILiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;
 
@@ -36,7 +36,7 @@ namespace WPILib
         private double m_setPoint;
 
 
-        public IcanTalon(int deviceNumber, int controlPeriodMs = 10)
+        public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
             DeviceID = deviceNumber;
             m_impl = Impl.C_TalonSRX_Create(deviceNumber, controlPeriodMs);

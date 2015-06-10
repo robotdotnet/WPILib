@@ -31,7 +31,7 @@ namespace WPILib
         {
             SetBounds(2.027, 1.525, 1.507, 1.49, 1.026);
             PeriodMultiplier = PeriodMultiplier.K2X;
-            Raw = CenterPwm;
+            SetRaw(CenterPwm);
             SetZeroLatch();
 
             //TODO:Add Live Actuator
@@ -63,7 +63,7 @@ namespace WPILib
         /// <param name="value">The most recently set value for the PWM between -1.0 and 1.0</param>
         public void Set(double value)
         {
-            Speed = value;
+            SetSpeed(value);
             Feed();
         }
 
@@ -73,7 +73,7 @@ namespace WPILib
         /// <returns>The most recently set value for the PWM between -1.0 and 1.0</returns>
         public double Get()
         {
-            return Speed;
+            return GetSpeed();
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace WPILib
         [Obsolete("For compatibility with CAN Jaguar")]
         public void Set(double value, byte syncGroup)
         {
-            Speed = value;
+            SetSpeed(value);
             Feed();
         }
     }

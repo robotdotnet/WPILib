@@ -1,7 +1,7 @@
 ﻿using System;
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
+using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALSolenoid;
 
@@ -13,7 +13,7 @@ namespace WPILib
     /// The Solenoid class is typically used for pneumatics solenoids, but could be used
     /// <para /> for any device within the current spec of the PCM. 
     /// </summary>
-    public class Solenoid : SolenoidBase, LiveWindowSendable, ITableListener
+    public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
         private int m_channel;//The channel to control.
         private IntPtr m_solenoidPort;

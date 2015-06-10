@@ -2,12 +2,12 @@
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
 using WPILib.CAN;
-using WPILib.livewindow;
-using WPILib.Util;
+using WPILib.Exceptions;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    public class IcanJaguar : IMotorSafety, ICANSpeedController, ITableListener, LiveWindowSendable, IDisposable
+    public class CANJaguar : IMotorSafety, ICANSpeedController, ITableListener, ILiveWindowSendable, IDisposable
     {
 
 // ReSharper disable InconsistentNaming
@@ -57,7 +57,7 @@ namespace WPILib
         public static int kReverseLimit = 2;
 // ReSharper restore InconsistentNaming
 
-        public IcanJaguar(int deviceNumber)
+        public CANJaguar(int deviceNumber)
         {
             try
             {
