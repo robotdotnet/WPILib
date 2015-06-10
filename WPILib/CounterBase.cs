@@ -6,9 +6,9 @@
         K2X = 1,
         K4X = 2,
     }
-    public interface CounterBase
+    public interface ICounterBase
     {
-        int Value { get; }
+        int Get();
         void Reset();
         double Period { get; }
         double MaxPeriod { set; }

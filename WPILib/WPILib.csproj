@@ -61,7 +61,7 @@
     <Compile Include="Buttons\NetworkButton.cs" />
     <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANJaguar.cs" />
-    <Compile Include="CANSpeedController.cs" />
+    <Compile Include="ICANSpeedController.cs" />
     <Compile Include="CANTalon.cs" />
     <Compile Include="CAN\CANExceptionFactory.cs" />
     <Compile Include="CAN\Exceptions.cs" />
@@ -96,11 +96,11 @@
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="MotorSafety.cs" />
-    <Compile Include="PIDOutput.cs" />
-    <Compile Include="PIDSource.cs" />
+    <Compile Include="IPIDOutput.cs" />
+    <Compile Include="IPIDSource.cs" />
     <Compile Include="Interfaces\Potentiometer.cs" />
     <Compile Include="smartdashboard\SendableChooser.cs" />
-    <Compile Include="SpeedController.cs" />
+    <Compile Include="ISpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />

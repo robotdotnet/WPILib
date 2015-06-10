@@ -18,7 +18,7 @@
         /// <summary>
         /// Get the result to use in PIDController
         /// </summary>
-        /// <value>The result to use in PIDController</value>
-        double PidGet { get; }
+        /// <returns>The result to use in PIDController</returns>
+        double PidGet();
     }
 }

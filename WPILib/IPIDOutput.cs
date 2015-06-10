@@ -8,7 +8,7 @@
         /// <summary>
         /// Set the output to the value calculated by PIDController
         /// </summary>
-        /// <value>Output the value calculated by PIDController</value>
-        double PidWrite { set; }
+        /// <param name="value">Output the value calculated by PIDController</param>
+        void PidWrite(double value);
     }
 }

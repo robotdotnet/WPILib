@@ -238,6 +238,6 @@ namespace WPILib
             }
         }
 
-        public double PidGet => AverageVoltage;
+        public double PidGet() => AverageVoltage;
     }
 }

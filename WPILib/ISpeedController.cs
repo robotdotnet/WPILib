@@ -4,10 +4,16 @@
     public interface ISpeedController : IPIDOutput
     {
         /// <summary>
+        /// Common interface for setting the speed of a speed controller.
+        /// </summary>
+        /// <param name="value">The speed to set.  Value should be between -1.0 and 1.0.</param>
+        void Set(double value);
+
+        /// <summary>
         /// Common interface for getting the current set speed of a speed controller.
         /// </summary>
-        /// <value>The current set speed. Value is between -1.0 and 1.0.</value>
-        double Value { get; set; }
+        /// <returns>The current set speed. Value is between -1.0 and 1.0.</returns>
+        double Get();
 
         /// <summary>
         /// Common interface for setting the speed of a speed controller.

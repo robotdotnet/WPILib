@@ -142,7 +142,7 @@ namespace WPILib
 
         public bool IsRangeValid()
         {
-            return m_counter.Value > 1;
+            return m_counter.Get() > 1;
         }
 
         public double GetRangeInches()
@@ -156,19 +156,16 @@ namespace WPILib
             return GetRangeInches() * 25.4;
         }
 
-        public double PidGet
+        public double PidGet()
         {
-            get
+            switch (DistanceUnits)
             {
-                switch (DistanceUnits)
-                {
-                    case Unit.Inches:
-                        return GetRangeInches();
-                    case Unit.Millimeters:
-                        return GetRangeMM();
-                    default:
-                        return 0.0;
-                }
+                case Unit.Inches:
+                    return GetRangeInches();
+                case Unit.Millimeters:
+                    return GetRangeMM();
+                default:
+                    return 0.0;
             }
         }
 
@@ -193,19 +190,17 @@ namespace WPILib
 
         public string SmartDashboardType => "Ultrasonic";
 
-        private ITable m_table;
-
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
+            Table = subtable;
             UpdateTable();
         }
 
-        public ITable Table => m_table;
+        public ITable Table { get; private set; }
 
         public void UpdateTable()
         {
-            m_table?.PutNumber("Value", GetRangeInches());
+            Table?.PutNumber("Value", GetRangeInches());
         }
 
         public void StartLiveWindowMode() { }

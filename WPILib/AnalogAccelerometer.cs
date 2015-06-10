@@ -53,6 +53,6 @@ namespace WPILib
             set { m_zeroGVoltage = value; }
         }
 
-        public double PidGet => Acceleration;
+        public double PidGet() => Acceleration;
     }
 }

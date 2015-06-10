@@ -54,7 +54,7 @@ namespace WPILib
             return (m_analogInput.Voltage / ControllerPower.Voltage5V) * m_fullRange + m_offset;
         }
 
-        public double PidGet => Get();
+        public double PidGet() => Get();
 
         public void Dispose()
         {

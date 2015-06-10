@@ -6,7 +6,7 @@ using static HAL_Base.HALDigital;
 
 namespace WPILib
 {
-    public class Counter : SensorBase, CounterBase, IPIDSource
+    public class Counter : SensorBase, ICounterBase, IPIDSource
     {
         private DigitalSource m_upSource;
         private DigitalSource m_downSource;
@@ -225,17 +225,14 @@ namespace WPILib
             SetCounterPulseLengthMode(m_counter, threshold, ref status);
         }
 
-        public int Value
+        public int Get()
         {
-            get
-            {
-                int status = 0;
-                int value = GetCounter(m_counter, ref status);
-                return value;
-            }
+            int status = 0;
+            int value = GetCounter(m_counter, ref status);
+            return value;
         }
 
-        public double Distance => Value*m_distancePerPulse;
+        public double Distance => Get()*m_distancePerPulse;
 
         public void Reset()
         {
@@ -331,19 +328,16 @@ namespace WPILib
             }
         }
 
-        public double PidGet
+        public double PidGet()
         {
-            get
+            switch (m_pidSource)
             {
-                switch (m_pidSource)
-                {
-                    case PIDSourceParameter.Distance:
-                        return Distance;
-                    case PIDSourceParameter.Rate:
-                        return Rate;
-                    default:
-                        return 0.0;
-                }
+                case PIDSourceParameter.Distance:
+                    return Distance;
+                case PIDSourceParameter.Rate:
+                    return Rate;
+                default:
+                    return 0.0;
             }
         }
     }

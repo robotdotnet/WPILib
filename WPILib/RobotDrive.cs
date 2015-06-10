@@ -357,7 +357,7 @@ namespace WPILib
 
             if (m_syncGroup != 0)
             {
-                CANJaguar.UpdateSyncGroup(m_syncGroup);
+                IcanJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
             m_safetyHelper?.Feed();
@@ -392,7 +392,7 @@ namespace WPILib
 
             if (m_syncGroup != 0)
             {
-                CANJaguar.UpdateSyncGroup(m_syncGroup);
+                IcanJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
             m_safetyHelper?.Feed();
@@ -413,7 +413,7 @@ namespace WPILib
 
             if (m_syncGroup != 0)
             {
-                CANJaguar.UpdateSyncGroup(m_syncGroup);
+                IcanJaguar.UpdateSyncGroup(m_syncGroup);
             }
 
             m_safetyHelper?.Feed();
@@ -512,10 +512,10 @@ namespace WPILib
 
         public void StopMotor()
         {
-            m_frontLeftMotor.Value = 0.0;
-            m_frontRightMotor.Value = 0.0;
-            m_rearLeftMotor.Value = 0.0;
-            m_rearRightMotor.Value = 0.0;
+            m_frontLeftMotor.Set(0.0);
+            m_frontRightMotor.Set(0.0);
+            m_rearLeftMotor.Set(0.0);
+            m_rearRightMotor.Set(0.0);
             m_safetyHelper?.Feed();
         }
 

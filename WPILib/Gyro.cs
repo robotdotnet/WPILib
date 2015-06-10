@@ -149,19 +149,16 @@ namespace WPILib
             }
         }
 
-        public double PidGet
+        public double PidGet()
         {
-            get
+            switch (m_pidSource)
             {
-                switch (m_pidSource)
-                {
-                    case PIDSourceParameter.Rate:
-                        return Rate;
-                    case PIDSourceParameter.Angle:
-                        return Angle;
-                    default:
-                        return 0.0;
-                }
+                case PIDSourceParameter.Rate:
+                    return Rate;
+                case PIDSourceParameter.Angle:
+                    return Angle;
+                default:
+                    return 0.0;
             }
         }
     }

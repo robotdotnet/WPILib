@@ -55,7 +55,7 @@ namespace WPILib
         SrxDisableSwitchInputs = 2,
     };
 
-    public interface CANSpeedController : ISpeedController
+    public interface ICANSpeedController : ISpeedController
     {
         double P { set; get; }
         double I { set; get; }

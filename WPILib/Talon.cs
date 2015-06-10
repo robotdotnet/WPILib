@@ -46,24 +46,29 @@ namespace WPILib
         /// <summary>
         /// Write out the PID value as seen in the PIDOutput base object.
         /// </summary>
-        /// <value>Write out the PWM value at it was found in the PID Controller</value>
-        public double PidWrite
+        /// <param name="value">Write out the PWM value at it was found in the PID Controller</param>
+        public void PidWrite(double value)
         {
-            set { Value = value; }
+            Set(value);
         }
 
         /// <summary>
         /// Get the recently set value of the PWM.
         /// </summary>
-        /// <value>The most recently set value for the PWM between -1.0 and 1.0</value>
-        public double Value
+        /// <param name="value">The most recently set value for the PWM between -1.0 and 1.0</param>
+        public void Set(double value)
         {
-            get { return Speed; }
-            set
-            {
-                Speed = value;
-                Feed();
-            }
+            Speed = value;
+            Feed();
+        }
+
+        /// <summary>
+        /// Get the recently set value of the PWM.
+        /// </summary>
+        /// <returns>The most recently set value for the PWM between -1.0 and 1.0</returns>
+        public double Get()
+        {
+            return Speed;
         }
 
         /// <summary>

@@ -144,7 +144,7 @@ namespace WPILib
             IPIDOutput ipidOutput = null;
             lock (this)
             {
-                input = ipidInput.PidGet;
+                input = ipidInput.PidGet();
             }
             lock (this)
             {
@@ -198,7 +198,7 @@ namespace WPILib
                 ipidOutput = m_ipidOutput;
                 result = m_result;
             }
-            ipidOutput.PidWrite = result;
+            ipidOutput.PidWrite(result);
         }
 
         public void SetPID(double p, double i, double d)
@@ -357,7 +357,7 @@ namespace WPILib
             {
                 lock (m_lockObject)
                 {
-                    return Setpoint - m_ipidInput.PidGet;
+                    return Setpoint - m_ipidInput.PidGet();
                 }
             }
         }
@@ -419,7 +419,7 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_ipidOutput.PidWrite = 0;
+                m_ipidOutput.PidWrite(0);
                 m_enabled = false;
             }
         }

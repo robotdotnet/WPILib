@@ -7,7 +7,7 @@ using WPILib.Util;
 
 namespace WPILib
 {
-    public class CANJaguar : IMotorSafety, CANSpeedController, ITableListener, LiveWindowSendable, IDisposable
+    public class IcanJaguar : IMotorSafety, ICANSpeedController, ITableListener, LiveWindowSendable, IDisposable
     {
 
 // ReSharper disable InconsistentNaming
@@ -57,7 +57,7 @@ namespace WPILib
         public static int kReverseLimit = 2;
 // ReSharper restore InconsistentNaming
 
-        public CANJaguar(int deviceNumber)
+        public IcanJaguar(int deviceNumber)
         {
             try
             {
@@ -261,18 +261,15 @@ namespace WPILib
 
         public string Description => "CANJaguar ID " + m_deviceNumber;
 
-        public double PidWrite
+        public void PidWrite(double value)
         {
-            set
+            if (m_controlMode == ControlMode.PercentVbus)
             {
-                if (m_controlMode == ControlMode.PercentVbus)
-                {
-                    Value = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException("PID only supported in PercentVbus mode");
-                }
+                Set(value);
+            }
+            else
+            {
+                throw new InvalidOperationException("PID only supported in PercentVbus mode");
             }
         }
 
@@ -337,10 +334,14 @@ namespace WPILib
             m_controlEnabled = false;
         }
 
-        public double Value
+        public void Set(double value)
         {
-            get { return m_value; }
-            set { Set(value, 0); }
+            Set(value, 0);
+        }
+
+        public double Get()
+        {
+            return m_value;
         }
 
         public void Set(double value, byte syncGroup)
@@ -1244,23 +1245,23 @@ namespace WPILib
 
         public void UpdateTable()
         {
-            m_table?.PutNumber("Value", Value);
+            m_table?.PutNumber("Value", Get());
         }
 
         public void StartLiveWindowMode()
         {
-            Value = 0.0;
+            Set(0.0);
             m_table.AddTableListener("Value", this, true);
         }
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
-            Value = (double)value;
+            Set((double)value);
         }
 
         public void StopLiveWindowMode()
         {
-            Value = 0.0;
+            Set(0.0);
             m_table.RemoveTableListener(this);
         }
 

@@ -6,7 +6,7 @@ using static HAL_Base.HALDigital;
 
 namespace WPILib
 {
-    public class Encoder : SensorBase, CounterBase, IPIDSource
+    public class Encoder : SensorBase, ICounterBase, IPIDSource
     {
         public enum IndexingType
         {
@@ -214,7 +214,7 @@ namespace WPILib
                 int value;
                 if (m_counter != null)
                 {
-                    value = m_counter.Value;
+                    value = m_counter.Get();
                 }
                 else
                 {
@@ -225,7 +225,7 @@ namespace WPILib
             }
         }
 
-        public int Value => (int) (Raw*DecodingScaleFactor);
+        public int Get() => (int) (Raw*DecodingScaleFactor);
 
         public void Reset()
         {
@@ -399,19 +399,16 @@ namespace WPILib
             }
         }
 
-        public double PidGet
+        public double PidGet()
         {
-            get
+            switch (m_pidSource)
             {
-                switch (m_pidSource)
-                {
-                    case PIDSourceParameter.Distance:
-                        return Distance;
-                    case PIDSourceParameter.Rate:
-                        return Rate;
-                    default:
-                        return 0.0;
-                }
+                case PIDSourceParameter.Distance:
+                    return Distance;
+                case PIDSourceParameter.Rate:
+                    return Rate;
+                default:
+                    return 0.0;
             }
         }
 

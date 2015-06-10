@@ -6,7 +6,7 @@ using WPILib.livewindow;
 namespace WPILib
 {
     using Impl = HALCanTalonSRX;
-    public class CANTalon : IMotorSafety, CANSpeedController, LiveWindowSendable, ITableListener, IDisposable
+    public class IcanTalon : IMotorSafety, ICANSpeedController, LiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;
 
@@ -31,15 +31,14 @@ namespace WPILib
         private ControlMode m_controlMode;
         private IntPtr m_impl;
         private const double DelayForSolicitedSignals = 0.004;
-        private int m_deviceNumber;
         private bool m_controlEnabled;
         private int m_profile;
         private double m_setPoint;
 
 
-        public CANTalon(int deviceNumber, int controlPeriodMs = 10)
+        public IcanTalon(int deviceNumber, int controlPeriodMs = 10)
         {
-            m_deviceNumber = deviceNumber;
+            DeviceID = deviceNumber;
             m_impl = Impl.C_TalonSRX_Create(deviceNumber, controlPeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
@@ -621,7 +620,7 @@ namespace WPILib
             }
             set
             {
-                Value = value;
+                Set(value);
             }
         }
 
@@ -793,7 +792,7 @@ namespace WPILib
         [Obsolete("Use DeviceID property instead.")]
         public int GetDeviceID() { return DeviceID; }
 
-        public int DeviceID => m_deviceNumber;
+        public int DeviceID { get; }
 
         [Obsolete("Use ForwardSoftLimit property instead.")]
         public double GetForwardSoftLimit() { return ForwardSoftLimit; }
@@ -1066,78 +1065,73 @@ namespace WPILib
             get { return m_safetyHelper.SafetyEnabled; }
         }
 
-        public string Description => $"CAN TalonSRX ID {m_deviceNumber}";
+        public string Description => $"CAN TalonSRX ID {DeviceID}";
 
-        public double PidWrite
+        public void PidWrite(double value)
         {
-            set
+            if (m_controlMode == ControlMode.PercentVbus)
             {
-                if (m_controlMode == ControlMode.PercentVbus)
-                {
-                    Value = value;
-                }
-                else
-                {
-                    throw new InvalidOperationException("PID on RoboRIO only supported in Voltage Bus (PWM-like) mode");
-                }
+                Set(value);
+            }
+            else
+            {
+                throw new InvalidOperationException("PID on RoboRIO only supported in Voltage Bus (PWM-like) mode");
             }
         }
 
-        public double Value
+        public void Set(double value)
         {
-            get
+            m_safetyHelper.Feed();
+            if (m_controlEnabled)
             {
-                int value = 0;
+                m_setPoint = value;
                 switch (m_controlMode)
                 {
-                    case ControlMode.Voltage:
-                        return OutputVoltage;
-                    case ControlMode.Position:
-                        Impl.C_TalonSRX_GetSensorPosition(m_impl, ref value);
-                        return value;
-                    case ControlMode.Speed:
-                        Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref value);
-                        return value;
-                    case ControlMode.Current:
-                        return OutputCurrent;
                     case ControlMode.PercentVbus:
+                        Impl.C_TalonSRX_SetDemand(m_impl, (int) (value*1023));
+                        break;
+                    case ControlMode.Voltage:
+                        int volts = (int) (value*256);
+                        Impl.C_TalonSRX_SetDemand(m_impl, volts);
+                        break;
+                    case ControlMode.Position:
+                    case ControlMode.Speed:
+                    case ControlMode.Follower:
+                        Impl.C_TalonSRX_SetDemand(m_impl, (int) value);
+                        break;
                     default:
-                        Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
-                        return value / 1023.0;
+                        break;
                 }
+                Impl.C_TalonSRX_SetModeSelect(m_impl, (int) MotorControlMode);
             }
-            set
+        }
+
+        public double Get()
+        {
+            int value = 0;
+            switch (m_controlMode)
             {
-                m_safetyHelper.Feed();
-                if (m_controlEnabled)
-                {
-                    m_setPoint = value;
-                    switch (m_controlMode)
-                    {
-                        case ControlMode.PercentVbus:
-                            Impl.C_TalonSRX_SetDemand(m_impl, (int)(value * 1023));
-                            break;
-                        case ControlMode.Voltage:
-                            int volts = (int)(value * 256);
-                            Impl.C_TalonSRX_SetDemand(m_impl, volts);
-                            break;
-                        case ControlMode.Position:
-                        case ControlMode.Speed:
-                        case ControlMode.Follower:
-                            Impl.C_TalonSRX_SetDemand(m_impl, (int)value);
-                            break;
-                        default:
-                            break;
-                    }
-                    Impl.C_TalonSRX_SetModeSelect(m_impl, (int)MotorControlMode);
-                }
+                case ControlMode.Voltage:
+                    return OutputVoltage;
+                case ControlMode.Position:
+                    Impl.C_TalonSRX_GetSensorPosition(m_impl, ref value);
+                    return value;
+                case ControlMode.Speed:
+                    Impl.C_TalonSRX_GetSensorVelocity(m_impl, ref value);
+                    return value;
+                case ControlMode.Current:
+                    return OutputCurrent;
+                case ControlMode.PercentVbus:
+                default:
+                    Impl.C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
+                    return value/1023.0;
             }
         }
 
         [Obsolete("This is only here to make CAN Jaguars happy")]
         public void Set(double value, byte syncGroup)
         {
-            Value = value;
+            Set(value);
         }
 
         public void SelectProfileSlot(int slotIdx)
@@ -1155,18 +1149,18 @@ namespace WPILib
 
         public void UpdateTable()
         {
-            Table?.PutNumber("Value", Value);
+            Table?.PutNumber("Value", Get());
         }
 
         public void StartLiveWindowMode()
         {
-            Value = 0.0;
+            Set(0.0);
             Table.AddTableListener("Value", this, true);
         }
 
         public void StopLiveWindowMode()
         {
-            Value = 0.0;
+            Set(0.0);
             Table.RemoveTableListener(this);
         }
 
@@ -1174,7 +1168,7 @@ namespace WPILib
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
-            Value = (double)value;
+            Set((double)value);
         }
 
         public void InitTable(ITable subtable)

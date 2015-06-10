@@ -82,15 +82,15 @@ namespace WPILib.Commands
 
         public void Disable() => PIDController.Disable();
 
-        public double PidGet => PIDInput;
+        public double PidGet() => PIDInput;
 
         /// <summary>
         /// Set the output to the value calculated by PIDController
         /// </summary>
-        /// <value>Output the value calculated by PIDController</value>
-        public double PidWrite
+        /// <param name="value">Output the value calculated by PIDController</param>
+        public void PidWrite(double value)
         {
-            set { PIDOutput = value; }
+            PIDOutput = value;
         }
 
         public new string SmartDashboardType => "PIDSubsystem";

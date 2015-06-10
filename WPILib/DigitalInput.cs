@@ -11,14 +11,11 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
         }
 
-        public bool Value
+        public bool Get()
         {
-            get
-            {
-                int status = 0;
-                bool value = HALDigital.GetDIO(m_port, ref status);
-                return value;
-            }
+            int status = 0;
+            bool value = HALDigital.GetDIO(m_port, ref status);
+            return value;
         }
 
         public int Channel => m_channel;

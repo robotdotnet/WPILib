@@ -6,11 +6,11 @@ namespace WPILib.Commands
     {
         private PIDController m_controller;
 
-        public double PidGet => ReturnPIDInput();
+        public double PidGet() => ReturnPIDInput();
 
-        public double PidWrite
+        public void PidWrite(double value)
         {
-            set { UsePIDOutput(value); }
+            UsePIDOutput(value);
         }
 
         public IpidCommand(string name, double p, double i, double d)
