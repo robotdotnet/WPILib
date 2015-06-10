@@ -5,8 +5,14 @@ using NetworkTablesDotNet.Tables;
 
 namespace WPILib.SmartDashboards
 {
+    /// <summary>
+    /// The <see cref="SmartDashboard"/> class is the bridge between robot programs and the SmartDashboard on the laptop.
+    /// </summary>
+    /// <remarks>When a value is put into the SmartDashboard here, it pops up on the SmartDashboard on the laptop.
+    /// Users can put values into and get values from the SmartDashboard</remarks>
     public class SmartDashboard
     {
+        //TODO: Implement the rest of this class
         private static NetworkTable s_table = NetworkTable.GetTable("SmartDashboard");
         private static Dictionary<ITable, ISendable> s_tablesToData = new Dictionary<ITable, ISendable>();
 
@@ -15,6 +21,13 @@ namespace WPILib.SmartDashboards
             HLUsageReporting.ReportSmartDashboard();
         }
 
+        /// <summary>
+        /// Maps the specified key to the specified value in this table.
+        /// </summary>
+        /// <remarks>The key cannot be null.</remarks>
+        /// <param name="key">The Key</param>
+        /// <param name="data">The Value</param>
+        /// <exception cref="ArgumentNullException">If key is null.</exception>
         public static void PutData(string key, ISendable data)
         {
             ITable dataTable = s_table.GetSubTable(key);

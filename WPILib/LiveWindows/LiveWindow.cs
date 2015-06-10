@@ -41,7 +41,7 @@ namespace WPILib.LiveWindows
     }
 
     /// <summary>
-    /// The LiveWindow class is trhe public interface for putting sensor and actuators on the LiveWindow.
+    /// The LiveWindow class is rhe public interface for putting sensor and actuators on the LiveWindow.
     /// </summary>
     public class LiveWindow
     {

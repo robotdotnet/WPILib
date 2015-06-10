@@ -64,14 +64,14 @@ namespace WPILib.SmartDashboards
             m_choices.Add(name);
             m_values.Add(obj);
 
-            m_table?.PutValue(OPTIONS, m_choices);
+            Table?.PutValue(OPTIONS, m_choices);
         }
 
         /// <summary>
         /// Add the given object to the list of options and marks it as the default.
         /// Functionally, this is very close to
-        /// <see cref="SendableChooser.AddObject(string, object)"/> except that it will
-        /// use this as the default option if none other is explicityly selected.
+        /// <see cref="SendableChooser.AddObject(string, object)">AddObject(...)</see> except that it will
+        /// use this as the default option if none other is explicitly selected.
         /// </summary>
         /// <param name="name">The name of the option</param>
         /// <param name="obj">The option</param>
@@ -84,7 +84,7 @@ namespace WPILib.SmartDashboards
 
             m_defaultChoice = name;
             m_defaultValue = obj;
-            m_table?.PutString(DEFAULT, m_defaultChoice);
+            Table?.PutString(DEFAULT, m_defaultChoice);
             AddObject(name, obj);
         }
 
@@ -92,10 +92,10 @@ namespace WPILib.SmartDashboards
         /// Returns the selected option. If there is none selected, it will return
         /// the default. If there is none selected, then it will return null.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The option selected</returns>
         public object GetSelected()
         {
-            string selected = m_table.GetString(SELECTED, null);
+            string selected = Table.GetString(SELECTED, null);
             for (int i = 0; i < m_values.Size(); ++i)
             {
                 if (m_choices.Get(i).Equals(selected))
@@ -106,22 +106,32 @@ namespace WPILib.SmartDashboards
             return m_defaultValue;
         }
 
-        private ITable m_table;
+
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
-            if (m_table != null)
+            Table = subtable;
+            if (Table != null)
             {
-                m_table.PutValue(OPTIONS, m_choices);
+                Table.PutValue(OPTIONS, m_choices);
                 if (m_defaultChoice != null)
                 {
-                    m_table.PutString(DEFAULT, m_defaultChoice);
+                    Table.PutString(DEFAULT, m_defaultChoice);
                 }
             }
         }
 
-        public ITable Table => m_table;
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
 
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
         public string SmartDashboardType => "String Chooser";
     }
 }
