@@ -1,12 +1,14 @@
 ﻿using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Exceptions;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    
-    public class DoubleSolenoid : SolenoidBase
+
+    public class DoubleSolenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
-        public enum Positions
+        public enum Value
         {
             Off,
             Forward,
@@ -77,35 +79,33 @@ namespace WPILib
             }
         }
 
-        public Positions Value
+        public void Set(Value value)
         {
-            set
+            byte rawValue = 0;
+
+            switch (value)
             {
-                byte rawValue = 0;
-
-                switch (value)
-                {
-                    case Positions.Off:
-                        rawValue = 0x00;
-                        break;
-                    case Positions.Forward:
-                        rawValue = m_forwardMask;
-                        break;
-                    case Positions.Reverse:
-                        rawValue = m_reverseMask;
-                        break;
-                }
-
-                Set(rawValue, m_forwardMask | m_reverseMask);
+                case Value.Off:
+                    rawValue = 0x00;
+                    break;
+                case Value.Forward:
+                    rawValue = m_forwardMask;
+                    break;
+                case Value.Reverse:
+                    rawValue = m_reverseMask;
+                    break;
             }
-            get
-            {
-                byte value = GetAll();
 
-                if ((value & m_forwardMask) != 0) return Positions.Forward;
-                if ((value & m_reverseMask) != 0) return Positions.Reverse;
-                return Positions.Off;
-            }
+            Set(rawValue, m_forwardMask | m_reverseMask);
+        }
+
+        public Value Get()
+        {
+            byte value = GetAll();
+
+            if ((value & m_forwardMask) != 0) return Value.Forward;
+            if ((value & m_reverseMask) != 0) return Value.Reverse;
+            return Value.Off;
         }
 
         public bool FwdSolenoidBlackListed
@@ -124,6 +124,70 @@ namespace WPILib
                 int blackList = GetPCMSolenoidBlackList();
                 return ((blackList & m_reverseMask) != 0);
             }
+        }
+
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
+
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
+        public string SmartDashboardType => "Double Solenoid";
+
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
+        public void UpdateTable()
+        {
+            Table?.PutString("Value", (Get() == Value.Forward ? "Forward" : (Get() == Value.Reverse ? "Reverse" : "Off")));
+        }
+
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
+        public void StartLiveWindowMode()
+        {
+            Set(Value.Off);
+            Table.AddTableListener("Value", this, true);
+        }
+
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
+        public void StopLiveWindowMode()
+        {
+            Table.RemoveTableListener(this);
+        }
+
+        /// <summary>
+        /// Not called externally. Just needed because its an interface.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isNew"></param>
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            if (value.ToString().Equals("Reverse"))
+                Set(Value.Reverse);
+            else if (value.ToString().Equals("Forward"))
+                Set(Value.Forward);
+            else
+                Set(Value.Off);
         }
     }
 }

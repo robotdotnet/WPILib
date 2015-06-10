@@ -40,7 +40,7 @@ namespace WPILib
                 foreach (var sensor in s_currentSensors)
                 {
                     if (sensor.Enabled)
-                        sensor.m_pingChannel.Pulse(sensor.m_pingChannel.Channel, PingTime);
+                        sensor.m_pingChannel.Pulse(PingTime);
                 }
                 Timer.Delay(.1);
             }
@@ -137,7 +137,7 @@ namespace WPILib
         {
             SetAutomaticMode(false);
             m_counter.Reset();
-            m_pingChannel.Pulse(m_pingChannel.Channel, PingTime);
+            m_pingChannel.Pulse(PingTime);
         }
 
         public bool IsRangeValid()
