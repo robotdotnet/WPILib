@@ -1,18 +1,26 @@
 ﻿using System;
 using HAL_Base;
-using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
+    /// <summary>
+    /// ADXL345 Accelerometer interfaced over I2C.
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
     public class ADXL345_SPI : ADXL345
     {
-        private const int Address_Read = 0x80;
-        private const int Address_MultiByte = 0x40;
+        private const int AddressRead = 0x80;
+        private const int AddressMultiByte = 0x40;
 
         private SPI m_spi;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="port">The SPI port the accelerometer is attached to</param>
+        /// <param name="range">The range (+ or -) that the accelerometer will measure.</param>
         public ADXL345_SPI(SPI.Port port, AccelerometerRange range)
         {
             m_spi = new SPI(port);
@@ -29,27 +37,40 @@ namespace WPILib
             LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
 
+        /// <summary>
+        /// Writes the range to the specified interface.
+        /// </summary>
+        /// <param name="value">The Range to write.</param>
         protected override void WriteRange(byte value)
         {
             byte[] commands = new byte[] { DataFormatRegister, (byte)((byte)DataFormat.FullRes | value) };
             m_spi.Write(commands, commands.Length);
         }
 
+        /// <summary>
+        /// Get the acceleration of one axis in Gs.
+        /// </summary>
+        /// <param name="axis">The axis to read from.</param>
+        /// <returns>Acceleration of the ADXL345 in Gs.</returns>
         public override double GetAcceleration(Axes axis)
         {
             byte[] transferBuffer = new byte[3];
-            transferBuffer[0] = (byte)((Address_Read | Address_MultiByte | DataRegister) + (byte)axis);
+            transferBuffer[0] = (byte)((AddressRead | AddressMultiByte | DataRegister) + (byte)axis);
             m_spi.Transaction(transferBuffer, transferBuffer, 3);
             return BitConverter.ToInt16(transferBuffer, 1) * GsPerLSB;
         }
 
+        /// <summary>
+        /// Get the acceleration of all axes in Gs.
+        /// </summary>
+        /// <returns>An object containing the acceleration measured on each side of the ADXL345 in Gs.</returns>
         public override AllAxes GetAccelerations()
         {
             AllAxes data = new AllAxes();
             byte[] dataBuffer = new byte[7];
             if (m_spi != null)
             {
-                dataBuffer[0] = (byte)(Address_Read | Address_MultiByte | DataRegister);
+                dataBuffer[0] = (byte)(AddressRead | AddressMultiByte | DataRegister);
                 m_spi.Transaction(dataBuffer, dataBuffer, 7);
                 data.XAxis = BitConverter.ToInt16(dataBuffer, 1) * GsPerLSB;
                 data.YAxis = BitConverter.ToInt16(dataBuffer, 3) * GsPerLSB;

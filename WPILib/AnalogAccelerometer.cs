@@ -1,9 +1,17 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    public class AnalogAccelerometer : SensorBase, IPIDSource
+    /// <summary>
+    /// Handle operation of an analog accelerometer
+    /// </summary>
+    /// <remarks>The accelerometer reads acceleration directly through the sensor. Many sensors have
+    /// <para/>multiple axis and can be treated as multiple devices.Each is calibrated by finding
+    /// <para/>the center value over a period of time.</remarks>
+    public class AnalogAccelerometer : SensorBase, IPIDSource, ILiveWindowSendable
     {
         private AnalogInput m_analogChannel;
         private double m_voltsPerG = 1.0;
@@ -12,9 +20,13 @@ namespace WPILib
 
         private void InitAccelerometer()
         {
-            HAL.Report(ResourceType.kResourceType_Accelerometer, (byte) m_analogChannel.Channel);
+            HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)m_analogChannel.Channel);
         }
 
+        /// <summary>
+        /// Create a new instance of an accelerometer, declaring a new analog channel.
+        /// </summary>
+        /// <param name="channel">The channel the accelerometer is connected to.</param>
         public AnalogAccelerometer(int channel)
         {
             m_allocatedChannel = true;
@@ -22,6 +34,10 @@ namespace WPILib
             InitAccelerometer();
         }
 
+        /// <summary>
+        /// Creates a new instance of the Accelerometer from an existing <see cref="AnalogInput"/>
+        /// </summary>
+        /// <param name="channel">The existing <see cref="AnalogInput"/> the accelerometer is connected to.</param>
         public AnalogAccelerometer(AnalogInput channel)
         {
             m_allocatedChannel = false;
@@ -31,6 +47,9 @@ namespace WPILib
             InitAccelerometer();
         }
 
+        /// <summary>
+        /// Delete the analog components used for the accelerometer.
+        /// </summary>
         public override void Dispose()
         {
             if (m_analogChannel != null && m_allocatedChannel)
@@ -38,21 +57,74 @@ namespace WPILib
                 m_analogChannel.Dispose();
             }
             m_analogChannel = null;
-            //base.Dispose();
         }
 
-        public double Acceleration => (m_analogChannel.AverageVoltage - m_zeroGVoltage)/m_voltsPerG;
+        /// <summary>
+        /// Returns the acceleration in Gs.
+        /// </summary>
+        /// <returns>The acceleration in Gs.</returns>
+        public double GetAcceleration() => (m_analogChannel.GetAverageVoltage() - m_zeroGVoltage)/m_voltsPerG;
 
+        /// <summary>
+        /// Sets the accelerometer sensitivity.
+        /// </summary>
         public double Sensitivity
         {
             set { m_voltsPerG = value; }
         }
 
+        /// <summary>
+        /// Sets the voltage that corresponds to 0G.
+        /// </summary>
         public double Zero
         {
             set { m_zeroGVoltage = value; }
         }
 
-        public double PidGet() => Acceleration;
+        /// <summary>
+        /// Get the result to use in PIDController
+        /// </summary>
+        /// <returns>The result to use in PIDController</returns>
+        public double PidGet() => GetAcceleration();
+
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
+
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
+        public string SmartDashboardType => "Accelerometer";
+
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
+        public void UpdateTable()
+        {
+            Table?.PutNumber("Value", GetAcceleration());
+        }
+
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
+        public void StartLiveWindowMode() { }
+
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
+        public void StopLiveWindowMode() { }
     }
 }

@@ -42,10 +42,19 @@ namespace WPILib
             m_channel = 0;
         }
 
+        /// <summary>
+        /// Get the channel routing number.
+        /// </summary>
         public override int ChannelForRouting => m_channel;
 
+        /// <summary>
+        /// Get the module routing number.
+        /// </summary>
         public override byte ModuleForRouting => 0;
 
+        /// <summary>
+        /// Is this an analog trigger?
+        /// </summary>
         public override bool AnalogTriggerForRouting => false;
     }
 }

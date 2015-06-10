@@ -121,7 +121,7 @@ namespace WPILib
                 }
                 else
                 {
-                    return (m_analog.AverageValue - (m_center + m_offset))
+                    return (m_analog.GetAverageValue() - (m_center + m_offset))
                            *1e-9
                            *m_analog.LSBWeight
                            /((1 << m_analog.OversampleBits)*Sensitivity);
