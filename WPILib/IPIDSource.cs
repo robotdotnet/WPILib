@@ -5,8 +5,11 @@
     /// </summary>
     public enum PIDSourceParameter
     {
+        ///The source is a Distance
         Distance = 0,
+        ///The source is a Rate
         Rate = 1,
+        ///The source is an Angle
         Angle = 2,
     }
 

@@ -160,11 +160,11 @@ namespace WPILib
             }
         }
 
-        public double Magnitude => Math.Sqrt(Math.Pow(GetX(), 2) + Math.Pow(GetY(), 2));
+        public double GetMagnitude() => Math.Sqrt(Math.Pow(GetX(), 2) + Math.Pow(GetY(), 2));
 
-        public double DirectionRadians => Math.Atan2(GetX(), -GetY());
+        public double GetDirectionRadians() => Math.Atan2(GetX(), -GetY());
 
-        public double DirectionDegrees => RadianToDegree(DirectionRadians);
+        public double GetDirectionDegrees() => RadianToDegree(GetDirectionRadians());
 
         private double RadianToDegree(double angle)
         {

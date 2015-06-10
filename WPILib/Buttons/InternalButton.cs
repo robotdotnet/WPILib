@@ -29,16 +29,30 @@ namespace WPILib.Buttons
             m_pressed = m_inverted = inverted;
         }
 
+        /// <summary>
+        /// Sets whether the button is inverted.
+        /// </summary>
+        /// <param name="inverted">True if inverted.</param>
         public void SetInverted(bool inverted)
         {
             m_inverted = inverted;
         }
 
+        /// <summary>
+        /// Sets whether the button is pressed
+        /// </summary>
+        /// <param name="pressed">True if pressed</param>
         public void SetPressed(bool pressed)
         {
             m_pressed = pressed;
         }
 
+        /// <summary>
+        /// Returns whether or not the trigger is active
+        /// </summary><remarks>
+        /// This method will be called repeatedly a command is linked to the Trigger.
+        /// </remarks>
+        /// <returns>Whether or not the trigger condition is active.</returns>
         public override bool Get()
         {
             return m_pressed ^ m_inverted;

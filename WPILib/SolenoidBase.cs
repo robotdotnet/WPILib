@@ -12,7 +12,13 @@ namespace WPILib
     public class SolenoidBase : SensorBase
     {
         private IntPtr[] m_ports;
+        /// <summary>
+        /// The module number for the solenoid.
+        /// </summary>
         protected int m_moduleNumber;//The number of the solenoid module being used
+        /// <summary>
+        /// The allocated resources for the solenoid.
+        /// </summary>
         protected Resource m_allocated = new Resource(63 * SolenoidChannels);
         private object m_lockObject = new object();
 
@@ -76,12 +82,12 @@ namespace WPILib
 
         /// <summary>
         /// Reads complete solenoid blacklist for all 8 solenoids as a single byte.
-        /// <para> </para>
-        /// <para />If a solenoid is shorted, it is added to the blacklist and
-        /// <para />disabled until power cycle, or until faults are cleared.
-        /// <para />See <see cref="ClearAllPCMStickyFaults()"/>
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>If a solenoid is shorted, it is added to the blacklist and
+        /// disabled until power cycle, or until faults are cleared.
+        /// </remarks>
+        /// <seealso cref="ClearAllPCMStickyFaults()"/>
+        /// <returns>The solenoid blacklist of all 8 solenoids on the module.</returns>
         public byte GetPCMSolenoidBlackList()
         {
             int status = 0;
@@ -115,15 +121,15 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Clear all sticky faults inside PCM that Compressor is wired to.
-        /// <para> </para>
+        /// Clear all sticky faults inside PCM that Compressor is wired to. </summary>
+        /// <remarks>
         /// If a sticky fault is set, then it will be persistently cleared.  Compressor drive
-        /// <para />		maybe momentarily disable while flags are being cleared. Care should be 
-        /// <para />		taken to not call this too frequently, otherwise normal compressor 
-        /// <para />		functionality may be prevented.
+        /// maybe momentarily disable while flags are being cleared. Care should be 
+        /// taken to not call this too frequently, otherwise normal compressor 
+        /// functionality may be prevented.
         /// <para> </para>
         /// If no sticky faults are set then this call will have no effect.
-        /// </summary>
+        /// </remarks>
         public void ClearAllPCMStickyFaults()
         {
             int status = 0;

@@ -8,33 +8,29 @@ namespace WPILib.Commands
 {
     /// <summary>
     /// The Command class is at the very core of the entire command framework.
+    /// </summary><remarks>
     /// Every command can be started with a call to <see cref="Command.Start()"/>.
     /// Once a command is started it will call <see cref="Command.Initialize()"/>, and then
     /// will repeatedly call <see cref="Command.Execute()"/> until the <see cref="Command.IsFinished()"/>
     /// returns true.  Once it does, <see cref="Command.End()"/> will be called.
-    /// <para> </para>
     /// <para>However, if at any point while it is running <see cref="Command.Cancel()"/> is called, then
     /// the command will be stopped and <see cref="Command.Interrupted()"/> will be called.</para>
-    /// <para> </para>
     /// <para>If a command uses a <see cref="Subsystem"/>, then it should specify that it does so by
     /// calling the <see cref="Command.Requires(Subsystem)"/> method
     /// in its constructor. Note that a Command may have multiple requirements, and
     /// <see cref="Command.Requires(Subsystem)"/> should be
     /// called for each one.</para>
-    /// <para> </para>
     /// <para>If a command is running and a new command with shared requirements is started,
     /// then one of two things will happen.  If the active command is interruptible,
     /// then <see cref="Command.Cancel()"/> will be called and the command will be removed
     /// to make way for the new one.  If the active command is not interruptible, the
     /// other one will not even be started, and the active one will continue functioning.</para>
-    /// </summary>
+    /// </remarks>
     /// <seealso cref="Subsystem"/>
     /// <seealso cref="CommandGroup"/>
     /// <seealso cref="IllegalUseOfCommandException"/>
     public abstract class Command : INamedSendable, ITableListener
     {
-        private string m_name;
-
         private double m_startTime = -1;
         private double m_timeout = -1;
         private bool m_initialized = false;
@@ -43,7 +39,6 @@ namespace WPILib.Commands
         private bool m_interruptible = true;
         private bool m_canceled = false;
         private bool m_locked = false;
-        private bool m_runWhenDisabled = false;
 
         private object m_syncRoot = new object();
 
@@ -51,12 +46,13 @@ namespace WPILib.Commands
 
         /// <summary>
         /// Creates a new command.
+        /// </summary><remarks>
         /// The name of this command will be set to its class name.
-        /// </summary>
-        public Command()
+        /// </remarks>
+        protected Command()
         {
-            m_name = GetType().Name;
-            m_name = m_name.Substring(m_name.LastIndexOf('.') + 1);
+            Name = GetType().Name;
+            Name = Name.Substring(Name.LastIndexOf('.') + 1);
         }
 
         /// <summary>
@@ -64,21 +60,21 @@ namespace WPILib.Commands
         /// </summary>
         /// <param name="name">The name for this command</param>
         /// <exception cref="ArgumentNullException">If name is null</exception>
-        public Command(string name)
+        protected Command(string name)
         {
             if (name == null)
-                throw new ArgumentNullException("Name must not be null.");
-            m_name = name;
+                throw new ArgumentNullException(nameof(name), "Name must not be null.");
+            Name = name;
         }
 
         /// <summary>
         /// Creates a new command with the given timeout and a default name.
-        /// The default name is the name of the class.
         /// </summary>
+        /// <remarks>The default name is the name of the class.</remarks>
         /// <param name="timeout">The time (in seconds) before this command "times out"</param>
         /// <exception cref="ArgumentOutOfRangeException">If given a negative timeout</exception>
         /// <seealso cref="Command.IsTimedOut()"/>
-        public Command(double timeout)
+        protected Command(double timeout)
             : this()
         {
             if (timeout < 0)
@@ -103,11 +99,11 @@ namespace WPILib.Commands
 
         /// <summary>
         /// Returns the name of this command.
+        /// </summary><remarks>
         /// If no name was specified in the constructor, 
         /// then the default is the name of the class.
-        /// </summary>
-        /// <value>The name of the command</value>
-        public string Name => m_name;
+        /// </remarks>
+        public string Name { get; }
 
         /// <summary>
         /// Sets the timeout of this command.
@@ -128,8 +124,9 @@ namespace WPILib.Commands
 
         /// <summary>
         /// Returns the time since this command was initialized (in seconds).
+        /// </summary><remarks>
         /// This function will work even if there is no specified timeout
-        /// </summary>
+        /// </remarks>
         /// <returns>The time since this command was initialize (in seconds).</returns>
         public double TimeSinceInitialized()
         {
@@ -142,10 +139,11 @@ namespace WPILib.Commands
 
         /// <summary>
         /// This method specifies that the given <see cref="Subsystem"/> is used by this command.
+        /// </summary><remarks>
         /// This method is crucial to the functioning of the Command System in general.
         /// <para> </para>
         /// Note that the recommended way to call this method is in the constructor.
-        /// </summary>
+        /// </remarks>
         /// <param name="subsystem">The <see cref="Subsystem"/> required</param>
         /// <exception cref="ArgumentNullException">If subsystem is null</exception>
         /// <exception cref="IllegalUseOfCommandException">If this command has started before or if it has been given to a <see cref="CommandGroup"/></exception>
@@ -164,7 +162,7 @@ namespace WPILib.Commands
                 }
                 else
                 {
-                    throw new ArgumentNullException("Subsystem must not be null.");
+                    throw new ArgumentNullException(nameof(subsystem), "Subsystem must not be null.");
                 }
             }
         }
@@ -172,8 +170,9 @@ namespace WPILib.Commands
 
         /// <summary>
         /// Called when the command has been removed.
+        /// </summary><remarks>
         /// This will call <see cref="Command.Interrupted()"/> or <see cref="Command.End()"/>.
-        /// </summary>
+        /// </remarks>
         internal void Removed()
         {
             lock (m_syncRoot)
@@ -181,7 +180,7 @@ namespace WPILib.Commands
 
                 if (m_initialized)
                 {
-                    if (IsCanceled())
+                    if (Canceled)
                     {
                         Interrupted();
                         _Interrupted();
@@ -209,11 +208,11 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
 
-                if (!m_runWhenDisabled && m_parent == null && RobotState.Disabled)
+                if (!RunWhenDisabled && m_parent == null && RobotState.Disabled)
                 {
                     Cancel();
                 }
-                if (IsCanceled())
+                if (Canceled)
                 {
                     return false;
                 }
@@ -243,35 +242,51 @@ namespace WPILib.Commands
         {
 
         }
-
+        //TODO: Finish these up
         protected abstract void Execute();
 
-        protected virtual void _Execute()
+        internal virtual void _Execute()
         {
 
         }
 
+        /// <summary>
+        /// Returns whether this command is finished.
+        /// </summary>
+        /// <remarks>If it is, then the command will be removed and
+        /// <see cref="Command.End()"/> will be called.
+        /// <para/>It may be useful for a team to reference the <see cref="Command.IsTimedOut()"/>
+        /// method for time-sensitive commands.</remarks>
+        /// <returns>Whether this command is finished</returns>
+        /// <seealso cref="Command.IsTimedOut()"/>
         protected abstract bool IsFinished();
 
         protected abstract void End();
 
-        protected virtual void _End()
+        internal virtual void _End()
         {
 
         }
 
         protected abstract void Interrupted();
 
-        protected virtual void _Interrupted()
+        internal virtual void _Interrupted()
         {
 
         }
+
 
         private void StartTiming()
         {
             m_startTime = FPGATimestamp;
         }
 
+        /// <summary>
+        /// Returns whether or not the <see cref="Command.TimeSinceInitialized()"/> 
+        /// method returns a number which is greater then or equal to the timeout for the command.
+        /// </summary>
+        /// <remarks>If there is no timeout, this will always return false.</remarks>
+        /// <returns>Whether the time has expired.</returns>
         protected bool IsTimedOut()
         {
             lock (m_syncRoot)
@@ -327,6 +342,12 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Starts up the command.
+        /// </summary>
+        /// <remarks>Gets the command ready to start.
+        /// <para/>Note that the command will eventually start, however it will not necessarily
+        /// do so immediately, and may in fact be canceled before initialize is even called.</remarks>
         public void Start()
         {
             lock (m_syncRoot)
@@ -348,10 +369,16 @@ namespace WPILib.Commands
 
                 m_running = true;
                 m_startTime = -1;
-                m_table?.PutBoolean("running", true);
+                Table?.PutBoolean("running", true);
             }
         }
 
+        /// <summary>
+        /// Returns whether or not the command is running.
+        /// </summary>
+        /// <remarks>This may return true even if the command has been canceled,
+        /// as it may not have yet called <see cref="Command.Interrupted()"/></remarks>
+        /// <returns>Whether or not the command is running</returns>
         public bool IsRunning()
         {
             lock (m_syncRoot)
@@ -360,6 +387,14 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// This will cancel the current command.
+        /// </summary>
+        /// <remarks>This will cancel the current command eventually. It can be called multiple times.
+        /// And it can be called when the command is not running. If the command is running though,
+        /// then the command will be marked as canceled and eventually removed.
+        /// <para/>A command cannot be canceled if it is a part of a <see cref="CommandGroup">command group</see>,
+        /// you must cancel the <see cref="CommandGroup">command group</see> instead.</remarks>
         public void Cancel()
         {
             lock (m_syncRoot)
@@ -385,38 +420,59 @@ namespace WPILib.Commands
             }
         }
 
-        public bool IsCanceled()
+        /// <summary>
+        /// Gets whether or not this has been canceled.
+        /// </summary>
+        public bool Canceled
         {
-            lock (m_syncRoot)
+            get
             {
-                return m_canceled;
+                lock (m_syncRoot)
+                {
+                    return m_canceled;
+                }
             }
         }
 
-        public bool IsInterruptible()
+        /// <summary>
+        /// Get or Set whether or not this command can be interrupted.
+        /// </summary>
+        public bool Interruptible
         {
-            lock (m_syncRoot)
+            get
             {
-                return m_interruptible;
+                lock (m_syncRoot)
+                {
+                    return m_interruptible;
+                }
+            }
+            protected set
+            {
+                lock (m_syncRoot)
+                {
+                    m_interruptible = value;
+                }
             }
         }
 
-        protected void SetInterruptable(bool interruptible)
-        {
-            lock (m_syncRoot)
-            {
-                m_interruptible = interruptible;
-            }
-        }
-
+        /// <summary>
+        /// Checks if the command requires the given <see cref="Subsystem"/>.
+        /// </summary>
+        /// <param name="system">The system</param>
+        /// <returns>Whether or not the subsystem is required, or false if given null.</returns>
         public bool DoesRequire(Subsystem system)
         {
             lock (m_syncRoot)
             {
-                return m_requirements != null && m_requirements.Contains(system);
+                return m_requirements?.Contains(system) ?? false;
             }
         }
 
+        /// <summary>
+        /// Returns the <see cref="CommandGroup"/> this command is a part of.
+        /// </summary>
+        /// <remarks>Will return null if this <see cref="Command"/> is not in a group.</remarks>
+        /// <returns>The <see cref="CommandGroup"/> that this command is a part of (or null if not in a group)</returns>
         public CommandGroup GetGroup()
         {
             lock (m_syncRoot)
@@ -425,39 +481,58 @@ namespace WPILib.Commands
             }
         }
 
-        public void SetRunWhenDisabled(bool run)
-        {
-            m_runWhenDisabled = run;
-        }
+        /// <summary>
+        /// Gets or Sets whether or not this <see cref="Command"/> should run when the robot is disabled.
+        /// </summary>
+        /// <remarks>By default a command will not run when the robot is disabled, and will in fact be canceled.</remarks>
+        public bool RunWhenDisabled { set; get; } = false;
 
-        public bool WillRunWhenDisabled()
-        {
-            return m_runWhenDisabled;
-        }
-
-        private ITable m_table;
+        /// <summary>
+        /// The string representation for a <see cref="Command"/> is by default its name.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
             return Name;
         }
 
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
         public void InitTable(ITable subtable)
         {
-            m_table?.RemoveTableListener(this);
-            m_table = subtable;
-            if (m_table != null)
+            Table?.RemoveTableListener(this);
+            Table = subtable;
+            if (Table != null)
             {
-                m_table.PutString("name", Name);
-                m_table.PutBoolean("running", IsRunning());
-                m_table.PutBoolean("isParented", m_parent != null);
-                m_table.AddTableListener("running", this, false);
+                Table.PutString("name", Name);
+                Table.PutBoolean("running", IsRunning());
+                Table.PutBoolean("isParented", m_parent != null);
+                Table.AddTableListener("running", this, false);
             }
         }
 
-        public ITable Table => m_table;
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
 
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
         public string SmartDashboardType => "Command";
 
+        /// <summary>
+        /// This function is called whenever the value is changed on the NetworkTable.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isNew"></param>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             if ((bool)value)

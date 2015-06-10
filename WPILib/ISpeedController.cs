@@ -1,6 +1,8 @@
 ﻿namespace WPILib
 {
-    //Interface for speed controlling devices
+    /// <summary>
+    /// ///Interface for speed controlling devices
+    /// </summary>
     public interface ISpeedController : IPIDOutput
     {
         /// <summary>

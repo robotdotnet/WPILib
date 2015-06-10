@@ -28,7 +28,6 @@ namespace WPILib
     /// <para/> to the hardware dependent values, in this case 0-2000 for the FPGA.
     /// <para/> Changes are immediately sent to the FPGA, and the update occurs at the next
     /// <para/> FPGA cycle. There is no delay. 
-    /// <para> </para>
     /// <para>As of revision 0.1.10 of the FPGA, the FPGA interprets the 0-2000 values as follows:
     /// <list type="bullet">
     /// <item><description>2000 = maximum pulse width</description></item>

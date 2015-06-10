@@ -1,11 +1,13 @@
 ﻿namespace WPILib
 {
     /// <summary>
-    /// Which hand hte Human Interface Device is associated with.
+    /// Which hand the Human Interface Device is associated with.
     /// </summary>
     public enum Hand
     {
+        ///Use the Left Hand
         Left,
+        ///Use the Right Hand
         Right,
     }
 

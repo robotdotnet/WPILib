@@ -229,26 +229,29 @@ namespace WPILib.Commands
         {
         }
 
-        public new bool IsInterruptible()
+        public new bool Interruptible
         {
-            lock (m_syncRoot)
+            get
             {
-
-                if (!base.IsInterruptible())
+                lock (m_syncRoot)
                 {
-                    return false;
-                }
 
-                if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
-                {
-                    Command cmd = m_commands[m_currentCommandIndex].command;
-                    if (!cmd.IsInterruptible())
+                    if (!base.Interruptible)
                     {
                         return false;
                     }
-                }
 
-                return m_children.All(s => s.command.IsInterruptible());
+                    if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
+                    {
+                        Command cmd = m_commands[m_currentCommandIndex].command;
+                        if (!cmd.Interruptible)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return m_children.All(s => s.command.Interruptible);
+                }
             }
         }
 

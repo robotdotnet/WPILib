@@ -23,10 +23,10 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Return the FPGA Revision number. The format of the revision is 3 numbers.
-        /// <para /> The 12 most significant bits are the Major Revision. the next 8 bits are
+        /// Return the FPGA Revision number. The format of the revision is 3 numbers. </summary>
+        /// <remarks>The 12 most significant bits are the Major Revision. the next 8 bits are
         /// <para /> the Minor Revision. The 12 least significant bits are the Build Number.
-        /// </summary>
+        /// </remarks>
         internal static long FPGARevision
         {
             get
@@ -65,7 +65,14 @@ namespace WPILib
             }
         }
 
-        internal static void CheckStatus(int status, [CallerMemberName] string memberName = "",
+        /// <summary>
+        /// //TODO:Implement
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="memberName"></param>
+        /// <param name="filePath"></param>
+        /// <param name="lineNumber"></param>
+        public static void CheckStatus(int status, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
             //TODO: Use Caller attributes

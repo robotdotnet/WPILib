@@ -69,7 +69,7 @@ namespace WPILib.Commands
 
             if (!m_commands.Contains(command))
             {
-                if (command.GetRequirements().Any(s => s.GetCurrentCommand() != null && !s.GetCurrentCommand().IsInterruptible()))
+                if (command.GetRequirements().Any(s => s.GetCurrentCommand() != null && !s.GetCurrentCommand().Interruptible))
                 {
                     return;
                 }

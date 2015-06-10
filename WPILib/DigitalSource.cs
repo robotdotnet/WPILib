@@ -12,10 +12,10 @@ namespace WPILib
     /// DigitalSource interface
     /// </summary>
     /// <remarks>The DigitalSource represents all the possible inputs
-    /// <para/> for a counter or a quadrature encoder.The source may be either a digital
-    /// <para/> input or an analog input.If the caller just provides a channel, then a
-    /// <para/> digital input will be constructed and freed when finished for the source. The
-    /// <para/> source can either be a digital input or analog trigger but not both.</remarks>
+    /// for a counter or a quadrature encoder.The source may be either a digital
+    /// input or an analog input.If the caller just provides a channel, then a
+    /// digital input will be constructed and freed when finished for the source. The
+    /// source can either be a digital input or analog trigger but not both.</remarks>
     public abstract class DigitalSource : InterruptableSensorBase
     {
         /// <summary>
@@ -80,7 +80,7 @@ namespace WPILib
         public override byte ModuleForRouting => 0;
 
         /// <summary>
-        /// Is this an analog trigger?
+        /// Is this an analog trigger.
         /// </summary>
         public override bool AnalogTriggerForRouting => false;
     }

@@ -5,14 +5,14 @@ namespace WPILib
 {
     /// <summary>
     /// Texas Instruments / Vex Robotics Jaguar Speed Controller as a PWM Device.
-    /// <para />See <see cref="CANJaguar"/> for CAN control
     /// </summary>
+    /// <seealso cref="CANJaguar"> CANJaguar for CAN Control</seealso>
     public class Jaguar : SafePWM, ISpeedController
     {
         /// <summary>
         /// Common initialization code called by all constructors.
         /// </summary>
-        private void InitJaguar()
+        protected void InitJaguar()
         {
             /*
              * Input profile defined by Luminary Micro.
@@ -73,13 +73,13 @@ namespace WPILib
 
         /// <summary>
         /// Set the PWM value.
+        /// </summary> <remarks>
         /// <para> </para>
         /// The PWM value is set using a range of -1.0 to 1.0, appropriately
         /// scaling the value for the FPGA.
-        /// </summary>
+        /// </remarks>
         /// <param name="value">The speed to set. Value should be between -1.0 and 1.0</param>
         /// <param name="syncGroup">The update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.</param>
-        [Obsolete("For compatibility with CAN Jaguar")]
         public void Set(double value, byte syncGroup)
         {
             SetSpeed(value);

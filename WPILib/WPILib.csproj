@@ -62,6 +62,10 @@
     <Compile Include="Buttons\NetworkButton.cs" />
     <Compile Include="Buttons\Trigger.cs" />
     <Compile Include="CANJaguar.cs" />
+    <Compile Include="CAN\CANInvalidBufferException.cs" />
+    <Compile Include="CAN\CANJaguarVersionException.cs" />
+    <Compile Include="CAN\CANMessageNotAllowedException.cs" />
+    <Compile Include="CAN\CANNotInitializedException.cs" />
     <Compile Include="Exceptions\AllocationException.cs" />
     <Compile Include="Exceptions\BaseSystemNotInitializedException.cs" />
     <Compile Include="Exceptions\BoundaryException.cs" />
@@ -71,7 +75,7 @@
     <Compile Include="ICANSpeedController.cs" />
     <Compile Include="CANTalon.cs" />
     <Compile Include="CAN\CANExceptionFactory.cs" />
-    <Compile Include="CAN\Exceptions.cs" />
+    <Compile Include="CAN\CANMessageNotFoundException.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandGroup.cs" />
     <Compile Include="Commands\IllegalUseOfCommandException.cs" />
@@ -102,7 +106,7 @@
     <Compile Include="CounterBase.cs" />
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
-    <Compile Include="MotorSafety.cs" />
+    <Compile Include="IMotorSafety.cs" />
     <Compile Include="IPIDOutput.cs" />
     <Compile Include="IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />

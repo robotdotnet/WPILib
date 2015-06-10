@@ -4,15 +4,16 @@ namespace WPILib.Buttons
 {
     /// <summary>
     /// This class provides an easy way to link commands to OI inputs.
-    ///
+    /// </summary>
+    /// <remarks>
     /// It is very easy to link a button to a command.  For instance, you could
     /// link the trigger button of a joystick to a "score" command.
     ///
-    /// This class represents a subclass of Trigger that is specifically aimed at
+    /// <para/>This class represents a subclass of Trigger that is specifically aimed at
     /// buttons on an operator interface as a common use case of the more generalized
     /// Trigger objects. This is a simple wrapper around Trigger with the method names
     /// renamed to fit the Button object use.
-    /// </summary>
+    /// </remarks>
     public abstract class Button : Trigger
     {
         /// <summary>
@@ -26,10 +27,10 @@ namespace WPILib.Buttons
 
         /// <summary>
         /// Constantly starts the given command while the button is held.
-        /// 
+        /// </summary><remarks>
         /// <see cref="Command.Start()"/> will be called repeatedly while the button is held,
         /// and will be canceled when the button is released.
-        /// </summary>
+        /// </remarks>
         /// <param name="command">The command to start</param>
         public void WhileHeld(Command command)
         {

@@ -5,15 +5,15 @@ namespace WPILib
 {
     /// <summary>
     /// VEX Robotics Victor 888 Speed Controller
-    /// <para> </para>
+    /// </summary><remarks>
     /// The Vex Robotics Victor 884 Speed Controller can also be used with this
-    /// <para />class but may need to be calibrated per the Victor 884 user manual.
-    /// </summary>
+    /// class but may need to be calibrated per the Victor 884 user manual.
+    /// </remarks>
     public class Victor : SafePWM, ISpeedController
     {
         /// <summary>
         /// Common initialization code called by all constructors.
-        /// <para> </para>
+        /// </summary><remarks>
         /// Note that the Victor uses the following bounds for PWM values.  These values were determined
         /// <para /> empirically and optimized for the Victor 888. These values should work reasonably well for
         /// <para /> Victor 884 controllers also but if users experience issues such as asymmetric behaviour around
@@ -26,8 +26,8 @@ namespace WPILib
         /// <para />  - 1.507ms = center of the deadband range (off)
         /// <para />  - 1.49ms = the "low end" of the deadband range
         /// <para />  - 1.026ms = full "reverse"
-        /// </summary>
-        private void InitVictor()
+        /// </remarks>
+        protected void InitVictor()
         {
             SetBounds(2.027, 1.525, 1.507, 1.49, 1.026);
             PeriodMultiplier = PeriodMultiplier.K2X;
@@ -77,11 +77,11 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Set the PWM value.
-        /// <para> </para>
+        /// Set the PWM value for a specific sync group
+        /// </summary> <remarks>
         /// The PWM value is set using a range of -1.0 to 1.0, appropriately
         /// scaling the value for the FPGA.
-        /// </summary>
+        /// </remarks>
         /// <param name="value">The speed to set. Value should be between -1.0 and 1.0</param>
         /// <param name="syncGroup">The update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.</param>
         [Obsolete("For compatibility with CAN Jaguar")]

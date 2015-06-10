@@ -2,6 +2,9 @@
 
 namespace WPILib.CAN
 {
+    /// <summary>
+    /// A class for dealing with CAN Exceptions
+    /// </summary>
     class CANExceptionFactory
     {
 // ReSharper disable InconsistentNaming

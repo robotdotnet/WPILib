@@ -10,7 +10,7 @@ namespace WPILib
     {
         /// <summary>
         /// Common initialization code called by all constructors.
-        /// <para> </para>
+        /// </summary><remarks>
         /// Note that the VictorSP uses the following bounds for PWM values. These values should work reasonably well for
         /// <para />most controllers, but if users experience issues such as asymmetric behavior around
         /// <para />the deadband or inability to saturate the controller in either direction, calibration is recommended.
@@ -21,8 +21,8 @@ namespace WPILib
         /// <para />  - 1.50ms = center of the deadband range (off)
         /// <para />  - 1.48ms = the "low end" of the deadband range
         /// <para />  - .997ms = full "reverse"
-        /// </summary>
-        private void InitVictorSP()
+        /// </remarks>
+        protected void InitVictorSP()
         {
             SetBounds(2.004, 1.52, 1.50, 1.48, .997);
             PeriodMultiplier = PeriodMultiplier.K1X;
@@ -72,11 +72,11 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Set the PWM value.
-        /// <para> </para>
+        /// Set the PWM value for a specific sync group.
+        /// </summary> <remarks>
         /// The PWM value is set using a range of -1.0 to 1.0, appropriately
         /// scaling the value for the FPGA.
-        /// </summary>
+        /// </remarks>
         /// <param name="value">The speed to set. Value should be between -1.0 and 1.0</param>
         /// <param name="syncGroup">The update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.</param>
         [Obsolete("For compatibility with CAN Jaguar")]

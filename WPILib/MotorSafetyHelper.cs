@@ -5,13 +5,17 @@ using static WPILib.Timer;
 namespace WPILib
 {
     /// <summary>
-    /// The MotorSafetyHelper object is constructed for every object that wants to implement the Motor
-    /// Safety protocol. The helper object has the code to actually do the timing and call the
+    /// The <see cref="MotorSafetyHelper"/> object is constructed for every object that wants to implement the Motor
+    /// Safety protocol. </summary>
+    /// <remarks>The helper object has the code to actually do the timing and call the
     /// motors Stop() method when the timeout expires. The motor object is expected to call the
     /// Feed() method whenever the motors value is updated.
-    /// </summary>
+    /// </remarks>
     public class MotorSafetyHelper
     {
+        /// <summary>
+        /// The default safety expiration time.
+        /// </summary>
         public const double DefaultSafetyExpiration = 0.1;
 
         private double m_stopTime;
@@ -21,14 +25,14 @@ namespace WPILib
         private static object s_lockObject = new object();
 
         /// <summary>
-        /// The constructor for a MotorSafetyHelper object
-        /// <para />
+        /// The constructor for a <see cref="MotorSafetyHelper"/> object
+        /// </summary><remarks>
         /// The helper object is constructed for every object that wants to implement the Motor
         /// Safety protocol. The helper object has the code to actually do the timing and call the
         /// motors Stop() method when the timeout expires. The motor object is expected to call the
         /// Feed() method whenever the motors value is updated.
-        /// </summary>
-        /// <param name="safeObject">A pointer to the motor object implementing MotorSafety. This is used
+        /// </remarks>
+        /// <param name="safeObject">A pointer to the motor object implementing <see cref="IMotorSafety"/>. This is used
         /// to call the Stop() method on the motor</param>
         public MotorSafetyHelper(IMotorSafety safeObject)
         {
@@ -44,9 +48,9 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Feed the motor safety object.
-        /// <para />Resets the timer on this object that is used to do the timeouts.
-        /// </summary>
+        /// Feed the motor safety object. </summary><remarks>
+        /// Resets the timer on this object that is used to do the timeouts.
+        /// </remarks>
         public void Feed()
         {
             m_stopTime = FPGATimestamp + Expiration;
@@ -65,11 +69,11 @@ namespace WPILib
         public bool Alive => !SafetyEnabled || m_stopTime > FPGATimestamp;
 
         /// <summary>
-        /// Check if this motor has exceeded its timeout.
-        /// <para />This method is called periodicallty to determine if this motor has exceeded its timeout value.
+        /// Check if this motor has exceeded its timeout. </summary> 
+        /// <remarks>This method is called periodically to determine if this motor has exceeded its timeout value.
         /// If it has, the stop method is called, and the motor is shut down until its value is
         /// updated again.
-        /// </summary>
+        /// </remarks>
         public void Check()
         {
             if (!SafetyEnabled || RobotState.Disabled || RobotState.Test)
@@ -85,16 +89,16 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Enable/disable motor safety for this device.
-        /// <para />Turn on and off the motor safety option for this PWM device.
-        /// </summary>
+        /// Enable/disable motor safety for this device. </summary><remarks>
+        /// Turn on and off the motor safety option for this PWM device.
+        /// </remarks>
         /// <value>True if motor safety is enforced for this object</value>
         public bool SafetyEnabled { set; get; }
 
         /// <summary>
-        /// Check the motors to see if any have timed out.
-        /// <para />This static method is called periodically to poll all motors and stop any that have timed out.
-        /// </summary>
+        /// Check the motors to see if any have timed out. </summary><remarks>
+        /// This static method is called periodically to poll all motors and stop any that have timed out.
+        /// </remarks>
         public static void CheckMotors()
         {
             lock (s_lockObject)
