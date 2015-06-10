@@ -98,14 +98,14 @@
     <Compile Include="Gyro.cs" />
     <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
-    <Compile Include="Interfaces\Accelerometer.cs" />
+    <Compile Include="Interfaces\IAccelerometer.cs" />
     <Compile Include="CounterBase.cs" />
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="MotorSafety.cs" />
     <Compile Include="IPIDOutput.cs" />
     <Compile Include="IPIDSource.cs" />
-    <Compile Include="Interfaces\Potentiometer.cs" />
+    <Compile Include="Interfaces\IPotentiometer.cs" />
     <Compile Include="SmartDashboards\SendableChooser.cs" />
     <Compile Include="ISpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />

@@ -1,18 +1,19 @@
 ﻿using System;
 using HAL_Base;
 using WPILib.Interfaces;
+using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
-    class BuiltInAccelerometer : Accelerometer
+    class BuiltInAccelerometer : IAccelerometer
     {
-        public BuiltInAccelerometer(Range range)
+        public BuiltInAccelerometer(AccelerometerRange range)
         {
-            Range = range;
+            AccelerometerRange = range;
             HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
         }
 
-        public Range Range
+        public AccelerometerRange AccelerometerRange
         {
             set
             {
@@ -20,16 +21,16 @@ namespace WPILib
 
                 switch (value)
                 {
-                    case Range.k2G:
-                        HALAccelerometer.SetAccelerometerRange(AccelerometerRange.Range_2G);
+                    case AccelerometerRange.k2G:
+                        HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_2G);
                         break;
-                    case Range.k4G:
-                        HALAccelerometer.SetAccelerometerRange(AccelerometerRange.Range_4G);
+                    case AccelerometerRange.k4G:
+                        HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_4G);
                         break;
-                    case Range.k8G:
-                        HALAccelerometer.SetAccelerometerRange(AccelerometerRange.Range_8G);
+                    case AccelerometerRange.k8G:
+                        HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_8G);
                         break;
-                    case Range.k16G:
+                    case AccelerometerRange.k16G:
                         throw new SystemException("16G range not supported (use k2G, k4G, or k8G)");
                 }
 
@@ -37,10 +38,10 @@ namespace WPILib
             }
         }
 
-        public double X => HALAccelerometer.GetAccelerometerX();
+        public double GetX() => HALAccelerometer.GetAccelerometerX();
 
-        public double Y => HALAccelerometer.GetAccelerometerY();
+        public double GetY() => HALAccelerometer.GetAccelerometerY();
 
-        public double Z => HALAccelerometer.GetAccelerometerZ();
+        public double GetZ() => HALAccelerometer.GetAccelerometerZ();
     }
 }

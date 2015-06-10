@@ -4,7 +4,7 @@ using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    public abstract class ADXL345 : SensorBase, Accelerometer, ILiveWindowSendable
+    public abstract class ADXL345 : SensorBase, IAccelerometer, ILiveWindowSendable
     {
         protected const byte PowerCtlRegister = 0x2D;
         protected const byte DataFormatRegister = 0x31;
@@ -42,23 +42,23 @@ namespace WPILib
 
         protected abstract void WriteRange(byte value);
 
-        public Range Range
+        public AccelerometerRange AccelerometerRange
         {
             set
             {
                 byte retVal = 0;
                 switch (value)
                 {
-                    case Range.k2G:
+                    case AccelerometerRange.k2G:
                         retVal = 0;
                         break;
-                    case Range.k4G:
+                    case AccelerometerRange.k4G:
                         retVal = 1;
                         break;
-                    case Range.k8G:
+                    case AccelerometerRange.k8G:
                         retVal = 2;
                         break;
-                    case Range.k16G:
+                    case AccelerometerRange.k16G:
                         retVal = 3;
                         break;
                 }
@@ -66,11 +66,11 @@ namespace WPILib
             }
         }
 
-        public double X => GetAcceleration(Axes.X);
+        public double GetX() => GetAcceleration(Axes.X);
 
-        public double Y => GetAcceleration(Axes.Y);
+        public double GetY() => GetAcceleration(Axes.Y);
 
-        public double Z => GetAcceleration(Axes.Z);
+        public double GetZ() => GetAcceleration(Axes.Z);
 
         public abstract double GetAcceleration(Axes axis);
 
@@ -91,9 +91,9 @@ namespace WPILib
         {
             if (m_table != null)
             {
-                m_table.PutNumber("X", X);
-                m_table.PutNumber("Y", Y);
-                m_table.PutNumber("Z", Z);
+                m_table.PutNumber("X", GetX());
+                m_table.PutNumber("Y", GetY());
+                m_table.PutNumber("Z", GetZ());
             }
         }
 

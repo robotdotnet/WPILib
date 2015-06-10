@@ -3,7 +3,7 @@ using WPILib.Interfaces;
 
 namespace WPILib
 {
-    public class AnalogPotentiometer : Potentiometer, IDisposable
+    public class AnalogPotentiometer : IPotentiometer, IDisposable
     {
         private double m_fullRange, m_offset;
         private AnalogInput m_analogInput;

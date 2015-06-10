@@ -2,6 +2,7 @@
 using HAL_Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
+using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
@@ -12,7 +13,7 @@ namespace WPILib
 
         private SPI m_spi;
 
-        public ADXL345_SPI(SPI.Port port, Range range)
+        public ADXL345_SPI(SPI.Port port, AccelerometerRange range)
         {
             m_spi = new SPI(port);
             m_spi.SetClockRate(500000);
@@ -23,7 +24,7 @@ namespace WPILib
             commands[0] = PowerCtlRegister;
             commands[1] = (byte)PowerCtl.Measure;
             m_spi.Write(commands, 2);
-            Range = range;
+            AccelerometerRange = range;
             HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_SPI);
             LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
