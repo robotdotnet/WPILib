@@ -105,9 +105,9 @@
         }
 
         /// <summary>
-        /// 
+        /// Initializes an instance of the <see cref="XboxController"/> class
         /// </summary>
-        /// <param name="port"></param>
+        /// <param name="port">The port the controller is in.</param>
         public XboxController(int port)
             : base(port)
         {

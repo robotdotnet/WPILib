@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -12,6 +13,9 @@ namespace HAL_Base
         public const uint solenoid_kNumDO7_0Elements = 8;
         //public const uint interrupt_kNumSystems ;//Find value
         public const uint kSystemClockTicksPerMicrosecond = 40;
+
+        public const string HALSim = "HAL-Simulation.dll";
+        public const string HALRIO = "/home/lvuser/mono/HAL-RoboRIO.dll";
 
 
         internal static Assembly HALAssembly;
@@ -32,12 +36,12 @@ namespace HAL_Base
         }
 
         /// <summary>
-        /// HAL Initalization. Must be called before any other HAL functions.
+        /// HAL Initialization. Must be called before any other HAL functions.
         /// </summary>
         /// <param name="mode">Initialization Mode</param>
         public static void Initialize(int mode = 0)
         {
-            HALAssembly = Assembly.LoadFrom(IsSimulation ? "HAL-Simulation.dll" : "/home/lvuser/mono/HAL-RoboRIO.dll");
+            HALAssembly = Assembly.LoadFrom(IsSimulation ? HALSim : HALRIO);
 
             SetupDelegates();
             HALAccelerometer.SetupDelegates();
