@@ -86,46 +86,40 @@ namespace WPILib
             //base.Dispose();
         }
 
-        public double Angle
+        public double GetAngle()
         {
-            get
+            if (m_analog == null)
             {
-                if (m_analog == null)
-                {
-                    return 0.0;
-                }
-                else
-                {
-                    m_analog.GetAccumulatorOutput(m_result);
+                return 0.0;
+            }
+            else
+            {
+                m_analog.GetAccumulatorOutput(m_result);
 
-                    long value = m_result.Value - (long) (m_result.Count*m_offset);
+                long value = m_result.Value - (long) (m_result.Count*m_offset);
 
-                    double scaledValue = value
-                                         *1e-9
-                                         *m_analog.LSBWeight
-                                         *(1 << m_analog.AverageBits)
-                                         /(AnalogInput.GlobalSampleRate*Sensitivity);
+                double scaledValue = value
+                                     *1e-9
+                                     *m_analog.LSBWeight
+                                     *(1 << m_analog.AverageBits)
+                                     /(AnalogInput.GlobalSampleRate*Sensitivity);
 
-                    return scaledValue;
-                }
+                return scaledValue;
             }
         }
 
-        public double Rate
+        public double GetRate()
         {
-            get
+            if (m_analog == null)
             {
-                if (m_analog == null)
-                {
-                    return 0.0;
-                }
-                else
-                {
-                    return (m_analog.GetAverageValue() - (m_center + m_offset))
-                           *1e-9
-                           *m_analog.LSBWeight
-                           /((1 << m_analog.OversampleBits)*Sensitivity);
-                }
+                return 0.0;
+            }
+            else
+            {
+                return (m_analog.GetAverageValue() - (m_center + m_offset))
+                       *1e-9
+                       *m_analog.LSBWeight
+                       /((1 << m_analog.OversampleBits)*Sensitivity);
             }
         }
 
@@ -154,9 +148,9 @@ namespace WPILib
             switch (m_pidSource)
             {
                 case PIDSourceParameter.Rate:
-                    return Rate;
+                    return GetRate();
                 case PIDSourceParameter.Angle:
-                    return Angle;
+                    return GetAngle();
                 default:
                     return 0.0;
             }

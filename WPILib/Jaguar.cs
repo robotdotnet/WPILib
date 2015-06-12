@@ -35,7 +35,7 @@ namespace WPILib
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="channel">The The PWM channel that the Jaguar is attached to. 0-9 are on-board, 10-19 are on the MXP port</param>
+        /// <param name="channel">The PWM channel that the Jaguar is attached to. 0-9 are on-board, 10-19 are on the MXP port</param>
         public Jaguar(int channel)
             : base(channel)
         {

@@ -8,7 +8,7 @@
     public interface IController
     {
         /// <summary>
-        /// Alllows the control loop to run
+        /// Allows the control loop to run
         /// </summary>
         void Enable();
 

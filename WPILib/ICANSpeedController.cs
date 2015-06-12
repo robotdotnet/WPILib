@@ -2,7 +2,9 @@
 
 namespace WPILib
 {
-
+    /// <summary>
+    /// Mode determines how the <see cref="ICANSpeedController"/> is controlled, used internally.
+    /// </summary>
     public enum ControlMode
     {
         PercentVbus = 0,
@@ -28,33 +30,44 @@ namespace WPILib
         RevSoftLimit = 0x80,
     };
 
+
     public enum Limits
     {
         ForwardLimit = 1,
         ReverseLimit = 2
     };
 
+    /// <summary>
+    /// Determines how the <see cref="ICANSpeedController"/> behaves when sending a
+    /// zero signal.
+    /// </summary>
     public enum NeutralMode
     {
-        /** Use the NeutralMode that is set by the jumper wire on the CAN device */
+        ///Use the <see cref="NeutralMode"/> that is set by the jumper wire on the CAN device
         Jumper = 0,
-        /** Stop the motor's rotation by applying a force. */
+        ///Stop the motor's rotation by applying a force.
         Brake = 1,
-        /** Do not attempt to stop the motor. Instead allow it to coast to a stop without applying resistance. */
+        ///Do not attempt to stop the motor. Instead allow it to coast to a stop without applying resistance.
         Coast = 2
     };
 
+    /// <summary>
+    /// Determines which sensor to use for position reference.
+    /// </summary>
     public enum LimitMode
     {
-        /** Only use switches for limits */
+        ///Only use switches for limits
         SwitchInputsOnly = 0,
-        /** Use both switches and soft limits */
+        ///Use both switches and soft limits
         SoftPositionLimits = 1,
         /* SRX extensions */
-        /** Disable switches and disable soft limits */
+        ///Disable switches and disable soft limits
         SrxDisableSwitchInputs = 2,
     };
 
+    /// <summary>
+    /// Interface for CAN Speed Controllers like <see cref="CANTalon"/> and <see cref="CANJaguar"/>
+    /// </summary>
     public interface ICANSpeedController : ISpeedController
     {
         double P { set; get; }

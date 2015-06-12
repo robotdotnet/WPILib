@@ -1,4 +1,5 @@
 ﻿using static  HAL_Base.HALPower;
+using static WPILib.Utility;
 
 namespace WPILib
 {
@@ -10,6 +11,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetVinVoltage(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -20,6 +22,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetVinCurrent(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -30,6 +33,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetUserVoltage3V3(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -40,6 +44,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetUserCurrent3V3(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -50,6 +55,7 @@ namespace WPILib
             {
                 int status = 0;
                 bool retVal = GetUserActive3V3(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -60,6 +66,7 @@ namespace WPILib
             {
                 int status = 0;
                 int retVal = GetUserCurrentFaults3V3(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -70,6 +77,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetUserVoltage5V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -80,6 +88,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetUserCurrent5V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -90,6 +99,7 @@ namespace WPILib
             {
                 int status = 0;
                 bool retVal = GetUserActive5V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -100,6 +110,7 @@ namespace WPILib
             {
                 int status = 0;
                 int retVal = GetUserCurrentFaults5V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -110,6 +121,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetUserVoltage6V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -120,6 +132,7 @@ namespace WPILib
             {
                 int status = 0;
                 double retVal = GetUserCurrent6V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -130,6 +143,7 @@ namespace WPILib
             {
                 int status = 0;
                 bool retVal = GetUserActive6V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -140,6 +154,7 @@ namespace WPILib
             {
                 int status = 0;
                 int retVal = GetUserCurrentFaults6V(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }

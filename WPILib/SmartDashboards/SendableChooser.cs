@@ -9,14 +9,14 @@ namespace WPILib.SmartDashboards
     /// <summary>
     /// The <see cref="SendableChooser"/> class is a useful tool for presenting a 
     /// selection of options to the <see cref="SmartDashboard"/>
-    /// <para> </para>
+    /// </summary><remarks>
     ///     For instance, you may wish to be able to select between multiple
     /// autonomous modes. You can do this by putting every possible <see cref="Command"/>
     /// you want to run as an autonomous into a <see cref="SendableChooser"/> and then put
     /// it into the <see cref="SmartDashboard"/> to have a list of options appear on the
     /// laptop. Once autonomous starts, simply ask the <see cref="SendableChooser"/> what
     /// the selected value is.
-    /// </summary>
+    /// </remarks>
     public class SendableChooser : ISendable
     {
         private static readonly string DEFAULT = "default";

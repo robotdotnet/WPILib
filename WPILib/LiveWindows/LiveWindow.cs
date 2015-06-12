@@ -8,8 +8,8 @@ namespace WPILib.LiveWindows
 {
     /// <summary>
     /// A LiveWindow component is a device (sensor or actuator) that should be added to the
-    /// <para /> SmartDashboard in test mode. The components are cached until the first time the robot
-    /// <para /> enters Test mode. This allows the components to be inserted, then renamed.
+    ///  SmartDashboard in test mode. The components are cached until the first time the robot
+    ///  enters Test mode. This allows the components to be inserted, then renamed.
     /// </summary>
     internal class LiveWindowComponent
     {
@@ -41,7 +41,7 @@ namespace WPILib.LiveWindows
     }
 
     /// <summary>
-    /// The LiveWindow class is rhe public interface for putting sensor and actuators on the LiveWindow.
+    /// The LiveWindow class is the public interface for putting sensor and actuators on the LiveWindow.
     /// </summary>
     public class LiveWindow
     {
@@ -54,11 +54,12 @@ namespace WPILib.LiveWindows
 
         /// <summary>
         /// Initialize all the LiveWindow elements the first time we enter LiveWindow
-        /// <para /> mode. By holding off creating the NetworkTable entries, it allows them to
-        /// <para /> be redefined before the first time in LiveWindow mode. This allows
-        /// <para /> default sensor and actuator values to be created that are replaced with
-        /// <para /> the custom names from users calling addActuator and addSensor.
-        /// </summary>
+        /// mode.</summary>
+        /// <remarks> By holding off creating the NetworkTable entries, it allows them to
+        /// be redefined before the first time in LiveWindow mode. This allows
+        /// default sensor and actuator values to be created that are replaced with
+        /// the custom names from users calling addActuator and addSensor.
+        /// </remarks>
         private static void InitializeLiveWindowComponents()
         {
             Console.WriteLine("Initializing the components  first time");
@@ -84,15 +85,16 @@ namespace WPILib.LiveWindows
         }
 
         /// <summary>
-        /// Set the enabled state of LiveWindow. If it's being enabled, turn off the
-        /// <para /> scheduler and remove all the commands from the queue and enable all the
-        /// <para /> components registered for LiveWindow. If it's being disabled, stop all
-        /// <para /> the registered components and reenable the scheduler. TODO: add code to
-        /// <para /> disable PID loops when enabling LiveWindow. The commands should reenable
-        /// <para /> the PID loops themselves when they get rescheduled. This prevents arms
-        /// <para /> from starting to move around, etc. after a period of adjusting them in
-        /// <para /> LiveWindow mode.
-        /// </summary>
+        /// Set the enabled state of LiveWindow. </summary>
+        /// <remarks>If it's being enabled, turn off the
+        /// scheduler and remove all the commands from the queue and enable all the
+        /// components registered for LiveWindow. If it's being disabled, stop all
+        /// the registered components and reenable the scheduler. TODO: add code to
+        /// disable PID loops when enabling LiveWindow. The commands should reenable
+        /// the PID loops themselves when they get rescheduled. This prevents arms
+        /// from starting to move around, etc. after a period of adjusting them in
+        /// LiveWindow mode.
+        /// </remarks>
         /// <param name="enabled"></param>
         public static void SetEnabled(bool enabled)
         {
@@ -171,8 +173,8 @@ namespace WPILib.LiveWindows
 
         /// <summary>
         /// Add Sensor to LiveWindow. The components are shown with the type and
-        /// <para /> channel like this: Gyro[1] for a gyro object connected to the first
-        /// <para /> analog channel.
+        ///  channel like this: Gyro[1] for a gyro object connected to the first
+        ///  analog channel.
         /// </summary>
         /// <param name="moduleType">A string indicating the type if the module used in the naming (above)</param>
         /// <param name="channel">The channel number the device is connected to</param>
@@ -188,10 +190,10 @@ namespace WPILib.LiveWindows
         }
 
         /// <summary>
-        /// Add Actuator to LiveWindow. The components are shown with the module
-        /// <para /> type, slot and channel like this: Servo[1,2] for a servo object connected
-        /// <para /> to the first digital module and PWM port 2.
-        /// </summary>
+        /// Add Actuator to LiveWindow. </summary><remarks>The components are shown with the module
+        /// type, slot and channel like this: Servo[1,2] for a servo object connected
+        /// to the first digital module and PWM port 2.
+        /// </remarks>
         /// <param name="moduleType">A string that defines the module name in the label for the value</param>
         /// <param name="channel">The channel number the device is connected to (usually PWM)</param>
         /// <param name="component">A reference to the object being added</param>
@@ -202,10 +204,10 @@ namespace WPILib.LiveWindows
         }
 
         /// <summary>
-        /// Add Actuator to LiveWindow. The components are shown with the module
-        /// <para /> type, slot and channel like this: Servo[1,2] for a servo object connected
-        /// <para /> to the first digital module and PWM port 2.
-        /// </summary>
+        /// Add Actuator to LiveWindow. </summary><remarks>The components are shown with the module
+        /// type, slot and channel like this: Servo[1,2] for a servo object connected
+        /// to the first digital module and PWM port 2.
+        /// </remarks>
         /// <param name="moduleType">A string that defines the module name in the label for the value</param>
         /// <param name="moduleNumber">The number of the particular module type</param>
         /// <param name="channel">The channel number the device is connected to (usually PWM)</param>

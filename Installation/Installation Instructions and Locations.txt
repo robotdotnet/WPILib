@@ -1,5 +1,0 @@
-Installing Mono
-1. Unzip the IPKs.zip located in the IPKs folder.
-2. Copy all the IPKs to a folder on the RoboRIO using FTP.
-3. Login to the RoboRIO over SSH using the admin account.
-4. Move to the folder you placed the ipks in, and run "opkg install *.ipk"

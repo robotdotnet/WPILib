@@ -9,10 +9,10 @@ namespace WPILib
 {
     /// <summary>
     /// Solenoid class for running high voltage digital output.
-    /// <para> </para>
+    /// </summary><remarks>
     /// The Solenoid class is typically used for pneumatics solenoids, but could be used
     /// <para /> for any device within the current spec of the PCM. 
-    /// </summary>
+    /// </remarks>
     public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
         private int m_channel;//The channel to control.
@@ -93,12 +93,12 @@ namespace WPILib
 
         /// <summary>
         /// Check if solenoid is blacklisted.
-        /// <para> </para>
-        /// <para />If a solenoid is shorted, it is added to the blacklist and
-        /// <para />disabled until power cycle, or until faults are cleared.
-        /// <para />See <see cref="SolenoidBase.ClearAllPCMStickyFaults()"/>
         /// </summary>
-        /// <returns>IF solenoid is disabled due to short.</returns>
+        /// <remarks>If a solenoid is shorted, it is added to the blacklist and
+        /// disabled until power cycle, or until faults are cleared.
+        /// See <see cref="SolenoidBase.ClearAllPCMStickyFaults()"/>
+        /// </remarks>
+        /// <returns>If solenoid is disabled due to short.</returns>
         public bool IsBlackListed()
         {
             int value = GetPCMSolenoidBlackList() & (1 << m_channel);
@@ -110,34 +110,56 @@ namespace WPILib
         /// </summary>
         public string SmartDashboardType => "Solenoid";
 
-        private ITable m_table;
-
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
+            Table = subtable;
             UpdateTable();
         }
 
-        public ITable Table => m_table;
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
 
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
         public void UpdateTable()
         {
-            m_table?.PutBoolean("Value", Get());
+            Table?.PutBoolean("Value", Get());
         }
 
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
         public void StartLiveWindowMode()
         {
             Set(false);
-            m_table?.AddTableListener("Value", this, true);
+            Table?.AddTableListener("Value", this, true);
         }
 
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
         public void StopLiveWindowMode()
         {
             Set(false);
-            m_table.RemoveTableListener(this);
+            Table?.RemoveTableListener(this);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isNew"></param>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             Set((bool)value);
