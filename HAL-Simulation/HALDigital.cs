@@ -526,7 +526,7 @@ namespace HAL_FRC
         ///dataReceived: byte*
         ///size: byte
         [DllImport("libHALAthena_shared.so", EntryPoint = "spiTransaction")]
-        public static extern int spiTransaction(byte port, ref byte dataToSend, ref byte dataReceived, byte size);
+        public static extern int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size);
 
 
         /// Return Type: int
@@ -534,7 +534,7 @@ namespace HAL_FRC
         ///dataToSend: byte*
         ///sendSize: byte
         [DllImport("libHALAthena_shared.so", EntryPoint = "spiWrite")]
-        public static extern int spiWrite(byte port, ref byte dataToSend, byte sendSize);
+        public static extern int spiWrite(byte port, byte[] dataToSend, byte sendSize);
 
 
         /// Return Type: int
@@ -542,7 +542,7 @@ namespace HAL_FRC
         ///buffer: byte*
         ///count: byte
         [DllImport("libHALAthena_shared.so", EntryPoint = "spiRead")]
-        public static extern int spiRead(byte port, ref byte buffer, byte count);
+        public static extern int spiRead(byte port, byte[] buffer, byte count);
 
 
         /// Return Type: void
@@ -630,7 +630,7 @@ namespace HAL_FRC
         ///dataReceived: byte*
         ///receiveSize: byte
         [DllImport("libHALAthena_shared.so", EntryPoint = "i2CTransaction")]
-        public static extern int i2CTransaction(byte port, byte deviceAddress, ref byte dataToSend, byte sendSize, ref byte dataReceived, byte receiveSize);
+        public static extern int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize, byte[] dataReceived, byte receiveSize);
 
 
         /// Return Type: int
@@ -639,7 +639,7 @@ namespace HAL_FRC
         ///dataToSend: byte*
         ///sendSize: byte
         [DllImport("libHALAthena_shared.so", EntryPoint = "i2CWrite")]
-        public static extern int i2CWrite(byte port, byte deviceAddress, ref byte dataToSend, byte sendSize);
+        public static extern int i2CWrite(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize);
 
 
         /// Return Type: int
@@ -648,7 +648,7 @@ namespace HAL_FRC
         ///buffer: byte*
         ///count: byte
         [DllImport("libHALAthena_shared.so", EntryPoint = "i2CRead")]
-        public static extern int i2CRead(byte port, byte deviceAddress, ref byte buffer, byte count);
+        public static extern int i2CRead(byte port, byte deviceAddress, byte[] buffer, byte count);
 
 
         /// Return Type: void

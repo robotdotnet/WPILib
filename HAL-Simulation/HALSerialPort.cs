@@ -111,7 +111,7 @@ namespace HAL_FRC
         ///count: int
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialRead")]
-        public static extern uint serialRead(byte port, string buffer, int count, ref int status);
+        public static extern uint serialRead(byte port, byte[] buffer, int count, ref int status);
 
 
         /// Return Type: unsigned int
@@ -120,7 +120,7 @@ namespace HAL_FRC
         ///count: int
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialWrite")]
-        public static extern uint serialWrite(byte port, [In()] [MarshalAs(UnmanagedType.LPStr)] string buffer, int count, ref int status);
+        public static extern uint serialWrite(byte port, byte[] buffer, int count, ref int status);
 
 
         /// Return Type: void

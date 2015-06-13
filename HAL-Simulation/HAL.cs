@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 using HAL_Base;
 
 namespace HAL_FRC
@@ -112,16 +113,14 @@ namespace HAL_FRC
             return ptr;
         }
 
-        internal static object NewDataSem;
-
         public static void HALSetNewDataSem(IntPtr sem)
         {
             MULTIWAIT_ID p = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-            NewDataSem = p.lockObject;
+            SimData.halNewDataSem = p;
         }
 
         [DllImport("libHALAthena_shared.so", EntryPoint = "getHALErrorMessage")]
-        public static extern string getHALErrorMessage(int code);
+        public static extern IntPtr getHALErrorMessage(int code);
 
         [DllImport("libHALAthena_shared.so", EntryPoint = "getFPGAVersion")]
         public static extern ushort getFPGAVersion(ref int status);
@@ -142,113 +141,32 @@ namespace HAL_FRC
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetControlWord")]
         public static int HALGetControlWord(ref HALControlWord data)
         {
-            halData["alliance_station"] = 0;
-            halData["time"] = new Dictionary<string,object>()
-            {
-                {"has_source", false },
-                {"program_start", 0},
-                {"match_start", null}
-            };
-
-            halData["control"] = new Dictionary<string, bool>()
-            {
-                {"has_source", false},
-                {"enabled", false},
-                {"autonomous", false},
-                {"test", false},
-                {"eStop", false},
-                {"fms_attached", false},
-                {"ds_attached", false},
-            };
-            //halData["reports"] = 
-            halData["joysticks"] = new Dictionary<int, object>()
-            {
-                {
-                    0, new Dictionary<string, object>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    1, new Dictionary<string, object>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    2, new Dictionary<string, object>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    3, new Dictionary<string, object>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    4, new Dictionary<string, object>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    5, new Dictionary<string, object>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                }
-            };
-
-            halData["fpga_button"] = false;
-            halData["error_data"] = null;
-
-            halData["accelerometer"] = new Dictionary<string, object>()
-            {
-                {"hal_source", false },
-                {"active", false },
-                {"range", 0 },
-                {"x", 0 },
-                {"y", 0 },
-                {"z", 0 },
-            };
-
-            halData["analog_sample_rate"] = 1024.0;
-
-
             return 0;
         }
 
         [DllImport("libHALAthena_shared.so", EntryPoint = "HALGetAllianceStation")]
         public static extern int HALGetAllianceStation(ref HALAllianceStationID allianceStation);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickAxes")]
-        public static extern int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes);
+        public static int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes)
+        {
+            axes.axes = new HALJoystickAxesArray();
+            axes.count = 12; //Need to make this netter.
+            return 0;
+        }
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickPOVs")]
-        public static extern int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs);
+        public static int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs)
+        {
+            povs.povs = new HALJoystickPOVArray();
+            povs.count = 12;
+            return 0;
+        }
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickButtons")]
-        public static extern int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons);
+        public static int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons)
+        {
+            buttons.buttons = 123;
+            buttons.count = 12;
+            return 0;
+        }
 
         [DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickDescriptor")]
         public static extern int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
@@ -273,25 +191,52 @@ namespace HAL_FRC
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALInitialize")]
         public static int HALInitialize(int mode)
         {
+            SimData.ResetHALData();
 
+            timer = new Timer((sender) =>
+            {
+                if (SimData.halNewDataSem != null)
+                {
+                    lock (SimData.halNewDataSem.Value.lockObject)
+                    {
+                        try
+                        {
+                            Monitor.PulseAll(SimData.halNewDataSem.Value.lockObject);
+                        }
+                        catch (ThreadInterruptedException)
+                        {
+
+                        }
+                    }
+                }
+            },null, 20, 20);
 
             return 1;
         }
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramStarting")]
-        public static extern void HALNetworkCommunicationObserveUserProgramStarting();
+        private static Timer timer;
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramDisabled")]
-        public static extern void HALNetworkCommunicationObserveUserProgramDisabled();
+        public static void HALNetworkCommunicationObserveUserProgramStarting()
+        {
+        }
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramAutonomous")]
-        public static extern void HALNetworkCommunicationObserveUserProgramAutonomous();
+        public static void HALNetworkCommunicationObserveUserProgramDisabled()
+        {
+            
+        }
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTeleop")]
-        public static extern void HALNetworkCommunicationObserveUserProgramTeleop();
+        public static void HALNetworkCommunicationObserveUserProgramAutonomous()
+        {
+        }
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTest")]
-        public static extern void HALNetworkCommunicationObserveUserProgramTest();
+        public static void HALNetworkCommunicationObserveUserProgramTeleop()
+        {
+            
+        }
+
+        public static void HALNetworkCommunicationObserveUserProgramTest()
+        {
+        }
 
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALReport")]
         //public static extern uint HALReport(byte resource, byte instanceNumber, byte context, string feature = null);

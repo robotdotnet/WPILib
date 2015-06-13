@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -64,7 +66,28 @@ namespace HAL_Base
             {
                 throw new Exception("HAL Initialize Failed");
             }
+
+            if (IsSimulation)
+            {
+                string className = "SimData";
+                var types = HAL.HALAssembly.GetTypes();
+                var q = from t in types where t.IsClass && t.Name == className select t;
+                Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+
+                GetData data = (GetData) Delegate.CreateDelegate(typeof (GetData), type.GetMethod("GetData"));
+
+                data(out halData, out halInData);
+
+                bool source = halData["analog_in"][0]["has_source"];
+
+                bool s = source;
+            }
         }
+
+        public delegate void GetData(out Dictionary<dynamic, dynamic> a, out Dictionary<dynamic, dynamic> b);
+
+        public static Dictionary<dynamic, dynamic> halData;
+        public static Dictionary<dynamic, dynamic> halInData;
 
         public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
             string feature = null)

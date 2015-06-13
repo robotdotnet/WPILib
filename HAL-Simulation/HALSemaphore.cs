@@ -85,7 +85,7 @@ namespace HAL_FRC
         public static IntPtr initializeSemaphore(uint initial_value)
         {
             SEMAPHORE_ID p = new SEMAPHORE_ID();
-            p.semaphore = new Semaphore((int)initial_value, 1);
+            p.semaphore = new Semaphore((int)initial_value, 3);
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
 
@@ -131,7 +131,7 @@ namespace HAL_FRC
         public static sbyte giveSemaphore(IntPtr sem)
         {
             var temp = (SEMAPHORE_ID)Marshal.PtrToStructure(sem, typeof(SEMAPHORE_ID));
-            temp.semaphore.Release();
+                temp.semaphore.Release();
             return 0;
         }
 
@@ -180,17 +180,41 @@ namespace HAL_FRC
             }
             return 0;
              */
+
+            bool canWait = true;
+
             var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+
+            new Thread(() =>
+            {
+                while (canWait) ;
+                Thread.Sleep(20);
+                lock (temp.lockObject)
+                {
+                    try
+                    {
+                        Monitor.PulseAll(temp.lockObject);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+            }).Start();
+             
+            
             lock (temp.lockObject)
             {
                 try
                 {
+                    canWait = false;
                     Monitor.Wait(temp.lockObject);
                 }
                 catch (ThreadInterruptedException)
                 {
                 }
             }
+            
+            
             return 0;
         }
 

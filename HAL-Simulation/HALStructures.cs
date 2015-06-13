@@ -16,8 +16,9 @@ namespace HAL_FRC
         public Semaphore semaphore;
         //public object lockObject;
     }
+
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MULTIWAIT_ID
+    public struct MULTIWAIT_ID
     {
         public object lockObject;
     }
