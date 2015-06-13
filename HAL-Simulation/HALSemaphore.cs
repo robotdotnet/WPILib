@@ -84,8 +84,8 @@ namespace HAL_FRC
         //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeSemaphore")]
         public static IntPtr initializeSemaphore(uint initial_value)
         {
-            SEMAPHORE_ID p = new SEMAPHORE_ID();
-            p.semaphore = new Semaphore((int)initial_value, 3);
+            MULTIWAIT_ID p = new MULTIWAIT_ID();
+            p.lockObject = new object();
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
 
@@ -108,8 +108,8 @@ namespace HAL_FRC
         //[DllImport("libHALAthena_shared.so", EntryPoint = "takeSemaphore")]
         public static sbyte takeSemaphore(IntPtr sem)
         {
-            var temp = (SEMAPHORE_ID) Marshal.PtrToStructure(sem, typeof (SEMAPHORE_ID));
-            temp.semaphore.WaitOne();
+            var temp = (MULTIWAIT_ID) Marshal.PtrToStructure(sem, typeof (MULTIWAIT_ID));
+            Monitor.Enter(temp.lockObject);//temp.semaphore.WaitOne();
             return 0;
         }
 
@@ -119,9 +119,11 @@ namespace HAL_FRC
         //[DllImport("libHALAthena_shared.so", EntryPoint = "tryTakeSemaphore")]
         public static sbyte tryTakeSemaphore(IntPtr sem)
         {
-            var temp = (SEMAPHORE_ID)Marshal.PtrToStructure(sem, typeof(SEMAPHORE_ID));
-            bool retVal = temp.semaphore.WaitOne(0);
-            return retVal ? (sbyte)1 : (sbyte)0;
+            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            bool retVal = Monitor.TryEnter(temp.lockObject);
+            
+            //bool retVal = temp.semaphore.WaitOne(0);
+            return retVal ? (sbyte)0 : (sbyte)1;
         }
 
 
@@ -130,8 +132,9 @@ namespace HAL_FRC
         //[DllImport("libHALAthena_shared.so", EntryPoint = "giveSemaphore")]
         public static sbyte giveSemaphore(IntPtr sem)
         {
-            var temp = (SEMAPHORE_ID)Marshal.PtrToStructure(sem, typeof(SEMAPHORE_ID));
-                temp.semaphore.Release();
+            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            if (Monitor.IsEntered(temp.lockObject))
+                Monitor.Exit(temp.lockObject);
             return 0;
         }
 
@@ -181,32 +184,12 @@ namespace HAL_FRC
             return 0;
              */
 
-            bool canWait = true;
-
             var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-
-            new Thread(() =>
-            {
-                while (canWait) ;
-                Thread.Sleep(20);
-                lock (temp.lockObject)
-                {
-                    try
-                    {
-                        Monitor.PulseAll(temp.lockObject);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-            }).Start();
-             
             
             lock (temp.lockObject)
             {
                 try
                 {
-                    canWait = false;
                     Monitor.Wait(temp.lockObject);
                 }
                 catch (ThreadInterruptedException)

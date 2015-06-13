@@ -9,11 +9,6 @@ namespace HAL_FRC
 {
     class NotifyDict<T, T2> : Dictionary<T, T2>
     {
-        public NotifyDict() : base()
-        {
-
-        }
-
         private Action<dynamic, dynamic> callback;
 
         public void Register(T key, Action<dynamic, dynamic> action, bool notify = false)
@@ -62,8 +57,8 @@ namespace HAL_FRC
 
     public class SimData
     {
-        static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
-        static Dictionary<dynamic, dynamic> halInData = new Dictionary<dynamic, dynamic>();
+        internal static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
+        internal static Dictionary<dynamic, dynamic> halInData = new Dictionary<dynamic, dynamic>();
 
         public static void GetData(out Dictionary<dynamic, dynamic> halDataOut, out Dictionary<dynamic, dynamic> halInDataOut)
         {
@@ -71,13 +66,13 @@ namespace HAL_FRC
             halInDataOut = halInData;
         }
 
-        public static MULTIWAIT_ID? halNewDataSem = null;
+        public static IntPtr halNewDataSem = IntPtr.Zero;
 
         public static void ResetHALData()
         {
             halData.Clear();
             halInData.Clear();
-            halNewDataSem = null;
+            halNewDataSem = IntPtr.Zero;
 
 
             halData["alliance_station"] = new IN(0);
@@ -99,6 +94,20 @@ namespace HAL_FRC
                 {"ds_attached", new OUT(false)},
             };
             halData["reports"] = new NotifyDict<dynamic, dynamic>();
+
+            halData["joysticks"] = new List<dynamic>();
+            for (int i = 0; i < 6; i++)
+            {
+                halData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
+                {
+                    {"has_source", new IN(false) },
+                        {"buttons", new IN(new bool[13]) },
+                        {"axes", new IN(new int[6]) },
+                        {"povs", new IN(new int[12]) }
+
+                });
+            }
+
             /*
             halData["joysticks"] = new Dictionary<dynamic, dynamic>
             {

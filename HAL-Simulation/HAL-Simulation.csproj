@@ -55,6 +55,8 @@
     <Compile Include="HALStructures.cs" />
     <Compile Include="HALUsageReporter.cs" />
     <Compile Include="HALUtilities.cs" />
+    <Compile Include="Hooks.cs" />
+    <Compile Include="ModeHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimData.cs" />
   </ItemGroup>
