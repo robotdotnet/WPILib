@@ -122,7 +122,7 @@ namespace WPILib
         private void Calculate()
         {
             bool enabled;
-            IPIDSource ipidInput;
+            IPIDSource pidInput;
 
             lock (this)
             {
@@ -135,16 +135,16 @@ namespace WPILib
                     return;
                 }
                 enabled = m_enabled; // take snapshot of these values...
-                ipidInput = m_ipidInput;
+                pidInput = m_ipidInput;
             }
 
             if (!enabled) return;
             double input;
             double result;
-            IPIDOutput ipidOutput = null;
+            IPIDOutput pidOutput = null;
             lock (this)
             {
-                input = ipidInput.PidGet();
+                input = pidInput.PidGet();
             }
             lock (this)
             {
@@ -195,10 +195,10 @@ namespace WPILib
                 {
                     m_result = m_minimumOutput;
                 }
-                ipidOutput = m_ipidOutput;
+                pidOutput = m_ipidOutput;
                 result = m_result;
             }
-            ipidOutput.PidWrite(result);
+            pidOutput.PidWrite(result);
         }
 
         public void SetPID(double p, double i, double d)
@@ -408,13 +408,13 @@ namespace WPILib
                 }
             }
         }
-
+        ///<inheritdoc/>
         public void Enable()
         {
             lock (m_lockObject)
                 m_enabled = true;
         }
-
+        ///<inheritdoc/>
         public void Disable()
         {
             lock (m_lockObject)

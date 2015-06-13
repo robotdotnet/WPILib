@@ -19,8 +19,9 @@
     <Language>en-US</Language>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.dll" />
-<DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.xml" />
-<DocumentationSource sourceFile="..\robotdotnet-wpilib.sln" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.xml" />
+      <DocumentationSource sourceFile="..\robotdotnet-wpilib.sln" />
+    </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
@@ -28,20 +29,20 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
     <CleanIntermediates>True</CleanIntermediates>
-    <MaximumGroupParts>2</MaximumGroupParts>
+    <MaximumGroupParts>4</MaximumGroupParts>
     <NamespaceGrouping>True</NamespaceGrouping>
     <SyntaxFilters>C#, Visual Basic</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <RootNamespaceTitle>RobotDotNet WPILib</RootNamespaceTitle>
-    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceTitle>RobotDotNet</RootNamespaceTitle>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
     <PresentationStyle>VS2013</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
-    <HelpTitle>RobotDotNet WPILib</HelpTitle>
+    <HelpTitle>RobotDotNet Documentation</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <ProjectSummary>RobotDotNet Documentation</ProjectSummary>
     <NamespaceSummaries>
-      <NamespaceSummaryItem name="(global)" isDocumented="True" />
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
       <NamespaceSummaryItem name="HAL_Base" isDocumented="False" />
       <NamespaceSummaryItem name="HAL_FRC" isDocumented="False" />
       <NamespaceSummaryItem name="HAL_RoboRIO" isDocumented="False" />
