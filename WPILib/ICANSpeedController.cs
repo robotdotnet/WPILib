@@ -3,7 +3,7 @@
 namespace WPILib
 {
     /// <summary>
-    /// Mode determines how the <see cref="ICANSpeedController"/> is controlled, used internally.
+    /// Mode for determining how the <see cref="ICANSpeedController"/> is controlled, used internally.
     /// </summary>
     public enum ControlMode
     {
@@ -16,6 +16,9 @@ namespace WPILib
         Disabled = 15
     }
 
+    /// <summary>
+    /// Fault enum for CAN devices.
+    /// </summary>
     [Flags]
     public enum Faults : ushort
     {
@@ -30,7 +33,9 @@ namespace WPILib
         RevSoftLimit = 0x80,
     };
 
-
+    /// <summary>
+    /// Limit switch enum for CAN devices
+    /// </summary>
     public enum Limits
     {
         ForwardLimit = 1,

@@ -5,38 +5,49 @@ using HAL_Base;
 
 namespace WPILib
 {
-    public enum AxisType
-    {
-        X = 0,
-        Y,
-        Z,
-        Twist,
-        Throttle,
-        NumAxis,
-    }
-
-    public enum ButtonType
-    {
-        Trigger = 0,
-        Top,
-        NumButton,
-    }
-
-    public enum RumbleType
-    {
-        LeftRumble = 0,
-        RightRumble = 1,
-    }
 
     public class Joystick : GenericHID
     {
-        private static byte s_defaultXAxis = 0;
-        private static byte s_defaultYAxis = 1;
-        private static byte s_defaultZAxis = 2;
-        private static byte s_defaultTwistAxis = 2;
-        private static byte s_defaultThrottleAxis = 3;
-        private static byte s_defaultTriggerButton = 1;
-        private static byte s_defaultTopButton = 2;
+        /// <summary>
+        /// Axes enum for Joysticks
+        /// </summary>
+        public enum AxisType
+        {
+            X = 0,
+            Y,
+            Z,
+            Twist,
+            Throttle,
+            NumAxis,
+        }
+
+        /// <summary>
+        /// Button enum for Joysticks
+        /// </summary>
+        public enum ButtonType
+        {
+            Trigger = 0,
+            Top,
+            NumButton,
+        }
+
+        /// <summary>
+        /// Rumble Type enum for Joysticks
+        /// </summary>
+        public enum RumbleType
+        {
+            LeftRumble = 0,
+            RightRumble = 1,
+        }
+
+
+        private const byte s_defaultXAxis = 0;
+        private const byte s_defaultYAxis = 1;
+        private const byte s_defaultZAxis = 2;
+        private const byte s_defaultTwistAxis = 2;
+        private const byte s_defaultThrottleAxis = 3;
+        private const byte s_defaultTriggerButton = 1;
+        private const byte s_defaultTopButton = 2;
 
         private DriverStation m_ds;
         private int m_port;

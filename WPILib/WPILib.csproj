@@ -102,7 +102,7 @@
     <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\IAccelerometer.cs" />
-    <Compile Include="CounterBase.cs" />
+    <Compile Include="ICounterBase.cs" />
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="IMotorSafety.cs" />

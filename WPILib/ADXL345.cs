@@ -13,6 +13,10 @@ namespace WPILib
         protected const byte DataFormatRegister = 0x31;
         protected const byte DataRegister = 0x32;
         protected const double GsPerLSB = 0.00390625;
+
+        /// <summary>
+        /// Power Control Settings for ADXL345
+        /// </summary>
         protected enum PowerCtl : byte
         {
             Link = 0x20,
@@ -20,6 +24,10 @@ namespace WPILib
             Measure = 0x08,
             Sleep = 0x04
         }
+
+        /// <summary>
+        /// Data Format Settings for ADXL345
+        /// </summary>
         protected enum DataFormat : byte
         {
             SelfTest = 0x80,
@@ -29,6 +37,9 @@ namespace WPILib
             Justify = 0x04
         }
 
+        /// <summary>
+        /// Axes Index's for ADXL345
+        /// </summary>
         public enum Axes
         {
             X = 1,

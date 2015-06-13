@@ -1,5 +1,8 @@
 ﻿namespace WPILib
 {
+    /// <summary>
+    /// Encoding Types for Counters and Encoders.
+    /// </summary>
     public enum EncodingType
     {
         K1X = 0,

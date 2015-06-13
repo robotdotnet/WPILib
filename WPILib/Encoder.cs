@@ -8,6 +8,9 @@ namespace WPILib
 {
     public class Encoder : SensorBase, ICounterBase, IPIDSource
     {
+        /// <summary>
+        /// Encoder Indexing Type Enum
+        /// </summary>
         public enum IndexingType
         {
             ResetWhileHigh,

@@ -18,6 +18,9 @@ namespace WPILib
         public const int MaxJoystickPOVs = 12;
 
         //Enums
+        /// <summary>
+        /// Alliance value enum.
+        /// </summary>
         public enum Alliance
         {
             Red,

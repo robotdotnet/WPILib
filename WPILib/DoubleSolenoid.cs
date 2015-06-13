@@ -8,6 +8,9 @@ namespace WPILib
 
     public class DoubleSolenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
+        /// <summary>
+        /// Values allowed for <see cref="DoubleSolenoid">Double Solenoids</see>.
+        /// </summary>
         public enum Value
         {
             Off,
