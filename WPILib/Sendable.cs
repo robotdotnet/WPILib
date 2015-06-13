@@ -17,7 +17,6 @@ namespace WPILib
         /// <summary>
         /// Returns the table that is currently associated with the sendable
         /// </summary>
- 
         ITable Table { get; }
 
         /// <summary>

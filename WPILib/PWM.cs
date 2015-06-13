@@ -341,22 +341,22 @@ namespace WPILib
         protected int NegativeScaleFactor => MaxNegativePwm - MinNegativePwm;
 
         protected int FullRangeScaleFactor => MaxPositivePwm - MinNegativePwm;
-
+        ///<inheritdoc/>
         public string SmartDashboardType => "Speed Controller";
-
+        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
-
+        ///<inheritdoc/>
         public void UpdateTable()
         {
             Table?.PutNumber("Value", GetSpeed());
         }
-
+        ///<inheritdoc/>
         public ITable Table { get; private set; }
-
+        ///<inheritdoc/>
         public void StartLiveWindowMode()
         {
             SetSpeed(0);
@@ -367,7 +367,7 @@ namespace WPILib
         {
             SetSpeed((double)value);
         }
-
+        ///<inheritdoc/>
         public void StopLiveWindowMode()
         {
             SetSpeed(0);

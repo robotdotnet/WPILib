@@ -242,7 +242,11 @@ namespace WPILib.Commands
         {
 
         }
-        //TODO: Finish these up
+        
+        /// <summary>
+        /// The execute method is called repeatedly until this <see cref="Command"/>
+        /// either finishes or is canceled.
+        /// </summary>
         protected abstract void Execute();
 
         internal virtual void _Execute()
@@ -261,6 +265,11 @@ namespace WPILib.Commands
         /// <seealso cref="Command.IsTimedOut()"/>
         protected abstract bool IsFinished();
 
+        /// <summary>
+        /// Called when the command ended peacefully
+        /// </summary>
+        /// <remarks>This is where you may want to wrap up loose ends, 
+        /// like shutting off a motor that was being used in the command.</remarks>
         protected abstract void End();
 
         internal virtual void _End()
@@ -268,6 +277,14 @@ namespace WPILib.Commands
 
         }
 
+        /// <summary>
+        /// Called when the command ends because somebody called <see cref="Cancel"/> or another command
+        /// shared the same requirements as this one, and booted it out.
+        /// </summary>
+        /// <remarks>This is where you may want to wrap up loose ends,
+        /// like shutting off a motor that was being used in the command.
+        /// Generally, it is useful to call the <see cref="End"/> method
+        /// within this method.</remarks>
         protected abstract void Interrupted();
 
         internal virtual void _Interrupted()
@@ -358,7 +375,7 @@ namespace WPILib.Commands
                 {
                     throw new IllegalUseOfCommandException("Can not start a command that is a part of a command group");
                 }
-                Scheduler.GetInstance().AddCommand(this);
+                Scheduler.Instance.AddCommand(this);
             }
         }
 

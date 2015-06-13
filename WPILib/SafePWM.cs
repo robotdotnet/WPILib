@@ -18,17 +18,17 @@
         {
             InitSafePWM();
         }
-
+        ///<inheritdoc/>
         public double Expiration
         {
             set { m_safetyHelper.Expiration = value; }
             get { return m_safetyHelper.Expiration; }
         }
-
+        ///<inheritdoc/>
         public bool Alive => m_safetyHelper.Alive;
-
+        ///<inheritdoc/>
         public void StopMotor() => Disable();
-
+        ///<inheritdoc/>
         public bool SafetyEnabled
         {
             set { m_safetyHelper.SafetyEnabled = value; }

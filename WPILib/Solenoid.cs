@@ -11,7 +11,7 @@ namespace WPILib
     /// Solenoid class for running high voltage digital output.
     /// </summary><remarks>
     /// The Solenoid class is typically used for pneumatics solenoids, but could be used
-    /// <para /> for any device within the current spec of the PCM. 
+    /// for any device within the current spec of the PCM. 
     /// </remarks>
     public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {

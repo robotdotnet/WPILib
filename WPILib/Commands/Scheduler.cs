@@ -1,11 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NetworkTablesDotNet.NetworkTables2.Type;
 using NetworkTablesDotNet.Tables;
 using WPILib.Buttons;
 
 namespace WPILib.Commands
 {
+    /// <summary>
+    /// The <see cref="Scheduler"/> is a singleton which holds the top-level running commands.
+    /// </summary>
+    /// <remarks>
+    /// It is in charge of both calling the command's <see cref="Command.Run">Run()</see> method
+    /// and to make sure that there are no two command with conflicting requirements running.
+    /// <para/>If is fine if teams with to take control of the <see cref="Scheduler"/> themselves.
+    /// All that needs to be done is to call <see cref="Scheduler.Instance">Scheduler.Instance.<see cref="Run"/></see>
+    /// often to have <see cref="Command">Commands</see> function correctly. However, this is
+    /// already done for you if you use the CommandBased Robot Template. 
+    /// </remarks>
+    /// <seealso cref="Command"/>
     public class Scheduler : INamedSendable
     {
         private static Scheduler s_instance = null;
@@ -17,11 +30,10 @@ namespace WPILib.Commands
 
         private object m_buttonsLock = new object();
         private object m_additionsLock = new object();
+        private static object m_instanceLock = new object();
 
         private bool m_adding;
         private bool m_enabled;
-
-        private ITable m_table;
 
         private bool m_runningCommandsChanged;
 
@@ -29,14 +41,23 @@ namespace WPILib.Commands
         {
             HLUsageReporting.ReportScheduler();
 
-            m_table = null;
+            Table = null;
             m_enabled = true;
             m_runningCommandsChanged = false;
         }
 
-        public static Scheduler GetInstance()
+        /// <summary>
+        /// Returns the <see cref="Scheduler"/>, creating it if one does not exist.
+        /// </summary>
+        public static Scheduler Instance
         {
-            return s_instance ?? (s_instance = new Scheduler());
+            get
+            {
+                lock (m_instanceLock)
+                {
+                    return s_instance ?? (s_instance = new Scheduler());
+                }
+            }
         }
 
         public void AddCommand(Command command)
@@ -138,6 +159,9 @@ namespace WPILib.Commands
                 }
                 s.ConfirmCommand();
             }
+
+            UpdateTable();
+
         }
 
         public void RegisterSubsystem(Subsystem system)
@@ -187,24 +211,74 @@ namespace WPILib.Commands
             m_buttons.Clear();
             m_additions.Clear();
             m_commands.Clear();
-            m_table = null;
+            Table = null;
         }
 
+        private StringArray commands;
+        private NumberArray ids, toCancel;
 
+        ///<inheritdoc/>
         public string Name => "Scheduler";
 
+        ///<inheritdoc/>
         public new string GetType()
         {
             return "Scheduler";
         }
 
+        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
+            Table = subtable;
+            commands = new StringArray();
+            ids = new NumberArray();
+            toCancel = new NumberArray();
+
+            Table.PutValue("Names", commands);
+            Table.PutValue("Ids", ids);
+            Table.PutValue("Cancel", toCancel);
         }
 
-        public ITable Table => m_table;
+        private void UpdateTable()
+        {
+            if (Table == null) return;
+            Table.RetrieveValue("Cancel", toCancel);
+            if (toCancel.Size() > 0)
+            {
+                foreach (var command in m_commands)
+                {
+                    for (int i = 0; i < toCancel.Size(); i++)
+                    {
+                        if (command.GetHashCode() == toCancel.Get(i))
+                        {
+                            command.Cancel();
+                        }
+                    }
+                }
+                toCancel.SetSize(0);
+                Table.PutValue("Cancel", toCancel);
+            }
 
+            if (m_runningCommandsChanged)
+            {
+                commands.SetSize(0);
+                ids.SetSize(0);
+
+                foreach (var command in m_commands)
+                {
+                    commands.Add(command.Name);
+                    ids.Add(command.GetHashCode());
+                }
+                Table.PutValue("Names", commands);
+                Table.PutValue("Ids", ids);
+            }
+
+        }
+
+        ///<inheritdoc/>
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc/>
         public string SmartDashboardType => "Scheduler";
     }
 }

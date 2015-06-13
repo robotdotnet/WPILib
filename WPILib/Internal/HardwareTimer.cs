@@ -7,10 +7,10 @@ namespace WPILib.Internal
     /// Timer objects measure accumulated time in milliseconds.
     /// </summary>
     /// <remarks>    
-    /// <para/>The timer object functions like a stopwatch.It can be started, stopped, and cleared.When the
-    /// <para/>timer is running its value counts up in milliseconds.When stopped, the timer holds the current
-    /// <para/>value. The implementation simply records the time when started and subtracts the current time
-    /// <para/>whenever the value is requested.</remarks>
+    /// The timer object functions like a stopwatch.It can be started, stopped, and cleared. When the
+    /// timer is running its value counts up in milliseconds.When stopped, the timer holds the current
+    /// value. The implementation simply records the time when started and subtracts the current time
+    /// whenever the value is requested.</remarks>
     public class HardwareTimer : Timer.IStaticInterface
     {
         /// <summary>

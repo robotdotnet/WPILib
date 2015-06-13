@@ -443,20 +443,20 @@ namespace WPILib
                 m_result = 0;
             }
         }
-
+        ///<inheritdoc/>
         public void UpdateTable()
         {
         }
-
+        ///<inheritdoc/>
         public void StartLiveWindowMode()
         {
             Disable();
         }
-
+        ///<inheritdoc/>
         public void StopLiveWindowMode()
         {
         }
-
+        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table?.RemoveTableListener(this);
@@ -472,9 +472,9 @@ namespace WPILib
                 Table.AddTableListener(this, false);
             }
         }
-
+        ///<inheritdoc/>
         public ITable Table { get; private set; }
-
+        ///<inheritdoc/>
         public string SmartDashboardType => "PIDController";
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)

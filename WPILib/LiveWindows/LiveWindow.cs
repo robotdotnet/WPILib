@@ -108,8 +108,8 @@ namespace WPILib.LiveWindows
                         InitializeLiveWindowComponents();
                         s_firstTime = false;
                     }
-                    Scheduler.GetInstance().Disable();
-                    Scheduler.GetInstance().RemoveAll();
+                    Scheduler.Instance.Disable();
+                    Scheduler.Instance.RemoveAll();
                     foreach (var component in s_components.Keys)
                     {
                         component.StartLiveWindowMode();
@@ -122,7 +122,7 @@ namespace WPILib.LiveWindows
                     {
                         component.StopLiveWindowMode();
                     }
-                    Scheduler.GetInstance().Enable();
+                    Scheduler.Instance.Enable();
                 }
                 s_liveWindowEnabled = enabled;
                 s_statusTable.PutBoolean("LW Enabled", enabled);

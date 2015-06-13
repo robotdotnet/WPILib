@@ -3,6 +3,13 @@ using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
+    /// <summary>
+    /// This class defines a major component of the robot.
+    /// </summary>
+    /// <remarks>A good example of a subsystem is the drivebase, or a claw if the robot has one.
+    /// <para> Subsystems are used within the command system as requirements for <see cref="Command"/>.
+    /// Only one command which requires a subsystem can run at a time. Also, subsystems can have default commands
+    /// which are started if there is no command running which requires this subsystem.</para></remarks>
     public abstract class Subsystem : INamedSendable
     {
         private bool m_initializedDefaultCommand = false;
@@ -13,21 +20,43 @@ namespace WPILib.Commands
 
         private static List<Subsystem> s_allSubsystems = new List<Subsystem>();
 
-        public Subsystem(string name)
+        /// <summary>
+        /// Creates a subsystem with the given name.
+        /// </summary>
+        /// <param name="name">The name of the subsystem.</param>
+        protected Subsystem(string name)
         {
             Name = name;
-            Scheduler.GetInstance().RegisterSubsystem(this);
+            Scheduler.Instance.RegisterSubsystem(this);
         }
 
-        public Subsystem()
+        /// <summary>
+        /// Creates a subsystem. This will set the name to the name of the class.
+        /// </summary>
+        protected Subsystem()
         {
             Name = GetType().Name.Substring(GetType().Name.LastIndexOf('.') + 1);
-            Scheduler.GetInstance().RegisterSubsystem(this);
+            Scheduler.Instance.RegisterSubsystem(this);
             m_currentCommandChanged = true;
         }
 
+        /// <summary>
+        /// Initialize the default command for a subsystem.
+        /// </summary>
+        /// <remarks>By default subsystems have no default command, but if they do,
+        /// the default command is set with this method. It is called on all Subsystems
+        /// by CommandBase in the users program after all the Subsystems are created.</remarks>
         protected abstract void InitDefaultCommand();
 
+        /// <summary>
+        /// Sets the default command.
+        /// </summary>
+        /// <remarks>If this is not called, or is called with null, then there will be no default
+        /// command for the subsystem.
+        /// <para/><b>WARNING:</b> This should <b>NOT</b> be called in a constructor if the 
+        /// subsystem is a singleton.</remarks>
+        /// <param name="command">The default command(or null if there should be none.</param>
+        /// <exception cref="IllegalUseOfCommandException">If the command does not require the subsystem.</exception>
         protected void SetDefaultCommand(Command command)
         {
             if (command == null)
@@ -77,43 +106,47 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Returns the command which currently claims this subsystem.
+        /// </summary>
+        /// <returns>The command which currently claims this subsystem.</returns>
         public Command GetCurrentCommand()
         {
             return m_currentCommand;
         }
 
+        ///<inheritdoc/>
         public string Name { get; }
-
-        private ITable m_table;
-
+        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
-            if (m_table != null)
+            Table = subtable;
+            if (Table != null)
             {
                 if (m_defaultCommand != null)
                 {
-                    m_table.PutBoolean("hasDefault", true);
-                    m_table.PutString("default", m_defaultCommand.Name);
+                    Table.PutBoolean("hasDefault", true);
+                    Table.PutString("default", m_defaultCommand.Name);
                 }
                 else
                 {
-                    m_table.PutBoolean("hasDefault", false);
+                    Table.PutBoolean("hasDefault", false);
                 }
                 if (m_currentCommand != null)
                 {
-                    m_table.PutBoolean("hasCommand", true);
-                    m_table.PutString("command", m_currentCommand.Name);
+                    Table.PutBoolean("hasCommand", true);
+                    Table.PutString("command", m_currentCommand.Name);
                 }
                 else
                 {
-                    m_table.PutBoolean("hasCommand", false);
+                    Table.PutBoolean("hasCommand", false);
                 }
             }
         }
 
-        public ITable Table => m_table;
-
+        ///<inheritdoc/>
+        public ITable Table { get; private set; }
+        ///<inheritdoc/>
         public string SmartDashboardType => "Subsystem";
     }
 }

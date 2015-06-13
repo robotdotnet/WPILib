@@ -2,10 +2,11 @@
 {
     /// <summary>
     /// Handle input from Xbox 360 or Xbox One controllers connected to the Driver Station.
+    /// </summary><remarks>
     /// This class handles xbox input that comes from the Driver Station. Each time a value is requested
     /// the most recent value is returned. There is a single class instance for each joystick and the mapping
     /// of ports to hardware buttons depends on the code in the driver station.
-    /// </summary>
+    /// </remarks>
     public class XboxController : Joystick
     {
         /// <summary>

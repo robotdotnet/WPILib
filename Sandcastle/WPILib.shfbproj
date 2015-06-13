@@ -18,8 +18,9 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\robotdotnet-wpilib.sln" xmlns="" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.dll" />
+<DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.xml" />
+<DocumentationSource sourceFile="..\robotdotnet-wpilib.sln" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
@@ -64,7 +65,7 @@
     Include namespaces (false by default)
     Namespaces comments filename ("Namespaces" if not specified or empty)
     Output folder (current folder if not specified or empty) -->
-          <output includeNamespaces="false" namespacesFile="Namespaces" folder="C:\Users\thad\Documents\GitHub\robotdotnet-wpilib\Output"/>
+          <output includeNamespaces="false" namespacesFile="Namespaces" folder="C:\Users\thad\Documents\GitHub\robotdotnet-wpilib\Output" />
         </component>
       </ComponentConfig>
     </ComponentConfigurations>

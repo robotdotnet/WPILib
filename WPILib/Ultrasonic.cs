@@ -278,34 +278,63 @@ namespace WPILib
         /// </summary>
         public Unit DistanceUnits { get; set; }
 
+        /// <summary>
+        /// Gets if the ultrasonic is enabled
+        /// </summary>
+        /// <returns>true if enabled</returns>
         [Obsolete("Use Enabled property instead.")]
         public bool GetEnabled() { return Enabled; }
 
         /// <summary>
         /// Set if the ultrasonic is enabled.
         /// </summary>
-        /// <param name="enabled"></param>
+        /// <param name="enabled">true if enabled</param>
         [Obsolete("Use Enabled property instead.")]
         public void SetEnabled(bool enabled) { Enabled = enabled; }
         
+        /// <summary>
+        /// Gets or Sets whether the ultrasonic is enabled.
+        /// </summary>
         public bool Enabled { get; set; }
 
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
         public string SmartDashboardType => "Ultrasonic";
 
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
 
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
         public ITable Table { get; private set; }
 
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
         public void UpdateTable()
         {
             Table?.PutNumber("Value", GetRangeInches());
         }
 
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
         public void StartLiveWindowMode() { }
+
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
         public void StopLiveWindowMode() { }
     }
 }

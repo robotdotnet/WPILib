@@ -4,7 +4,7 @@ namespace WPILib.Interfaces
     /// <summary>
     /// Interface for Potentiometers
     /// </summary>
-    interface IPotentiometer : IPIDSource
+    public interface IPotentiometer : IPIDSource
     {
         /// <summary>
         /// Get the value of the potentiometer

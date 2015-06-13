@@ -2,37 +2,37 @@
 
 namespace WPILib.Commands
 {
-    public abstract class IpidSubsystem : Subsystem, IPIDSource, IPIDOutput
+    public abstract class PIDSubsystem : Subsystem, IPIDSource, IPIDOutput
     {
-        public IpidSubsystem(string name, double p, double i, double d)
+        public PIDSubsystem(string name, double p, double i, double d)
             : base(name)
         {
             PIDController = new PIDController(p, i, d, this, this);
         }
 
-        public IpidSubsystem(string name, double p, double i, double d, double f)
+        public PIDSubsystem(string name, double p, double i, double d, double f)
             : base(name)
         {
             PIDController = new PIDController(p, i, d, f, this, this);
         }
 
-        public IpidSubsystem(string name, double p, double i, double d, double f, double period)
+        public PIDSubsystem(string name, double p, double i, double d, double f, double period)
             : base(name)
         {
             PIDController = new PIDController(p, i, d, f, this, this, period);
         }
 
-        public IpidSubsystem(double p, double i, double d)
+        public PIDSubsystem(double p, double i, double d)
         {
             PIDController = new PIDController(p, i, d, this, this);
         }
 
-        public IpidSubsystem(double p, double i, double d, double period, double f)
+        public PIDSubsystem(double p, double i, double d, double period, double f)
         {
             PIDController = new PIDController(p, i, d, f, this, this, period);
         }
 
-        public IpidSubsystem(double p, double i, double d, double period)
+        public PIDSubsystem(double p, double i, double d, double period)
         {
             PIDController = new PIDController(p, i, d, this, this, period);
         }
@@ -41,16 +41,20 @@ namespace WPILib.Commands
 
         public double PositionRelative
         {
-            set { Setpoint = Position + value; }
+            set { SetSetpoint(GetPosition() + value); }
         }
 
-        public double Setpoint
+        public void SetSetpoint(double value)
         {
-            get { return PIDController.Setpoint; }
-            set { PIDController.Setpoint = value; }
+            PIDController.Setpoint = value;
         }
 
-        public double Position => PIDInput;
+        public double GetSetpoint()
+        {
+            return PIDController.Setpoint;
+        }
+
+        public double GetPosition() => ReturnPIDInput();
 
         public void SetInputRange(double minimumInput, double maximumInput)
         {
@@ -62,39 +66,46 @@ namespace WPILib.Commands
             PIDController.SetOutputRange(minimumOutput, maximumOutput);
         }
 
-        public double AbsoluteTolerance
+        public void SetAbsoluteTolerance(double t)
         {
-            set { PIDController.SetAbsoluteTolerance(value); }
+             PIDController.SetAbsoluteTolerance(t); 
         }
 
-        public double PercentTolerance
+        public void SetPercentTolerance(double p)
         {
-            set { PIDController.SetPercentTolerance(value); }
+            PIDController.SetPercentTolerance(p);
         }
 
-        public bool OnTarget => PIDController.OnTarget;
+        public bool OnTarget() => PIDController.OnTarget;
 
-        protected abstract double PIDInput { get; }
+        protected abstract double ReturnPIDInput();
 
-        protected abstract double PIDOutput { set; }
 
-        public void Enable() => PIDController.Enable();
-
-        public void Disable() => PIDController.Disable();
-
-        public double PidGet() => PIDInput;
+        protected abstract void UsePIDOutput(double output);
 
         /// <summary>
-        /// Set the output to the value calculated by PIDController
+        /// Enables the internal <see cref="WPILib.PIDController">PIDController</see>
         /// </summary>
-        /// <param name="value">Output the value calculated by PIDController</param>
+        public void Enable() => PIDController.Enable();
+
+        /// <summary>
+        /// Disables the internal <see cref="WPILib.PIDController">PIDController</see>
+        /// </summary>
+        public void Disable() => PIDController.Disable();
+
+
+        ///<inheritdoc/>
+        public double PidGet() => ReturnPIDInput();
+
+        ///<inheritdoc/>
         public void PidWrite(double value)
         {
-            PIDOutput = value;
+            UsePIDOutput(value);
         }
 
+        ///<inheritdoc/>
         public new string SmartDashboardType => "PIDSubsystem";
-
+        ///<inheritdoc/>
         public new void InitTable(ITable table)
         {
             PIDController.InitTable(table);
