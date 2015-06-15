@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     public enum Mode
     {

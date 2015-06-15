@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     //Semaphore
 

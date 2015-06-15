@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
-using static HAL_FRC.SimData;
+using static HAL_Simulator.SimData;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     public enum AccelerometerRange
     {

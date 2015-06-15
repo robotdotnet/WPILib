@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     class NotifyDict<T, T2> : Dictionary<T, T2>
     {

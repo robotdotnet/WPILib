@@ -3,7 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using HAL_Base;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     /*
     public enum CTR_Code

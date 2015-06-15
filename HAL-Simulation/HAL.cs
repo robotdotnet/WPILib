@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using HAL_Base;
-using static HAL_FRC.SimData;
+using static HAL_Simulator.SimData;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     /*
     public enum HALAllianceStationID
@@ -296,13 +296,10 @@ namespace HAL_FRC
                 }
             });
 
-            timer.Start();
-            hd = halData;
+            timer.Start(); 
 
             return 1;
         }
-
-        private static Dictionary<dynamic, dynamic> hd;
 
         private static Thread timer;
 

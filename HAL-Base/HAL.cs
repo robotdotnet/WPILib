@@ -67,6 +67,7 @@ namespace HAL_Base
                 throw new Exception("HAL Initialize Failed");
             }
 
+            //If we are simulator, grab a local copy of the dictionary so we can debug its values.
             if (IsSimulation)
             {
                 string className = "SimData";
@@ -77,10 +78,7 @@ namespace HAL_Base
                 GetData data = (GetData) Delegate.CreateDelegate(typeof (GetData), type.GetMethod("GetData"));
 
                 data(out halData, out halInData);
-
-                bool source = halData["analog_in"][0]["has_source"];
-
-                bool s = source;
+                
             }
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     public static class Hooks
     {

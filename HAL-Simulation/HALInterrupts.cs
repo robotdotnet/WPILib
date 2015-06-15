@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     /// Return Type: void
     ///interruptAssertedMask: unsigned int
