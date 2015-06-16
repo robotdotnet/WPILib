@@ -34,7 +34,7 @@ namespace WPILib
                 IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
                 m_solenoidPort = InitializeSolenoidPort(port, ref status);
 
-                //TODO: Live Window Actuator
+                LiveWindow.AddActuator("Solenoid", m_moduleNumber, m_channel, this);
                 Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
             }
         }

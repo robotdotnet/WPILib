@@ -1,10 +1,13 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Exceptions;
+using WPILib.LiveWindows;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class Relay : SensorBase
+    public class Relay : SensorBase, ILiveWindowSendable, ITableListener
     {
         public enum Value
         {
@@ -50,7 +53,8 @@ namespace WPILib
             }
             int status = 0;
             m_port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)m_channel), ref status);
-
+            CheckStatus(status);
+            LiveWindow.AddActuator("Relay", m_channel, this);
         }
 
         public Relay(int channel, Direction direction)
@@ -81,9 +85,11 @@ namespace WPILib
             int status = 0;
 
             HALDigital.SetRelayForward(m_port, false, ref status);
+            CheckStatus(status);
             HALDigital.SetRelayReverse(m_port, false, ref status);
-
+            CheckStatus(status);
             HALDigital.FreeDIO(m_port, ref status);
+            CheckStatus(status);
         }
 
         public void Set(Value value)
@@ -144,6 +150,7 @@ namespace WPILib
                     }
                     break;
             }
+            CheckStatus(status);
         }
 
         public Value Get()
@@ -195,6 +202,70 @@ namespace WPILib
             Dispose();
             m_direction = direction;
             InitRelay();
+        }
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        ///<inheritdoc />
+        public ITable Table { get; private set; }
+        ///<inheritdoc />
+        public string SmartDashboardType => "Relay";
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            if (Table != null)
+            {
+                switch (Get())
+                {
+                    case Value.On:
+                        Table.PutString("Value", "On");
+                        break;
+                    case Value.Forward:
+                        Table.PutString("Value", "Forward");
+                        break;
+                    case Value.Reverse:
+                        Table.PutString("Value", "Reverse");
+                        break;
+                    default:
+                        Table.PutString("Value", "Off");
+                        break;
+                }
+            }
+        }
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+            Table.AddTableListener("Value", this, true);
+        }
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
+            Table.RemoveTableListener(this);
+        }
+
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            string val = ((string)value);
+            if (val.Equals("Off"))
+            {
+                Set(Value.Off);
+            }
+            else if (val.Equals("On"))
+            {
+                Set(Value.On);
+            }
+            else if (val.Equals("Forward"))
+            {
+                Set(Value.Forward);
+            }
+            else if (val.Equals("Reverse"))
+            {
+                Set(Value.Reverse);
+            }
         }
     }
 }

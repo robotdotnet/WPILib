@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
@@ -29,7 +30,7 @@ namespace WPILib
             SetRaw(CenterPwm);
             SetZeroLatch();
 
-            //TODO:Add Live Actuator
+            LiveWindow.AddActuator("VictorSP", Channel, this);
             HAL.Report(ResourceType.kResourceType_VictorSP, (byte)Channel);
         }
 

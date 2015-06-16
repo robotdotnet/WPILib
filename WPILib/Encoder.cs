@@ -1,12 +1,14 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Exceptions;
+using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
 
 namespace WPILib
 {
-    public class Encoder : SensorBase, ICounterBase, IPIDSource
+    public class Encoder : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         /// <summary>
         /// Encoder Indexing Type Enum
@@ -64,6 +66,7 @@ namespace WPILib
 
             m_pidSource = PIDSourceParameter.Distance;
 
+            LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
             Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
         }
 
@@ -210,25 +213,22 @@ namespace WPILib
             }
         }
 
-        public int Raw
+        public int GetRaw()
         {
-            get
+            int value;
+            if (m_counter != null)
             {
-                int value;
-                if (m_counter != null)
-                {
-                    value = m_counter.Get();
-                }
-                else
-                {
-                    int status = 0;
-                    value = GetEncoder(m_encoder, ref status);
-                }
-                return value;
+                value = m_counter.Get();
             }
+            else
+            {
+                int status = 0;
+                value = GetEncoder(m_encoder, ref status);
+            }
+            return value;
         }
 
-        public int Get() => (int) (Raw*DecodingScaleFactor);
+        public int Get() => (int) (GetRaw()*DecodingScaleFactor);
 
         public void Reset()
         {
@@ -241,22 +241,19 @@ namespace WPILib
             }
         }
 
-        public double Period
+        public double GetPeriod()
         {
-            get
+            double measuredPeriod;
+            if (m_counter != null)
             {
-                double measuredPeriod;
-                if (m_counter != null)
-                {
-                    measuredPeriod = m_counter.Period/DecodingScaleFactor;
-                }
-                else
-                {
-                    int status = 0;
-                    measuredPeriod = GetEncoderPeriod(m_encoder, ref status);
-                }
-                return measuredPeriod;
+                measuredPeriod = m_counter.GetPeriod()/DecodingScaleFactor;
             }
+            else
+            {
+                int status = 0;
+                measuredPeriod = GetEncoderPeriod(m_encoder, ref status);
+            }
+            return measuredPeriod;
         }
 
         public double MaxPeriod
@@ -275,20 +272,17 @@ namespace WPILib
             }
         }
 
-        public bool Stopped
+        public bool GetStopped()
         {
-            get
+            if (m_counter != null)
             {
-                if (m_counter != null)
-                {
-                    return m_counter.Stopped;
-                }
-                else
-                {
-                    int status = 0;
-                    bool value = GetEncoderStopped(m_encoder, ref status);
-                    return value;
-                }
+                return m_counter.GetStopped();
+            }
+            else
+            {
+                int status = 0;
+                bool value = GetEncoderStopped(m_encoder, ref status);
+                return value;
             }
         }
 
@@ -327,9 +321,9 @@ namespace WPILib
             }
         }
 
-        public double Distance => Raw*DecodingScaleFactor*DistancePerPulse;
+        public double GetDistance() => GetRaw()*DecodingScaleFactor*DistancePerPulse;
 
-        public double Rate => DistancePerPulse/Period;
+        public double GetRate() => DistancePerPulse/GetPeriod();
 
         public double MinRate
         {
@@ -407,9 +401,9 @@ namespace WPILib
             switch (m_pidSource)
             {
                 case PIDSourceParameter.Distance:
-                    return Distance;
+                    return GetDistance();
                 case PIDSourceParameter.Rate:
-                    return Rate;
+                    return GetRate();
                 default:
                     return 0.0;
             }
@@ -446,5 +440,35 @@ namespace WPILib
             SetIndexSource(source, IndexingType.ResetOnRisingEdge);
         }
 
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "Encoder";
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            if (Table != null)
+            {
+                Table.PutNumber("Speed", GetRate());
+                Table.PutNumber("Distance", GetDistance());
+                Table.PutNumber("Distance per Tick", DistancePerPulse);
+            }
+        }
+
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+        }
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
+        }
     }
 }

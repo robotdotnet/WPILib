@@ -3,6 +3,7 @@
 using System;
 using System.Threading;
 using HAL_Base;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
@@ -53,6 +54,7 @@ namespace WPILib
 
             if (!m_robotMainOverriden)
             {
+                LiveWindow.SetEnabled(false);
                 RobotInit();
                 while (true)
                 {
@@ -78,13 +80,13 @@ namespace WPILib
                     }
                     else if (IsTest)
                     {
-                        //LiveWindow.setEnabled(true);
+                        LiveWindow.SetEnabled(true);
                         m_ds.InTest(true);
                         Test();
                         m_ds.InTest(false);
                         while (IsTest && IsEnabled)
                             Thread.Sleep(1);
-                        //LiveWindow.setEnabled(false);
+                        LiveWindow.SetEnabled(false);
                     }
                     else
                     {

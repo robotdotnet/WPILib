@@ -1,5 +1,7 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.LiveWindows;
 using static HAL_Base.HALCompressor;
 
 namespace WPILib
@@ -15,7 +17,7 @@ namespace WPILib
     /// directly from this class as doing so would circumvent the safety provided in using the 
     /// pressure switch and closed loop control. You can only turn off closed loop control, 
     /// thereby stopping the compressor from operating.</remarks>
-    public class Compressor : SensorBase
+    public class Compressor : SensorBase, ILiveWindowSendable
     {
         private IntPtr m_pcm; 
 
@@ -68,38 +70,29 @@ namespace WPILib
         /// <summary>
         /// Gets whether the compressor is enabled.
         /// </summary>
-        public bool Enabled
+        public bool Enabled()
         {
-            get
-            {
-                int status = 0;
-                bool on = GetCompressor(m_pcm, ref status);
-                return @on;
-            }
+            int status = 0;
+            bool on = GetCompressor(m_pcm, ref status);
+            return @on;
         }
 
         /// <summary>
         /// Gets the value of the pressure switch.
         /// </summary>
-        public bool PressureSwitchValue
+        public bool GetPressureSwitchValue()
         {
-            get
-            {
-                int status = 0;
-                bool on = GetPressureSwitch(m_pcm, ref status);
-                return @on;
-            }
+            int status = 0;
+            bool on = GetPressureSwitch(m_pcm, ref status);
+            return @on;
         }
 
 
-        public float CompressorCurrent
+        public float GetCompressorCurrent()
         {
-            get
-            {
-                int status = 0;
-                float current = GetCompressorCurrent(m_pcm, ref status);
-                return current;
-            }
+            int status = 0;
+            float current = HALCompressor.GetCompressorCurrent(m_pcm, ref status);
+            return current;
         }
 
         public bool ClosedLoopControl
@@ -117,60 +110,68 @@ namespace WPILib
             }
         }
 
-        public bool CompressorCurrentTooHighFault
+        public bool GetCompressorCurrentTooHighFault()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetCompressorCurrentTooHighFault(m_pcm, ref status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = HALCompressor.GetCompressorCurrentTooHighFault(m_pcm, ref status);
+            return retVal;
         }
 
-        public bool CompressorShortedStickyFault
+        public bool GetCompressorShortedStickyFault()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetCompressorShortedStickyFault(m_pcm, ref status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = HALCompressor.GetCompressorShortedStickyFault(m_pcm, ref status);
+            return retVal;
         }
 
-        public bool CompressorShortedFault
+        public bool GetCompressorShortedFault()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetCompressorShortedFault(m_pcm, ref status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = HALCompressor.GetCompressorShortedFault(m_pcm, ref status);
+            return retVal;
         }
 
-        public bool CompressorNotConnectedStickyFault
+        public bool GetCompressorNotConnectedStickyFault()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetCompressorNotConnectedStickyFault(m_pcm, ref status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = HALCompressor.GetCompressorNotConnectedStickyFault(m_pcm, ref status);
+            return retVal;
         }
 
-        public bool CompressorNotConnectedFault
+        public bool GetCompressorNotConnectedFault()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetCompressorNotConnectedFault(m_pcm, ref status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = HALCompressor.GetCompressorNotConnectedFault(m_pcm, ref status);
+            return retVal;
         }
 
         public void ClearAllPCMStickyFaults()
         {
             int status = 0;
             HALCompressor.ClearAllPCMStickyFaults(m_pcm, ref status);
+        }
+
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        public ITable Table { get; private set; }
+        public string SmartDashboardType => "Compressor";
+        public void UpdateTable()
+        {
+            Table?.PutBoolean("Enabled", Enabled());
+            Table?.PutBoolean("Pressure Switch", GetPressureSwitchValue());
+        }
+
+        public void StartLiveWindowMode()
+        {
+        }
+
+        public void StopLiveWindowMode()
+        {
         }
     }
 }

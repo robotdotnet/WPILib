@@ -44,7 +44,7 @@ namespace WPILib
             int status = 0;
             m_port = HALAnalog.InitializeAnalogOutputPort(portPointer, ref status);
             CheckStatus(status);
-            //TODO: Add Live Window
+            LiveWindow.AddSensor("AnalogOutput", channel, this);
             HAL.Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
         }
 

@@ -21,6 +21,7 @@ namespace WPILib
         private void InitAccelerometer()
         {
             HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)m_analogChannel.Channel);
+            LiveWindow.AddSensor("Accelerometer", m_analogChannel.Channel, this);
         }
 
         /// <summary>

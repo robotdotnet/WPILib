@@ -1,4 +1,5 @@
 ﻿using HAL_Base;
+using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 
 namespace WPILib
@@ -17,6 +18,7 @@ namespace WPILib
             PeriodMultiplier = PeriodMultiplier.K4X;
 
             Report(ResourceType.kResourceType_Servo, (byte)Channel);
+            LiveWindow.AddActuator("Servo", Channel, this);
         }
 
         public Servo(int channel) : base(channel)

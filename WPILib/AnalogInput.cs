@@ -53,7 +53,7 @@ namespace WPILib
             int status = 0;
             m_port = InitializeAnalogInputPort(portPointer, ref status);
             CheckStatus(status);
-            //TODO: Add LiveWindow
+            LiveWindow.AddSensor("AnalogInput", channel, this);
             Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
 

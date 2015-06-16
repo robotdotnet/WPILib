@@ -1,16 +1,19 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Interfaces;
+using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
-    class BuiltInAccelerometer : IAccelerometer
+    class BuiltInAccelerometer : IAccelerometer, ILiveWindowSendable
     {
         public BuiltInAccelerometer(AccelerometerRange range)
         {
             AccelerometerRange = range;
             HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
+            LiveWindow.AddSensor("BuiltInAccel", 0, this);
         }
 
         public AccelerometerRange AccelerometerRange
@@ -43,5 +46,39 @@ namespace WPILib
         public double GetY() => HALAccelerometer.GetAccelerometerY();
 
         public double GetZ() => HALAccelerometer.GetAccelerometerZ();
+
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        ///<inheritdoc />
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "3AxisAccelerometer";
+
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            if (Table != null)
+            {
+                Table.PutNumber("X", GetX());
+                Table.PutNumber("Y", GetY());
+                Table.PutNumber("Z", GetZ());
+            }
+        }
+
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+        }
+
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
+        }
     }
 }

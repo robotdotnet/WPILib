@@ -13,9 +13,9 @@
     {
         int Get();
         void Reset();
-        double Period { get; }
+        double GetPeriod();
         double MaxPeriod { set; }
-        bool Stopped { get; }
+        bool GetStopped();
         bool Direction { get; }
     }
 }

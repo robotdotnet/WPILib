@@ -1,12 +1,15 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Exceptions;
+using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class Counter : SensorBase, ICounterBase, IPIDSource
+    public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         private DigitalSource m_upSource;
         private DigitalSource m_downSource;
@@ -76,7 +79,7 @@ namespace WPILib
                 SetDownSourceEdge(true, true);
                 SetCounterAverageSize(m_counter, 2, ref status);
             }
-
+            CheckStatus(status);
             SetDownSourceEdge(inverted, true);
         }
 
@@ -99,6 +102,7 @@ namespace WPILib
 
             int status = 0;
             FreeCounter(m_counter, ref status);
+            CheckStatus(status);
 
             m_upSource = null;
             m_downSource = null;
@@ -258,14 +262,11 @@ namespace WPILib
             }
         }
 
-        public bool Stopped
+        public bool GetStopped()
         {
-            get
-            {
-                int status = 0;
-                bool value = GetCounterStopped(m_counter, ref status);
-                return value;
-            }
+            int status = 0;
+            bool value = GetCounterStopped(m_counter, ref status);
+            return value;
         }
 
         public bool Direction
@@ -283,17 +284,14 @@ namespace WPILib
             }
         }
 
-        public double Period
+        public double GetPeriod()
         {
-            get
-            {
-                int status = 0;
-                double value = GetCounterPeriod(m_counter, ref status);
-                return value;
-            }
+            int status = 0;
+            double value = GetCounterPeriod(m_counter, ref status);
+            return value;
         }
 
-        public double Rate => m_distancePerPulse/Period;
+        public double Rate => m_distancePerPulse/GetPeriod();
 
         public int SamplesToAverage
         {
@@ -339,6 +337,31 @@ namespace WPILib
                 default:
                     return 0.0;
             }
+        }
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+        ///<inheritdoc />
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "Counter";
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            Table?.PutNumber("Value", Get());
+        }
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+        }
+
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
         }
     }
 }

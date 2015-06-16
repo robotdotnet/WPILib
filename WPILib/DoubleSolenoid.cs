@@ -54,6 +54,7 @@ namespace WPILib
 
                 HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
                 HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
+                LiveWindow.AddActuator("DoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
             }
         }
 

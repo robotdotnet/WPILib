@@ -1,4 +1,5 @@
 ﻿using HAL_Base;
+using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static System.Console;
 
@@ -34,7 +35,7 @@ namespace WPILib
 
             HALNetworkCommunicationObserveUserProgramStarting();
 
-            //LiveWindow.setEnabled(false);
+            LiveWindow.SetEnabled(false);
             while (true)
             {
                 //Console.WriteLine("RobotLoop");
@@ -45,7 +46,7 @@ namespace WPILib
                     // either a different mode or from power-on
                     if (!m_disabledInitialized)
                     {
-                        //LiveWindow.setEnabled(false);
+                        LiveWindow.SetEnabled(false);
                         DisabledInit();
                         m_disabledInitialized = true;
                         // reset the initialization flags for the other modes
@@ -65,7 +66,7 @@ namespace WPILib
                     // a different mode or from power-on
                     if (!m_testInitialized)
                     {
-                        //LiveWindow.setEnabled(true);
+                        LiveWindow.SetEnabled(true);
                         TestInit();
                         m_testInitialized = true;
                         m_autonomousInitialized = false;
@@ -84,7 +85,7 @@ namespace WPILib
                     // we've entered autonomous_mode
                     if (!m_autonomousInitialized)
                     {
-                        //LiveWindow.setEnabled(false);
+                        LiveWindow.SetEnabled(false);
                         // KBS NOTE: old code reset all PWMs and relays to "safe values"
                         // whenever entering autonomous mode, before calling
                         // "Autonomous_Init()"
@@ -106,7 +107,7 @@ namespace WPILib
                     // we've entered teleop_mode
                     if (!m_teleopInitialized)
                     {
-                        //LiveWindow.setEnabled(false);
+                        LiveWindow.SetEnabled(false);
                         TeleopInit();
                         m_teleopInitialized = true;
                         m_testInitialized = false;

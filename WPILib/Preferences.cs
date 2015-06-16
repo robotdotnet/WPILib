@@ -302,7 +302,6 @@ namespace WPILib
                     {
                         File.Delete(FILE_NAME);
                     }
-
                     output = new StreamWriter(FILE_NAME);
 
                     output.Write("[Preferences]\n");
@@ -340,7 +339,7 @@ namespace WPILib
 
                         }
                     }
-                    //NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
+                    NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
                 }
             }
         }
@@ -436,7 +435,7 @@ namespace WPILib
                                 m_keys.Add(name);
                                 m_values.Add(name, result);
 
-                                //NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
+                                NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
                                 if (comment != null)
                                 {
                                     if (m_comments == null)
@@ -483,9 +482,8 @@ namespace WPILib
                 }
             }
 
-            //NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
-            //TableListener listener = new TableListener(this, ref m_lockObject, ref values, ref keys);
-            //NetworkTable.GetTable(TABLE_NAME).AddTableListener(listener);//Figure this out
+            NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
+            NetworkTable.GetTable(TABLE_NAME).AddTableListener(this);//Figure this out
         }
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
@@ -507,12 +505,16 @@ namespace WPILib
                         {
                             m_values.Remove(key);
                             m_keys.Remove(key);
-                            //NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
+                            NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
                         }
                     }
                     else
                     {
-                        if (!m_values.ContainsKey(key))
+                        if (m_values.ContainsKey(key))
+                        {
+                            m_values[key] = value.ToString();
+                        }
+                        else
                         {
                             m_values.Add(key, value.ToString());
                             m_keys.Add(key);

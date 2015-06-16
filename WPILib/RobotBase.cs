@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using HAL_Base;
+using NetworkTablesDotNet.NetworkTables;
 using WPILib.Internal;
 using static HAL_Base.HAL;
 
@@ -17,7 +18,10 @@ namespace WPILib
 
         protected RobotBase()
         {
+            NetworkTable.SetServerMode();
             m_ds = DriverStation.Instance;
+            NetworkTable.GetTable("");
+            NetworkTable.GetTable("LiveWindow").GetSubTable("~STATUS~").PutBoolean("LW Enabled", false);
         }
 
         public void Dispose()

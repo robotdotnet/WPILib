@@ -1,10 +1,12 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Exceptions;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    public class Gyro : SensorBase, IPIDSource
+    public class Gyro : SensorBase, IPIDSource, ILiveWindowSendable
     {
         private static int kOversampleBits = 10;
         private static int kAverageBits = 0;
@@ -56,6 +58,7 @@ namespace WPILib
             PIDSourceParameter = PIDSourceParameter.Angle;
 
             HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
+            LiveWindow.AddSensor("Gyro", m_analog.Channel, this);
 
         }
 
@@ -154,6 +157,30 @@ namespace WPILib
                 default:
                     return 0.0;
             }
+        }
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+        ///<inheritdoc />
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "Gyro";
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            Table?.PutNumber("Value", GetAngle());
+        }
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+        }
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HAL_Base;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
@@ -54,6 +55,7 @@ namespace WPILib
             {
                 HAL.Report(ResourceType.kResourceType_GearTooth, (byte)channel, 0);
             }
+            LiveWindow.AddSensor("GearTooth", channel, this);
         }
 
         /// <summary>

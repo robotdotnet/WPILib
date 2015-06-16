@@ -19,6 +19,7 @@ namespace WPILib
             InitDigitalPort(channel, true);
 
             HAL.Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
+            LiveWindow.AddSensor("DigitalInput", channel, this);
         }
 
         /// <summary>

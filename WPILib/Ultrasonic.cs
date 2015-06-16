@@ -77,7 +77,7 @@ namespace WPILib
                 SetAutomaticMode(originalMode);
                 ++s_instances;
                 HAL.Report(ResourceType.kResourceType_Ultrasonic, s_instances);
-                //TODO: Add to LiveWindow
+                LiveWindow.AddSensor("Ultrasonic", m_echoChannel.Channel, this);
             }
         }
 
@@ -222,7 +222,7 @@ namespace WPILib
         /// Returns 0 if there is no valid value.</returns>
         public double GetRangeInches()
         {
-            if (IsRangeValid()) return m_counter.Period * SpeedOfSoundInchesPerSec / 2;
+            if (IsRangeValid()) return m_counter.GetPeriod() * SpeedOfSoundInchesPerSec / 2;
             return 0;
         }
 

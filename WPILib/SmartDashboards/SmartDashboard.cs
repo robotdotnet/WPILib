@@ -53,5 +53,50 @@ namespace WPILib.SmartDashboards
                 throw new ArgumentException("SmartDashboard data does not exist: " + key);
             }
         }
+
+        public static void PutBoolean(string key, bool value)
+        {
+            s_table.PutBoolean(key, value);
+        }
+
+        public static bool GetBoolean(string key)
+        {
+            return s_table.GetBoolean(key);
+        }
+
+        public static bool GetBoolean(string key, bool defaultValue)
+        {
+            return s_table.GetBoolean(key, defaultValue);
+        }
+
+        public static void PutString(string key, string value)
+        {
+            s_table.PutString(key, value);
+        }
+
+        public static string GetString(string key)
+        {
+            return s_table.GetString(key);
+        }
+
+        public static string GetString(string key, string defaultValue)
+        {
+            return s_table.GetString(key, defaultValue);
+        }
+
+        public static void PutNumber(string key, double value)
+        {
+            s_table.PutNumber(key, value);
+        }
+
+        public static double GetNumber(string key)
+        {
+            return s_table.GetNumber(key);
+        }
+
+        public static double GetNumber(string key, double defaultValue)
+        {
+            return s_table.GetNumber(key, defaultValue);
+        }
     }
 }
