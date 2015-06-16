@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace WPILib.Commands
 {
@@ -12,10 +9,7 @@ namespace WPILib.Commands
         private List<Entry> m_commands = new List<Entry>();
         private LinkedList<Entry> m_children = new LinkedList<Entry>();
 
-        internal LinkedList<Entry> Children
-        {
-            get { return m_children; }
-        }
+        internal LinkedList<Entry> Children => m_children;
 
         private int m_currentCommandIndex = -1;
         private object m_syncRoot = new object();
@@ -235,26 +229,29 @@ namespace WPILib.Commands
         {
         }
 
-        public new bool IsInterruptible()
+        public new bool Interruptible
         {
-            lock (m_syncRoot)
+            get
             {
-
-                if (!base.IsInterruptible())
+                lock (m_syncRoot)
                 {
-                    return false;
-                }
 
-                if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
-                {
-                    Command cmd = m_commands[m_currentCommandIndex].command;
-                    if (!cmd.IsInterruptible())
+                    if (!base.Interruptible)
                     {
                         return false;
                     }
-                }
 
-                return m_children.All(s => s.command.IsInterruptible());
+                    if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
+                    {
+                        Command cmd = m_commands[m_currentCommandIndex].command;
+                        if (!cmd.Interruptible)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return m_children.All(s => s.command.Interruptible);
+                }
             }
         }
 
@@ -302,7 +299,7 @@ namespace WPILib.Commands
             {
                 this.command = command;
                 this.state = state;
-                this.timeout = -1;
+                timeout = -1;
             }
 
             internal Entry(Command command, int state, double timeout)

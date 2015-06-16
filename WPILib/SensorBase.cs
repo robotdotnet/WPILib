@@ -24,11 +24,6 @@ namespace WPILib
 
         private static int s_defaultSolenoidModule = 0;
 
-        public static void SetDefaultSolenoidModule(int moduleNumber)
-        {
-            CheckSolenoidModule(moduleNumber);
-            s_defaultSolenoidModule = moduleNumber;
-        }
 
         protected static void CheckSolenoidModule(int moduleNumber)
         {
@@ -137,17 +132,17 @@ namespace WPILib
             }
         }
 
-        public static int GetDefaultSolenoidModule()
+        public static int DefaultSolenoidModule
         {
-            return s_defaultSolenoidModule;
+            get { return s_defaultSolenoidModule; }
+            set
+            {
+                CheckSolenoidModule(value);
+                s_defaultSolenoidModule = value;
+            }
         }
 
-        public void Dispose()
-        {
-            Free();
-        }
-
-        public virtual void Free()
+        public virtual void Dispose()
         {
         }
     }

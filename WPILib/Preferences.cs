@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading;
 using HAL_Base;
-using System.IO;
 using NetworkTablesDotNet.NetworkTables;
 using NetworkTablesDotNet.Tables;
 
@@ -30,9 +28,7 @@ namespace WPILib
         {
             lock(s_lockObject)
             {
-                if (s_instance == null)
-                    s_instance = new Preferences();
-                return s_instance;
+                return s_instance ?? (s_instance = new Preferences());
             }
         }
 
@@ -59,7 +55,7 @@ namespace WPILib
                     Monitor.Wait(m_fileLock);
                     
                 }
-                catch(ThreadInterruptedException ex)
+                catch(ThreadInterruptedException)
                 {
 
                 }
@@ -68,10 +64,13 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_Preferences, (byte)0);
         }
 
-        public List<string> GetKeys()
+        public List<string> Keys
         {
-            lock (m_lockObject)
-                return m_keys;
+            get
+            {
+                lock (m_lockObject)
+                    return m_keys;
+            }
         }
 
         private void Put(string key, string value)
@@ -80,7 +79,7 @@ namespace WPILib
             {
                 if (key == null)
                 {
-                    throw new ArgumentNullException("key");
+                    throw new ArgumentNullException(nameof(key));
                 }
                 ImproperPreferenceKeyException.ConfirmString(key);
                 if (!m_values.ContainsKey(key))
@@ -96,11 +95,11 @@ namespace WPILib
         {
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             if (value.IndexOf('"') != -1)
             {
-                throw new ArgumentException("Can not put string:" + value + " because it contains quotation marks");
+                throw new ArgumentException($"Can not put string:{value} because it contains quotation marks");
             }
             Put(key, value);
         }
@@ -136,11 +135,9 @@ namespace WPILib
             {
                 if (key == null)
                 {
-                    throw new ArgumentNullException("key");
+                    throw new ArgumentNullException(nameof(key));
                 }
-                if (!m_values.ContainsKey(key))
-                    return null;
-                return m_values[key];
+                return !m_values.ContainsKey(key) ? null : m_values[key];
             }
         }
 
@@ -155,7 +152,7 @@ namespace WPILib
             {
                 if (key == null)
                 {
-                    throw new ArgumentNullException("key");
+                    throw new ArgumentNullException(nameof(key));
                 }
                 m_values.Remove(key);
                 m_keys.Remove(key);
@@ -165,7 +162,7 @@ namespace WPILib
         public string GetString(string key, string backup)
         {
             string value = Get(key);
-            return value == null ? backup : value;
+            return value ?? backup;
         }
 
         public int GetInt(string key, int backup)
@@ -282,7 +279,7 @@ namespace WPILib
                 {
                     Monitor.Wait(m_fileLock);
                 }
-                catch(ThreadInterruptedException ex)
+                catch(ThreadInterruptedException)
                 {
 
                 }
@@ -305,7 +302,6 @@ namespace WPILib
                     {
                         File.Delete(FILE_NAME);
                     }
-
                     output = new StreamWriter(FILE_NAME);
 
                     output.Write("[Preferences]\n");
@@ -315,10 +311,7 @@ namespace WPILib
                         if (m_comments != null)
                         {
                             Comment comment = m_comments[key];
-                            if (comment != null)
-                            {
-                                comment.Write(output);
-                            }
+                            comment?.Write(output);
                         }
 
                         output.Write(key);
@@ -327,10 +320,7 @@ namespace WPILib
                         output.Write(VALUE_SUFFIX);
                     }
 
-                    if (m_endComment != null)
-                    {
-                        m_endComment.Write(output);
-                    }
+                    m_endComment?.Write(output);
                 }
                 catch (IOException ex)
                 {
@@ -344,12 +334,12 @@ namespace WPILib
                         {
                             output.Close();
                         }
-                        catch (IOException ex)
+                        catch (IOException)
                         {
 
                         }
                     }
-                    //NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
+                    NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
                 }
             }
         }
@@ -435,7 +425,7 @@ namespace WPILib
                                             buffer.Append(value);
                                         }
                                     }
-                                    catch (EndOfStreamException e)
+                                    catch (EndOfStreamException)
                                     {
                                         shouldBreak = true;
                                     }
@@ -445,7 +435,7 @@ namespace WPILib
                                 m_keys.Add(name);
                                 m_values.Add(name, result);
 
-                                //NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
+                                NetworkTable.GetTable(TABLE_NAME).PutString(name, result);
                                 if (comment != null)
                                 {
                                     if (m_comments == null)
@@ -469,7 +459,7 @@ namespace WPILib
                 {
                     Console.WriteLine(ex);
                 }
-                catch (EndOfStreamException ex)
+                catch (EndOfStreamException)
                 {
                     Console.WriteLine("Done Reading");
                 }
@@ -480,7 +470,7 @@ namespace WPILib
                     {
                         input.Close();
                     }
-                    catch(IOException ex)
+                    catch(IOException)
                     {
 
                     }
@@ -492,9 +482,8 @@ namespace WPILib
                 }
             }
 
-            //NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
-            //TableListener listener = new TableListener(this, ref m_lockObject, ref values, ref keys);
-            //NetworkTable.GetTable(TABLE_NAME).AddTableListener(listener);//Figure this out
+            NetworkTable.GetTable(TABLE_NAME).PutBoolean(SAVE_FIELD, false);
+            NetworkTable.GetTable(TABLE_NAME).AddTableListener(this);//Figure this out
         }
 
         public void ValueChanged(ITable source, string key, object value, bool isNew)
@@ -516,12 +505,16 @@ namespace WPILib
                         {
                             m_values.Remove(key);
                             m_keys.Remove(key);
-                            //NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
+                            NetworkTable.GetTable(TABLE_NAME).PutString(key, "\"");
                         }
                     }
                     else
                     {
-                        if (!m_values.ContainsKey(key))
+                        if (m_values.ContainsKey(key))
+                        {
+                            m_values[key] = value.ToString();
+                        }
+                        else
                         {
                             m_values.Add(key, value.ToString());
                             m_keys.Add(key);
@@ -539,7 +532,7 @@ namespace WPILib
 
                 internal Reader(StreamReader stream)
                 {
-                    this.m_stream = stream;
+                    m_stream = stream;
                 }
 
                 internal char Read()

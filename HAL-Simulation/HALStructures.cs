@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+using System.Threading;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     //Semaphore
 
@@ -12,11 +13,12 @@ namespace HAL_FRC
     [StructLayout(LayoutKind.Sequential)]
     internal struct SEMAPHORE_ID
     {
-        public System.Threading.Semaphore semaphore;
+        public Semaphore semaphore;
         //public object lockObject;
     }
+
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MULTIWAIT_ID
+    public struct MULTIWAIT_ID
     {
         public object lockObject;
     }

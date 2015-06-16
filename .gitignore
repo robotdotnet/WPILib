@@ -10,11 +10,15 @@
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
+[Oo]utput/
 x64/
 build/
 bld/
 [Bb]in/
 [Oo]bj/
+
+#Sandcastle Output
+Sandcastle/Help/
 
 # Roslyn cache directories
 *.ide/
@@ -188,3 +192,4 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 nuget.exe
+buildLocal.bat

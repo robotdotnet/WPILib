@@ -1,132 +1,114 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet.Tables;
-using WPILib.Interfaces;
+﻿using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
-    public abstract class PIDSubsystem : Subsystem, PIDSource, PIDOutput
+    public abstract class PIDSubsystem : Subsystem, IPIDSource, IPIDOutput
     {
-
-        private PIDController m_controller;
-
         public PIDSubsystem(string name, double p, double i, double d)
             : base(name)
         {
-            m_controller = new PIDController(p, i, d, this, this);
+            PIDController = new PIDController(p, i, d, this, this);
         }
 
         public PIDSubsystem(string name, double p, double i, double d, double f)
             : base(name)
         {
-            m_controller = new PIDController(p, i, d, f, this, this);
+            PIDController = new PIDController(p, i, d, f, this, this);
         }
 
         public PIDSubsystem(string name, double p, double i, double d, double f, double period)
             : base(name)
         {
-            m_controller = new PIDController(p, i, d, f, this, this, period);
+            PIDController = new PIDController(p, i, d, f, this, this, period);
         }
 
         public PIDSubsystem(double p, double i, double d)
         {
-            m_controller = new PIDController(p, i, d, this, this);
+            PIDController = new PIDController(p, i, d, this, this);
         }
 
         public PIDSubsystem(double p, double i, double d, double period, double f)
         {
-            m_controller = new PIDController(p, i, d, f, this, this, period);
+            PIDController = new PIDController(p, i, d, f, this, this, period);
         }
 
         public PIDSubsystem(double p, double i, double d, double period)
         {
-            m_controller = new PIDController(p, i, d, this, this, period);
+            PIDController = new PIDController(p, i, d, this, this, period);
         }
 
-        public PIDController GetPIDController()
+        public PIDController PIDController { get; }
+
+        public double PositionRelative
         {
-            return m_controller;
+            set { SetSetpoint(GetPosition() + value); }
         }
 
-        public void SetPositionRelative(double deltaSetpoint)
+        public void SetSetpoint(double value)
         {
-            SetSetpoint(GetPosition() + deltaSetpoint);
-        }
-
-        public void SetSetpoint(double setpoint)
-        {
-            m_controller.SetSetpoint(setpoint);
+            PIDController.Setpoint = value;
         }
 
         public double GetSetpoint()
         {
-            return m_controller.GetSetpoint();
+            return PIDController.Setpoint;
         }
 
-        public double GetPosition()
-        {
-            return ReturnPIDInput();
-        }
+        public double GetPosition() => ReturnPIDInput();
 
         public void SetInputRange(double minimumInput, double maximumInput)
         {
-            m_controller.SetInputRange(minimumInput, maximumInput);
+            PIDController.SetInputRange(minimumInput, maximumInput);
         }
 
         public void SetOutputRange(double minimumOutput, double maximumOutput)
         {
-            m_controller.SetOutputRange(minimumOutput, maximumOutput);
+            PIDController.SetOutputRange(minimumOutput, maximumOutput);
         }
 
         public void SetAbsoluteTolerance(double t)
         {
-            m_controller.SetAbsoluteTolerance(t);
+             PIDController.SetAbsoluteTolerance(t); 
         }
 
         public void SetPercentTolerance(double p)
         {
-            m_controller.SetPercentTolerance(p);
+            PIDController.SetPercentTolerance(p);
         }
 
-        public bool OnTarget()
-        {
-            return m_controller.OnTarget();
-        }
+        public bool OnTarget() => PIDController.OnTarget;
 
         protected abstract double ReturnPIDInput();
 
+
         protected abstract void UsePIDOutput(double output);
 
-        public void Enable()
+        /// <summary>
+        /// Enables the internal <see cref="WPILib.PIDController">PIDController</see>
+        /// </summary>
+        public void Enable() => PIDController.Enable();
+
+        /// <summary>
+        /// Disables the internal <see cref="WPILib.PIDController">PIDController</see>
+        /// </summary>
+        public void Disable() => PIDController.Disable();
+
+
+        ///<inheritdoc/>
+        public double PidGet() => ReturnPIDInput();
+
+        ///<inheritdoc/>
+        public void PidWrite(double value)
         {
-            m_controller.Enable();
+            UsePIDOutput(value);
         }
 
-        public void Disable()
-        {
-            m_controller.Disable();
-        }
-
-        public double PidGet()
-        {
-            return ReturnPIDInput();
-        }
-
-        public void PidWrite(double output)
-        {
-            UsePIDOutput(output);
-        }
-
-        public new string GetSmartDashboardType()
-        {
-            return "PIDSubsystem";
-        }
-
+        ///<inheritdoc/>
+        public new string SmartDashboardType => "PIDSubsystem";
+        ///<inheritdoc/>
         public new void InitTable(ITable table)
         {
-            m_controller.InitTable(table);
+            PIDController.InitTable(table);
             base.InitTable(table);
         }
     }

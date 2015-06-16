@@ -1,98 +1,163 @@
-﻿
-
-using System;
-using WPILib.Util;
+﻿using System;
 using HAL_Base;
+using WPILib.Exceptions;
+using static HAL_Base.HALAnalog;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class AnalogTrigger
+    /// <summary>
+    /// Class for creating and configuring Analog Triggers.
+    /// </summary>
+    public class AnalogTrigger : IDisposable
     {
-        private IntPtr m_port;
-        private int m_index;
+        internal IntPtr Port { get; private set; }
 
-        internal IntPtr Port
-        {
-            get { return m_port; }
-        }
+        /// <summary>
+        /// Gets the index of the analog trigger
+        /// </summary>
+        public int Index { get; protected set; }
 
-        internal int Index
-        {
-            get { return m_index; }
-        }
-
+        /// <summary>
+        /// Initialize an analog trigger from a channel
+        /// </summary>
+        /// <param name="channel">The port to use for the analog trigger.</param>
         protected void InitTrigger(int channel)
         {
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
             uint index = 0;
 
-            m_port = HALAnalog.InitializeAnalogTrigger(portPointer, ref index, ref status);
-            m_index = (int)index;
-
+            Port = InitializeAnalogTrigger(portPointer, ref index, ref status);
+            Index = (int)index;
+            CheckStatus(status);
             HAL.Report(ResourceType.kResourceType_AnalogTrigger, (byte)channel);
         }
 
+        /// <summary>
+        /// Constructor for an analog trigger given a channel number.
+        /// </summary>
+        /// <param name="channel">The port to use for the analog trigger 0-3 are on-board, 4-7 are on the MXP port</param>
         public AnalogTrigger(int channel)
         {
             InitTrigger(channel);
         }
 
+        /// <summary>
+        /// Construct an analog trigger given an analog channel.
+        /// </summary>
+        /// <remarks>Should be used in case of sharing an analog channel
+        /// between a trigger and an input.</remarks>
+        /// <param name="channel">The <see cref="AnalogInput"/> to use for the analog trigger</param>
         public AnalogTrigger(AnalogInput channel)
         {
             if (channel == null)
                 throw new NullReferenceException("The Analog Input given was null");
-            InitTrigger(channel.GetChannel());
+            InitTrigger(channel.Channel);
         }
 
-        public void Free()
+        /// <summary>
+        /// Release the resources used by this object.
+        /// </summary>
+        public void Dispose()
         {
             int status = 0;
-            HALAnalog.CleanAnalogTrigger(m_port, ref status);
-            m_port = IntPtr.Zero;
+            CleanAnalogTrigger(Port, ref status);
+            CheckStatus(status);
+            Port = IntPtr.Zero;
         }
 
+        /// <summary>
+        /// Set the upper and lower limits of the analog trigger. The limits are
+	    /// given in ADC codes.If oversampling is used, the units must be scaled
+        /// appropriately.
+        /// </summary>
+        /// <param name="lower">The lower raw limit</param>
+        /// <param name="upper">The upper raw limit</param>
         public void SetLimitsRaw(int lower, int upper)
         {
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            HALAnalog.SetAnalogTriggerLimitsRaw(m_port, lower, upper, ref status);
+            SetAnalogTriggerLimitsRaw(Port, lower, upper, ref status);
+            CheckStatus(status);
         }
 
+        /// <summary>
+        /// Set the upper and lower limits of the analog trigger. The limits are
+        /// given as floating point voltage values.
+        /// </summary>
+        /// <param name="lower">The lower voltage limit</param>
+        /// <param name="upper">The upper voltage limit</param>
         public void SetLimitsVoltage(double lower, double upper)
         {
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            HALAnalog.SetAnalogTriggerLimitsVoltage(m_port, lower, upper, ref status);
+            SetAnalogTriggerLimitsVoltage(Port, lower, upper, ref status);
+            CheckStatus(status);
         }
 
-        public void SetAveraged(bool useAveragedValue)
+        /// <summary>
+        /// Configure the analog trigger to use averaged vs. raw values.
+        /// </summary>
+        public bool Averaged
         {
-            int status = 0;
-            HALAnalog.SetAnalogTriggerFiltered(m_port, useAveragedValue, ref status);
+            set
+            {
+                int status = 0;
+                SetAnalogTriggerFiltered(Port, value, ref status);
+                CheckStatus(status);
+            }
         }
 
-        public int GetIndex()
+        /// <summary>
+        /// Configure the analog trigger to use a filtered value. True if filtered.
+        /// </summary>
+        public bool Filtered
         {
-            return m_index;
+            set
+            {
+                int status = 0;
+                SetAnalogTriggerFiltered(Port, value, ref status);
+                CheckStatus(status);
+            }
         }
-
-        public bool GetInWindow()
+        
+        /// <summary>
+        /// Return the InWindow output of the analog trigger. True if between the limits.
+        /// </summary>
+        public bool InWindow
         {
-            int status = 0;
-            bool value = HALAnalog.GetAnalogTriggerInWindow(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                bool value = GetAnalogTriggerInWindow(Port, ref status);
+                CheckStatus(status);
+                return value;
+            }
         }
 
-        public bool GetTriggerState()
+        /// <summary>
+        /// Return the trigger state. True if above upper limit, False if below lower limit.
+        /// Maintains previous value if in between limits.
+        /// </summary>
+        public bool TriggerState
         {
-            int status = 0;
-            bool value = HALAnalog.GetAnalogTriggerTriggerState(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                bool value = GetAnalogTriggerTriggerState(Port, ref status);
+                CheckStatus(status);
+                return value;
+            }
         }
 
+        /// <summary>
+        /// Creates an <see cref="AnalogTriggerOutput">analog trigger output</see>. 
+        /// </summary>
+        /// <param name="type">The type of object to create.</param>
+        /// <returns>A pointer to a new <see cref="AnalogTriggerOutput"/></returns>
         public AnalogTriggerOutput CreateOutput(AnalogTriggerType type)
         {
             return new AnalogTriggerOutput(this, type);

@@ -4,13 +4,13 @@ using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     public class HALSemaphore
     {
         /// Return Type: MUTEX_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexRecursive")]
-        public static System.IntPtr initializeMutexRecursive()
+        public static IntPtr initializeMutexRecursive()
         {
             MUTEX_ID p = new MUTEX_ID();
             p.lockObject = new object();
@@ -38,7 +38,7 @@ namespace HAL_FRC
         /// Return Type: void
         ///sem: MUTEX_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "deleteMutex")]
-        public static void deleteMutex(System.IntPtr sem)
+        public static void deleteMutex(IntPtr sem)
         {
             Marshal.FreeHGlobal(sem);
             sem = IntPtr.Zero;
@@ -48,7 +48,7 @@ namespace HAL_FRC
         /// Return Type: byte
         ///sem: MUTEX_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "takeMutex")]
-        public static sbyte takeMutex(System.IntPtr sem)
+        public static sbyte takeMutex(IntPtr sem)
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof (MUTEX_ID));
             Monitor.Enter(temp.lockObject);
@@ -60,7 +60,7 @@ namespace HAL_FRC
         /// Return Type: byte
         ///sem: MUTEX_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "tryTakeMutex")]
-        public static sbyte tryTakeMutex(System.IntPtr sem)
+        public static sbyte tryTakeMutex(IntPtr sem)
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
             bool retVal = Monitor.TryEnter(temp.lockObject);
@@ -71,7 +71,7 @@ namespace HAL_FRC
         /// Return Type: byte
         ///sem: MUTEX_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "giveMutex")]
-        public static sbyte giveMutex(System.IntPtr sem)
+        public static sbyte giveMutex(IntPtr sem)
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
             Monitor.Exit(temp.lockObject);
@@ -82,10 +82,10 @@ namespace HAL_FRC
         /// Return Type: SEMAPHORE_ID->void*
         ///initial_value: unsigned int
         //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeSemaphore")]
-        public static System.IntPtr initializeSemaphore(uint initial_value)
+        public static IntPtr initializeSemaphore(uint initial_value)
         {
-            SEMAPHORE_ID p = new SEMAPHORE_ID();
-            p.semaphore = new Semaphore((int)initial_value, 1);
+            MULTIWAIT_ID p = new MULTIWAIT_ID();
+            p.lockObject = new object();
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
 
@@ -96,7 +96,7 @@ namespace HAL_FRC
         /// Return Type: void
         ///sem: SEMAPHORE_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "deleteSemaphore")]
-        public static void deleteSemaphore(System.IntPtr sem)
+        public static void deleteSemaphore(IntPtr sem)
         {
             Marshal.FreeHGlobal(sem);
             sem = IntPtr.Zero;
@@ -106,10 +106,10 @@ namespace HAL_FRC
         /// Return Type: byte
         ///sem: SEMAPHORE_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "takeSemaphore")]
-        public static sbyte takeSemaphore(System.IntPtr sem)
+        public static sbyte takeSemaphore(IntPtr sem)
         {
-            var temp = (SEMAPHORE_ID) Marshal.PtrToStructure(sem, typeof (SEMAPHORE_ID));
-            temp.semaphore.WaitOne();
+            var temp = (MULTIWAIT_ID) Marshal.PtrToStructure(sem, typeof (MULTIWAIT_ID));
+            Monitor.Enter(temp.lockObject);//temp.semaphore.WaitOne();
             return 0;
         }
 
@@ -117,21 +117,24 @@ namespace HAL_FRC
         /// Return Type: byte
         ///sem: SEMAPHORE_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "tryTakeSemaphore")]
-        public static sbyte tryTakeSemaphore(System.IntPtr sem)
+        public static sbyte tryTakeSemaphore(IntPtr sem)
         {
-            var temp = (SEMAPHORE_ID)Marshal.PtrToStructure(sem, typeof(SEMAPHORE_ID));
-            bool retVal = temp.semaphore.WaitOne(0);
-            return retVal ? (sbyte)1 : (sbyte)0;
+            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            bool retVal = Monitor.TryEnter(temp.lockObject);
+            
+            //bool retVal = temp.semaphore.WaitOne(0);
+            return retVal ? (sbyte)0 : (sbyte)1;
         }
 
 
         /// Return Type: byte
         ///sem: SEMAPHORE_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "giveSemaphore")]
-        public static sbyte giveSemaphore(System.IntPtr sem)
+        public static sbyte giveSemaphore(IntPtr sem)
         {
-            var temp = (SEMAPHORE_ID)Marshal.PtrToStructure(sem, typeof(SEMAPHORE_ID));
-            temp.semaphore.Release();
+            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            if (Monitor.IsEntered(temp.lockObject))
+                Monitor.Exit(temp.lockObject);
             return 0;
         }
 
@@ -152,7 +155,7 @@ namespace HAL_FRC
         /// Return Type: void
         ///sem: MULTIWAIT_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "deleteMultiWait")]
-        public static void deleteMultiWait(System.IntPtr sem)
+        public static void deleteMultiWait(IntPtr sem)
         {
             Marshal.FreeHGlobal(sem);
             sem = IntPtr.Zero;
@@ -180,24 +183,28 @@ namespace HAL_FRC
             }
             return 0;
              */
+
             var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            
             lock (temp.lockObject)
             {
                 try
                 {
                     Monitor.Wait(temp.lockObject);
                 }
-                catch (ThreadInterruptedException ex)
+                catch (ThreadInterruptedException)
                 {
                 }
             }
+            
+            
             return 0;
         }
 
         /// Return Type: byte
         ///sem: MULTIWAIT_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "giveMultiWait")]
-        public static sbyte giveMultiWait(System.IntPtr sem)
+        public static sbyte giveMultiWait(IntPtr sem)
         {
             var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
             lock (temp.lockObject)
@@ -206,7 +213,7 @@ namespace HAL_FRC
                 {
                     Monitor.PulseAll(temp.lockObject);
                 }
-                catch (ThreadInterruptedException e)
+                catch (ThreadInterruptedException)
                 {
                     
                 }

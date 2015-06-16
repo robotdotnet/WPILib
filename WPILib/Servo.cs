@@ -1,4 +1,6 @@
 ﻿using HAL_Base;
+using WPILib.LiveWindows;
+using static HAL_Base.HAL;
 
 namespace WPILib
 {
@@ -13,9 +15,10 @@ namespace WPILib
         private void InitServo()
         {
             SetBounds(s_defaultMaxServoPWM, 0, 0, 0, s_defaultMinServoPWM);
-            SetPeriodMultiplier(PeriodMultiplier.K4X);
+            PeriodMultiplier = PeriodMultiplier.K4X;
 
-            HAL.Report(ResourceType.kResourceType_Servo, (byte)GetChannel());
+            Report(ResourceType.kResourceType_Servo, (byte)Channel);
+            LiveWindow.AddActuator("Servo", Channel, this);
         }
 
         public Servo(int channel) : base(channel)
@@ -33,28 +36,21 @@ namespace WPILib
             return GetPosition();
         }
 
-        public void SetAngle(double degrees)
+        public double Angle
         {
-            if (degrees < s_MinServoAngle)
-                degrees = s_MinServoAngle;
-            else if (degrees > s_MaxServoAngle)
-                degrees = s_MaxServoAngle;
-            SetPosition(((degrees - s_MinServoAngle)) / GetServoAngleRange());
+            get { return GetPosition()*ServoAngleRange + s_MinServoAngle; }
+            set
+            {
+                if (value < s_MinServoAngle)
+                    value = s_MinServoAngle;
+                else if (value > s_MaxServoAngle)
+                    value = s_MaxServoAngle;
+                SetPosition(((value - s_MinServoAngle))/ServoAngleRange);
+            }
         }
 
-        public double GetAngle()
-        {
-            return GetPosition() * GetServoAngleRange() + s_MinServoAngle;
-        }
+        private double ServoAngleRange => s_MaxServoAngle - s_MinServoAngle;
 
-        private double GetServoAngleRange()
-        {
-            return s_MaxServoAngle - s_MinServoAngle;
-        }
-
-        public new string GetSmartDashboardType()
-        {
-            return "Servo";
-        }
+        public new string SmartDashboardType => "Servo";
     }
 }

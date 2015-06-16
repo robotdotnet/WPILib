@@ -1,5 +1,5 @@
 ﻿
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     public enum ResourceType
     {

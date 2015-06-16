@@ -1,25 +1,41 @@
-﻿
-
-using System;
+﻿using System;
 using System.Linq;
-using WPILib.Interfaces;
-using WPILib.Util;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.Exceptions;
+using WPILib.LiveWindows;
+using static HAL_Base.HAL;
+using static HAL_Base.HALAnalog;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class AnalogInput : SensorBase, PIDSource
+    /// <summary>
+    /// Analog Channel class. Each channel is read from hardware as a 12-bit number representing 0v to 5v.
+    /// </summary>
+    /// <remarks>Connected to each analog channel is an averaging and oversampling engine.
+    /// <para/> This engine accumulates the specified(by setAverageBits() and
+    /// <para/> setOversampleBits() ) number of samples before returning a new value.This is
+    /// <para/> not a sliding window average.The only difference between the oversampled
+    /// <para/> samples and the averaged samples is that the oversampled samples are simply
+    /// <para/> accumulated effectively increasing the resolution, while the averaged samples
+    /// <para/> are divided by the number of samples to retain the resolution, but get more
+    /// <para/> stable values.</remarks>
+    public class AnalogInput : SensorBase, IPIDSource, ILiveWindowSendable
     {
         //private static int AccumulatorSlot = 1;
         private static Resource s_channels = new Resource(AnalogInputChannels);
         private IntPtr m_port;
-        private int m_channel;
         private static int[] s_accumulatorChannels = { 0, 1 };
         private long m_accumulatorOffset;
 
+        /// <summary>
+        /// Construct an analog channel
+        /// </summary>
+        /// <param name="channel">The channel number to represent. 0-3 are on-board 4-7 are on the MXP port.</param>
         public AnalogInput(int channel)
         {
-            m_channel = channel;
+            Channel = channel;
 
             CheckAnalogInputChannel(channel);
 
@@ -27,189 +43,333 @@ namespace WPILib
             {
                 s_channels.Allocate(channel);
             }
-            catch (CheckedAllocationException ex)
+            catch (CheckedAllocationException)
             {
-                throw new AllocationException("Analog input channel " + m_channel
+                throw new AllocationException("Analog input channel " + Channel
                      + " is already allocated");
             }
 
-            IntPtr portPointer = HAL.GetPort((byte)channel);
+            IntPtr portPointer = GetPort((byte)channel);
             int status = 0;
-            m_port = HALAnalog.InitializeAnalogInputPort(portPointer, ref status);
-            HAL.Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
+            m_port = InitializeAnalogInputPort(portPointer, ref status);
+            CheckStatus(status);
+            LiveWindow.AddSensor("AnalogInput", channel, this);
+            Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
 
-        public override void Free()
+        /// <summary>
+        /// Channel destructor.
+        /// </summary>
+        public override void Dispose()
         {
-            s_channels.Free(m_channel);
-            m_channel = 0;
+            s_channels.Dispose(Channel);
+            Channel = 0;
             m_accumulatorOffset = 0;
         }
 
+        /// <summary>
+        /// Get a sample straight from this channel. 
+        /// </summary>
+        /// <remarks>The sample is a 12-bit value
+        /// <para/> representing the 0V to 5V range of the A/D converter.The units are in
+        /// <para/> A/D converter codes.Use GetVoltage() to get the analog value in
+        /// <para/> calibrated units.</remarks>
+        /// <returns>A straight sample from this channel in 12 bit form.</returns>
         public int GetValue()
         {
             int status = 0;
-            int value = HALAnalog.GetAnalogValue(m_port, ref status);
+            int value = GetAnalogValue(m_port, ref status);
+            CheckStatus(status);
             return value;
         }
 
+        /// <summary>
+        /// Get a sample from the output of the oversample and average engine for this channel.
+        /// </summary>
+        /// <remarks>The sample is 12-bit + the bits configured in
+        /// <para/> SetOversampleBits(). The value configured in setAverageBits() will cause
+        /// <para/> this value to be averaged 2^bits number of samples.This is not a
+        /// <para/> sliding window. The sample will not change until 2^(OversampleBits +
+        /// <para/> AverageBits) samples have been acquired from this channel.Use
+        /// <para/> getAverageVoltage() to get the analog value in calibrated units.</remarks>
+        /// <returns> A sample from the oversample and average engine for this channel.</returns>
         public int GetAverageValue()
         {
             int status = 0;
-            int value = HALAnalog.GetAnalogAverageValue(m_port, ref status);
+            int value = GetAnalogAverageValue(m_port, ref status);
+            CheckStatus(status);
             return value;
         }
 
+        /// <summary>
+        /// Get a scaled sample straight from this channel.
+        /// </summary>
+        /// <returns>The voltage on the Analog Input</returns>
         public double GetVoltage()
         {
             int status = 0;
-            double value = HALAnalog.GetAnalogVoltage(m_port, ref status);
+            double value = GetAnalogVoltage(m_port, ref status);
+            CheckStatus(status);
             return value;
         }
 
+        /// <summary>
+        /// Get a scaled sample from the output of the oversample and average engine
+	    /// for this channel.
+        /// </summary>
+        /// <returns>A scaled sample from the output of the oversample and average engine for this channel.</returns>
         public double GetAverageVoltage()
         {
             int status = 0;
-            double value = HALAnalog.GetAnalogAverageVoltage(m_port, ref status);
+            double value = GetAnalogAverageVoltage(m_port, ref status);
+            CheckStatus(status);
             return value;
         }
 
-        public long GetLSBWeight()
+        public long LSBWeight
         {
-            int status = 0;
-            long value = HALAnalog.GetAnalogLSBWeight(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                long value = GetAnalogLSBWeight(m_port, ref status);
+                CheckStatus(status);
+                return value;
+            }
         }
 
-        public int GetOffset()
+        public int Offset
         {
-            int status = 0;
-            int value = HALAnalog.GetAnalogOffset(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                int value = GetAnalogOffset(m_port, ref status);
+                CheckStatus(status);
+                return value;
+            }
         }
 
-        public int GetChannel()
+        public int Channel { get; private set; }
+
+        public int AverageBits
         {
-            return m_channel;
+            set
+            {
+                int status = 0;
+                SetAnalogAverageBits(m_port, (uint)value, ref status);
+                CheckStatus(status);
+            }
+            get
+            {
+                int status = 0;
+                uint value = GetAnalogAverageBits(m_port, ref status);
+                CheckStatus(status);
+                return (int)value;
+            }
         }
 
-        public void SetAverageBits(int bits)
+        public int OversampleBits
         {
-            int status = 0;
-            HALAnalog.SetAnalogAverageBits(m_port, (uint)bits, ref status);
+            set
+            {
+                int status = 0;
+                SetAnalogOversampleBits(m_port, (uint)value, ref status);
+                CheckStatus(status);
+            }
+            get
+            {
+                int status = 0;
+                uint value = GetAnalogOversampleBits(m_port, ref status);
+                CheckStatus(status);
+                return (int)value;
+            }
         }
 
-        public int GetAverageBits()
-        {
-            int status = 0;
-            uint value = HALAnalog.GetAnalogAverageBits(m_port, ref status);
-            return (int)value;
-        }
-
-        public void SetOversampleBits(int bits)
-        {
-            int status = 0;
-            HALAnalog.SetAnalogOversampleBits(m_port, (uint)bits, ref status);
-        }
-
-        public int GetOversampleBits()
-        {
-            int status = 0;
-            uint value = HALAnalog.GetAnalogOversampleBits(m_port, ref status);
-            return (int)value;
-        }
-
+        /// <summary>
+        /// Initialize the accumulator.
+        /// </summary>
         public void InitAccumulator()
         {
-            if (!IsAccumulatorChannel())
+            if (!IsAccumulatorChannel)
             {
                 throw new AllocationException("This is not an accumulator");
             }
             m_accumulatorOffset = 0;
             int status = 0;
             HALAnalog.InitAccumulator(m_port, ref status);
+            CheckStatus(status);
         }
 
-        public void SetAccumulatorInitialValue(long initialValue)
+        /// <summary>
+        /// Set an initial value for the accumulator. This will be added to all values returned to the user.
+        /// </summary>
+        public long AccumulatorInitialValue
         {
-            m_accumulatorOffset = initialValue;
+            set { m_accumulatorOffset = value; }
         }
 
+        /// <summary>
+        /// Reset the accumulator to its initial value.
+        /// </summary>
         public void ResetAccumulator()
         {
             int status = 0;
             HALAnalog.ResetAccumulator(m_port, ref status);
-
-            double sampleTime = 1.0 / GetGlobalSampleRate();
-            double overSamples = 1 << GetOversampleBits();
-            double averageSamples = 1 << GetAverageBits();
+            CheckStatus(status);
+            double sampleTime = 1.0 / GlobalSampleRate;
+            double overSamples = 1 << OversampleBits;
+            double averageSamples = 1 << AverageBits;
             Timer.Delay(sampleTime * overSamples * averageSamples);
         }
 
-        public void SetAccumulatorCenter(int center)
+        /// <summary>
+        /// Set the center value of the accumulator.
+        /// </summary>
+        public int AccumulatorCenter
         {
-            int status = 0;
-            HALAnalog.SetAccumulatorCenter(m_port, center, ref status);
+            set
+            {
+                int status = 0;
+                SetAccumulatorCenter(m_port, value, ref status);
+                CheckStatus(status);
+            }
         }
 
-        public void SetAccumulatorDeadband(int deadband)
+        /// <summary>
+        /// Set the accumulators deadband in 12 bit format.
+        /// </summary>
+        public int AccumulatorDeadband
         {
-            int status = 0;
-            HALAnalog.SetAccumulatorDeadband(m_port, deadband, ref status);
+            set
+            {
+                int status = 0;
+                SetAccumulatorDeadband(m_port, value, ref status);
+                CheckStatus(status);
+            }
         }
 
-        public long GetAccumulatorValue()
+        /// <summary>
+        /// Read the accumulated value
+        /// </summary>
+        public long AccumulatorValue
         {
-            int status = 0;
-            long value = HALAnalog.GetAccumulatorValue(m_port, ref status);
-            return value + m_accumulatorOffset;
+            get
+            {
+                int status = 0;
+                long value = GetAccumulatorValue(m_port, ref status);
+                CheckStatus(status);
+                return value + m_accumulatorOffset;
+            }
         }
 
-        public long GetAccumulatorCount()
+        /// <summary>
+        /// Read the number of accumulated values
+        /// </summary>
+        public long AccumulatorCount
         {
-            int status = 0;
-            long value = HALAnalog.GetAccumulatorCount(m_port, ref status);
-            return value;
+            get
+            {
+                int status = 0;
+                long value = GetAccumulatorCount(m_port, ref status);
+                CheckStatus(status);
+                return value;
+            }
         }
 
+        /// <summary>
+        /// Read the accumulated value and the number of accumulated values atomically.
+        /// </summary>
+        /// <param name="result">AccumulatorResult object to store the result in.</param>
         public void GetAccumulatorOutput(AccumulatorResult result)
         {
             if (result == null)
-                throw new ArgumentNullException();
-            if (!IsAccumulatorChannel())
-                throw new ArgumentException("Channel " + m_channel
-                    + " is not an accumulator channel.");
+                throw new ArgumentNullException(nameof(result));
+            if (!IsAccumulatorChannel)
+                throw new ArgumentException($"Channel {Channel} is not an accumulator channel.");
 
             uint count = 0;
             long value = 0;
             int status = 0;
             HALAnalog.GetAccumulatorOutput(m_port, ref value, ref count, ref status);
-            result.value = value + m_accumulatorOffset;
-            result.count = count;
+            CheckStatus(status);
+            result.Value = value + m_accumulatorOffset;
+            result.Count = count;
         }
 
-
-        public bool IsAccumulatorChannel()
+        /// <summary>
+        /// Is the channel attached to an accumulator.
+        /// </summary>
+        public bool IsAccumulatorChannel
         {
-            return s_accumulatorChannels.Any(t => m_channel == t);
+            get { return s_accumulatorChannels.Any(t => Channel == t); }
         }
 
-        public static void SetGlobalSampleRate(double samplesPerSecond)
+        /// <summary>
+        /// Gets or Sets the current global sample rage.
+        /// </summary>
+        public static double GlobalSampleRate
         {
-            int status = 0;
-            HALAnalog.SetAnalogSampleRate(samplesPerSecond, ref status);
+            set
+            {
+                int status = 0;
+                SetAnalogSampleRate(value, ref status);
+            }
+            get
+            {
+                int status = 0;
+                double value = GetAnalogSampleRate(ref status);
+                CheckStatus(status);
+                return value;
+            }
         }
 
-        public static double GetGlobalSampleRate()
+        /// <summary>
+        /// Get the result to use in PIDController
+        /// </summary>
+        /// <returns>The result to use in PIDController</returns>
+        public double PidGet() => GetAverageVoltage();
+
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
+        public void InitTable(ITable subtable)
         {
-            int status = 0;
-            double value = HALAnalog.GetAnalogSampleRate(ref status);
-            return value;
+            Table = subtable;
+            UpdateTable();
         }
 
-        public double PidGet()
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
+
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
+        public string SmartDashboardType => "Analog Input";
+
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
+        public void UpdateTable()
         {
-            return GetAverageVoltage();
+            Table?.PutNumber("Value", GetAverageVoltage());
+        }
+
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
+        public void StartLiveWindowMode()
+        {
+        }
+
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
+        public void StopLiveWindowMode()
+        {
         }
     }
 }

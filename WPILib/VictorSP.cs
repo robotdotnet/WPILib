@@ -1,16 +1,17 @@
 ﻿using System;
 using HAL_Base;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
     /// <summary>
     /// VEX Robotics Victor SP Speed Controller
     /// </summary>
-    public class VictorSP : SafePWM, SpeedController
+    public class VictorSP : SafePWM, ISpeedController
     {
         /// <summary>
         /// Common initialization code called by all constructors.
-        /// <para> </para>
+        /// </summary><remarks>
         /// Note that the VictorSP uses the following bounds for PWM values. These values should work reasonably well for
         /// <para />most controllers, but if users experience issues such as asymmetric behavior around
         /// <para />the deadband or inability to saturate the controller in either direction, calibration is recommended.
@@ -21,16 +22,16 @@ namespace WPILib
         /// <para />  - 1.50ms = center of the deadband range (off)
         /// <para />  - 1.48ms = the "low end" of the deadband range
         /// <para />  - .997ms = full "reverse"
-        /// </summary>
-        private void InitVictorSP()
+        /// </remarks>
+        protected void InitVictorSP()
         {
             SetBounds(2.004, 1.52, 1.50, 1.48, .997);
-            SetPeriodMultiplier(PeriodMultiplier.K1X);
-            SetRaw(GetCenterPwm());
+            PeriodMultiplier = PeriodMultiplier.K1X;
+            SetRaw(CenterPwm);
             SetZeroLatch();
 
-            //TODO:Add Live Actuator
-            HAL.Report(ResourceType.kResourceType_VictorSP, (byte)GetChannel());
+            LiveWindow.AddActuator("VictorSP", Channel, this);
+            HAL.Report(ResourceType.kResourceType_VictorSP, (byte)Channel);
         }
 
         /// <summary>
@@ -46,10 +47,20 @@ namespace WPILib
         /// <summary>
         /// Write out the PID value as seen in the PIDOutput base object.
         /// </summary>
-        /// <param name="output">Write out the PWM value at it was found in the PID Controller</param>
-        public void PidWrite(double output)
+        /// <param name="value">Write out the PWM value at it was found in the PID Controller</param>
+        public void PidWrite(double value)
         {
-            Set(output);
+            Set(value);
+        }
+
+        /// <summary>
+        /// Get the recently set value of the PWM.
+        /// </summary>
+        /// <param name="value">The most recently set value for the PWM between -1.0 and 1.0</param>
+        public void Set(double value)
+        {
+            SetSpeed(value);
+            Feed();
         }
 
         /// <summary>
@@ -62,31 +73,17 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Set the PWM value.
-        /// <para> </para>
+        /// Set the PWM value for a specific sync group.
+        /// </summary> <remarks>
         /// The PWM value is set using a range of -1.0 to 1.0, appropriately
         /// scaling the value for the FPGA.
-        /// </summary>
-        /// <param name="speed">The speed to set. Value should be between -1.0 and 1.0</param>
+        /// </remarks>
+        /// <param name="value">The speed to set. Value should be between -1.0 and 1.0</param>
         /// <param name="syncGroup">The update group to add this Set() to, pending UpdateSyncGroup(). If 0, update immediately.</param>
         [Obsolete("For compatibility with CAN Jaguar")]
-        public void Set(double speed, byte syncGroup)
+        public void Set(double value, byte syncGroup)
         {
-            SetSpeed(speed);
-            Feed();
-        }
-
-        /// <summary>
-        /// Set the PWM value.
-        /// <para> </para>
-        /// The PWM value is set using a range of -1.0 to 1.0, appropriately
-        /// scaling the value for the FPGA.
-        /// </summary>
-        /// <param name="speed">The speed value between -1.0 and 1.0 to set.</param>
-        public void Set(double speed)
-        {
-            
-            SetSpeed(speed);
+            SetSpeed(value);
             Feed();
         }
     }

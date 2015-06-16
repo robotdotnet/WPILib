@@ -18,7 +18,7 @@ namespace WPILib.Buttons
         }
 
         /// <summary>
-        /// Gets the value of the joytick button
+        /// Gets the value of the joystick button
         /// </summary>
         /// <returns>The value of the joystick button</returns>
         public override bool Get()

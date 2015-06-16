@@ -1,13 +1,15 @@
-﻿
-
-using System;
-using WPILib.Interfaces;
-using WPILib.Util;
+﻿using System;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.Exceptions;
+using WPILib.LiveWindows;
+using static HAL_Base.HAL;
+using static HAL_Base.HALDigital;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class Counter : SensorBase, CounterBase, PIDSource
+    public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         private DigitalSource m_upSource;
         private DigitalSource m_downSource;
@@ -21,17 +23,17 @@ namespace WPILib
         private void InitCounter(Mode mode)
         {
             int status = 0;
-            m_counter = HALDigital.InitializeCounter(mode, ref m_index, ref status);
+            m_counter = InitializeCounter(mode, ref m_index, ref status);
 
             m_allocatedUpSource = false;
             m_allocatedDownSource = false;
             m_upSource = null;
             m_downSource = null;
 
-            SetMaxPeriod(0.5);
+            MaxPeriod = 0.5;
             m_distancePerPulse = 1;
 
-            HAL.Report(ResourceType.kResourceType_Counter, (byte)m_index, (byte)mode);
+            Report(ResourceType.kResourceType_Counter, (byte)m_index, (byte)mode);
         }
 
         public Counter()
@@ -70,14 +72,14 @@ namespace WPILib
             if (encodingType == EncodingType.K1X)
             {
                 SetUpSourceEdge(true, false);
-                HALDigital.SetCounterAverageSize(m_counter, 1, ref status);
+                SetCounterAverageSize(m_counter, 1, ref status);
             }
             else
             {
                 SetDownSourceEdge(true, true);
-                HALDigital.SetCounterAverageSize(m_counter, 2, ref status);
+                SetCounterAverageSize(m_counter, 2, ref status);
             }
-
+            CheckStatus(status);
             SetDownSourceEdge(inverted, true);
         }
 
@@ -91,25 +93,23 @@ namespace WPILib
             SetUpSource(trigger.CreateOutput(AnalogTriggerType.State));
         }
 
-        public override void Free()
+        public override void Dispose()
         {
-            SetUpdateWhenEmpty(true);
+            UpdateWhenEmpty = true;
 
             ClearUpSource();
             ClearDownSource();
 
             int status = 0;
-            HALDigital.FreeCounter(m_counter, ref status);
+            FreeCounter(m_counter, ref status);
+            CheckStatus(status);
 
             m_upSource = null;
             m_downSource = null;
             m_counter = IntPtr.Zero;
         }
 
-        public int GetFPGAIndex()
-        {
-            return (int)m_index;
-        }
+        public int FPGAIndex => (int) m_index;
 
         public void SetUpSource(int channel)
         {
@@ -120,12 +120,12 @@ namespace WPILib
         {
             if (m_upSource != null && m_allocatedUpSource)
             {
-                m_upSource.Free();
+                m_upSource.Dispose();
                 m_allocatedUpSource = false;
             }
             m_upSource = source;
             int status = 0;
-            HALDigital.SetCounterUpSource(m_counter, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
+            SetCounterUpSource(m_counter, (uint)source.ChannelForRouting, source.AnalogTriggerForRouting, ref status);
         }
 
         public void SetUpSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
@@ -141,20 +141,20 @@ namespace WPILib
             if (m_upSource == null)
                 throw new SystemException("Up Source must be set before setting the edge!");
             int status = 0;
-            HALDigital.SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
         }
 
         public void ClearUpSource()
         {
             if (m_upSource != null && m_allocatedUpSource)
             {
-                m_upSource.Free();
+                m_upSource.Dispose();
                 m_allocatedUpSource = false;
             }
             m_upSource = null;
 
             int status = 0;
-            HALDigital.ClearCounterUpSource(m_counter, ref status);
+            ClearCounterUpSource(m_counter, ref status);
         }
 
 
@@ -168,12 +168,12 @@ namespace WPILib
         {
             if (m_downSource != null && m_allocatedDownSource)
             {
-                m_downSource.Free();
+                m_downSource.Dispose();
                 m_allocatedDownSource = false;
             }
             m_downSource = source;
             int status = 0;
-            HALDigital.SetCounterDownSource(m_counter, (uint)source.GetChannelForRouting(), source.GetAnalogTriggerForRouting(), ref status);
+            SetCounterDownSource(m_counter, (uint)source.ChannelForRouting, source.AnalogTriggerForRouting, ref status);
         }
 
         public void SetDownSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
@@ -189,134 +189,141 @@ namespace WPILib
             if (m_downSource == null)
                 throw new SystemException("Up Source must be set before setting the edge!");
             int status = 0;
-            HALDigital.SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
         }
 
         public void ClearDownSource()
         {
             if (m_downSource != null && m_allocatedDownSource)
             {
-                m_downSource.Free();
+                m_downSource.Dispose();
                 m_allocatedDownSource = false;
             }
             m_downSource = null;
 
             int status = 0;
-            HALDigital.ClearCounterDownSource(m_counter, ref status);
+            ClearCounterDownSource(m_counter, ref status);
         }
 
         public void SetUpDownCounterMode()
         {
             int status = 0;
-            HALDigital.SetCounterUpDownMode(m_counter, ref status);
+            SetCounterUpDownMode(m_counter, ref status);
         }
 
         public void SetExternalDirectionMode()
         {
             int status = 0;
-            HALDigital.SetCounterExternalDirectionMode(m_counter, ref status);
+            SetCounterExternalDirectionMode(m_counter, ref status);
         }
 
         public void SetSemiPeriodMode(bool highSemiPeriod)
         {
             int status = 0;
-            HALDigital.SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
+            SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
         }
 
         public void SetPulseLengthMode(double threshold)
         {
             int status = 0;
-            HALDigital.SetCounterPulseLengthMode(m_counter, threshold, ref status);
+            SetCounterPulseLengthMode(m_counter, threshold, ref status);
         }
 
         public int Get()
         {
             int status = 0;
-            int value = HALDigital.GetCounter(m_counter, ref status);
+            int value = GetCounter(m_counter, ref status);
             return value;
         }
 
-        public double GetDistance()
-        {
-            return Get()*m_distancePerPulse;
-        }
+        public double Distance => Get()*m_distancePerPulse;
 
         public void Reset()
         {
             int status = 0;
-            HALDigital.ResetCounter(m_counter, ref status);
+            ResetCounter(m_counter, ref status);
         }
 
-        public void SetMaxPeriod(double maxPeriod)
+        public double MaxPeriod
         {
-            int status = 0;
-            HALDigital.SetCounterMaxPeriod(m_counter, maxPeriod, ref status);
+            set
+            {
+                int status = 0;
+                SetCounterMaxPeriod(m_counter, value, ref status);
+            }
         }
 
-        public void SetUpdateWhenEmpty(bool enabled)
+        public bool UpdateWhenEmpty
         {
-            int status = 0;
-            HALDigital.SetCounterUpdateWhenEmpty(m_counter, enabled, ref status);
+            set
+            {
+                int status = 0;
+                SetCounterUpdateWhenEmpty(m_counter, value, ref status);
+            }
         }
 
         public bool GetStopped()
         {
             int status = 0;
-            bool value = HALDigital.GetCounterStopped(m_counter, ref status);
+            bool value = GetCounterStopped(m_counter, ref status);
             return value;
         }
 
-        public bool GetDirection()
+        public bool Direction
         {
-            int status = 0;
-            bool value = HALDigital.GetCounterDirection(m_counter, ref status);
-            return value;
-        }
-
-        public void SetReverseDirection(bool reverseDirection)
-        {
-            int status = 0;
-            HALDigital.SetCounterReverseDirection(m_counter, reverseDirection, ref status);
+            get
+            {
+                int status = 0;
+                bool value = GetCounterDirection(m_counter, ref status);
+                return value;
+            }
+            set
+            {
+                int status = 0;
+                SetCounterReverseDirection(m_counter, value, ref status);
+            }
         }
 
         public double GetPeriod()
         {
             int status = 0;
-            double value = HALDigital.GetCounterPeriod(m_counter, ref status);
+            double value = GetCounterPeriod(m_counter, ref status);
             return value;
         }
 
-        public double GetRate()
-        {
-            return m_distancePerPulse/GetPeriod();
-        }
+        public double Rate => m_distancePerPulse/GetPeriod();
 
-        public void SetSamplesToAverage(int samplesToAverage)
+        public int SamplesToAverage
         {
-            int status = 0;
-            HALDigital.SetCounterSamplesToAverage(m_counter, samplesToAverage, ref status);
-            if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
+            set
             {
-                throw new BoundaryException(BoundaryException.GetMessage(samplesToAverage, 1, 127));
+                int status = 0;
+                SetCounterSamplesToAverage(m_counter, value, ref status);
+                if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
+                {
+                    throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
+                }
+            }
+            get
+            {
+                int status = 0;
+                int value = GetCounterSamplesToAverage(m_counter, ref status);
+                return value;
             }
         }
 
-        public int GetSamplesToAverage()
+        public double DistancePerPulse
         {
-            int status = 0;
-            int value = HALDigital.GetCounterSamplesToAverage(m_counter, ref status);
-            return value;
+            set { m_distancePerPulse = value; }
         }
 
-        public void SetDistancePerPulse(double distancePerPulse)
+        public PIDSourceParameter PIDSourceParameter
         {
-            m_distancePerPulse = distancePerPulse;
-        }
-
-        public void SetPIDSourceParameter(PIDSourceParameter pidSource)
-        {
-            BoundaryException.AssertWithinBounds((int) pidSource, 0, 1);
-            m_pidSource = pidSource;
+            set
+            {
+                BoundaryException.AssertWithinBounds((int) value, 0, 1);
+                m_pidSource = value;
+            }
         }
 
         public double PidGet()
@@ -324,12 +331,37 @@ namespace WPILib
             switch (m_pidSource)
             {
                 case PIDSourceParameter.Distance:
-                    return GetDistance();
+                    return Distance;
                 case PIDSourceParameter.Rate:
-                    return GetRate();
+                    return Rate;
                 default:
                     return 0.0;
             }
+        }
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+        ///<inheritdoc />
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "Counter";
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            Table?.PutNumber("Value", Get());
+        }
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+        }
+
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
         }
     }
 }

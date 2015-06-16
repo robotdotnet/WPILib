@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using HAL_Base;
-using WPILib.Util;
+﻿using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.Exceptions;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
-    
-    public class DoubleSolenoid : SolenoidBase
+
+    public class DoubleSolenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
+        /// <summary>
+        /// Values allowed for <see cref="DoubleSolenoid">Double Solenoids</see>.
+        /// </summary>
         public enum Value
         {
             Off,
@@ -36,7 +36,7 @@ namespace WPILib
                 {
                     m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
                 }
-                catch (CheckedAllocationException e)
+                catch (CheckedAllocationException)
                 {
                     throw new AllocationException("Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
                 }
@@ -44,7 +44,7 @@ namespace WPILib
                 {
                     m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
                 }
-                catch (CheckedAllocationException e)
+                catch (CheckedAllocationException)
                 {
                     throw new AllocationException("Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
                 }
@@ -54,11 +54,12 @@ namespace WPILib
 
                 HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
                 HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
+                LiveWindow.AddActuator("DoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
             }
         }
 
         public DoubleSolenoid(int forwardChannel, int reverseChannel)
-            : base(GetDefaultSolenoidModule())
+            : base(DefaultSolenoidModule)
         {
             m_forwardChannel = forwardChannel;
             m_reverseChannel = reverseChannel;
@@ -73,12 +74,12 @@ namespace WPILib
             InitSolenoid();
         }
 
-        public override void Free()
+        public override void Dispose()
         {
             lock (m_lockObject)
             {
-                m_allocated.Free(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                m_allocated.Free(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                m_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                m_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_reverseChannel);
             }
         }
 
@@ -111,16 +112,86 @@ namespace WPILib
             return Value.Off;
         }
 
-        public bool IsFwdSolenoidBlackListed()
+        public bool FwdSolenoidBlackListed
         {
-            int blackList = GetPCMSolenoidBlackList();
-            return ((blackList & m_forwardMask) != 0);
+            get
+            {
+                int blackList = GetPCMSolenoidBlackList();
+                return ((blackList & m_forwardMask) != 0);
+            }
         }
 
-        public bool IsRevSolenoidBlackListed()
+        public bool RevSolenoidBlackListed
         {
-            int blackList = GetPCMSolenoidBlackList();
-            return ((blackList & m_reverseMask) != 0);
+            get
+            {
+                int blackList = GetPCMSolenoidBlackList();
+                return ((blackList & m_reverseMask) != 0);
+            }
+        }
+
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
+
+        /// <summary>
+        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
+        /// </summary>
+        public string SmartDashboardType => "Double Solenoid";
+
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
+        public void UpdateTable()
+        {
+            Table?.PutString("Value", (Get() == Value.Forward ? "Forward" : (Get() == Value.Reverse ? "Reverse" : "Off")));
+        }
+
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
+        public void StartLiveWindowMode()
+        {
+            Set(Value.Off);
+            Table.AddTableListener("Value", this, true);
+        }
+
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
+        public void StopLiveWindowMode()
+        {
+            Table.RemoveTableListener(this);
+        }
+
+        /// <summary>
+        /// Not called externally. Just needed because its an interface.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isNew"></param>
+        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        {
+            if (value.ToString().Equals("Reverse"))
+                Set(Value.Reverse);
+            else if (value.ToString().Equals("Forward"))
+                Set(Value.Forward);
+            else
+                Set(Value.Off);
         }
     }
 }

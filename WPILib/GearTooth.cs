@@ -1,30 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HAL_Base;
+﻿using HAL_Base;
+using WPILib.LiveWindows;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Alias for counter class.
+    /// </summary>
+    /// <remarks>Implement the gear tooth sensor supplied by FIRST. 
+    /// Currently there is no reverse sensing on the gear tooth sensor, 
+    /// but in future versions we might implement the necessary timing in 
+    /// the FPGA to sense direction.</remarks>
     public class GearTooth : Counter
     {
         private const double GearToothThreshold = 55e-6;
 
-        public void EnableDirectionSensing(bool directionSensitive)
+        /// <summary>
+        /// Sets whether the GearTooth sensor is direction sensing.
+        /// </summary>
+        public bool DirectionSensing
         {
-            if (directionSensitive)
+            set
             {
-                SetPulseLengthMode(GearToothThreshold);
+                if (value)
+                {
+                    SetPulseLengthMode(GearToothThreshold);
+                }
             }
         }
 
+        /// <summary>
+        /// Construct a <see cref="GearTooth"/> sensor given a channel.
+        /// </summary>
+        /// <remarks>No direction sensing is assumed.</remarks>
+        /// <param name="channel">The GPIO channel that the sensor is
+        /// connected to.</param>
         public GearTooth(int channel) : this(channel, false)
         {
         }
 
+        /// <summary>
+        /// Construct a <see cref="GearTooth"/> sensor given a channel.
+        /// </summary>
+        /// <param name="channel">The GPIO channel that the sensor is
+        /// connected to.</param>
+        /// <param name="directionSensitive">True to enable direction sensing.</param>
         public GearTooth(int channel, bool directionSensitive) : base(channel)
         {
-            EnableDirectionSensing(directionSensitive);
+            DirectionSensing = directionSensitive;
             if (directionSensitive)
             {
                 HAL.Report(ResourceType.kResourceType_GearTooth, (byte) channel, 0, "D");
@@ -33,13 +55,27 @@ namespace WPILib
             {
                 HAL.Report(ResourceType.kResourceType_GearTooth, (byte)channel, 0);
             }
+            LiveWindow.AddSensor("GearTooth", channel, this);
         }
 
+        /// <summary>
+        /// Construct a <see cref="GearTooth"/> sensor given a <see cref="DigitalSource"/>.
+        /// </summary>
+        /// <remarks>This should be used when sharing digital inputs</remarks>
+        /// <param name="source">An existing <see cref="DigitalSource"/> object 
+        /// (such as a <see cref="DigitalInput"/></param>
+        /// <param name="directionSensitive">True to enable direction sensing.</param>
         public GearTooth(DigitalSource source, bool directionSensitive) : base(source)
         {
-            EnableDirectionSensing(directionSensitive);
+            DirectionSensing = directionSensitive;
         }
 
+        /// <summary>
+        /// Construct a <see cref="GearTooth"/> sensor given a <see cref="DigitalSource"/>.
+        /// </summary>
+        /// <remarks>No direction sensing is assumed.</remarks>
+        /// <param name="source">An existing <see cref="DigitalSource"/> object 
+        /// (such as a <see cref="DigitalInput"/></param>
         public GearTooth(DigitalSource source) : this(source, false)
         {
             

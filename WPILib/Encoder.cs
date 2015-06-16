@@ -1,12 +1,18 @@
 ﻿using System;
-using WPILib.Interfaces;
-using WPILib.Util;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
+using WPILib.Exceptions;
+using WPILib.LiveWindows;
+using static HAL_Base.HAL;
+using static HAL_Base.HALDigital;
 
 namespace WPILib
 {
-    public class Encoder : SensorBase, CounterBase, PIDSource
+    public class Encoder : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
+        /// <summary>
+        /// Encoder Indexing Type Enum
+        /// </summary>
         public enum IndexingType
         {
             ResetWhileHigh,
@@ -21,7 +27,6 @@ namespace WPILib
 
         private IntPtr m_encoder;
         private int m_index;
-        private double m_distancePerPulse;
 
         private Counter m_counter;
         private EncodingType m_encodingType = EncodingType.K4X;
@@ -38,30 +43,31 @@ namespace WPILib
                 case EncodingType.K4X:
                     m_encodingScale = 4;
                     int status = 0;
-                    m_encoder = HALDigital.InitializeEncoder(m_aSource.GetModuleForRouting(),
-                        (uint)m_aSource.GetChannelForRouting(),
-                        m_aSource.GetAnalogTriggerForRouting(), m_bSource.GetModuleForRouting(),
-                        (uint)m_bSource.GetChannelForRouting(),
-                        m_bSource.GetAnalogTriggerForRouting(), reverseDirection, ref m_index, ref status);
+                    m_encoder = InitializeEncoder(m_aSource.ModuleForRouting,
+                        (uint)m_aSource.ChannelForRouting,
+                        m_aSource.AnalogTriggerForRouting, m_bSource.ModuleForRouting,
+                        (uint)m_bSource.ChannelForRouting,
+                        m_bSource.AnalogTriggerForRouting, reverseDirection, ref m_index, ref status);
                     m_counter = null;
-                    SetMaxPeriod(0.5);
+                    MaxPeriod = 0.5;
                     break;
                 case EncodingType.K2X:
                     m_encodingScale = 2;
                     m_counter = new Counter(m_encodingType, m_aSource, m_bSource, reverseDirection);
-                    m_index = m_counter.GetFPGAIndex();
+                    m_index = m_counter.FPGAIndex;
                     break;
                 case EncodingType.K1X:
                     m_encodingScale = 1;
                     m_counter = new Counter(m_encodingType, m_aSource, m_bSource, reverseDirection);
-                    m_index = m_counter.GetFPGAIndex();
+                    m_index = m_counter.FPGAIndex;
                     break;
             }
-            m_distancePerPulse = 1.0;
+            DistancePerPulse = 1.0;
 
             m_pidSource = PIDSourceParameter.Distance;
 
-            HAL.Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
+            LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
+            Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
         }
 
         public Encoder(int aChannel, int bChannel, bool reverseDirection)
@@ -170,31 +176,25 @@ namespace WPILib
 
         }
 
-        public int GetFPGAIndex()
-        {
-            return m_index;
-        }
+        public int FPGAIndex => m_index;
 
-        public int GetEncodingScale()
-        {
-            return m_encodingScale;
-        }
+        public int EncodingScale => m_encodingScale;
 
-        public override void Free()
+        public override void Dispose()
         {
             if (m_aSource != null && m_allocatedA)
             {
-                m_aSource.Free();
+                m_aSource.Dispose();
                 m_allocatedA = false;
             }
             if (m_bSource != null && m_allocatedB)
             {
-                m_bSource.Free();
+                m_bSource.Dispose();
                 m_allocatedB = false;
             }
             if (m_indexSource != null && m_allocatedI)
             {
-                m_indexSource.Free();
+                m_indexSource.Dispose();
                 m_allocatedI = false;
             }
 
@@ -203,13 +203,13 @@ namespace WPILib
             m_indexSource = null;
             if (m_counter != null)
             {
-                m_counter.Free();
+                m_counter.Dispose();
                 m_counter = null;
             }
             else
             {
                 int status = 0;
-                HALDigital.FreeCounter(m_encoder, ref status);
+                FreeCounter(m_encoder, ref status);
             }
         }
 
@@ -223,15 +223,12 @@ namespace WPILib
             else
             {
                 int status = 0;
-                value = HALDigital.GetEncoder(m_encoder, ref status);
+                value = GetEncoder(m_encoder, ref status);
             }
             return value;
         }
 
-        public int Get()
-        {
-            return (int) (GetRaw()*DecodingScaleFactor());
-        }
+        public int Get() => (int) (GetRaw()*DecodingScaleFactor);
 
         public void Reset()
         {
@@ -240,7 +237,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                HALDigital.ResetEncoder(m_encoder, ref status);
+                ResetEncoder(m_encoder, ref status);
             }
         }
 
@@ -249,26 +246,29 @@ namespace WPILib
             double measuredPeriod;
             if (m_counter != null)
             {
-                measuredPeriod = m_counter.GetPeriod()/DecodingScaleFactor();
+                measuredPeriod = m_counter.GetPeriod()/DecodingScaleFactor;
             }
             else
             {
                 int status = 0;
-                measuredPeriod = HALDigital.GetEncoderPeriod(m_encoder, ref status);
+                measuredPeriod = GetEncoderPeriod(m_encoder, ref status);
             }
             return measuredPeriod;
         }
 
-        public void SetMaxPeriod(double maxPeriod)
+        public double MaxPeriod
         {
-            if (m_counter != null)
+            set
             {
-                m_counter.SetMaxPeriod(maxPeriod*DecodingScaleFactor());
-            }
-            else
-            {
-                int status = 0;
-                HALDigital.SetEncoderMaxPeriod(m_encoder, maxPeriod, ref status);
+                if (m_counter != null)
+                {
+                    m_counter.MaxPeriod = value*DecodingScaleFactor;
+                }
+                else
+                {
+                    int status = 0;
+                    SetEncoderMaxPeriod(m_encoder, value, ref status);
+                }
             }
         }
 
@@ -281,114 +281,119 @@ namespace WPILib
             else
             {
                 int status = 0;
-                bool value = HALDigital.GetEncoderStopped(m_encoder, ref status);
+                bool value = GetEncoderStopped(m_encoder, ref status);
                 return value;
             }
         }
 
-        public bool GetDirection()
+        public bool Direction
         {
-            if (m_counter != null)
+            get
             {
-                return m_counter.GetDirection();
-            }
-            else
-            {
-                int status = 0;
-                bool value = HALDigital.GetEncoderDirection(m_encoder, ref status);
-                return value;
-            }
-        }
-
-        private double DecodingScaleFactor()
-        {
-            switch (m_encodingType)
-            {
-                case EncodingType.K4X:
-                    return 0.25;
-                case EncodingType.K2X:
-                    return 0.5;
-                case EncodingType.K1X:
-                    return 1.0;
-                default:
-                    return 0.0;
-            }
-        }
-
-        public double GetDistance()
-        {
-            return GetRaw()*DecodingScaleFactor()*m_distancePerPulse;
-        }
-
-        public double GetRate()
-        {
-            return m_distancePerPulse/GetPeriod();
-        }
-
-        public void SetMinRate(double minRate)
-        {
-            SetMaxPeriod(m_distancePerPulse/minRate);
-        }
-
-        public void SetDistancePerPulse(double distancePerPulse)
-        {
-            m_distancePerPulse = distancePerPulse;
-        }
-
-        public void SetReverseDirection(bool reverseDirection)
-        {
-            if (m_counter != null)
-            {
-                m_counter.SetReverseDirection(reverseDirection);
-            }
-            else
-            {
-                int status = 0;
-                HALDigital.SetEncoderReverseDirection(m_encoder, reverseDirection, ref status);
-            }
-        }
-
-        public void SetSamplesToAverage(int samplesToAverage)
-        {
-            switch (m_encodingType)
-            {
-                case EncodingType.K4X:
+                if (m_counter != null)
+                {
+                    return m_counter.Direction;
+                }
+                else
+                {
                     int status = 0;
-                    HALDigital.SetEncoderSamplesToAverage(m_encoder, (uint) samplesToAverage, ref status);
-                    if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
-                    {
-                        throw new BoundaryException(BoundaryException.GetMessage(samplesToAverage, 1, 127));
-                    }
-                    break;
-                case EncodingType.K2X:
-                    m_counter.SetSamplesToAverage(samplesToAverage);
-                    break;
-                case EncodingType.K1X:
-                    m_counter.SetSamplesToAverage(samplesToAverage);
-                    break;
-            }
-        }
-
-        public int GetSamplesToAverage()
-        {
-            switch (m_encodingType)
-            {
-                case EncodingType.K4X:
-                    int status = 0;
-                    int value = (int)HALDigital.GetEncoderSamplesToAverage(m_encoder, ref status);
+                    bool value = GetEncoderDirection(m_encoder, ref status);
                     return value;
-                case EncodingType.K2X:
-                    return m_counter.GetSamplesToAverage();
-                case EncodingType.K1X:
-                    return m_counter.GetSamplesToAverage();
+                }
             }
-            return 1;
         }
 
-        public void SetPIDSourceParameter(PIDSourceParameter pidSource)
+        private double DecodingScaleFactor
         {
-            BoundaryException.AssertWithinBounds((int) pidSource, 0, 1);
-            m_pidSource = pidSource;
+            get
+            {
+                switch (m_encodingType)
+                {
+                    case EncodingType.K4X:
+                        return 0.25;
+                    case EncodingType.K2X:
+                        return 0.5;
+                    case EncodingType.K1X:
+                        return 1.0;
+                    default:
+                        return 0.0;
+                }
+            }
+        }
+
+        public double GetDistance() => GetRaw()*DecodingScaleFactor*DistancePerPulse;
+
+        public double GetRate() => DistancePerPulse/GetPeriod();
+
+        public double MinRate
+        {
+            set { MaxPeriod = DistancePerPulse/value; }
+        }
+
+        public double DistancePerPulse { get; set; }
+
+        public bool ReverseDirection
+        {
+            set
+            {
+                if (m_counter != null)
+                {
+                    m_counter.Direction = value;
+                }
+                else
+                {
+                    int status = 0;
+                    SetEncoderReverseDirection(m_encoder, value, ref status);
+                }
+            }
+        }
+
+        public int SamplesToAverage
+        {
+            set
+            {
+                switch (m_encodingType)
+                {
+                    case EncodingType.K4X:
+                        int status = 0;
+                        SetEncoderSamplesToAverage(m_encoder, (uint) value, ref status);
+                        if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
+                        {
+                            throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
+                        }
+                        break;
+                    case EncodingType.K2X:
+                        m_counter.SamplesToAverage = value;
+                        break;
+                    case EncodingType.K1X:
+                        m_counter.SamplesToAverage = value;
+                        break;
+                }
+            }
+            get
+            {
+                switch (m_encodingType)
+                {
+                    case EncodingType.K4X:
+                        int status = 0;
+                        int value = (int) GetEncoderSamplesToAverage(m_encoder, ref status);
+                        return value;
+                    case EncodingType.K2X:
+                        return m_counter.SamplesToAverage;
+                    case EncodingType.K1X:
+                        return m_counter.SamplesToAverage;
+                }
+                return 1;
+            }
+        }
+
+        public PIDSourceParameter PIDSourceParameter
+        {
+            set
+            {
+                BoundaryException.AssertWithinBounds((int) value, 0, 1);
+                m_pidSource = value;
+            }
         }
 
         public double PidGet()
@@ -411,7 +416,7 @@ namespace WPILib
             bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
-            HALDigital.SetEncoderIndexSource(m_encoder, (uint) channel, false, activeHigh, edgeSensitive, ref status);
+            SetEncoderIndexSource(m_encoder, (uint) channel, false, activeHigh, edgeSensitive, ref status);
         }
 
         public void SetIndexSource(int channel)
@@ -426,8 +431,8 @@ namespace WPILib
             bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
-            HALDigital.SetEncoderIndexSource(m_encoder, (uint) source.GetChannelForRouting(),
-                source.GetAnalogTriggerForRouting(), activeHigh, edgeSensitive, ref status);
+            SetEncoderIndexSource(m_encoder, (uint) source.ChannelForRouting,
+                source.AnalogTriggerForRouting, activeHigh, edgeSensitive, ref status);
         }
 
         public void SetIndexSource(DigitalSource source)
@@ -435,5 +440,35 @@ namespace WPILib
             SetIndexSource(source, IndexingType.ResetOnRisingEdge);
         }
 
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
+        {
+            Table = subtable;
+            UpdateTable();
+        }
+
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "Encoder";
+        ///<inheritdoc />
+        public void UpdateTable()
+        {
+            if (Table != null)
+            {
+                Table.PutNumber("Speed", GetRate());
+                Table.PutNumber("Distance", GetDistance());
+                Table.PutNumber("Distance per Tick", DistancePerPulse);
+            }
+        }
+
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
+        {
+        }
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
+        }
     }
 }

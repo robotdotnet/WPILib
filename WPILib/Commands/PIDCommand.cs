@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NetworkTablesDotNet.Tables;
-using WPILib.Interfaces;
+﻿using NetworkTablesDotNet.Tables;
 
 namespace WPILib.Commands
 {
-    public abstract class PIDCommand : Command, PIDSource, PIDOutput
+    public abstract class PIDCommand : Command, IPIDSource, IPIDOutput
     {
         private PIDController m_controller;
-        public double PidGet()
-        {
-            return ReturnPIDInput();
-        }
 
-        public void PidWrite(double output)
+        ///<inheritdoc/>
+        public double PidGet() => ReturnPIDInput();
+        ///<inheritdoc/>
+        public void PidWrite(double value)
         {
-            UsePIDOutput(output);
+            UsePIDOutput(value);
         }
 
         public PIDCommand(string name, double p, double i, double d)
@@ -42,21 +36,19 @@ namespace WPILib.Commands
             m_controller = new PIDController(p, i, d, this, this, period);
         }
 
-        protected PIDController GetPIDController()
-        {
-            return m_controller;
-        }
 
+        protected PIDController GetPIDController() => m_controller;
+        ///<inheritdoc/>
         protected new virtual void _Initialize()
         {
             m_controller.Enable();
         }
-
+        ///<inheritdoc/>
         protected new virtual void _End()
         {
             m_controller.Disable();
         }
-
+        ///<inheritdoc/>
         protected new virtual void _Interrupted()
         {
             _End();
@@ -69,12 +61,12 @@ namespace WPILib.Commands
 
         protected void SetSetpoint(double setpoint)
         {
-            m_controller.SetSetpoint(setpoint);
+            m_controller.Setpoint = setpoint;
         }
 
         protected double GetSetpoint()
         {
-            return m_controller.GetSetpoint();
+            return m_controller.Setpoint;
         }
 
         protected double GetPosition()
@@ -90,11 +82,10 @@ namespace WPILib.Commands
         protected abstract double ReturnPIDInput();
 
         protected abstract void UsePIDOutput(double output);
+        ///<inheritdoc/>
+        public new string SmartDashboardType => "PIDCommand";
 
-        public new string GetSmartDashboardType()
-        {
-            return "PIDCommand";
-        }
+        ///<inheritdoc/>
         public new void InitTable(ITable table)
         {
             m_controller.InitTable(table);

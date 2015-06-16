@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.Util;
+﻿using WPILib.Exceptions;
 
 namespace WPILib.CAN
 {
+    /// <summary>
+    /// A class for dealing with CAN Exceptions
+    /// </summary>
     class CANExceptionFactory
     {
 // ReSharper disable InconsistentNaming

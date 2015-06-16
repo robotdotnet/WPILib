@@ -1,31 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WPILib.livewindow;
+using HAL_Base;
+using WPILib.LiveWindows;
+using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
+    /// <summary>
+    /// ADXL345 Accelerometer interfaced over I2C.
+    /// </summary>
+    // ReSharper disable once InconsistentNaming
     public class ADXL345_I2C : ADXL345
     {
         private const byte Address = 0x1D;
 
         private I2C m_i2C;
 
-        public ADXL345_I2C(I2C.Port port, Interfaces.Range range)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="port">The I2C port the accelerometer is attached to</param>
+        /// <param name="range">The range (+ or -) that the accelerometer will measure.</param>
+        public ADXL345_I2C(I2C.Port port, AccelerometerRange range)
         {
             m_i2C = new I2C(port, Address);
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
-            SetRange(range);
-            HAL_Base.HAL.Report(HAL_Base.ResourceType.kResourceType_ADXL345, HAL_Base.Instances.kADXL345_I2C);
+            AccelerometerRange = range;
+            HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
             LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
         }
 
+        /// <summary>
+        /// Writes the range to the specified interface.
+        /// </summary>
+        /// <param name="value">The Range to write.</param>
         protected override void WriteRange(byte value)
         {
             m_i2C.Write(DataFormatRegister, (byte)DataFormat.FullRes | value);
         }
 
+
+        /// <summary>
+        /// Get the acceleration of one axis in Gs.
+        /// </summary>
+        /// <param name="axis">The axis to read from.</param>
+        /// <returns>Acceleration of the ADXL345 in Gs.</returns>
         public override double GetAcceleration(Axes axis)
         {
             byte[] rawAccel = new byte[2];
@@ -33,6 +51,10 @@ namespace WPILib
             return BitConverter.ToInt16(rawAccel, 0) * GsPerLSB;
         }
 
+        /// <summary>
+        /// Get the acceleration of all axes in Gs.
+        /// </summary>
+        /// <returns>An object containing the acceleration measured on each side of the ADXL345 in Gs.</returns>
         public override AllAxes GetAccelerations()
         {
             AllAxes data = new AllAxes();

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("HAL-Base")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("RobotDotNet")]
 [assembly: AssemblyProduct("HAL-Base")]
 [assembly: AssemblyCopyright("Copyright \u00A9  2015")]
 [assembly: AssemblyTrademark("")]

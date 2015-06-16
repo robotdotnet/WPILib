@@ -23,7 +23,7 @@ namespace WPILib.Buttons
 
         public void Start()
         {
-            Scheduler.GetInstance().AddButton(this);
+            Scheduler.Instance.AddButton(this);
         }
     }
 

@@ -1,20 +1,44 @@
 ﻿
 
 using System;
-using WPILib.Util;
 using HAL_Base;
+using WPILib.Exceptions;
+using static HAL_Base.HALDigital;
+using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class DigitalSource : InterruptableSensorBase
+    /// <summary>
+    /// DigitalSource interface
+    /// </summary>
+    /// <remarks>The DigitalSource represents all the possible inputs
+    /// for a counter or a quadrature encoder.The source may be either a digital
+    /// input or an analog input.If the caller just provides a channel, then a
+    /// digital input will be constructed and freed when finished for the source. The
+    /// source can either be a digital input or analog trigger but not both.</remarks>
+    public abstract class DigitalSource : InterruptableSensorBase
     {
+        /// <summary>
+        /// A collection of the Digital Sources.
+        /// </summary>
         protected static Resource s_channels = new Resource(DigitalChannels);
+        /// <summary>
+        /// The Port this source is attached to.
+        /// </summary>
         protected IntPtr m_port;
+        /// <summary>
+        /// The channel this source is connected to
+        /// </summary>
         protected int m_channel;
 
+        /// <summary>
+        /// Base Initialization function for all Ports.
+        /// </summary>
+        /// <param name="channel">The channel the port is connected too</param>
+        /// <param name="input">True if port is input, false if output</param>
         protected void InitDigitalPort(int channel, bool input)
         {
-            this.m_channel = channel;
+            m_channel = channel;
 
             CheckDigitalChannel(channel);
 
@@ -22,39 +46,42 @@ namespace WPILib
             {
                 s_channels.Allocate(channel);
             }
-            catch (CheckedAllocationException ex)
+            catch (CheckedAllocationException)
             {
                 throw new AllocationException("Digital input " + channel + " is already allocated");
             }
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;
-            m_port = HALDigital.InitializeDigitalPort(portPointer, ref status);
-            HALDigital.AllocateDIO(m_port, input, ref status);
-            Utility.CheckStatus(status);
+            m_port = InitializeDigitalPort(portPointer, ref status);
+            AllocateDIO(m_port, input, ref status);
+            CheckStatus(status);
         }
 
-        public override void Free()
+        /// <summary>
+        /// Destructor
+        /// </summary>
+        public override void Dispose()
         {
-            s_channels.Free(m_channel);
+            s_channels.Dispose(m_channel);
             int status = 0;
-            HALDigital.FreeDIO(m_port, ref status);
+            FreeDIO(m_port, ref status);
             m_channel = 0;
         }
 
-        public override int GetChannelForRouting()
-        {
-            return m_channel;
-        }
+        /// <summary>
+        /// Get the channel routing number.
+        /// </summary>
+        public override int ChannelForRouting => m_channel;
 
-        public override byte GetModuleForRouting()
-        {
-            return 0;
-        }
+        /// <summary>
+        /// Get the module routing number.
+        /// </summary>
+        public override byte ModuleForRouting => 0;
 
-        public override bool GetAnalogTriggerForRouting()
-        {
-            return false;
-        }
+        /// <summary>
+        /// Is this an analog trigger.
+        /// </summary>
+        public override bool AnalogTriggerForRouting => false;
     }
 }

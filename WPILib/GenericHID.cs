@@ -1,11 +1,13 @@
 ﻿namespace WPILib
 {
     /// <summary>
-    /// Which hand hte Human Interface Device is associated with.
+    /// Which hand the Human Interface Device is associated with.
     /// </summary>
     public enum Hand
     {
+        ///Use the Left Hand
         Left,
+        ///Use the Right Hand
         Right,
     }
 
@@ -65,14 +67,14 @@
         /// <summary>
         /// Get the twist value
         /// </summary>
-        /// <returns>The twist value</returns>
-        public abstract double GetTwist();
+        /// <value>The twist value</value>
+        public abstract double Twist { get; }
 
         /// <summary>
         /// Get the Throttle Value
         /// </summary>
-        /// <returns>The Trottle Value</returns>
-        public abstract double GetThrottle();
+        /// <value>The Trottle Value</value>
+        public abstract double Throttle { get; }
 
         /// <summary>
         /// Get the raw axis

@@ -1,55 +1,84 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using HAL_Base;
+using NetworkTablesDotNet.Tables;
 using WPILib.Interfaces;
+using WPILib.LiveWindows;
+using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
-    class BuiltInAccelerometer : Accelerometer
+    class BuiltInAccelerometer : IAccelerometer, ILiveWindowSendable
     {
-        public BuiltInAccelerometer(Range range)
+        public BuiltInAccelerometer(AccelerometerRange range)
         {
-            SetRange(range);
+            AccelerometerRange = range;
             HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
+            LiveWindow.AddSensor("BuiltInAccel", 0, this);
         }
 
-        public void SetRange(Range range)
+        public AccelerometerRange AccelerometerRange
         {
-            HALAccelerometer.SetAccelerometerActive(false);
-
-            switch (range)
+            set
             {
-                case Range.k2G:
-                    HALAccelerometer.SetAccelerometerRange(AccelerometerRange.Range_2G);
-                    break;
-                case Range.k4G:
-                    HALAccelerometer.SetAccelerometerRange(AccelerometerRange.Range_4G);
-                    break;
-                case Range.k8G:
-                    HALAccelerometer.SetAccelerometerRange(AccelerometerRange.Range_8G);
-                    break;
-                case Range.k16G:
-                    throw new SystemException("16G range not supported (use k2G, k4G, or k8G)");
+                HALAccelerometer.SetAccelerometerActive(false);
+
+                switch (value)
+                {
+                    case AccelerometerRange.k2G:
+                        HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_2G);
+                        break;
+                    case AccelerometerRange.k4G:
+                        HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_4G);
+                        break;
+                    case AccelerometerRange.k8G:
+                        HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_8G);
+                        break;
+                    case AccelerometerRange.k16G:
+                        throw new SystemException("16G range not supported (use k2G, k4G, or k8G)");
+                }
+
+                HALAccelerometer.SetAccelerometerActive(true);
             }
-
-            HALAccelerometer.SetAccelerometerActive(true);
         }
 
-        public double GetX()
+        public double GetX() => HALAccelerometer.GetAccelerometerX();
+
+        public double GetY() => HALAccelerometer.GetAccelerometerY();
+
+        public double GetZ() => HALAccelerometer.GetAccelerometerZ();
+
+        ///<inheritdoc />
+        public void InitTable(ITable subtable)
         {
-            return HALAccelerometer.GetAccelerometerX();
+            Table = subtable;
+            UpdateTable();
         }
 
-        public double GetY()
+        ///<inheritdoc />
+        public ITable Table { get; private set; }
+
+        ///<inheritdoc />
+        public string SmartDashboardType => "3AxisAccelerometer";
+
+        ///<inheritdoc />
+        public void UpdateTable()
         {
-            return HALAccelerometer.GetAccelerometerY();
+            if (Table != null)
+            {
+                Table.PutNumber("X", GetX());
+                Table.PutNumber("Y", GetY());
+                Table.PutNumber("Z", GetZ());
+            }
         }
 
-        public double GetZ()
+        ///<inheritdoc />
+        public void StartLiveWindowMode()
         {
-            return HALAccelerometer.GetAccelerometerZ();
+        }
+
+        ///<inheritdoc />
+        public void StopLiveWindowMode()
+        {
         }
     }
 }

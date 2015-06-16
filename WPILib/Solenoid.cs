@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using HAL_Base;
 using NetworkTablesDotNet.Tables;
-using WPILib.livewindow;
+using WPILib.LiveWindows;
+using static HAL_Base.HAL;
+using static HAL_Base.HALSolenoid;
 
 namespace WPILib
 {
     /// <summary>
     /// Solenoid class for running high voltage digital output.
-    /// <para> </para>
+    /// </summary><remarks>
     /// The Solenoid class is typically used for pneumatics solenoids, but could be used
-    /// <para /> for any device within the current spec of the PCM. 
-    /// </summary>
-    public class Solenoid : SolenoidBase, LiveWindowSendable, ITableListener
+    /// for any device within the current spec of the PCM. 
+    /// </remarks>
+    public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
         private int m_channel;//The channel to control.
         private IntPtr m_solenoidPort;
@@ -33,11 +31,11 @@ namespace WPILib
 
                 int status = 0;
 
-                IntPtr port = HAL.GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
-                m_solenoidPort = HALSolenoid.InitializeSolenoidPort(port, ref status);
+                IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
+                m_solenoidPort = InitializeSolenoidPort(port, ref status);
 
-                //TODO: Live Window Actuator
-                HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
+                LiveWindow.AddActuator("Solenoid", m_moduleNumber, m_channel, this);
+                Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
             }
         }
 
@@ -46,7 +44,7 @@ namespace WPILib
         /// </summary>
         /// <param name="channel">The channel on the PCM to control (0..7).</param>
         public Solenoid(int channel)
-            : base(GetDefaultSolenoidModule())
+            : base(DefaultSolenoidModule)
         {
             m_channel = channel;
             InitSolenoid();
@@ -67,7 +65,7 @@ namespace WPILib
         /// <summary>
         /// Destructor
         /// </summary>
-        public override void Free()
+        public override void Dispose()
         {
         }
 
@@ -95,12 +93,12 @@ namespace WPILib
 
         /// <summary>
         /// Check if solenoid is blacklisted.
-        /// <para> </para>
-        /// <para />If a solenoid is shorted, it is added to the blacklist and
-        /// <para />disabled until power cycle, or until faults are cleared.
-        /// <para />See <see cref="SolenoidBase.ClearAllPCMStickyFaults()"/>
         /// </summary>
-        /// <returns>IF solenoid is disabled due to short.</returns>
+        /// <remarks>If a solenoid is shorted, it is added to the blacklist and
+        /// disabled until power cycle, or until faults are cleared.
+        /// See <see cref="SolenoidBase.ClearAllPCMStickyFaults()"/>
+        /// </remarks>
+        /// <returns>If solenoid is disabled due to short.</returns>
         public bool IsBlackListed()
         {
             int value = GetPCMSolenoidBlackList() & (1 << m_channel);
@@ -110,48 +108,58 @@ namespace WPILib
         /// <summary>
         /// Live Window code, only does anything if live window is activated.
         /// </summary>
-        public string GetSmartDashboardType()
-        {
-            return "Solenoid";
-        }
+        public string SmartDashboardType => "Solenoid";
 
-        private ITable m_table;
-
+        /// <summary>
+        /// Initialize a table for this sendable object.
+        /// </summary>
+        /// <param name="subtable">The table to put the values in.</param>
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
+            Table = subtable;
             UpdateTable();
         }
 
-        public ITable GetTable()
-        {
-            return m_table;
-        }
+        /// <summary>
+        /// Returns the table that is currently associated with the sendable
+        /// </summary>
+        public ITable Table { get; private set; }
 
+        /// <summary>
+        /// Update the table for this sendable object with the latest
+        /// values.
+        /// </summary>
         public void UpdateTable()
         {
-            if (m_table != null)
-            {
-                m_table.PutBoolean("Value", Get());
-            }
+            Table?.PutBoolean("Value", Get());
         }
 
+        /// <summary>
+        /// Start having this sendable object automatically respond to
+        /// value changes reflect the value on the table.
+        /// </summary>
         public void StartLiveWindowMode()
         {
             Set(false);
-            if (m_table != null)
-            {
-                m_table.AddTableListener("Value", this, true);
-            }
+            Table?.AddTableListener("Value", this, true);
         }
 
+        /// <summary>
+        /// Stop having this sendable object automatically respond to value changes.
+        /// </summary>
         public void StopLiveWindowMode()
         {
             Set(false);
-            m_table.RemoveTableListener(this);
+            Table?.RemoveTableListener(this);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="isNew"></param>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             Set((bool)value);

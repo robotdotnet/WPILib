@@ -1,4 +1,7 @@
-﻿namespace HAL_FRC
+﻿using System.Runtime.InteropServices;
+using static HAL_Simulator.SimData;
+
+namespace HAL_Simulator
 {
     public enum AccelerometerRange
     {
@@ -16,28 +19,33 @@
     {
         /// Return Type: void
         ///param0: boolean
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setAccelerometerActive")]
-        public static extern void setAccelerometerActive([System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool param0);
+        public static void setAccelerometerActive(bool param0)
+        {
+            halData["accelerometer"]["active"] = param0;
+        }
 
 
         /// Return Type: void
         ///param0: AccelerometerRange
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setAccelerometerRange")]
-        public static extern void setAccelerometerRange(AccelerometerRange param0);
+        public static void setAccelerometerRange(AccelerometerRange param0)
+        {
+            halData["accelerometer"]["range"] = (int) param0;
+        }
 
 
-        /// Return Type: double
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getAccelerometerX")]
-        public static extern double getAccelerometerX();
+        public static double getAccelerometerX()
+        {
+            return halData["accelerometer"]["x"];
+        }
 
+        public static double getAccelerometerY()
+        {
+            return halData["accelerometer"]["y"];
+        }
 
-        /// Return Type: double
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getAccelerometerY")]
-        public static extern double getAccelerometerY();
-
-
-        /// Return Type: double
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getAccelerometerZ")]
-        public static extern double getAccelerometerZ();
+        public static double getAccelerometerZ()
+        {
+            return halData["accelerometer"]["z"];
+        }
     }
 }

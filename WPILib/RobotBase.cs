@@ -1,15 +1,15 @@
-﻿
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Reflection;
 using HAL_Base;
+using NetworkTablesDotNet.NetworkTables;
+using WPILib.Internal;
+using static HAL_Base.HAL;
 
 namespace WPILib
 {
-    public abstract class RobotBase
+    public abstract class RobotBase : IDisposable
     {
         public const int RobotTaskPriority = 101;
 
@@ -18,96 +18,46 @@ namespace WPILib
 
         protected RobotBase()
         {
-            m_ds = DriverStation.GetInstance();
+            NetworkTable.SetServerMode();
+            m_ds = DriverStation.Instance;
+            NetworkTable.GetTable("");
+            NetworkTable.GetTable("LiveWindow").GetSubTable("~STATUS~").PutBoolean("LW Enabled", false);
         }
 
-        public void Free()
+        public void Dispose()
         {
         }
 
-        /**
-     * @return If the robot is running in simulation.
-     */
-        public static bool IsSimulation()
-        {
-            return false;
-        }
+        public static bool IsSimulation => false;
 
-        /**
-         * @return If the robot is running in the real world.
-         */
-        public static bool IsReal()
-        {
-            return true;
-        }
+        public static bool IsReal => true;
 
-        /**
-         * Determine if the Robot is currently disabled.
-         * @return True if the Robot is currently disabled by the field controls.
-         */
-        public bool IsDisabled()
-        {
-            return m_ds.IsDisabled();
-        }
+        public bool IsDisabled => m_ds.Disabled;
 
-        /**
-         * Determine if the Robot is currently enabled.
-         * @return True if the Robot is currently enabled by the field controls.
-         */
-        public bool IsEnabled()
-        {
-            return m_ds.IsEnabled();
-        }
+        public bool IsEnabled => m_ds.Enabled;
 
-        /**
-         * Determine if the robot is currently in Autonomous mode.
-         * @return True if the robot is currently operating Autonomously as determined by the field controls.
-         */
-        public bool IsAutonomous()
-        {
-            return m_ds.IsAutonomous();
-        }
+        public bool IsAutonomous => m_ds.Autonomous;
 
-        /**
-         * Determine if the robot is currently in Test mode
-         * @return True if the robot is currently operating in Test mode as determined by the driver station.
-         */
-        public bool IsTest()
-        {
-            return m_ds.IsTest();
-        }
+        public bool IsTest => m_ds.Test;
 
-        /**
-         * Determine if the robot is currently in Operator Control mode.
-         * @return True if the robot is currently operating in Tele-Op mode as determined by the field controls.
-         */
-        public bool IsOperatorControl()
-        {
-            return m_ds.IsOperatorControl();
-        }
+        public bool IsOperatorControl => m_ds.OperatorControl;
 
-        /**
-         * Indicates if new data is available from the driver station.
-         * @return Has new data arrived over the network since the last time this function was called?
-         */
-        public bool IsNewDataAvailable()
-        {
-            return m_ds.IsNewControlData();
-        }
+        public bool IsNewDataAvailable => m_ds.NewControlData;
+
 
         public abstract void StartCompetition();
 
         protected virtual void Prestart()
         {
-            HAL.HALNetworkCommunicationObserveUserProgramStarting();
+            HALNetworkCommunicationObserveUserProgramStarting();
         }
 
         public static void InitializeHardwareConfiguration()
         {
-            HAL.Initialize();
-            RobotState.SetImplementation(DriverStation.GetInstance());
-            Timer.SetImplementation(new Internal.HardwareTimer());
-            HLUsageReporting.SetImplementation(new Internal.HardwareHLUsageReporting());
+            Initialize();
+            RobotState.Implementation = DriverStation.Instance;
+            Timer.Implementation = new HardwareTimer();
+            HLUsageReporting.Implementation = new HardwareHLUsageReporting();
 
         }
 
@@ -116,7 +66,7 @@ namespace WPILib
         {
             HAL.IsSimulation = Environment.OSVersion.Platform != PlatformID.Unix;
             InitializeHardwareConfiguration();
-            HAL.Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
+            Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
             string robotName = "";
             string robotAssemblyName = "";
             try

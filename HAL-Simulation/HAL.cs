@@ -1,10 +1,13 @@
 ﻿
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 using HAL_Base;
+using static HAL_Simulator.SimData;
 
-namespace HAL_FRC
+namespace HAL_Simulator
 {
     /*
     public enum HALAllianceStationID
@@ -86,6 +89,7 @@ namespace HAL_FRC
 
     public class HAL
     {
+         //static Dictionary<string, object> halData = new Dictionary<string, object>();
         //public const string "libHALAthena_shared.so" = "libHALAthena_shared.so"; 
 
         /// Return Type: void*
@@ -100,147 +104,251 @@ namespace HAL_FRC
 
         public static IntPtr getPortWithModule(byte module, byte pin)
         {
-            Port port = new Port();
-            port.pin = pin;
-            port.module = module;
+            Port port = new Port
+            {
+                pin = pin,
+                module = module
+            };
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(port));
             Marshal.StructureToPtr(port, ptr, true);
             return ptr;
         }
 
-        internal static object NewDataSem;
-
         public static void HALSetNewDataSem(IntPtr sem)
         {
-            MULTIWAIT_ID p = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-            NewDataSem = p.lockObject;
+            halNewDataSem = sem;
         }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getHALErrorMessage")]
-        public static extern string getHALErrorMessage(int code);
+        public static IntPtr getHALErrorMessage(int code)
+        {
+            string retVal = "";
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getFPGAVersion")]
-        public static extern ushort getFPGAVersion(ref int status);
+            return Marshal.StringToHGlobalAnsi(retVal);
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getFPGARevision")]
-        public static extern uint getFPGARevision(ref int status);
+        public static ushort getFPGAVersion(ref int status)
+        {
+            status = 0;
+            return 2015;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getFPGATime")]
-        public static extern uint getFPGATime(ref int status);
+        public static uint getFPGARevision(ref int status)
+        {
+            status = 0;
+            return 0;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "getFPGAButton")]
-        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getFPGAButton(ref int status);
+        public static uint getFPGATime(ref int status)
+        {
+            status = 0;
+            return Hooks.GetFPGATime();
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALSetErrorData")]
-        public static extern int HALSetErrorData(string errors, int errorsLength, int wait_ms);
+        public static bool getFPGAButton(ref int status)
+        {
+            status = 0;
+            return halData["fpga_button"];
+        }
+
+        public static int HALSetErrorData(string errors, int errorsLength, int wait_ms)
+        {
+            //TODO: Logger 
+            halData["error_data"] = errors;
+            return 0;
+        }
 
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetControlWord")]
         public static int HALGetControlWord(ref HALControlWord data)
         {
+            var h = halData["control"];
+            bool[] d = new bool[32];
+            d[0] = h["enabled"];
+            d[1] = h["autonomous"];
+            d[2] = h["test"];
+            d[3] = h["eStop"];
+            d[4] = h["fms_attached"];
+            d[5] = h["ds_attached"];
+
+            int r = 0;
+            for(int i = 0; i < d.Length; i++)
+            {
+                if (d[i])
+                {
+                    r |= 1 << (d.Length - i);
+                }
+            }
+        
+
+
+            data = new HALControlWord((uint)r);
             return 0;
         }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetAllianceStation")]
-        public static extern int HALGetAllianceStation(ref HALAllianceStationID allianceStation);
+        public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
+        {
+            return halData["alliance_station"];
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickAxes")]
-        public static extern int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes);
+        public static int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes)
+        {
+            axes.axes = new HALJoystickAxesArray();
+            var joyData = halData["joysticks"][joystickNum]["axes"];
+            for(short i = 0; i < joyData.Length; i++)
+            {
+                int tmp = 0;
+                if (joyData[i] < 0)
+                    tmp = joyData[i]*128;
+                else
+                    tmp = joyData[i]*127;
+                axes.axes[i] = (short)tmp;
+            }
+            axes.count = 12; //Need to make this netter.
+            return 0;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickPOVs")]
-        public static extern int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs);
+        public static int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs)
+        {
+            //TODO: Fix
+            povs.povs = new HALJoystickPOVArray();
+            povs.count = 12;
+            return 0;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickButtons")]
-        public static extern int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons);
+        public static int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons)
+        {
+            //TODO: Fix
+            buttons.buttons = 123;
+            buttons.count = 12;
+            return 0;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetJoystickDescriptor")]
-        public static extern int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
+        public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
+        {
+            var stick = halData["joysticks"][joystickNum];
+            desc.isXbox = stick["isXbox"];
+            desc.type = stick["type"];
+            desc.name = stick["name"];
+            desc.axisCount = stick["axisCount"];
+            desc.buttonCount = stick["buttonCount"];
+            return 0;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALSetJoystickOutputs")]
-        public static extern int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble, ushort rightRumble);
+        public static int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble,
+            ushort rightRumble)
+        {
+            halData["joysticks"][joystickNum]["leftRumble"] = leftRumble;
+            halData["joysticks"][joystickNum]["rightRumble"] = rightRumble;
+            //halData[]TODO:Outputs
+            return 0;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetMatchTime")]
-        public static extern int HALGetMatchTime(ref float matchTime);
+        public static int HALGetMatchTime(ref float matchTime)
+        {
+            var matchStart = halData["time"]["match_start"];
+            if (matchStart == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return ((Hooks.GetFPGATime() - matchStart) /
+                1000000.0);
+            }
+        }
 
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALSetNewDataSem")]
         //public static extern void HALSetNewDataSem(System.IntPtr sem);
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetSystemActive")]
-        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool HALGetSystemActive(ref int status);
+        public static bool HALGetSystemActive(ref int status)
+        {
+            status = 0;
+            return true;
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetBrownedOut")]
-        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool HALGetBrownedOut(ref int status);
+        public static bool HALGetBrownedOut(ref int status)
+        {
+            status = 0;
+            return false;
+        }
 
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALInitialize")]
         public static int HALInitialize(int mode)
         {
+            ResetHALData();
+            /*
+            timer = new Timer((sender) =>
+            {
+                if (SimData.halNewDataSem != IntPtr.Zero)
+                {
+                    //HALSemaphore.giveMultiWait(SimData.halNewDataSem);
+                }
+            },null, 10, 10);
+            */
+            timer = new Thread(() =>
+            {
+                while (true)
+                {
+                    if (halNewDataSem != IntPtr.Zero)
+                    {
+                        HALSemaphore.giveMultiWait(halNewDataSem);
+                    }
+                    Thread.Sleep(20);
+                }
+            });
+
+            timer.Start(); 
+
             return 1;
         }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramStarting")]
-        public static extern void HALNetworkCommunicationObserveUserProgramStarting();
+        private static Thread timer;
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramDisabled")]
-        public static extern void HALNetworkCommunicationObserveUserProgramDisabled();
+        public static void HALNetworkCommunicationObserveUserProgramStarting()
+        {
+            halData["user_program_state"] = "starting";
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramAutonomous")]
-        public static extern void HALNetworkCommunicationObserveUserProgramAutonomous();
+        public static void HALNetworkCommunicationObserveUserProgramDisabled()
+        {
+            halData["user_program_state"] = "disabled";
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTeleop")]
-        public static extern void HALNetworkCommunicationObserveUserProgramTeleop();
+        public static void HALNetworkCommunicationObserveUserProgramAutonomous()
+        {
+            halData["user_program_state"] = "autonomous";
+        }
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTest")]
-        public static extern void HALNetworkCommunicationObserveUserProgramTest();
+        public static void HALNetworkCommunicationObserveUserProgramTeleop()
+        {
+            halData["user_program_state"] = "teleop";
+        }
+
+        public static void HALNetworkCommunicationObserveUserProgramTest()
+        {
+            halData["user_program_state"] = "test";
+        }
 
         //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALReport")]
         //public static extern uint HALReport(byte resource, byte instanceNumber, byte context, string feature = null);
 
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "NumericArrayResize")]
-        public static extern void NumericArrayResize();
-
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "RTSetCleanupProc")]
-        public static extern void RTSetCleanupProc();
-
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "EDVR_CreateReference")]
-        public static extern void EDVR_CreateReference();
-
-        [System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "Occur")]
-        public static extern void Occur();
-
-        /// Return Type: void
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramStarting")]
-        public static void NetworkCommunicationObserveUserProgramStarting()
+        public static void NumericArrayResize()
         {
+            
         }
 
-
-        /// Return Type: void
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramDisabled")]
-        public static void NetworkCommunicationObserveUserProgramDisabled()
+        public static void RTSetCleanupProc()
         {
+            
         }
 
-
-        /// Return Type: void
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramAutonomous")]
-        public static void NetworkCommunicationObserveUserProgramAutonomous()
+        public static void EDVR_CreateReference()
         {
+            
         }
 
-
-        /// Return Type: void
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTeleop")]
-        public static void NetworkCommunicationObserveUserProgramTeleop()
+        public static void Occur()
         {
-        }
-
-
-        /// Return Type: void
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALNetworkCommunicationObserveUserProgramTest")]
-        public static void NetworkCommunicationObserveUserProgramTest()
-        {
+            
         }
 
 
@@ -256,34 +364,7 @@ namespace HAL_FRC
             return 0;
         }
 
-        
-
-
-        //Move to WPILib
-
-        public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
-        }
-
-        public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
-        }
-
-        public static uint Report(byte resource, Instances instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
-        }
-
-        public static uint Report(byte resource, byte instanceNumber, byte context = 0,
-            string feature = null)
-        {
-            return HALReport((byte)resource, (byte)instanceNumber, context, feature);
-        }
+       
 
         /*
         public static void CheckStatus(int status)

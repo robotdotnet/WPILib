@@ -1,111 +1,114 @@
-﻿namespace HAL_FRC
+﻿using System;
+using System.Runtime.InteropServices;
+
+namespace HAL_Simulator
 {
     public class HALCompressor
     {
         /// Return Type: void*
         ///module: byte
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "initializeCompressor")]
-        public static extern System.IntPtr initializeCompressor(byte module);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeCompressor")]
+        public static extern IntPtr initializeCompressor(byte module);
 
 
         /// Return Type: boolean
         ///module: byte
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "checkCompressorModule")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
+        [DllImport("libHALAthena_shared.so", EntryPoint = "checkCompressorModule")]
+        [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool checkCompressorModule(byte module);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressor")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressor(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressor")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressor(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: void
         ///pcm_pointer: void*
         ///value: boolean
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "setClosedLoopControl")]
-        public static extern void setClosedLoopControl(System.IntPtr pcm_pointer, [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)] bool value, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "setClosedLoopControl")]
+        public static extern void setClosedLoopControl(IntPtr pcm_pointer, [MarshalAs(UnmanagedType.I1)] bool value, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getClosedLoopControl")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getClosedLoopControl(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getClosedLoopControl")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getClosedLoopControl(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPressureSwitch")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getPressureSwitch(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getPressureSwitch")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getPressureSwitch(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: float
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorCurrent")]
-        public static extern float getCompressorCurrent(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorCurrent")]
+        public static extern float getCompressorCurrent(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorCurrentTooHighFault")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressorCurrentTooHighFault(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorCurrentTooHighFault")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressorCurrentTooHighFault(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorCurrentTooHighStickyFault")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressorCurrentTooHighStickyFault(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorCurrentTooHighStickyFault")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressorCurrentTooHighStickyFault(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorShortedStickyFault")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressorShortedStickyFault(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorShortedStickyFault")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressorShortedStickyFault(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorShortedFault")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressorShortedFault(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorShortedFault")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressorShortedFault(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorNotConnectedStickyFault")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressorNotConnectedStickyFault(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorNotConnectedStickyFault")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressorNotConnectedStickyFault(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: boolean
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getCompressorNotConnectedFault")]
-        [return: System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.I1)]
-        public static extern bool getCompressorNotConnectedFault(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "getCompressorNotConnectedFault")]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static extern bool getCompressorNotConnectedFault(IntPtr pcm_pointer, ref int status);
 
 
         /// Return Type: void
         ///pcm_pointer: void*
         ///status: int*
-        [System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "clearAllPCMStickyFaults")]
-        public static extern void clearAllPCMStickyFaults(System.IntPtr pcm_pointer, ref int status);
+        [DllImport("libHALAthena_shared.so", EntryPoint = "clearAllPCMStickyFaults")]
+        public static extern void clearAllPCMStickyFaults(IntPtr pcm_pointer, ref int status);
     }
 }

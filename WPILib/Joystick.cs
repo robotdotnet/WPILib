@@ -1,43 +1,53 @@
 ﻿
 
 using System;
-using WPILib.Interfaces;
 using HAL_Base;
 
 namespace WPILib
 {
-    public enum AxisType
-    {
-        X = 0,
-        Y,
-        Z,
-        Twist,
-        Throttle,
-        NumAxis,
-    }
-
-    public enum ButtonType
-    {
-        Trigger = 0,
-        Top,
-        NumButton,
-    }
-
-    public enum RumbleType
-    {
-        LeftRumble = 0,
-        RightRumble = 1,
-    }
 
     public class Joystick : GenericHID
     {
-        private static byte s_defaultXAxis = 0;
-        private static byte s_defaultYAxis = 1;
-        private static byte s_defaultZAxis = 2;
-        private static byte s_defaultTwistAxis = 2;
-        private static byte s_defaultThrottleAxis = 3;
-        private static byte s_defaultTriggerButton = 1;
-        private static byte s_defaultTopButton = 2;
+        /// <summary>
+        /// Axes enum for Joysticks
+        /// </summary>
+        public enum AxisType
+        {
+            X = 0,
+            Y,
+            Z,
+            Twist,
+            Throttle,
+            NumAxis,
+        }
+
+        /// <summary>
+        /// Button enum for Joysticks
+        /// </summary>
+        public enum ButtonType
+        {
+            Trigger = 0,
+            Top,
+            NumButton,
+        }
+
+        /// <summary>
+        /// Rumble Type enum for Joysticks
+        /// </summary>
+        public enum RumbleType
+        {
+            LeftRumble = 0,
+            RightRumble = 1,
+        }
+
+
+        private const byte s_defaultXAxis = 0;
+        private const byte s_defaultYAxis = 1;
+        private const byte s_defaultZAxis = 2;
+        private const byte s_defaultTwistAxis = 2;
+        private const byte s_defaultThrottleAxis = 3;
+        private const byte s_defaultTriggerButton = 1;
+        private const byte s_defaultTopButton = 2;
 
         private DriverStation m_ds;
         private int m_port;
@@ -66,7 +76,7 @@ namespace WPILib
 
         protected Joystick(int port, int numAxisTypes, int numButtonTypes)
         {
-            m_ds = DriverStation.GetInstance();
+            m_ds = DriverStation.Instance;
             m_axes = new byte[numAxisTypes];
             m_buttons = new byte[numButtonTypes];
             m_port = port;
@@ -89,15 +99,9 @@ namespace WPILib
             return GetRawAxis(m_axes[(int)AxisType.Z]);
         }
 
-        public override double GetTwist()
-        {
-            return GetRawAxis(m_axes[(int)AxisType.Twist]);
-        }
+        public override double Twist => GetRawAxis(m_axes[(int) AxisType.Twist]);
 
-        public override double GetThrottle()
-        {
-            return GetRawAxis(m_axes[(int)AxisType.Throttle]);
-        }
+        public override double Throttle => GetRawAxis(m_axes[(int) AxisType.Throttle]);
 
         public override double GetRawAxis(int axis)
         {
@@ -115,18 +119,15 @@ namespace WPILib
                 case AxisType.Z:
                     return GetZ();
                 case AxisType.Twist:
-                    return GetTwist();
+                    return Twist;
                 case AxisType.Throttle:
-                    return GetThrottle();
+                    return Throttle;
                 default:
                     return 0.0;
             }
         }
 
-        public int GetAxisCount()
-        {
-            return m_ds.GetStickAxisCount(m_port);
-        }
+        public int AxisCount => m_ds.GetStickAxisCount(m_port);
 
         public override bool GetTrigger(Hand hand)
         {
@@ -147,20 +148,15 @@ namespace WPILib
         {
             return m_ds.GetStickButton(m_port, (byte)button);
         }
-        public int GetButtonCount()
-        {
-            return m_ds.GetStickButtonCount(m_port);
-        }
+
+        public int ButtonCount => m_ds.GetStickButtonCount(m_port);
 
         public override int GetPOV(int pov)
         {
             return m_ds.GetStickPOV(m_port, pov);
         }
 
-        public int GetPOVCount()
-        {
-            return m_ds.GetStickPOVCount(m_port);
-        }
+        public int POVCount => m_ds.GetStickPOVCount(m_port);
 
         public bool GetButton(ButtonType button)
         {
@@ -175,20 +171,11 @@ namespace WPILib
             }
         }
 
-        public double GetMagnitude()
-        {
-            return Math.Sqrt(Math.Pow(GetX(), 2) + Math.Pow(GetY(), 2));
-        }
+        public double GetMagnitude() => Math.Sqrt(Math.Pow(GetX(), 2) + Math.Pow(GetY(), 2));
 
-        public double GetDirectionRadians()
-        {
-            return Math.Atan2(GetX(), -GetY());
-        }
+        public double GetDirectionRadians() => Math.Atan2(GetX(), -GetY());
 
-        public double GetDirectionDegrees()
-        {
-            return RadianToDegree(GetDirectionRadians());
-        }
+        public double GetDirectionDegrees() => RadianToDegree(GetDirectionRadians());
 
         private double RadianToDegree(double angle)
         {
