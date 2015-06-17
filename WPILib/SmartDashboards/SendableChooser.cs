@@ -1,7 +1,7 @@
 ﻿using System;
-using NetworkTablesDotNet.NetworkTables2.Type;
-using NetworkTablesDotNet.NetworkTables2.Util;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.NetworkTables2.Type;
+using NetworkTables.NetworkTables2.Util;
+using NetworkTables.Tables;
 using WPILib.Commands;
 
 namespace WPILib.SmartDashboards

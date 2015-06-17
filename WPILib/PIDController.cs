@@ -1,5 +1,5 @@
 ﻿using System;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindows;
 

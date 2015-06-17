@@ -35,8 +35,8 @@
     <DocumentationFile>Output\WPILib.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkTablesDotNet, Version=2015.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NetworkTablesDotNet.2015.0.1-a\lib\net45\NetworkTablesDotNet.dll</HintPath>
+    <Reference Include="NetworkTables, Version=2015.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.2015.0.1\lib\net45\NetworkTables.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

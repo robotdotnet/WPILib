@@ -1,4 +1,4 @@
-﻿using NetworkTablesDotNet.Tables;
+﻿using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using HAL_Base;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
