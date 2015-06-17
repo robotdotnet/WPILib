@@ -13,8 +13,4 @@
     <copyright>Copyright 2015</copyright>
     <tags>WPILib FIRST FRC RoboRIO</tags>
   </metadata>
-  <files>
-		<file src="Content\WPILib.props" target="build\" />
-		<file src="Content\libHALAthena_shared.so" target="content\" />
-	</files>
 </package>

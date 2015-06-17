@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NetworkTablesDotNet.NetworkTables2.Type;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.NetworkTables2.Type;
+using NetworkTables.Tables;
 using WPILib.Buttons;
 
 namespace WPILib.Commands

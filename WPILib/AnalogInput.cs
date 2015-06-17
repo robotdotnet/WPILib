@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using HAL_Base;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;

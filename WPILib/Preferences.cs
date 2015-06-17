@@ -4,8 +4,8 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using HAL_Base;
-using NetworkTablesDotNet.NetworkTables;
-using NetworkTablesDotNet.Tables;
+using NetworkTables;
+using NetworkTables.Tables;
 
 namespace WPILib
 {

@@ -1,4 +1,4 @@
-﻿using NetworkTablesDotNet.Tables;
+﻿using NetworkTables.Tables;
 using WPILib.Commands;
 
 namespace WPILib.Buttons

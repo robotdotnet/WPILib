@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.Tables;
 
 namespace WPILib.Commands
 {

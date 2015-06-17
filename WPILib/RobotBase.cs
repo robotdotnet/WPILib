@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using HAL_Base;
-using NetworkTablesDotNet.NetworkTables;
+using NetworkTables;
 using WPILib.Internal;
 using static HAL_Base.HAL;
 

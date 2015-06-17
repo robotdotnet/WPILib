@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using NetworkTablesDotNet.NetworkTables;
-using NetworkTablesDotNet.Tables;
+using NetworkTables;
+using NetworkTables.Tables;
 using WPILib.Commands;
 
 namespace WPILib.LiveWindows

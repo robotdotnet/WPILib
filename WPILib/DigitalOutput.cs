@@ -1,6 +1,6 @@
 ﻿using System;
 using HAL_Base;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.Tables;
 using WPILib.LiveWindows;
 using static HAL_Base.HALDigital;
 using static WPILib.Utility;

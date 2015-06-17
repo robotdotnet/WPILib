@@ -1,5 +1,5 @@
 ﻿using HAL_Base;
-using NetworkTablesDotNet.Tables;
+using NetworkTables.Tables;
 using WPILib.LiveWindows;
 
 namespace WPILib
