@@ -49,9 +49,9 @@ namespace WPILib
         private const double JoystickUnpluggedMessageInterval = 1.0;
 
         //Public Fields
+        private static DriverStation m_instance;
 
-
-        public static DriverStation Instance { get; } = new DriverStation();
+        public static DriverStation Instance => m_instance ?? (m_instance = new DriverStation());
 
 
         protected DriverStation()

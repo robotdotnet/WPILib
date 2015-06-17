@@ -18,10 +18,9 @@
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.dll" />
-      <DocumentationSource sourceFile="..\packages\NetworkTablesDotNet.2015.0.1\lib\net45\NetworkTablesDotNet.xml" />
-      <DocumentationSource sourceFile="..\robotdotnet-wpilib.sln" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\packages\FRC.NetworkTables.2015.0.1\lib\net45\NetworkTables.dll" />
+<DocumentationSource sourceFile="..\packages\FRC.NetworkTables.2015.0.1\lib\net45\NetworkTables.xml" />
+<DocumentationSource sourceFile="..\robotdotnet-wpilib.sln" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
@@ -43,20 +42,21 @@
     <ProjectSummary>RobotDotNet Documentation</ProjectSummary>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
-<NamespaceSummaryItem name="HAL_Base" isDocumented="False" />
-<NamespaceSummaryItem name="HAL_FRC" isDocumented="False" />
-<NamespaceSummaryItem name="HAL_RoboRIO" isDocumented="False" />
-<NamespaceSummaryItem name="WPILib" isDocumented="True">The WPILib namespace contains all of the component classes for the library.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.Buttons" isDocumented="True">The Buttons namespace contains Buttons for use with Commands.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.CAN" isDocumented="True">The CAN namespace contains the exception filtering for interfacing with CAN Jaguars.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.Commands" isDocumented="True">The Commands namespace contains classes for creating Commands and Subsystems.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.Exceptions" isDocumented="True">The Exceptions namespace contains custom exceptions for the WPILib.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.Extras" isDocumented="True">The Extras namespace contains classes not included in the officially WPILib but we think they should be.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.Interfaces" isDocumented="True">The Interfaces namespace contains common interfaces used by the WPILib.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.Internal" isDocumented="True">The Internal namespace contains class implementations for the RoboRIO.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.LiveWindows" isDocumented="True">The LiveWindows namespace contains LiveWindow components. Note that in java this would be called LiveWindow, but C# doesnt allow a namespace to match a class.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib.SmartDashboards" isDocumented="True">The SmartDashboard namespace contains classes for interfacing with the Smart Dashboard.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="WPILib (Group)" isGroup="True" isDocumented="True">WPILib Root Namespace</NamespaceSummaryItem></NamespaceSummaries>
+      <NamespaceSummaryItem name="HAL_Base" isDocumented="False" />
+      <NamespaceSummaryItem name="HAL_FRC" isDocumented="False" />
+      <NamespaceSummaryItem name="HAL_RoboRIO" isDocumented="False" />
+      <NamespaceSummaryItem name="WPILib" isDocumented="True">The WPILib namespace contains all of the component classes for the library.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.Buttons" isDocumented="True">The Buttons namespace contains Buttons for use with Commands.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.CAN" isDocumented="True">The CAN namespace contains the exception filtering for interfacing with CAN Jaguars.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.Commands" isDocumented="True">The Commands namespace contains classes for creating Commands and Subsystems.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.Exceptions" isDocumented="True">The Exceptions namespace contains custom exceptions for the WPILib.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.Extras" isDocumented="True">The Extras namespace contains classes not included in the officially WPILib but we think they should be.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.Interfaces" isDocumented="True">The Interfaces namespace contains common interfaces used by the WPILib.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.Internal" isDocumented="True">The Internal namespace contains class implementations for the RoboRIO.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.LiveWindows" isDocumented="True">The LiveWindows namespace contains LiveWindow components. Note that in java this would be called LiveWindow, but C# doesnt allow a namespace to match a class.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib.SmartDashboards" isDocumented="True">The SmartDashboard namespace contains classes for interfacing with the Smart Dashboard.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="WPILib (Group)" isGroup="True" isDocumented="True">WPILib Root Namespace</NamespaceSummaryItem>
+    </NamespaceSummaries>
     <ComponentConfigurations>
       <ComponentConfig id="IntelliSense Component" enabled="True">
         <component id="IntelliSense Component">

@@ -101,6 +101,7 @@ namespace WPILib
                 catch (IOException ex)
                 {
                     Console.WriteLine(ex.StackTrace);
+                    
                 }
             }
 
