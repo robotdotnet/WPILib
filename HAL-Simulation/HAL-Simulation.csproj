@@ -7,7 +7,7 @@
     <ProjectGuid>{471A8C6B-AA80-492A-85A3-3EF67FC70988}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HAL_FRC</RootNamespace>
+    <RootNamespace>HAL_Simulator</RootNamespace>
     <AssemblyName>HAL-Simulation</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -43,6 +43,7 @@
     <Compile Include="HAL.cs" />
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />
+    <Compile Include="HALCAN.cs" />
     <Compile Include="HALCANTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />

@@ -1,6 +1,9 @@
 ﻿
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace HAL_Simulator
 {
@@ -10,27 +13,56 @@ namespace HAL_Simulator
     
     //public delegate void NotifierDelegate(uint param0, System.IntPtr param1);
 
+    
+
     public class HALNotifier
     {
-        /// Return Type: void*
-        ///ProcessQueue: Anonymous_bc6469e1_81ca_4ce4_a849_7751f6a8b58e
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeNotifier")]
-        public static extern IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status);
+        private static List<Notifier> Notifiers = new List<Notifier>(); 
 
 
-        /// Return Type: void
-        ///notifier_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "cleanNotifier")]
-        public static extern void cleanNotifier(IntPtr notifier_pointer, ref int status);
+        public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
+        {
+            Notifier notifier = new Notifier();
+            notifier.Callback = ProcessQueue;
+            Notifiers.Add(notifier);
+            return (IntPtr)Notifiers.IndexOf(notifier);
+            //IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(int));
+            //Marshal.StructureToPtr(notifier, ptr, true);
+            //return ptr;
+        }
+
+        public static void cleanNotifier(IntPtr notifier_pointer, ref int status)
+        {
+            Notifier notifier = (Notifier) Marshal.PtrToStructure(notifier_pointer, typeof (Notifier));
+            if (notifier.alarm != null && notifier.alarm.IsAlive)
+            {
+                notifier.alarm.Abort();
+            }
+            notifier.alarm?.Join();
+            notifier.alarm = null;
+            notifier.Callback = null;
+        }
 
 
-        /// Return Type: void
-        ///notifier_pointer: void*
-        ///triggerTime: unsigned int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "updateNotifierAlarm")]
-        public static extern void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status);
+        public static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
+        {
+
+            Notifier notifier = Notifiers[notifier_pointer.ToInt32()];//(Notifier)Marshal.PtrToStructure(notifier_pointer, typeof(Notifier));
+            if (notifier.alarm != null && notifier.alarm.IsAlive)
+            {
+                notifier.alarm.Abort();
+            }
+            notifier.alarm?.Join();
+            notifier.alarm = new Thread(() =>
+            {
+                while (triggerTime > Hooks.GetFPGATime())
+                {
+                }
+                if (notifier.Callback == null)
+                    Console.WriteLine("Callback Null");
+                notifier.Callback(0, IntPtr.Zero);
+            });
+            notifier.alarm.Start();
+        }
     }
 }

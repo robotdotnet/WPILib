@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace HAL_Simulator
@@ -90,8 +91,8 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct Notifier
     {
-        //NotImplemented
-        public bool idx;
+        public Action<uint, IntPtr> Callback;
+        public Thread alarm;
     }
 
     //Solenoid
@@ -107,4 +108,5 @@ namespace HAL_Simulator
     {
         public uint deviceNumber;
     }
+
 }

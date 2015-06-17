@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Runtime.InteropServices;
 
 namespace HAL_Simulator
@@ -7,19 +8,25 @@ namespace HAL_Simulator
     {
         /// Return Type: void
         ///ticks: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "delayTicks")]
-        public static extern void delayTicks(int ticks);
+        public static void delayTicks(int ticks)
+        {
+            throw new NotImplementedException();
+        }
 
 
         /// Return Type: void
         ///ms: double
-        [DllImport("libHALAthena_shared.so", EntryPoint = "delayMillis")]
-        public static extern void delayMillis(double ms);
+        public static void delayMillis(double ms)
+        {
+            Hooks.DelayMillis(ms);
+        }
 
 
         /// Return Type: void
         ///s: double
-        [DllImport("libHALAthena_shared.so", EntryPoint = "delaySeconds")]
-        public static extern void delaySeconds(double s);
+        public static void delaySeconds(double s)
+        {
+            Hooks.DelaySeconds(s);
+        }
     }
 }

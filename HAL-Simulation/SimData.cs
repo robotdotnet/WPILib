@@ -101,72 +101,12 @@ namespace HAL_Simulator
                 halData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
                 {
                     {"has_source", new IN(false) },
-                        {"buttons", new IN(new bool[13]) },
-                        {"axes", new IN(new int[6]) },
-                        {"povs", new IN(new int[12]) }
+                    {"buttons", new IN(new bool[13]) },
+                    {"axes", new IN(new int[6]) },
+                    {"povs", new IN(new int[12]) }
 
                 });
             }
-
-            /*
-            halData["joysticks"] = new Dictionary<dynamic, dynamic>
-            {
-                {
-                    0, new Dictionary<dynamic, dynamic>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    1, new Dictionary<dynamic, dynamic>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    2, new Dictionary<dynamic, dynamic>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    3, new Dictionary<dynamic, dynamic>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    4, new Dictionary<dynamic, dynamic>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                },
-                {
-                    5, new Dictionary<dynamic, dynamic>()
-                    {
-                        {"has_source", false },
-                        {"buttons", new bool[32] },
-                        {"axes", new double[6] },
-                        {"povs", new int[12] }
-                    }
-                }
-            };
-            */
 
             halData["fpga_button"] = new IN(false);
             halData["error_data"] = new OUT(null);
@@ -199,7 +139,7 @@ namespace HAL_Simulator
             {
                 halData["analog_in"].Add(new NotifyDict<dynamic, dynamic>
                 {
-                    { "has_source", new IN(false) },
+                    {"has_source", new IN(false) },
                     {"initialized", new OUT(false) },
                     {"avg_bits", new OUT(0) },
                     {"oversample_bits", new OUT(0) },
@@ -219,7 +159,90 @@ namespace HAL_Simulator
                 });
             }
 
+            halData["analog_trigger"] = new Dictionary<dynamic, dynamic>()
+            {
+                {"has_source", new IN(false) },
+                {"initialized", new OUT(false) },
+                {"port", new OUT(0) },
+                {"trig_lower",  new OUT(null)},
+                {"trig_upper",  new OUT(null)},
+                {"trig_type",   new OUT(null)},
+                {"trig_state", new  OUT(false)},
+            };
+
+            halData["compressor"] = new NotifyDict<dynamic, dynamic>()
+            {
+                { "has_source", new IN(false) },
+                {"initialized", new OUT(false) },
+                {"on", new IN(false) },
+                {"closed_loop_enabled", new OUT(false) },
+                {"pressure_switch", new IN(false) },
+                {"current", new IN(0.0) },
+            };
+
+            halData["pwm"] = new List<dynamic>();
+            for (int i = 0; i < 20; i++)
+            {
+                halData["pwm"].Add(new NotifyDict<dynamic, dynamic>
+                {
+                    {"initialized", new OUT(false) },
+                    {"type", new OUT(false) },
+                    {"raw_value", new OUT(0.0) },
+                    {"value", new OUT(0.0) },
+                    {"period_scale", new OUT(null) },
+                    {"zero_latch", new OUT(false) },
+
+                });
+            }
+
+            halData["pwm_loop_timing"] = new IN(40);
+
+            halData["d0_pwm"] = new OUT(new Dictionary<dynamic, dynamic>[6]); //# dict with keys: duty_cycle, pin
+            halData["d0_pwm_rate"] = new OUT(null);
+
+
+            halData["relay"] = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+            {
+                halData["relay"].Add(new NotifyDict<dynamic, dynamic>
+                {
+                    {"initialized", new OUT(false) },
+                    {"fwd", new OUT(false) },
+                    {"rev", new OUT(false) },
+                });
+            }
+
+            halData["mxp"] = new List<dynamic>();
+            for (int i = 0; i < 16; i++)
+            {
+                halData["mxp"].Add(new Dictionary<dynamic, dynamic>
+                    {
+                        {"initialized", new OUT(false)},
+                    }
+                );
+            }
+            halData["dio"] = new List<dynamic>();
+            for (int i = 0; i < 26; i++)
+            {
+                halData["dio"].Add(new NotifyDict<dynamic, dynamic>
+                {
+                    {"has_source", new IN(false) },
+                    {"initialized", new OUT(false) },
+                    {"value", new IN(false) },
+                    {"pulse_length", new OUT(null) },
+                    {"is_input", new OUT(false) },
+
+                });
+            }
+
+
+            halData["CAN"] = new Dictionary<dynamic,dynamic>();
+
+            
+
             FilterHalData(halData, halInData);
+
+            halData["time"]["program_start"] = Hooks.GetTime();
         }
 
         public static void FilterHalData(Dictionary<dynamic, dynamic> both, Dictionary<dynamic, dynamic> inData)
@@ -278,7 +301,7 @@ namespace HAL_Simulator
                 {
                     throw new ArgumentOutOfRangeException(nameof(both), "Lists can only contain dictionaries, otherwise must only be contained in IN or OUT.");
                 }
-                Dictionary<dynamic,dynamic> vIn = new Dictionary<dynamic, dynamic>();
+                Dictionary<dynamic, dynamic> vIn = new Dictionary<dynamic, dynamic>();
                 FilterHalData(v, vIn);
                 if (vIn.Count != 0)
                 {
