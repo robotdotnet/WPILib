@@ -3,7 +3,7 @@
   <metadata>
     <id>FRC.$id$</id>
     <version>$version$</version>
-    <title>FRC $title$</title>
+    <title>$title$</title>
     <authors>$author$</authors>
     <owners>$author$</owners>
     <licenseUrl>https://github.com/robotdotnet/robotdotnet-wpilib/blob/master/LICENSE.txt</licenseUrl>
