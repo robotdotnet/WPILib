@@ -110,6 +110,7 @@
     <Compile Include="IPIDOutput.cs" />
     <Compile Include="IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />
+    <Compile Include="PWMSpeedController.cs" />
     <Compile Include="SmartDashboards\SendableChooser.cs" />
     <Compile Include="ISpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />

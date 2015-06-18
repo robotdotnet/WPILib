@@ -7,9 +7,10 @@ using static HAL_Base.HALSolenoid;
 namespace WPILib
 {
     /// <summary>
-    /// SolenoidBase class is the common base class for the Solenoid and DoubleSolenoid classes
+    /// The SolenoidBase class is the common base class for the <see cref="Solenoid"/>
+    /// and <see cref="DoubleSolenoid"/> classes.
     /// </summary>
-    public class SolenoidBase : SensorBase
+    public abstract class SolenoidBase : SensorBase
     {
         private IntPtr[] m_ports;
         /// <summary>
@@ -23,10 +24,10 @@ namespace WPILib
         private object m_lockObject = new object();
 
         /// <summary>
-        /// Constructor.
+        /// Creates a new <see cref="SolenoidBase"/>.
         /// </summary>
         /// <param name="moduleNumber">The PCM CAN ID</param>
-        public SolenoidBase(int moduleNumber)
+        protected SolenoidBase(int moduleNumber)
         {
             lock (m_lockObject)
             {

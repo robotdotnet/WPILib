@@ -1,5 +1,10 @@
 ﻿namespace WPILib
 {
+    /// <summary>
+    /// This class is used to create PWM devices that implement <see cref="IMotorSafety"/>.
+    /// This will cause a watchdog to be created for the object, and if it is
+    /// not updated within a certain period, it will be stopped.
+    /// </summary>
     public class SafePWM : PWM, IMotorSafety
     {
         private MotorSafetyHelper m_safetyHelper;
@@ -13,6 +18,10 @@
             };
         }
 
+        /// <summary>
+        /// Creates a new SafePWM object.
+        /// </summary>
+        /// <param name="channel">The PWM Channel that the Object is attached to. 0-9 are on-board, 10-19 are on the MXP port</param>
         public SafePWM(int channel)
             : base(channel)
         {
@@ -35,10 +44,19 @@
             get { return m_safetyHelper.SafetyEnabled; }
         }
 
+        ///<inheritdoc/>
         public string Description => $"PWM {Channel}";
 
+        /// <summary>
+        /// Feeds the Motor Safety Timer
+        /// </summary>
+        /// <remarks>This method should be called by the derived class whenever its
+        /// setpoint gets updated, in order to feed the watchdog.</remarks>
         public void Feed() => m_safetyHelper.Feed();
 
+        /// <summary>
+        /// Disables the PWM output.
+        /// </summary>
         public void Disable() => SetRaw(PwmDisabled);
     }
 }

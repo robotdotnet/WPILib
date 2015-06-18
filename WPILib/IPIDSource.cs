@@ -1,7 +1,7 @@
 ﻿namespace WPILib
 {
     /// <summary>
-    /// A description for the type of output value to provide to a PIDController
+    /// A description for the type of output value to provide to a <see cref="PIDController"/>
     /// </summary>
     public enum PIDSourceParameter
     {
@@ -14,14 +14,14 @@
     }
 
     /// <summary>
-    /// This interface allows for PIDController to automatically read from this object
+    /// This interface allows for <see cref="PIDController"/> to automatically read from this object
     /// </summary>
     public interface IPIDSource
     {
         /// <summary>
-        /// Get the result to use in PIDController
+        /// Get the result to use in <see cref="PIDController"/>
         /// </summary>
-        /// <returns>The result to use in PIDController</returns>
+        /// <returns>The result to use in <see cref="PIDController"/></returns>
         double PidGet();
     }
 }

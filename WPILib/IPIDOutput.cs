@@ -1,14 +1,14 @@
 ﻿namespace WPILib
 {
     /// <summary>
-    /// This interface allows PIDController to write it's results to its output.
+    /// This interface allows <see cref="PIDController"/> to write it's results to its output.
     /// </summary>
     public interface IPIDOutput
     {
         /// <summary>
-        /// Set the output to the value calculated by PIDController
+        /// Set the output to the value calculated by <see cref="PIDController"/>
         /// </summary>
-        /// <param name="value">Output the value calculated by PIDController</param>
+        /// <param name="value">Output the value calculated by <see cref="PIDController"/></param>
         void PidWrite(double value);
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using HAL_Base;
 using NetworkTables;
 using WPILib.Internal;
@@ -9,13 +10,23 @@ using static HAL_Base.HAL;
 
 namespace WPILib
 {
+    /// <summary>
+    /// This is the base for all FRC Robots.
+    /// </summary>
+    /// <remarks>You must call the Main function from your robots Entrance Point.
+    /// Note that if you use the templates, this will automatically be done for you.</remarks>
     public abstract class RobotBase : IDisposable
     {
-        public const int RobotTaskPriority = 101;
-
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable once InconsistentNaming
+        /// <summary>
+        /// This holds the <see cref="DriverStation"/> object for this robot.
+        /// </summary>
         protected readonly DriverStation m_ds;
 
+        /// <summary>
+        /// Creates a new RobotBase. When this is called, it initializes NetworkTables and the
+        /// <see cref="DriverStation"/>
+        /// </summary>
         protected RobotBase()
         {
             NetworkTable.SetServerMode();
@@ -24,13 +35,14 @@ namespace WPILib
             NetworkTable.GetTable("LiveWindow").GetSubTable("~STATUS~").PutBoolean("LW Enabled", false);
         }
 
+        ///<inheritdoc/>
         public void Dispose()
         {
         }
 
-        public static bool IsSimulation => false;
+        public static bool IsSimulation => HAL.IsSimulation;
 
-        public static bool IsReal => true;
+        public static bool IsReal => !IsSimulation;
 
         public bool IsDisabled => m_ds.Disabled;
 

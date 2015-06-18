@@ -69,8 +69,9 @@ namespace WPILib
         /// <summary>
         /// DefaultPWMStepsDown is the number of PWM steps below the centerpoint
         /// </summary>
-        protected static readonly int DefaultPwmStepsDown = 1000;
-        public static readonly int PwmDisabled = 0;
+        protected const int DefaultPwmStepsDown = 1000;
+        ///The output value for disabled.
+        public const int PwmDisabled = 0;
         private int m_deadbandMaxPwm;
         private int m_deadbandMinPwm;
 
@@ -194,16 +195,18 @@ namespace WPILib
                 pos = 1.0;
             }
 
-            int rawValue;
-
             // note, need to perform the multiplication below as floating point before converting to int
-            rawValue = (int)((pos * (double)FullRangeScaleFactor) + MinNegativePwm);
+            var rawValue = (int)((pos * (double)FullRangeScaleFactor) + MinNegativePwm);
 
             // send the computed pwm value to the FPGA
             SetRaw(rawValue);
         }
 
-
+        /// <summary>
+        /// Get the PWM value in terms of a position
+        /// </summary>
+        /// <remarks>This is intended to be used by servos.</remarks>
+        /// <returns>The position the server is set to between 0.0 and 1.0</returns>
         public double GetPosition()
         {
             int value = GetRaw();
@@ -221,6 +224,11 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Set the PWM value based on speed
+        /// </summary>
+        /// <remarks>This is intended to be used by speed controllers.</remarks>
+        /// <param name="value">The speed to set the speed controller between -1.0 and 1.0</param>
         public void SetSpeed(double value)
         {
             // clamp speed to be in the range 1.0 >= speed >= -1.0
@@ -254,6 +262,11 @@ namespace WPILib
             SetRaw(rawValue);
         }
 
+        /// <summary>
+        /// Gets the latest PWM value in terms of speed
+        /// </summary>
+        /// <remarks>This is intended to be used by speed controllers.</remarks>
+        /// <returns>The most recently set speed between -1.0 and 1.0</returns>
         public double GetSpeed()
         {
             int value = GetRaw();
@@ -279,6 +292,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the PWM value directly to the FPGA.
+        /// </summary>
+        /// <param name="value">Raw PWM value between 0 and 2000</param>
         public void SetRaw(int value)
         {
             int status = 0;
@@ -286,6 +303,10 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Gets the latest PWM value directly from the FPGA.
+        /// </summary>
+        /// <returns>Raw PWM value between 0 and 2000</returns>
         public int GetRaw()
         {
             int status = 0;
@@ -295,6 +316,10 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Sets the Period Multiplier. This is used to slow down the signal for
+        /// old PWM devices.
+        /// </summary>
         public PeriodMultiplier PeriodMultiplier
         {
             set
@@ -303,13 +328,13 @@ namespace WPILib
 
                 switch (value)
                 {
-                    case PeriodMultiplier.K1X:
+                    case PeriodMultiplier.K4X:
                         SetPWMPeriodScale(m_port, 3, ref status);
                         break;
                     case PeriodMultiplier.K2X:
                         SetPWMPeriodScale(m_port, 1, ref status);
                         break;
-                    case PeriodMultiplier.K4X:
+                    case PeriodMultiplier.K1X:
                         SetPWMPeriodScale(m_port, 0, ref status);
                         break;
                     default:
@@ -319,6 +344,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Latch Zero on the PWM Port.
+        /// </summary>
         protected void SetZeroLatch()
         {
             int status = 0;
@@ -326,49 +354,75 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Get the Max Positive PWM allowed.
+        /// </summary>
         protected int MaxPositivePwm { get; private set; }
 
+        /// <summary>
+        /// Gets the Min Positive PWM allowed. This is the high end of the deadzone.
+        /// </summary>
         protected int MinPositivePwm => DeadbandElimination ? m_deadbandMaxPwm : CenterPwm + 1;
 
+        /// <summary>
+        /// Gets the Center PWM value.
+        /// </summary>
         protected int CenterPwm { get; private set; }
 
+        /// <summary>
+        /// Gets the Max Negative PWM allowed. This is the low end of the deadband.
+        /// </summary>
         protected int MaxNegativePwm => DeadbandElimination ? m_deadbandMinPwm : CenterPwm - 1;
 
+        /// <summary>
+        /// Gets the Min Negative PWM allowed.
+        /// </summary>
         protected int MinNegativePwm { get; private set; }
 
+        /// <summary>
+        /// Gets the scale factor for positive values
+        /// </summary>
         protected int PositiveScaleFactor => MaxPositivePwm - MinPositivePwm;
 
+        /// <summary>
+        /// Gets the scale factor for negative values
+        /// </summary>
         protected int NegativeScaleFactor => MaxNegativePwm - MinNegativePwm;
 
+        /// <summary>
+        /// Gets the scale factor for all values
+        /// </summary>
         protected int FullRangeScaleFactor => MaxPositivePwm - MinNegativePwm;
+
         ///<inheritdoc/>
-        public string SmartDashboardType => "Speed Controller";
+        public virtual string SmartDashboardType => "Speed Controller";
         ///<inheritdoc/>
-        public void InitTable(ITable subtable)
+        public virtual void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
         ///<inheritdoc/>
-        public void UpdateTable()
+        public virtual void UpdateTable()
         {
             Table?.PutNumber("Value", GetSpeed());
         }
         ///<inheritdoc/>
-        public ITable Table { get; private set; }
+        public ITable Table { get; protected set; }
         ///<inheritdoc/>
-        public void StartLiveWindowMode()
+        public virtual void StartLiveWindowMode()
         {
             SetSpeed(0);
             Table?.AddTableListener("Value", this, true);
         }
 
-        public void ValueChanged(ITable table, string key, object value, bool bin)
+        ///<inheritdoc/>
+        public virtual void ValueChanged(ITable table, string key, object value, bool bin)
         {
             SetSpeed((double)value);
         }
         ///<inheritdoc/>
-        public void StopLiveWindowMode()
+        public virtual void StopLiveWindowMode()
         {
             SetSpeed(0);
             Table?.RemoveTableListener(this);
