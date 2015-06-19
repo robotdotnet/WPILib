@@ -8,6 +8,11 @@ namespace HAL_Base
 {
     public partial class HALUtilities
     {
+        static HALUtilities()
+        {
+            HAL.Initialize();
+        }
+
         internal static void SetupDelegates()
         {
             string className = MethodBase.GetCurrentMethod().DeclaringType.Name;

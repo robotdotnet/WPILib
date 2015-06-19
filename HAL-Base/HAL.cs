@@ -37,49 +37,61 @@ namespace HAL_Base
             return HALSetErrorData(errors, errors.Length, waitMs);
         }
 
+        private static bool m_initialized = false;
+        private static object m_lockObject = new object();
+
         /// <summary>
         /// HAL Initialization. Must be called before any other HAL functions.
         /// </summary>
         /// <param name="mode">Initialization Mode</param>
         public static void Initialize(int mode = 0)
         {
-            HALAssembly = Assembly.LoadFrom(IsSimulation ? HALSim : HALRIO);
-
-            SetupDelegates();
-            HALAccelerometer.SetupDelegates();
-            HALAnalog.SetupDelegates();
-            HALCAN.SetupDelegates();
-            HALCanTalonSRX.SetupDelegates();
-            HALCompressor.SetupDelegates();
-            HALDigital.SetupDelegates();
-            HALInterrupts.SetupDelegates();
-            HALNotifier.SetupDelegates();
-            HALPDP.SetupDelegates();
-            HALPower.SetupDelegates();
-            HALSemaphore.SetupDelegates();
-            HALSerialPort.SetupDelegates();
-            HALSolenoid.SetupDelegates();
-            HALUtilities.SetupDelegates();
-
-
-            var rv = HALInitialize(mode);
-            if (rv == 0)
+            //Lock this function, so that if accidentally called from multiple threads it doesnt
+            //get m_initialized at the wrong value.
+            lock (m_lockObject)
             {
-                throw new Exception("HAL Initialize Failed");
-            }
+                // We don't want to initialize more then once.
+                if (m_initialized) return;
 
-            //If we are simulator, grab a local copy of the dictionary so we can debug its values.
-            if (IsSimulation)
-            {
-                string className = "SimData";
-                var types = HAL.HALAssembly.GetTypes();
-                var q = from t in types where t.IsClass && t.Name == className select t;
-                Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+                HALAssembly = Assembly.LoadFrom(IsSimulation ? HALSim : HALRIO);
 
-                GetData data = (GetData) Delegate.CreateDelegate(typeof (GetData), type.GetMethod("GetData"));
+                SetupDelegates();
+                HALAccelerometer.SetupDelegates();
+                HALAnalog.SetupDelegates();
+                HALCAN.SetupDelegates();
+                HALCanTalonSRX.SetupDelegates();
+                HALCompressor.SetupDelegates();
+                HALDigital.SetupDelegates();
+                HALInterrupts.SetupDelegates();
+                HALNotifier.SetupDelegates();
+                HALPDP.SetupDelegates();
+                HALPower.SetupDelegates();
+                HALSemaphore.SetupDelegates();
+                HALSerialPort.SetupDelegates();
+                HALSolenoid.SetupDelegates();
+                HALUtilities.SetupDelegates();
 
-                data(out halData, out halInData);
-                
+
+                var rv = HALInitialize(mode);
+                if (rv != 1)
+                {
+                    throw new Exception($"HAL Initialize Failed with return code {rv}");
+                }
+
+                //If we are simulator, grab a local copy of the dictionary so we can debug its values.
+                if (IsSimulation)
+                {
+                    string className = "SimData";
+                    var types = HAL.HALAssembly.GetTypes();
+                    var q = from t in types where t.IsClass && t.Name == className select t;
+                    Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+
+                    GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
+
+                    data(out halData, out halInData);
+
+                }
+                m_initialized = true;
             }
         }
 

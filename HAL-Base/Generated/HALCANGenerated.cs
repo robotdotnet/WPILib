@@ -6,6 +6,11 @@ namespace HAL_Base
 {
     public partial class HALCAN
     {
+        static HALCAN()
+        {
+            HAL.Initialize();
+        }
+
         internal static void SetupDelegates()
         {
             string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
