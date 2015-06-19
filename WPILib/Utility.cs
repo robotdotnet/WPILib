@@ -66,8 +66,10 @@ namespace WPILib
         }
 
         /// <summary>
-        /// //TODO:Implement
+        /// This is used to check the status's returned from the HAL functions.
         /// </summary>
+        /// <remarks>This should not be needed, unless you are calling a HAL function yourself.
+        /// However we would recommend against this unless absolutely necessary.</remarks>
         /// <param name="status"></param>
         /// <param name="memberName"></param>
         /// <param name="filePath"></param>

@@ -127,7 +127,7 @@ namespace WPILib
 
         private void ReportJoystickUnpluggedError(string message)
         {
-            double currentTime = FPGATimestamp;
+            double currentTime = GetFPGATimestamp();
             if (currentTime > m_nextMessageTime)
             {
                 ReportError(message, false);

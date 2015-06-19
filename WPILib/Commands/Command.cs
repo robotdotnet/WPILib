@@ -133,7 +133,7 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
 
-                return m_startTime < 0 ? 0 : FPGATimestamp - m_startTime;
+                return m_startTime < 0 ? 0 : GetFPGATimestamp() - m_startTime;
             }
         }
 
@@ -295,7 +295,7 @@ namespace WPILib.Commands
 
         private void StartTiming()
         {
-            m_startTime = FPGATimestamp;
+            m_startTime = GetFPGATimestamp();
         }
 
         /// <summary>

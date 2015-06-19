@@ -32,7 +32,7 @@ namespace WPILib.Commands
         }
 
         ///<inheritdoc/>
-        protected override bool IsFinished() => MatchTime >= m_time;
+        protected override bool IsFinished() => GetMatchTime() >= m_time;
 
         ///<inheritdoc/>
         protected override void End()

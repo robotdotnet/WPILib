@@ -63,9 +63,7 @@ namespace WPILib
             InitSolenoid();
         }
 
-        /// <summary>
-        /// Destructor
-        /// </summary>
+        ///<inheritdoc/>
         public override void Dispose()
         {
         }
@@ -106,61 +104,40 @@ namespace WPILib
             return (value != 0);
         }
 
-        /// <summary>
-        /// Live Window code, only does anything if live window is activated.
-        /// </summary>
+        ///<inheritdoc/>
         public string SmartDashboardType => "Solenoid";
 
-        /// <summary>
-        /// Initialize a table for this sendable object.
-        /// </summary>
-        /// <param name="subtable">The table to put the values in.</param>
+        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
 
-        /// <summary>
-        /// Returns the table that is currently associated with the sendable
-        /// </summary>
+        ///<inheritdoc/>
         public ITable Table { get; private set; }
 
-        /// <summary>
-        /// Update the table for this sendable object with the latest
-        /// values.
-        /// </summary>
+        ///<inheritdoc/>
         public void UpdateTable()
         {
             Table?.PutBoolean("Value", Get());
         }
 
-        /// <summary>
-        /// Start having this sendable object automatically respond to
-        /// value changes reflect the value on the table.
-        /// </summary>
+        ///<inheritdoc/>
         public void StartLiveWindowMode()
         {
             Set(false);
             Table?.AddTableListener("Value", this, true);
         }
 
-        /// <summary>
-        /// Stop having this sendable object automatically respond to value changes.
-        /// </summary>
+        ///<inheritdoc/>
         public void StopLiveWindowMode()
         {
             Set(false);
             Table?.RemoveTableListener(this);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="isNew"></param>
+        ///<inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             Set((bool)value);

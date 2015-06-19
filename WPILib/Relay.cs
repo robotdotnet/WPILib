@@ -7,8 +7,15 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
+    /// <summary>
+    /// The Relay class is used to interface with the Relay ports on the RoboRIO. 
+    /// These are usually used with Spike Relays.
+    /// </summary>
     public class Relay : SensorBase, ILiveWindowSendable, ITableListener
     {
+        /// <summary>
+        /// The value to set the relay to.
+        /// </summary>
         public enum Value
         {
             Off,
@@ -17,6 +24,9 @@ namespace WPILib
             Reverse,
         }
 
+        /// <summary>
+        /// The directions the relay is allowed to output.
+        /// </summary>
         public enum Direction
         {
             Both,
@@ -57,6 +67,11 @@ namespace WPILib
             LiveWindow.AddActuator("Relay", m_channel, this);
         }
 
+        /// <summary>
+        /// Creates a new relay, specifying the directions allowed.
+        /// </summary>
+        /// <param name="channel">The relay channel</param>
+        /// <param name="direction">The directions allowed.</param>
         public Relay(int channel, Direction direction)
         {
             m_channel = channel;
@@ -65,12 +80,17 @@ namespace WPILib
             Set(Value.Off);
         }
 
+        /// <summary>
+        /// Creates a new relay, allowing both directions.
+        /// </summary>
+        /// <param name="channel"></param>
         public Relay(int channel)
             : this(channel, Direction.Both)
         {
 
         }
 
+        ///<inheritdoc/>
         public override void Dispose()
         {
             if (m_direction == Direction.Both || m_direction == Direction.Forward)
@@ -92,6 +112,10 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Sets the relay output.
+        /// </summary>
+        /// <param name="value">The value to set.</param>
         public void Set(Value value)
         {
             int status = 0;
@@ -153,6 +177,10 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Gets the latest relay value sent.
+        /// </summary>
+        /// <returns>The latest relay value.</returns>
         public Value Get()
         {
             int status = 0;
@@ -195,6 +223,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the direction allowed by the relay.
+        /// </summary>
+        /// <param name="direction">The directions to allow.</param>
         public void SetDirection(Direction direction)
         {
             if (m_direction == direction)
@@ -247,6 +279,7 @@ namespace WPILib
             Table.RemoveTableListener(this);
         }
 
+        ///<inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             string val = ((string)value);

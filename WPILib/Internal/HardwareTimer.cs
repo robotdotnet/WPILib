@@ -11,17 +11,17 @@ namespace WPILib.Internal
     /// timer is running its value counts up in milliseconds.When stopped, the timer holds the current
     /// value. The implementation simply records the time when started and subtracts the current time
     /// whenever the value is requested.</remarks>
-    public class HardwareTimer : Timer.IStaticInterface
+    public class HardwareTimer : Timer.IStaticTimerInterface
     {
         /// <summary>
         /// Returns the system clock time in seconds.
         /// </summary>
-        public double FPGATimestamp => FPGATime / 1000000.0;
+        public double GetFPGATimestamp() => FPGATime/1000000.0;
 
         /// <summary>
         /// Returns the Match Time in seconds
         /// </summary>
-        public double MatchTime => DriverStation.Instance.MatchTime;
+        public double GetMatchTime() => DriverStation.Instance.MatchTime;
 
         /// <summary>
         /// Pause the thread for a specified time
@@ -43,7 +43,7 @@ namespace WPILib.Internal
         /// Creates a new Timer
         /// </summary>
         /// <returns>A new timer</returns>
-        public Timer.Interface NewTimer()
+        public Timer.ITimerInterface NewTimer()
         {
             return new TimerImpl();
         }
@@ -51,7 +51,7 @@ namespace WPILib.Internal
         /// <summary>
         /// A hardware timer implementation
         /// </summary>
-        public class TimerImpl : Timer.Interface
+        public class TimerImpl : Timer.ITimerInterface
         {
             private long m_startTime;
             private double m_accumulatedTime;

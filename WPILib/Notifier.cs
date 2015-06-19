@@ -124,7 +124,7 @@ namespace WPILib
             }
             else
             {
-                m_expirationTime = FPGATimestamp + m_period;
+                m_expirationTime = GetFPGATimestamp() + m_period;
             }
             if (m_expirationTime > ((111 << 32) / 1e6))
             {
@@ -259,7 +259,7 @@ namespace WPILib
             {
                 lock (s_queueSemaphore)
                 {
-                    double currentTime = FPGATimestamp;
+                    double currentTime = GetFPGATimestamp();
                     current = s_timerQueueHead;
                     if (current == null || current.m_expirationTime > currentTime)
                     {

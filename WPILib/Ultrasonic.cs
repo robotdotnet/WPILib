@@ -297,44 +297,29 @@ namespace WPILib
         /// </summary>
         public bool Enabled { get; set; }
 
-        /// <summary>
-        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
-        /// </summary>
+        /// <inheridoc/>
         public string SmartDashboardType => "Ultrasonic";
 
-        /// <summary>
-        /// Initialize a table for this sendable object.
-        /// </summary>
-        /// <param name="subtable">The table to put the values in.</param>
+        /// <inheridoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
 
-        /// <summary>
-        /// Returns the table that is currently associated with the sendable
-        /// </summary>
+        /// <inheridoc/>
         public ITable Table { get; private set; }
 
-        /// <summary>
-        /// Update the table for this sendable object with the latest
-        /// values.
-        /// </summary>
+        /// <inheridoc/>
         public void UpdateTable()
         {
             Table?.PutNumber("Value", GetRangeInches());
         }
 
-        /// <summary>
-        /// Start having this sendable object automatically respond to
-        /// value changes reflect the value on the table.
-        /// </summary>
+        /// <inheridoc/>
         public void StartLiveWindowMode() { }
 
-        /// <summary>
-        /// Stop having this sendable object automatically respond to value changes.
-        /// </summary>
+        /// <inheridoc/>
         public void StopLiveWindowMode() { }
     }
 }

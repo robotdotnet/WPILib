@@ -1,30 +1,31 @@
 ﻿using WPILib.Exceptions;
+using WPILib.Internal;
 
 namespace WPILib
 {
     /// <summary>
-    /// WPILib Timer Class
+    /// This class is used to create timers
     /// </summary>
+    /// <remarks>This will use the Hardware implementation of the timer that is set by the library.
+    /// This can currently be found in <see cref="Internal.HardwareTimer"/></remarks>
     public class Timer
     {
         //TODO: Add remakrs to these methods.
-        internal static IStaticInterface Implementation { private get; set; }
+        internal static IStaticTimerInterface Implementation { private get; set; }
 
         /// <summary>
         /// Return the system clock time in seconds.
         /// </summary><remarks>Return the time from the
         /// FPGA hardware clock in seconds since the FPGA started.
         /// </remarks>
-        public static double FPGATimestamp
+        /// <returns>The FPGA timestamp in seconds.</returns>
+        public static double GetFPGATimestamp()
         {
-            get
+            if (Implementation != null)
             {
-                if (Implementation != null)
-                {
-                    return Implementation.FPGATimestamp;
-                }
-                throw new BaseSystemNotInitializedException(Implementation, typeof (Timer));
+                return Implementation.GetFPGATimestamp();
             }
+            throw new BaseSystemNotInitializedException(Implementation, typeof (Timer));
         }
 
         /// <summary>
@@ -37,16 +38,14 @@ namespace WPILib
         /// If the robot is disabled, this returns 0.0 seconds
         /// <para />Warning: This is not an official time (so it cannot be used to argue with referees)
         /// </remarks>
-        public static double MatchTime
+        /// <returns>Match time since the beginning of autonomous.</returns>
+        public static double GetMatchTime()
         {
-            get
+            if (Implementation != null)
             {
-                if (Implementation != null)
-                {
-                    return Implementation.MatchTime;
-                }
-                throw new BaseSystemNotInitializedException(Implementation, typeof(Timer));
+                return Implementation.GetMatchTime();
             }
+            throw new BaseSystemNotInitializedException(Implementation, typeof (Timer));
         }
 
         /// <summary>
@@ -57,7 +56,7 @@ namespace WPILib
         /// to update. Only the task containing the wait will pause until the wait
         /// time is expired.
         /// </remarks>
-        /// <param name="seconds">Length of time to pause</param>
+        /// <param name="seconds">Length of time to pause (seconds)</param>
         public static void Delay(double seconds)
         {
             if (Implementation != null)
@@ -69,16 +68,27 @@ namespace WPILib
                 throw new BaseSystemNotInitializedException(Implementation, typeof(Timer));
             }
         }
-        public interface IStaticInterface
+
+        /// <summary>
+        /// This interface is used to specify the static timer functions to be used by the <see cref="Timer"/> class.
+        /// </summary>
+        public interface IStaticTimerInterface
         {
-            double FPGATimestamp { get; }
-            double MatchTime { get; }
+            /// <inheritdoc cref="HardwareTimer.GetFPGATimestamp"/>
+            double GetFPGATimestamp();
+            /// <inheritdoc cref="HardwareTimer.GetMatchTime"/>
+            double GetMatchTime();
+            /// <inheritdoc cref="HardwareTimer.Delay"/>
             void Delay(double seconds);
-            Interface NewTimer();
+            /// <inheritdoc cref="HardwareTimer.NewTimer"/>
+            ITimerInterface NewTimer();
         }
 
-        private Interface m_timer;
+        private ITimerInterface m_timer;
 
+        /// <summary>
+        /// Creates a new Timer
+        /// </summary>
         public Timer()
         {
             if (Implementation != null)
@@ -90,10 +100,11 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Get the current time from the timer. If the clock is running it is derived from
+        /// Get the current time from the timer.</summary>
+        /// <remarks>If the clock is running it is derived from
         /// the current system clock the start time stored in the timer class. If the clock
         /// is not running, then return the time when it was last stopped.
-        /// </summary>
+        /// </remarks>
         /// <returns>Current time value for this timer in seconds</returns>
         public double Get()
         {
@@ -102,8 +113,9 @@ namespace WPILib
 
         /// <summary>
         /// Reset the timer by setting the time to 0.
-        /// Make the timer startTime the current time so new requests will be relative now
-        /// </summary>
+        /// </summary><remarks>
+        /// Make the timer start time the current time so new requests will be relative now
+        /// </remarks>
         public void Reset()
         {
             m_timer.Reset();
@@ -111,20 +123,22 @@ namespace WPILib
 
         /// <summary>
         /// Start the timer running.
+        /// </summary><remarks>
         /// Just set the running flag to true indicating that all time requests should be
         /// relative to the system clock.
-        /// </summary>
+        /// </remarks>
         public void Start()
         {
             m_timer.Start();
         }
 
         /// <summary>
-        /// Stop the timer.
+        /// Stop the timer. </summary>
+        /// <remarks>
         /// This computes the time as of now and clears the running flag, causing all
         /// subsequent time requests to be read from the accumulated time rather than
         /// looking at the system clock.
-        /// </summary>
+        /// </remarks>
         public void Stop()
         {
             m_timer.Stop();
@@ -132,9 +146,10 @@ namespace WPILib
 
         /// <summary>
         /// Check if the period specified has passed and if it has, advance the start
-        /// time by that period. This is useful to decide if it's time to do periodic
+        /// time by that period.</summary>
+        /// <remarks>This is useful to decide if it's time to do periodic
         /// work without drifting later by the time it took to get around to checking.
-        /// </summary>
+        /// </remarks>
         /// <param name="period">The period to check for (in seconds)</param>
         /// <returns>If the period has passed.</returns>
         public bool HasPeriodPassed(double period)
@@ -143,15 +158,19 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Interface for a Timer
+        /// This interface is used to specify the instance timer functions to be used by the <see cref="Timer"/> class.
         /// </summary>
-        // ReSharper disable once InconsistentNaming
-        public interface Interface
+        public interface ITimerInterface
         {
+            /// <inheritdoc cref="HardwareTimer.TimerImpl.Get"/>
             double Get();
+            /// <inheritdoc cref="HardwareTimer.TimerImpl.Reset"/>
             void Reset();
+            /// <inheritdoc cref="HardwareTimer.TimerImpl.Start"/>
             void Start();
+            /// <inheritdoc cref="HardwareTimer.TimerImpl.Stop"/>
             void Stop();
+            /// <inheritdoc cref="HardwareTimer.TimerImpl.HasPeriodPassed"/>
             bool HasPeriodPassed(double period);
         }
     }

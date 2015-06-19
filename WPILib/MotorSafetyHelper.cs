@@ -39,7 +39,7 @@ namespace WPILib
             m_safeObject = safeObject;
             SafetyEnabled = false;
             Expiration = DefaultSafetyExpiration;
-            m_stopTime = FPGATimestamp;
+            m_stopTime = GetFPGATimestamp();
             lock (s_lockObject)
             {
                 m_nextHelper = s_headHelper;
@@ -53,7 +53,7 @@ namespace WPILib
         /// </remarks>
         public void Feed()
         {
-            m_stopTime = FPGATimestamp + Expiration;
+            m_stopTime = GetFPGATimestamp() + Expiration;
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace WPILib
         /// Determine if the motor is still operating or has timed out.
         /// </summary>
         /// <value>A true value if the motor is still operating normally and hasn't timed out.</value>
-        public bool Alive => !SafetyEnabled || m_stopTime > FPGATimestamp;
+        public bool Alive => !SafetyEnabled || m_stopTime > GetFPGATimestamp();
 
         /// <summary>
         /// Check if this motor has exceeded its timeout. </summary> 
@@ -78,7 +78,7 @@ namespace WPILib
         {
             if (!SafetyEnabled || RobotState.Disabled || RobotState.Test)
                 return;
-            if (m_stopTime < FPGATimestamp)
+            if (m_stopTime < GetFPGATimestamp())
             {
                 TextWriter errorWriter = Console.Error;
                 errorWriter.WriteLine(m_safeObject.Description + "... Output not updated often enough.");
