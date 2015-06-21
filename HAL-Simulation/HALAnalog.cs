@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using HAL_Base;
+using static HAL_Simulator.SimData;
+using static HAL_Simulator.PortConverters;
 
 namespace HAL_Simulator
 {
@@ -23,223 +26,251 @@ namespace HAL_Simulator
 
     public class HALAnalog
     {
-        /// Return Type: void*
-        ///port_pointer: void*
-        ///status: int*
-        [DllImport("<>", EntryPoint = "initializeAnalogOutputPort")]
-        public static extern IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status);
+        internal const uint Timebase = 40000000;
+        internal const int DefaultOversampleBits = 0;
+        internal const double DefaultSampleRate = 50000.0;
+        internal const int AnalogInputPins = 8;
+        internal const int AnalogOutputPins = 2;
+        internal const int VOLTAGE_OUT_OF_RANGE = 1002;
+        internal const int NO_AVAILABLE_RESOURCES = -1004;
 
+        internal const int AccumulatorNumChannels = 2;
+        internal static readonly int[] AccumulatorChannels = {0, 1};
 
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///voltage: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogOutput")]
-        public static extern void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status);
+        internal const int ANALOG_TRIGGER_PULSE_OUTPUT_ERROR = -1011;
 
+        public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
+        {
+            status = 0;
+            AnalogPort p = new AnalogPort()
+            {
+                port = GetHalPort(port_pointer)
+            };
+            halData["analog_out"][p.port.pin]["initialized"] = true;
 
-        /// Return Type: double
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogOutput")]
-        public static extern double getAnalogOutput(IntPtr analog_port_pointer, ref int status);
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
+            Marshal.StructureToPtr(p, ptr, true);
 
+            return ptr;
+        }
 
-        /// Return Type: boolean
-        ///pin: unsigned int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "checkAnalogOutputChannel")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool checkAnalogOutputChannel(uint pin);
+        public static void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status)
+        {
+            status = 0;
+            halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["output"] = voltage;
+        }
 
+        public static double getAnalogOutput(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["output"];
+        }
 
-        /// Return Type: void*
-        ///port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeAnalogInputPort")]
-        public static extern IntPtr initializeAnalogInputPort(IntPtr port_pointer, ref int status);
+        public static bool checkAnalogOutputChannel(uint pin)
+        {
+            return pin < AnalogOutputPins;
+        }
 
+        public static IntPtr initializeAnalogInputPort(IntPtr port_pointer, ref int status)
+        {
+            status = 0;
+            AnalogPort p = new AnalogPort()
+            {
+                port = GetHalPort(port_pointer)
+            };
+            halData["analog_in"][p.port.pin]["initialized"] = true;
 
-        /// Return Type: boolean
-        ///module: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "checkAnalogModule")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool checkAnalogModule(byte module);
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
+            Marshal.StructureToPtr(p, ptr, true);
 
+            return ptr;
+        }
 
-        /// Return Type: boolean
-        ///pin: unsigned int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "checkAnalogInputChannel")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool checkAnalogInputChannel(uint pin);
+        public static bool checkAnalogModule(byte module)
+        {
+            return module == 1;
+        }
 
+        public static bool checkAnalogInputChannel(uint pin)
+        {
+            return pin < AnalogInputPins;
+        }
 
-        /// Return Type: void
-        ///samplesPerSecond: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogSampleRate")]
-        public static extern void setAnalogSampleRate(double samplesPerSecond, ref int status);
+        public static void setAnalogSampleRate(double samplesPerSecond, ref int status)
+        {
+            status = 0;
+            halData["analog_sample_rate"] = samplesPerSecond;
+        }
 
+        public static float getAnalogSampleRate(ref int status)
+        {
+            status = 0;
+            return halData["analog_sample_rate"];
+        }
 
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogSampleRate")]
-        public static extern float getAnalogSampleRate(ref int status);
+        public static void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status)
+        {
+            status = 0;
+            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"] = bits;
+        }
 
+        public static uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"];
+        }
 
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///bits: unsigned int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogAverageBits")]
-        public static extern void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status);
+        public static void setAnalogOversampleBits(IntPtr analog_port_pointer, uint bits, ref int status)
+        {
+            status = 0;
+            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"] = bits;
+        }
 
+        public static uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"];
+        }
 
-        /// Return Type: unsigned int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogAverageBits")]
-        public static extern uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status);
+        public static short getAnalogValue(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["value"];
+        }
 
+        public static int getAnalogAverageValue(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_value"];
+        }
 
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///bits: unsigned int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogOversampleBits")]
-        public static extern void setAnalogOversampleBits(IntPtr analog_port_pointer, uint bits, ref int status);
+        public static int getAnalogVoltsToValue(IntPtr analog_port_pointer, double voltage, ref int status)
+        {
+            status = 0;
+            if (voltage > 5.0)
+            {
+                voltage = 5.0;
+                status = VOLTAGE_OUT_OF_RANGE;
+            }
+            else if (voltage < 0.0)
+            {
+                voltage = 0.0;
+                status = VOLTAGE_OUT_OF_RANGE;
+            }
 
+            var LSBWeight = getAnalogLSBWeight(analog_port_pointer, ref status);
+            var offset = getAnalogOffset(analog_port_pointer, ref status);
+            return (int) ((voltage + offset*1.0e-9)/(LSBWeight*1.0e-9));
+        }
 
-        /// Return Type: unsigned int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogOversampleBits")]
-        public static extern uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status);
+        public static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
+        }
 
+        public static float getAnalogAverageVoltage(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_voltage"];
+        }
 
-        /// Return Type: short
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogValue")]
-        public static extern short getAnalogValue(IntPtr analog_port_pointer, ref int status);
+        public static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["lsb_weight"];
+        }
 
+        public static int getAnalogOffset(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["offset"];
+        }
 
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogAverageValue")]
-        public static extern int getAnalogAverageValue(IntPtr analog_port_pointer, ref int status);
+        public static bool isAccumulatorChannel(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return AccumulatorChannels.Contains(GetAnalogPort(analog_port_pointer).port.pin);
+        }
 
+        public static void initAccumulator(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_initialized"] = true;
+        }
 
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///voltage: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogVoltsToValue")]
-        public static extern int getAnalogVoltsToValue(IntPtr analog_port_pointer, double voltage, ref int status);
+        public static void resetAccumulator(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            int pin = GetAnalogPort(analog_port_pointer).port.pin;
+            halData["analog_in"][pin]["accumulator_center"] = 0;
+            halData["analog_in"][pin]["accumulator_count"] = 1;
+            halData["analog_in"][pin]["accumulator_value"] = 0;
+        }
 
+        public static void setAccumulatorCenter(IntPtr analog_port_pointer, int center, ref int status)
+        {
+            status = 0;
+            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_center"] = center;
+        }
 
-        /// Return Type: float
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogVoltage")]
-        public static extern float getAnalogVoltage(IntPtr analog_port_pointer, ref int status);
+        public static void setAccumulatorDeadband(IntPtr analog_port_pointer, int deadband, ref int status)
+        {
+            status = 0;
+            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_deadband"] = deadband;
+        }
 
+        public static long getAccumulatorValue(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_value"];
+        }
 
-        /// Return Type: float
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogAverageVoltage")]
-        public static extern float getAnalogAverageVoltage(IntPtr analog_port_pointer, ref int status);
+        public static uint getAccumulatorCount(IntPtr analog_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
+        }
 
+        public static void getAccumulatorOutput(IntPtr analog_port_pointer, ref long value, ref uint count,
+            ref int status)
+        {
+            status = 0;
+            count = halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
+            value = halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_value"];
+        }
 
-        /// Return Type: unsigned int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogLSBWeight")]
-        public static extern uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status);
+        public static IntPtr initializeAnalogTrigger(IntPtr port_pointer, ref uint index, ref int status)
+        {
+            status = 0;
 
+            Port pt = GetHalPort(port_pointer);
+            for (int i = 0; i < halData["analog_trigger"].Count; i++)
+            {
+                var cnt = halData["analog_trigger"][i];
+                if (cnt["initialized"] == false)
+                {
+                    cnt["initialized"] = true;
+                    cnt["port"] = pt;
+                    AnalogTrigger trig = new AnalogTrigger()
+                    {
+                        port = pt,
+                        index = (uint) i,
+                    };
+                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
+                    Marshal.StructureToPtr(trig, ptr, true);
+                    return ptr;
+                }
+            }
+            status = NO_AVAILABLE_RESOURCES;
+            return  IntPtr.Zero;
+        }
 
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogOffset")]
-        public static extern int getAnalogOffset(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: boolean
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "isAccumulatorChannel")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool isAccumulatorChannel(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initAccumulator")]
-        public static extern void initAccumulator(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "resetAccumulator")]
-        public static extern void resetAccumulator(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///center: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAccumulatorCenter")]
-        public static extern void setAccumulatorCenter(IntPtr analog_port_pointer, int center, ref int status);
-
-
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///deadband: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAccumulatorDeadband")]
-        public static extern void setAccumulatorDeadband(IntPtr analog_port_pointer, int deadband, ref int status);
-
-
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAccumulatorValue")]
-        public static extern long getAccumulatorValue(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: unsigned int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAccumulatorCount")]
-        public static extern uint getAccumulatorCount(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///analog_port_pointer: void*
-        ///value: int*
-        ///count: unsigned int*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAccumulatorOutput")]
-        public static extern void getAccumulatorOutput(IntPtr analog_port_pointer, ref long value, ref uint count, ref int status);
-
-
-        /// Return Type: void*
-        ///port_pointer: void*
-        ///index: unsigned int*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeAnalogTrigger")]
-        public static extern IntPtr initializeAnalogTrigger(IntPtr port_pointer, ref uint index, ref int status);
-
-
-        /// Return Type: void
-        ///analog_trigger_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "cleanAnalogTrigger")]
-        public static extern void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status);
+        public static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
+        {
+            status = 0;
+            halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["initialized"] = false;
+        }
 
 
         /// Return Type: void
@@ -292,13 +323,18 @@ namespace HAL_Simulator
         public static extern bool getAnalogTriggerTriggerState(IntPtr analog_trigger_pointer, ref int status);
 
 
-        /// Return Type: boolean
-        ///analog_trigger_pointer: void*
-        ///type: AnalogTriggerType
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogTriggerOutput")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status);
+        public static bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status)
+        {
+            if (type == AnalogTriggerType.InWindow)
+                return getAnalogTriggerInWindow(analog_trigger_pointer, ref status);
+            if (type == AnalogTriggerType.State)
+                return getAnalogTriggerTriggerState(analog_trigger_pointer, ref status);
+            else
+            {
+                status = ANALOG_TRIGGER_PULSE_OUTPUT_ERROR;
+                return false;
+            }
+        }
 
 
         /// Return Type: int

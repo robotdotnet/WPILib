@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using static HAL_Simulator.SimData;
+using static HAL_Simulator.PortConverters;
 
 namespace HAL_Simulator
 {
     public class HALSolenoid
     {
-        private static SolenoidPort GetSolenoidPort(IntPtr sPort)
-        {
-            return (SolenoidPort)Marshal.PtrToStructure(sPort, typeof (SolenoidPort));
-        }
 
         public static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)
         {
-            SolenoidPort p = new SolenoidPort {port = (Port)Marshal.PtrToStructure(port_pointer, typeof(Port))};
+            SolenoidPort p = new SolenoidPort
+            {
+                port = GetHalPort(port_pointer)
+            };
             status = 0;
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);

@@ -89,14 +89,6 @@ namespace HAL_Simulator
 
     public class HAL
     {
-         //static Dictionary<string, object> halData = new Dictionary<string, object>();
-        //public const string "libHALAthena_shared.so" = "libHALAthena_shared.so"; 
-
-        /// Return Type: void*
-        ///pin: byte
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "getPort")]
-        //public static extern System.IntPtr GetPort(byte pin);
-
         public static IntPtr getPort(byte pin)
         {
             return getPortWithModule(1, pin);
@@ -328,9 +320,6 @@ namespace HAL_Simulator
             halData["user_program_state"] = "test";
         }
 
-        //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALReport")]
-        //public static extern uint HALReport(byte resource, byte instanceNumber, byte context, string feature = null);
-
         public static void NumericArrayResize()
         {
             
@@ -352,84 +341,8 @@ namespace HAL_Simulator
         }
 
 
-        /// Return Type: unsigned int
-        ///resource: byte
-        ///instanceNumber: byte
-        ///context: byte
-        ///feature: char*
-        //[System.Runtime.InteropServices.DllImportAttribute("libHALAthena_shared.so", EntryPoint = "HALReport")]
-        //private static extern uint HALReport(byte resource, byte instanceNumber, byte context = 0, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string feature = null);
         public static uint HALReport(byte resource, byte instanceNumber, byte context = 0, string feature = null)
         {
             return 0;
         }
-
-       
-
-        /*
-        public static void CheckStatus(int status)
-        {
-            if (status < 0)
-            {
-                string message = GetHALErrorMessage(status);
-                throw new SystemException(" Code: " + status + ". " + message);
-            }
-            else if (status > 0)
-            {
-                string message = GetHALErrorMessage(status);
-                DriverStation.ReportError(message, true);
-            }
-        }
-         * */
-        /*
-        public static HALControlWord HALGetControlWord()
-        {
-            //HALControlWord temp = new HALControlWord();
-            uint temp = 0;
-            //GetControlWord(ref temp);
-            return new HALControlWord(temp);
-        }
-         */
-    }
-    /*
-    public struct HALControlWord
-    {
-        private uint _wordData;
-
-        public HALControlWord(uint data)
-        {
-            _wordData = data;
-        }
-
-        public bool GetEnabled()
-        {
-            return (_wordData & (1 << 1 - 1)) != 0;
-        }
-
-        public bool GetAutonomous()
-        {
-            return (_wordData & (1 << 2 - 1)) != 0;
-        }
-
-        public bool GetTest()
-        {
-            return (_wordData & (1 << 3 - 1)) != 0;
-        }
-
-        public bool GetEStop()
-        {
-            return (_wordData & (1 << 4 - 1)) != 0;
-        }
-
-        public bool GetFMSAttached()
-        {
-            return (_wordData & (1 << 5 - 1)) != 0;
-        }
-
-        public bool GetDSAttached()
-        {
-            return (_wordData & (1 << 6 - 1)) != 0;
-        }
-    }
-     * */
 }
