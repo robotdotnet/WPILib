@@ -20,6 +20,6 @@ Once you are ready to go please follow these instructions:
 	* Disabled - No software downloaded on your machine, or no connection to the RoboRIO has been made.
 
 Updating Software on the RoboRIO
-================================
+--------------------------------
 
 If you would like to update the software on the RoboRIO, please follow the instructions above. If you are not connected to the internet, skip instructions 2 and 4. Note if you have not done the download steps beforehand, you will not be able to install the software onto the RoboRIO until you have an internet connects. We will be adding an import and export button at some point to make this requirement less restrcting. For now, if you need to download the files on another system, contact us and we will give instructions on where to place the files.

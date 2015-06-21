@@ -11,7 +11,7 @@ Welcome to RobotDotNet's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 2
    
    getting_started
    

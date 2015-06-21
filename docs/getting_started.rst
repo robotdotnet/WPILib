@@ -6,7 +6,7 @@ Getting Started
 Please note that we currently only have documentation for C#. VB support has been minimally tested, but it should work. A basic IterativeRobot template is currently included in the extension to get started.
 
 Online Installation
-======================
+-------------------
 
 RobotDotNet can be compiled using Mono on Linux and Mac OSX, but is currently best supported using Windows and Visual Studio. Here's how to get started.
 
@@ -18,7 +18,7 @@ Now that your RoboRIO has been setup, and the FRC extensions have been installed
 
 
 Manual Installation
-===================
+-------------------
 
 If you do not have an active internet connection on your dev system, you can download an offline version of the FRC Extensions `here <>`.
 
@@ -31,7 +31,7 @@ Now that your RoboRIO has been setup, and the FRC extensions have been installed
 
 
 Upgrading the Extension
-=======================
+-----------------------
 
 If your developer system is connected to the internet, you can install updates to the extention using the Tools | Extensions and Updates utility. If updates are available, they will show up in the Updates section.
 
