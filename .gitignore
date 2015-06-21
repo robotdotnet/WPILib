@@ -17,6 +17,10 @@ bld/
 [Bb]in/
 [Oo]bj/
 
+_build/
+_static/
+_templates/
+
 #Sandcastle Output
 Sandcastle/Help/
 

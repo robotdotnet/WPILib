@@ -9,84 +9,6 @@ using static HAL_Simulator.SimData;
 
 namespace HAL_Simulator
 {
-    /*
-    public enum HALAllianceStationID
-    {
-// ReSharper disable InconsistentNaming
-        kHALAllianceStationID_red1,
-
-
-        kHALAllianceStationID_red2,
-
-        kHALAllianceStationID_red3,
-
-        kHALAllianceStationID_blue1,
-
-        kHALAllianceStationID_blue2,
-
-        kHALAllianceStationID_blue3,
-// ReSharper restore InconsistentNaming
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALJoystickAxes
-    {
-        /// unsigned short
-        public ushort count;
-
-        /// short[12]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = System.Runtime.InteropServices.UnmanagedType.I2)]
-        public short[] axes;
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALJoystickPOVs
-    {
-        /// unsigned short
-        public ushort count;
-
-        /// short[12]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValArray, SizeConst = 12, ArraySubType = System.Runtime.InteropServices.UnmanagedType.I2)]
-        public short[] povs;
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    public struct HALJoystickButtons
-    {
-        /// unsigned int
-        public uint buttons;
-
-        /// byte
-        public byte count;
-    }
-
-    [System.Runtime.InteropServices.StructLayoutAttribute(System.Runtime.InteropServices.LayoutKind.Sequential, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
-    public struct HALJoystickDescriptor
-    {
-        /// byte
-        public byte isXbox;
-
-        /// byte
-        public byte type;
-
-        /// char[256]
-        [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string name;
-
-        /// byte
-        public byte axisCount;
-
-        /// byte
-        public byte axisTypes;
-
-        /// byte
-        public byte buttonCount;
-
-        /// byte
-        public byte povCount;
-    }
-     * */
-
     public class HAL
     {
         public static IntPtr getPort(byte pin)
@@ -162,17 +84,17 @@ namespace HAL_Simulator
             d[5] = h["ds_attached"];
 
             int r = 0;
-            for(int i = 0; i < d.Length; i++)
+            for (int i = 0; i < d.Length; i++)
             {
                 if (d[i])
                 {
                     r |= 1 << (d.Length - i);
                 }
             }
-        
 
 
-            data = new HALControlWord((uint)r);
+
+            data = new HALControlWord((uint) r);
             return 0;
         }
 
@@ -185,14 +107,14 @@ namespace HAL_Simulator
         {
             axes.axes = new HALJoystickAxesArray();
             var joyData = halData["joysticks"][joystickNum]["axes"];
-            for(short i = 0; i < joyData.Length; i++)
+            for (short i = 0; i < joyData.Length; i++)
             {
                 int tmp = 0;
                 if (joyData[i] < 0)
                     tmp = joyData[i]*128;
                 else
                     tmp = joyData[i]*127;
-                axes.axes[i] = (short)tmp;
+                axes.axes[i] = (short) tmp;
             }
             axes.count = 12; //Need to make this netter.
             return 0;
@@ -243,8 +165,8 @@ namespace HAL_Simulator
             }
             else
             {
-                return ((Hooks.GetFPGATime() - matchStart) /
-                1000000.0);
+                return ((Hooks.GetFPGATime() - matchStart)/
+                        1000000.0);
             }
         }
 
@@ -288,7 +210,7 @@ namespace HAL_Simulator
                 }
             });
 
-            timer.Start(); 
+            timer.Start();
 
             return 1;
         }
@@ -322,22 +244,22 @@ namespace HAL_Simulator
 
         public static void NumericArrayResize()
         {
-            
+
         }
 
         public static void RTSetCleanupProc()
         {
-            
+
         }
 
         public static void EDVR_CreateReference()
         {
-            
+
         }
 
         public static void Occur()
         {
-            
+
         }
 
 
@@ -345,4 +267,5 @@ namespace HAL_Simulator
         {
             return 0;
         }
+    }
 }
