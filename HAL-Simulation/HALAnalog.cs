@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Web.UI.WebControls;
 using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
@@ -35,9 +36,12 @@ namespace HAL_Simulator
         internal const int NO_AVAILABLE_RESOURCES = -1004;
 
         internal const int AccumulatorNumChannels = 2;
-        internal static readonly int[] AccumulatorChannels = {0, 1};
+        internal static readonly int[] AccumulatorChannels = { 0, 1 };
 
         internal const int ANALOG_TRIGGER_PULSE_OUTPUT_ERROR = -1011;
+        internal const int ANALOG_TRIGGER_LIMIT_ORDER_ERROR = -1010;
+
+        internal const int INCOMPATIBLE_STATE = 1015;
 
         public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
         {
@@ -160,7 +164,7 @@ namespace HAL_Simulator
 
             var LSBWeight = getAnalogLSBWeight(analog_port_pointer, ref status);
             var offset = getAnalogOffset(analog_port_pointer, ref status);
-            return (int) ((voltage + offset*1.0e-9)/(LSBWeight*1.0e-9));
+            return (int)((voltage + offset * 1.0e-9) / (LSBWeight * 1.0e-9));
         }
 
         public static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
@@ -254,8 +258,9 @@ namespace HAL_Simulator
                     cnt["port"] = pt;
                     AnalogTrigger trig = new AnalogTrigger()
                     {
+                        portPtr = port_pointer,
                         port = pt,
-                        index = (uint) i,
+                        index = (uint)i,
                     };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
                     Marshal.StructureToPtr(trig, ptr, true);
@@ -263,7 +268,7 @@ namespace HAL_Simulator
                 }
             }
             status = NO_AVAILABLE_RESOURCES;
-            return  IntPtr.Zero;
+            return IntPtr.Zero;
         }
 
         public static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
@@ -272,55 +277,115 @@ namespace HAL_Simulator
             halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["initialized"] = false;
         }
 
+        public static void setAnalogTriggerLimitsRaw(IntPtr analog_trigger_pointer, int lower, int upper, ref int status)
+        {
+            if (lower > upper)
+            {
+                status = ANALOG_TRIGGER_LIMIT_ORDER_ERROR;
+            }
+            else
+            {
+                status = 0;
+                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_lower"] = lower;
+                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_upper"] = upper;
+            }
+        }
 
-        /// Return Type: void
-        ///analog_trigger_pointer: void*
-        ///lower: int
-        ///upper: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogTriggerLimitsRaw")]
-        public static extern void setAnalogTriggerLimitsRaw(IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
+        public static void setAnalogTriggerLimitsVoltage(IntPtr analog_trigger_pointer, double lower,
+            double upper, ref int status)
+        {
+            if (lower > upper)
+            {
+                status = ANALOG_TRIGGER_LIMIT_ORDER_ERROR;
+            }
+            else
+            {
+                status = 0;
+                var port = GetAnalogTrigger(analog_trigger_pointer).portPtr;
+                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_lower"] = getAnalogVoltsToValue(port, lower, ref status);
+                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_upper"] = getAnalogVoltsToValue(port, upper, ref status);
+            }
+        }
 
+        public static void setAnalogTriggerAveraged(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status)
+        {
+            var trigPort = GetAnalogTrigger(analog_trigger_pointer);
+            if (halData["analog_trigger"][trigPort.index]["trig_type"] == "filtered")
+            {
+                status = INCOMPATIBLE_STATE;
+            }
+            else
+            {
+                status = 0;
+                string val = useAveragedValue ? "averaged" : null;
+                halData["analog_trigger"][trigPort.index]["trig_type"] = val;
+            }
+        }
 
-        /// Return Type: void
-        ///analog_trigger_pointer: void*
-        ///lower: double
-        ///upper: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogTriggerLimitsVoltage")]
-        public static extern void setAnalogTriggerLimitsVoltage(IntPtr analog_trigger_pointer, double lower, double upper, ref int status);
+        public static void setAnalogTriggerFiltered(IntPtr analog_trigger_pointer,
+            bool useFilteredValue, ref int status)
+        {
+            var trigPort = GetAnalogTrigger(analog_trigger_pointer);
+            if (halData["analog_trigger"][trigPort.index]["trig_type"] == "averaged")
+            {
+                status = INCOMPATIBLE_STATE;
+            }
+            else
+            {
+                status = 0;
+                string val = useFilteredValue ? "filtered" : null;
+                halData["analog_trigger"][trigPort.index]["trig_type"] = val;
+            }
+        }
 
+        private static dynamic getTriggerValue(AnalogTrigger trigger)
+        {
+            var ain = halData["analog_in"][trigger.port.pin];
+            var atr = halData["analog_trigger"][trigger.index];
+            var trigType = atr["trig_type"];
+            if (trigType == null)
+            {
+                return ain["value"];
+            }
+            if (trigType == "averaged")
+            {
+                return ain["avg_value"];
+            }
+            if (trigType == "filtered")
+            {
+                return ain["value"];
+            }
+            throw new ArgumentOutOfRangeException(nameof(trigger), "Analog Trigger must be either filtered, averaged or null.");
 
-        /// Return Type: void
-        ///analog_trigger_pointer: void*
-        ///useAveragedValue: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogTriggerAveraged")]
-        public static extern void setAnalogTriggerAveraged(IntPtr analog_trigger_pointer, [MarshalAs(UnmanagedType.I1)] bool useAveragedValue, ref int status);
+        }
 
+        public static bool getAnalogTriggerInWindow(IntPtr analog_trigger_pointer, ref int status)
+        {
+            status = 0;
+            var trig = GetAnalogTrigger(analog_trigger_pointer);
+            var val = getTriggerValue(trig);
+            var atr = halData["analog_trigger"][trig.index];
+            return val >= atr["trig_lower"] && val <= atr["trig_upper"];
+        }
 
-        /// Return Type: void
-        ///analog_trigger_pointer: void*
-        ///useFilteredValue: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogTriggerFiltered")]
-        public static extern void setAnalogTriggerFiltered(IntPtr analog_trigger_pointer, [MarshalAs(UnmanagedType.I1)] bool useFilteredValue, ref int status);
-
-
-        /// Return Type: boolean
-        ///analog_trigger_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogTriggerInWindow")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getAnalogTriggerInWindow(IntPtr analog_trigger_pointer, ref int status);
-
-
-        /// Return Type: boolean
-        ///analog_trigger_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogTriggerTriggerState")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getAnalogTriggerTriggerState(IntPtr analog_trigger_pointer, ref int status);
+        public static bool getAnalogTriggerTriggerState(IntPtr analog_trigger_pointer, ref int status)
+        {
+            status = 0;
+            var trig = GetAnalogTrigger(analog_trigger_pointer);
+            var val = getTriggerValue(trig);
+            var atr = halData["analog_trigger"][trig.index];
+            if (val < atr["trig_lower"])
+            {
+                atr["trig_state"] = false;
+                return false;
+            }
+            if (val > atr["trig_upper"])
+            {
+                atr["trig_state"] = true;
+                return true;
+            }
+            return atr["trig_state"];
+        }
 
 
         public static bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status)

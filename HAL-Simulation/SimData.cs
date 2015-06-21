@@ -163,7 +163,7 @@ namespace HAL_Simulator
             {
                 {"has_source", new IN(false) },
                 {"initialized", new OUT(false) },
-                {"port", new OUT(0) },
+                {"port", new OUT(null) },
                 {"trig_lower",  new OUT(null)},
                 {"trig_upper",  new OUT(null)},
                 {"trig_type",   new OUT(null)},

@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -43,6 +44,7 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct AnalogTrigger
     {
+        public IntPtr portPtr;
         public Port port;
         public uint index;
     }
