@@ -1,44 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace HAL_Base
 {
-    
-
     public partial class HAL
     {
-        //public const uint dio_kNumSystems;//Find Value
-        public const uint solenoid_kNumDO7_0Elements = 8;
-        //public const uint interrupt_kNumSystems ;//Find value
-        public const uint kSystemClockTicksPerMicrosecond = 40;
+        /// <summary>
+        /// This contains all of the HAL Constants
+        /// </summary>
+        public class Constants
+        {
+            //public const uint dio_kNumSystems;//Find Value
+            public const uint solenoid_kNumDO7_0Elements = 8;
+            //public const uint interrupt_kNumSystems ;//Find value
+            public const uint kSystemClockTicksPerMicrosecond = 40;
+        }
 
-        public const string HALSim = "HAL-Simulation.dll";
-        public const string HALRIO = "/home/lvuser/mono/HAL-RoboRIO.dll";
+        
+        //These strings are the location of the HAL DLLs used for reflection.
+        //Since these are provided by the NuGet package, they will usually be
+        //located in the executable directory
+        private const string HALSim = "HAL-Simulation.dll";
+        private const string HALRIO = "HAL-RoboRIO.dll";
 
-
+        //This contains the HAL Assembly, if we need to reference it for values later.
         internal static Assembly HALAssembly;
+
+        //We use this so we can call initialize multiple times, without it crashing with itself
+        private static bool s_initialized = false;
+        //Makes it so if we call initialize from different threads, its safe.
+        private static object s_lockObject = new object();
 
         /// <summary>
         /// Gets or Sets if the code is in simulation mode
         /// </summary>
         public static bool IsSimulation { get; set; } = false;
 
-        public static string GetErrorMessage(int code)
-        {
-            return Marshal.PtrToStringAnsi(GetHALErrorMessage(code));
-        }
+        //These are used to get us a copy of the dictionary from the simulator.
+        //This is so we can debug it, because we cannot look at private members
+        //of a reflected assembly.
+        public delegate void GetData(out Dictionary<dynamic, dynamic> a, out Dictionary<dynamic, dynamic> b);
 
-        public static int SetErrorData(string errors, int waitMs)
-        {
-            return HALSetErrorData(errors, errors.Length, waitMs);
-        }
+        public static Dictionary<dynamic, dynamic> halData;
+        public static Dictionary<dynamic, dynamic> halInData;
 
-        private static bool m_initialized = false;
-        private static object m_lockObject = new object();
+
 
         /// <summary>
         /// HAL Initialization. Must be called before any other HAL functions.
@@ -48,10 +57,10 @@ namespace HAL_Base
         {
             //Lock this function, so that if accidentally called from multiple threads it doesnt
             //get m_initialized at the wrong value.
-            lock (m_lockObject)
+            lock (s_lockObject)
             {
                 // We don't want to initialize more then once.
-                if (m_initialized) return;
+                if (s_initialized) return;
 
                 HALAssembly = Assembly.LoadFrom(IsSimulation ? HALSim : HALRIO);
 
@@ -98,14 +107,32 @@ namespace HAL_Base
                     data(out halData, out halInData);
 
                 }
-                m_initialized = true;
+                s_initialized = true;
             }
         }
 
-        public delegate void GetData(out Dictionary<dynamic, dynamic> a, out Dictionary<dynamic, dynamic> b);
+        
 
-        public static Dictionary<dynamic, dynamic> halData;
-        public static Dictionary<dynamic, dynamic> halInData;
+        /// <summary>
+        /// Returns the string for the error message for the give code.
+        /// </summary>
+        /// <param name="code">The Error Code</param>
+        /// <returns>The Error String</returns>
+        public static string GetErrorMessage(int code)
+        {
+            return Marshal.PtrToStringAnsi(GetHALErrorMessage(code));
+        }
+
+        /// <summary>
+        /// Writes Error Data to the driver station.
+        /// </summary>
+        /// <param name="errors"></param>
+        /// <param name="waitMs"></param>
+        /// <returns></returns>
+        public static int SetErrorData(string errors, int waitMs)
+        {
+            return HALSetErrorData(errors, errors.Length, waitMs);
+        }
 
         public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
             string feature = null)
@@ -131,6 +158,10 @@ namespace HAL_Base
             return HALReport(resource, instanceNumber, context, feature);
         }
         
+        /// <summary>
+        /// Gets the HAL Control Word
+        /// </summary>
+        /// <returns></returns>
         public static HALControlWord GetControlWord()
         {
             HALControlWord temp = new HALControlWord();

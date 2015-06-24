@@ -3,6 +3,7 @@ using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
 using static HAL_Base.HALCanTalonSRX;
+using static HAL_Base.HALCanTalonSRX.Constants;
 using static WPILib.Utility;
 
 namespace WPILib

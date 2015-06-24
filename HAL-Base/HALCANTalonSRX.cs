@@ -4,40 +4,44 @@ namespace HAL_Base
 
     public partial class HALCanTalonSRX
     {
-        public const int kDefaultControlPeriodMs = 10; //!< default control update rate is 10ms.
-        /* mode select enumerations */
-        public const int kMode_DutyCycle = 0; //!< Demand is 11bit signed duty cycle [-1023,1023].
-        public const int kMode_PositionCloseLoop = 1; //!< Position PIDF.
-        public const int kMode_VelocityCloseLoop = 2; //!< Velocity PIDF.
-        public const int kMode_CurrentCloseLoop = 3; //!< Current close loop - not done.
-        public const int kMode_VoltCompen = 4; //!< Voltage Compensation Mode - not done.  Demand is fixed pt target 8.8 volts.
-        public const int kMode_SlaveFollower = 5; //!< Demand is the 6 bit Device ID of the 'master' TALON SRX.
-        public const int kMode_NoDrive = 15; //!< Zero the output (honors brake/coast) regardless of demand.  Might be useful if we need to change modes but can't atomically change all the signals we want in between.
-        /* limit switch enumerations */
-        public const int kLimitSwitchOverride_UseDefaultsFromFlash = 1;
-        public const int kLimitSwitchOverride_DisableFwd_DisableRev = 4;
-        public const int kLimitSwitchOverride_DisableFwd_EnableRev = 5;
-        public const int kLimitSwitchOverride_EnableFwd_DisableRev = 6;
-        public const int kLimitSwitchOverride_EnableFwd_EnableRev = 7;
-        /* brake override enumerations */
-        public const int kBrakeOverride_UseDefaultsFromFlash = 0;
-        public const int kBrakeOverride_OverrideCoast = 1;
-        public const int kBrakeOverride_OverrideBrake = 2;
-        /* feedback device enumerations */
-        public const int kFeedbackDev_DigitalQuadEnc = 0;
-        public const int kFeedbackDev_AnalogPot = 2;
-        public const int kFeedbackDev_AnalogEncoder = 3;
-        public const int kFeedbackDev_CountEveryRisingEdge = 4;
-        public const int kFeedbackDev_CountEveryFallingEdge = 5;
-        public const int kFeedbackDev_PosIsPulseWidth = 8;
-        /* ProfileSlotSelect enumerations*/
-        public const int kProfileSlotSelect_Slot0 = 0;
-        public const int kProfileSlotSelect_Slot1 = 1;
-        /* status frame rate types */
-        public const int kStatusFrame_General = 0;
-        public const int kStatusFrame_Feedback = 1;
-        public const int kStatusFrame_Encoder = 2;
-        public const int kStatusFrame_AnalogTempVbat = 3;
+        public class Constants
+        {
+
+            public const int kDefaultControlPeriodMs = 10; //!< default control update rate is 10ms.
+                                                           /* mode select enumerations */
+            public const int kMode_DutyCycle = 0; //!< Demand is 11bit signed duty cycle [-1023,1023].
+            public const int kMode_PositionCloseLoop = 1; //!< Position PIDF.
+            public const int kMode_VelocityCloseLoop = 2; //!< Velocity PIDF.
+            public const int kMode_CurrentCloseLoop = 3; //!< Current close loop - not done.
+            public const int kMode_VoltCompen = 4; //!< Voltage Compensation Mode - not done.  Demand is fixed pt target 8.8 volts.
+            public const int kMode_SlaveFollower = 5; //!< Demand is the 6 bit Device ID of the 'master' TALON SRX.
+            public const int kMode_NoDrive = 15; //!< Zero the output (honors brake/coast) regardless of demand.  Might be useful if we need to change modes but can't atomically change all the signals we want in between.
+                                                 /* limit switch enumerations */
+            public const int kLimitSwitchOverride_UseDefaultsFromFlash = 1;
+            public const int kLimitSwitchOverride_DisableFwd_DisableRev = 4;
+            public const int kLimitSwitchOverride_DisableFwd_EnableRev = 5;
+            public const int kLimitSwitchOverride_EnableFwd_DisableRev = 6;
+            public const int kLimitSwitchOverride_EnableFwd_EnableRev = 7;
+            /* brake override enumerations */
+            public const int kBrakeOverride_UseDefaultsFromFlash = 0;
+            public const int kBrakeOverride_OverrideCoast = 1;
+            public const int kBrakeOverride_OverrideBrake = 2;
+            /* feedback device enumerations */
+            public const int kFeedbackDev_DigitalQuadEnc = 0;
+            public const int kFeedbackDev_AnalogPot = 2;
+            public const int kFeedbackDev_AnalogEncoder = 3;
+            public const int kFeedbackDev_CountEveryRisingEdge = 4;
+            public const int kFeedbackDev_CountEveryFallingEdge = 5;
+            public const int kFeedbackDev_PosIsPulseWidth = 8;
+            /* ProfileSlotSelect enumerations*/
+            public const int kProfileSlotSelect_Slot0 = 0;
+            public const int kProfileSlotSelect_Slot1 = 1;
+            /* status frame rate types */
+            public const int kStatusFrame_General = 0;
+            public const int kStatusFrame_Feedback = 1;
+            public const int kStatusFrame_Encoder = 2;
+            public const int kStatusFrame_AnalogTempVbat = 3;
+        }
 
         public enum ParamID
         {
