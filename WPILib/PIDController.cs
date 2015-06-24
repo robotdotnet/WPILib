@@ -119,7 +119,7 @@ namespace WPILib
             controller.Calculate();
         }
 
-        private void Calculate()
+        protected virtual void Calculate()
         {
             bool enabled;
             IPIDSource pidInput;

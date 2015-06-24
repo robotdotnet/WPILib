@@ -1093,24 +1093,31 @@ namespace WPILib
             if (m_controlEnabled)
             {
                 m_setPoint = value;
+                CTR_Code status = CTR_Code.CTR_OKAY;
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
                         C_TalonSRX_SetDemand(m_impl, (int) (value*1023));
+                        status = CTR_Code.CTR_OKAY;
                         break;
                     case ControlMode.Voltage:
                         int volts = (int) (value*256);
-                        C_TalonSRX_SetDemand(m_impl, volts);
+                        status = C_TalonSRX_SetDemand(m_impl, volts);
                         break;
                     case ControlMode.Position:
                     case ControlMode.Speed:
                     case ControlMode.Follower:
-                        C_TalonSRX_SetDemand(m_impl, (int) value);
+                        status = C_TalonSRX_SetDemand(m_impl, (int) value);
                         break;
+                    case ControlMode.Current:
                     default:
+                        status = CTR_Code.CTR_OKAY;
                         break;
                 }
-                C_TalonSRX_SetModeSelect(m_impl, (int) MotorControlMode);
+                CheckStatus((int)status);
+                status = C_TalonSRX_SetModeSelect(m_impl, (int) MotorControlMode);
+                CheckStatus((int)status);
+
             }
         }
 
@@ -1129,6 +1136,7 @@ namespace WPILib
                     return value;
                 case ControlMode.Current:
                     return OutputCurrent;
+                case ControlMode.Follower:
                 case ControlMode.PercentVbus:
                 default:
                     C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
@@ -1155,36 +1163,43 @@ namespace WPILib
             ControlEnabled = false;
         }
 
+        ///<inheritdoc/>
         public void UpdateTable()
         {
             Table?.PutNumber("Value", Get());
         }
 
+        ///<inheritdoc/>
         public void StartLiveWindowMode()
         {
             Set(0.0);
             Table.AddTableListener("Value", this, true);
         }
 
+        ///<inheritdoc/>
         public void StopLiveWindowMode()
         {
             Set(0.0);
             Table.RemoveTableListener(this);
         }
 
+        ///<inheritdoc/>
         public string SmartDashboardType => "Speed Controller";
 
+        ///<inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
             Set((double)value);
         }
 
+        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
 
+        ///<inheritdoc/>
         public ITable Table { get; private set; }
     }
 }
