@@ -99,9 +99,9 @@ namespace WPILib
             return GetRawAxis(m_axes[(int)AxisType.Z]);
         }
 
-        public override double Twist => GetRawAxis(m_axes[(int) AxisType.Twist]);
+        public override double GetTwist() => GetRawAxis(m_axes[(int) AxisType.Twist]);
 
-        public override double Throttle => GetRawAxis(m_axes[(int) AxisType.Throttle]);
+        public override double GetThrottle() => GetRawAxis(m_axes[(int) AxisType.Throttle]);
 
         public override double GetRawAxis(int axis)
         {
@@ -119,9 +119,9 @@ namespace WPILib
                 case AxisType.Z:
                     return GetZ();
                 case AxisType.Twist:
-                    return Twist;
+                    return GetTwist();
                 case AxisType.Throttle:
-                    return Throttle;
+                    return GetThrottle();
                 default:
                     return 0.0;
             }

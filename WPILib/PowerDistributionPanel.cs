@@ -1,63 +1,75 @@
-﻿using HAL_Base;
-using NetworkTables.Tables;
+﻿using NetworkTables.Tables;
 using WPILib.LiveWindows;
+using static HAL_Base.HALPDP;
 
 namespace WPILib
 {
     public class PowerDistributionPanel : SensorBase, ILiveWindowSendable
     {
+        private readonly int m_module = 0;
+
+        public PowerDistributionPanel(int module)
+        {
+            m_module = module;
+            CheckPDPModule(m_module);
+            InitializePDP(m_module);
+        }
+
+        public PowerDistributionPanel() : this(0)
+        { }
+
         public double GetVoltage()
         {
             int status = 0;
-            double value = HALPDP.GetPDPVoltage(ref status);
+            double value = GetPDPVoltage(ref status, (byte)m_module);
             return value;
         }
 
         public double GetTemperature()
         {
             int status = 0;
-            double value = HALPDP.GetPDPTemperature(ref status);
+            double value = GetPDPTemperature(ref status, (byte)m_module);
             return value;
         }
 
         public double GetCurrent(int channel)
         {
             int status = 0;
-            double value = HALPDP.GetPDPChannelCurrent((byte)channel, ref status);
+            double value = GetPDPChannelCurrent((byte)channel, ref status, (byte)m_module);
             return value;
         }
 
         public double GetTotalCurrent()
         {
             int status = 0;
-            double value = HALPDP.GetPDPTotalCurrent(ref status);
+            double value = GetPDPTotalCurrent(ref status, (byte)m_module);
             return value;
         }
 
         public double GetTotalPower()
         {
             int status = 0;
-            double value = HALPDP.GetPDPTotalPower(ref status);
+            double value = GetPDPTotalPower(ref status, (byte)m_module);
             return value;
         }
 
         public double GetTotalEnergy()
         {
             int status = 0;
-            double value = HALPDP.GetPDPTotalEnergy(ref status);
+            double value = GetPDPTotalEnergy(ref status, (byte)m_module);
             return value;
         }
 
         public void ResetEnergyTotal()
         {
             int status = 0;
-            HALPDP.ResetPDPTotalEnergy(ref status);
+            ResetPDPTotalEnergy(ref status, (byte)m_module);
         }
 
         public void ClearStickyFaults()
         {
             int status = 0;
-            HALPDP.ClearPDPStickyFaults(ref status);
+            ClearPDPStickyFaults(ref status, (byte)m_module);
         }
 
         ///<inheritdoc />

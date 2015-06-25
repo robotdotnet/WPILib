@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace HAL_Base
 {
@@ -19,6 +20,7 @@ namespace HAL_Base
             var types = HAL.HALAssembly.GetTypes();
             var q = from t in types where t.IsClass && t.Name == className select t;
             Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+            InitializePDP = (InitializePDPDelegate)Delegate.CreateDelegate(typeof (InitializePDPDelegate), type.GetMethod("initializePDP"));
             GetPDPTemperature = (GetPDPTemperatureDelegate)Delegate.CreateDelegate(typeof(GetPDPTemperatureDelegate), type.GetMethod("getPDPTemperature"));
             GetPDPVoltage = (GetPDPVoltageDelegate)Delegate.CreateDelegate(typeof(GetPDPVoltageDelegate), type.GetMethod("getPDPVoltage"));
             GetPDPChannelCurrent = (GetPDPChannelCurrentDelegate)Delegate.CreateDelegate(typeof(GetPDPChannelCurrentDelegate), type.GetMethod("getPDPChannelCurrent"));
@@ -29,28 +31,31 @@ namespace HAL_Base
             ClearPDPStickyFaults = (ClearPDPStickyFaultsDelegate)Delegate.CreateDelegate(typeof(ClearPDPStickyFaultsDelegate), type.GetMethod("clearPDPStickyFaults"));
         }
 
-        public delegate double GetPDPTemperatureDelegate(ref int status);
+        public delegate void InitializePDPDelegate(int module);
+        public static InitializePDPDelegate InitializePDP;
+
+        public delegate double GetPDPTemperatureDelegate(ref int status, byte module);
         public static GetPDPTemperatureDelegate GetPDPTemperature;
 
-        public delegate double GetPDPVoltageDelegate(ref int status);
+        public delegate double GetPDPVoltageDelegate(ref int status, byte module);
         public static GetPDPVoltageDelegate GetPDPVoltage;
 
-        public delegate double GetPDPChannelCurrentDelegate(byte channel, ref int status);
+        public delegate double GetPDPChannelCurrentDelegate(byte channel, ref int status, byte module);
         public static GetPDPChannelCurrentDelegate GetPDPChannelCurrent;
 
-        public delegate double GetPDPTotalCurrentDelegate(ref int status);
+        public delegate double GetPDPTotalCurrentDelegate(ref int status, byte module);
         public static GetPDPTotalCurrentDelegate GetPDPTotalCurrent;
 
-        public delegate double GetPDPTotalPowerDelegate(ref int status);
+        public delegate double GetPDPTotalPowerDelegate(ref int status, byte module);
         public static GetPDPTotalPowerDelegate GetPDPTotalPower;
 
-        public delegate double GetPDPTotalEnergyDelegate(ref int status);
+        public delegate double GetPDPTotalEnergyDelegate(ref int status, byte module);
         public static GetPDPTotalEnergyDelegate GetPDPTotalEnergy;
 
-        public delegate void ResetPDPTotalEnergyDelegate(ref int status);
+        public delegate void ResetPDPTotalEnergyDelegate(ref int status, byte module);
         public static ResetPDPTotalEnergyDelegate ResetPDPTotalEnergy;
 
-        public delegate void ClearPDPStickyFaultsDelegate(ref int status);
+        public delegate void ClearPDPStickyFaultsDelegate(ref int status, byte module);
         public static ClearPDPStickyFaultsDelegate ClearPDPStickyFaults;
     }
 }

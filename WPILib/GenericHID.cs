@@ -68,13 +68,13 @@
         /// Get the twist value
         /// </summary>
         /// <value>The twist value</value>
-        public abstract double Twist { get; }
+        public abstract double GetTwist();// { get; }
 
         /// <summary>
         /// Get the Throttle Value
         /// </summary>
         /// <value>The Trottle Value</value>
-        public abstract double Throttle { get; }
+        public abstract double GetThrottle();// { get; }
 
         /// <summary>
         /// Get the raw axis

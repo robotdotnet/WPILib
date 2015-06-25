@@ -25,6 +25,8 @@ namespace WPILib
 
         public const int PDPChannels = 16;
 
+        public const int PDPModules = 63;
+
         private static int s_defaultSolenoidModule = 0;
 
         /// <summary>
@@ -124,6 +126,15 @@ namespace WPILib
             {
                 throw new IndexOutOfRangeException("Requested PDP channel number is out of range.");
             }
+        }
+
+        protected static void CheckPDPModule(int module)
+        {
+            if (module < 0 || module > PDPModules)
+            {
+                throw new IndexOutOfRangeException("Requested PDP module number is out of range.");
+            }
+
         }
 
         /// <summary>

@@ -24,7 +24,7 @@ namespace HAL_Base
         //Since these are provided by the NuGet package, they will usually be
         //located in the executable directory
         private const string HALSim = "HAL-Simulation.dll";
-        private const string HALRIO = "HAL-RoboRIO.dll";
+        private const string HALRIO = "/home/lvuser/mono/HAL-RoboRIO.dll";
 
         //This contains the HAL Assembly, if we need to reference it for values later.
         internal static Assembly HALAssembly;
