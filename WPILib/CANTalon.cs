@@ -8,7 +8,7 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
-    public class CANTalon : IMotorSafety, ICANSpeedController, ILiveWindowSendable, ITableListener, IDisposable
+    public class CANTalon : IMotorSafety, ICANSpeedController, IPIDInterface, ILiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;
 
@@ -42,6 +42,8 @@ namespace WPILib
         private bool m_controlEnabled;
         private int m_profile;
         private double m_setPoint;
+        private double m_minimumInput;
+        private double m_maximumInput;
 
 
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
@@ -196,54 +198,39 @@ namespace WPILib
             return state != 0;
         }
 
-        public double Temperature
+        public double GetTemperature()
         {
-            get
-            {
-                double temp = 0.0;
-                C_TalonSRX_GetTemp(m_impl, ref temp);
-                return temp;
-            }
+            double temp = 0.0;
+            C_TalonSRX_GetTemp(m_impl, ref temp);
+            return temp;
         }
 
-        public double OutputCurrent
+        public double GetOutputCurrent()
         {
-            get
-            {
-                double current = 0.0;
-                C_TalonSRX_GetCurrent(m_impl, ref current);
-                return current;
-            }
+            double current = 0.0;
+            C_TalonSRX_GetCurrent(m_impl, ref current);
+            return current;
         }
 
-        public double OutputVoltage
+        public double GetOutputVoltage()
         {
-            get
-            {
-                int throttle = 0;
-                C_TalonSRX_GetAppliedThrottle(m_impl, ref throttle);
-                return BusVoltage * (throttle / 1023.0);
-            }
+            int throttle = 0;
+            C_TalonSRX_GetAppliedThrottle(m_impl, ref throttle);
+            return GetBusVoltage()*(throttle/1023.0);
         }
 
-        public double BusVoltage
+        public double GetBusVoltage()
         {
-            get
-            {
-                double voltage = 0.0;
-                C_TalonSRX_GetBatteryV(m_impl, ref voltage);
-                return voltage;
-            }
+            double voltage = 0.0;
+            C_TalonSRX_GetBatteryV(m_impl, ref voltage);
+            return voltage;
         }
 
-        public double Position
+        public double GetPosition()
         {
-            get
-            {
-                int pos = 0;
-                C_TalonSRX_GetSensorPosition(m_impl, ref pos);
-                return pos;
-            }
+            int pos = 0;
+            C_TalonSRX_GetSensorPosition(m_impl, ref pos);
+            return pos;
         }
 
         public void SetPosition(double pos)
@@ -251,114 +238,102 @@ namespace WPILib
             SetParam(ParamID.eSensorPosition, pos);
         }
 
-        public double Speed
+        public double GetSpeed()
         {
-            get
-            {
-                int vel = 0;
-                C_TalonSRX_GetSensorVelocity(m_impl, ref vel);
-                return vel;
-            }
+            int vel = 0;
+            C_TalonSRX_GetSensorVelocity(m_impl, ref vel);
+            return vel;
         }
 
-        public bool ForwardLimitOK
+        public bool GetForwardLimitOK()
         {
-            get
-            {
-                int limSwitch = FaultForwardLimit;
-                int softLim = FaultForwardSoftLimit;
-                return (softLim == 0 && limSwitch == 0);
-            }
+            int limSwitch = FaultForwardLimit;
+            int softLim = FaultForwardSoftLimit;
+            return (softLim == 0 && limSwitch == 0);
         }
 
-        public bool ReverseLimitOK
+        public bool GetReverseLimitOK()
         {
-            get
-            {
-                int limSwitch = FaultReverseLimit;
-                int softLim = FaultReverseSoftLimit;
-                return (softLim == 0 && limSwitch == 0);
-            }
+            int limSwitch = FaultReverseLimit;
+            int softLim = FaultReverseSoftLimit;
+            return (softLim == 0 && limSwitch == 0);
         }
 
-        public Faults Faults
+        public Faults GetFaults()
         {
-            get
+            Faults retVal = 0;
+
+            int val;
+
+            CTR_Code status;
+
+            //Temp
+            val = 0;
+            status = C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
             {
-                Faults retVal = 0;
-
-                int val;
-
-                CTR_Code status;
-
-                //Temp
-                val = 0;
-                status = C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
-
-                if (status != CTR_Code.CTR_OKAY)
-                {
-                    CheckStatus((int)status);
-                }
-
-                retVal |= (val != 0) ? Faults.TemperatureFault : 0;
-
-                //Voltage
-                val = 0;
-                status = C_TalonSRX_GetFault_UnderVoltage(m_impl, ref val);
-
-                if (status != CTR_Code.CTR_OKAY)
-                {
-                    CheckStatus((int)status);
-                }
-
-                retVal |= (val != 0) ? Faults.BusVoltageFault : 0;
-
-                //Fwd Limit Switch
-                val = 0;
-                status = C_TalonSRX_GetFault_ForLim(m_impl, ref val);
-
-                if (status != CTR_Code.CTR_OKAY)
-                {
-                    CheckStatus((int)status);
-                }
-
-                retVal |= (val != 0) ? Faults.FwdLimitSwitch : 0;
-
-                //Rev Limit Switch
-                val = 0;
-                status = C_TalonSRX_GetFault_RevLim(m_impl, ref val);
-
-                if (status != CTR_Code.CTR_OKAY)
-                {
-                    CheckStatus((int)status);
-                }
-
-                retVal |= (val != 0) ? Faults.RevLimitSwitch : 0;
-
-                //Fwd Soft Limit
-                val = 0;
-                status = C_TalonSRX_GetFault_ForSoftLim(m_impl, ref val);
-
-                if (status != CTR_Code.CTR_OKAY)
-                {
-                    CheckStatus((int)status);
-                }
-
-                retVal |= (val != 0) ? Faults.FwdSoftLimit : 0;
-
-                //Rev Soft Limit
-                val = 0;
-                status = C_TalonSRX_GetFault_RevSoftLim(m_impl, ref val);
-
-                if (status != CTR_Code.CTR_OKAY)
-                {
-                    CheckStatus((int)status);
-                }
-
-                retVal |= (val != 0) ? Faults.RevSoftLimit : 0;
-
-                return retVal;
+                CheckStatus((int) status);
             }
+
+            retVal |= (val != 0) ? Faults.TemperatureFault : 0;
+
+            //Voltage
+            val = 0;
+            status = C_TalonSRX_GetFault_UnderVoltage(m_impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                CheckStatus((int) status);
+            }
+
+            retVal |= (val != 0) ? Faults.BusVoltageFault : 0;
+
+            //Fwd Limit Switch
+            val = 0;
+            status = C_TalonSRX_GetFault_ForLim(m_impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                CheckStatus((int) status);
+            }
+
+            retVal |= (val != 0) ? Faults.FwdLimitSwitch : 0;
+
+            //Rev Limit Switch
+            val = 0;
+            status = C_TalonSRX_GetFault_RevLim(m_impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                CheckStatus((int) status);
+            }
+
+            retVal |= (val != 0) ? Faults.RevLimitSwitch : 0;
+
+            //Fwd Soft Limit
+            val = 0;
+            status = C_TalonSRX_GetFault_ForSoftLim(m_impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                CheckStatus((int) status);
+            }
+
+            retVal |= (val != 0) ? Faults.FwdSoftLimit : 0;
+
+            //Rev Soft Limit
+            val = 0;
+            status = C_TalonSRX_GetFault_RevSoftLim(m_impl, ref val);
+
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                CheckStatus((int) status);
+            }
+
+            retVal |= (val != 0) ? Faults.RevSoftLimit : 0;
+
+            return retVal;
         }
 
         private void ApplyControlMode(ControlMode value)
@@ -422,6 +397,8 @@ namespace WPILib
         {
             ControlEnabled = true;
         }
+
+        public void Enable() => ControlEnabled = true;
 
         [Obsolete("Set ControlEnabled property to false instead.")]
         public void DisableControl()
@@ -1127,7 +1104,7 @@ namespace WPILib
             switch (m_controlMode)
             {
                 case ControlMode.Voltage:
-                    return OutputVoltage;
+                    return GetOutputVoltage();
                 case ControlMode.Position:
                     C_TalonSRX_GetSensorPosition(m_impl, ref value);
                     return value;
@@ -1135,7 +1112,7 @@ namespace WPILib
                     C_TalonSRX_GetSensorVelocity(m_impl, ref value);
                     return value;
                 case ControlMode.Current:
-                    return OutputCurrent;
+                    return GetOutputCurrent();
                 case ControlMode.Follower:
                 case ControlMode.PercentVbus:
                 default:
@@ -1149,6 +1126,16 @@ namespace WPILib
         {
             Set(value);
         }
+
+        public void Reset()
+        {
+            Disable();
+            ClearIAccum();
+        }
+
+        public bool Enabled => ControlEnabled;
+
+        public double GetError() => GetClosedLoopError();
 
         public void SelectProfileSlot(int slotIdx)
         {

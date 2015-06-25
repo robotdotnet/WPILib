@@ -107,6 +107,7 @@
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="IMotorSafety.cs" />
+    <Compile Include="IPIDInterface.cs" />
     <Compile Include="IPIDOutput.cs" />
     <Compile Include="IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />

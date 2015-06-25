@@ -79,17 +79,17 @@ namespace WPILib
         double I { set; get; }
         double D { set; get; }
         void SetPID(double p, double i, double d);
-        double BusVoltage { get; }
-        double OutputVoltage { get; }
-        double OutputCurrent { get; }
-        double Temperature { get; }
-        double Position { get; }
-        double Speed { get; }
+        double GetBusVoltage();
+        double GetOutputVoltage();
+        double GetOutputCurrent();
+        double GetTemperature();
+        double GetPosition();
+        double GetSpeed();
 // ReSharper disable InconsistentNaming
-        bool ForwardLimitOK { get; }
-        bool ReverseLimitOK { get; }
+        bool GetForwardLimitOK();
+        bool GetReverseLimitOK();
 // ReSharper restore InconsistentNaming
-        Faults Faults { get; }
+        Faults GetFaults();
         double VoltageRampRate { set; }
         uint FirmwareVersion { get; }
         NeutralMode ConfigNeutralMode { set; }

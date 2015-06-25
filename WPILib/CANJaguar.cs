@@ -9,7 +9,7 @@ using static HAL_Base.HALCAN.Constants;
 
 namespace WPILib
 {
-    public class CANJaguar : IMotorSafety, ICANSpeedController, ITableListener, ILiveWindowSendable, IDisposable
+    public class CANJaguar : IMotorSafety, ICANSpeedController, IPIDInterface, ITableListener, ILiveWindowSendable, IDisposable
     {
 
 // ReSharper disable InconsistentNaming
@@ -344,6 +344,23 @@ namespace WPILib
         public double Get()
         {
             return m_value;
+        }
+
+        public double Setpoint
+        {
+            get
+            {
+                return Get();
+            }
+            set
+            {
+                Set(value);
+            }
+        }
+
+        public double GetError()
+        {
+            return Get() - GetPosition();
         }
 
         public void Set(double value, byte syncGroup)
@@ -941,9 +958,9 @@ namespace WPILib
                 // available ones.
                 SetupPeriodicStatus();
                 //The properties are called just to update their periodic status.
-                var tmp = Temperature;
-                var tmp2 = Position;
-                var tmp3 = Faults;
+                var tmp = GetTemperature();
+                var tmp2 = GetPosition();
+                var tmp3 = GetFaults();
             }
         }
 
@@ -1227,10 +1244,9 @@ namespace WPILib
         }
 
         [Obsolete]
-        public void Disable()
-        {
-            DisableControl();
-        }
+        public void Disable() => DisableControl();
+
+        public bool Enabled => m_controlEnabled;
 
         public void InitTable(ITable subtable)
         {
@@ -1266,6 +1282,19 @@ namespace WPILib
             Set(0.0);
             m_table.RemoveTableListener(this);
         }
+
+        public void Reset()
+        {
+            Set(m_value);
+            DisableControl();
+        }
+
+        public void Enable()
+        {
+            EnableControl();
+        }
+
+        
 
         /**
          * Set the reference source device for position controller mode.
@@ -1742,14 +1771,11 @@ namespace WPILib
         * @return The bus voltage in Volts.
         */
 
-        public double BusVoltage
+        public double GetBusVoltage()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return m_busVoltage;
-            }
+            return m_busVoltage;
         }
 
         /**
@@ -1758,14 +1784,11 @@ namespace WPILib
         * @return The output voltage in Volts.
         */
 
-        public double OutputVoltage
+        public double GetOutputVoltage()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return m_outputVoltage;
-            }
+            return m_outputVoltage;
         }
 
         /**
@@ -1774,14 +1797,11 @@ namespace WPILib
         * @return The output current in Amps.
         */
 
-        public double OutputCurrent
+        public double GetOutputCurrent()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return m_outputCurrent;
-            }
+            return m_outputCurrent;
         }
 
         /**
@@ -1790,14 +1810,11 @@ namespace WPILib
         * @return The temperature of the Jaguar in degrees Celsius.
         */
 
-        public double Temperature
+        public double GetTemperature()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return m_temperature;
-            }
+            return m_temperature;
         }
 
         /**
@@ -1808,14 +1825,11 @@ namespace WPILib
          * @see CANJaguar#configEncoderCodesPerRev(int)
          */
 
-        public double Position
+        public double GetPosition()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return m_position;
-            }
+            return m_position;
         }
 
         /**
@@ -1824,14 +1838,11 @@ namespace WPILib
         * @return The speed of the motor in RPM based on the configured feedback.
         */
 
-        public double Speed
+        public double GetSpeed()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return m_speed;
-            }
+            return m_speed;
         }
 
         /**
@@ -1840,14 +1851,11 @@ namespace WPILib
          * @return true if the motor is allowed to turn in the forward direction.
          */
 
-        public bool ForwardLimitOK
+        public bool GetForwardLimitOK()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return (m_limits & kForwardLimit) != 0;
-            }
+            return (m_limits & kForwardLimit) != 0;
         }
 
         /**
@@ -1856,14 +1864,11 @@ namespace WPILib
          * @return true if the motor is allowed to turn in the reverse direction.
          */
 
-        public bool ReverseLimitOK
+        public bool GetReverseLimitOK()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return (m_limits & kReverseLimit) != 0;
-            }
+            return (m_limits & kReverseLimit) != 0;
         }
 
         /**
@@ -1876,14 +1881,11 @@ namespace WPILib
          * @see #kGateDriverFault
          */
 
-        public Faults Faults
+        public Faults GetFaults()
         {
-            get
-            {
-                UpdatePeriodicStatus();
+            UpdatePeriodicStatus();
 
-                return (Faults) m_faults;
-            }
+            return (Faults) m_faults;
         }
 
         /**

@@ -6,7 +6,7 @@ using WPILib.LiveWindows;
 namespace WPILib
 {
 
-    public class PIDController : IController, ILiveWindowSendable, ITableListener, IDisposable
+    public class PIDController : IController, IPIDInterface, ILiveWindowSendable, ITableListener, IDisposable
     {
         public enum ToleranceType
         {
@@ -351,14 +351,11 @@ namespace WPILib
             }
         }
 
-        public double Error
+        public double GetError()
         {
-            get
+            lock (m_lockObject)
             {
-                lock (m_lockObject)
-                {
-                    return Setpoint - m_ipidInput.PidGet();
-                }
+                return Setpoint - m_ipidInput.PidGet();
             }
         }
 
