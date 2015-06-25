@@ -53,6 +53,18 @@ namespace HAL_RoboRIO
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickDescriptor")]
         public static extern int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
 
+        [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickIsXbox")]
+        public static extern int HALGetJoystickIsXbox(byte joystickNum);
+
+        [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickType")]
+        public static extern int HALGetJoystickType(byte joystickNum);
+
+        [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickName")]
+        public static extern IntPtr HALGetJoystickName(byte joystickNum);
+
+        [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickAxisType")]
+        public static extern int HALGetJoystickAxisType(byte joystickNum, byte axis);
+
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALSetJoystickOutputs")]
         public static extern int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble, ushort rightRumble);
 

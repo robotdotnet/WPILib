@@ -192,6 +192,21 @@ namespace WPILib
             m_axes[(int)axis] = (byte)channel;
         }
 
+        public bool GetIsXbox()
+        {
+            return m_ds.GetJoystickIsXbox(m_port);
+        }
+
+        public int GetType()
+        {
+            return m_ds.GetJoystickType(m_port);
+        }
+
+        public string GetName()
+        {
+            return m_ds.GetJoystickName(m_port);
+        }
+
         public void SetRumble(RumbleType type, float value)
         {
             if (value < 0)

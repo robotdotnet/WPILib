@@ -279,14 +279,116 @@ namespace HAL_Base
         /// byte
         public byte axisCount;
 
-        /// byte
-        public byte axisTypes;
+        /// byte[] hack
+        public HALJoystickAxesTypesArray axisTypes;
 
         /// byte
         public byte buttonCount;
 
         /// byte
         public byte povCount;
+    }
+
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct HALJoystickAxesTypesArray
+    {
+        public Byte axes0;
+        public Byte axes1;
+        public Byte axes2;
+        public Byte axes3;
+        public Byte axes4;
+        public Byte axes5;
+        public Byte axes6;
+        public Byte axes7;
+        public Byte axes8;
+        public Byte axes9;
+        public Byte axes10;
+        public Byte axes11;
+
+        public Byte this[int i]
+        {
+            get
+            {
+                switch (i)
+                {
+                    case 0:
+                        return axes0;
+                    case 1:
+                        return axes1;
+                    case 2:
+                        return axes2;
+                    case 3:
+                        return axes3;
+                    case 4:
+                        return axes4;
+                    case 5:
+                        return axes5;
+                    case 6:
+                        return axes6;
+                    case 7:
+                        return axes7;
+                    case 8:
+                        return axes8;
+                    case 9:
+                        return axes9;
+                    case 10:
+                        return axes10;
+                    case 11:
+                        return axes11;
+                    default:
+                        throw new IndexOutOfRangeException();
+                }
+            }
+
+            set
+            {
+                switch (i)
+                {
+                    case 0:
+                        axes0 = value;
+                        return;
+                    case 1:
+                        axes1 = value;
+                        return;
+                    case 2:
+                        axes2 = value;
+                        return;
+                    case 3:
+                        axes3 = value;
+                        return;
+                    case 4:
+                        axes4 = value;
+                        return;
+                    case 5:
+                        axes5 = value;
+                        return;
+                    case 6:
+                        axes6 = value;
+                        return;
+                    case 7:
+                        axes7 = value;
+                        return;
+                    case 8:
+                        axes8 = value;
+                        return;
+                    case 9:
+                        axes9 = value;
+                        return;
+                    case 10:
+                        axes10 = value;
+                        return;
+                    case 11:
+                        axes11 = value;
+                        return;
+                    default:
+                        throw new IndexOutOfRangeException();
+
+                }
+            }
+
+        }
+
     }
 
     public struct HALControlWord

@@ -147,6 +147,30 @@ namespace HAL_Simulator
             return 0;
         }
 
+        public static int HALGetJoystickIsXbox(byte joystickNum)
+        {
+            var stick = halData["joysticks"][joystickNum];
+            return stick["isXbox"];
+        }
+
+        public static int HALGetJoystickType(byte joystickNum)
+        {
+            var stick = halData["joysticks"][joystickNum];
+            return stick["type"];
+        }
+
+        public static IntPtr HALGetJoystickName(byte joystickNum)
+        {
+            var stick = halData["joysticks"][joystickNum];
+            return Marshal.StringToHGlobalAnsi(stick["name"]);
+        }
+
+        public static int HALGetJoystickAxisType(byte joystickNum, byte axis)
+        {
+            var stick = halData["joysticks"][joystickNum];
+            return stick["NotImplemented"];
+        }
+
         public static int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble,
             ushort rightRumble)
         {

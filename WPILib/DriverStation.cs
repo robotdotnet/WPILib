@@ -32,6 +32,7 @@ namespace WPILib
         private HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
         private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
         private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
+
         private IntPtr m_newControlData;
         private IntPtr m_packetDataAvailableMultiWait;
         private IntPtr m_packetDataAvailableMutex;
@@ -271,6 +272,61 @@ namespace WPILib
                 return m_joystickButtons[stick].count;
             }
         }
+
+        public bool GetJoystickIsXbox(int stick)
+        {
+            lock (m_lockObject)
+            {
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(stick), "Joystick index is out of range, should be 0-5");
+                }
+                //TODO: Remove this when calling for descriptor on empty stick
+                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+                {
+                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick + 
+                        " not available, check if controller is plugged in\n");
+                    return false;
+                }
+                return HALGetJoystickIsXbox((byte) stick) == 1;
+            }
+        }
+
+        public int GetJoystickType(int stick)
+        {
+            lock (m_lockObject)
+            {
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(stick), "Joystick index is out of range, should be 0-5");
+                }
+                //TODO: Remove this when calling for descriptor on empty stick
+                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+                {
+                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
+                        " not available, check if controller is plugged in\n");
+                    return -1;
+                }
+                return HALGetJoystickType((byte) stick);
+            }
+        }
+
+        public string GetJoystickName(int stick)
+        {
+            if (stick < 0 || stick >= JoystickPorts)
+            {
+                throw new ArgumentOutOfRangeException(nameof(stick), "Joystick index is out of range, should be 0-5");
+            }
+            //TODO: Remove this when calling for descriptor on empty stick
+            if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+            {
+                ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
+                    " not available, check if controller is plugged in\n");
+                return "";
+            }
+            return HAL.GetJoystickName((byte) stick);
+        }
+
         public bool Enabled
         {
             get

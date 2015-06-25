@@ -33,6 +33,12 @@ namespace HAL_Base
             HALGetJoystickPOVs = (HALGetJoystickPOVsDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickPOVsDelegate), type.GetMethod("HALGetJoystickPOVs"));
             HALGetJoystickButtons = (HALGetJoystickButtonsDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickButtonsDelegate), type.GetMethod("HALGetJoystickButtons"));
             HALGetJoystickDescriptor = (HALGetJoystickDescriptorDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickDescriptorDelegate), type.GetMethod("HALGetJoystickDescriptor"));
+
+            HALGetJoystickIsXbox = (HALGetJoystickIsXboxDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickIsXboxDelegate), type.GetMethod("HALGetJoystickIsXbox"));
+            HALGetJoystickType = (HALGetJoystickTypeDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickTypeDelegate), type.GetMethod("HALGetJoystickType"));
+            HALGetJoystickName = (HALGetJoystickNameDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickNameDelegate), type.GetMethod("HALGetJoystickName"));
+            HALGetJoystickAxisType = (HALGetJoystickAxisTypeDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickAxisTypeDelegate), type.GetMethod("HALGetJoystickAxisType"));
+
             HALSetJoystickOutputs = (HALSetJoystickOutputsDelegate)Delegate.CreateDelegate(typeof(HALSetJoystickOutputsDelegate), type.GetMethod("HALSetJoystickOutputs"));
             HALGetMatchTime = (HALGetMatchTimeDelegate)Delegate.CreateDelegate(typeof(HALGetMatchTimeDelegate), type.GetMethod("HALGetMatchTime"));
             HALSetNewDataSem = (HALSetNewDataSemDelegate)Delegate.CreateDelegate(typeof(HALSetNewDataSemDelegate), type.GetMethod("HALSetNewDataSem"));
@@ -57,8 +63,8 @@ namespace HAL_Base
         public delegate IntPtr GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
-        public delegate IntPtr GetHALErrorMessageDelegate(int code);
-        public static GetHALErrorMessageDelegate GetHALErrorMessage;
+        private delegate IntPtr GetHALErrorMessageDelegate(int code);
+        private static GetHALErrorMessageDelegate GetHALErrorMessage;
 
         public delegate ushort GetFPGAVersionDelegate(ref int status);
         public static GetFPGAVersionDelegate GetFPGAVersion;
@@ -92,6 +98,18 @@ namespace HAL_Base
 
         public delegate int HALGetJoystickDescriptorDelegate(byte joystickNum, ref HALJoystickDescriptor desc);
         public static HALGetJoystickDescriptorDelegate HALGetJoystickDescriptor;
+
+        public delegate int HALGetJoystickIsXboxDelegate(byte joystickNum);
+        public static HALGetJoystickIsXboxDelegate HALGetJoystickIsXbox;
+
+        public delegate int HALGetJoystickTypeDelegate(byte joystickNum);
+        public static HALGetJoystickTypeDelegate HALGetJoystickType;
+
+        private delegate IntPtr HALGetJoystickNameDelegate(byte joystickNum);
+        private static HALGetJoystickNameDelegate HALGetJoystickName;
+
+        public delegate int HALGetJoystickAxisTypeDelegate(byte joystickNum, byte axis);
+        public static HALGetJoystickAxisTypeDelegate HALGetJoystickAxisType;
 
         public delegate int HALSetJoystickOutputsDelegate(byte joystickNum, uint outputs, ushort leftRumble, ushort rightRumble);
         public static HALSetJoystickOutputsDelegate HALSetJoystickOutputs;

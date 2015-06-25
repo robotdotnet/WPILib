@@ -111,7 +111,10 @@ namespace HAL_Base
             }
         }
 
-        
+        public static string GetJoystickName(byte joystickNum)
+        {
+            return Marshal.PtrToStringAnsi(HALGetJoystickName(joystickNum));
+        }
 
         /// <summary>
         /// Returns the string for the error message for the give code.
