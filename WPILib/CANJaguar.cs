@@ -59,6 +59,8 @@ namespace WPILib
         public static int kReverseLimit = 2;
 // ReSharper restore InconsistentNaming
 
+        public bool Inverted { get; set; }
+
         public CANJaguar(int deviceNumber)
         {
             try
@@ -375,11 +377,11 @@ namespace WPILib
                 {
                     case ControlMode.PercentVbus:
                         messageID = LM_API_VOLT_T_SET;
-                        dataSize = PackPercentage(data, value);
+                        dataSize = PackPercentage(data, Inverted ? -value : value);
                         break;
                     case ControlMode.Speed:
                         messageID = LM_API_SPD_T_SET;
-                        dataSize = PackFXP16_16(data, value);
+                        dataSize = PackFXP16_16(data, Inverted ? -value : value);
                         break;
                     case ControlMode.Position:
                         messageID = LM_API_POS_T_SET;
@@ -391,7 +393,7 @@ namespace WPILib
                         break;
                     case ControlMode.Voltage:
                         messageID = LM_API_VCOMP_T_SET;
-                        dataSize = PackFXP8_8(data, value);
+                        dataSize = PackFXP8_8(data, Inverted ? -value : value);
                         break;
                     default:
                         return;

@@ -42,8 +42,9 @@ namespace WPILib
         private bool m_controlEnabled;
         private int m_profile;
         private double m_setPoint;
-        private double m_minimumInput;
-        private double m_maximumInput;
+
+        public bool Inverted { get; set; }
+
 
 
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
@@ -1074,17 +1075,17 @@ namespace WPILib
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        C_TalonSRX_SetDemand(m_impl, (int) (value*1023));
+                        C_TalonSRX_SetDemand(m_impl, Inverted ? -((int) (value*1023)) : ((int)(value * 1023)));
                         status = CTR_Code.CTR_OKAY;
                         break;
                     case ControlMode.Voltage:
                         int volts = (int) (value*256);
-                        status = C_TalonSRX_SetDemand(m_impl, volts);
+                        status = C_TalonSRX_SetDemand(m_impl, Inverted ? -volts : volts);
                         break;
                     case ControlMode.Position:
                     case ControlMode.Speed:
                     case ControlMode.Follower:
-                        status = C_TalonSRX_SetDemand(m_impl, (int) value);
+                        status = C_TalonSRX_SetDemand(m_impl, Inverted ? (int) -value : (int) value);
                         break;
                     case ControlMode.Current:
                     default:

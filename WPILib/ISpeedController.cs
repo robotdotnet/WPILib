@@ -44,5 +44,10 @@
         /// this will be called if the controller does not get updated within the safety period.
         /// </remarks>
         void Disable();
+
+        /// <summary>
+        /// Inverts the direction of the motors rotation.
+        /// </summary>
+        bool Inverted { get; set; }
     }
 }

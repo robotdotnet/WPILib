@@ -34,7 +34,7 @@ namespace WPILib
         /// <inheritdoc/>
         public virtual void Set(double value)
         {
-            SetSpeed(value);
+            SetSpeed(Inverted ? -value : value);
             Feed();
         }
 
@@ -48,8 +48,10 @@ namespace WPILib
         [Obsolete("For compatibility with CAN Jaguar. Please use Set(double) instead.")]
         public virtual void Set(double value, byte syncGroup)
         {
-            SetSpeed(value);
+            SetSpeed(Inverted ? -value : value);
             Feed();
         }
+
+        public bool Inverted { get; set; }
     }
 }
