@@ -89,7 +89,7 @@
     <Compile Include="Commands\WaitForChildren.cs" />
     <Compile Include="Commands\WaitUntilCommand.cs" />
     <Compile Include="Compressor.cs" />
-    <Compile Include="Controller.cs" />
+    <Compile Include="IController.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />

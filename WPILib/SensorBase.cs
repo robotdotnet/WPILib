@@ -17,7 +17,9 @@ namespace WPILib
 
         public const int AnalogOutputChannels = 2;
 
-        public const int SolenoidChannels = 2;
+        public const int SolenoidChannels = 8;
+
+        public const int SolenoidModules = 2;
 
         public const int PwmChannels = 20;
 
