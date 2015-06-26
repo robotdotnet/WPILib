@@ -20,7 +20,6 @@ namespace WPILib
         public static double DefaultMaxOutput = 1.0;
 
         protected static int s_maxNumberOfMotors = 4;
-        protected int[] m_invertedMotors = new int[4];
         protected double m_sensitivity;
         protected double m_maxOutput;
         protected ISpeedController m_frontLeftMotor;
@@ -43,10 +42,6 @@ namespace WPILib
             m_rearLeftMotor = new Talon(leftMotorChannel);
             m_frontRightMotor = null;
             m_rearRightMotor = new Talon(rightMotorChannel);
-            for (int i = 0; i < s_maxNumberOfMotors; i++)
-            {
-                m_invertedMotors[i] = 1;
-            }
             m_allocatedSpeedControllers = true;
             SetupMotorSafety();
             Drive(0, 0);
@@ -61,10 +56,6 @@ namespace WPILib
             m_rearRightMotor = new Talon(rearRightMotor);
             m_frontLeftMotor = new Talon(frontLeftMotor);
             m_frontRightMotor = new Talon(frontRightMotor);
-            for (int i = 0; i < s_maxNumberOfMotors; i++)
-            {
-                m_invertedMotors[i] = 1;
-            }
             m_allocatedSpeedControllers = true;
             SetupMotorSafety();
             Drive(0, 0);
@@ -83,10 +74,6 @@ namespace WPILib
             m_rearRightMotor = rightMotor;
             m_sensitivity = DefaultSensitivity;
             m_maxOutput = DefaultMaxOutput;
-            for (int i = 0; i < s_maxNumberOfMotors; i++)
-            {
-                m_invertedMotors[i] = 1;
-            }
             m_allocatedSpeedControllers = false;
             SetupMotorSafety();
             Drive(0, 0);
@@ -106,10 +93,6 @@ namespace WPILib
             m_rearRightMotor = rearRightMotor;
             m_sensitivity = DefaultSensitivity;
             m_maxOutput = DefaultMaxOutput;
-            for (int i = 0; i < s_maxNumberOfMotors; i++)
-            {
-                m_invertedMotors[i] = 1;
-            }
             m_allocatedSpeedControllers = false;
             SetupMotorSafety();
             Drive(0, 0);
@@ -350,10 +333,10 @@ namespace WPILib
             wheelSpeeds[(int)MotorType.RearRight] = xIn + yIn - rotation;
 
             Normalize(wheelSpeeds);
-            m_frontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * m_invertedMotors[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
-            m_frontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * m_invertedMotors[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
-            m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_invertedMotors[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
-            m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_invertedMotors[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
+            m_frontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
+            m_frontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
+            m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
+            m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
 
             if (m_syncGroup != 0)
             {
@@ -385,10 +368,10 @@ namespace WPILib
 
             Normalize(wheelSpeeds);
 
-            m_frontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * m_invertedMotors[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
-            m_frontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * m_invertedMotors[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
-            m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_invertedMotors[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
-            m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_invertedMotors[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
+            m_frontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
+            m_frontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
+            m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
+            m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
 
             if (m_syncGroup != 0)
             {
@@ -405,11 +388,11 @@ namespace WPILib
                 throw new NullReferenceException("Null motor provided");
             }
 
-            m_frontLeftMotor?.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
-            m_rearLeftMotor.Set(Limit(leftOutput) * m_invertedMotors[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
+            m_frontLeftMotor?.Set(Limit(leftOutput) * m_maxOutput, m_syncGroup);
+            m_rearLeftMotor.Set(Limit(leftOutput) * m_maxOutput, m_syncGroup);
 
-            m_frontRightMotor?.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
-            m_rearRightMotor.Set(-Limit(rightOutput) * m_invertedMotors[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
+            m_frontRightMotor?.Set(-Limit(rightOutput) * m_maxOutput, m_syncGroup);
+            m_rearRightMotor.Set(-Limit(rightOutput) * m_maxOutput, m_syncGroup);
 
             if (m_syncGroup != 0)
             {
@@ -461,7 +444,21 @@ namespace WPILib
 
         public void SetInvertedMotor(MotorType motor, bool isInverted)
         {
-            m_invertedMotors[(int)motor] = isInverted ? -1 : 1;
+            switch (motor)
+            {
+                case MotorType.FrontLeft:
+                    m_frontLeftMotor.Inverted = isInverted;
+                    break;
+                case MotorType.FrontRight:
+                    m_frontRightMotor.Inverted = isInverted;
+                    break;
+                case MotorType.RearLeft:
+                    m_rearLeftMotor.Inverted = isInverted;
+                    break;
+                case MotorType.RearRight:
+                    m_rearRightMotor.Inverted = isInverted;
+                    break;
+            }
         }
 
         public double Sensitivity
