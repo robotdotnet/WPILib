@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -19,7 +20,7 @@ namespace HAL_Base
             public const uint kSystemClockTicksPerMicrosecond = 40;
         }
 
-        
+
         //These strings are the location of the HAL DLLs used for reflection.
         //Since these are provided by the NuGet package, they will usually be
         //located in the executable directory
@@ -34,10 +35,15 @@ namespace HAL_Base
         //Makes it so if we call initialize from different threads, its safe.
         private static object s_lockObject = new object();
 
-        /// <summary>
-        /// Gets or Sets if the code is in simulation mode
-        /// </summary>
-        public static bool IsSimulation { get; set; } = false;
+        public enum HALTypes
+        {
+            RoboRIO,
+            Simulation,
+            Other,
+            None,
+        }
+
+        public static HALTypes HALType = HALTypes.None;
 
         //These are used to get us a copy of the dictionary from the simulator.
         //This is so we can debug it, because we cannot look at private members
@@ -55,15 +61,42 @@ namespace HAL_Base
         /// <param name="mode">Initialization Mode</param>
         public static void Initialize(int mode = 0)
         {
-            //Lock this function, so that if accidentally called from multiple threads it doesnt
+            //Lock this function, so that if accidentally called from multiple threads it doesn't
             //get m_initialized at the wrong value.
             lock (s_lockObject)
             {
                 // We don't want to initialize more then once.
                 if (s_initialized) return;
 
-                HALAssembly = Assembly.LoadFrom(IsSimulation ? HALSim : HALRIO);
+                //Check to see if we are on a RoboRIO. We do this by probing for a file we know is located
+                //on the RIO.
+                HALType = HALTypes.Simulation;
+                if (File.Exists("/usr/local/frc/bin/frcRunRobot.sh"))
+                {
+                    HALType = HALTypes.RoboRIO;
+                }
 
+                string asm = "";
+                switch (HALType)
+                {
+                    case (HALTypes.Simulation):
+                        asm = HALSim;
+                        break;
+                    case HALTypes.None:
+                    case HALTypes.RoboRIO:
+                    case HALTypes.Other:
+                    default:
+                        asm = HALRIO;
+                        break;
+                }
+
+                HALAssembly = Assembly.LoadFrom(asm);
+
+                //Setup all of our delegates
+                //This allows us to dynamically switch between simulator, RoboRIO
+                //and potentially others later.
+                //Using delegates speeds the method calls up directly over
+                //invoking the method using reflection, by about 20x.
                 SetupDelegates();
                 HALAccelerometer.SetupDelegates();
                 HALAnalog.SetupDelegates();
@@ -95,7 +128,7 @@ namespace HAL_Base
                 HALDigital.InitializeDigitalPort(GetPort(0), ref status);
 
                 //If we are simulator, grab a local copy of the dictionary so we can debug its values.
-                if (IsSimulation)
+                if (HALType == HALTypes.Simulation)
                 {
                     string className = "SimData";
                     var types = HAL.HALAssembly.GetTypes();
@@ -160,7 +193,7 @@ namespace HAL_Base
         {
             return HALReport(resource, instanceNumber, context, feature);
         }
-        
+
         /// <summary>
         /// Gets the HAL Control Word
         /// </summary>

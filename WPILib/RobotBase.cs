@@ -40,7 +40,7 @@ namespace WPILib
         {
         }
 
-        public static bool IsSimulation => HAL.IsSimulation;
+        public static bool IsSimulation => HALType == HALTypes.Simulation;
 
         public static bool IsReal => !IsSimulation;
 
@@ -70,25 +70,37 @@ namespace WPILib
             RobotState.Implementation = DriverStation.Instance;
             Timer.Implementation = new HardwareTimer();
             HLUsageReporting.Implementation = new HardwareHLUsageReporting();
-
         }
 
         private static RobotBase s_robot;
-        public static void Main(Assembly robotAssembly)
+        public static void Main(Assembly robotAssembly, Type robotType = null)
         {
-            HAL.IsSimulation = Environment.OSVersion.Platform != PlatformID.Unix;
             InitializeHardwareConfiguration();
-            Report(ResourceType.kResourceType_Language, Instances.kLanguage_CPlusPlus);
+            Report(ResourceType.kResourceType_Language, Instances.kLanguage_DotNet);
             string robotName = "";
             string robotAssemblyName = "";
             try
             {
-                robotAssemblyName = robotAssembly.GetName().Name;
-                var robotClasses = (from t in robotAssembly.GetTypes() where typeof(RobotBase).IsAssignableFrom(t) select t).ToList();
-                if (robotClasses.Count == 0)
-                    throw new Exception("Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
-                robotName = robotClasses[0].FullName;
-                s_robot = (RobotBase)(Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
+                if (robotType == null && robotAssembly != null)
+                {
+                    robotAssemblyName = robotAssembly.GetName().Name;
+                    var robotClasses =
+                        (from t in robotAssembly.GetTypes() where typeof (RobotBase).IsAssignableFrom(t) select t)
+                            .ToList();
+                    if (robotClasses.Count == 0)
+                        throw new Exception(
+                            "Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
+                    robotName = robotClasses[0].FullName;
+                    s_robot = (RobotBase) (Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
+                }
+                else
+                {
+                    if (robotType == null)
+                    {
+                        throw new Exception("Both robotAssembly and robotType cannot be null.");
+                    }
+                    s_robot = (RobotBase) (Activator.CreateInstance(robotType));
+                }
                 s_robot.Prestart();
             }
             catch (Exception ex)
@@ -100,7 +112,7 @@ namespace WPILib
                 Environment.Exit(1);
                 return;
             }
-            if (Environment.OSVersion.Platform == PlatformID.Unix)
+            if (HALType == HALTypes.RoboRIO)
             {
                 string file = "/tmp/frc_versions/FRC_Lib_Version.ini";
                 try
