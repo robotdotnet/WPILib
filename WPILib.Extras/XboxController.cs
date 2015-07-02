@@ -12,82 +12,83 @@
         /// <summary>
         /// Get A Button
         /// </summary>
-        public bool A => GetRawButton(1);
+        /// <returns>The A Button</returns>
+        public bool GetA() => GetRawButton(1);
 
         /// <summary>
         /// Get B Button
         /// </summary>
-        public bool B => GetRawButton(2);
+        public bool GetB() => GetRawButton(2);
 
         /// <summary>
         /// Get X Button
         /// </summary>
-        public bool X => GetRawButton(3);
+        public new bool GetX() => GetRawButton(3);
 
         /// <summary>
         /// Get Y Button
         /// </summary>
-        public bool Y => GetRawButton(4);
+        public new bool GetY() => GetRawButton(4);
 
         /// <summary>
         /// Get Left Stick Button 
         /// </summary>
-        public bool LeftStickButton => GetRawButton(9);
+        public bool GetLeftStickButton() => GetRawButton(9);
 
         /// <summary>
         /// Get Right Stick Button
         /// </summary>
-        public bool RightStickButton => GetRawButton(10);
+        public bool GetRightStickButton() => GetRawButton(10);
 
         /// <summary>
         /// Get Left Bumper
         /// </summary>
-        public bool LeftBumper => GetRawButton(5);
+        public bool GetLeftBumper() => GetRawButton(5);
 
         /// <summary>
         /// Get Right Bumper
         /// </summary>
-        public bool RightBumper => GetRawButton(6);
+        public bool GetRightBumper() => GetRawButton(6);
 
         /// <summary>
         /// Get Back Button
         /// </summary>
-        public bool Back => GetRawButton(7);
+        public bool GetBack() => GetRawButton(7);
 
         /// <summary>
         /// Get Start Button
         /// </summary>
-        public bool Start => GetRawButton(8);
+        public bool GetStart() => GetRawButton(8);
 
         /// <summary>
         /// Get Left X Axis
         /// </summary>
-        public double LeftXAxis => GetRawAxis(0);
+        public double GetLeftXAxis() => GetRawAxis(0);
 
         /// <summary>
         /// Get Left Y Axis
         /// </summary>
-        public double LeftYAxis => GetRawAxis(1);
+        public double GetLeftYAxis() => GetRawAxis(1);
 
         /// <summary>
         /// Get Right X Axis
         /// </summary>
-        public double RightXAxis => GetRawAxis(4);
+        public double GetRightXAxis() => GetRawAxis(4);
 
         /// <summary>
         /// Get Right Y Axis
         /// </summary>
-        public double RightYAxis => GetRawAxis(5);
+        public double GetRightYAxis() => GetRawAxis(5);
 
         /// <summary>
         /// Get Left Trigger
         /// </summary>
-        public double LeftTrigger => GetRawAxis(2);
+        public double GetLeftTrigger() => GetRawAxis(2);
 
         /// <summary>
         /// Get Right Trigger
         /// </summary>
-        public double RightTrigger => GetRawAxis(3);
+        public double GetRightTrigger() => GetRawAxis(3);
 
         /// <summary>
         /// Set Left Rumble
