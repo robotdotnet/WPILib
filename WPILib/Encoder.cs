@@ -8,6 +8,9 @@ using static HAL_Base.HALDigital;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Class to read quadrature encoders.
+    /// </summary>
     public class Encoder : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         /// <summary>

@@ -54,8 +54,8 @@ namespace HAL_Simulator
             ref int status)
         {
             Interrupt interrupt = Interrupts[interrupt_pointer.ToInt32()];
+            return 0;
 
-            
         }
             
 

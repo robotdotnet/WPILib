@@ -6,6 +6,9 @@ using WPILib.LiveWindows;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Class for interfacing with an analog gyro to get robot heading.
+    /// </summary>
     public class Gyro : SensorBase, IPIDSource, ILiveWindowSendable
     {
         private static int kOversampleBits = 10;

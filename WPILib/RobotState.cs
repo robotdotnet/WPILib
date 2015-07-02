@@ -2,6 +2,9 @@
 
 namespace WPILib
 {
+    /// <summary>
+    /// High level robot state reporting.
+    /// </summary>
     public static class RobotState
     {
         public static Interface Implementation { private get; set; }
@@ -66,6 +69,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Interface for robot state reporters.
+        /// </summary>
         public interface Interface
         {
             bool Disabled { get; }

@@ -44,6 +44,9 @@ namespace WPILib
         FlushWhenFull = 2,
     }
 
+    /// <summary>
+    /// Driver for the serial ports onboard the RoboRIO.
+    /// </summary>
     public class SerialPort : IDisposable
     {
         private byte m_port;

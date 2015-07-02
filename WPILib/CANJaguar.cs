@@ -9,10 +9,13 @@ using static HAL_Base.HALCAN.Constants;
 
 namespace WPILib
 {
+    /// <summary>
+    /// This class represents a CAN Jaguar Motor Controller.
+    /// </summary>
     public class CANJaguar : IMotorSafety, ICANSpeedController, IPIDInterface, ITableListener, ILiveWindowSendable, IDisposable
     {
 
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         public static readonly int kMaxMessageDataSize = 8;
 
 
@@ -25,30 +28,16 @@ namespace WPILib
         private static readonly int kFullMessageIDMask = CAN_MSGID_API_M | CAN_MSGID_MFR_M | CAN_MSGID_DTYPE_M;
         private const int kSendMessagePeriod = 20;
 
-// ReSharper restore InconsistentNaming
-
-        public struct EncoderTag
+        /// <summary>
+        /// The source mode for the CAN Jaguar
+        /// </summary>
+        public enum SourceMode
         {
-
+            Encoder,
+            QuadEncoder,
+            Potentiometer,
+            None,
         }
-
-        public struct QuadEncoderTag
-        {
-
-        }
-
-        public struct PotentiometerTag
-        {
-
-        }
-
-// ReSharper disable InconsistentNaming
-        public static readonly EncoderTag kEncoder = new EncoderTag();
-
-
-        public readonly static QuadEncoderTag kQuadEncoder = new QuadEncoderTag();
-
-        public readonly static PotentiometerTag kPotentiometer = new PotentiometerTag();
 
         public static readonly int kCurrentFault = 1;
         public static readonly int kTemeperatureFault = 2;
@@ -57,8 +46,8 @@ namespace WPILib
 
         public static int kForwardLimit = 1;
         public static int kReverseLimit = 2;
-// ReSharper restore InconsistentNaming
 
+        ///<inheritdoc/>
         public bool Inverted { get; set; }
 
         public CANJaguar(int deviceNumber)
@@ -239,7 +228,7 @@ namespace WPILib
         bool m_receivedStatusMessage1 = false;
         bool m_receivedStatusMessage2 = false;
 
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable once InconsistentNaming
         private const int kReceiveStatusAttempts = 50;
 
         bool m_controlEnabled = true;
@@ -1181,14 +1170,14 @@ namespace WPILib
             return 4;
         }
 
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable once InconsistentNaming
         private static byte PackINT16(byte[] buffer, short value)
         {
             Swap16(value, buffer);
             return 2;
         }
 
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable once InconsistentNaming
         private static byte PackINT32(byte[] buffer, int value)
         {
             Swap32(value, buffer);
@@ -1221,13 +1210,13 @@ namespace WPILib
             return Unpack32(buffer, 0) / 65536.0;
         }
 
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable once InconsistentNaming
         private static short UnpackINT16(byte[] buffer)
         {
             return Unpack16(buffer, 0);
         }
 
-// ReSharper disable once InconsistentNaming
+        // ReSharper disable once InconsistentNaming
         private static int UnpackINT32(byte[] buffer)
         {
             return Unpack32(buffer, 0);
@@ -1296,7 +1285,7 @@ namespace WPILib
             EnableControl();
         }
 
-        
+
 
         /**
          * Set the reference source device for position controller mode.
@@ -1463,286 +1452,121 @@ namespace WPILib
             D = d;
         }
 
-        /**
-        * Get the Proportional gain of the controller.
-        *
-        * @return The proportional gain.
-        */
 
-        /**
-        * Get the Integral gain of the controller.
-        *
-        * @return The integral gain.
-        */
-
-        /**
-        * Get the Derivative gain of the controller.
-        *
-        * @return The derivative gain.
-        */
-
-        /**
-         * Enable controlling the motor voltage as a percentage of the bus voltage
-         * without any position or speed feedback.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         */
-        public void SetPercentMode()
+        public void SetPercentMode(SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.PercentVbus);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_NONE);
+            switch (mode)
+            {
+                case SourceMode.Encoder:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_ENCODER);
+                    EncoderCodesPerRev = codesPerRev;
+                    break;
+                case SourceMode.QuadEncoder:
+                    SetPositionReference(LM_REF_ENCODER);
+                    SetSpeedReference(LM_REF_QUAD_ENCODER);
+                    EncoderCodesPerRev = codesPerRev;
+                    break;
+                case SourceMode.Potentiometer:
+                    SetPositionReference(LM_REF_POT);
+                    SetSpeedReference(LM_REF_NONE);
+                    PotentiometerTurns = 1;
+                    break;
+                default:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_NONE);
+                    break;
+            }
         }
 
-        /**
-         * Enable controlling the motor voltage as a percentage of the bus voltage,
-         * and enable speed sensing from a non-quadrature encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         */
-        public void SetPercentMode(EncoderTag tag, int codesPerRev)
-        {
-            ChangeControlMode(ControlMode.PercentVbus);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-        }
-
-        /**
-         * Enable controlling the motor voltage as a percentage of the bus voltage,
-         * and enable position and speed sensing from a quadrature encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kQuadEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         */
-        public void SetPercentMode(QuadEncoderTag tag, int codesPerRev)
-        {
-            ChangeControlMode(ControlMode.PercentVbus);
-            SetPositionReference(LM_REF_ENCODER);
-            SetSpeedReference(LM_REF_QUAD_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-        }
-
-        /**
-         * Enable controlling the motor voltage as a percentage of the bus voltage,
-         * and enable position sensing from a potentiometer and no speed feedback.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kPotentiometer}
-         */
-        public void SetPercentMode(PotentiometerTag tag)
-        {
-            ChangeControlMode(ControlMode.PercentVbus);
-            SetPositionReference(LM_REF_POT);
-            SetSpeedReference(LM_REF_NONE);
-            PotentiometerTurns = 1;
-        }
-
-        /**
-         * Enable controlling the motor current with a PID loop.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetCurrentMode(double p, double i, double d)
+        public void SetCurrentMode(double p, double i, double d, SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.Current);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_NONE);
-            SetPID(p, i, d);
+            switch (mode)
+            {
+                case SourceMode.Encoder:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_NONE);
+                    EncoderCodesPerRev = codesPerRev;
+                    SetPID(p, i, d);
+                    break;
+                case SourceMode.QuadEncoder:
+                    SetPositionReference(LM_REF_ENCODER);
+                    SetSpeedReference(LM_REF_QUAD_ENCODER);
+                    EncoderCodesPerRev = codesPerRev;
+                    SetPID(p, i, d);
+                    break;
+                case SourceMode.Potentiometer:
+                    SetPositionReference(LM_REF_POT);
+                    SetSpeedReference(LM_REF_NONE);
+                    PotentiometerTurns = 1;
+                    SetPID(p, i, d);
+                    break;
+                default:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_NONE);
+                    SetPID(p, i, d);
+                    break;
+            }
         }
 
-        /**
-         * Enable controlling the motor current with a PID loop, and enable speed
-         * sensing from a non-quadrature encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kEncoder}
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetCurrentMode(EncoderTag tag, int codesPerRev, double p, double i, double d)
-        {
-            ChangeControlMode(ControlMode.Current);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_NONE);
-            EncoderCodesPerRev = codesPerRev;
-            SetPID(p, i, d);
-        }
-
-        /**
-         * Enable controlling the motor current with a PID loop, and enable speed and
-         * position sensing from a quadrature encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kQuadEncoder}
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetCurrentMode(QuadEncoderTag tag, int codesPerRev, double p, double i, double d)
-        {
-            ChangeControlMode(ControlMode.Current);
-            SetPositionReference(LM_REF_ENCODER);
-            SetSpeedReference(LM_REF_QUAD_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-            SetPID(p, i, d);
-        }
-
-        /**
-         * Enable controlling the motor current with a PID loop, and enable position
-         * sensing from a potentiometer.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kPotentiometer}
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetCurrentMode(PotentiometerTag tag, double p, double i, double d)
-        {
-            ChangeControlMode(ControlMode.Current);
-            SetPositionReference(LM_REF_POT);
-            SetSpeedReference(LM_REF_NONE);
-            PotentiometerTurns = 1;
-            SetPID(p, i, d);
-        }
-
-        /**
-         * Enable controlling the speed with a feedback loop from a non-quadrature
-         * encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetSpeedMode(EncoderTag tag, int codesPerRev, double p, double i, double d)
+        public void SetSpeedMode(double p, double i, double d, SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.Speed);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-            SetPID(p, i, d);
+            switch (mode)
+            {
+                case SourceMode.Encoder:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_NONE);
+                    EncoderCodesPerRev = codesPerRev;
+                    SetPID(p, i, d);
+                    break;
+                case SourceMode.QuadEncoder:
+                    SetPositionReference(LM_REF_ENCODER);
+                    SetSpeedReference(LM_REF_QUAD_ENCODER);
+                    EncoderCodesPerRev = codesPerRev;
+                    SetPID(p, i, d);
+                    break;
+                case SourceMode.Potentiometer:
+                    SetPositionReference(LM_REF_POT);
+                    SetSpeedReference(LM_REF_NONE);
+                    PotentiometerTurns = 1;
+                    SetPID(p, i, d);
+                    break;
+                default:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_NONE);
+                    SetPID(p, i, d);
+                    break;
+            }
         }
 
-        /**
-         * Enable controlling the speed with a feedback loop from a quadrature encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kQuadEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetSpeedMode(QuadEncoderTag tag, int codesPerRev, double p, double i, double d)
-        {
-            ChangeControlMode(ControlMode.Speed);
-            SetPositionReference(LM_REF_ENCODER);
-            SetSpeedReference(LM_REF_QUAD_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-            SetPID(p, i, d);
-        }
-
-        /**
-         * Enable controlling the position with a feedback loop using an encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kQuadEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         *
-         */
-        public void SetPositionMode(QuadEncoderTag tag, int codesPerRev, double p, double i, double d)
-        {
-            ChangeControlMode(ControlMode.Position);
-            SetPositionReference(LM_REF_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-            SetPID(p, i, d);
-        }
-
-        /**
-         * Enable controlling the position with a feedback loop using a potentiometer.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kPotentiometer}
-         * @param p The proportional gain of the Jaguar's PID controller.
-         * @param i The integral gain of the Jaguar's PID controller.
-         * @param d The differential gain of the Jaguar's PID controller.
-         */
-        public void SetPositionMode(PotentiometerTag tag, double p, double i, double d)
-        {
-            ChangeControlMode(ControlMode.Position);
-            SetPositionReference(LM_REF_POT);
-            PotentiometerTurns = 1;
-            SetPID(p, i, d);
-        }
-
-        /**
-         * Enable controlling the motor voltage without any position or speed feedback.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         */
-        public void SetVoltageMode()
+        public void SetVoltageMode(SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.Voltage);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_NONE);
-        }
-
-        /**
-         * Enable controlling the motor voltage with speed feedback from a
-         * non-quadrature encoder and no position feedback.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         */
-        public void SetVoltageMode(EncoderTag tag, int codesPerRev)
-        {
-            ChangeControlMode(ControlMode.Voltage);
-            SetPositionReference(LM_REF_NONE);
-            SetSpeedReference(LM_REF_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-        }
-
-        /**
-         * Enable controlling the motor voltage with position and speed feedback from a
-         * quadrature encoder.<br>
-         * After calling this you must call {@link CANJaguar#enableControl()} or {@link CANJaguar#enableControl(double)} to enable the device.
-         *
-         * @param tag The constant {@link CANJaguar#kQuadEncoder}
-         * @param codesPerRev The counts per revolution on the encoder
-         */
-        public void SetVoltageMode(QuadEncoderTag tag, int codesPerRev)
-        {
-            ChangeControlMode(ControlMode.Voltage);
-            SetPositionReference(LM_REF_ENCODER);
-            SetSpeedReference(LM_REF_QUAD_ENCODER);
-            EncoderCodesPerRev = codesPerRev;
-        }
-
-        /**
-         * Enable controlling the motor voltage with position feedback from a
-         * potentiometer and no speed feedback.
-         *
-         * @param tag The constant {@link CANJaguar#kPotentiometer}
-         */
-        public void SetVoltageMode(PotentiometerTag tag)
-        {
-            ChangeControlMode(ControlMode.Voltage);
-            SetPositionReference(LM_REF_POT);
-            SetSpeedReference(LM_REF_NONE);
-            PotentiometerTurns = 1;
+            switch (mode)
+            {
+                case SourceMode.Encoder:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_ENCODER);
+                    EncoderCodesPerRev = codesPerRev;
+                    break;
+                case SourceMode.QuadEncoder:
+                    SetPositionReference(LM_REF_ENCODER);
+                    SetSpeedReference(LM_REF_QUAD_ENCODER);
+                    EncoderCodesPerRev = codesPerRev;
+                    break;
+                case SourceMode.Potentiometer:
+                    SetPositionReference(LM_REF_POT);
+                    SetSpeedReference(LM_REF_NONE);
+                    PotentiometerTurns = 1;
+                    break;
+                default:
+                    SetPositionReference(LM_REF_NONE);
+                    SetSpeedReference(LM_REF_NONE);
+                    break;
+            }
         }
 
         private void ChangeControlMode(ControlMode controlMode)
@@ -1887,7 +1711,7 @@ namespace WPILib
         {
             UpdatePeriodicStatus();
 
-            return (Faults) m_faults;
+            return (Faults)m_faults;
         }
 
         /**
@@ -1909,11 +1733,11 @@ namespace WPILib
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        dataSize = PackPercentage(data, value/(m_maxOutputVoltage*kControllerRate));
+                        dataSize = PackPercentage(data, value / (m_maxOutputVoltage * kControllerRate));
                         message = LM_API_VOLT_SET_RAMP;
                         break;
                     case ControlMode.Voltage:
-                        dataSize = PackFXP8_8(data, value/kControllerRate);
+                        dataSize = PackFXP8_8(data, value / kControllerRate);
                         message = LM_API_VCOMP_COMP_RAMP;
                         break;
                     default:
@@ -1931,7 +1755,7 @@ namespace WPILib
         * @return The firmware version.  0 if the device did not respond.
         */
 
-        public uint FirmwareVersion => (uint) m_firmwareVersion;
+        public uint FirmwareVersion => (uint)m_firmwareVersion;
 
         /**
         * Get the version of the Jaguar hardware.
@@ -1957,7 +1781,7 @@ namespace WPILib
             {
                 byte[] data = new byte[8];
 
-                data[0] = (byte) value;
+                data[0] = (byte)value;
 
                 SendMessage(LM_API_CFG_BRAKE_COAST, data, 1);
 
@@ -1978,10 +1802,10 @@ namespace WPILib
             {
                 byte[] data = new byte[8];
 
-                int dataSize = PackINT16(data, (short) value);
+                int dataSize = PackINT16(data, (short)value);
                 SendMessage(LM_API_CFG_ENC_LINES, data, dataSize);
 
-                m_encoderCodesPerRev = (short) value;
+                m_encoderCodesPerRev = (short)value;
                 m_encoderCodesPerRevVerified = false;
             }
         }
@@ -2001,10 +1825,10 @@ namespace WPILib
             {
                 byte[] data = new byte[8];
 
-                int dataSize = PackINT16(data, (short) value);
+                int dataSize = PackINT16(data, (short)value);
                 SendMessage(LM_API_CFG_POT_TURNS, data, dataSize);
 
-                m_potentiometerTurns = (short) value;
+                m_potentiometerTurns = (short)value;
                 m_potentiometerTurnsVerified = false;
             }
         }
@@ -2051,7 +1875,7 @@ namespace WPILib
             set
             {
                 byte[] data = new byte[8];
-                data[0] = (byte) value;
+                data[0] = (byte)value;
                 SendMessage(LM_API_CFG_LIMIT_MODE, data, 1);
             }
         }
@@ -2141,7 +1965,7 @@ namespace WPILib
                 if (value < 0.5f) value = 0.5f;
                 else if (value > 3.0f) value = 3.0f;
 
-                int dataSize = PackINT16(data, (short) (value*1000.0));
+                int dataSize = PackINT16(data, (short)(value * 1000.0));
                 SendMessage(LM_API_CFG_FAULT_TIME, data, dataSize);
 
                 m_faultTime = value;

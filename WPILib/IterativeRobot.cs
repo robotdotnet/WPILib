@@ -5,6 +5,9 @@ using static System.Console;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Implements a iterative robot framework, extending from <see cref="RobotBase"/>.
+    /// </summary>
     public class IterativeRobot : RobotBase
     {
         private bool m_disabledInitialized;

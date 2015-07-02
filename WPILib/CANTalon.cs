@@ -8,6 +8,9 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
+    /// <summary>
+    /// This Class represents a CAN Talon SRX Motor Controller.
+    /// </summary>
     public class CANTalon : IMotorSafety, ICANSpeedController, IPIDInterface, ILiveWindowSendable, ITableListener, IDisposable
     {
         private MotorSafetyHelper m_safetyHelper;

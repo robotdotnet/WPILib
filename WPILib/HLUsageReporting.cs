@@ -2,6 +2,9 @@
 
 namespace WPILib
 {
+    /// <summary>
+    /// Support for High Level Usage Reporting.
+    /// </summary>
     public class HLUsageReporting
     {
         public static Interface Implementation { get; set; }
@@ -42,6 +45,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// The interface to use for High Level usage reporting.
+        /// </summary>
         public interface Interface
         {
             void ReportScheduler();

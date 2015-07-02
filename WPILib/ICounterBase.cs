@@ -9,6 +9,10 @@
         K2X = 1,
         K4X = 2,
     }
+
+    /// <summary>
+    /// Interface for counting input ticks.
+    /// </summary>
     public interface ICounterBase
     {
         int Get();

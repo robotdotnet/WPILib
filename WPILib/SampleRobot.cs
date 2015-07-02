@@ -7,6 +7,9 @@ using WPILib.LiveWindows;
 
 namespace WPILib
 {
+    /// <summary>
+    /// A simple robot base class that knows the standard competition states.
+    /// </summary>
     public class SampleRobot : RobotBase
     {
         private bool m_robotMainOverriden;

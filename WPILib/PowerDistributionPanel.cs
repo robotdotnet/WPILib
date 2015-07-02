@@ -4,6 +4,9 @@ using static HAL_Base.HALPDP;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Class for getting voltage, current, temperature, and energy from the CAN PDP.
+    /// </summary>
     public class PowerDistributionPanel : SensorBase, ILiveWindowSendable
     {
         private readonly int m_module = 0;

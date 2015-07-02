@@ -9,6 +9,10 @@ using NetworkTables.Tables;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Provides a relatively simple way to save important values to the RoboRIO to access the next
+    /// time the RoboRIO is booted.
+    /// </summary>
     public class Preferences : ITableListener
     {
 // ReSharper disable InconsistentNaming
@@ -567,7 +571,7 @@ namespace WPILib
             }
         }
 
-        public class ImproperPreferenceKeyException : SystemException
+        internal class ImproperPreferenceKeyException : SystemException
         {
             public ImproperPreferenceKeyException(string value, char letter)
                 : base("Preference key \""

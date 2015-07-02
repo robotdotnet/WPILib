@@ -3,8 +3,13 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
+    /// <summary>
+    /// This Class is used to get the voltages and currents from the power rails
+    /// on the RoboRIO. See <see cref="PowerDistributionPanel"/> for PDP rails.
+    /// </summary>
     public static class ControllerPower
     {
+        //TODO: Make these not properties.
         public static double InputVoltage
         {
             get

@@ -47,6 +47,9 @@ namespace WPILib
             Z = 1 << 2
         }
 
+        /// <summary>
+        /// A struct containing all the axes the accelerometer contains.
+        /// </summary>
         public struct AllAxes
         {
             public double XAxis;

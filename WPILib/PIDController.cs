@@ -5,7 +5,9 @@ using WPILib.LiveWindows;
 
 namespace WPILib
 {
-
+    /// <summary>
+    /// Implements a PID loop to be used with mechanisms.
+    /// </summary>
     public class PIDController : IController, IPIDInterface, ILiveWindowSendable, ITableListener, IDisposable
     {
         public enum ToleranceType

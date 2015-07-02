@@ -7,6 +7,9 @@ using static HAL_Base.HALDigital;
 
 namespace WPILib
 {
+    /// <summary>
+    /// I2C bus interface class.
+    /// </summary>
     public class I2C : SensorBase
     {
         public enum Port : byte

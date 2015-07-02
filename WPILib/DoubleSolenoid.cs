@@ -5,7 +5,9 @@ using WPILib.LiveWindows;
 
 namespace WPILib
 {
-
+    /// <summary>
+    /// Class for running 2 channels of High Voltage Digital Output from the PCM.
+    /// </summary>
     public class DoubleSolenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
         /// <summary>

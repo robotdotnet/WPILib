@@ -5,7 +5,9 @@ using HAL_Base;
 
 namespace WPILib
 {
-
+    /// <summary>
+    /// Handles inputs from joysticks connected to the driver station.
+    /// </summary>
     public class Joystick : GenericHID
     {
         /// <summary>

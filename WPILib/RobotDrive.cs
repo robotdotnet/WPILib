@@ -11,6 +11,9 @@ namespace WPILib
         RearRight,
     }
 
+    /// <summary>
+    /// Simple abstraction for handing robot drivetrains.
+    /// </summary>
     public class RobotDrive : IMotorSafety, IDisposable
     {
         protected MotorSafetyHelper m_safetyHelper;

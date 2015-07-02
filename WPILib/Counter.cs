@@ -9,6 +9,9 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Class for counting the number of ticks on a digital input channel.
+    /// </summary>
     public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         private DigitalSource m_upSource;
