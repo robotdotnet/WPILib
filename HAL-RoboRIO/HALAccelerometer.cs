@@ -8,19 +8,19 @@ namespace HAL_RoboRIO
     public class HALAccelerometer
     {
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAccelerometerActive")]
+        [DllImport(HAL_RoboRIO.HAL.LibhalathenaSharedSo, EntryPoint = "setAccelerometerActive")]
         public static extern void setAccelerometerActive([MarshalAs(UnmanagedType.I1)] bool param0);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAccelerometerRange")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setAccelerometerRange")]
         public static extern void setAccelerometerRange(AccelerometerRange param0);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAccelerometerX")]
+        [DllImport(HAL_RoboRIO.HAL.LibhalathenaSharedSo, EntryPoint = "getAccelerometerX")]
         public static extern double getAccelerometerX();
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAccelerometerY")]
+        [DllImport(HAL_RoboRIO.HAL.LibhalathenaSharedSo, EntryPoint = "getAccelerometerY")]
         public static extern double getAccelerometerY();
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAccelerometerZ")]
+        [DllImport(HAL_RoboRIO.HAL.LibhalathenaSharedSo, EntryPoint = "getAccelerometerZ")]
         public static extern double getAccelerometerZ();
     }
 }

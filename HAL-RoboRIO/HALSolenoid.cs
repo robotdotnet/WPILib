@@ -8,32 +8,32 @@ namespace HAL_RoboRIO
     public class HALSolenoid
     {
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeSolenoidPort")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeSolenoidPort")]
         public static extern IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "checkSolenoidModule")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "checkSolenoidModule")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool checkSolenoidModule(byte module);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getSolenoid")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getSolenoid")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool getSolenoid(IntPtr solenoid_port_pointer, ref int status);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setSolenoid")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setSolenoid")]
         public static extern void setSolenoid(IntPtr solenoid_port_pointer, [MarshalAs(UnmanagedType.I1)] bool value, ref int status);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPCMSolenoidBlackList")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getPCMSolenoidBlackList")]
         public static extern int getPCMSolenoidBlackList(IntPtr solenoid_port_pointer, ref int status);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPCMSolenoidVoltageStickyFault")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getPCMSolenoidVoltageStickyFault")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool getPCMSolenoidVoltageStickyFault(IntPtr solenoid_port_pointer, ref int status);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPCMSolenoidVoltageFault")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getPCMSolenoidVoltageFault")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool getPCMSolenoidVoltageFault(IntPtr solenoid_port_pointer, ref int status);
 
-        [DllImport("libHALAthena_shared.so", EntryPoint = "clearAllPCMStickyFaults_sol")]
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "clearAllPCMStickyFaults_sol")]
         public static extern void clearAllPCMStickyFaults_sol(IntPtr solenoid_port_pointer, ref int status);
     }
 }

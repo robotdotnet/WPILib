@@ -8,7 +8,7 @@ namespace HAL_RoboRIO
 {
     public class HAL
     {
-        private const string LibhalathenaSharedSo = "libHALAthena_shared.so";
+        internal const string LibhalathenaSharedSo = "libHALAthena_shared.so";
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "getPort")]
         public static extern IntPtr getPort(byte pin);
