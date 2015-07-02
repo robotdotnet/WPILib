@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace HAL_Simulator
@@ -11,19 +12,37 @@ namespace HAL_Simulator
 
     public class HALInterrupts
     {
+        private static List<Interrupt> Interrupts = new List<Interrupt>(); 
+
         /// Return Type: void*
         ///interruptIndex: unsigned int
         ///watcher: boolean
         ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeInterrupts")]
-        public static extern IntPtr initializeInterrupts(uint interruptIndex, [MarshalAs(UnmanagedType.I1)] bool watcher, ref int status);
+        public static IntPtr initializeInterrupts(uint interruptIndex, bool watcher,
+            ref int status)
+        {
+            Interrupt interrupt = new Interrupt
+            {
+                idx = interruptIndex,
+                Callback = null,
+                isSynchronous = watcher
+            };
+            status = 0;
+            Interrupts.Add(interrupt);
+            return (IntPtr)Interrupts.IndexOf(interrupt);
+        }
 
 
         /// Return Type: void
         ///interrupt_pointer: void*
         ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "cleanInterrupts")]
-        public static extern void cleanInterrupts(IntPtr interrupt_pointer, ref int status);
+        public static void cleanInterrupts(IntPtr interrupt_pointer, ref int status)
+        {
+            status = 0;
+            Interrupt interrupt = Interrupts[interrupt_pointer.ToInt32()];
+            interrupt.Callback = null;
+            Interrupts.Remove(interrupt);
+        }
 
 
         /// Return Type: unsigned int
@@ -31,8 +50,14 @@ namespace HAL_Simulator
         ///timeout: double
         ///ignorePrevious: boolean
         ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "waitForInterrupt")]
-        public static extern uint waitForInterrupt(IntPtr interrupt_pointer, double timeout, [MarshalAs(UnmanagedType.I1)] bool ignorePrevious, ref int status);
+        public static uint waitForInterrupt(IntPtr interrupt_pointer, double timeout, bool ignorePrevious,
+            ref int status)
+        {
+            Interrupt interrupt = Interrupts[interrupt_pointer.ToInt32()];
+
+            
+        }
+            
 
 
         /// Return Type: void

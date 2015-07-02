@@ -85,8 +85,9 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct Interrupt
     {
-        //NotImplemented
-        public bool idx;
+        public uint idx;
+        public Action<uint, IntPtr> Callback;
+        public bool isSynchronous;
     }
 
     //Notifier

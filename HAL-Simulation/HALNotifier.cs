@@ -22,6 +22,7 @@ namespace HAL_Simulator
 
         public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
         {
+            status = 0;
             Notifier notifier = new Notifier();
             notifier.Callback = ProcessQueue;
             Notifiers.Add(notifier);
@@ -33,6 +34,7 @@ namespace HAL_Simulator
 
         public static void cleanNotifier(IntPtr notifier_pointer, ref int status)
         {
+            status = 0;
             Notifier notifier = (Notifier) Marshal.PtrToStructure(notifier_pointer, typeof (Notifier));
             if (notifier.alarm != null && notifier.alarm.IsAlive)
             {
@@ -41,12 +43,13 @@ namespace HAL_Simulator
             notifier.alarm?.Join();
             notifier.alarm = null;
             notifier.Callback = null;
+            Notifiers.Remove(notifier);
         }
 
 
         public static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
         {
-
+            status = 0;
             Notifier notifier = Notifiers[notifier_pointer.ToInt32()];//(Notifier)Marshal.PtrToStructure(notifier_pointer, typeof(Notifier));
             if (notifier.alarm != null && notifier.alarm.IsAlive)
             {
