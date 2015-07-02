@@ -2,6 +2,9 @@
 
 namespace WPILib.Commands
 {
+    /// <summary>
+    /// This class defines a <see cref="Command"/> which interacts heavily with a PID loop.
+    /// </summary>
     public abstract class PIDCommand : Command, IPIDSource, IPIDOutput
     {
         private PIDController m_controller;

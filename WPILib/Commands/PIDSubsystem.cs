@@ -2,6 +2,10 @@
 
 namespace WPILib.Commands
 {
+    /// <summary>
+    /// This class is designed to handle the case where there is a <see cref="Subsystem"/>
+    /// which uses a single <see cref="WPILib.PIDController">PIDController</see> almost constantly.
+    /// </summary>
     public abstract class PIDSubsystem : Subsystem, IPIDSource, IPIDOutput
     {
         public PIDSubsystem(string name, double p, double i, double d)

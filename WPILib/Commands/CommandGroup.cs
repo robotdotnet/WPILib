@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace WPILib.Commands
 {
+    /// <summary>
+    /// A CommandGroup is a list of commands which are executed in sequence.
+    /// </summary>
     public class CommandGroup : Command
     {
         private List<Entry> m_commands = new List<Entry>();
