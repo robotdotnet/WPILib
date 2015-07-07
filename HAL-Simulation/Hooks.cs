@@ -12,7 +12,7 @@ namespace HAL_Simulator
     public static class Hooks
     {
         public static uint GetFPGATime()
-        {//TODO: Implement
+        {
             return (uint)((DateTime.Now.Ticks - SimData.halData["time"]["program_start"]) / 10);
         }
 

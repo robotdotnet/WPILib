@@ -2,6 +2,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+using static HAL_Simulator.PortConverters;
+using static HAL_Simulator.SimData;
 
 namespace HAL_Simulator
 {
@@ -22,6 +24,12 @@ namespace HAL_Simulator
 
     public class HALDigital
     {
+        internal const int ExpectedLoopTiming = 40;
+        internal const int DigitalPins = 26;
+        internal const int PwmPins = 20;
+        internal const int RelayPins = 4;
+        internal const int NumHeaders = 10;
+
         /// Return Type: void*
         ///port_pointer: void*
         ///status: int*
@@ -38,18 +46,19 @@ namespace HAL_Simulator
             return ptr;
         }
 
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "checkPWMChannel")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool checkPWMChannel(IntPtr digital_port_pointer);
+
+        public static bool checkPWMChannel(IntPtr digital_port_pointer)
+        {
+            var dPort = GetDigitalPort(digital_port_pointer);
+            return dPort.port.pin < PwmPins;
+        }
 
 
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "checkRelayChannel")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool checkRelayChannel(IntPtr digital_port_pointer);
+        public static bool checkRelayChannel(IntPtr digital_port_pointer)
+        {
+            var dPort = GetDigitalPort(digital_port_pointer);
+            return dPort.port.pin < RelayPins;
+        }
 
 
         /// Return Type: void
@@ -133,36 +142,35 @@ namespace HAL_Simulator
         public static extern void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status);
 
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///on: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setRelayForward")]
-        public static extern void setRelayForward(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)] bool on, ref int status);
+        public static void setRelayForward(IntPtr digital_port_pointer, bool on, ref int status)
+        {
+            status = 0;
+            var dPort = GetDigitalPort(digital_port_pointer);
+            var relay = halData["relay"][dPort.port.pin];
+            relay["initialized"] = true;
+            relay["fwd"] = on;
+        }
 
+        public static void setRelayReverse(IntPtr digital_port_pointer, bool on, ref int status)
+        {
+            status = 0;
+            var dPort = GetDigitalPort(digital_port_pointer);
+            var relay = halData["relay"][dPort.port.pin];
+            relay["initialized"] = true;
+            relay["rev"] = on;
+        }
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///on: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setRelayReverse")]
-        public static extern void setRelayReverse(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)] bool on, ref int status);
+        public static bool getRelayForward(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["fwd"];
+        }
 
-
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getRelayForward")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getRelayForward(IntPtr digital_port_pointer, ref int status);
-
-
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getRelayReverse")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getRelayReverse(IntPtr digital_port_pointer, ref int status);
+        public static bool getRelayReverse(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["rev"];
+        }
 
 
         /// Return Type: boolean
@@ -173,12 +181,13 @@ namespace HAL_Simulator
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool allocateDIO(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)] bool input, ref int status);
 
+        public static void freeDIO(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            var dPort = GetDigitalPort(digital_port_pointer);
+            halData["dio"][dPort.port.pin]["initialized"] = false;
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "freeDIO")]
-        public static extern void freeDIO(IntPtr digital_port_pointer, ref int status);
+        }
 
 
         /// Return Type: void
