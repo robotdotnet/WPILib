@@ -161,7 +161,7 @@ namespace WPILib
         /// somewhere that is taking care of synchronizing access to the queue.
         /// Remove this Notifier from the timer queue and adjust the next interrupt
         /// time to reflect the current top of the queue.</remarks>
-        public void DeleteFromQueue()
+        private void DeleteFromQueue()
         {
             if (m_queued)
             {
@@ -252,7 +252,7 @@ namespace WPILib
         /// <param name="mask"></param>
         /// <param name="param"></param>
         [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
-        static public void ProcessQueue(uint mask, IntPtr param)
+        static private void ProcessQueue(uint mask, IntPtr param)
         {
             Notifier current;
             while (true)
