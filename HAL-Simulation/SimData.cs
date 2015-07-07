@@ -235,6 +235,14 @@ namespace HAL_Simulator
                 });
             }
 
+            halData["power"] = new Dictionary<dynamic, dynamic>()
+            {
+                {"has_source", new IN(false) },
+                {"vin_voltage", new IN(0) },
+                {"vin_current", new IN(0) },
+                {"user_voltage_3v3", new IN(0) },
+            };
+
 
             halData["CAN"] = new Dictionary<dynamic,dynamic>();
 

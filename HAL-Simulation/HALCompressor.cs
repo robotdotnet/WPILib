@@ -51,7 +51,7 @@ namespace HAL_Simulator
         public static float getCompressorCurrent(IntPtr pcm_pointer, ref int status)
         {
             status = 0;
-            return halData["compressor"]["current"];
+            return (float)halData["compressor"]["current"];
         }
         
         public static bool getCompressorCurrentTooHighFault(IntPtr pcm_pointer, ref int status)

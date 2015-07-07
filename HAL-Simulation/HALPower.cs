@@ -1,19 +1,21 @@
 ﻿using System.Runtime.InteropServices;
+using static HAL_Simulator.SimData;
 
 namespace HAL_Simulator
 {
     public class HALPower
     {
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getVinVoltage")]
-        public static extern float getVinVoltage(ref int status);
+        public static float getVinVoltage(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["vin_voltage"];
+        }
 
-
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getVinCurrent")]
-        public static extern float getVinCurrent(ref int status);
+        public static float getVinCurrent(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["vin_current"];
+        }
 
 
         /// Return Type: float
@@ -66,10 +68,11 @@ namespace HAL_Simulator
         public static extern int getUserCurrentFaults5V(ref int status);
 
 
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserVoltage3V3")]
-        public static extern float getUserVoltage3V3(ref int status);
+        public static float getUserVoltage3V3(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["user_voltage_3v3"];
+        }
 
 
         /// Return Type: float
