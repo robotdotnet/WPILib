@@ -108,8 +108,8 @@ namespace WPILib
             CheckStatus(status);
             HALDigital.SetRelayReverse(m_port, false, ref status);
             CheckStatus(status);
-            HALDigital.FreeDIO(m_port, ref status);
-            CheckStatus(status);
+            //HALDigital.FreeDIO(m_port, ref status);
+            //CheckStatus(status);
         }
 
         /// <summary>
