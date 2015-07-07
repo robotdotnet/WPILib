@@ -72,7 +72,7 @@ namespace WPILib
         /// <returns>The current position of the potentiometer</returns>
         public double Get()
         {
-            return (m_analogInput.GetVoltage() / ControllerPower.Voltage5V) * m_fullRange + m_offset;
+            return (m_analogInput.GetVoltage() / ControllerPower.GetVoltage5V()) * m_fullRange + m_offset;
         }
 
         /// <summary>

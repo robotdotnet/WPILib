@@ -7,7 +7,7 @@ using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib
 {
-    class BuiltInAccelerometer : IAccelerometer, ILiveWindowSendable
+    public class BuiltInAccelerometer : IAccelerometer, ILiveWindowSendable
     {
         public BuiltInAccelerometer(AccelerometerRange range)
         {
@@ -34,7 +34,7 @@ namespace WPILib
                         HALAccelerometer.SetAccelerometerRange(HAL_Base.AccelerometerRange.Range_8G);
                         break;
                     case AccelerometerRange.k16G:
-                        throw new SystemException("16G range not supported (use k2G, k4G, or k8G)");
+                        throw new ArgumentOutOfRangeException(nameof(value), "16G range not supported (use k2G, k4G, or k8G)");
                 }
 
                 HALAccelerometer.SetAccelerometerActive(true);

@@ -10,158 +10,117 @@ namespace WPILib
     public static class ControllerPower
     {
         //TODO: Make these not properties.
-        public static double InputVoltage
+
+        public static double GetInputVoltage()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetVinVoltage(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            float retVal = GetVinVoltage(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double InputCurrrent
+        public static double GetInputCurrrent()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetVinCurrent(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetVinCurrent(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double Voltage3V3
+        public static double GetVoltage3V3()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetUserVoltage3V3(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetUserVoltage3V3(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double Current3V3
+        public static double GetCurrent3V3()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetUserCurrent3V3(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetUserCurrent3V3(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static bool Enabled3V3
+        public static bool GetEnabled3V3()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetUserActive3V3(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = GetUserActive3V3(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static int FaultCount3V3
+        public static int GetFaultCount3V3()
         {
-            get
-            {
-                int status = 0;
-                int retVal = GetUserCurrentFaults3V3(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            int retVal = GetUserCurrentFaults3V3(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double Voltage5V
+        public static double GetVoltage5V()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetUserVoltage5V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetUserVoltage5V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double Current5V
+        public static double GetCurrent5V()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetUserCurrent5V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetUserCurrent5V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static bool Enabled5V
+        public static bool GetEnabled5V()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetUserActive5V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = GetUserActive5V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static int FaultCount5V
+        public static int GetFaultCount5V()
         {
-            get
-            {
-                int status = 0;
-                int retVal = GetUserCurrentFaults5V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            int retVal = GetUserCurrentFaults5V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double Voltage6V
+        public static double GetVoltage6V()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetUserVoltage6V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetUserVoltage6V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static double Current6V
+        public static double GetCurrent6V()
         {
-            get
-            {
-                int status = 0;
-                double retVal = GetUserCurrent6V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            double retVal = GetUserCurrent6V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static bool Enabled6V
+        public static bool GetEnabled6V()
         {
-            get
-            {
-                int status = 0;
-                bool retVal = GetUserActive6V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            bool retVal = GetUserActive6V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
 
-        public static int FaultCount6V
+        public static int GetFaultCount6V()
         {
-            get
-            {
-                int status = 0;
-                int retVal = GetUserCurrentFaults6V(ref status);
-                CheckStatus(status);
-                return retVal;
-            }
+            int status = 0;
+            int retVal = GetUserCurrentFaults6V(ref status);
+            CheckStatus(status);
+            return retVal;
         }
     }
 }
