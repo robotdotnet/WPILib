@@ -79,6 +79,7 @@
     <Compile Include="HALStructures.cs" />
     <Compile Include="HALUsageReporter.cs" />
     <Compile Include="HALUtilities.cs" />
+    <Compile Include="ISimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

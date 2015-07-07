@@ -58,7 +58,6 @@
     <Compile Include="HALUsageReporter.cs" />
     <Compile Include="HALUtilities.cs" />
     <Compile Include="Hooks.cs" />
-    <Compile Include="ISim.cs" />
     <Compile Include="ModeHelpers.cs" />
     <Compile Include="PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

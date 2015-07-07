@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HAL_Simulator
+namespace HAL_Base
 {
-    interface ISim
+    public interface ISimulator : IDisposable
     {
-        void AddArguments();
-
+        string AddArguments();
         void Start();
     }
 }

@@ -139,10 +139,69 @@ namespace HAL_Base
 
                     data(out halData, out halInData);
 
+                    FindSimulators();
+
+                    //
+
                 }
                 s_initialized = true;
             }
         }
+
+        private static List<string> simulatorFiles = null;
+        private static List<Simulator> simulators = new List<Simulator>(); 
+
+        private static string[] ignoreList = { "WPILib.dll", "HAL-Base.dll", "HAL-RoboRIO.dll", "WPILib.Extras.dll", "HAL-Simulation.dll" };
+
+        private struct Simulator
+        {
+            public string AssemblyName;
+            public Type SimType;
+            public string SimName;
+            public string SearchName;
+        }
+
+
+        private static bool FindSimulators()
+        {
+            simulatorFiles =
+                (Directory.GetFiles(Directory.GetCurrentDirectory()).Where(x => x.Contains(".dll"))).ToList();
+            foreach (var s in ignoreList.Where(s => simulatorFiles.Contains(s)))
+            {
+                simulatorFiles.Remove(s);
+            }
+
+            if(simulatorFiles.Count == 0)
+            {
+                return false;
+            }
+
+            bool found = false;
+            //Load each file still available.
+            foreach (var asm in simulatorFiles.Where(File.Exists).Select(Assembly.LoadFile))
+            {
+                string assembly = asm.GetName().Name;
+                var classes = (from t in asm.GetTypes() where typeof (ISimulator).IsAssignableFrom(t) select t).ToList();
+                foreach (var c in classes)
+                {
+                    using (var s = (ISimulator) Activator.CreateInstance(assembly, c.FullName).Unwrap())
+                    {
+                        string sName = s.AddArguments();
+                        found = true;
+                        var sim = new Simulator()
+                        {
+                            AssemblyName = assembly,
+                            SimType = c,
+                            SimName = c.FullName,
+                            SearchName = sName
+                        };
+                        simulators.Add(sim);
+                    }
+                }
+            }
+            return found;
+        }
+
 
         public static string GetJoystickName(byte joystickNum)
         {
