@@ -55,12 +55,12 @@
     <Compile Include="HALSerialPort.cs" />
     <Compile Include="HALSolenoid.cs" />
     <Compile Include="HALStructures.cs" />
-    <Compile Include="HALUsageReporter.cs" />
     <Compile Include="HALUtilities.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="ModeHelpers.cs" />
     <Compile Include="PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PWMHelpers.cs" />
     <Compile Include="SimData.cs" />
   </ItemGroup>
   <ItemGroup>

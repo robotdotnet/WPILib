@@ -186,7 +186,7 @@ namespace HAL_Simulator
                 halData["pwm"].Add(new NotifyDict<dynamic, dynamic>
                 {
                     {"initialized", new OUT(false) },
-                    {"type", new OUT(false) },
+                    {"type", new OUT(null) },
                     {"raw_value", new OUT(0.0) },
                     {"value", new OUT(0.0) },
                     {"period_scale", new OUT(null) },
@@ -322,6 +322,41 @@ namespace HAL_Simulator
                 throw new Exception("This is being thrown in Filter HAL Data.");
             }*/
             return inList;
+        }
+
+        public static void UpdateHalData(Dictionary<dynamic, dynamic> inDict, Dictionary<dynamic, dynamic> outData = null)
+        {
+            if (outData == null)
+                outData = halData;
+
+            foreach (var o in inDict)
+            {
+                if (o.Value is Dictionary<dynamic, dynamic>)
+                {
+                    UpdateHalData(o.Value, outData[o.Key]);
+                }
+                else if (o.Value is List<dynamic> || o.Value is Array)
+                {
+                    var vOut = outData[o.Key];
+                    int count = 0;
+                    foreach (var vv in o.Value)
+                    {
+                        if (vv is Dictionary<dynamic, dynamic>)
+                        {
+                            UpdateHalData(vv, vOut[count]);
+                        }
+                        else
+                        {
+                            vOut[count] = vv;
+                        }
+                        count++;
+                    }
+                }
+                else
+                {
+                    outData[o.Key] = o.Value;
+                }
+            }
         }
     }
 }

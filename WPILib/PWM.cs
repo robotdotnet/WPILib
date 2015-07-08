@@ -161,7 +161,7 @@ namespace WPILib
         /// <param name="center">The center speed (off)</param>
         /// <param name="deadbandMin">The low end of the deadband range</param>
         /// <param name="min">The minimum PWM value</param>
-        protected void SetBounds(double max, double deadbandMax, double center, double deadbandMin, double min)
+        public void SetBounds(double max, double deadbandMax, double center, double deadbandMin, double min)
         {
             int status = 0;
 
@@ -357,27 +357,27 @@ namespace WPILib
         /// <summary>
         /// Get the Max Positive PWM allowed.
         /// </summary>
-        protected int MaxPositivePwm { get; private set; }
+        public int MaxPositivePwm { get; private set; }
 
         /// <summary>
         /// Gets the Min Positive PWM allowed. This is the high end of the deadzone.
         /// </summary>
-        protected int MinPositivePwm => DeadbandElimination ? m_deadbandMaxPwm : CenterPwm + 1;
+        public int MinPositivePwm => DeadbandElimination ? m_deadbandMaxPwm : CenterPwm + 1;
 
         /// <summary>
         /// Gets the Center PWM value.
         /// </summary>
-        protected int CenterPwm { get; private set; }
+        public int CenterPwm { get; private set; }
 
         /// <summary>
         /// Gets the Max Negative PWM allowed. This is the low end of the deadband.
         /// </summary>
-        protected int MaxNegativePwm => DeadbandElimination ? m_deadbandMinPwm : CenterPwm - 1;
+        public int MaxNegativePwm => DeadbandElimination ? m_deadbandMinPwm : CenterPwm - 1;
 
         /// <summary>
         /// Gets the Min Negative PWM allowed.
         /// </summary>
-        protected int MinNegativePwm { get; private set; }
+        public int MinNegativePwm { get; private set; }
 
         /// <summary>
         /// Gets the scale factor for positive values

@@ -1,9 +1,12 @@
 ﻿
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Web.Profile;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.SimData;
+using static HAL_Simulator.PWMHelpers;
 
 namespace HAL_Simulator
 {
@@ -30,6 +33,8 @@ namespace HAL_Simulator
         internal const int RelayPins = 4;
         internal const int NumHeaders = 10;
 
+        internal const int RESOURCE_IS_ALLOCATED = -1029;
+
         /// Return Type: void*
         ///port_pointer: void*
         ///status: int*
@@ -44,6 +49,19 @@ namespace HAL_Simulator
             Marshal.StructureToPtr(p, ptr, true);
 
             return ptr;
+        }
+
+        private static int RemapMXPChannel(int pin)
+        {
+            return pin - 10;
+        }
+
+        private static int RemapMXPPWMChannel(int pin)
+        {
+            if (pin < 14)
+                return pin - 10;
+            else
+                return pin - 6;
         }
 
 
@@ -61,62 +79,95 @@ namespace HAL_Simulator
         }
 
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///value: unsigned short
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWM")]
-        public static extern void setPWM(IntPtr digital_port_pointer, ushort value, ref int status);
+        public static void setPWM(IntPtr digital_port_pointer, ushort value, ref int status)
+        {
+            status = 0;
+            var dPort = GetDigitalPort(digital_port_pointer);
+            halData["pwm"][dPort.port.pin]["raw_value"] = value;
+            halData["pwm"][dPort.port.pin]["value"] = ReverseByType(dPort.port.pin);
+        }
 
+        public static bool allocatePWMChannel(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            var pin = GetDigitalPort(digital_port_pointer).port.pin;
+            var mxp_port = RemapMXPPWMChannel(pin);
+            if (pin >= NumHeaders)
+            {
+                if (halData["mxp"][mxp_port]["initialized"])
+                {
+                    status = RESOURCE_IS_ALLOCATED;
+                    return false;
+                }
+            }
+            if (halData["pwm"][pin]["initialized"])
+            {
+                status = RESOURCE_IS_ALLOCATED;
+                return false;
+            }
+            halData["pwm"][pin]["initialized"] = true;
 
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "allocatePWMChannel")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool allocatePWMChannel(IntPtr digital_port_pointer, ref int status);
+            if (pin > NumHeaders)
+            {
+                halData["mxp"][mxp_port]["initialized"] = true;
+            }
+            return true;
+        }
 
+        public static void freePWMChannel(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            var pin = GetDigitalPort(digital_port_pointer).port.pin;
+            halData["pwm"][pin]["initialized"] = false;
+            halData["pwm"][pin]["raw_value"] = 0;
+            halData["pwm"][pin]["value"] = 0;
+            halData["pwm"][pin]["period_scale"] = false;
+            halData["pwm"][pin]["zero_latch"] = false;
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "freePWMChannel")]
-        public static extern void freePWMChannel(IntPtr digital_port_pointer, ref int status);
+            if (pin > NumHeaders)
+            {
+                var mxp_port = RemapMXPPWMChannel(pin);
+                halData["mxp"][mxp_port]["initialized"] = false;
+            }
+        }
 
+        public static ushort getPWM(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            return (ushort) halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["raw_value"];
+        }
 
-        /// Return Type: unsigned short
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPWM")]
-        public static extern ushort getPWM(IntPtr digital_port_pointer, ref int status);
+        public static void latchPWMZero(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["zero_latch"] = true;
+        }
 
+        public static void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status)
+        {
+            status = 0;
+            halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["period_scale"] = squelchMask;
+        }
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "latchPWMZero")]
-        public static extern void latchPWMZero(IntPtr digital_port_pointer, ref int status);
+        public static IntPtr allocatePWM(ref int status)
+        {
+            status = 0;
+            //TODO: Figure this code out 
+            /*
+                    for i, v in enumerate(hal_data['d0_pwm']):
+                if v is None:
+                    break
+            else:
+                return None
+            */
+            return IntPtr.Zero;
+        }
 
-
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///squelchMask: unsigned int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMPeriodScale")]
-        public static extern void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status);
-
-
-        /// Return Type: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "allocatePWM")]
-        public static extern IntPtr allocatePWM(ref int status);
-
-
-        /// Return Type: void
-        ///pwmGenerator: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "freePWM")]
-        public static extern void freePWM(IntPtr pwmGenerator, ref int status);
+        public static void freePWM(IntPtr pwmGenerator, ref int status)
+        {
+            status = 0;
+            halData["d0_pwm"][GetPWM(pwmGenerator).idx] = null;
+        }
 
 
         /// Return Type: void
@@ -172,69 +223,88 @@ namespace HAL_Simulator
             return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["rev"];
         }
 
-
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///input: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "allocateDIO")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool allocateDIO(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)] bool input, ref int status);
+        public static bool allocateDIO(IntPtr digital_port_pointer, bool input,
+            ref int status)
+        {
+            status = 0;
+            var pin = GetDigitalPort(digital_port_pointer).port.pin;
+            var mxpPort = RemapMXPChannel(pin);
+            if (pin > NumHeaders)
+            {
+                if (halData["mxp"][mxpPort]["initialized"])
+                {
+                    status = RESOURCE_IS_ALLOCATED;
+                    return false;
+                }
+            }
+            var dio = halData["dio"][pin];
+            if (dio["initialized"])
+            {
+                status = RESOURCE_IS_ALLOCATED;
+                return false;
+            }
+            if (pin > NumHeaders)
+            {
+                halData["mxp"][mxpPort]["initialized"] = true;
+            }
+            dio["initialized"] = true;
+            dio["is_input"] = input;
+            return true;
+        }
 
         public static void freeDIO(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            var dPort = GetDigitalPort(digital_port_pointer);
-            halData["dio"][dPort.port.pin]["initialized"] = false;
+            var pin = GetDigitalPort(digital_port_pointer).port.pin;
+            halData["dio"][pin]["initialized"] = false;
+            if (pin > NumHeaders)
+            {
+                halData["mxp"][RemapMXPChannel(pin)]["initialized"] = false;
+            }
 
         }
 
+        public static void setDIO(IntPtr digital_port_pointer, short value, ref int status)
+        {
+            status = 0;
+            halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["value"] = value != 0;
+        }
 
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///value: short
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setDIO")]
-        public static extern void setDIO(IntPtr digital_port_pointer, short value, ref int status);
+        public static bool getDIO(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["value"];
+        }
 
+        public static bool getDIODirection(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["is_input"];
+        }
 
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getDIO")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getDIO(IntPtr digital_port_pointer, ref int status);
+        public static void pulse(IntPtr digital_port_pointer, double pulseLength, ref int status)
+        {
+            status = 0;
+            halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["pulse_length"] = pulseLength;
 
+        }
 
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getDIODirection")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getDIODirection(IntPtr digital_port_pointer, ref int status);
+        public static bool isPulsing(IntPtr digital_port_pointer, ref int status)
+        {
+            status = 0;
+            return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["pulse_length"] != 0;
+        }
 
-
-        /// Return Type: void
-        ///digital_port_pointer: void*
-        ///pulseLength: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "pulse")]
-        public static extern void pulse(IntPtr digital_port_pointer, double pulseLength, ref int status);
-
-
-        /// Return Type: boolean
-        ///digital_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "isPulsing")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool isPulsing(IntPtr digital_port_pointer, ref int status);
-
-
-        /// Return Type: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "isAnyPulsing")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool isAnyPulsing(ref int status);
+        public static bool isAnyPulsing(ref int status)
+        {
+            status = 0;
+            foreach (var p in halData["dio"])
+            {
+                if (p != null && p["pulse_lenght"] != null)
+                    return true;
+            }
+            return false;
+        }
 
 
         /// Return Type: void*
@@ -516,10 +586,10 @@ namespace HAL_Simulator
         public static extern void setEncoderIndexSource(IntPtr encoder_pointer, uint pin, [MarshalAs(UnmanagedType.I1)] bool analogTrigger, [MarshalAs(UnmanagedType.I1)] bool activeHigh, [MarshalAs(UnmanagedType.I1)] bool edgeSensitive, ref int status);
 
 
-        /// Return Type: unsigned short
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getLoopTiming")]
-        public static extern ushort getLoopTiming(ref int status);
+        public static ushort getLoopTiming(ref int status)
+        {
+            return (ushort) halData["pwm_loop_timing"];
+        }
 
 
         /// Return Type: void

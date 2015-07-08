@@ -55,12 +55,19 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="MotorControllers\TestJaguar.cs" />
+    <Compile Include="MotorControllers\TestTalonSRX.cs" />
+    <Compile Include="MotorControllers\TestVictor.cs" />
+    <Compile Include="MotorControllers\TestVictorSP.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
+    <Compile Include="TestHALSim.cs" />
     <Compile Include="TestNotifier.cs" />
+    <Compile Include="TestPWM.cs" />
     <Compile Include="TestRelay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MotorControllers\TestTalon.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">

@@ -139,7 +139,7 @@ namespace HAL_Base
 
                     data(out halData, out halInData);
 
-                    FindSimulators();
+                    //FindSimulators();
 
                     //
 

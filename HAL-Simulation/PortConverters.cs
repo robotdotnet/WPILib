@@ -33,5 +33,10 @@ namespace HAL_Simulator
         {
             return (AnalogTrigger)Marshal.PtrToStructure(ptr, typeof(AnalogTrigger));
         }
+
+        public static PWM GetPWM(IntPtr ptr)
+        {
+            return (PWM) Marshal.PtrToStructure(ptr, typeof (PWM));
+        }
     }
 }

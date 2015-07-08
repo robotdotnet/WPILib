@@ -289,6 +289,29 @@ namespace HAL_Simulator
 
         public static uint HALReport(byte resource, byte instanceNumber, byte context = 0, string feature = null)
         {
+            switch (resource)
+            {
+                case (byte)ResourceType.kResourceType_Jaguar:
+                    halData["pwm"][instanceNumber]["type"] = "jaguar";
+                    break;
+                case (byte) ResourceType.kResourceType_Talon:
+                    halData["pwm"][instanceNumber]["type"] = "talon";
+                    break;
+                case (byte)ResourceType.kResourceType_TalonSRX:
+                    halData["pwm"][instanceNumber]["type"] = "talonsrx";
+                    break;
+                case (byte)ResourceType.kResourceType_Victor:
+                    halData["pwm"][instanceNumber]["type"] = "victor";
+                    break;
+                case (byte)ResourceType.kResourceType_VictorSP:
+                    halData["pwm"][instanceNumber]["type"] = "victorsp";
+                    break;
+                case (byte) ResourceType.kResourceType_Solenoid:
+                    halData["solenoid"][instanceNumber]["initialized"] = true;
+                    break;
+            }
+
+
             return 0;
         }
     }
