@@ -36,7 +36,7 @@ namespace WPILib
 
                 try
                 {
-                    m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                    s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
                 }
                 catch (CheckedAllocationException)
                 {
@@ -44,7 +44,7 @@ namespace WPILib
                 }
                 try
                 {
-                    m_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                    s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
                 }
                 catch (CheckedAllocationException)
                 {
@@ -80,8 +80,8 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                m_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                s_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                s_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_reverseChannel);
             }
         }
 

@@ -17,7 +17,7 @@ namespace HAL_Simulator
         }
 
         public static uint GetTime()
-        {//TODO: Implement
+        {
             return (uint)(DateTime.Now.Ticks);
         }
 

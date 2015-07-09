@@ -5,24 +5,6 @@ using HAL_Base;
 
 namespace HAL_Simulator
 {
-    /*
-    public enum CTR_Code
-    {
-        CTR_OKAY,
-
-        CTR_RxTimeout,
-
-        CTR_TxTimeout,
-
-        CTR_InvalidParamValue,
-
-        CTR_UnexpectedArbId,
-
-        CTR_TxFailed,
-
-        CTR_SigNotUpdated,
-    }
-     * */
     public class HALCanTalonSRX
     {
         /// Return Type: void*

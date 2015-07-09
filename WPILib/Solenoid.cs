@@ -1,6 +1,7 @@
 ﻿using System;
 using HAL_Base;
 using NetworkTables.Tables;
+using WPILib.Exceptions;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALSolenoid;
@@ -29,6 +30,16 @@ namespace WPILib
             {
                 CheckSolenoidModule(m_moduleNumber);
                 CheckSolenoidChannel(m_channel);
+
+                //Check to see if it is already allocated
+                try
+                {
+                    s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_channel);
+                }
+                catch (CheckedAllocationException)
+                {
+                    throw new AllocationException("Solenoid channel " + m_channel + " on module " + m_moduleNumber + " is already allocated");
+                }
 
                 int status = 0;
 
@@ -66,6 +77,10 @@ namespace WPILib
         ///<inheritdoc/>
         public override void Dispose()
         {
+            lock (m_lockObject)
+            {
+                s_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_channel);
+            }
         }
 
         /// <summary>

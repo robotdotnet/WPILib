@@ -243,6 +243,16 @@ namespace HAL_Simulator
                 {"user_voltage_3v3", new IN(0) },
             };
 
+            halData["solenoid"] = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+            {
+                halData["solenoid"].Add(new NotifyDict<dynamic, dynamic>
+                {
+                    {"initialized", new OUT(false)},
+                    {"value", new OUT(false)}
+                });
+            };
+
 
             halData["CAN"] = new Dictionary<dynamic,dynamic>();
 

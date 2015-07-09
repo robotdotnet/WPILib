@@ -20,7 +20,7 @@ namespace WPILib
         /// <summary>
         /// The allocated resources for the solenoid.
         /// </summary>
-        protected Resource m_allocated = new Resource(63 * SolenoidChannels);
+        protected static Resource s_allocated = new Resource(63 * SolenoidChannels);
         private object m_lockObject = new object();
 
         /// <summary>

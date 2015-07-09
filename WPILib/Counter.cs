@@ -27,6 +27,7 @@ namespace WPILib
         {
             int status = 0;
             m_counter = InitializeCounter(mode, ref m_index, ref status);
+            CheckStatus(status);
 
             m_allocatedUpSource = false;
             m_allocatedDownSource = false;

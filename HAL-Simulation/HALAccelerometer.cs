@@ -1,20 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using HAL_Base;
 using static HAL_Simulator.SimData;
 
 namespace HAL_Simulator
 {
-    public enum AccelerometerRange
-    {
-        /// kRange_2G -> 0
-        kRange_2G = 0,
-
-        /// kRange_4G -> 1
-        kRange_4G = 1,
-
-        /// kRange_8G -> 2
-        kRange_8G = 2,
-    }
-
     public class HALAccelerometer
     {
         /// Return Type: void

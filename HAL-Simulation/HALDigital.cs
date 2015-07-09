@@ -1,30 +1,15 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Runtime.InteropServices;
-using System.Web.Profile;
+using HAL_Base;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PWMHelpers;
+using static HAL_Simulator.HALErrorConstants;
 
 namespace HAL_Simulator
 {
-    public enum Mode
-    {
-        /// kTwoPulse -> 0
-        kTwoPulse = 0,
-
-        /// kSemiperiod -> 1
-        kSemiperiod = 1,
-
-        /// kPulseLength -> 2
-        kPulseLength = 2,
-
-        /// kExternalDirection -> 3
-        kExternalDirection = 3,
-    }
-
     public class HALDigital
     {
         internal const int ExpectedLoopTiming = 40;
@@ -32,8 +17,6 @@ namespace HAL_Simulator
         internal const int PwmPins = 20;
         internal const int RelayPins = 4;
         internal const int NumHeaders = 10;
-
-        internal const int RESOURCE_IS_ALLOCATED = -1029;
 
         /// Return Type: void*
         ///port_pointer: void*
@@ -152,15 +135,30 @@ namespace HAL_Simulator
         public static IntPtr allocatePWM(ref int status)
         {
             status = 0;
-            //TODO: Figure this code out 
-            /*
-                    for i, v in enumerate(hal_data['d0_pwm']):
-                if v is None:
-                    break
-            else:
-                return None
-            */
-            return IntPtr.Zero;
+            bool found = false;
+            int i = 0;
+            for (i = 0; i < halData["d0_pwm"].Length; i++)
+            {
+                if (halData["d0_pwm"][i] == null)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                return IntPtr.Zero;
+
+            halData["d0_pwm"][i] = new Dictionary<dynamic, dynamic>()
+            {
+                ["duty_cycle"] = null,
+                ["pin"] = null,
+            };
+
+            PWM p = new PWM {idx = (uint) i};
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
+            Marshal.StructureToPtr(p, ptr, true);
+
+            return ptr;
         }
 
         public static void freePWM(IntPtr pwmGenerator, ref int status)
@@ -170,27 +168,24 @@ namespace HAL_Simulator
         }
 
 
-        /// Return Type: void
-        ///rate: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMRate")]
-        public static extern void setPWMRate(double rate, ref int status);
 
+        public static void setPWMRate(double rate, ref int status)
+        {
+            status = 0;
+            halData["d0_pwm_rate"] = rate;
+        }
 
-        /// Return Type: void
-        ///pwmGenerator: void*
-        ///dutyCycle: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMDutyCycle")]
-        public static extern void setPWMDutyCycle(IntPtr pwmGenerator, double dutyCycle, ref int status);
+        public static void setPWMDutyCycle(IntPtr pwmGenerator, double dutyCycle, ref int status)
+        {
+            status = 0;
+            halData["d0_pwm"][GetPWM(pwmGenerator).idx]["duty_cycle"] = dutyCycle;
+        }
 
-
-        /// Return Type: void
-        ///pwmGenerator: void*
-        ///pin: unsigned int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMOutputChannel")]
-        public static extern void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status);
+        public static void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status)
+        {
+            status = 0;
+            halData["d0_pwm"][GetPWM(pwmGenerator).idx]["pin"] = pin;
+        }
 
 
         public static void setRelayForward(IntPtr digital_port_pointer, bool on, ref int status)
@@ -306,28 +301,45 @@ namespace HAL_Simulator
             return false;
         }
 
+        public static IntPtr initializeCounter(Mode mode, ref uint index, ref int status)
+        {
+            status = 0;
+            int i = 0;
+            for (i = 0; i < halData["counter"].Length; i++)
+            {
+                var cnt = halData["counter"][i];
+                if (!cnt["initialized"])
+                {
+                    cnt["initialized"] = true;
+                    cnt["mode"] = mode;
 
-        /// Return Type: void*
-        ///mode: Mode
-        ///index: unsigned int*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeCounter")]
-        public static extern IntPtr initializeCounter(Mode mode, ref uint index, ref int status);
+                    Counter c = new Counter() {idx = (uint)i};
+                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
+                    Marshal.StructureToPtr(c, ptr, true);
+                    index = (uint)i;
 
+                    return ptr;
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "freeCounter")]
-        public static extern void freeCounter(IntPtr counter_pointer, ref int status);
+                }
+            }
 
+            status = NO_AVAILABLE_RESOURCES;
+            return IntPtr.Zero;
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///size: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterAverageSize")]
-        public static extern void setCounterAverageSize(IntPtr counter_pointer, int size, ref int status);
+        public static void freeCounter(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["initialized"] = false;
+
+            Marshal.FreeHGlobal(counter_pointer);
+        }
+
+        public static void setCounterAverageSize(IntPtr counter_pointer, int size, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["average_size"] = size;
+        }
 
 
         /// Return Type: void
@@ -424,26 +436,25 @@ namespace HAL_Simulator
         [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterSamplesToAverage")]
         public static extern void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status);
 
-
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "resetCounter")]
-        public static extern void resetCounter(IntPtr counter_pointer, ref int status);
-
-
-        /// Return Type: int
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getCounter")]
-        public static extern int getCounter(IntPtr counter_pointer, ref int status);
+        public static void resetCounter(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["count"] = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["period"] = 0;
+        }
 
 
-        /// Return Type: double
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterPeriod")]
-        public static extern double getCounterPeriod(IntPtr counter_pointer, ref int status);
+        public static int getCounter(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            return halData["counter"][GetCounter(counter_pointer).idx]["count"];
+        }
+
+        public static double getCounterPeriod(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            return halData["counter"][GetCounter(counter_pointer).idx]["period"];
+        }
 
 
         /// Return Type: void
@@ -486,104 +497,119 @@ namespace HAL_Simulator
         public static extern void setCounterReverseDirection(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)] bool reverseDirection, ref int status);
 
 
-        /// Return Type: void*
-        ///port_a_module: byte
-        ///port_a_pin: unsigned int
-        ///port_a_analog_trigger: boolean
-        ///port_b_module: byte
-        ///port_b_pin: unsigned int
-        ///port_b_analog_trigger: boolean
-        ///reverseDirection: boolean
-        ///index: int*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "initializeEncoder")]
-        public static extern IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, [MarshalAs(UnmanagedType.I1)] bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, [MarshalAs(UnmanagedType.I1)] bool port_b_analog_trigger, [MarshalAs(UnmanagedType.I1)] bool reverseDirection, ref int index, ref int status);
+        public static IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger,
+            byte port_b_module, uint port_b_pin, bool port_b_analog_trigger, bool reverseDirection, ref int index,
+            ref int status)
+        {
+            status = 0;
+            for (int i = 0; i < halData["encoder"].Length; i++)
+            {
+                var enc = halData["encoder"][i];
+                if (!enc["initialized"])
+                {
+                    enc["initialized"] = true;
+                    enc["config"] = new Dictionary<dynamic, dynamic>()
+                    {
+                        ["ASource_Module"] = port_a_module,
+                        ["ASource_Channel"] = port_a_pin,
+                        ["ASource_AnalogTrigger"] = port_a_analog_trigger,
+                        ["BSource_Module"] = port_b_module,
+                        ["BSource_Channel"] = port_b_pin,
+                        ["BSource_AnalogTrigger"] = port_b_analog_trigger,
+                    };
+
+                    enc["reverse_direction"] = reverseDirection;
+
+                    Encoder e = new Encoder() { idx = (uint)i};
+                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
+                    Marshal.StructureToPtr(e, ptr, true);
+
+                    return ptr;
+
+                }
+            }
+
+            status = NO_AVAILABLE_RESOURCES;
+            return IntPtr.Zero;
+        }
+
+        public static void freeEncoder(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["initialized"] = false;
+
+            Marshal.FreeHGlobal(encoder_pointer);
+        }
+
+        public static void resetEncoder(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["count"] = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["period "] = 0;
+        }
+
+        public static int getEncoder(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            return halData["encoder"][GetEncoder(encoder_pointer).idx]["count"];
+        }
+
+        public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            return halData["encoder"][GetEncoder(encoder_pointer).idx]["period"];
+        }
 
 
-        /// Return Type: void
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "freeEncoder")]
-        public static extern void freeEncoder(IntPtr encoder_pointer, ref int status);
+        public static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
+        {
+            status = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["max_period"] = maxPeriod;
+        }
+
+        public static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            var enc = halData["encoder"][GetEncoder(encoder_pointer).idx];
+            return enc["period"] > enc["max_period"];
+        }
+
+        public static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            return halData["encoder"][GetEncoder(encoder_pointer).idx]["direction"];
+        }
+
+        public static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
+        {
+            status = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["reverse_direction"] = reverseDirection;
+        }
+
+        public static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
+        {
+            status = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"] = samplesToAverage;
+        }
+
+        public static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
+        {
+            status = 0;
+            return halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"];
+        }
 
 
-        /// Return Type: void
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "resetEncoder")]
-        public static extern void resetEncoder(IntPtr encoder_pointer, ref int status);
-
-
-        /// Return Type: int
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoder")]
-        public static extern int getEncoder(IntPtr encoder_pointer, ref int status);
-
-
-        /// Return Type: double
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderPeriod")]
-        public static extern double getEncoderPeriod(IntPtr encoder_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///encoder_pointer: void*
-        ///maxPeriod: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderMaxPeriod")]
-        public static extern void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status);
-
-
-        /// Return Type: boolean
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderStopped")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getEncoderStopped(IntPtr encoder_pointer, ref int status);
-
-
-        /// Return Type: boolean
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderDirection")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getEncoderDirection(IntPtr encoder_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///encoder_pointer: void*
-        ///reverseDirection: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderReverseDirection")]
-        public static extern void setEncoderReverseDirection(IntPtr encoder_pointer, [MarshalAs(UnmanagedType.I1)] bool reverseDirection, ref int status);
-
-
-        /// Return Type: void
-        ///encoder_pointer: void*
-        ///samplesToAverage: unsigned int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderSamplesToAverage")]
-        public static extern void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status);
-
-
-        /// Return Type: unsigned int
-        ///encoder_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getEncoderSamplesToAverage")]
-        public static extern uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///encoder_pointer: void*
-        ///pin: unsigned int
-        ///analogTrigger: boolean
-        ///activeHigh: boolean
-        ///edgeSensitive: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setEncoderIndexSource")]
-        public static extern void setEncoderIndexSource(IntPtr encoder_pointer, uint pin, [MarshalAs(UnmanagedType.I1)] bool analogTrigger, [MarshalAs(UnmanagedType.I1)] bool activeHigh, [MarshalAs(UnmanagedType.I1)] bool edgeSensitive, ref int status);
+        public static void setEncoderIndexSource(IntPtr encoder_pointer, uint pin, bool analogTrigger,
+            bool activeHigh, bool edgeSensitive, ref int status)
+        {
+            status = 0;
+            var enc = halData["encoder"][GetEncoder(encoder_pointer).idx]["config"];
+            enc["IndexSource_Channel"] = pin;
+            enc["IndexSource_Module"] = 0;
+            enc["IndexSource_AnalogTrigger"] = analogTrigger;
+            enc["IndexActiveHigh"] = activeHigh;
+            enc["IndexEdgeSensitive"] = edgeSensitive;
+        }
 
 
         public static ushort getLoopTiming(ref int status)
@@ -591,149 +617,105 @@ namespace HAL_Simulator
             return (ushort) halData["pwm_loop_timing"];
         }
 
+        public static void spiInitialize(byte port, ref int status)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// Return Type: void
-        ///port: byte
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiInitialize")]
-        public static extern void spiInitialize(byte port, ref int status);
+        public static int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size)
+        {
+            throw new NotImplementedException();
+        }
 
+        public static int spiWrite(byte port, byte[] dataToSend, byte sendSize)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// Return Type: int
-        ///port: byte
-        ///dataToSend: byte*
-        ///dataReceived: byte*
-        ///size: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiTransaction")]
-        public static extern int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size);
+        public static int spiRead(byte port, byte[] buffer, byte count)
+        {
+            throw new NotImplementedException();
+        }
 
+        public static void spiClose(byte port)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// Return Type: int
-        ///port: byte
-        ///dataToSend: byte*
-        ///sendSize: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiWrite")]
-        public static extern int spiWrite(byte port, byte[] dataToSend, byte sendSize);
+        public static void spiSetSpeed(byte port, uint speed)
+        {
+            throw new NotImplementedException();
+        }
 
-
-        /// Return Type: int
-        ///port: byte
-        ///buffer: byte*
-        ///count: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiRead")]
-        public static extern int spiRead(byte port, byte[] buffer, byte count);
-
-
-        /// Return Type: void
-        ///port: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiClose")]
-        public static extern void spiClose(byte port);
+        public static void spiSetBitsPerWord(byte port, byte bpw)
+        {
+            throw new NotImplementedException();
+        }
 
 
-        /// Return Type: void
-        ///port: byte
-        ///speed: unsigned int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetSpeed")]
-        public static extern void spiSetSpeed(byte port, uint speed);
+        public static void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high)
+        {
+            throw new NotImplementedException();
+        }
 
 
-        /// Return Type: void
-        ///port: byte
-        ///bpw: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetBitsPerWord")]
-        public static extern void spiSetBitsPerWord(byte port, byte bpw);
+        public static void spiSetChipSelectActiveHigh(byte port, ref int status)
+        {
+            throw new NotImplementedException();
+        }
 
 
-        /// Return Type: void
-        ///port: byte
-        ///msb_first: int
-        ///sample_on_trailing: int
-        ///clk_idle_high: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetOpts")]
-        public static extern void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high);
+        public static void spiSetChipSelectActiveLow(byte port, ref int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static int spiGetHandle(byte port)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static void spiSetHandle(byte port, int handle)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IntPtr spiGetSemaphore(byte port)
+        {
+            throw new NotImplementedException();
+        }
 
 
-        /// Return Type: void
-        ///port: byte
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetChipSelectActiveHigh")]
-        public static extern void spiSetChipSelectActiveHigh(byte port, ref int status);
+        public static void spiSetSemaphore(byte port, IntPtr semaphore)
+        {
+            throw new NotImplementedException();
+        }
 
+        public static void i2CInitialize(byte port, ref int status)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// Return Type: void
-        ///port: byte
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetChipSelectActiveLow")]
-        public static extern void spiSetChipSelectActiveLow(byte port, ref int status);
+        public static int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize,
+            byte[] dataReceived, byte receiveSize)
+        {
+            throw new NotImplementedException();
+        }
 
+        public static int i2CWrite(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// Return Type: int
-        ///port: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiGetHandle")]
-        public static extern int spiGetHandle(byte port);
+        public static int i2CRead(byte port, byte deviceAddress, byte[] buffer, byte count)
+        {
+            throw new NotImplementedException();
+        }
 
-
-        /// Return Type: void
-        ///port: byte
-        ///handle: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetHandle")]
-        public static extern void spiSetHandle(byte port, int handle);
-
-        //Actually returns MUTEX_ID
-        /// Return Type: int
-        ///port: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiGetSemaphore")]
-        public static extern IntPtr spiGetSemaphore(byte port);
-
-
-        //Actually takes MUTEX_ID
-        /// Return Type: void
-        ///port: byte
-        ///semaphore: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "spiSetSemaphore")]
-        public static extern void spiSetSemaphore(byte port, IntPtr semaphore);
-
-
-        /// Return Type: void
-        ///port: byte
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "i2CInitialize")]
-        public static extern void i2CInitialize(byte port, ref int status);
-
-
-        /// Return Type: int
-        ///port: byte
-        ///deviceAddress: byte
-        ///dataToSend: byte*
-        ///sendSize: byte
-        ///dataReceived: byte*
-        ///receiveSize: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "i2CTransaction")]
-        public static extern int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize, byte[] dataReceived, byte receiveSize);
-
-
-        /// Return Type: int
-        ///port: byte
-        ///deviceAddress: byte
-        ///dataToSend: byte*
-        ///sendSize: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "i2CWrite")]
-        public static extern int i2CWrite(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize);
-
-
-        /// Return Type: int
-        ///port: byte
-        ///deviceAddress: byte
-        ///buffer: byte*
-        ///count: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "i2CRead")]
-        public static extern int i2CRead(byte port, byte deviceAddress, byte[] buffer, byte count);
-
-
-        /// Return Type: void
-        ///port: byte
-        [DllImport("libHALAthena_shared.so", EntryPoint = "i2CClose")]
-        public static extern void i2CClose(byte port);
+        public static void i2CClose(byte port)
+        {
+            throw new NotImplementedException();
+        }
 
 
         /// Return Type: void

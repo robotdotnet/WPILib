@@ -38,5 +38,15 @@ namespace HAL_Simulator
         {
             return (PWM) Marshal.PtrToStructure(ptr, typeof (PWM));
         }
+
+        public static Encoder GetEncoder(IntPtr ptr)
+        {
+            return (Encoder)Marshal.PtrToStructure(ptr, typeof(Encoder));
+        }
+
+        public static Counter GetCounter(IntPtr ptr)
+        {
+            return (Counter)Marshal.PtrToStructure(ptr, typeof(Counter));
+        }
     }
 }

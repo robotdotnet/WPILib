@@ -5,25 +5,10 @@ using System.Web.UI.WebControls;
 using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
+using static HAL_Simulator.HALErrorConstants;
 
 namespace HAL_Simulator
 {
-    /*
-    public enum AnalogTriggerType
-    {
-        /// kInWindow -> 0
-        kInWindow = 0,
-
-        /// kState -> 1
-        kState = 1,
-
-        /// kRisingPulse -> 2
-        kRisingPulse = 2,
-
-        /// kFallingPulse -> 3
-        kFallingPulse = 3,
-    }
-     * */
 
     public class HALAnalog
     {
@@ -32,16 +17,10 @@ namespace HAL_Simulator
         internal const double DefaultSampleRate = 50000.0;
         internal const int AnalogInputPins = 8;
         internal const int AnalogOutputPins = 2;
-        internal const int VOLTAGE_OUT_OF_RANGE = 1002;
-        internal const int NO_AVAILABLE_RESOURCES = -1004;
-
         internal const int AccumulatorNumChannels = 2;
+
         internal static readonly int[] AccumulatorChannels = { 0, 1 };
 
-        internal const int ANALOG_TRIGGER_PULSE_OUTPUT_ERROR = -1011;
-        internal const int ANALOG_TRIGGER_LIMIT_ORDER_ERROR = -1010;
-
-        internal const int INCOMPATIBLE_STATE = 1015;
 
         public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
         {

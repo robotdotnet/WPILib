@@ -103,6 +103,8 @@ namespace HAL_Simulator
                     return ReverseVictorPWM((double)trans_val);
                 case "victorsp":
                     return ReverseVictorSPPWM((double)trans_val);
+                case "servo":
+                    return 0.0;
                 default:
                     if (type != null)
                         throw new InvalidOperationException($"The type {type} is not a usable motor controller type");

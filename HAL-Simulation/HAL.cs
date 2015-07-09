@@ -1,11 +1,13 @@
 ﻿
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
 using HAL_Base;
 using static HAL_Simulator.SimData;
+using static HAL_Simulator.HALErrorConstants;
 
 namespace HAL_Simulator
 {
@@ -36,6 +38,78 @@ namespace HAL_Simulator
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
+
+            if (code == 0)
+                retVal = "";
+            else if (code == CTR_RxTimeout)
+                retVal = "CTRE CAN Recieve Timeout";
+            else if (code == CTR_InvalidParamValue)
+                retVal = "CTRE CAN Invalid Parameter";
+            else if (code == CTR_UnexpectedArbId)
+                retVal = "CTRE Unexpected Arbitration ID (CAN Node ID)";
+            else if (code == CTR_TxFailed)
+                retVal = "CTRE CAN Transmit Error";
+            else if (code == CTR_SigNotUpdated)
+                retVal = "CTRE CAN Signal Not Updated";
+            else if (code == NiFpga_Status_FifoTimeout)
+                retVal = "NIFPGA: FIFO timeout error";
+            else if (code == NiFpga_Status_TransferAborted)
+                retVal = "NIFPGA: Transfer aborted error";
+            else if (code == NiFpga_Status_MemoryFull)
+                retVal = "NIFPGA: Memory Allocation failed, memory full";
+            else if (code == NiFpga_Status_SoftwareFault)
+                retVal = "NIFPGA: Unexepected software error";
+            else if (code == NiFpga_Status_InvalidParameter)
+                retVal = "NIFPGA: Invalid Parameter";
+            else if (code == NiFpga_Status_ResourceNotFound)
+                retVal = "NIFPGA: Resource not found";
+            else if (code == NiFpga_Status_ResourceNotInitialized)
+                retVal = "NIFPGA: Resource not initialized";
+            else if (code == NiFpga_Status_HardwareFault)
+                retVal = "NIFPGA: Hardware Fault";
+            else if (code == NiFpga_Status_IrqTimeout)
+                retVal = "NIFPGA: Interrupt timeout";
+
+            else if (code == ERR_CANSessionMux_InvalidBuffer)
+                retVal = "CAN: Invalid Buffer";
+            else if (code == ERR_CANSessionMux_MessageNotFound)
+                retVal = "CAN: Message not found";
+            else if (code == WARN_CANSessionMux_NoToken)
+                retVal = "CAN: No token";
+            else if (code == ERR_CANSessionMux_NotAllowed)
+                retVal = "CAN: Not allowed";
+            else if (code == ERR_CANSessionMux_NotInitialized)
+                retVal = "CAN: Not initialized";
+
+            else if (code == SAMPLE_RATE_TOO_HIGH)
+                retVal = "HAL: Analog module sample rate is too high";
+            else if (code == VOLTAGE_OUT_OF_RANGE)
+                retVal = "HAL: Voltage to convert to raw value is out of range [0; 5]";
+            else if (code == LOOP_TIMING_ERROR)
+                retVal = "HAL: Digital module loop timing is not the expected value";
+            else if (code == SPI_WRITE_NO_MOSI)
+                retVal = "HAL: Cannot write to SPI port with no MOSI output";
+            else if (code == SPI_READ_NO_MISO)
+                retVal = "HAL: Cannot read from SPI port with no MISO input";
+            else if (code == SPI_READ_NO_DATA)
+                retVal = "HAL: No data available to read from SPI";
+            else if (code == INCOMPATIBLE_STATE)
+                retVal = "HAL: Incompatible State: The operation cannot be completed";
+            else if (code == NO_AVAILABLE_RESOURCES)
+                retVal = "HAL: No available resources to allocate";
+            else if (code == NULL_PARAMETER)
+                retVal = "HAL: A pointer parameter to a method is NULL";
+            else if (code == ANALOG_TRIGGER_LIMIT_ORDER_ERROR)
+                retVal = "HAL: AnalogTrigger limits error.  Lower limit > Upper Limit";
+            else if (code == ANALOG_TRIGGER_PULSE_OUTPUT_ERROR)
+                retVal = "HAL: Attempted to read AnalogTrigger pulse output.";
+            else if (code == PARAMETER_OUT_OF_RANGE)
+                retVal = "HAL: A parameter is out of range.";
+            else if (code == RESOURCE_IS_ALLOCATED)
+                retVal = "HAL: A resource is already allocated.";
+            else
+                retVal = "Unknown error status";
+
 
             return Marshal.StringToHGlobalAnsi(retVal);
         }
@@ -71,7 +145,6 @@ namespace HAL_Simulator
             return 0;
         }
 
-        //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALGetControlWord")]
         public static int HALGetControlWord(ref HALControlWord data)
         {
             var h = halData["control"];
@@ -94,7 +167,7 @@ namespace HAL_Simulator
 
 
 
-            data = new HALControlWord((uint) r);
+            data = new HALControlWord((uint)r);
             return 0;
         }
 
@@ -111,28 +184,38 @@ namespace HAL_Simulator
             {
                 int tmp = 0;
                 if (joyData[i] < 0)
-                    tmp = joyData[i]*128;
+                    tmp = joyData[i] * 128;
                 else
-                    tmp = joyData[i]*127;
-                axes.axes[i] = (short) tmp;
+                    tmp = joyData[i] * 127;
+                axes.axes[i] = (short)tmp;
             }
             axes.count = 12; //Need to make this netter.
             return 0;
         }
 
         public static int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs)
-        {
-            //TODO: Fix
+        { 
             povs.povs = new HALJoystickPOVArray();
-            povs.count = 12;
+            var povData = halData["joysticks"][joystickNum]["povs"];
+            for (int i = 0; i < povData.Length; i++)
+            {
+                povs.povs[i] = (short)povData[i];
+            }
+            povs.count = (ushort)povData.Length;
             return 0;
         }
 
         public static int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons)
         {
-            //TODO: Fix
-            buttons.buttons = 123;
-            buttons.count = 12;
+            var b = halData["joysticks"][joystickNum]["buttons"];
+            uint total = 0;
+            for (int i = 1; i < b.Length; i++)
+            {
+                total = total + (uint)((b[i] ? 1 : 0) << i-1);
+            }
+
+            buttons.buttons = total;
+            buttons.count = (byte)(b.Length - 1);
             return 0;
         }
 
@@ -189,13 +272,10 @@ namespace HAL_Simulator
             }
             else
             {
-                return ((Hooks.GetFPGATime() - matchStart)/
+                return ((Hooks.GetFPGATime() - matchStart) /
                         1000000.0);
             }
         }
-
-        //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALSetNewDataSem")]
-        //public static extern void HALSetNewDataSem(System.IntPtr sem);
 
         public static bool HALGetSystemActive(ref int status)
         {
@@ -294,7 +374,7 @@ namespace HAL_Simulator
                 case (byte)ResourceType.kResourceType_Jaguar:
                     halData["pwm"][instanceNumber]["type"] = "jaguar";
                     break;
-                case (byte) ResourceType.kResourceType_Talon:
+                case (byte)ResourceType.kResourceType_Talon:
                     halData["pwm"][instanceNumber]["type"] = "talon";
                     break;
                 case (byte)ResourceType.kResourceType_TalonSRX:
@@ -306,7 +386,10 @@ namespace HAL_Simulator
                 case (byte)ResourceType.kResourceType_VictorSP:
                     halData["pwm"][instanceNumber]["type"] = "victorsp";
                     break;
-                case (byte) ResourceType.kResourceType_Solenoid:
+                case (byte)ResourceType.kResourceType_Servo:
+                    halData["pwm"][instanceNumber]["type"] = "servo";
+                    break;
+                case (byte)ResourceType.kResourceType_Solenoid:
                     halData["solenoid"][instanceNumber]["initialized"] = true;
                     break;
             }

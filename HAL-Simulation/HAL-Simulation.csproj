@@ -47,6 +47,7 @@
     <Compile Include="HALCANTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />
+    <Compile Include="HALErrorConstants.cs" />
     <Compile Include="HALInterrupts.cs" />
     <Compile Include="HALNotifier.cs" />
     <Compile Include="HALPDP.cs" />
