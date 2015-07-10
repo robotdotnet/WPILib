@@ -37,12 +37,18 @@ namespace HAL_Simulator
 
             if (mode != oldMode || enabled != newEnabled)
             {
-                if (mode == "test")
-                    SetTestMode(newEnabled);
-                else if (mode == "auto")
-                    SetAutonomous(newEnabled);
-                else if (mode == "teleop")
-                    SetTeleopMode(newEnabled);
+                switch (mode)
+                {
+                    case "test":
+                        SetTestMode(newEnabled);
+                        break;
+                    case "auto":
+                        SetAutonomous(newEnabled);
+                        break;
+                    case "teleop":
+                        SetTeleopMode(newEnabled);
+                        break;
+                }
 
             }
         }
@@ -55,7 +61,7 @@ namespace HAL_Simulator
             halData["control"]["ds_attached"] = true;
 
             if (newEnabled)
-                halData["time"]["match_start"] = Hooks.GetFPGATime() - 15000000;
+                halData["time"]["match_start"] = SimHooks.GetFPGATime() - 15000000;
             else
                 halData["time"]["match_start"] = 0;
 
@@ -70,7 +76,7 @@ namespace HAL_Simulator
             halData["control"]["ds_attached"] = true;
 
             if (newEnabled)
-                halData["time"]["match_start"] = Hooks.GetFPGATime();
+                halData["time"]["match_start"] = SimHooks.GetFPGATime();
             else
                 halData["time"]["match_start"] = 0;
 

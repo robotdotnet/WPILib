@@ -57,7 +57,7 @@
     <Compile Include="HALSolenoid.cs" />
     <Compile Include="HALStructures.cs" />
     <Compile Include="HALUtilities.cs" />
-    <Compile Include="Hooks.cs" />
+    <Compile Include="SimHooks.cs" />
     <Compile Include="ModeHelpers.cs" />
     <Compile Include="PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

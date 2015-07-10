@@ -18,7 +18,7 @@ namespace HAL_Simulator
         ///ms: double
         public static void delayMillis(double ms)
         {
-            Hooks.DelayMillis(ms);
+            SimHooks.DelayMillis(ms);
         }
 
 
@@ -26,7 +26,7 @@ namespace HAL_Simulator
         ///s: double
         public static void delaySeconds(double s)
         {
-            Hooks.DelaySeconds(s);
+            SimHooks.DelaySeconds(s);
         }
     }
 }

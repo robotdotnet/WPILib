@@ -79,7 +79,7 @@ namespace HAL_Simulator
             halData["time"] = new Dictionary<dynamic, dynamic>
             {
                 {"has_source", new IN(false) },
-                {"program_start", new OUT(0)},
+                {"program_start", new OUT(SimHooks.GetTime())},
                 {"match_start", new OUT(null)}
             };
 
@@ -172,7 +172,7 @@ namespace HAL_Simulator
 
             halData["compressor"] = new NotifyDict<dynamic, dynamic>()
             {
-                { "has_source", new IN(false) },
+                {"has_source", new IN(false) },
                 {"initialized", new OUT(false) },
                 {"on", new IN(false) },
                 {"closed_loop_enabled", new OUT(false) },
@@ -235,12 +235,74 @@ namespace HAL_Simulator
                 });
             }
 
+            halData["encoder"] = new List<dynamic>();
+            for (int i = 0; i < 4; i++)
+            {
+                halData["encoder"].Add(new Dictionary<dynamic, dynamic>()
+                {
+                    {"has_source", new IN(false) },
+                    {"initialized", new OUT(false) },
+                    {"config", new OUT(null)},
+                    {"count", new IN(0) },
+                    {"period", new IN(float.MaxValue) },
+                    {"max_period", new OUT(0) },
+                    {"direction", new IN(false) },
+                    {"reverse_direction", new OUT(false) },
+                    {"samples_to_average", new OUT(0) }
+                });
+            }
+            halData["counter"] = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
+            {
+                halData["counter"].Add(new Dictionary<dynamic, dynamic>()
+                {
+                    {"has_source", new IN(false) },
+                    {"initialized", new OUT(false) },
+                    {"config", new OUT(null)},
+                    {"count", new IN(0) },
+                    {"period", new IN(float.MaxValue) },
+                    {"max_period", new OUT(0) },
+                    {"direction", new IN(false) },
+                    {"reverse_direction", new OUT(false) },
+                    {"samples_to_average", new OUT(0) },
+                    {"mode", new OUT(0) },
+                    {"average_size", new OUT(0) },
+
+                    {"up_source_channel", new OUT(0)},
+                    {"up_source_trigger", new OUT(false)},
+                    {"down_source_channel", new OUT(0)},
+                    {"down_source_trigger", new OUT(false)},
+
+                    {"update_when_empty", new OUT(false)},
+
+                    {"up_rising_edge", new OUT(false)},
+                    {"up_falling_edge", new OUT(false)},
+                    {"down_rising_edge",new OUT(false)},
+                    {"down_falling_edge",new OUT(false)},
+
+                    {"pulse_length_threshold" ,new OUT(0)},
+                });
+            }
+
+            halData["user_program_state"] = new OUT(null);
+
             halData["power"] = new Dictionary<dynamic, dynamic>()
             {
                 {"has_source", new IN(false) },
-                {"vin_voltage", new IN(0) },
-                {"vin_current", new IN(0) },
-                {"user_voltage_3v3", new IN(0) },
+                { "vin_voltage", new IN(0) },
+				{"vin_current", new IN(0) },
+				{"user_voltage_6v", new IN(6.0)},
+				{"user_current_6v", new IN(0)},
+				{"user_active_6v", new  IN(false)},
+			    {"user_faults_6v", new  IN(0)},
+			    {"user_voltage_5v",new  IN(5.0)},
+			 	{"user_current_5v",new  IN(0)},
+                {"user_active_5v",  new IN(false)},
+                {"user_faults_5v", new  IN(0)},
+                {"user_voltage_3v3",new IN(3.3)},
+				{"user_current_3v3",new IN(0)},
+                {"user_active_3v3", new IN(false)},
+                {"user_faults_3v3", new IN(0)},
             };
 
             halData["solenoid"] = new List<dynamic>();
@@ -253,29 +315,36 @@ namespace HAL_Simulator
                 });
             };
 
+            halData["pdp"] = new Dictionary<dynamic, dynamic>()
+            {
+                {"has_source", new IN(false) },
+                {"temperature", new IN(0) },
+                {"has_source", new IN(0) },
+                {"voltage", new IN(0) },
+                {"current", new IN(new double[16]) },
+                {"total_current", new IN(0) },
+                {"total_power", new IN(0) },
+                {"total_energy", new IN(0) },
 
-            halData["CAN"] = new Dictionary<dynamic,dynamic>();
+            };
 
-            
+
+
+            halData["CAN"] = new NotifyDict<dynamic, dynamic>();
+
+
 
             FilterHalData(halData, halInData);
-
-            halData["time"]["program_start"] = Hooks.GetTime();
         }
 
         public static void FilterHalData(Dictionary<dynamic, dynamic> both, Dictionary<dynamic, dynamic> inData)
         {
-            List<dynamic> myKeys = new List<dynamic>();
-            foreach (var key in both.Keys)
-            {
-                myKeys.Add(key);
-            }
+            List<dynamic> myKeys = both.Keys.ToList();
 
             foreach (var s in myKeys)
             {
                 dynamic v = both[s];
                 dynamic k = s;
-                //dynamic v = o.Value;
                 if (v is IN)
                 {
                     both[k] = v.value;
@@ -326,11 +395,6 @@ namespace HAL_Simulator
                     inList.Add(vIn);
                 }
             }
-            /*
-            if (inList.Count == 0 || inList.Count == both.Count)
-            {
-                throw new Exception("This is being thrown in Filter HAL Data.");
-            }*/
             return inList;
         }
 

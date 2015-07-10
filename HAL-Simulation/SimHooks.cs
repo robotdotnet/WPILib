@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator
 {
-    public static class Hooks
+    public static class SimHooks
     {
         public static uint GetFPGATime()
         {

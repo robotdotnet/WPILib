@@ -88,7 +88,7 @@ namespace HAL_Simulator
         public static float getAnalogSampleRate(ref int status)
         {
             status = 0;
-            return halData["analog_sample_rate"];
+            return (float)halData["analog_sample_rate"];
         }
 
         public static void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status)
@@ -161,7 +161,7 @@ namespace HAL_Simulator
         public static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["lsb_weight"];
+            return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["lsb_weight"];
         }
 
         public static int getAnalogOffset(IntPtr analog_port_pointer, ref int status)
@@ -219,7 +219,7 @@ namespace HAL_Simulator
             ref int status)
         {
             status = 0;
-            count = halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
+            count = (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
             value = halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_value"];
         }
 

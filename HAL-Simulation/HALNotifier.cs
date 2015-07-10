@@ -58,7 +58,7 @@ namespace HAL_Simulator
             notifier.alarm?.Join();
             notifier.alarm = new Thread(() =>
             {
-                while (triggerTime > Hooks.GetFPGATime())
+                while (triggerTime > SimHooks.GetFPGATime())
                 {
                 }
                 if (notifier.Callback == null)

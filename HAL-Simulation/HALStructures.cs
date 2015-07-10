@@ -66,19 +66,19 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct PWM
     {
-        public uint idx;
+        public int idx;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct Counter
     {
-        public uint idx;
+        public int idx;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct Encoder
     {
-        public uint idx;
+        public int idx;
     }
 
     //Interrupts

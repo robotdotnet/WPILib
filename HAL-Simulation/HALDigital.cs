@@ -154,7 +154,7 @@ namespace HAL_Simulator
                 ["pin"] = null,
             };
 
-            PWM p = new PWM {idx = (uint) i};
+            PWM p = new PWM {idx = i};
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
 
@@ -313,7 +313,7 @@ namespace HAL_Simulator
                     cnt["initialized"] = true;
                     cnt["mode"] = mode;
 
-                    Counter c = new Counter() {idx = (uint)i};
+                    Counter c = new Counter() {idx = i};
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
                     Marshal.StructureToPtr(c, ptr, true);
                     index = (uint)i;
@@ -502,7 +502,7 @@ namespace HAL_Simulator
             ref int status)
         {
             status = 0;
-            for (int i = 0; i < halData["encoder"].Length; i++)
+            for (int i = 0; i < halData["encoder"].Count; i++)
             {
                 var enc = halData["encoder"][i];
                 if (!enc["initialized"])
@@ -520,7 +520,7 @@ namespace HAL_Simulator
 
                     enc["reverse_direction"] = reverseDirection;
 
-                    Encoder e = new Encoder() { idx = (uint)i};
+                    Encoder e = new Encoder() { idx = i};
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
                     Marshal.StructureToPtr(e, ptr, true);
 
