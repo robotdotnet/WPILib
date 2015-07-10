@@ -15,7 +15,7 @@ namespace HAL_Simulator
     {
         public static IntPtr getPort(byte pin)
         {
-            return getPortWithModule(1, pin);
+            return getPortWithModule(0, pin);
         }
 
         public static IntPtr getPortWithModule(byte module, byte pin)
@@ -145,30 +145,10 @@ namespace HAL_Simulator
             return 0;
         }
 
-        public static int HALGetControlWord(ref HALControlWord data)
+        public static HALControlWord HALGetControlWord()
         {
             var h = halData["control"];
-            bool[] d = new bool[32];
-            d[0] = h["enabled"];
-            d[1] = h["autonomous"];
-            d[2] = h["test"];
-            d[3] = h["eStop"];
-            d[4] = h["fms_attached"];
-            d[5] = h["ds_attached"];
-
-            int r = 0;
-            for (int i = 0; i < d.Length; i++)
-            {
-                if (d[i])
-                {
-                    r |= 1 << (d.Length - i);
-                }
-            }
-
-
-
-            data = new HALControlWord((uint)r);
-            return 0;
+            return new HALControlWord(h["enabled"], h["autonomous"], h["test"], h["eStop"], h["fms_attached"], h["ds_attached"]);
         }
 
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)

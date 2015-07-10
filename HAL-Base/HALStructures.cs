@@ -393,41 +393,52 @@ namespace HAL_Base
 
     public struct HALControlWord
     {
-        private uint _wordData;
+        private bool m_enabled;
+        private bool m_autonomous;
+        private bool m_test;
+        private bool m_eStop;
+        private bool m_fmsAttached;
+        private bool m_dsAttached;
 
-        public HALControlWord(uint data)
+        public HALControlWord(bool enabled, bool autonomous, bool test, bool eStop,
+            bool fmsAttached, bool dsAttached)
         {
-            _wordData = data;
+            m_enabled = enabled;
+            m_autonomous = autonomous;
+            m_test = test;
+            m_eStop = eStop;
+            m_fmsAttached = fmsAttached;
+            m_dsAttached = dsAttached;
         }
 
         public bool GetEnabled()
         {
-            return (_wordData & (1 << 1 - 1)) != 0;
+            return m_enabled;
         }
 
         public bool GetAutonomous()
         {
-            return (_wordData & (1 << 2 - 1)) != 0;
+            return m_autonomous;
         }
 
         public bool GetTest()
         {
-            return (_wordData & (1 << 3 - 1)) != 0;
+            return m_test;
         }
 
         public bool GetEStop()
         {
-            return (_wordData & (1 << 4 - 1)) != 0;
+            return m_eStop;
         }
 
         public bool GetFMSAttached()
         {
-            return (_wordData & (1 << 5 - 1)) != 0;
+            return m_fmsAttached;
         }
 
         public bool GetDSAttached()
         {
-            return (_wordData & (1 << 6 - 1)) != 0;
+            return m_dsAttached;
         }
     }
 

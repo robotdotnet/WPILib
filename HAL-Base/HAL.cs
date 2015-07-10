@@ -68,6 +68,8 @@ namespace HAL_Base
                 // We don't want to initialize more then once.
                 if (s_initialized) return;
 
+                s_initialized = true;
+
                 //Check to see if we are on a RoboRIO. We do this by probing for a file we know is located
                 //on the RIO.
                 HALType = HALTypes.Simulation;
@@ -149,7 +151,7 @@ namespace HAL_Base
         }
 
         private static List<string> simulatorFiles = null;
-        private static List<Simulator> simulators = new List<Simulator>(); 
+        private static List<Simulator> simulators = new List<Simulator>();
 
         private static string[] ignoreList = { "WPILib.dll", "HAL-Base.dll", "HAL-RoboRIO.dll", "WPILib.Extras.dll", "HAL-Simulation.dll" };
 
@@ -171,7 +173,7 @@ namespace HAL_Base
                 simulatorFiles.Remove(s);
             }
 
-            if(simulatorFiles.Count == 0)
+            if (simulatorFiles.Count == 0)
             {
                 return false;
             }
@@ -181,10 +183,10 @@ namespace HAL_Base
             foreach (var asm in simulatorFiles.Where(File.Exists).Select(Assembly.LoadFile))
             {
                 string assembly = asm.GetName().Name;
-                var classes = (from t in asm.GetTypes() where typeof (ISimulator).IsAssignableFrom(t) select t).ToList();
+                var classes = (from t in asm.GetTypes() where typeof(ISimulator).IsAssignableFrom(t) select t).ToList();
                 foreach (var c in classes)
                 {
-                    using (var s = (ISimulator) Activator.CreateInstance(assembly, c.FullName).Unwrap())
+                    using (var s = (ISimulator)Activator.CreateInstance(assembly, c.FullName).Unwrap())
                     {
                         string sName = s.AddArguments();
                         found = true;
@@ -253,15 +255,5 @@ namespace HAL_Base
             return HALReport(resource, instanceNumber, context, feature);
         }
 
-        /// <summary>
-        /// Gets the HAL Control Word
-        /// </summary>
-        /// <returns></returns>
-        public static HALControlWord GetControlWord()
-        {
-            HALControlWord temp = new HALControlWord();
-            HALGetControlWord(ref temp);
-            return temp;
-        }
     }
 }

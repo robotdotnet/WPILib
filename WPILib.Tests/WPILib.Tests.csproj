@@ -62,6 +62,7 @@
     <Compile Include="TestBuiltinAccelerometer.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
+    <Compile Include="TestDriverStation.cs" />
     <Compile Include="TestHALSim.cs" />
     <Compile Include="TestNotifier.cs" />
     <Compile Include="TestPWM.cs" />

@@ -27,7 +27,7 @@ namespace HAL_Base
             GetFPGATime = (GetFPGATimeDelegate)Delegate.CreateDelegate(typeof(GetFPGATimeDelegate), type.GetMethod("getFPGATime"));
             GetFPGAButton = (GetFPGAButtonDelegate)Delegate.CreateDelegate(typeof(GetFPGAButtonDelegate), type.GetMethod("getFPGAButton"));
             HALSetErrorData = (HALSetErrorDataDelegate)Delegate.CreateDelegate(typeof(HALSetErrorDataDelegate), type.GetMethod("HALSetErrorData"));
-            HALGetControlWord = (HALGetControlWordDelegate)Delegate.CreateDelegate(typeof(HALGetControlWordDelegate), type.GetMethod("HALGetControlWord"));
+            GetControlWord = (HALGetControlWordDelegate)Delegate.CreateDelegate(typeof(HALGetControlWordDelegate), type.GetMethod("HALGetControlWord"));
             HALGetAllianceStation = (HALGetAllianceStationDelegate)Delegate.CreateDelegate(typeof(HALGetAllianceStationDelegate), type.GetMethod("HALGetAllianceStation"));
             HALGetJoystickAxes = (HALGetJoystickAxesDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickAxesDelegate), type.GetMethod("HALGetJoystickAxes"));
             HALGetJoystickPOVs = (HALGetJoystickPOVsDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickPOVsDelegate), type.GetMethod("HALGetJoystickPOVs"));
@@ -81,8 +81,8 @@ namespace HAL_Base
         public delegate int HALSetErrorDataDelegate(string errors, int errorsLength, int wait_ms);
         public static HALSetErrorDataDelegate HALSetErrorData;
 
-        public delegate int HALGetControlWordDelegate(ref HALControlWord data);
-        public static HALGetControlWordDelegate HALGetControlWord;
+        public delegate HALControlWord HALGetControlWordDelegate();
+        public static HALGetControlWordDelegate GetControlWord;
 
         public delegate int HALGetAllianceStationDelegate(ref HALAllianceStationID allianceStation);
         public static HALGetAllianceStationDelegate HALGetAllianceStation;

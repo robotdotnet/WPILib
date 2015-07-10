@@ -36,7 +36,7 @@ namespace HAL_RoboRIO
         public static extern int HALSetErrorData(string errors, int errorsLength, int wait_ms);
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetControlWord")]
-        public static extern int HALGetControlWord(ref HALControlWord data);
+        private static extern int NativeHALGetControlWord(ref uint data);
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetAllianceStation")]
         public static extern int HALGetAllianceStation(ref HALAllianceStationID allianceStation);
@@ -114,5 +114,19 @@ namespace HAL_RoboRIO
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "Occur")]
         public static extern void Occur();
+
+        
+        /// <summary>
+        /// Gets the HAL Control Word
+        /// </summary>
+        /// <returns></returns>
+        public static HALControlWord HALGetControlWord()
+        {
+            //HALControlWord temp = new HALControlWord();
+            uint word = 0;
+            NativeHALGetControlWord(ref word);
+            return new HALControlWord((word & 1) != 0, ((word >> 1) & 1) != 0, ((word >> 2) & 1) != 0,
+                ((word >> 3) & 1) != 0, ((word >> 4) & 1) != 0, ((word >> 5) & 1) != 0);
+        }
     }
 }

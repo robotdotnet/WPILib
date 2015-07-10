@@ -3,11 +3,13 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {
     public class HALSemaphore
     {
+
         /// Return Type: MUTEX_ID->void*
         //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeMutexRecursive")]
         public static IntPtr initializeMutexRecursive()

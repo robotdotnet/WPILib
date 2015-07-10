@@ -319,7 +319,6 @@ namespace HAL_Simulator
             {
                 {"has_source", new IN(false) },
                 {"temperature", new IN(0) },
-                {"has_source", new IN(0) },
                 {"voltage", new IN(0) },
                 {"current", new IN(new double[16]) },
                 {"total_current", new IN(0) },
