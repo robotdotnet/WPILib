@@ -46,7 +46,7 @@ namespace HAL_Simulator
     {
         public IntPtr portPtr;
         public Port port;
-        public uint index;
+        public int index;
     }
 
     //Compressor
@@ -117,7 +117,7 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct TalonSRX
     {
-        public uint deviceNumber;
+        public int deviceNumber;
     }
 
 }

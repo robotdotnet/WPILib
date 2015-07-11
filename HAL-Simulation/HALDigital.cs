@@ -311,7 +311,7 @@ namespace HAL_Simulator
                 if (!cnt["initialized"])
                 {
                     cnt["initialized"] = true;
-                    cnt["mode"] = mode;
+                    cnt["mode"] = (int)mode;
 
                     Counter c = new Counter() {idx = i};
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
@@ -341,100 +341,117 @@ namespace HAL_Simulator
             halData["counter"][GetCounter(counter_pointer).idx]["average_size"] = size;
         }
 
+        public static void setCounterUpSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
+        {
+            var idx = GetCounter(counter_pointer).idx;
+            status = 0;
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///pin: unsigned int
-        ///analogTrigger: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpSource")]
-        public static extern void setCounterUpSource(IntPtr counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)] bool analogTrigger, ref int status);
+            halData["counter"][idx]["up_source_channel"] = pin;
+            halData["counter"][idx]["up_source_trigger"] = analogTrigger;
 
+            if (halData["counter"][idx]["mode"] == (int) Mode.ExternalDirection ||
+                halData["counter"][idx]["mode"] == (int) Mode.TwoPulse)
+            {
+                setCounterUpSourceEdge(counter_pointer, true, false, ref status);
+            }
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///risingEdge: boolean
-        ///fallingEdge: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpSourceEdge")]
-        public static extern void setCounterUpSourceEdge(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)] bool risingEdge, [MarshalAs(UnmanagedType.I1)] bool fallingEdge, ref int status);
+        public static void setCounterUpSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
+            ref int status)
+        {
+            status = 0;
+            var idx = GetCounter(counter_pointer).idx;
+            halData["counter"][idx]["up_rising_edge"] = risingEdge;
+            halData["counter"][idx]["up_falling_edge"] = fallingEdge;
+        }
 
+        public static void clearCounterUpSource(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            var counter = halData["counter"][GetCounter((counter_pointer)).idx];
+            counter["up_rising_edge"] = false;
+            counter["up_falling_edge"] = false;
+            counter["up_source_channel"] = 0;
+            counter["up_source_trigger"] = false;
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "clearCounterUpSource")]
-        public static extern void clearCounterUpSource(IntPtr counter_pointer, ref int status);
+        public static void setCounterDownSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
+        {
+            var idx = GetCounter(counter_pointer).idx;
+            status = 0;
 
+            if (halData["counter"][idx]["mode"] != (int)Mode.ExternalDirection &&
+                halData["counter"][idx]["mode"] != (int)Mode.TwoPulse)
+            {
+                status = PARAMETER_OUT_OF_RANGE;
+                return;
+            }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///pin: unsigned int
-        ///analogTrigger: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterDownSource")]
-        public static extern void setCounterDownSource(IntPtr counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)] bool analogTrigger, ref int status);
+            halData["counter"][idx]["down_source_channel"] = pin;
+            halData["counter"][idx]["down_source_trigger"] = analogTrigger;
 
+            
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///risingEdge: boolean
-        ///fallingEdge: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterDownSourceEdge")]
-        public static extern void setCounterDownSourceEdge(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)] bool risingEdge, [MarshalAs(UnmanagedType.I1)] bool fallingEdge, ref int status);
+        public static void setCounterDownSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
+            ref int status)
+        {
+            status = 0;
+            var idx = GetCounter(counter_pointer).idx;
+            halData["counter"][idx]["down_rising_edge"] = risingEdge;
+            halData["counter"][idx]["down_falling_edge"] = fallingEdge;
+        }
 
+        public static void clearCounterDownSource(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            var counter = halData["counter"][GetCounter((counter_pointer)).idx];
+            counter["down_rising_edge"] = false;
+            counter["down_falling_edge"] = false;
+            counter["down_source_channel"] = 0;
+            counter["down_source_trigger"] = false;
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "clearCounterDownSource")]
-        public static extern void clearCounterDownSource(IntPtr counter_pointer, ref int status);
+        public static void setCounterUpDownMode(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["mode"] = (int) Mode.TwoPulse;
+        }
 
+        public static void setCounterExternalDirectionMode(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["mode"] = (int)Mode.ExternalDirection;
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpDownMode")]
-        public static extern void setCounterUpDownMode(IntPtr counter_pointer, ref int status);
+        public static void setCounterSemiPeriodMode(IntPtr counter_pointer, bool highSemiPeriod, ref int status)
+        {
+            status = 0;
+            var counter = halData["counter"][GetCounter(counter_pointer).idx];
+            counter["mode"] = (int) Mode.Semiperiod;
+            counter["up_rising_edge"] = highSemiPeriod;
+            counter["update_when_empty"] = false;
+        }
 
+        public static void setCounterPulseLengthMode(IntPtr counter_pointer, double threshold, ref int status)
+        {
+            status = 0;
+            var counter = halData["counter"][GetCounter(counter_pointer).idx];
+            counter["mode"] = (int)Mode.PulseLength;
+            counter["pulse_lenght_threshold"] = threshold;
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterExternalDirectionMode")]
-        public static extern void setCounterExternalDirectionMode(IntPtr counter_pointer, ref int status);
+        public static int getCounterSamplesToAverage(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            return (int)halData["counter"][GetCounter(counter_pointer).idx]["samples_to_average"];
+        }
 
-
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///highSemiPeriod: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterSemiPeriodMode")]
-        public static extern void setCounterSemiPeriodMode(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)] bool highSemiPeriod, ref int status);
-
-
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///threshold: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterPulseLengthMode")]
-        public static extern void setCounterPulseLengthMode(IntPtr counter_pointer, double threshold, ref int status);
-
-
-        /// Return Type: int
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterSamplesToAverage")]
-        public static extern int getCounterSamplesToAverage(IntPtr counter_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///samplesToAverage: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterSamplesToAverage")]
-        public static extern void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status);
+        public static void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["samples_to_average"] = samplesToAverage;
+        }
 
         public static void resetCounter(IntPtr counter_pointer, ref int status)
         {
@@ -457,44 +474,37 @@ namespace HAL_Simulator
         }
 
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///maxPeriod: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterMaxPeriod")]
-        public static extern void setCounterMaxPeriod(IntPtr counter_pointer, double maxPeriod, ref int status);
 
+        public static void setCounterMaxPeriod(IntPtr counter_pointer, double maxPeriod, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["max_period"] = maxPeriod;
+        }
 
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///enabled: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterUpdateWhenEmpty")]
-        public static extern void setCounterUpdateWhenEmpty(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)] bool enabled, ref int status);
+        public static void setCounterUpdateWhenEmpty(IntPtr counter_pointer, bool enabled, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["update_when_empty"] = enabled;
+        }
 
+        public static bool getCounterStopped(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            var cnt = halData["counter"][GetCounter(counter_pointer).idx];
+            return cnt["period"] > cnt["max_period"];
+        }
 
-        /// Return Type: boolean
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterStopped")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getCounterStopped(IntPtr counter_pointer, ref int status);
+        public static bool getCounterDirection(IntPtr counter_pointer, ref int status)
+        {
+            status = 0;
+            return halData["counter"][GetCounter(counter_pointer).idx]["direction"];
+        }
 
-
-        /// Return Type: boolean
-        ///counter_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getCounterDirection")]
-        [return: MarshalAs(UnmanagedType.I1)]
-        public static extern bool getCounterDirection(IntPtr counter_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///counter_pointer: void*
-        ///reverseDirection: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setCounterReverseDirection")]
-        public static extern void setCounterReverseDirection(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)] bool reverseDirection, ref int status);
+        public static void setCounterReverseDirection(IntPtr counter_pointer, bool reverseDirection, ref int status)
+        {
+            status = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["reverse_direction"] = reverseDirection;
+        }
 
 
         public static IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger,
@@ -520,7 +530,7 @@ namespace HAL_Simulator
 
                     enc["reverse_direction"] = reverseDirection;
 
-                    Encoder e = new Encoder() { idx = i};
+                    Encoder e = new Encoder { idx = i};
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
                     Marshal.StructureToPtr(e, ptr, true);
 

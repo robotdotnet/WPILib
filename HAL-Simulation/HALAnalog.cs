@@ -239,7 +239,7 @@ namespace HAL_Simulator
                     {
                         portPtr = port_pointer,
                         port = pt,
-                        index = (uint)i,
+                        index = i,
                     };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
                     Marshal.StructureToPtr(trig, ptr, true);

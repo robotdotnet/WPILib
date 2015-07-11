@@ -36,7 +36,7 @@ namespace HAL_Simulator
 
         public static PWM GetPWM(IntPtr ptr)
         {
-            return (PWM) Marshal.PtrToStructure(ptr, typeof (PWM));
+            return (PWM)Marshal.PtrToStructure(ptr, typeof(PWM));
         }
 
         public static Encoder GetEncoder(IntPtr ptr)
@@ -47,6 +47,11 @@ namespace HAL_Simulator
         public static Counter GetCounter(IntPtr ptr)
         {
             return (Counter)Marshal.PtrToStructure(ptr, typeof(Counter));
+        }
+
+        public static int GetTalonSRX(IntPtr ptr)
+        {
+            return ((TalonSRX)Marshal.PtrToStructure(ptr, typeof(TalonSRX))).deviceNumber;
         }
     }
 }
