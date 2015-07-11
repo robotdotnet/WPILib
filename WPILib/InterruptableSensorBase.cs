@@ -66,6 +66,11 @@ namespace WPILib
         public abstract byte ModuleForRouting { get; }
 
         /// <summary>
+        /// Gets the index of the Interrupt
+        /// </summary>
+        public uint InterruptIndex => m_interruptIndex;
+
+        /// <summary>
         /// Requests one of the 8 interrupts asynchronously on this input.
         /// </summary>
         /// <remarks>Request interrupts in asynchronous mode where the user program interrupt handler will be 
@@ -301,6 +306,15 @@ namespace WPILib
             else
             {
                 throw new InvalidOperationException("You must call RequestInterrupts before SetUpSourceEdge");
+            }
+        }
+
+        ///<inheritdoc/>
+        public override void Dispose()
+        {
+            if (m_interrupt != IntPtr.Zero)
+            {
+                CancelInterrupts();
             }
         }
     }
