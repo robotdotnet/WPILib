@@ -21,7 +21,7 @@ namespace WPILib.Internal
         /// <summary>
         /// Returns the Match Time in seconds
         /// </summary>
-        public double GetMatchTime() => DriverStation.Instance.MatchTime;
+        public double GetMatchTime() => DriverStation.Instance.GetMatchTime();
 
         /// <summary>
         /// Pause the thread for a specified time

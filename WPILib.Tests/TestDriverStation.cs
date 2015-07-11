@@ -11,8 +11,7 @@ namespace WPILib.Tests
         [ClassInitialize]
         public static void Initialize(TestContext c)
         {
-            RobotBase.InitializeHardwareConfiguration();
-            HAL.Initialize();
+            TestBase.StartCode();
         }
 
         [ClassCleanup]
@@ -64,6 +63,11 @@ namespace WPILib.Tests
             Assert.IsFalse(ct.GetEStop());
             Assert.IsFalse(ct.GetDSAttached());
             Assert.IsFalse(ct.GetFMSAttached());
+        }
+
+        public void TestGetMatchTime()
+        {
+            
         }
     }
 }

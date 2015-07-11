@@ -431,16 +431,12 @@ namespace WPILib
 
         public bool DSAtached => GetControlWord().GetDSAttached();
 
-        public double MatchTime
+        public double GetMatchTime()
         {
-            get
-            {
-                float temp = 0;
-                HALGetMatchTime(ref temp);
-                return temp;
-            }
+            float temp = 0;
+            HALGetMatchTime(ref temp);
+            return temp;
         }
-
 
 
         public static void ReportError(string error, bool printTrace)

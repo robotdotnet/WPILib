@@ -15,8 +15,7 @@ namespace WPILib.Tests
         [ClassInitialize]
         public static void Initialize(TestContext c)
         {
-            RobotBase.InitializeHardwareConfiguration();
-            HAL.Initialize();
+            TestBase.StartCode();
         }
 
         [ClassCleanup]

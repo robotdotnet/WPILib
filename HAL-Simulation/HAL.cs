@@ -13,6 +13,9 @@ namespace HAL_Simulator
 {
     public class HAL
     {
+        public const double AutonomousTime = 15.0;
+        public const double TeleopTime = 135.0;
+
         public static IntPtr getPort(byte pin)
         {
             return getPortWithModule(0, pin);
@@ -153,7 +156,7 @@ namespace HAL_Simulator
 
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
         {
-            return halData["alliance_station"];
+            return (int)halData["alliance_station"];
         }
 
         public static int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes)
@@ -164,9 +167,9 @@ namespace HAL_Simulator
             {
                 int tmp = 0;
                 if (joyData[i] < 0)
-                    tmp = joyData[i] * 128;
+                    tmp = (int)(joyData[i] * 128);
                 else
-                    tmp = joyData[i] * 127;
+                    tmp = (int)(joyData[i] * 127);
                 axes.axes[i] = (short)tmp;
             }
             axes.count = 12; //Need to make this netter.
@@ -174,7 +177,7 @@ namespace HAL_Simulator
         }
 
         public static int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs)
-        { 
+        {
             povs.povs = new HALJoystickPOVArray();
             var povData = halData["joysticks"][joystickNum]["povs"];
             for (int i = 0; i < povData.Length; i++)
@@ -191,7 +194,7 @@ namespace HAL_Simulator
             uint total = 0;
             for (int i = 1; i < b.Length; i++)
             {
-                total = total + (uint)((b[i] ? 1 : 0) << i-1);
+                total = total + (uint)((b[i] ? 1 : 0) << i - 1);
             }
 
             buttons.buttons = total;
@@ -202,7 +205,7 @@ namespace HAL_Simulator
         public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
         {
             var stick = halData["joysticks"][joystickNum];
-            desc.isXbox = stick["isXbox"];
+            desc.isXbox = (byte)(stick["isXbox"]);
             desc.type = stick["type"];
             desc.name = stick["name"];
             desc.axisCount = stick["axisCount"];
@@ -213,13 +216,13 @@ namespace HAL_Simulator
         public static int HALGetJoystickIsXbox(byte joystickNum)
         {
             var stick = halData["joysticks"][joystickNum];
-            return stick["isXbox"];
+            return (int)stick["isXbox"];
         }
 
         public static int HALGetJoystickType(byte joystickNum)
         {
             var stick = halData["joysticks"][joystickNum];
-            return stick["type"];
+            return (int)stick["type"];
         }
 
         public static IntPtr HALGetJoystickName(byte joystickNum)
@@ -231,7 +234,7 @@ namespace HAL_Simulator
         public static int HALGetJoystickAxisType(byte joystickNum, byte axis)
         {
             var stick = halData["joysticks"][joystickNum];
-            return stick["NotImplemented"];
+            return 0;//stick["NotImplemented"];
         }
 
         public static int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble,
@@ -245,16 +248,25 @@ namespace HAL_Simulator
 
         public static int HALGetMatchTime(ref float matchTime)
         {
+            
             var matchStart = halData["time"]["match_start"];
-            if (matchStart == null)
+            //If Enabled
+            if (halData["control"]["enabled"])
             {
-                return 0;
+                if (halData["control"]["autonomous"])
+                {
+                    matchTime = (float)(AutonomousTime - (SimHooks.GetFPGATimestamp() - matchStart));
+                }
+                else
+                {
+                    matchTime = (float)(TeleopTime - (SimHooks.GetFPGATimestamp() - matchStart));
+                }
             }
             else
             {
-                return ((SimHooks.GetFPGATime() - matchStart) /
-                        1000000.0);
+                matchStart = -1.0f;
             }
+            return 0;
         }
 
         public static bool HALGetSystemActive(ref int status)
@@ -269,37 +281,17 @@ namespace HAL_Simulator
             return false;
         }
 
-        //[System.Runtime.InteropServices.DllImport("libHALAthena_shared.so", EntryPoint = "HALInitialize")]
         public static int HALInitialize(int mode)
         {
             ResetHALData();
-            /*
-            timer = new Timer((sender) =>
-            {
-                if (SimData.halNewDataSem != IntPtr.Zero)
-                {
-                    //HALSemaphore.giveMultiWait(SimData.halNewDataSem);
-                }
-            },null, 10, 10);
-            */
-            timer = new Thread(() =>
-            {
-                while (true)
-                {
-                    if (halNewDataSem != IntPtr.Zero)
-                    {
-                        HALSemaphore.giveMultiWait(halNewDataSem);
-                    }
-                    Thread.Sleep(20);
-                }
-            });
-
-            timer.Start();
+            //Uncomment this if we want a constant running driver station thread.
+            //This should be done by the Sim implementation though. But it might be needed for testing.
+            
+            //ModeHelpers.StartDSLoop();
+            
 
             return 1;
         }
-
-        private static Thread timer;
 
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
@@ -352,7 +344,11 @@ namespace HAL_Simulator
                     halData["solenoid"][instanceNumber]["initialized"] = true;
                     break;
             }
-
+            if (!halData["reports"].ContainsKey(resource))
+            {
+                halData["reports"].Add(resource, new List<dynamic>());
+            }
+            halData["reports"][resource].Add(instanceNumber);
 
             return 0;
         }

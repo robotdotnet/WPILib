@@ -12,6 +12,17 @@ namespace WPILib.Tests
     [TestClass]
     public class TestRelay
     {
+        [ClassInitialize]
+        public static void Initialize(TestContext ctx)
+        {
+            TestBase.StartCode();
+        }
+
+        [ClassCleanup]
+        public static void Kill()
+        {
+            DriverStation.Instance.Release();
+        }
 
         [TestMethod]
         public void TestCreateAll()

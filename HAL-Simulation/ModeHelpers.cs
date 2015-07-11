@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static HAL_Simulator.SimData;
 
@@ -15,6 +16,29 @@ namespace HAL_Simulator
             {
                 HALSemaphore.giveMultiWait(halNewDataSem);
             }
+        }
+
+        private static Thread DSLoop;
+
+        public static void StartDSLoop(int millisecondLoopTime = 20)
+        {
+            if (DSLoop == null)
+            {
+                DSLoop = new Thread(() =>
+                {
+                    while (true)
+                    {
+                        NotifyNewDSData();
+                        Thread.Sleep(millisecondLoopTime);
+                    }
+                });
+                DSLoop.Start();
+            }
+        }
+
+        public static void KillDSLoop()
+        {
+            DSLoop?.Abort();
         }
 
 
@@ -60,10 +84,14 @@ namespace HAL_Simulator
             halData["control"]["enabled"] = newEnabled;
             halData["control"]["ds_attached"] = true;
 
+            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
+            /*
+
             if (newEnabled)
-                halData["time"]["match_start"] = SimHooks.GetFPGATime() - 15000000;
+                halData["time"]["match_start"] = SimHooks.GetFPGATimestamp() - HAL.AutonomousTime;
             else
-                halData["time"]["match_start"] = 0;
+                halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
+                */
 
             NotifyNewDSData();
         }
@@ -75,11 +103,14 @@ namespace HAL_Simulator
             halData["control"]["enabled"] = newEnabled;
             halData["control"]["ds_attached"] = true;
 
-            if (newEnabled)
-                halData["time"]["match_start"] = SimHooks.GetFPGATime();
-            else
-                halData["time"]["match_start"] = 0;
+            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
+            /*
 
+            if (newEnabled)
+                halData["time"]["match_start"] = SimHooks.GetFPGATimestamp() - HAL.AutonomousTime;
+            else
+                halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
+                */
             NotifyNewDSData();
         }
 
@@ -90,7 +121,7 @@ namespace HAL_Simulator
             halData["control"]["enabled"] = newEnabled;
             halData["control"]["ds_attached"] = true;
 
-            halData["time"]["match_start"] = 0;
+            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
 
             NotifyNewDSData();
         }
@@ -102,7 +133,7 @@ namespace HAL_Simulator
             halData["control"]["enabled"] = false;
             halData["control"]["ds_attached"] = true;
 
-            halData["time"]["match_start"] = 0;
+            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
 
             NotifyNewDSData();
         }
@@ -115,7 +146,7 @@ namespace HAL_Simulator
             halData["control"]["ds_attached"] = true;
             halData["control"]["eStop"] = true;
 
-            halData["time"]["match_start"] = 0;
+            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
 
             NotifyNewDSData();
         }

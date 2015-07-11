@@ -12,7 +12,7 @@ namespace WPILib.Tests
         [ClassInitialize]
         static public void Init(TestContext c)
         {
-            RobotBase.InitializeHardwareConfiguration();
+            TestBase.StartCode();
         }
 
         private AutoResetEvent _autoResetEvent;

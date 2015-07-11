@@ -13,7 +13,7 @@ namespace WPILib.Tests
         [ClassInitialize]
         public static void Initialize(TestContext ctx)
         {
-            HAL.Initialize();
+            TestBase.StartCode();
         }
 
         [TestMethod]
@@ -42,14 +42,14 @@ namespace WPILib.Tests
                         }
                         else
                         {
-                            Assert.IsTrue(vv == null || vv is double || vv is int || vv is string || vv is bool || vv is float || vv is uint);
+                            Assert.IsTrue(vv == null || vv is double || vv is int || vv is string || vv is bool || vv is float || vv is uint || vv is long);
                         }
                     }
                 }
                 else
                 {
                     var vv = o.Value;
-                    Assert.IsTrue(vv == null || vv is double || vv is int || vv is string || vv is bool || vv is float || vv is uint);
+                    Assert.IsTrue(vv == null || vv is double || vv is int || vv is string || vv is bool || vv is float || vv is uint || vv is long);
                 }
             }
         }

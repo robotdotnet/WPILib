@@ -98,7 +98,7 @@ namespace HAL_Simulator
             {
                 {"has_source", new IN(false) },
                 {"program_start", new OUT(SimHooks.GetTime())},
-                {"match_start", new OUT(null)}
+                {"match_start", new OUT(0.0)}
             };
 
             halData["control"] = new Dictionary<dynamic, dynamic>
@@ -121,8 +121,12 @@ namespace HAL_Simulator
                     {"has_source", new IN(false) },
                     {"buttons", new IN(new bool[13]) },
                     {"axes", new IN(new int[6]) },
-                    {"povs", new IN(new int[12]) }
-
+                    {"povs", new IN(new int[12]) },
+                    {"isXbox", new IN(0)},
+                    {"type",  new IN(0)},
+                    {"name", new IN("") },
+                    {"axisCount", new IN(6) },
+                    {"buttonCount", new IN(12) }
                 });
             }
 
