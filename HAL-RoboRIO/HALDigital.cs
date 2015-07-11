@@ -262,11 +262,5 @@ namespace HAL_RoboRIO
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "i2CClose")]
         public static extern void i2CClose(byte port);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setPWMRateIntHack")]
-        public static extern void setPWMRateIntHack(int rate, ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setPWMDutyCycleIntHack")]
-        public static extern void setPWMDutyCycleIntHack(IntPtr pwmGenerator, int dutyCycle, ref int status);
     }
 }

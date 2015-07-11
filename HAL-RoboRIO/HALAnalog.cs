@@ -126,23 +126,5 @@ namespace HAL_RoboRIO
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getAnalogTriggerOutput")]
         [return: MarshalAs(UnmanagedType.I1)]
         public static extern bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getAnalogSampleRateIntHack")]
-        public static extern int getAnalogSampleRateIntHack(ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getAnalogVoltageIntHack")]
-        public static extern int getAnalogVoltageIntHack(IntPtr analog_port_pointer, ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getAnalogAverageVoltageIntHack")]
-        public static extern int getAnalogAverageVoltageIntHack(IntPtr analog_port_pointer, ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setAnalogSampleRateIntHack")]
-        public static extern void setAnalogSampleRateIntHack(int samplesPerSecond, ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getAnalogVoltsToValueIntHack")]
-        public static extern int getAnalogVoltsToValueIntHack(IntPtr analog_port_pointer, int voltage, ref int status);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setAnalogTriggerLimitsVoltageIntHack")]
-        public static extern void setAnalogTriggerLimitsVoltageIntHack(IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
     }
 }

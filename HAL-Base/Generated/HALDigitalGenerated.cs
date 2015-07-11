@@ -99,8 +99,6 @@ namespace HAL_Base
             I2CWrite = (I2CWriteDelegate)Delegate.CreateDelegate(typeof(I2CWriteDelegate), type.GetMethod("i2CWrite"));
             I2CRead = (I2CReadDelegate)Delegate.CreateDelegate(typeof(I2CReadDelegate), type.GetMethod("i2CRead"));
             I2CClose = (I2CCloseDelegate)Delegate.CreateDelegate(typeof(I2CCloseDelegate), type.GetMethod("i2CClose"));
-            SetPWMRateIntHack = (SetPWMRateIntHackDelegate)Delegate.CreateDelegate(typeof(SetPWMRateIntHackDelegate), type.GetMethod("setPWMRateIntHack"));
-            SetPWMDutyCycleIntHack = (SetPWMDutyCycleIntHackDelegate)Delegate.CreateDelegate(typeof(SetPWMDutyCycleIntHackDelegate), type.GetMethod("setPWMDutyCycleIntHack"));
         }
 
         public delegate IntPtr InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
@@ -342,11 +340,5 @@ namespace HAL_Base
 
         public delegate void I2CCloseDelegate(byte port);
         public static I2CCloseDelegate I2CClose;
-
-        public delegate void SetPWMRateIntHackDelegate(int rate, ref int status);
-        public static SetPWMRateIntHackDelegate SetPWMRateIntHack;
-
-        public delegate void SetPWMDutyCycleIntHackDelegate(IntPtr pwmGenerator, int dutyCycle, ref int status);
-        public static SetPWMDutyCycleIntHackDelegate SetPWMDutyCycleIntHack;
     }
 }

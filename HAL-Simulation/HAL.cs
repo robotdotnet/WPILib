@@ -326,27 +326,6 @@ namespace HAL_Simulator
             halData["user_program_state"] = "test";
         }
 
-        public static void NumericArrayResize()
-        {
-
-        }
-
-        public static void RTSetCleanupProc()
-        {
-
-        }
-
-        public static void EDVR_CreateReference()
-        {
-
-        }
-
-        public static void Occur()
-        {
-
-        }
-
-
         public static uint HALReport(byte resource, byte instanceNumber, byte context = 0, string feature = null)
         {
             switch (resource)

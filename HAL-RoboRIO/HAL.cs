@@ -103,18 +103,6 @@ namespace HAL_RoboRIO
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALReport")]
         public static extern uint HALReport(byte resource, byte instanceNumber, byte context, string feature = null);
 
-        [DllImport(LibhalathenaSharedSo, EntryPoint = "NumericArrayResize")]
-        public static extern void NumericArrayResize();
-
-        [DllImport(LibhalathenaSharedSo, EntryPoint = "RTSetCleanupProc")]
-        public static extern void RTSetCleanupProc();
-
-        [DllImport(LibhalathenaSharedSo, EntryPoint = "EDVR_CreateReference")]
-        public static extern void EDVR_CreateReference();
-
-        [DllImport(LibhalathenaSharedSo, EntryPoint = "Occur")]
-        public static extern void Occur();
-
         
         /// <summary>
         /// Gets the HAL Control Word

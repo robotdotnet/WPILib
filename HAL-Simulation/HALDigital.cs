@@ -716,28 +716,5 @@ namespace HAL_Simulator
         {
             throw new NotImplementedException();
         }
-
-
-        /// Return Type: void
-        ///rate: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMRateIntHack")]
-        public static extern void setPWMRateIntHack(int rate, ref int status);
-
-
-        /// Return Type: void
-        ///pwmGenerator: void*
-        ///dutyCycle: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setPWMDutyCycleIntHack")]
-        public static extern void setPWMDutyCycleIntHack(IntPtr pwmGenerator, int dutyCycle, ref int status);
     }
-
-    /*
-    [StructLayout(LayoutKind.Explicit)]
-    public struct MUTEX_ID
-    {
-        
-    }
-     * */
 }

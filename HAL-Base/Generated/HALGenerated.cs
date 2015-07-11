@@ -51,10 +51,6 @@ namespace HAL_Base
             HALNetworkCommunicationObserveUserProgramTeleop = (HALNetworkCommunicationObserveUserProgramTeleopDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramTeleopDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramTeleop"));
             HALNetworkCommunicationObserveUserProgramTest = (HALNetworkCommunicationObserveUserProgramTestDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramTestDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramTest"));
             HALReport = (HALReportDelegate)Delegate.CreateDelegate(typeof(HALReportDelegate), type.GetMethod("HALReport"));
-            NumericArrayResize = (NumericArrayResizeDelegate)Delegate.CreateDelegate(typeof(NumericArrayResizeDelegate), type.GetMethod("NumericArrayResize"));
-            RTSetCleanupProc = (RTSetCleanupProcDelegate)Delegate.CreateDelegate(typeof(RTSetCleanupProcDelegate), type.GetMethod("RTSetCleanupProc"));
-            EDVR_CreateReference = (EDVR_CreateReferenceDelegate)Delegate.CreateDelegate(typeof(EDVR_CreateReferenceDelegate), type.GetMethod("EDVR_CreateReference"));
-            Occur = (OccurDelegate)Delegate.CreateDelegate(typeof(OccurDelegate), type.GetMethod("Occur"));
         }
 
         public delegate IntPtr GetPortDelegate(byte pin);
@@ -146,17 +142,5 @@ namespace HAL_Base
 
         public delegate uint HALReportDelegate(byte resource, byte instanceNumber, byte context, string feature = null);
         public static HALReportDelegate HALReport;
-
-        public delegate void NumericArrayResizeDelegate();
-        public static NumericArrayResizeDelegate NumericArrayResize;
-
-        public delegate void RTSetCleanupProcDelegate();
-        public static RTSetCleanupProcDelegate RTSetCleanupProc;
-
-        public delegate void EDVR_CreateReferenceDelegate();
-        public static EDVR_CreateReferenceDelegate EDVR_CreateReference;
-
-        public delegate void OccurDelegate();
-        public static OccurDelegate Occur;
     }
 }

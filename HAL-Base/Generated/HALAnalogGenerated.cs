@@ -56,12 +56,6 @@ namespace HAL_Base
             GetAnalogTriggerInWindow = (GetAnalogTriggerInWindowDelegate)Delegate.CreateDelegate(typeof(GetAnalogTriggerInWindowDelegate), type.GetMethod("getAnalogTriggerInWindow"));
             GetAnalogTriggerTriggerState = (GetAnalogTriggerTriggerStateDelegate)Delegate.CreateDelegate(typeof(GetAnalogTriggerTriggerStateDelegate), type.GetMethod("getAnalogTriggerTriggerState"));
             GetAnalogTriggerOutput = (GetAnalogTriggerOutputDelegate)Delegate.CreateDelegate(typeof(GetAnalogTriggerOutputDelegate), type.GetMethod("getAnalogTriggerOutput"));
-            GetAnalogSampleRateIntHack = (GetAnalogSampleRateIntHackDelegate)Delegate.CreateDelegate(typeof(GetAnalogSampleRateIntHackDelegate), type.GetMethod("getAnalogSampleRateIntHack"));
-            GetAnalogVoltageIntHack = (GetAnalogVoltageIntHackDelegate)Delegate.CreateDelegate(typeof(GetAnalogVoltageIntHackDelegate), type.GetMethod("getAnalogVoltageIntHack"));
-            GetAnalogAverageVoltageIntHack = (GetAnalogAverageVoltageIntHackDelegate)Delegate.CreateDelegate(typeof(GetAnalogAverageVoltageIntHackDelegate), type.GetMethod("getAnalogAverageVoltageIntHack"));
-            SetAnalogSampleRateIntHack = (SetAnalogSampleRateIntHackDelegate)Delegate.CreateDelegate(typeof(SetAnalogSampleRateIntHackDelegate), type.GetMethod("setAnalogSampleRateIntHack"));
-            GetAnalogVoltsToValueIntHack = (GetAnalogVoltsToValueIntHackDelegate)Delegate.CreateDelegate(typeof(GetAnalogVoltsToValueIntHackDelegate), type.GetMethod("getAnalogVoltsToValueIntHack"));
-            SetAnalogTriggerLimitsVoltageIntHack = (SetAnalogTriggerLimitsVoltageIntHackDelegate)Delegate.CreateDelegate(typeof(SetAnalogTriggerLimitsVoltageIntHackDelegate), type.GetMethod("setAnalogTriggerLimitsVoltageIntHack"));
         }
 
         public delegate IntPtr InitializeAnalogOutputPortDelegate(IntPtr port_pointer, ref int status);
@@ -174,23 +168,5 @@ namespace HAL_Base
 
         public delegate bool GetAnalogTriggerOutputDelegate(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status);
         public static GetAnalogTriggerOutputDelegate GetAnalogTriggerOutput;
-
-        public delegate int GetAnalogSampleRateIntHackDelegate(ref int status);
-        public static GetAnalogSampleRateIntHackDelegate GetAnalogSampleRateIntHack;
-
-        public delegate int GetAnalogVoltageIntHackDelegate(IntPtr analog_port_pointer, ref int status);
-        public static GetAnalogVoltageIntHackDelegate GetAnalogVoltageIntHack;
-
-        public delegate int GetAnalogAverageVoltageIntHackDelegate(IntPtr analog_port_pointer, ref int status);
-        public static GetAnalogAverageVoltageIntHackDelegate GetAnalogAverageVoltageIntHack;
-
-        public delegate void SetAnalogSampleRateIntHackDelegate(int samplesPerSecond, ref int status);
-        public static SetAnalogSampleRateIntHackDelegate SetAnalogSampleRateIntHack;
-
-        public delegate int GetAnalogVoltsToValueIntHackDelegate(IntPtr analog_port_pointer, int voltage, ref int status);
-        public static GetAnalogVoltsToValueIntHackDelegate GetAnalogVoltsToValueIntHack;
-
-        public delegate void SetAnalogTriggerLimitsVoltageIntHackDelegate(IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
-        public static SetAnalogTriggerLimitsVoltageIntHackDelegate SetAnalogTriggerLimitsVoltageIntHack;
     }
 }

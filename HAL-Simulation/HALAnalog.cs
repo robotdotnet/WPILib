@@ -379,49 +379,5 @@ namespace HAL_Simulator
                 return false;
             }
         }
-
-
-        /// Return Type: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogSampleRateIntHack")]
-        public static extern int getAnalogSampleRateIntHack(ref int status);
-
-
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogVoltageIntHack")]
-        public static extern int getAnalogVoltageIntHack(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogAverageVoltageIntHack")]
-        public static extern int getAnalogAverageVoltageIntHack(IntPtr analog_port_pointer, ref int status);
-
-
-        /// Return Type: void
-        ///samplesPerSecond: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogSampleRateIntHack")]
-        public static extern void setAnalogSampleRateIntHack(int samplesPerSecond, ref int status);
-
-
-        /// Return Type: int
-        ///analog_port_pointer: void*
-        ///voltage: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getAnalogVoltsToValueIntHack")]
-        public static extern int getAnalogVoltsToValueIntHack(IntPtr analog_port_pointer, int voltage, ref int status);
-
-
-        /// Return Type: void
-        ///analog_trigger_pointer: void*
-        ///lower: int
-        ///upper: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "setAnalogTriggerLimitsVoltageIntHack")]
-        public static extern void setAnalogTriggerLimitsVoltageIntHack(IntPtr analog_trigger_pointer, int lower, int upper, ref int status);
     }
 }
