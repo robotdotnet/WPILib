@@ -3,6 +3,8 @@ using HAL_Base;
 
 namespace WPILib
 {
+    /// <summary>The location of a motor on the robot for the purpose of driving.
+    /// </summary>
     public enum MotorType : int
     {
         FrontLeft = 0,
