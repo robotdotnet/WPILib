@@ -16,7 +16,7 @@ namespace WPILib.Internal
         /// <summary>
         /// Returns the system clock time in seconds.
         /// </summary>
-        public double GetFPGATimestamp() => FPGATime/1000000.0;
+        public double GetFPGATimestamp() => GetFPGATime()/1000000.0;
 
         /// <summary>
         /// Returns the Match Time in seconds
@@ -68,7 +68,7 @@ namespace WPILib.Internal
                 Reset();
             }
 
-            private static long MsClock => FPGATime / 1000;
+            private static long MsClock => GetFPGATime() / 1000;
 
             /// <summary>
             /// Get the current time from the timer

@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator
 {
-    class NotifyDict<T, T2> : Dictionary<T, T2>
+    public class NotifyDict<T, T2> : Dictionary<T, T2>
     {
-        private Action<dynamic, dynamic> callback;
+        private Dictionary<T, Action<dynamic, dynamic>> callbacks = new Dictionary<T, Action<dynamic, dynamic>>(); 
+
+        //private Action<dynamic, dynamic> callback;
 
         public void Register(T key, Action<dynamic, dynamic> action, bool notify = false)
         {
@@ -17,11 +19,23 @@ namespace HAL_Simulator
             {
                 throw new ArgumentOutOfRangeException(nameof(key), "Cannot register for non existent key");
             }
-            callback += action;
+            if (!callbacks.ContainsKey(key))
+            {
+                callbacks.Add(key, action);
+            }
+            else
+            {
+                callbacks[key] += action;
+            }
             if (notify)
             {
-                callback?.Invoke(key, this[key]);
+                callbacks[key]?.Invoke(key, this[key]);
             }
+        }
+
+        public void Cancel(T key, Action<dynamic, dynamic> action)
+        {
+            if (action != null && callbacks.ContainsKey(key)) callbacks[key] -= action;
         }
 
         public new T2 this[T key]
@@ -30,8 +44,12 @@ namespace HAL_Simulator
             set
             {
                 base[key] = value;
-                Action<dynamic, dynamic> handler = callback;
-                handler?.Invoke(key, value);
+                if (callbacks.ContainsKey(key))
+                {
+                    callbacks[key]?.Invoke(key, value);
+                    //Action<dynamic, dynamic> handler = callback;
+                    //handler?.Invoke(key, value);
+                }
             }
         }
 
@@ -427,7 +445,17 @@ namespace HAL_Simulator
                 }
                 else
                 {
-                    outData[o.Key] = o.Value;
+                    //Since the Dictionary Indexer is not marked virtual, we have to explcitly
+                    //see if the dictionary is a NotifyDict, and if so, box it and then set the value.
+                    NotifyDict<dynamic, dynamic> tmp = outData as NotifyDict<dynamic, dynamic>;
+                    if (tmp != null)
+                    {
+                        tmp[o.Key] = o.Value;
+                    }
+                    else
+                    {
+                        outData[o.Key] = o.Value;
+                    }
                 }
             }
         }

@@ -64,6 +64,7 @@
     <Compile Include="TestControllerPower.cs" />
     <Compile Include="TestDriverStation.cs" />
     <Compile Include="TestHALSim.cs" />
+    <Compile Include="TestInterrupt.cs" />
     <Compile Include="TestNotifier.cs" />
     <Compile Include="TestPWM.cs" />
     <Compile Include="TestRelay.cs" />

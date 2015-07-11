@@ -82,12 +82,20 @@ namespace HAL_Simulator
     }
 
     //Interrupts
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct Interrupt
+    //[StructLayout(LayoutKind.Sequential)]
+    internal class Interrupt
     {
-        public uint idx;
+        public int dioPin;
         public Action<uint, IntPtr> Callback;
-        public bool isSynchronous;
+        public Action<dynamic, dynamic> DictCallback;
+        public IntPtr Param;
+        public bool Watcher;
+        public double RisingTimestamp;
+        public double FallingTimestamp;
+        public bool PreviousState;
+
+        public bool FireOnUp;
+        public bool FireOnDown;
     }
 
     //Notifier

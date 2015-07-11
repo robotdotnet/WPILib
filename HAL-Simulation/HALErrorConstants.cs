@@ -24,6 +24,7 @@ namespace HAL_Simulator
         internal const int NiFpga_Status_ResourceNotInitialized = -52010;
         internal const int NiFpga_Status_HardwareFault = -52018;
         internal const int NiFpga_Status_IrqTimeout = -61060;
+        internal const int NiFpga_Status_Success = 0;
 
         internal const int ERR_CANSessionMux_InvalidBuffer = -44408;
         internal const int ERR_CANSessionMux_MessageNotFound = -44087;

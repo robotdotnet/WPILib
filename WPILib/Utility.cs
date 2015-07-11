@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using HAL_Base;
 using static HAL_Base.HAL;
 
 namespace WPILib
@@ -12,14 +13,11 @@ namespace WPILib
         /// <summary>
         /// Return the FPGA Version number. For now, expect this to be 2015.
         /// </summary>
-        internal static int FPGAVersion
+        internal static int GetFPGAVersion()
         {
-            get
-            {
-                int status = 0;
-                int value = GetFPGAVersion(ref status);
-                return value;
-            }
+            int status = 0;
+            int value = HAL.GetFPGAVersion(ref status);
+            return value;
         }
 
         /// <summary>
@@ -27,42 +25,33 @@ namespace WPILib
         /// <remarks>The 12 most significant bits are the Major Revision. the next 8 bits are
         /// <para /> the Minor Revision. The 12 least significant bits are the Build Number.
         /// </remarks>
-        internal static long FPGARevision
+        internal static long GetFPGARevision()
         {
-            get
-            {
-                int status = 0;
-                uint value = GetFPGARevision(ref status);
-                return value;
-            }
+            int status = 0;
+            uint value = HAL.GetFPGARevision(ref status);
+            return value;
         }
 
         /// <summary>
         /// Read the microsecond timer from the FPGA
         /// </summary>
-        public static long FPGATime
+        public static long GetFPGATime()
         {
-            get
-            {
-                int status = 0;
-                long value = GetFPGATime(ref status);
-                return value;
-            }
+            int status = 0;
+            long value = HAL.GetFPGATime(ref status);
+            return value;
         }
 
         /// <summary>
         /// Get the state of the "USER" button on the RoboRIO
         /// </summary>
         /// <returns>True if the button is currently pressed down</returns>
-        public static bool UserButton
+        public static bool GetUserButton()
         {
-            get
-            {
-                int status = 0;
-                bool value = GetFPGAButton(ref status);
-                //CheckStatus(status); //Not calling check status right now because these functions are returning errors. 
-                return value;
-            }
+            int status = 0;
+            bool value = GetFPGAButton(ref status);
+            //CheckStatus(status); //Not calling check status right now because these functions are returning errors. 
+            return value;
         }
 
         /// <summary>

@@ -129,7 +129,7 @@ namespace HAL_Simulator
         public static uint getFPGATime(ref int status)
         {
             status = 0;
-            return SimHooks.GetFPGATime();
+            return (uint)SimHooks.GetFPGATime();
         }
 
         public static bool getFPGAButton(ref int status)
