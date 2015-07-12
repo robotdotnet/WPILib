@@ -13,7 +13,7 @@ namespace WPILib
         /// <summary>
         /// Return the FPGA Version number. For now, expect this to be 2015.
         /// </summary>
-        internal static int GetFPGAVersion()
+        public static int GetFPGAVersion()
         {
             int status = 0;
             int value = HAL.GetFPGAVersion(ref status);
@@ -25,7 +25,7 @@ namespace WPILib
         /// <remarks>The 12 most significant bits are the Major Revision. the next 8 bits are
         /// <para /> the Minor Revision. The 12 least significant bits are the Build Number.
         /// </remarks>
-        internal static long GetFPGARevision()
+        public static long GetFPGARevision()
         {
             int status = 0;
             uint value = HAL.GetFPGARevision(ref status);

@@ -70,6 +70,7 @@ namespace HAL_Base
             SetCounterReverseDirection = (SetCounterReverseDirectionDelegate)Delegate.CreateDelegate(typeof(SetCounterReverseDirectionDelegate), type.GetMethod("setCounterReverseDirection"));
             InitializeEncoder = (InitializeEncoderDelegate)Delegate.CreateDelegate(typeof(InitializeEncoderDelegate), type.GetMethod("initializeEncoder"));
             ResetEncoder = (ResetEncoderDelegate)Delegate.CreateDelegate(typeof(ResetEncoderDelegate), type.GetMethod("resetEncoder"));
+            FreeEncoder = (FreeEncoderDelegate)Delegate.CreateDelegate(typeof(FreeEncoderDelegate), type.GetMethod("freeEncoder"));
             GetEncoder = (GetEncoderDelegate)Delegate.CreateDelegate(typeof(GetEncoderDelegate), type.GetMethod("getEncoder"));
             GetEncoderPeriod = (GetEncoderPeriodDelegate)Delegate.CreateDelegate(typeof(GetEncoderPeriodDelegate), type.GetMethod("getEncoderPeriod"));
             SetEncoderMaxPeriod = (SetEncoderMaxPeriodDelegate)Delegate.CreateDelegate(typeof(SetEncoderMaxPeriodDelegate), type.GetMethod("setEncoderMaxPeriod"));
@@ -253,6 +254,9 @@ namespace HAL_Base
 
         public delegate void ResetEncoderDelegate(IntPtr encoder_pointer, ref int status);
         public static ResetEncoderDelegate ResetEncoder;
+
+        public delegate void FreeEncoderDelegate(IntPtr encoder_pointer, ref int status);
+        public static FreeEncoderDelegate FreeEncoder;
 
         public delegate int GetEncoderDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderDelegate GetEncoder;

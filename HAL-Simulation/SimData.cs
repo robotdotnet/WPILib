@@ -180,17 +180,21 @@ namespace HAL_Simulator
 
                 });
             }
-
-            halData["analog_trigger"] = new Dictionary<dynamic, dynamic>()
+            halData["analog_trigger"] = new List<dynamic>();
+            for (int i = 0; i < 8; i++)
             {
-                {"has_source", new IN(false) },
-                {"initialized", new OUT(false) },
-                {"port", new OUT(null) },
-                {"trig_lower",  new OUT(null)},
-                {"trig_upper",  new OUT(null)},
-                {"trig_type",   new OUT(null)},
-                {"trig_state", new  OUT(false)},
-            };
+
+                halData["analog_trigger"].Add(new Dictionary<dynamic, dynamic>()
+                {
+                    {"has_source", new IN(false)},
+                    {"initialized", new OUT(false)},
+                    {"port", new OUT(null)},
+                    {"trig_lower", new OUT(null)},
+                    {"trig_upper", new OUT(null)},
+                    {"trig_type", new OUT(null)},
+                    {"trig_state", new OUT(false)},
+                });
+            }
 
             halData["compressor"] = new NotifyDict<dynamic, dynamic>()
             {
@@ -290,9 +294,9 @@ namespace HAL_Simulator
                     {"mode", new OUT(0) },
                     {"average_size", new OUT(0) },
 
-                    {"up_source_channel", new OUT(0)},
+                    {"up_source_channel", new OUT(0u)},
                     {"up_source_trigger", new OUT(false)},
-                    {"down_source_channel", new OUT(0)},
+                    {"down_source_channel", new OUT(0u)},
                     {"down_source_trigger", new OUT(false)},
 
                     {"update_when_empty", new OUT(false)},

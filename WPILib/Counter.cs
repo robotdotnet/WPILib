@@ -12,6 +12,12 @@ namespace WPILib
     /// <summary>
     /// Class for counting the number of ticks on a digital input channel.
     /// </summary>
+    /// <remarks>This is a general purpose class for counting repetitive events.
+    /// It can return the number of counts, the period of the most recent cycle,
+    /// and detect when the signal being counted has stopped by supplying a 
+    /// maximum cycle time.
+    /// <para>All counters will immediately start counting - <see cref="Reset()"/> them if you need
+    /// them to be zeroes before use.</para></remarks>
     public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         private DigitalSource m_upSource;
@@ -64,13 +70,13 @@ namespace WPILib
             InitCounter(Mode.ExternalDirection);
             if (encodingType != EncodingType.K2X && encodingType != EncodingType.K1X)
             {
-                throw new SystemException("Counters only support 1X and 2X decoding!");
+                throw new ArgumentOutOfRangeException(nameof(encodingType), "Counters only support 1X and 2X decoding!");
             }
             if (upSource == null)
-                throw new NullReferenceException("Up Source given was null");
+                throw new ArgumentNullException(nameof(upSource), "Up Source given was null");
             SetUpSource(upSource);
             if (downSource == null)
-                throw new NullReferenceException("Down Source given was null");
+                throw new ArgumentNullException(nameof(downSource), "Down Source given was null");
             SetDownSource(downSource);
             int status = 0;
             if (encodingType == EncodingType.K1X)
@@ -80,7 +86,7 @@ namespace WPILib
             }
             else
             {
-                SetDownSourceEdge(true, true);
+                SetUpSourceEdge(true, true);
                 SetCounterAverageSize(m_counter, 2, ref status);
             }
             CheckStatus(status);
@@ -91,7 +97,7 @@ namespace WPILib
         {
             if (trigger == null)
             {
-                throw new NullReferenceException("The Analog Trigger given was null");
+                throw new ArgumentNullException(nameof(trigger), "The Analog Trigger given was null");
             }
             InitCounter(Mode.TwoPulse);
             SetUpSource(trigger.CreateOutput(AnalogTriggerType.State));

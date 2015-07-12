@@ -1,10 +1,6 @@
-﻿
-
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading;
 using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
@@ -13,14 +9,26 @@ namespace HAL_Simulator
 {
     public class HAL
     {
+        //Time constants used for GetMatchTime.
         public const double AutonomousTime = 15.0;
         public const double TeleopTime = 135.0;
 
+        /// <summary>
+        /// Gets a RoboRIO Port.
+        /// </summary>
+        /// <param name="pin">The hardware pin of the port</param>
+        /// <returns>IntPtr containing the port</returns>
         public static IntPtr getPort(byte pin)
         {
             return getPortWithModule(0, pin);
         }
 
+        /// <summary>
+        /// Gets a RoboRIO Port with Module
+        /// </summary>
+        /// <param name="module">Hardware Module</param>
+        /// <param name="pin">Hardware Pin</param>
+        /// <returns>IntPtr containing the port</returns>
         public static IntPtr getPortWithModule(byte module, byte pin)
         {
             Port port = new Port
@@ -33,11 +41,20 @@ namespace HAL_Simulator
             return ptr;
         }
 
+        /// <summary>
+        /// Sets the NewDataSem used to indicate new DS ports.
+        /// </summary>
+        /// <param name="sem"></param>
         public static void HALSetNewDataSem(IntPtr sem)
         {
             halNewDataSem = sem;
         }
 
+        /// <summary>
+        /// Returns a HAL Error Message
+        /// </summary>
+        /// <param name="code">The Error Code</param>
+        /// <returns>IntPtr containing the Error message</returns>
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
@@ -117,30 +134,57 @@ namespace HAL_Simulator
             return Marshal.StringToHGlobalAnsi(retVal);
         }
 
+        /// <summary>
+        /// Gets the FPGA Version
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public static ushort getFPGAVersion(ref int status)
         {
             status = 0;
             return 2015;
         }
 
+        /// <summary>
+        /// Gets the FPGA Revision
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public static uint getFPGARevision(ref int status)
         {
             status = 0;
             return 0;
         }
 
+        /// <summary>
+        /// Gets the FPGA Time
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public static uint getFPGATime(ref int status)
         {
             status = 0;
             return (uint)SimHooks.GetFPGATime();
         }
 
+        /// <summary>
+        /// Gets the FPGA Time
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public static bool getFPGAButton(ref int status)
         {
             status = 0;
             return halData["fpga_button"];
         }
 
+        /// <summary>
+        /// Sets the HAL error data
+        /// </summary>
+        /// <param name="errors"></param>
+        /// <param name="errorsLength"></param>
+        /// <param name="wait_ms"></param>
+        /// <returns></returns>
         public static int HALSetErrorData(string errors, int errorsLength, int wait_ms)
         {
             //TODO: Logger 
@@ -148,12 +192,21 @@ namespace HAL_Simulator
             return 0;
         }
 
+        /// <summary>
+        /// Returns a control word containing the DS states.
+        /// </summary>
+        /// <returns></returns>
         public static HALControlWord HALGetControlWord()
         {
             var h = halData["control"];
             return new HALControlWord(h["enabled"], h["autonomous"], h["test"], h["eStop"], h["fms_attached"], h["ds_attached"]);
         }
 
+        /// <summary>
+        /// Gets the Alliance Station
+        /// </summary>
+        /// <param name="allianceStation"></param>
+        /// <returns></returns>
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
         {
             return (int)halData["alliance_station"];
@@ -246,6 +299,13 @@ namespace HAL_Simulator
             return 0;
         }
 
+        /// <summary>
+        /// Gets the Current match time.
+        /// </summary>
+        /// <param name="matchTime"></param>
+        /// <returns></returns>
+        /// <remarks>Returns -1.0 if the robot is disabled, in test mode, or enabled, but not field connected
+        /// or practice mode.</remarks>
         public static int HALGetMatchTime(ref float matchTime)
         {
             
@@ -264,7 +324,7 @@ namespace HAL_Simulator
             }
             else
             {
-                matchStart = -1.0f;
+                matchTime = -1.0f;
             }
             return 0;
         }

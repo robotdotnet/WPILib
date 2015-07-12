@@ -174,6 +174,9 @@ namespace HAL_RoboRIO
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "resetEncoder")]
         public static extern void resetEncoder(IntPtr encoder_pointer, ref int status);
 
+        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "freeEncoder")]
+        public static extern void freeEncoder(IntPtr encoder_pointer, ref int status);
+
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getEncoder")]
         public static extern int getEncoder(IntPtr encoder_pointer, ref int status);
 

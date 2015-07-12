@@ -137,7 +137,7 @@ namespace HAL_Simulator
             status = 0;
             bool found = false;
             int i = 0;
-            for (i = 0; i < halData["d0_pwm"].Length; i++)
+            for (i = 0; i < halData["d0_pwm"].Count; i++)
             {
                 if (halData["d0_pwm"][i] == null)
                 {
@@ -305,7 +305,7 @@ namespace HAL_Simulator
         {
             status = 0;
             int i = 0;
-            for (i = 0; i < halData["counter"].Length; i++)
+            for (i = 0; i < halData["counter"].Count; i++)
             {
                 var cnt = halData["counter"][i];
                 if (!cnt["initialized"])
@@ -371,7 +371,7 @@ namespace HAL_Simulator
             var counter = halData["counter"][GetCounter((counter_pointer)).idx];
             counter["up_rising_edge"] = false;
             counter["up_falling_edge"] = false;
-            counter["up_source_channel"] = 0;
+            counter["up_source_channel"] = 0u;
             counter["up_source_trigger"] = false;
         }
 
@@ -408,7 +408,7 @@ namespace HAL_Simulator
             var counter = halData["counter"][GetCounter((counter_pointer)).idx];
             counter["down_rising_edge"] = false;
             counter["down_falling_edge"] = false;
-            counter["down_source_channel"] = 0;
+            counter["down_source_channel"] = 0u;
             counter["down_source_trigger"] = false;
         }
 

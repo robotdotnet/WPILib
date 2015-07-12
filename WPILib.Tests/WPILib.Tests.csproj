@@ -64,6 +64,7 @@
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
     <Compile Include="TestDriverStation.cs" />
+    <Compile Include="TestEncoders.cs" />
     <Compile Include="TestHALSim.cs" />
     <Compile Include="TestInterrupt.cs" />
     <Compile Include="TestNotifier.cs" />
@@ -74,6 +75,8 @@
     <Compile Include="TestServo.cs" />
     <Compile Include="TestDoubleSolenoid.cs" />
     <Compile Include="TestSolenoid.cs" />
+    <Compile Include="TestCounter.cs" />
+    <Compile Include="TestUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">

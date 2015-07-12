@@ -212,7 +212,7 @@ namespace WPILib
             else
             {
                 int status = 0;
-                FreeCounter(m_encoder, ref status);
+                FreeEncoder(m_encoder, ref status);
             }
         }
 
