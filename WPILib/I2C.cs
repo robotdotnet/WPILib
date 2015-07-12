@@ -71,6 +71,8 @@ namespace WPILib
             }
         }
 
+
+
         public bool Read(int registerAddress, int count, byte[] buffer)
         {
             BoundaryException.AssertWithinBounds(count, 1, 7);
@@ -117,6 +119,42 @@ namespace WPILib
                 }
             }
             return true;
+        }
+
+
+        public void LVWrite(byte register, byte[] message)
+        {
+            byte[] newData = new byte[message.Length + 1];
+
+            newData[0] = register;
+            for (int i = 0; i < message.Length; i++)
+            {
+                newData[i + 1] = message[i];
+            }
+            lock (m_synchronizeRoot)
+            {
+                I2CWrite((byte) m_port, (byte) m_deviceAddress, newData, (byte) newData.Length);
+            }
+        }
+
+        public void LVRead(byte[] register, byte bytesToRead, ref byte[] returnData)
+        {
+            lock (m_synchronizeRoot)
+            {
+                if (returnData.Length < bytesToRead)
+                {
+                    returnData = new byte[bytesToRead];
+                }
+                if (register.Length == 0)
+                {
+                    I2CRead((byte) m_port, (byte) m_deviceAddress, returnData, bytesToRead);
+                }
+                else
+                {
+                    I2CTransaction((byte) m_port, (byte) m_deviceAddress, register, (byte) register.Length, returnData,
+                        bytesToRead);
+                }
+            }
         }
     }
 }
