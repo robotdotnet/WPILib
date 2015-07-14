@@ -6,6 +6,7 @@ using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.HALErrorConstants;
+// ReSharper disable RedundantAssignment
 
 namespace HAL_Simulator
 {
@@ -149,13 +150,13 @@ namespace HAL_Simulator
         public static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
+            return (float)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
         }
 
         public static float getAnalogAverageVoltage(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_voltage"];
+            return (float)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_voltage"];
         }
 
         public static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)

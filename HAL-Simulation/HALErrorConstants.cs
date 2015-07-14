@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {

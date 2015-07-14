@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {

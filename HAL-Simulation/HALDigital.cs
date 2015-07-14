@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PWMHelpers;
 using static HAL_Simulator.HALErrorConstants;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {
@@ -17,12 +18,6 @@ namespace HAL_Simulator
         internal const int PwmPins = 20;
         internal const int RelayPins = 4;
         internal const int NumHeaders = 10;
-
-        /// Return Type: void*
-        ///port_pointer: void*
-        ///status: int*
-        //[DllImport("libHALAthena_shared.so", EntryPoint = "initializeDigitalPort")]
-        //public static extern System.IntPtr initializeDigitalPort(System.IntPtr port_pointer, ref int status);
 
         public static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
         {

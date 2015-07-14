@@ -4,6 +4,8 @@ using System.Runtime.InteropServices;
 using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {

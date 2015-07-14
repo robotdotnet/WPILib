@@ -1,5 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using static HAL_Simulator.SimData;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {
@@ -43,10 +45,11 @@ namespace HAL_Simulator
         public static extern int getUserCurrentFaults6V(ref int status);
 
 
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserVoltage5V")]
-        public static extern float getUserVoltage5V(ref int status);
+        public static float getUserVoltage5V(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["user_voltage_5v"];
+        }
 
 
         /// Return Type: float

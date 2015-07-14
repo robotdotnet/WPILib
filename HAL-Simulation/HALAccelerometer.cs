@@ -1,5 +1,8 @@
-﻿using HAL_Base;
+﻿using System.Diagnostics.CodeAnalysis;
+using HAL_Base;
 using static HAL_Simulator.SimData;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {

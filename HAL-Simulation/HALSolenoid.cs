@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {

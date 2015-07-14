@@ -1,20 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {
-    /// Return Type: void
-    ///param0: unsigned int
-    ///param1: void*
-    
-    //public delegate void NotifierDelegate(uint param0, System.IntPtr param1);
-
-    
-
     public class HALNotifier
     {
         private static List<Notifier> Notifiers = new List<Notifier>(); 

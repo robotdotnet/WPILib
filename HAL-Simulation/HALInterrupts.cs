@@ -1,11 +1,9 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+﻿using System;
 using System.Threading;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
+// ReSharper disable RedundantAssignment
+// ReSharper disable InconsistentNaming
 
 namespace HAL_Simulator
 {
@@ -63,7 +61,7 @@ namespace HAL_Simulator
             {
                 Callback = null,
                 Watcher = watcher,
-                dioPin = 0,
+                DIOPin = 0,
             };
             status = NiFpga_Status_Success;
             Interrupts[interruptIndex] = interrupt;
@@ -83,7 +81,7 @@ namespace HAL_Simulator
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
             if (interrupt.DictCallback != null)
             {
-                halData["dio"][interrupt.dioPin].Cancel("value", interrupt.DictCallback);
+                halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
             }
             interrupt.DictCallback = null;
             Interrupts[interrupt_pointer.ToInt32() - 1] = null;
@@ -114,7 +112,7 @@ namespace HAL_Simulator
             object lockObject = new object();
 
             //Store the previous state of the interrupt, so we can check for rising or falling edges
-            interrupt.PreviousState = halData["dio"][interrupt.dioPin]["value"];
+            interrupt.PreviousState = halData["dio"][interrupt.DIOPin]["value"];
 
             interrupt.DictCallback = (k, v) =>
             {
@@ -135,7 +133,7 @@ namespace HAL_Simulator
             };
 
             //Register our interrupt with the NotifyDict
-            halData["dio"][interrupt.dioPin].Register("value", interrupt.DictCallback);
+            halData["dio"][interrupt.DIOPin].Register("value", interrupt.DictCallback);
 
             WaitResult retVal = WaitResult.Timeout;
             //We are using a lock to wait for the interrupt.
@@ -143,7 +141,7 @@ namespace HAL_Simulator
             {
                 bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
                 //Cancel the interrupt, because we don't want it to fire again.
-                halData["dio"][interrupt.dioPin].Cancel("value", interrupt.DictCallback);
+                halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
                 if (timedout)
                 {
                     retVal = WaitResult.Timeout;
@@ -216,12 +214,12 @@ namespace HAL_Simulator
                 }
                 //Call our callback in a new thread. This is what the FPGA does as well.
                 new Thread(() => {
-                    interrupt.Callback((uint) interrupt.dioPin, interrupt.Param);
+                    interrupt.Callback((uint) interrupt.DIOPin, interrupt.Param);
                 }).Start();
             };
             //Set our previous state, and register
-            interrupt.PreviousState = halData["dio"][interrupt.dioPin]["value"];
-            halData["dio"][interrupt.dioPin].Register("value", interrupt.DictCallback, false);
+            interrupt.PreviousState = halData["dio"][interrupt.DIOPin]["value"];
+            halData["dio"][interrupt.DIOPin].Register("value", interrupt.DictCallback, false);
         }
 
         /// <summary>
@@ -233,7 +231,7 @@ namespace HAL_Simulator
         {
             status = NiFpga_Status_Success;
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
-            halData["dio"][interrupt.dioPin].Cancel("value", interrupt.DictCallback);
+            halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
         }
 
         /// <summary>
@@ -279,7 +277,7 @@ namespace HAL_Simulator
             if (routing_module != 0)
                 throw new ArgumentOutOfRangeException(nameof(routing_module), "Routing module must be 0.");
             status = NiFpga_Status_Success;
-            interrupt.dioPin = (int)routing_pin;
+            interrupt.DIOPin = (int)routing_pin;
         }
 
         /// <summary>

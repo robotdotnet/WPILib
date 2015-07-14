@@ -7,35 +7,56 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator
 {
+    /// <summary>
+    /// This class allows us to listen for changes in a specific part of the dictionary. 
+    /// </summary>
+    /// <remarks>Not everything is wrapped, because we don't care about changes in certain things.
+    /// <para/>Note that since the indexer is not marked virtual, if you set a value in the
+    /// dictionary manually, the notify callback will not be called unless you first
+    /// box the dictionary as a NotifyDict. The recommended way to update the data however
+    /// is to update the HalInData dictionary, and then call <see cref="SimData.UpdateHalData"/> 
+    /// with that dictionary.</remarks>
+    /// <typeparam name="T">Please use dynamic</typeparam>
+    /// <typeparam name="T2">Please use dynamic</typeparam>
     public class NotifyDict<T, T2> : Dictionary<T, T2>
     {
-        private Dictionary<T, Action<dynamic, dynamic>> callbacks = new Dictionary<T, Action<dynamic, dynamic>>(); 
+        private Dictionary<T, Action<dynamic, dynamic>> m_callbacks = new Dictionary<T, Action<dynamic, dynamic>>(); 
 
-        //private Action<dynamic, dynamic> callback;
 
+        /// <summary>
+        /// Register a notify function to get called when the field updates.
+        /// </summary>
+        /// <param name="key">The key to watch</param>
+        /// <param name="action">The callback function</param>
+        /// <param name="notify">Whether to notify immediately</param>
         public void Register(T key, Action<dynamic, dynamic> action, bool notify = false)
         {
             if (!this.ContainsKey(key))
             {
                 throw new ArgumentOutOfRangeException(nameof(key), "Cannot register for non existent key");
             }
-            if (!callbacks.ContainsKey(key))
+            if (!m_callbacks.ContainsKey(key))
             {
-                callbacks.Add(key, action);
+                m_callbacks.Add(key, action);
             }
             else
             {
-                callbacks[key] += action;
+                m_callbacks[key] += action;
             }
             if (notify)
             {
-                callbacks[key]?.Invoke(key, this[key]);
+                m_callbacks[key]?.Invoke(key, this[key]);
             }
         }
 
+        /// <summary>
+        /// Cancel a notify function
+        /// </summary>
+        /// <param name="key">The key the function is waiting for</param>
+        /// <param name="action">The callback function to cancel.</param>
         public void Cancel(T key, Action<dynamic, dynamic> action)
         {
-            if (action != null && callbacks.ContainsKey(key)) callbacks[key] -= action;
+            if (action != null && m_callbacks.ContainsKey(key)) m_callbacks[key] -= action;
         }
 
         public new T2 this[T key]
@@ -44,18 +65,19 @@ namespace HAL_Simulator
             set
             {
                 base[key] = value;
-                if (callbacks.ContainsKey(key))
+                if (m_callbacks.ContainsKey(key))
                 {
-                    callbacks[key]?.Invoke(key, value);
-                    //Action<dynamic, dynamic> handler = callback;
-                    //handler?.Invoke(key, value);
+                    m_callbacks[key]?.Invoke(key, value);
                 }
             }
         }
 
     }
 
-    public class IN
+    /// <summary>
+    /// Marks a variable in the dict as something the simulator can set.
+    /// </summary>
+    internal class IN
     {
         public dynamic value { get; set; }
         public IN(dynamic d)
@@ -64,7 +86,10 @@ namespace HAL_Simulator
         }
     }
 
-    public class OUT
+    /// <summary>
+    /// Marks a variable in the dict as something the robot will set.
+    /// </summary>
+    internal class OUT
     {
         public dynamic value { get; set; }
         public OUT(dynamic d)
@@ -73,18 +98,32 @@ namespace HAL_Simulator
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class SimData
     {
         internal static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
+
+        public static Dictionary<dynamic, dynamic> HalData => halData;
+         
         internal static Dictionary<dynamic, dynamic> halInData = new Dictionary<dynamic, dynamic>();
 
+        public static Dictionary<dynamic, dynamic> HalInData => halInData; 
+
+        /// <summary>
+        /// This method gets a copy of both data dictionaries.
+        /// It is here for use with reflection. Please use the Properties instead
+        /// </summary>
+        /// <param name="halDataOut"></param>
+        /// <param name="halInDataOut"></param>
         public static void GetData(out Dictionary<dynamic, dynamic> halDataOut, out Dictionary<dynamic, dynamic> halInDataOut)
         {
             halDataOut = halData;
             halInDataOut = halInData;
         }
 
-        public static IntPtr halNewDataSem = IntPtr.Zero;
+        internal static IntPtr halNewDataSem = IntPtr.Zero;
 
         public static void ResetHALData()
         {
@@ -362,7 +401,7 @@ namespace HAL_Simulator
             FilterHalData(halData, halInData);
         }
 
-        public static void FilterHalData(Dictionary<dynamic, dynamic> both, Dictionary<dynamic, dynamic> inData)
+        private static void FilterHalData(Dictionary<dynamic, dynamic> both, Dictionary<dynamic, dynamic> inData)
         {
             List<dynamic> myKeys = both.Keys.ToList();
 
@@ -373,7 +412,7 @@ namespace HAL_Simulator
                 if (v is IN)
                 {
                     both[k] = v.value;
-                    inData[k] = new IN(v.value);
+                    inData[k] = v.value;
                 }
                 else if (v is OUT)
                 {
@@ -403,7 +442,7 @@ namespace HAL_Simulator
             }
         }
 
-        public static List<dynamic> FilterHalList(List<dynamic> both)
+        private static List<dynamic> FilterHalList(List<dynamic> both)
         {
             List<dynamic> inList = new List<dynamic>();
 
@@ -423,6 +462,11 @@ namespace HAL_Simulator
             return inList;
         }
 
+        /// <summary>
+        /// This function takes a dictionary, and updates it into the main HAL dictionary.
+        /// </summary>
+        /// <param name="inDict"></param>
+        /// <param name="outData"></param>
         public static void UpdateHalData(Dictionary<dynamic, dynamic> inDict, Dictionary<dynamic, dynamic> outData = null)
         {
             if (outData == null)
