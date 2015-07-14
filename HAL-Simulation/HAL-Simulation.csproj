@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DriverStationHelper.cs" />
     <Compile Include="HAL.cs" />
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />

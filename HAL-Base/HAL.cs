@@ -48,10 +48,12 @@ namespace HAL_Base
         //These are used to get us a copy of the dictionary from the simulator.
         //This is so we can debug it, because we cannot look at private members
         //of a reflected assembly.
-        public delegate void GetData(out Dictionary<dynamic, dynamic> a, out Dictionary<dynamic, dynamic> b);
+        public delegate void GetData(out Dictionary<dynamic, dynamic> a, out Dictionary<dynamic, dynamic> b,
+            out Dictionary<dynamic, dynamic> c);
 
         public static Dictionary<dynamic, dynamic> halData;
         public static Dictionary<dynamic, dynamic> halInData;
+        public static Dictionary<dynamic, dynamic> halDSData;
 
 
 
@@ -139,7 +141,7 @@ namespace HAL_Base
 
                     GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
 
-                    data(out halData, out halInData);
+                    data(out halData, out halInData, out halDSData);
 
                     //FindSimulators();
 
