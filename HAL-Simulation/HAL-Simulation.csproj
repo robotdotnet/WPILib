@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>Output\HAL-Simulation.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -41,28 +42,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DriverStationHelper.cs" />
-    <Compile Include="HAL.cs" />
-    <Compile Include="HALAccelerometer.cs" />
-    <Compile Include="HALAnalog.cs" />
-    <Compile Include="HALCAN.cs" />
-    <Compile Include="HALCANTalonSRX.cs" />
-    <Compile Include="HALCompressor.cs" />
-    <Compile Include="HALDigital.cs" />
-    <Compile Include="HALErrorConstants.cs" />
-    <Compile Include="HALInterrupts.cs" />
-    <Compile Include="HALNotifier.cs" />
-    <Compile Include="HALPDP.cs" />
-    <Compile Include="HALPower.cs" />
-    <Compile Include="HALSemaphore.cs" />
-    <Compile Include="HALSerialPort.cs" />
-    <Compile Include="HALSolenoid.cs" />
-    <Compile Include="HALStructures.cs" />
-    <Compile Include="HALUtilities.cs" />
+    <Compile Include="HAL Files\HAL.cs" />
+    <Compile Include="HAL Files\HALAccelerometer.cs" />
+    <Compile Include="HAL Files\HALAnalog.cs" />
+    <Compile Include="HAL Files\HALCAN.cs" />
+    <Compile Include="HAL Files\HALCANTalonSRX.cs" />
+    <Compile Include="HAL Files\HALCompressor.cs" />
+    <Compile Include="HAL Files\HALDigital.cs" />
+    <Compile Include="HAL Files\HALErrorConstants.cs" />
+    <Compile Include="HAL Files\HALInterrupts.cs" />
+    <Compile Include="HAL Files\HALNotifier.cs" />
+    <Compile Include="HAL Files\HALPDP.cs" />
+    <Compile Include="HAL Files\HALPower.cs" />
+    <Compile Include="HAL Files\HALSemaphore.cs" />
+    <Compile Include="HAL Files\HALSerialPort.cs" />
+    <Compile Include="HAL Files\HALSolenoid.cs" />
+    <Compile Include="HAL Files\HALStructures.cs" />
+    <Compile Include="HAL Files\HALUtilities.cs" />
     <Compile Include="SimHooks.cs" />
-    <Compile Include="ModeHelpers.cs" />
-    <Compile Include="PortConverters.cs" />
+    <Compile Include="HAL Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PWMHelpers.cs" />
+    <Compile Include="HAL Files\PWMHelpers.cs" />
     <Compile Include="SimData.cs" />
   </ItemGroup>
   <ItemGroup>

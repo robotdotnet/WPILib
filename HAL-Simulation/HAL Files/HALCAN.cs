@@ -1,13 +1,16 @@
 ﻿using System;
 using HAL_Base;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALCAN
     {
-
         public static void FRC_NetworkCommunication_CANSessionMux_sendMessage(uint messageID, byte[] data,
             byte dataSize, int periodMs, ref int status)
         {

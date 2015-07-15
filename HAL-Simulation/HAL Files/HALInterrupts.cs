@@ -2,14 +2,15 @@
 using System.Threading;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
-    //This simulates interrupts
-    //Currently it does not support analog triggers, but that could potentially be added
-    //at some point.
+    ///<inheritdoc cref="HAL"/>
     public class HALInterrupts
     {
         private enum WaitResult

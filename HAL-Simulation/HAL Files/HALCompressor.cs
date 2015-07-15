@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using static HAL_Simulator.SimData;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALCompressor
     {
         public static IntPtr initializeCompressor(byte module)

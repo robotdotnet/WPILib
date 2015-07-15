@@ -1,11 +1,14 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using HAL_Base;
+﻿using HAL_Base;
 using static HAL_Simulator.SimData;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALAccelerometer
     {
         /// Return Type: void

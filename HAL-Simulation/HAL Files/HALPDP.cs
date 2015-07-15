@@ -1,9 +1,13 @@
 ﻿using System.Runtime.InteropServices;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALPDP
     {
         public static void initializePDP(int module)

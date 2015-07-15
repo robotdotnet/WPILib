@@ -1,16 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    /// <summary>
+    /// This class is used by HAL-Base, and is used to emulate the HAL. 
+    /// Please do not call functions in this class directly. 
+    /// </summary>
     public class HAL
     {
         //Time constants used for GetMatchTime.
@@ -51,7 +56,7 @@ namespace HAL_Simulator
         /// <param name="sem"></param>
         public static void HALSetNewDataSem(IntPtr sem)
         {
-            halNewDataSem = sem;
+            HALNewDataSem = sem;
         }
 
         /// <summary>
@@ -229,7 +234,7 @@ namespace HAL_Simulator
                     tmp = (int)(joyData[i] * 127);
                 axes.axes[i] = (short)tmp;
             }
-            axes.count = 12; //Need to make this netter.
+            axes.count = (ushort)joyData.Length;
             return 0;
         }
 

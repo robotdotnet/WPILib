@@ -1,8 +1,11 @@
 ﻿// ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     internal static class HALErrorConstants
     {
         internal const int CTR_RxTimeout = 1;

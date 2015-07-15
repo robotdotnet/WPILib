@@ -11,13 +11,17 @@ using static HAL_Base.HALSemaphore;
 namespace WPILib
 {
     /// <summary>
-    /// Provides access to the network communication data to/ from the Driver Station.
+    /// Provides access to the network communication data to/from the Driver Station.
     /// </summary>
     public class DriverStation : RobotState.Interface
     {
         //Constants
+        //TODO: Move this to the HAL
+        ///The number of joystick ports
         public const int JoystickPorts = 6;
+        ///The number of joystick axes
         public const int MaxJoystickAxes = 12;
+        ///The number of joystick POVs
         public const int MaxJoystickPOVs = 12;
 
         //Enums
@@ -36,30 +40,47 @@ namespace WPILib
         private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
         private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
 
+        //Pointers to the semaphores to the HAL and FPGA
+        //We use native semaphores rather then .NET semaphores for some of these
+        //Because the mono semaphores were taking up too much CPU, and not looping
+        //In the correct time.
         private IntPtr m_newControlData;
         private IntPtr m_packetDataAvailableMultiWait;
         private IntPtr m_packetDataAvailableMutex;
         private IntPtr m_waitForDataSem;
         private IntPtr m_waitForDataMutex;
+
+        //Driver station thread keep alive
         private bool m_threadKeepAlive = true;
+
+        //User mode states
         private bool m_userInDisabled;
         private bool m_userInAutonomous;
         private bool m_userInTeleop;
         private bool m_userInTest;
-        private double m_nextMessageTime;
 
+        //Thread lock objects
         private object m_lockObject = new object();
 
+        //Reporting interval time limiters
         private const double JoystickUnpluggedMessageInterval = 1.0;
+        private double m_nextMessageTime;
 
-        //Public Fields
+        //The singleton instance of the driver station
         private static DriverStation s_instance;
 
+        /// <summary>
+        /// Gets the instance of the driver station.
+        /// </summary>
         public static DriverStation Instance => s_instance ?? (s_instance = new DriverStation());
 
-
+        /// <summary>
+        /// Driver Station constructor
+        /// </summary>
+        /// <remarks>This is normally created statically in the singleton instance.</remarks>
         protected DriverStation()
         {
+            //Force all joysticks to have no value.
             for (int i = 0; i < JoystickPorts; i++)
             {
                 m_joystickButtons[i].count = 0;
@@ -67,7 +88,7 @@ namespace WPILib
                 m_joystickPOVs[i].count = 0;
             }
 
-
+            //Initializes the HAL semaphores
             m_packetDataAvailableMultiWait = InitializeMultiWait();
             m_newControlData = InitializeSemaphore(0);
 
@@ -79,26 +100,36 @@ namespace WPILib
             HALSetNewDataSem(m_packetDataAvailableMultiWait);
 
 
-
+            //Starts the driver station thread in the background.
             var thread = new Thread(Task) { Priority = ThreadPriority.Highest, IsBackground = true };
             thread.Start();
         }
 
+        /// <summary>
+        /// Stops the driver station thread
+        /// </summary>
         public void Release() => m_threadKeepAlive = false;
 
+        //The DS loop thread
         private void Task()
         {
+            //The safety counter is used in order to implement motor safety
             int safetyCounter = 0;
             while (m_threadKeepAlive)
             {
+                //Wait for new DS data, grab the newest data, and return the semaphore.
                 TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
                 GetData();
                 GiveMultiWait(m_waitForDataSem);
+
+                //Every 4 loops (80ms) check all of the motors to make sure they have been updated
                 if (++safetyCounter >= 4)
                 {
                     MotorSafetyHelper.CheckMotors();
                     safetyCounter = 0;
                 }
+
+                //Report our program state.
                 if (m_userInDisabled)
                     HALNetworkCommunicationObserveUserProgramDisabled();
                 if (m_userInAutonomous)
@@ -110,8 +141,15 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Wait for new data from the driver station.
+        /// </summary>
+        /// <param name="timeout">The timeout in ms</param>
         public void WaitForData(long timeout = 0) => TakeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
 
+        /// <summary>
+        /// Grabs the newest Joystick data and stores it
+        /// </summary>
         protected void GetData()
         {
             for (byte stick = 0; stick < JoystickPorts; stick++)
@@ -120,15 +158,24 @@ namespace WPILib
                 HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
                 HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
             }
+            //Pings the NewControlData function
             GiveSemaphore(m_newControlData);
         }
 
+        /// <summary>
+        /// Reads the battery voltage
+        /// </summary>
+        /// <returns>The battery voltage in Volts.</returns>
         public double GetBatteryVoltage()
         {
             int status = 0;
             return HALPower.GetVinVoltage(ref status);
         }
 
+        /// <summary>
+        /// Reports errors related to unplugged joysticks.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
         private void ReportJoystickUnpluggedError(string message)
         {
             double currentTime = GetFPGATimestamp();
@@ -139,19 +186,29 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the value of an axis on the joystick.
+        /// </summary>
+        /// <param name="stick">The joystick to read</param>
+        /// <param name="axis">The axis to read.</param>
+        /// <returns>The value of the axis from -1.0 to 1.0</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick or axis are out of range.</exception>
         public double GetStickAxis(int stick, int axis)
         {
             lock (m_joystickAxes)
             {
                 if (stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick Index is out of range");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
                 if (axis > m_joystickAxes[stick].count)
                 {
                     if (axis >= MaxJoystickAxes)
-                        throw new SystemException("Joystick index is out of range, should be 0-5");
+                        throw new ArgumentOutOfRangeException(nameof(axis),
+                            $"Joystick axis is out of range, should be between 0 and {m_joystickAxes[stick].count}");
                     else
                     {
                         ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
@@ -160,7 +217,7 @@ namespace WPILib
                     return 0.0;
                 }
 
-                int value = m_joystickAxes[stick].axes[axis];//GetAxesData(axis, ref m_joystickAxes[stick]);
+                int value = m_joystickAxes[stick].axes[axis];
 
                 if (value < 0)
                 {
@@ -174,31 +231,49 @@ namespace WPILib
 
         }
 
+        /// <summary>
+        /// Returns the number of axes on a given joystick port.
+        /// </summary>
+        /// <param name="stick">The joystick to check</param>
+        /// <returns>The number of axes on the joystick.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public int GetStickAxisCount(int stick)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick index is out of range, should be 0-{JoystickPorts}");
                 }
 
                 return m_joystickAxes[stick].count;
             }
         }
 
+        /// <summary>
+        /// Returns the state of a POV on the joystick.
+        /// </summary>
+        /// <param name="stick">The joystick to read</param>
+        /// <param name="pov">The POV to read</param>
+        /// <returns>The angle of the POV in degrees, or -1 if the POV is not pressed.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick or povs are out of range.</exception>
         public int GetStickPOV(int stick, int pov)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
                 if (pov < 0 || pov >= MaxJoystickPOVs)
                 {
-                    throw new SystemException("Joystick POV is out of range");
+                    throw new ArgumentOutOfRangeException(nameof(pov),
+                        $"Joystick POV is out of range, should be between 0 and {MaxJoystickPOVs}");
                 }
 
 
@@ -213,38 +288,63 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Returns the number of POVs on a given joystick port
+        /// </summary>
+        /// <param name="stick">The joystick port number</param>
+        /// <returns>The number of POVs on the indicated joystick.</returns>.
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public int GetStickPOVCount(int stick)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
                 return m_joystickPOVs[stick].count;
             }
         }
 
+        /// <summary>
+        /// The state of the buttons on the joystick.
+        /// </summary>
+        /// <param name="stick">The joystick to read</param>
+        /// <returns>The state of the buttons</returns>
+        /// /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public int GetStickButtons(int stick)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
                 return (int)m_joystickButtons[stick].buttons;
             }
         }
 
+        /// <summary>
+        /// Gets the state of one joystick button. Button indexes begin at 1.
+        /// </summary>
+        /// <param name="stick">The joystick to read</param>
+        /// <param name="button">The button index</param>
+        /// <returns>The state of the joystick button.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public bool GetStickButton(int stick, byte button)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
                 if (button > m_joystickButtons[stick].count)
@@ -263,45 +363,69 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the number of buttons on a joystick.
+        /// </summary>
+        /// <param name="stick">The joystick port number</param>
+        /// <returns>The number of buttons on the joystick.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public int GetStickButtonCount(int stick)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new SystemException("Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
                 return m_joystickButtons[stick].count;
             }
         }
 
+        /// <summary>
+        /// Gets if the joystick is an xbox controller.
+        /// </summary>
+        /// <param name="stick">The joystick port number</param>
+        /// <returns>True if the joystick is an xbox controller.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public bool GetJoystickIsXbox(int stick)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(stick), "Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
-                //TODO: Remove this when calling for descriptor on empty stick
+                //TODO: Remove this when calling for descriptor on empty stick no longer crashes
                 if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
                 {
-                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick + 
+                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
                         " not available, check if controller is plugged in\n");
                     return false;
                 }
-                return HALGetJoystickIsXbox((byte) stick) == 1;
+                return HALGetJoystickIsXbox((byte)stick) == 1;
             }
         }
 
+        /// <summary>
+        /// Gets the type of joystick
+        /// </summary>
+        /// <param name="stick">The joystick port number</param>
+        /// <returns>The joystick type</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public int GetJoystickType(int stick)
         {
             lock (m_lockObject)
             {
                 if (stick < 0 || stick >= JoystickPorts)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(stick), "Joystick index is out of range, should be 0-5");
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
                 //TODO: Remove this when calling for descriptor on empty stick
                 if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
@@ -310,15 +434,23 @@ namespace WPILib
                         " not available, check if controller is plugged in\n");
                     return -1;
                 }
-                return HALGetJoystickType((byte) stick);
+                return HALGetJoystickType((byte)stick);
             }
         }
 
+        /// <summary>
+        /// Gets the name of the joystick.
+        /// </summary>
+        /// <param name="stick">The joystick port number</param>
+        /// <returns>The joystick name</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
         public string GetJoystickName(int stick)
         {
             if (stick < 0 || stick >= JoystickPorts)
             {
-                throw new ArgumentOutOfRangeException(nameof(stick), "Joystick index is out of range, should be 0-5");
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
             //TODO: Remove this when calling for descriptor on empty stick
             if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
@@ -327,9 +459,12 @@ namespace WPILib
                     " not available, check if controller is plugged in\n");
                 return "";
             }
-            return HAL.GetJoystickName((byte) stick);
+            return HAL.GetJoystickName((byte)stick);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the Driver Station requires the robot to be enabled.
+        /// </summary>
         public bool Enabled
         {
             get
@@ -339,8 +474,15 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the Driver Station requires the robot to be disabled.
+        /// </summary>
         public bool Disabled => !Enabled;
 
+        /// <summary>
+        /// Gets a value indicating whether the Driver Station requires the robot to be
+        /// running in autonomous mode.
+        /// </summary>
         public bool Autonomous
         {
             get
@@ -350,6 +492,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the Driver Station requires the robot to be
+        /// running in test mode.
+        /// </summary>
         public bool Test
         {
             get
@@ -359,15 +505,40 @@ namespace WPILib
             }
         }
 
-        public bool OperatorControl => !(Autonomous || Test);
-
-        public bool IsSysActive()
+        //The implementation here is different, since calls to GetControlWord
+        //take over 0.3ms. Instead of having to call it twice if we are in teleop
+        //we only call it once.
+        /// <summary>
+        /// Gets a value indicating whether the Driver Station requires the robot to be
+        /// running in operator-controlled mode.
+        /// </summary>
+        public bool OperatorControl // => !(Autonomous || Test);//
         {
-            int status = 0;
-            bool retVal = HALGetSystemActive(ref status);
-            return retVal;
+            get
+            {
+                HALControlWord controlWord = GetControlWord();
+                return !(controlWord.GetAutonomous() || controlWord.GetTest());
+            }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the FPGA outputs are enabled.
+        /// </summary>
+        /// <remarks>The outputs may be disabled if the robot is disabled or
+        /// e-stopped, the watchdog has expired, or if the roboRIO browns out</remarks>
+        public bool SysActive
+        {
+            get
+            {
+                int status = 0;
+                bool retVal = HALGetSystemActive(ref status);
+                return retVal;
+            }
+        }
+
+        /// <summary>
+        /// Gets if the system is browned out.
+        /// </summary>
         public bool BrownedOut
         {
             get
@@ -378,8 +549,16 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets whether a new control packet from the driver station has arrived since
+        /// the last time this was called.
+        /// </summary>
         public bool NewControlData => TryTakeSemaphore(m_newControlData) == 0;
 
+        /// <summary>
+        /// Gets the current alliance and station from the FMS.
+        /// </summary>
+        /// <returns>The current alliance</returns>
         public Alliance GetAlliance()
         {
             HALAllianceStationID allianceStationID = new HALAllianceStationID();
@@ -403,6 +582,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the driver station number.
+        /// </summary>
+        /// <returns>The driver station number (1, 2 or 3)</returns>
         public int GetLocation()
         {
             HALAllianceStationID allianceStationID = new HALAllianceStationID();
@@ -427,10 +610,28 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if the FMS is attached.
+        /// </summary>
         public bool FMSAttached => GetControlWord().GetFMSAttached();
 
+        /// <summary>
+        /// Gets if the DS is attached.
+        /// </summary>
         public bool DSAtached => GetControlWord().GetDSAttached();
 
+        /// <summary>
+        /// Get the approximate match time.
+        /// </summary>
+        /// <remarks>The FMS does not send an official match
+        /// time to the robots, but does send an approximate match time. The value will
+        /// count down the time remaining in the current period (auto or teleop).
+        /// <para/>
+        /// Warning: This is not an official time(so it cannot be used to dispute ref
+        /// calls or guarantee that a function will trigger before the match ends) The
+        /// Practice Match function of the DS approximates the behavior seen on the
+        /// field.</remarks>
+        /// <returns>The time remaining in the current match period in seconds.</returns>
         public double GetMatchTime()
         {
             float temp = 0;
@@ -438,7 +639,11 @@ namespace WPILib
             return temp;
         }
 
-
+        /// <summary>
+        /// Report an error to the driver station.
+        /// </summary>
+        /// <param name="error">The error to send</param>
+        /// <param name="printTrace">If true, append stack trace to error string</param>
         public static void ReportError(string error, bool printTrace)
         {
             string errorString = error;

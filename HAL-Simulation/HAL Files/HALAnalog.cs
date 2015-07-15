@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Web.UI.WebControls;
 using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.HALErrorConstants;
+
 // ReSharper disable RedundantAssignment
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
-
+    ///<inheritdoc cref="HAL"/>
     public class HALAnalog
     {
         internal const uint Timebase = 40000000;

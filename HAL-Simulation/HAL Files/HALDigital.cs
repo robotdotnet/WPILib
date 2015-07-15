@@ -6,11 +6,15 @@ using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PWMHelpers;
 using static HAL_Simulator.HALErrorConstants;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALDigital
     {
         internal const int ExpectedLoopTiming = 40;

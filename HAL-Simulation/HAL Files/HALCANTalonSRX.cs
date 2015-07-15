@@ -3,12 +3,16 @@ using System.Runtime.InteropServices;
 using HAL_Base;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.SimData;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALCanTalonSRX
     {
         public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)

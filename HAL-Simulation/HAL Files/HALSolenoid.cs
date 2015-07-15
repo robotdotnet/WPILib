@@ -2,11 +2,15 @@
 using System.Runtime.InteropServices;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALSolenoid
     {
 

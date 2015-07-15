@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
@@ -21,7 +24,7 @@ namespace HAL_Simulator
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct MULTIWAIT_ID
+    internal struct MULTIWAIT_ID
     {
         public object lockObject;
     }

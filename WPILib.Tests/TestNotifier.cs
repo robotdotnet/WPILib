@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Telerik.JustMock;
 
 namespace WPILib.Tests
 {
@@ -15,7 +16,40 @@ namespace WPILib.Tests
             TestBase.StartCode();
         }
 
-        private AutoResetEvent _autoResetEvent;
+        [TestMethod]
+        public void TestSingle()
+        {
+            var delegateMock = Mock.Create<Action>();
+
+            Mock.Arrange(() => delegateMock()).OccursOnce();
+
+            using (Notifier nt = new Notifier(delegateMock))
+            {
+                nt.StartSingle(0.25);
+
+                Thread.Sleep(750);
+
+                Mock.Assert(delegateMock);
+            }
+        }
+        /*
+        [TestMethod]
+        public void TestMultiple()
+        {
+            var delegateMock = Mock.Create<Action>();
+
+            Mock.Arrange(() => delegateMock()).OccursOnce();
+
+            using (Notifier nt = new Notifier(delegateMock))
+            {
+                nt.StartPeriodic(0.1);
+
+                Thread.Sleep(500);
+
+                Mock.Assert(delegateMock);
+            }
+        }
+        */
 
         /*
         [TestMethod]

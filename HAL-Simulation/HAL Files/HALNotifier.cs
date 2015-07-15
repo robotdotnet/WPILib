@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALNotifier
     {
         private static List<Notifier> Notifiers = new List<Notifier>(); 
@@ -27,7 +31,7 @@ namespace HAL_Simulator
         public static void cleanNotifier(IntPtr notifier_pointer, ref int status)
         {
             status = 0;
-            Notifier notifier = (Notifier) Marshal.PtrToStructure(notifier_pointer, typeof (Notifier));
+            Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
             if (notifier.alarm != null && notifier.alarm.IsAlive)
             {
                 notifier.alarm.Abort();
@@ -42,7 +46,7 @@ namespace HAL_Simulator
         public static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
         {
             status = 0;
-            Notifier notifier = Notifiers[notifier_pointer.ToInt32()];//(Notifier)Marshal.PtrToStructure(notifier_pointer, typeof(Notifier));
+            Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
             if (notifier.alarm != null && notifier.alarm.IsAlive)
             {
                 notifier.alarm.Abort();

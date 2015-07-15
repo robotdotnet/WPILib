@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
+// ReSharper disable CheckNamespace
+#pragma warning disable 1591
 
 namespace HAL_Simulator
 {
+    ///<inheritdoc cref="HAL"/>
     public class HALSemaphore
     {
         public static IntPtr initializeMutexRecursive()

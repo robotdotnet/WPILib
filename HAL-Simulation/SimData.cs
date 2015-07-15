@@ -133,6 +133,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="halDataOut"></param>
         /// <param name="halInDataOut"></param>
+        /// <param name="halDSDataOut"></param>
         public static void GetData(out Dictionary<dynamic, dynamic> halDataOut, 
             out Dictionary<dynamic, dynamic> halInDataOut, out Dictionary<dynamic, dynamic> halDSDataOut)
         {
@@ -141,14 +142,14 @@ namespace HAL_Simulator
             halDSDataOut = halDSData;
         }
 
-        internal static IntPtr halNewDataSem = IntPtr.Zero;
+        internal static IntPtr HALNewDataSem = IntPtr.Zero;
 
         public static void ResetHALData()
         {
             halData.Clear();
             halInData.Clear();
             halDSData.Clear();
-            halNewDataSem = IntPtr.Zero;
+            HALNewDataSem = IntPtr.Zero;
 
 
             halData["alliance_station"] = new DS(0);
@@ -179,7 +180,7 @@ namespace HAL_Simulator
                     {"has_source", new IN(false) },
                     {"buttons", new DS(new bool[13]) },
                     {"axes", new DS(new double[6]) },
-                    {"povs", new DS(new int[12]) },
+                    {"povs", new DS(new []{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1})},
                     {"rightRumble", new OUT(0) },
                     {"leftRumble", new OUT(0) },
                     {"isXbox", new DS(0)},
@@ -189,6 +190,7 @@ namespace HAL_Simulator
                     {"buttonCount", new DS(12) }
                 });
             }
+           
 
             halData["fpga_button"] = new IN(false);
             halData["error_data"] = new OUT(null);
@@ -461,20 +463,7 @@ namespace HAL_Simulator
                 if (v is IN)
                 {
                     both[k] = v.value;
-                    if (v is Array)
-                    {
-                        var vOut = both[k];
-                        int count = 0;
-                        foreach (var vv in v.value)
-                        {
-                            vOut.Add(vv);
-                            count++;
-                        }
-                    }
-                    else
-                    {
-                        inData[k] = v.value;
-                    }
+                    inData[k] = v.value;
                 }
                 else if (v is OUT)
                 {

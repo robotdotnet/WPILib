@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using HAL_Simulator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Telerik.JustMock;
 using WPILib.Exceptions;
 using HAL = HAL_Base.HAL;
 
@@ -126,8 +127,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    NotifyDict<dynamic, dynamic> nd = HAL_Base.HAL.halData["dio"][0];
-                    nd["value"] = true;
+                    HAL_Base.HAL.halData["dio"][0]["value"] = true;
                 });
 
                 t.Start();
@@ -149,8 +149,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    NotifyDict<dynamic, dynamic> nd = HAL_Base.HAL.halData["dio"][0];
-                    nd["value"] = true;
+                    HAL_Base.HAL.halData["dio"][0]["value"] = true;
                 });
 
                 t.Start();
@@ -173,8 +172,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    NotifyDict<dynamic, dynamic> nd = HAL_Base.HAL.halData["dio"][0];
-                    nd["value"] = false;
+                    HAL_Base.HAL.halData["dio"][0]["value"] = false;
                 });
 
                 t.Start();
@@ -197,8 +195,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    NotifyDict<dynamic, dynamic> nd = HAL_Base.HAL.halData["dio"][0];
-                    nd["value"] = false;
+                    HAL_Base.HAL.halData["dio"][0]["value"] = false;
                 });
 
                 t.Start();
@@ -214,29 +211,21 @@ namespace WPILib.Tests
         {
             using (DigitalInput d = NewInput())
             {
-                bool fired = false;
+                var delegateMock = Mock.Create<Action>();
+
+                Mock.Arrange(() => delegateMock()).OccursOnce();
+
                 HAL_Base.HAL.halData["dio"][0]["value"] = false;
-                d.RequestInterrupts(() =>
-                {
-                    fired = true;
-                });
+
+                d.RequestInterrupts(delegateMock);
                 d.EnableInterrupts();
 
-                NotifyDict<dynamic, dynamic> nd = HAL_Base.HAL.halData["dio"][0];
-                nd["value"] = true;
+                HAL.halData["dio"][0]["value"] = true;
+
                 Thread.Sleep(50);
 
-                Assert.IsTrue(fired);
+                Mock.Assert(delegateMock);
             }
-        }
-
-        public void TestMethod1()
-        {
-            //HalData()["time"]["program_start"] = SimHooks.GetTime();
-            //SimHooks.GetFPGATimestamp();
-            Thread.Sleep(3000);
-            //Console.WriteLine(SimHooks.GetTime() - HalData()["time"]["program_start"]);
-            Console.WriteLine(SimHooks.GetFPGATimestamp());
         }
     }
 }
