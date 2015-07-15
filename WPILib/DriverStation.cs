@@ -209,7 +209,7 @@ namespace WPILib
                     return -1;
                 }
 
-                return m_joystickPOVs[stick].povs[pov];//GetPOVData(pov, ref m_joystickPOVs[stick]);
+                return m_joystickPOVs[stick].povs[pov];
             }
         }
 

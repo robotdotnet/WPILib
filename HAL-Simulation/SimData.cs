@@ -177,27 +177,16 @@ namespace HAL_Simulator
                 halData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
                 {
                     {"has_source", new IN(false) },
-<<<<<<< HEAD
-                    {"buttons", new IN(new bool[13]) },
-                    {"axes", new IN(new double[6]) },
-                    {"povs", new IN(new int[12]) },
+                    {"buttons", new DS(new bool[13]) },
+                    {"axes", new DS(new double[6]) },
+                    {"povs", new DS(new int[12]) },
                     {"rightRumble", new OUT(0) },
                     {"leftRumble", new OUT(0) },
-                    {"isXbox", new IN(0)},
-                    {"type",  new IN(0)},
-                    {"name", new IN("") },
-                    {"axisCount", new IN(6) },
-                    {"buttonCount", new IN(12) }
-=======
-                    {"buttons", new DS(new bool[13]) },
-                    {"axes", new DS(new int[6]) },
-                    {"povs", new DS(new int[12]) },
                     {"isXbox", new DS(0)},
                     {"type",  new DS(0)},
                     {"name", new DS("") },
                     {"axisCount", new DS(6) },
                     {"buttonCount", new DS(12) }
->>>>>>> origin/master
                 });
             }
 
@@ -446,7 +435,7 @@ namespace HAL_Simulator
                 halDSData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
                 {
                     {"buttons", new bool[13] },
-                    {"axes", new int[6] },
+                    {"axes", new double[6] },
                     {"povs", new int[12] },
                     {"isXbox", 0},
                     {"type",  0},

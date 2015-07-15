@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using static HAL_Simulator.SimData;
@@ -289,7 +291,7 @@ namespace HAL_Simulator
         public static int HALGetJoystickAxisType(byte joystickNum, byte axis)
         {
             var stick = halData["joysticks"][joystickNum];
-            return 0;//stick["NotImplemented"];
+            return 0;
         }
 
         public static int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble,

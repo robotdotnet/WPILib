@@ -24,7 +24,14 @@ namespace HAL_Simulator
             EStopped,
         }
 
-        private static Timer dsTimer;
+        private static Timer s_dsTimer;
+
+        public static Dictionary<dynamic, dynamic> DSData; 
+
+        public static void StartDSLoop()
+        {
+            StartDSLoop(TimeSpan.FromMilliseconds(20));
+        }
 
         public static void StartDSLoop(int loopTime)
         {
@@ -33,14 +40,15 @@ namespace HAL_Simulator
 
         public static void StartDSLoop(TimeSpan loopTime)
         {
-            if (dsTimer == null)
+            DSData = HalDSData;
+            if (s_dsTimer == null)
             {
-                dsTimer = new Timer(s =>
+                s_dsTimer = new Timer(s =>
                 {
-                    SimData.UpdateHalData(HalInData);
-                    if (SimData.halNewDataSem != IntPtr.Zero)
+                    UpdateHalData(HalDSData);
+                    if (halNewDataSem != IntPtr.Zero)
                     {
-                        HALSemaphore.giveMultiWait(SimData.halNewDataSem);
+                        HALSemaphore.giveMultiWait(halNewDataSem);
                     }
                 }, null, loopTime, loopTime);
             }
@@ -48,50 +56,68 @@ namespace HAL_Simulator
 
         public static void SetJoystickButton(int joystickNum, int buttonNum, bool state)
         {
-            if (joystickNum < 0 || joystickNum >= HalInData["joysticks"].Length)
+            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
             {
-                throw new ArgumentOutOfRangeException(nameof(joystickNum), 
-                    $"Joysticks must be between 0 and {HalInData["joysticks"].Length - 1}");
+                throw new ArgumentOutOfRangeException(nameof(joystickNum),
+                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
             }
-            if (buttonNum < 1 || buttonNum >= HalInData["joysticks"][joystickNum]["buttons"].Length)
+            if (buttonNum < 1 || buttonNum >= HalDSData["joysticks"][joystickNum]["buttons"].Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(buttonNum),
-                    $"Button must be between 1 and {HalInData["joysticks"][joystickNum]["buttons"].Length - 1}");
+                    $"Button must be between 1 and {HalDSData["joysticks"][joystickNum]["buttons"].Length - 1}");
             }
-            HalInData["joysticks"][joystickNum]["buttons"][buttonNum] = state;
+            HalDSData["joysticks"][joystickNum]["buttons"][buttonNum] = state;
         }
 
         public static void SetJoystickAxis(int joystickNum, int axisNum, double value)
         {
-            if (joystickNum < 0 || joystickNum >= HalInData["joysticks"].Length)
+            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
-                    $"Joysticks must be between 0 and {HalInData["joysticks"].Length - 1}");
+                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
             }
-            if (axisNum < 1 || axisNum >= HalInData["joysticks"][joystickNum]["axes"].Length)
+            if (axisNum < 0 || axisNum >= HalDSData["joysticks"][joystickNum]["axes"].Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(axisNum),
-                    $"Axis must be between 1 and {HalInData["joysticks"][joystickNum]["axes"].Length - 1}");
+                    $"Axis must be between 0 and {HalDSData["joysticks"][joystickNum]["axes"].Length - 1}");
             }
-            HalInData["joysticks"][joystickNum]["axes"][axisNum] = (float)value;
+            HalDSData["joysticks"][joystickNum]["axes"][axisNum] = (float)value;
         }
 
-        
+        public static void SetJoystickPOV(int joystickNum, int povNum, int povValue)
+        {
+            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(joystickNum),
+                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
+            }
+            if (povNum < 1 || povNum >= HalDSData["joysticks"][joystickNum]["povs"].Length)
+            {
+                throw new ArgumentOutOfRangeException(nameof(povNum),
+                    $"POV must be between 0 and {HalDSData["joysticks"][joystickNum]["povs"].Length - 1}");
+            }
+            HalDSData["joysticks"][joystickNum]["povs"][povNum] = (short)povValue;
+        }
+
+
         public static void SetEnabledState(EnabledState state)
         {
             switch (state)
             {
                 case EnabledState.Disabled:
-                    HalInData["control"]["enabled"] = false;
-                    HalInData["control"]["eStop"] = false;
+                    HalDSData["control"]["enabled"] = false;
+                    HalDSData["control"]["eStop"] = false;
+                    HalDSData["control"]["ds_attached"] = true;
                     break;
                 case EnabledState.Enabled:
-                    HalInData["control"]["enabled"] = true;
-                    HalInData["control"]["eStop"] = false;
+                    HalDSData["control"]["enabled"] = true;
+                    HalDSData["control"]["eStop"] = false;
+                    HalDSData["control"]["ds_attached"] = true;
                     break;
                 case EnabledState.EStopped:
-                    HalInData["control"]["enabled"] = false;
-                    HalInData["control"]["eStop"] = true;
+                    HalDSData["control"]["enabled"] = false;
+                    HalDSData["control"]["eStop"] = true;
+                    HalDSData["control"]["ds_attached"] = true;
                     break;
             }
         }
@@ -112,25 +138,25 @@ namespace HAL_Simulator
                 case RobotMode.Autonomous:
                     if (prevState != RobotMode.Autonomous)
                         SetEnabledState(EnabledState.Disabled);
-                    HalInData["control"]["autonomous"] = true;
-                    HalInData["control"]["test"] = false;
+                    HalDSData["control"]["autonomous"] = true;
+                    HalDSData["control"]["test"] = false;
                     break;
                 case RobotMode.Teleop:
                     if (prevState != RobotMode.Teleop)
                         SetEnabledState(EnabledState.Disabled);
-                    HalInData["control"]["autonomous"] = false;
-                    HalInData["control"]["test"] = false;
+                    HalDSData["control"]["autonomous"] = false;
+                    HalDSData["control"]["test"] = false;
                     break;
                 case RobotMode.Test:
                     if (prevState != RobotMode.Test)
                         SetEnabledState(EnabledState.Disabled);
-                    HalInData["control"]["autonomous"] = false;
-                    HalInData["control"]["test"] = true;
+                    HalDSData["control"]["autonomous"] = false;
+                    HalDSData["control"]["test"] = true;
                     break;
                 default:
                     SetEnabledState(EnabledState.Disabled);
-                    HalInData["control"]["autonomous"] = false;
-                    HalInData["control"]["test"] = false;
+                    HalDSData["control"]["autonomous"] = false;
+                    HalDSData["control"]["test"] = false;
                     break;
             }
         }
