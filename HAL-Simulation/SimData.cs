@@ -159,8 +159,10 @@ namespace HAL_Simulator
                 {
                     {"has_source", new IN(false) },
                     {"buttons", new IN(new bool[13]) },
-                    {"axes", new IN(new int[6]) },
+                    {"axes", new IN(new double[6]) },
                     {"povs", new IN(new int[12]) },
+                    {"rightRumble", new OUT(0) },
+                    {"leftRumble", new OUT(0) },
                     {"isXbox", new IN(0)},
                     {"type",  new IN(0)},
                     {"name", new IN("") },

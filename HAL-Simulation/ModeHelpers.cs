@@ -37,6 +37,9 @@ namespace HAL_Simulator
             DSLoop?.Abort();
         }
 
+        //TODO: These all need to be rewritten to make sense with how the 
+        //FPGA actually works.
+
 
         private static string oldMode = "teleop";
         public static void SetMode(string mode, bool newEnabled)
@@ -80,14 +83,10 @@ namespace HAL_Simulator
             halData["control"]["enabled"] = newEnabled;
             halData["control"]["ds_attached"] = true;
 
-            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
-            /*
+            //halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
 
             if (newEnabled)
-                halData["time"]["match_start"] = SimHooks.GetFPGATimestamp() - HAL.AutonomousTime;
-            else
                 halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
-                */
 
             NotifyNewDSData();
         }
@@ -99,14 +98,8 @@ namespace HAL_Simulator
             halData["control"]["enabled"] = newEnabled;
             halData["control"]["ds_attached"] = true;
 
-            halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
-            /*
-
             if (newEnabled)
-                halData["time"]["match_start"] = SimHooks.GetFPGATimestamp() - HAL.AutonomousTime;
-            else
                 halData["time"]["match_start"] = SimHooks.GetFPGATimestamp();
-                */
             NotifyNewDSData();
         }
 
