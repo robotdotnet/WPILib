@@ -99,6 +99,18 @@ namespace HAL_Simulator
     }
 
     /// <summary>
+    /// Marks a variable in the dict as something controlled by the driver station.
+    /// </summary>
+    internal class DS
+    {
+        public dynamic value { get; set; }
+        public DS(dynamic d)
+        {
+            value = d;
+        }
+    }
+
+    /// <summary>
     /// 
     /// </summary>
     public class SimData
@@ -109,7 +121,11 @@ namespace HAL_Simulator
          
         internal static Dictionary<dynamic, dynamic> halInData = new Dictionary<dynamic, dynamic>();
 
-        public static Dictionary<dynamic, dynamic> HalInData => halInData; 
+        public static Dictionary<dynamic, dynamic> HalInData => halInData;
+
+        internal static Dictionary<dynamic, dynamic> halDSData = new Dictionary<dynamic, dynamic>();
+
+        public static Dictionary<dynamic, dynamic> HalDSData => halDSData;
 
         /// <summary>
         /// This method gets a copy of both data dictionaries.
@@ -117,10 +133,12 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="halDataOut"></param>
         /// <param name="halInDataOut"></param>
-        public static void GetData(out Dictionary<dynamic, dynamic> halDataOut, out Dictionary<dynamic, dynamic> halInDataOut)
+        public static void GetData(out Dictionary<dynamic, dynamic> halDataOut, 
+            out Dictionary<dynamic, dynamic> halInDataOut, out Dictionary<dynamic, dynamic> halDSDataOut)
         {
             halDataOut = halData;
             halInDataOut = halInData;
+            halDSDataOut = halDSData;
         }
 
         internal static IntPtr halNewDataSem = IntPtr.Zero;
@@ -129,10 +147,11 @@ namespace HAL_Simulator
         {
             halData.Clear();
             halInData.Clear();
+            halDSData.Clear();
             halNewDataSem = IntPtr.Zero;
 
 
-            halData["alliance_station"] = new IN(0);
+            halData["alliance_station"] = new DS(0);
             halData["time"] = new Dictionary<dynamic, dynamic>
             {
                 {"has_source", new IN(false) },
@@ -143,12 +162,12 @@ namespace HAL_Simulator
             halData["control"] = new Dictionary<dynamic, dynamic>
             {
                 {"has_source", new IN(false)},
-                {"enabled", new OUT(false)},
-                {"autonomous", new OUT(false)},
-                {"test", new OUT(false)},
-                {"eStop", new OUT(false)},
-                {"fms_attached", new IN(false)},
-                {"ds_attached", new OUT(false)},
+                {"enabled", new DS(false)},
+                {"autonomous", new DS(false)},
+                {"test", new DS(false)},
+                {"eStop", new DS(false)},
+                {"fms_attached", new DS(false)},
+                {"ds_attached", new DS(false)},
             };
             halData["reports"] = new NotifyDict<dynamic, dynamic>();
 
@@ -158,6 +177,7 @@ namespace HAL_Simulator
                 halData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
                 {
                     {"has_source", new IN(false) },
+<<<<<<< HEAD
                     {"buttons", new IN(new bool[13]) },
                     {"axes", new IN(new double[6]) },
                     {"povs", new IN(new int[12]) },
@@ -168,6 +188,16 @@ namespace HAL_Simulator
                     {"name", new IN("") },
                     {"axisCount", new IN(6) },
                     {"buttonCount", new IN(12) }
+=======
+                    {"buttons", new DS(new bool[13]) },
+                    {"axes", new DS(new int[6]) },
+                    {"povs", new DS(new int[12]) },
+                    {"isXbox", new DS(0)},
+                    {"type",  new DS(0)},
+                    {"name", new DS("") },
+                    {"axisCount", new DS(6) },
+                    {"buttonCount", new DS(12) }
+>>>>>>> origin/master
                 });
             }
 
@@ -398,6 +428,34 @@ namespace HAL_Simulator
 
             halData["CAN"] = new NotifyDict<dynamic, dynamic>();
 
+            //manually filling out DS data. Later this will be automated.
+            halDSData["alliance_station"] = 0;
+            halDSData["control"] = new Dictionary<dynamic, dynamic>
+            {
+                {"enabled", false},
+                {"autonomous", false},
+                {"test", false},
+                {"eStop", false},
+                {"fms_attached", false},
+                {"ds_attached", false},
+            };
+
+            halDSData["joysticks"] = new List<dynamic>();
+            for (int i = 0; i < 6; i++)
+            {
+                halDSData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
+                {
+                    {"buttons", new bool[13] },
+                    {"axes", new int[6] },
+                    {"povs", new int[12] },
+                    {"isXbox", 0},
+                    {"type",  0},
+                    {"name", "" },
+                    {"axisCount", 6 },
+                    {"buttonCount", 12 }
+                });
+            }
+
 
 
             FilterHalData(halData, halInData);
@@ -414,9 +472,26 @@ namespace HAL_Simulator
                 if (v is IN)
                 {
                     both[k] = v.value;
-                    inData[k] = v.value;
+                    if (v is Array)
+                    {
+                        var vOut = both[k];
+                        int count = 0;
+                        foreach (var vv in v.value)
+                        {
+                            vOut.Add(vv);
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        inData[k] = v.value;
+                    }
                 }
                 else if (v is OUT)
+                {
+                    both[k] = v.value;
+                }
+                else if (v is DS)
                 {
                     both[k] = v.value;
                 }
