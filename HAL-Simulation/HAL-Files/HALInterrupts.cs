@@ -33,7 +33,7 @@ namespace HAL_Simulator
         //here, we subtract 1.
         private static Interrupt GetInterrupt(IntPtr ptr)
         {
-            return Interrupts[ptr.ToInt32() -1];
+            return Interrupts[ptr.ToInt32() - 1];
         }
 
         /// <summary>
@@ -43,6 +43,7 @@ namespace HAL_Simulator
         /// <param name="watcher">This tells if we are using synchronous interrupts</param>
         /// <param name="status">Return Status</param>
         /// <returns>Interrupt Pointer</returns>
+        [CalledSimFunction]
         public static IntPtr initializeInterrupts(uint interruptIndex, bool watcher,
             ref int status)
         {
@@ -76,6 +77,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="interrupt_pointer">The Interrupt Pointer</param>
         /// <param name="status">Return Status</param>
+        [CalledSimFunction]
         public static void cleanInterrupts(IntPtr interrupt_pointer, ref int status)
         {
             status = NiFpga_Status_Success;
@@ -96,10 +98,11 @@ namespace HAL_Simulator
         /// <param name="ignorePrevious"></param>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static uint waitForInterrupt(IntPtr interrupt_pointer, double timeout, bool ignorePrevious,
             ref int status)
         {
-            
+
             status = NiFpga_Status_Success;
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
 
@@ -175,6 +178,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="interrupt_pointer"></param>
         /// <param name="status"></param>
+        [CalledSimFunction]
         public static void enableInterrupts(IntPtr interrupt_pointer, ref int status)
         {
             status = NiFpga_Status_Success;
@@ -214,8 +218,9 @@ namespace HAL_Simulator
                     interrupt.FallingTimestamp = 0;
                 }
                 //Call our callback in a new thread. This is what the FPGA does as well.
-                new Thread(() => {
-                    interrupt.Callback((uint) interrupt.DIOPin, interrupt.Param);
+                new Thread(() =>
+                {
+                    interrupt.Callback((uint)interrupt.DIOPin, interrupt.Param);
                 }).Start();
             };
             //Set our previous state, and register
@@ -228,6 +233,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="interrupt_pointer"></param>
         /// <param name="status"></param>
+        [CalledSimFunction]
         public static void disableInterrupts(IntPtr interrupt_pointer, ref int status)
         {
             status = NiFpga_Status_Success;
@@ -241,6 +247,7 @@ namespace HAL_Simulator
         /// <param name="interrupt_pointer"></param>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static double readRisingTimestamp(IntPtr interrupt_pointer, ref int status)
         {
             status = NiFpga_Status_Success;
@@ -253,6 +260,7 @@ namespace HAL_Simulator
         /// <param name="interrupt_pointer"></param>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static double readFallingTimestamp(IntPtr interrupt_pointer, ref int status)
         {
             status = NiFpga_Status_Success;
@@ -269,6 +277,7 @@ namespace HAL_Simulator
         /// <param name="routing_pin">Our DIO Pin</param>
         /// <param name="routing_analog_trigger">If analog trigger (must be false)</param>
         /// <param name="status"></param>
+        [CalledSimFunction]
         public static void requestInterrupts(IntPtr interrupt_pointer, byte routing_module, uint routing_pin,
             bool routing_analog_trigger, ref int status)
         {
@@ -288,6 +297,7 @@ namespace HAL_Simulator
         /// <param name="handler"></param>
         /// <param name="param"></param>
         /// <param name="status"></param>
+        [CalledSimFunction]
         public static void attachInterruptHandler(IntPtr interrupt_pointer, Action<uint, IntPtr> handler, IntPtr param,
             ref int status)
         {
@@ -304,6 +314,7 @@ namespace HAL_Simulator
         /// <param name="risingEdge"></param>
         /// <param name="fallingEdge"></param>
         /// <param name="status"></param>
+        [CalledSimFunction]
         public static void setInterruptUpSourceEdge(IntPtr interrupt_pointer, bool risingEdge, bool fallingEdge,
             ref int status)
         {

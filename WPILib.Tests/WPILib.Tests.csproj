@@ -16,6 +16,8 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -119,7 +121,8 @@
     <Compile Include="MotorControllers\TestTalonSRX.cs" />
     <Compile Include="MotorControllers\TestVictor.cs" />
     <Compile Include="MotorControllers\TestVictorSP.cs" />
-    <Compile Include="SpecScaners\HALNet.cs" />
+    <Compile Include="SpecScaners\NativeProjects.cs" />
+    <Compile Include="SpecScaners\NetProjects.cs" />
     <Compile Include="SpecScaners\TestHALImpl.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
@@ -168,6 +171,9 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

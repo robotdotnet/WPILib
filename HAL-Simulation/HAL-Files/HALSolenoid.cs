@@ -14,6 +14,7 @@ namespace HAL_Simulator
     public class HALSolenoid
     {
 
+        [CalledSimFunction]
         public static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)
         {
             SolenoidPort p = new SolenoidPort
@@ -26,11 +27,13 @@ namespace HAL_Simulator
             return ptr;
         }
 
+        [CalledSimFunction]
         public static bool checkSolenoidModule(byte module)
         {
             return module < 63;
         }
 
+        [CalledSimFunction]
         public static bool getSolenoid(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
@@ -39,6 +42,7 @@ namespace HAL_Simulator
         }
 
 
+        [CalledSimFunction]
         public static void setSolenoid(IntPtr solenoid_port_pointer, bool value,
             ref int status)
         {
@@ -46,12 +50,14 @@ namespace HAL_Simulator
             halData["solenoid"][GetSolenoidPort(solenoid_port_pointer).port.pin]["value"] = value;
         }
 
+        [CalledSimFunction]
         public static int getPCMSolenoidBlackList(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
             return 0;
         }
 
+        [CalledSimFunction]
         public static bool getPCMSolenoidVoltageStickyFault(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
@@ -59,13 +65,15 @@ namespace HAL_Simulator
         }
 
 
-        public static bool  getPCMSolenoidVoltageFault(IntPtr solenoid_port_pointer, ref int status)
+        [CalledSimFunction]
+        public static bool getPCMSolenoidVoltageFault(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
             return false;
         }
 
 
+        [CalledSimFunction]
         public static void clearAllPCMStickyFaults_sol(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;

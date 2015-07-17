@@ -55,7 +55,7 @@ namespace WPILib.Tests
         }
 
         [TestClass]
-        public class RelayBoth
+        public class TestRelayBoth
         {
             //Test with Both
             [TestMethod]
@@ -115,7 +115,7 @@ namespace WPILib.Tests
 
 
         [TestClass]
-        public class RelayForward
+        public class TestRelayForward
         {
             //Test with Both
             [TestMethod]
@@ -179,7 +179,7 @@ namespace WPILib.Tests
         }
 
         [TestClass]
-        public class RelayReverse
+        public class TestRelayReverse
         {
             [TestMethod]
             public void TestForward()

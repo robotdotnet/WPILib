@@ -13,9 +13,10 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     public class HALNotifier
     {
-        private static List<Notifier> Notifiers = new List<Notifier>(); 
+        private static List<Notifier> Notifiers = new List<Notifier>();
 
 
+        [CalledSimFunction]
         public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
         {
             status = 0;
@@ -28,6 +29,7 @@ namespace HAL_Simulator
             //return ptr;
         }
 
+        [CalledSimFunction]
         public static void cleanNotifier(IntPtr notifier_pointer, ref int status)
         {
             status = 0;
@@ -43,6 +45,7 @@ namespace HAL_Simulator
         }
 
 
+        [CalledSimFunction]
         public static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
         {
             status = 0;

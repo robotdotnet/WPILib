@@ -14,6 +14,113 @@ namespace WPILib.Tests.SpecScaners
     public class TestHALImpl
     {
         [TestMethod]
+        public void TestHALBaseMapsToHALSim()
+        {
+            StringBuilder functionList = new StringBuilder();
+
+            functionList.AppendLine("HAL-Simulator Functions\n");
+
+            List<Function> SimFunctions = new List<Function>();
+            var funcs = NetProjects.GetHALSimMethods();
+            foreach (var func in funcs)
+            {
+                functionList.AppendLine(func.ClassName);
+                foreach (var syntax in func.Methods)
+                {
+                    //Console.WriteLine(syntax.GetNativeMethod());
+                    //Function
+                    string ret = syntax.ReturnType.ToString();
+                    string id = syntax.Identifier.ToString();
+                    List<string> param = new List<string>();
+
+                    StringBuilder builder = new StringBuilder();
+                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
+                    bool first = true;
+                    foreach (var parameter in syntax.ParameterList.Parameters)
+                    {
+                        param.Add(parameter.Type.ToString());
+                        if (first)
+                        {
+                            first = false;
+                            builder.Append($"{parameter.Type} {parameter.Identifier}");
+                        }
+                        else
+                        {
+                            builder.Append($", {parameter.Type} {parameter.Identifier}");
+                        }
+                    }
+                    builder.Append(")");
+                    functionList.AppendLine(builder.ToString());
+
+                    Function f = new Function(ret, id, param.ToArray());
+                    SimFunctions.Add(f);
+                }
+            }
+
+            functionList.AppendLine("\nBase Functions\n");
+
+            List<Function> baseFunctions = new List<Function>();
+
+            var funcs2 = NetProjects.GetHalBaseDelegates();
+            foreach (var func in funcs2)
+            {
+                functionList.AppendLine(func.ClassName);
+                foreach (var syntax in func.Methods)
+                {
+
+                    string ret = syntax.ReturnType.ToString();
+                    string id = syntax.Identifier.ToString();
+                    List<string> param = new List<string>();
+
+                    StringBuilder builder = new StringBuilder();
+                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
+                    bool first = true;
+                    foreach (var parameter in syntax.ParameterList.Parameters)
+                    {
+                        param.Add(parameter.Type.ToString());
+                        if (first)
+                        {
+                            first = false;
+                            builder.Append($"{parameter.Type} {parameter.Identifier}");
+                        }
+                        else
+                        {
+                            builder.Append($", {parameter.Type} {parameter.Identifier}");
+                        }
+                    }
+                    builder.Append(")");
+                    functionList.AppendLine(builder.ToString());
+
+                    Function f = new Function(ret, id.Replace("Delegate", ""), param.ToArray());
+                    baseFunctions.Add(f);
+                }
+            }
+            List<Function> wrong = (from baseFunction
+                                    in baseFunctions
+                                    let found = SimFunctions.Any(baseFunction.Equals)
+                                    where !found
+                                    select baseFunction).ToList();
+
+            bool pass = false;
+            if (wrong.Count == 0)
+            {
+                pass = true;
+                Console.WriteLine("All functions pass");
+            }
+
+            foreach (var function in wrong)
+            {
+                Console.WriteLine(function.identifier + " Signature does not match");
+            }
+
+            Console.WriteLine("\n\n");
+
+            Console.WriteLine(functionList.ToString());
+
+            Assert.IsTrue(pass);
+        }
+
+        [TestMethod]
         public void TestHALBaseMapsToHALRIO()
         {
             StringBuilder functionList = new StringBuilder();
@@ -21,12 +128,13 @@ namespace WPILib.Tests.SpecScaners
             functionList.AppendLine("HAL-roboRIO Functions\n");
 
             List<Function> rioFunctions = new List<Function>();
-            var funcs = HALNet.GetHalRoboRIOFunctions();
+            var funcs = NetProjects.GetHalRoboRIOMethods();
             foreach (var func in funcs)
             {
                 functionList.AppendLine(func.ClassName);
                 foreach (var syntax in func.Methods)
                 {
+                    //Console.WriteLine(syntax.GetNativeMethod());
                     //Function
                     string ret = syntax.ReturnType.ToString();
                     string id = syntax.Identifier.ToString();
@@ -60,12 +168,13 @@ namespace WPILib.Tests.SpecScaners
 
             List<Function> baseFunctions = new List<Function>();
 
-            var funcs2 = HALNet.GetHalBaseFunctions();
+            var funcs2 = NetProjects.GetHalBaseDelegates();
             foreach (var func in funcs2)
             {
                 functionList.AppendLine(func.ClassName);
                 foreach (var syntax in func.Methods)
                 {
+                    
                     string ret = syntax.ReturnType.ToString();
                     string id = syntax.Identifier.ToString();
                     List<string> param = new List<string>();
@@ -93,13 +202,15 @@ namespace WPILib.Tests.SpecScaners
                     baseFunctions.Add(f);
                 }
             }
-            List<Function> wrong = (from rioFunction 
-                                    in rioFunctions
-                                    let found = baseFunctions.Any(rioFunction.Equals)
+            List<Function> wrong = (from baseFunction 
+                                    in baseFunctions
+                                    let found = rioFunctions.Any(baseFunction.Equals)
                                     where !found
-                                    select rioFunction).ToList();
+                                    select baseFunction).ToList();
+            bool pass = false;              
             if (wrong.Count == 0)
             {
+                pass = true;
                 Console.WriteLine("All functions pass");
             }
 
@@ -111,6 +222,8 @@ namespace WPILib.Tests.SpecScaners
             Console.WriteLine("\n\n");
 
             Console.WriteLine(functionList.ToString());
+
+            Assert.IsTrue(pass);
         }
     }
 
@@ -150,13 +263,13 @@ namespace WPILib.Tests.SpecScaners
         }
     }
 
-    public struct HALRIOClass
+    public struct HALMethodClass
     {
         public string ClassName;
         public List<MethodDeclarationSyntax> Methods;
     }
 
-    public struct HALBaseClass
+    public struct HALDelegateClass
     {
         public string ClassName;
         public List<DelegateDeclarationSyntax> Methods;

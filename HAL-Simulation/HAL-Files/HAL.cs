@@ -12,6 +12,11 @@ using static HAL_Simulator.HALErrorConstants;
 
 namespace HAL_Simulator
 {
+    public class CalledSimFunction : Attribute
+    {
+
+    }
+
     /// <summary>
     /// This class is used by HAL-Base, and is used to emulate the HAL. 
     /// Please do not call functions in this class directly. 
@@ -27,6 +32,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="pin">The hardware pin of the port</param>
         /// <returns>IntPtr containing the port</returns>
+        [CalledSimFunction]
         public static IntPtr getPort(byte pin)
         {
             return getPortWithModule(0, pin);
@@ -38,6 +44,7 @@ namespace HAL_Simulator
         /// <param name="module">Hardware Module</param>
         /// <param name="pin">Hardware Pin</param>
         /// <returns>IntPtr containing the port</returns>
+        [CalledSimFunction]
         public static IntPtr getPortWithModule(byte module, byte pin)
         {
             Port port = new Port
@@ -50,10 +57,12 @@ namespace HAL_Simulator
             return ptr;
         }
 
+
         /// <summary>
         /// Sets the NewDataSem used to indicate new DS ports.
         /// </summary>
         /// <param name="sem"></param>
+        [CalledSimFunction]
         public static void HALSetNewDataSem(IntPtr sem)
         {
             HALNewDataSem = sem;
@@ -64,6 +73,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="code">The Error Code</param>
         /// <returns>IntPtr containing the Error message</returns>
+        [CalledSimFunction]
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
@@ -148,6 +158,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static ushort getFPGAVersion(ref int status)
         {
             status = 0;
@@ -159,6 +170,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static uint getFPGARevision(ref int status)
         {
             status = 0;
@@ -170,6 +182,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static uint getFPGATime(ref int status)
         {
             status = 0;
@@ -181,6 +194,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static bool getFPGAButton(ref int status)
         {
             status = 0;
@@ -194,6 +208,7 @@ namespace HAL_Simulator
         /// <param name="errorsLength"></param>
         /// <param name="wait_ms"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static int HALSetErrorData(string errors, int errorsLength, int wait_ms)
         {
             //TODO: Logger 
@@ -205,6 +220,7 @@ namespace HAL_Simulator
         /// Returns a control word containing the DS states.
         /// </summary>
         /// <returns></returns>
+        [CalledSimFunction]
         public static HALControlWord HALGetControlWord()
         {
             var h = halData["control"];
@@ -216,11 +232,13 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="allianceStation"></param>
         /// <returns></returns>
+        [CalledSimFunction]
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
         {
             return (int)halData["alliance_station"];
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes)
         {
             axes.axes = new HALJoystickAxesArray();
@@ -238,6 +256,7 @@ namespace HAL_Simulator
             return 0;
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs)
         {
             povs.povs = new HALJoystickPOVArray();
@@ -250,6 +269,7 @@ namespace HAL_Simulator
             return 0;
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons)
         {
             var b = halData["joysticks"][joystickNum]["buttons"];
@@ -264,6 +284,7 @@ namespace HAL_Simulator
             return 0;
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
         {
             var stick = halData["joysticks"][joystickNum];
@@ -275,30 +296,35 @@ namespace HAL_Simulator
             return 0;
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickIsXbox(byte joystickNum)
         {
             var stick = halData["joysticks"][joystickNum];
             return (int)stick["isXbox"];
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickType(byte joystickNum)
         {
             var stick = halData["joysticks"][joystickNum];
             return (int)stick["type"];
         }
 
+        [CalledSimFunction]
         public static IntPtr HALGetJoystickName(byte joystickNum)
         {
             var stick = halData["joysticks"][joystickNum];
             return Marshal.StringToHGlobalAnsi(stick["name"]);
         }
 
+        [CalledSimFunction]
         public static int HALGetJoystickAxisType(byte joystickNum, byte axis)
         {
             var stick = halData["joysticks"][joystickNum];
             return 0;
         }
 
+        [CalledSimFunction]
         public static int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble,
             ushort rightRumble)
         {
@@ -315,9 +341,10 @@ namespace HAL_Simulator
         /// <returns></returns>
         /// <remarks>Returns -1.0 if the robot is disabled, in test mode, or enabled, but not field connected
         /// or practice mode.</remarks>
+        [CalledSimFunction]
         public static int HALGetMatchTime(ref float matchTime)
         {
-            
+
             var matchStart = halData["time"]["match_start"];
             //If Enabled
             if (halData["control"]["enabled"])
@@ -338,55 +365,64 @@ namespace HAL_Simulator
             return 0;
         }
 
+        [CalledSimFunction]
         public static bool HALGetSystemActive(ref int status)
         {
             status = 0;
             return true;
         }
 
+        [CalledSimFunction]
         public static bool HALGetBrownedOut(ref int status)
         {
             status = 0;
             return false;
         }
 
+        [CalledSimFunction]
         public static int HALInitialize(int mode)
         {
             ResetHALData();
             //Uncomment this if we want a constant running driver station thread.
             //This should be done by the Sim implementation though. But it might be needed for testing.
-            
+
             //ModeHelpers.StartDSLoop();
-            
+
 
             return 1;
         }
 
+        [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
             halData["user_program_state"] = "starting";
         }
 
+        [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramDisabled()
         {
             halData["user_program_state"] = "disabled";
         }
 
+        [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramAutonomous()
         {
             halData["user_program_state"] = "autonomous";
         }
 
+        [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramTeleop()
         {
             halData["user_program_state"] = "teleop";
         }
 
+        [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramTest()
         {
             halData["user_program_state"] = "test";
         }
 
+        [CalledSimFunction]
         public static uint HALReport(byte resource, byte instanceNumber, byte context = 0, string feature = null)
         {
             switch (resource)
