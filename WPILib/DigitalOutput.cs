@@ -75,7 +75,7 @@ namespace WPILib
         public void Pulse(int pulseLength)
         {
             int status = 0;
-            float convertedPulse = (float)(pulseLength / 1.0e9 * (HALDigital.GetLoopTiming(ref status) * 25));
+            float convertedPulse = (float)(pulseLength / 1.0e9 * (GetLoopTiming(ref status) * 25));
             HALDigital.Pulse(m_port, convertedPulse, ref status);
             CheckStatus(status);
         }

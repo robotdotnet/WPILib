@@ -53,7 +53,7 @@ namespace WPILib
             }
             else
             {
-                HAL.Report(ResourceType.kResourceType_GearTooth, (byte)channel, 0);
+                HAL.Report(ResourceType.kResourceType_GearTooth, (byte)channel);
             }
             LiveWindow.AddSensor("GearTooth", channel, this);
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.CAN;
 using WPILib.Exceptions;

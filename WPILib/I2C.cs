@@ -77,7 +77,7 @@ namespace WPILib
         {
             BoundaryException.AssertWithinBounds(count, 1, 7);
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            return Transaction(new byte[1] { (byte)registerAddress }, 1, buffer, count);
+            return Transaction(new byte[] { (byte)registerAddress }, 1, buffer, count);
         }
 
         public bool ReadOnly(byte[] buffer, int count)

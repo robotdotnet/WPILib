@@ -98,7 +98,7 @@ namespace WPILib
             {
                 throw new CheckedAllocationException("Index " + index + " out of range");
             }
-            if (m_numAllocated[index] == true)
+            if (m_numAllocated[index])
             {
                 throw new CheckedAllocationException("Resource at index " + index + " already allocated");
             }

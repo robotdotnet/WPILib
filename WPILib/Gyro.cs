@@ -30,7 +30,7 @@ namespace WPILib
             if (m_analog == null)
             {
                 Console.WriteLine("Null m_analog");
-                throw new ArgumentNullException("m_analog");
+                throw new NullReferenceException("m_analog");
             }
             Sensitivity = kDefaultVoltsPerDegreePerSecond;
             m_analog.AverageBits = kAverageBits;

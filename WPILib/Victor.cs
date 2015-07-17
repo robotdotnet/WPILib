@@ -1,5 +1,4 @@
-﻿using System;
-using HAL_Base;
+﻿using HAL_Base;
 using WPILib.LiveWindows;
 
 namespace WPILib

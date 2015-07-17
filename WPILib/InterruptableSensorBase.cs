@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using HAL_Base;
 using WPILib.Exceptions;
 using static WPILib.Utility;
@@ -24,7 +22,7 @@ namespace WPILib
         /// <summary>
         /// The interrupt resource.
         /// </summary>
-        protected IntPtr m_interrupt = IntPtr.Zero;
+        protected IntPtr m_interrupt;
 
         /// <summary>
         /// The index of the interrupt

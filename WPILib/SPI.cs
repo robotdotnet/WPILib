@@ -165,10 +165,7 @@ namespace WPILib
             int retVal = 0;
             byte[] receivedBuffer = new byte[size];
             byte[] sendBuffer = new byte[size];
-            if (initiate)
-                retVal = SpiTransaction((byte)m_port, sendBuffer, receivedBuffer, (byte)size);
-            else
-                retVal = SpiRead((byte)m_port, receivedBuffer, (byte)size);
+            retVal = initiate ? SpiTransaction((byte)m_port, sendBuffer, receivedBuffer, (byte)size) : SpiRead((byte)m_port, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(size, dataReceived.Length));
             return retVal;
         }

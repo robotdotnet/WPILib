@@ -5,7 +5,7 @@ namespace WPILib
 {
     /// <summary>The location of a motor on the robot for the purpose of driving.
     /// </summary>
-    public enum MotorType : int
+    public enum MotorType
     {
         FrontLeft = 0,
         FrontRight,

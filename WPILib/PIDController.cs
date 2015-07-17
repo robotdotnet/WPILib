@@ -41,7 +41,7 @@ namespace WPILib
         private double m_setpoint = 0.0;
         private double m_error = 0.0;
         private double m_result = 0.0;
-        private double m_period = DefaultPeriod;
+        private double m_period;
         IPIDSource m_ipidInput;
         IPIDOutput m_ipidOutput;
         private object m_lockObject = new object();

@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Reflection;
 
+// ReSharper disable CheckNamespace
+
 namespace HAL_Base
 {
     public partial class HALCAN

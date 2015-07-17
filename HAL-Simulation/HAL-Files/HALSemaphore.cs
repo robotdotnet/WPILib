@@ -67,8 +67,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static IntPtr initializeSemaphore(uint initial_value)
         {
-            var p = new MULTIWAIT_ID();
-            p.lockObject = new object();
+            var p = new MULTIWAIT_ID {lockObject = new object()};
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
 

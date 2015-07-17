@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -398,8 +397,12 @@ namespace WPILib
                             }
                             else if (value == '[')
                             {
-                                while (reader.Read() != ']') ;
-                                while (reader.Read() != '\n');
+                                while (reader.Read() != ']')
+                                {
+                                }
+                                while (reader.Read() != '\n')
+                                {
+                                }
                             }
                             else
                             {
@@ -419,7 +422,9 @@ namespace WPILib
                                     {
                                         buffer.Append(value);
                                     }
-                                    while (reader.Read() != '\n') ;
+                                    while (reader.Read() != '\n')
+                                    {
+                                    }
                                 }
                                 else
                                 {

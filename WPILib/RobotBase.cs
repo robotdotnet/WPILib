@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
 using HAL_Base;
 using NetworkTables;
 using WPILib.Internal;
@@ -105,7 +104,7 @@ namespace WPILib
             }
             catch (Exception ex)
             {
-                DriverStation.ReportError("ERROR Unhandled exception instantiating robot " + robotName + " " + ex.ToString() + " at " + ex.StackTrace, false);//"ERROR Could not instantiate robot", true);
+                DriverStation.ReportError("ERROR Unhandled exception instantiating robot " + robotName + " " + ex + " at " + ex.StackTrace, false);
                 //Log Robots dont quit
                 Console.Error.WriteLine("WARNING: Robots don't quit!");
                 Console.Error.WriteLine("Error: Could not instantiate robot " + robotName + "!");
@@ -136,7 +135,7 @@ namespace WPILib
             //Add a keyboard exception
             catch (Exception ex)
             {
-                DriverStation.ReportError("ERROR Unhandled exception" + ex.ToString(), false);
+                DriverStation.ReportError("ERROR Unhandled exception" + ex, false);
                 return;
             }
             finally

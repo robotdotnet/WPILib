@@ -80,7 +80,7 @@ namespace HAL_Base
                     HALType = HALTypes.RoboRIO;
                 }
 
-                string asm = "";
+                string asm;
                 switch (HALType)
                 {
                     case (HALTypes.Simulation):
