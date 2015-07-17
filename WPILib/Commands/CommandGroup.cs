@@ -10,9 +10,9 @@ namespace WPILib.Commands
     public class CommandGroup : Command
     {
         private List<Entry> m_commands = new List<Entry>();
-        private LinkedList<Entry> m_children = new LinkedList<Entry>();
+        private List<Entry> m_children = new List<Entry>();
 
-        internal LinkedList<Entry> Children => m_children;
+        internal List<Entry> Children => m_children; 
 
         private int m_currentCommandIndex = -1;
         private object m_syncRoot = new object();
@@ -157,30 +157,22 @@ namespace WPILib.Commands
                         m_currentCommandIndex++;
                         CancelConflicts(entry.command);
                         entry.command.StartRunning();
-                        m_children.AddLast(entry);
+                        m_children.Add(entry);
                         break;
                 }
             }
-            var iter = m_children.First;
-
-            for (; iter != m_children.Last;)
+            for (int i = 0; i < m_children.Count; i++)
             {
-                entry = iter.Value;
+                entry = m_children[i];
                 Command child = entry.command;
                 if (entry.IsTimedOut())
                 {
-                    child.Cancel();
+                    child._Cancel();
                 }
                 if (!child.Run())
                 {
                     child.Removed();
-                    var iterTemp = iter.Next;
-                    m_children.Remove(iter);
-                    iter = iterTemp;
-                }
-                else
-                {
-                    iter = iter.Next;
+                    m_children.RemoveAt(i--);
                 }
             }
         }
@@ -259,25 +251,17 @@ namespace WPILib.Commands
 
         private void CancelConflicts(Command command)
         {
-            var childIter = m_children.First;
-
-            for (; childIter != m_children.Last;)
+            for (int i = 0; i < m_children.Count; i++)
             {
-                Command child = childIter.Value.command;
-                bool erased = false;
-
-                if (command.GetRequirements().Any(child.DoesRequire))
+                Command child = m_children[i].command;
+                foreach (var requirement in command.GetRequirements())
                 {
-                    child._Cancel();
-                    child.Removed();
-                    var childTemp = childIter.Next;
-                    m_children.Remove(childIter);
-                    childIter = childTemp;
-                    erased = true;
-                }
-                if (!erased)
-                {
-                    childIter = childIter.Next;
+                    if (child.DoesRequire(requirement))
+                    {
+                        child._Cancel();
+                        child.Removed();
+                        m_children.RemoveAt(i--);
+                    }
                 }
             }
         }
