@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WPILib.Exceptions;
 
@@ -28,7 +25,7 @@ namespace WPILib.Tests
         public void TestCreateAll()
         {
             List<Relay> relays = new List<Relay>();
-            for (int i = 0; i < WPILib.SensorBase.RelayChannels; i++)
+            for (int i = 0; i < SensorBase.RelayChannels; i++)
             {
                 Relay r = new Relay(i);
                 relays.Add(r);
@@ -108,7 +105,7 @@ namespace WPILib.Tests
 
             private Dictionary<dynamic,dynamic> GetSimData()
             {
-                return HAL_Base.HAL.halData;
+                return HAL.halData;
             }
         }
 
@@ -174,7 +171,7 @@ namespace WPILib.Tests
 
             private Dictionary<dynamic, dynamic> GetSimData()
             {
-                return HAL_Base.HAL.halData;
+                return HAL.halData;
             }
         }
 
@@ -239,7 +236,7 @@ namespace WPILib.Tests
 
             private Dictionary<dynamic, dynamic> GetSimData()
             {
-                return HAL_Base.HAL.halData;
+                return HAL.halData;
             }
         }
     }

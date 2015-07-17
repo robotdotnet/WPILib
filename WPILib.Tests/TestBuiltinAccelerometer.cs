@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WPILib.Interfaces;
+using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib.Tests
 {
@@ -13,7 +11,7 @@ namespace WPILib.Tests
     {
         private Dictionary<dynamic, dynamic> GetData()
         {
-            return HAL_Base.HAL.halData["accelerometer"];
+            return HAL.halData["accelerometer"];
         }
 
         private static BuiltInAccelerometer s_instance = null;

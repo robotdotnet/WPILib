@@ -31,7 +31,7 @@ namespace HAL_Simulator
         /// <param name="notify">Whether to notify immediately</param>
         public void Register(T key, Action<dynamic, dynamic> action, bool notify = false)
         {
-            if (!this.ContainsKey(key))
+            if (!ContainsKey(key))
             {
                 throw new ArgumentOutOfRangeException(nameof(key), "Cannot register for non existent key");
             }
@@ -403,7 +403,7 @@ namespace HAL_Simulator
                 });
             };
 
-            halData["pdp"] = new Dictionary<dynamic, dynamic>()
+            halData["pdp"] = new Dictionary<dynamic, dynamic>
             {
                 {"has_source", new IN(false) },
                 {"temperature", new IN(0) },

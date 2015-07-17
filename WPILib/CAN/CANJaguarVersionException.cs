@@ -30,14 +30,9 @@ namespace WPILib.CAN
         private static string GetString(int deviceNumber, int fwVersion)
         {
             string msg;
-            if (fwVersion < MinRDKFirmwareVersion)
-            {
-                msg = $"Jaguar {deviceNumber} firmware is too old. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!";
-            }
-            else
-            {
-                msg = $"Jaguar {deviceNumber} firmware is not FIRST approved. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!";
-            }
+            msg = fwVersion < MinRDKFirmwareVersion ? 
+                $"Jaguar {deviceNumber} firmware is too old. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!" 
+                : $"Jaguar {deviceNumber} firmware is not FIRST approved. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!";
             return msg;
         }
     }

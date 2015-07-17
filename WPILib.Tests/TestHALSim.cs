@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using HAL_Simulator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;

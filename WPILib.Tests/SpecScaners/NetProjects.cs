@@ -7,7 +7,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-
 namespace WPILib.Tests.SpecScaners
 {
     public static class GetNativeMethodExtension

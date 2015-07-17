@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -366,11 +367,11 @@ namespace WPILib
                     {
                         input = new StreamReader(FILE_NAME);
                         EndOfStreamException.Reader reader = new EndOfStreamException.Reader(input);
-                        StringBuilder buffer;
 
                         while (true)
                         {
                             char value = reader.ReadWithoutWhitespace();
+                            StringBuilder buffer;
                             if (value == '\n' || value == ';')
                             {
                                 if (comment == null)

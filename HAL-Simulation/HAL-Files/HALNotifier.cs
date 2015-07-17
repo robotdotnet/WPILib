@@ -20,8 +20,7 @@ namespace HAL_Simulator
         public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
         {
             status = 0;
-            Notifier notifier = new Notifier();
-            notifier.Callback = ProcessQueue;
+            Notifier notifier = new Notifier {Callback = ProcessQueue};
             Notifiers.Add(notifier);
             return (IntPtr)Notifiers.IndexOf(notifier);
             //IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(int));
@@ -62,7 +61,7 @@ namespace HAL_Simulator
                 }
                 if (notifier.Callback == null)
                     Console.WriteLine("Callback Null");
-                notifier.Callback(0, IntPtr.Zero);
+                notifier.Callback?.Invoke(0, IntPtr.Zero);
             });
             notifier.alarm.Start();
         }

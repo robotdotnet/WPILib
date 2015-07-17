@@ -267,13 +267,9 @@ namespace WPILib
         {
             Faults retVal = 0;
 
-            int val;
-
-            CTR_Code status;
-
             //Temp
-            val = 0;
-            status = C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
+            var val = 0;
+            var status = C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -449,13 +445,7 @@ namespace WPILib
                 else
                     return GetParam(ParamID.eProfileParamSlot1_P);
             }
-            set
-            {
-                if (m_profile == 0)
-                    SetParam(ParamID.eProfileParamSlot0_P, value);
-                else
-                    SetParam(ParamID.eProfileParamSlot1_P, value);
-            }
+            set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_P : ParamID.eProfileParamSlot1_P, value); }
         }
 
         public double I
@@ -463,18 +453,9 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                if (m_profile == 0)
-                    return GetParam(ParamID.eProfileParamSlot0_I);
-                else
-                    return GetParam(ParamID.eProfileParamSlot1_I);
+                return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_I : ParamID.eProfileParamSlot1_I);
             }
-            set
-            {
-                if (m_profile == 0)
-                    SetParam(ParamID.eProfileParamSlot0_I, value);
-                else
-                    SetParam(ParamID.eProfileParamSlot1_I, value);
-            }
+            set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_I : ParamID.eProfileParamSlot1_I, value); }
         }
 
         public double D
@@ -482,18 +463,9 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                if (m_profile == 0)
-                    return GetParam(ParamID.eProfileParamSlot0_D);
-                else
-                    return GetParam(ParamID.eProfileParamSlot1_D);
+                return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_D : ParamID.eProfileParamSlot1_D);
             }
-            set
-            {
-                if (m_profile == 0)
-                    SetParam(ParamID.eProfileParamSlot0_D, value);
-                else
-                    SetParam(ParamID.eProfileParamSlot1_D, value);
-            }
+            set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_D : ParamID.eProfileParamSlot1_D, value); }
         }
 
         [Obsolete("Use F property instead.")]
@@ -506,18 +478,9 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                if (m_profile == 0)
-                    return GetParam(ParamID.eProfileParamSlot0_F);
-                else
-                    return GetParam(ParamID.eProfileParamSlot1_F);
+                return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_F : ParamID.eProfileParamSlot1_F);
             }
-            set
-            {
-                if (m_profile == 0)
-                    SetParam(ParamID.eProfileParamSlot0_F, value);
-                else
-                    SetParam(ParamID.eProfileParamSlot1_F, value);
-            }
+            set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_F : ParamID.eProfileParamSlot1_F, value); }
         }
 
         [Obsolete("Use IZone property instead.")]
@@ -530,17 +493,10 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                if (m_profile == 0)
-                    return GetParam(ParamID.eProfileParamSlot0_IZone);
-                else
-                    return GetParam(ParamID.eProfileParamSlot1_IZone);
+                return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_IZone : ParamID.eProfileParamSlot1_IZone);
             }
-            set
-            {
-                if (m_profile == 0)
-                    SetParam(ParamID.eProfileParamSlot0_IZone, value);
-                else
-                    SetParam(ParamID.eProfileParamSlot1_IZone, value);
+            set {
+                SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_IZone : ParamID.eProfileParamSlot1_IZone, value);
             }
         }
 
@@ -566,24 +522,19 @@ namespace WPILib
             get
             {
                 EnsureInPIDMode();
-                if (m_profile == 0)
-                    return GetParam(ParamID.eProfileParamSlot0_CloseLoopRampRate);
-                else
-                    return GetParam(ParamID.eProfileParamSlot1_CloseLoopRampRate);
+                return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_CloseLoopRampRate : ParamID.eProfileParamSlot1_CloseLoopRampRate);
             }
-            set
-            {
-                if (m_profile == 0)
-                    SetParam(ParamID.eProfileParamSlot0_CloseLoopRampRate, value);
-                else
-                    SetParam(ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
+            set {
+                SetParam(m_profile == 0
+                    ? ParamID.eProfileParamSlot0_CloseLoopRampRate
+                    : ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
             }
         }
 
         public void SetPID(double p, double i, double value, double f, int izone, double closeLoopRampRate, int profile)
         {
             if (profile != 0 && profile != 1)
-                throw new ArgumentOutOfRangeException("Talon PID profile must be 0 or 1.");
+                throw new ArgumentOutOfRangeException(nameof(profile), "Talon PID profile must be 0 or 1.");
             m_profile = profile;
             P = p;
             I = i;
@@ -624,7 +575,7 @@ namespace WPILib
             set
             {
                 if (value != 0 && value != 1)
-                    throw new ArgumentOutOfRangeException("Talon PID profile must be 0 or 1.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Talon PID profile must be 0 or 1.");
                 m_profile = value;
                 C_TalonSRX_SetProfileSlotSelect(m_impl, m_profile);
             }

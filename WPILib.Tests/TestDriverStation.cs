@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Collections.Generic;
 using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Telerik.JustMock;
 
 namespace WPILib.Tests
 {
@@ -24,7 +21,7 @@ namespace WPILib.Tests
 
         private static Dictionary<dynamic, dynamic> HalData()
         {
-            return HAL_Base.HAL.halData;
+            return HAL.halData;
         }
 
         [TestMethod]

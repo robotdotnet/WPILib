@@ -254,9 +254,9 @@ namespace WPILib
         [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
         static private void ProcessQueue(uint mask, IntPtr param)
         {
-            Notifier current;
             while (true)
             {
+                Notifier current;
                 lock (s_queueSemaphore)
                 {
                     double currentTime = GetFPGATimestamp();

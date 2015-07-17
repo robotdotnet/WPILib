@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace WPILib.Tests
@@ -12,7 +9,7 @@ namespace WPILib.Tests
     {
         private Dictionary<dynamic, dynamic> GetData()
         {
-            return HAL_Base.HAL.halData["compressor"];
+            return HAL.halData["compressor"];
         }
 
         public Compressor GetCompressor()

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using HAL_Simulator;
+using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using WPILib.Exceptions;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -26,7 +25,7 @@ namespace WPILib.Tests
 
         private static Dictionary<dynamic, dynamic> HalData()
         {
-            return HAL_Base.HAL.halData;
+            return HAL.halData;
         }
 
         public DigitalInput NewInput()
@@ -127,7 +126,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL_Base.HAL.halData["dio"][0]["value"] = true;
+                    HAL.halData["dio"][0]["value"] = true;
                 });
 
                 t.Start();
@@ -149,7 +148,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL_Base.HAL.halData["dio"][0]["value"] = true;
+                    HAL.halData["dio"][0]["value"] = true;
                 });
 
                 t.Start();
@@ -167,12 +166,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, true);
-                HAL_Base.HAL.halData["dio"][0]["value"] = true;
+                HAL.halData["dio"][0]["value"] = true;
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL_Base.HAL.halData["dio"][0]["value"] = false;
+                    HAL.halData["dio"][0]["value"] = false;
                 });
 
                 t.Start();
@@ -190,12 +189,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, false);
-                HAL_Base.HAL.halData["dio"][0]["value"] = true;
+                HAL.halData["dio"][0]["value"] = true;
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL_Base.HAL.halData["dio"][0]["value"] = false;
+                    HAL.halData["dio"][0]["value"] = false;
                 });
 
                 t.Start();
@@ -215,7 +214,7 @@ namespace WPILib.Tests
 
                 Mock.Arrange(() => delegateMock()).OccursOnce();
 
-                HAL_Base.HAL.halData["dio"][0]["value"] = false;
+                HAL.halData["dio"][0]["value"] = false;
 
                 d.RequestInterrupts(delegateMock);
                 d.EnableInterrupts();

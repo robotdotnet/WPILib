@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WPILib.Exceptions;
@@ -31,7 +28,7 @@ namespace WPILib.Tests
 
         private static Dictionary<dynamic, dynamic> HalData()
         {
-            return HAL_Base.HAL.halData;
+            return HAL.halData;
         }
 
         [TestMethod]

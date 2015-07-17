@@ -218,10 +218,10 @@ namespace WPILib
         double m_temperature = 0.0f;
         double m_position = 0.0;
         double m_speed = 0.0;
-        byte m_limits = (byte)0;
-        short m_faults = (short)0;
+        byte m_limits = 0;
+        short m_faults = 0;
         int m_firmwareVersion = 0;
-        byte m_hardwareVersion = (byte)0;
+        byte m_hardwareVersion = 0;
 
         // Which periodic status messages have we received at least once?
         bool m_receivedStatusMessage0 = false;
@@ -268,7 +268,7 @@ namespace WPILib
 
         private void SetSpeedReference(int reference)
         {
-            SendMessage(LM_API_SPD_REF, new byte[] { (byte)reference }, 1);
+            SendMessage(LM_API_SPD_REF, new[] { (byte)reference }, 1);
             m_speedReference = reference;
             m_speedRefVerified = false;
         }
@@ -356,12 +356,12 @@ namespace WPILib
 
         public void Set(double value, byte syncGroup)
         {
-            int messageID;
             byte[] data = new byte[8];
-            byte dataSize;
 
             if (m_controlEnabled)
             {
+                int messageID;
+                byte dataSize;
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
@@ -442,8 +442,7 @@ namespace WPILib
                     m_receivedStatusMessage1 = false;
                     m_receivedStatusMessage2 = false;
 
-                    int[] messages = new int[]
-                    {
+                    int[] messages = {
                         LM_API_SPD_REF, LM_API_POS_REF,
                         LM_API_SPD_PC, LM_API_POS_PC,
                         LM_API_ICTRL_PC, LM_API_SPD_IC,
@@ -1025,7 +1024,7 @@ namespace WPILib
         {
             uint messageIdu = (uint)messageID;
             messageIdu |= m_deviceNumber;
-            messageIdu &= (uint)CAN_MSGID_FULL_M;
+            messageIdu &= CAN_MSGID_FULL_M;
             byte dataSize = 0;
             uint timeStamp = 0;
             int status = 0;
@@ -1042,32 +1041,31 @@ namespace WPILib
         protected void SetupPeriodicStatus()
         {
             byte[] data = new byte[8];
-            int dataSize;
 
-            byte[] kMessage0Data = new byte[] {
-            (byte)LM_PSTAT_VOLTBUS_B0, (byte)LM_PSTAT_VOLTBUS_B1,
-            (byte)LM_PSTAT_VOLTOUT_B0, (byte)LM_PSTAT_VOLTOUT_B1,
-            (byte)LM_PSTAT_CURRENT_B0, (byte)LM_PSTAT_CURRENT_B1,
-            (byte)LM_PSTAT_TEMP_B0, (byte)LM_PSTAT_TEMP_B1
+            byte[] kMessage0Data = {
+            LM_PSTAT_VOLTBUS_B0, LM_PSTAT_VOLTBUS_B1,
+            LM_PSTAT_VOLTOUT_B0, LM_PSTAT_VOLTOUT_B1,
+            LM_PSTAT_CURRENT_B0, LM_PSTAT_CURRENT_B1,
+            LM_PSTAT_TEMP_B0, LM_PSTAT_TEMP_B1
             };
 
-            byte[] kMessage1Data = new byte[] {
-            (byte)LM_PSTAT_POS_B0, (byte)LM_PSTAT_POS_B1, (byte)LM_PSTAT_POS_B2, (byte)LM_PSTAT_POS_B3,
-            (byte)LM_PSTAT_SPD_B0, (byte)LM_PSTAT_SPD_B1, (byte)LM_PSTAT_SPD_B2, (byte)LM_PSTAT_SPD_B3
-        };
+            byte[] kMessage1Data = {
+                LM_PSTAT_POS_B0, LM_PSTAT_POS_B1, LM_PSTAT_POS_B2, LM_PSTAT_POS_B3,
+                LM_PSTAT_SPD_B0, LM_PSTAT_SPD_B1, LM_PSTAT_SPD_B2, LM_PSTAT_SPD_B3
+            };
 
-            byte[] kMessage2Data = new byte[] {
-            (byte)LM_PSTAT_LIMIT_CLR,
-            (byte)LM_PSTAT_FAULT,
-            (byte)LM_PSTAT_END,
-            (byte)0,
-            (byte)0,
-            (byte)0,
-            (byte)0,
-            (byte)0,
-        };
+            byte[] kMessage2Data = {
+                LM_PSTAT_LIMIT_CLR,
+                LM_PSTAT_FAULT,
+                LM_PSTAT_END,
+                0,
+                0,
+                0,
+                0,
+                0,
+            };
 
-            dataSize = PackINT16(data, (short)(kSendMessagePeriod));
+            int dataSize = PackINT16(data, kSendMessagePeriod);
             SendMessage(LM_API_PSTAT_PER_EN_S0, data, dataSize);
             SendMessage(LM_API_PSTAT_PER_EN_S1, data, dataSize);
             SendMessage(LM_API_PSTAT_PER_EN_S2, data, dataSize);
@@ -1088,10 +1086,10 @@ namespace WPILib
             {
                 GetMessage(LM_API_PSTAT_DATA_S0, CAN_MSGID_FULL_M, data);
 
-                m_busVoltage = UnpackFXP8_8(new byte[] { data[0], data[1] });
-                m_outputVoltage = UnpackPercentage(new byte[] { data[2], data[3] }) * m_busVoltage;
-                m_outputCurrent = UnpackFXP8_8(new byte[] { data[4], data[5] });
-                m_temperature = UnpackFXP8_8(new byte[] { data[6], data[7] });
+                m_busVoltage = UnpackFXP8_8(new[] { data[0], data[1] });
+                m_outputVoltage = UnpackPercentage(new[] { data[2], data[3] }) * m_busVoltage;
+                m_outputCurrent = UnpackFXP8_8(new[] { data[4], data[5] });
+                m_temperature = UnpackFXP8_8(new[] { data[6], data[7] });
 
                 m_receivedStatusMessage0 = true;
             }
@@ -1102,8 +1100,8 @@ namespace WPILib
             {
                 GetMessage(LM_API_PSTAT_DATA_S1, CAN_MSGID_FULL_M, data);
 
-                m_position = UnpackFXP16_16(new byte[] { data[0], data[1], data[2], data[3] });
-                m_speed = UnpackFXP16_16(new byte[] { data[4], data[5], data[6], data[7] });
+                m_position = UnpackFXP16_16(new[] { data[0], data[1], data[2], data[3] });
+                m_speed = UnpackFXP16_16(new[] { data[4], data[5], data[6], data[7] });
 
                 m_receivedStatusMessage1 = true;
             }

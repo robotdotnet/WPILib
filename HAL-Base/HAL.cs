@@ -135,9 +135,9 @@ namespace HAL_Base
                 if (HALType == HALTypes.Simulation)
                 {
                     string className = "SimData";
-                    var types = HAL.HALAssembly.GetTypes();
+                    var types = HALAssembly.GetTypes();
                     var q = from t in types where t.IsClass && t.Name == className select t;
-                    Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
+                    Type type = HALAssembly.GetType(q.ToList()[0].FullName);
 
                     GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
 

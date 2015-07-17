@@ -29,7 +29,7 @@ namespace WPILib.Tests
 
         private static Dictionary<dynamic, dynamic> PWMData()
         {
-            return HAL_Base.HAL.halData["pwm"][2];
+            return HAL.halData["pwm"][2];
         }
 
         private static PWM boundPWM(PWM pwm)
@@ -138,7 +138,7 @@ namespace WPILib.Tests
         [TestMethod]
         public void TestSetBounds()
         {
-            HAL_Base.HAL.halData["pwm_loop_timing"] = SensorBase.SystemClockTicksPerMicrosecond;
+            HAL.halData["pwm_loop_timing"] = SensorBase.SystemClockTicksPerMicrosecond;
 
             using (PWM pwm = NewPWM())
             {

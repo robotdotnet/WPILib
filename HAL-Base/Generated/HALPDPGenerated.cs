@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+// ReSharper disable CheckNamespace
 
 namespace HAL_Base
 {
