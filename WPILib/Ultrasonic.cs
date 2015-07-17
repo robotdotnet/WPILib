@@ -6,8 +6,6 @@ using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
 
-//using System.Linq;
-
 namespace WPILib
 {
     /// <summary>

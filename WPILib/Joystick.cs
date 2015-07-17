@@ -199,7 +199,7 @@ namespace WPILib
             return m_ds.GetJoystickIsXbox(m_port);
         }
 
-        public int GetType()
+        public int GetJoystickType()
         {
             return m_ds.GetJoystickType(m_port);
         }

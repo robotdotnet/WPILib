@@ -21,6 +21,7 @@ namespace WPILib.Commands
     /// <seealso cref="Command"/>
     public class Scheduler : INamedSendable
     {
+        /// The Singleton Instance
         private static Scheduler s_instance = null;
 
         private HashSet<Subsystem> m_subsystems = new HashSet<Subsystem>();
@@ -30,20 +31,16 @@ namespace WPILib.Commands
 
         private object m_buttonsLock = new object();
         private object m_additionsLock = new object();
-        private static object m_instanceLock = new object();
+        private static object s_instanceLock = new object();
 
         private bool m_adding;
-        private bool m_enabled;
+        private bool m_enabled = true;
 
-        private bool m_runningCommandsChanged;
+        private bool m_runningCommandsChanged = false;
 
         private Scheduler()
         {
             HLUsageReporting.ReportScheduler();
-
-            Table = null;
-            m_enabled = true;
-            m_runningCommandsChanged = false;
         }
 
         /// <summary>
@@ -53,7 +50,7 @@ namespace WPILib.Commands
         {
             get
             {
-                lock (m_instanceLock)
+                lock (s_instanceLock)
                 {
                     return s_instance ?? (s_instance = new Scheduler());
                 }
@@ -133,13 +130,10 @@ namespace WPILib.Commands
 
             m_runningCommandsChanged = false;
 
-            foreach (var s in m_commands)
+            foreach (var s in m_commands.Where(s => !s.Run()))
             {
-                if (!s.Run())
-                {
-                    Remove(s);
-                    m_runningCommandsChanged = true;
-                }
+                Remove(s);
+                m_runningCommandsChanged = true;
             }
 
             lock (m_additionsLock)
@@ -202,16 +196,6 @@ namespace WPILib.Commands
         public void Enable()
         {
             m_enabled = true;
-        }
-
-        public void ResetAll()
-        {
-            RemoveAll();
-            m_subsystems.Clear();
-            m_buttons.Clear();
-            m_additions.Clear();
-            m_commands.Clear();
-            Table = null;
         }
 
         private StringArray commands;

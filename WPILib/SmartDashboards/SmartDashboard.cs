@@ -12,7 +12,6 @@ namespace WPILib.SmartDashboards
     /// Users can put values into and get values from the SmartDashboard</remarks>
     public class SmartDashboard
     {
-        //TODO: Implement the rest of this class
         private static NetworkTable s_table = NetworkTable.GetTable("SmartDashboard");
         private static Dictionary<ITable, ISendable> s_tablesToData = new Dictionary<ITable, ISendable>();
 
@@ -50,7 +49,7 @@ namespace WPILib.SmartDashboards
             }
             catch (KeyNotFoundException)
             {
-                throw new ArgumentException("SmartDashboard data does not exist: " + key);
+                throw new ArgumentOutOfRangeException(nameof(key), "SmartDashboard data does not exist: " + key);
             }
         }
 

@@ -10,7 +10,6 @@ namespace WPILib
     /// This can currently be found in <see cref="Internal.HardwareTimer"/></remarks>
     public class Timer
     {
-        //TODO: Add remakrs to these methods.
         internal static IStaticTimerInterface Implementation { private get; set; }
 
         /// <summary>

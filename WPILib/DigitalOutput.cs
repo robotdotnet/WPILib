@@ -209,6 +209,7 @@ namespace WPILib
         /// <param name="isNew"></param>
         public void ValueChanged(ITable source, string key, object value, bool isNew)
         {
+            Set((bool)value);
         }
     }
 }

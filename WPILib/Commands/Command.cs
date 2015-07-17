@@ -195,7 +195,7 @@ namespace WPILib.Commands
                 m_canceled = false;
                 m_running = false;
 
-                //TODO:Add Table
+                Table?.PutBoolean("running", false);
             }
         }
 
@@ -329,7 +329,7 @@ namespace WPILib.Commands
             }
         }
 
-        internal void Validate(String message)
+        internal void Validate(string message)
         {
             lock (m_syncRoot)
             {
@@ -355,7 +355,7 @@ namespace WPILib.Commands
                 LockChanges();
                 m_parent = parent;
 
-                //Add table 
+                Table?.PutBoolean("isParented", true);
             }
         }
 

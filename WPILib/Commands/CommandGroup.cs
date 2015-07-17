@@ -32,10 +32,10 @@ namespace WPILib.Commands
             {
                 Validate("Can not add new command to command group");
                 if (command == null)
-                    throw new ArgumentNullException("Given null command");
+                    throw new ArgumentNullException(nameof(command), "Given null command");
                 command.SetParent(this);
                 m_commands.Add(new Entry(command, Entry.IN_SEQUENCE));
-                foreach (Subsystem e in command.GetRequirements())
+                foreach (var e in command.GetRequirements())
                 {
                     Requires(e);
                 } 
@@ -48,11 +48,10 @@ namespace WPILib.Commands
             {
                 Validate("Can not add new command to command group");
                 if (command == null)
-                    throw new ArgumentNullException("Given null command");
+                    throw new ArgumentNullException(nameof(command), "Given null command");
                 if (timeout < 0)
-                    throw new ArgumentOutOfRangeException("Can not be given a negative timeout");
+                    throw new ArgumentOutOfRangeException(nameof(timeout), "Can not be given a negative timeout");
                 command.SetParent(this);
-                //Figure out what to do about timeout
                 m_commands.Add(new Entry(command, Entry.IN_SEQUENCE, timeout));
                 foreach (Subsystem e in command.GetRequirements())
                 {
@@ -68,7 +67,7 @@ namespace WPILib.Commands
 
                 Validate("Can not add new command to command group");
                 if (command == null)
-                    throw new ArgumentNullException("Given null command");
+                    throw new ArgumentNullException(nameof(command), "Given null command");
                 command.SetParent(this);
                 m_commands.Add(new Entry(command, Entry.BRANCH_CHILD));
                 foreach (Subsystem e in command.GetRequirements())
@@ -85,11 +84,11 @@ namespace WPILib.Commands
 
                 Validate("Can not add new command to command group");
                 if (command == null)
-                    throw new ArgumentNullException("Given null command");
+                    throw new ArgumentNullException(nameof(command), "Given null command");
                 if (timeout < 0)
-                    throw new ArgumentOutOfRangeException("Can not be given a negative timeout");
+                    throw new ArgumentOutOfRangeException(nameof(command), "Can not be given a negative timeout");
                 command.SetParent(this);
-                //Figure out what to do about timeout
+
                 m_commands.Add(new Entry(command, Entry.BRANCH_CHILD, timeout));
                 foreach (Subsystem e in command.GetRequirements())
                 {

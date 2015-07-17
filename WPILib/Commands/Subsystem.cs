@@ -66,7 +66,6 @@ namespace WPILib.Commands
             else
             {
                 bool found = false;
-                //var requirements = command.GetRequirements();
 
                 foreach (var s in command.GetRequirements())
                 {
@@ -78,6 +77,19 @@ namespace WPILib.Commands
                     throw new IllegalUseOfCommandException("A default command must require the subsystem");
                 }
                 m_defaultCommand = command;
+            }
+
+            if (Table != null)
+            {
+                if (m_defaultCommand != null)
+                {
+                    Table.PutBoolean("hasDefault", true);
+                    Table.PutString("default", m_defaultCommand.Name);
+                }
+                else
+                {
+                    Table.PutBoolean("hasDefault", false);
+                }
             }
         }
 
@@ -101,7 +113,18 @@ namespace WPILib.Commands
         {
             if (m_currentCommandChanged)
             {
-                //Add Table
+                if (Table != null)
+                {
+                    if (m_currentCommand != null)
+                    {
+                        Table.PutBoolean("hasCommand", true);
+                        Table.PutString("default", m_currentCommand.Name);
+                    }
+                    else
+                    {
+                        Table.PutBoolean("hasCommand", false);
+                    }
+                }
                 m_currentCommandChanged = false;
             }
         }

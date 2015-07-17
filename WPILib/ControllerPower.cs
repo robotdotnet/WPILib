@@ -9,7 +9,6 @@ namespace WPILib
     /// </summary>
     public static class ControllerPower
     {
-        //TODO: Make these not properties.
 
         public static double GetInputVoltage()
         {
