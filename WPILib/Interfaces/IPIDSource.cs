@@ -1,4 +1,4 @@
-﻿namespace WPILib
+﻿namespace WPILib.Interfaces
 {
     /// <summary>
     /// A description for the type of output value to provide to a <see cref="PIDController"/>

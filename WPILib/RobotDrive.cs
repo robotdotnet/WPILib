@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using WPILib.Interfaces;
 
 namespace WPILib
 {

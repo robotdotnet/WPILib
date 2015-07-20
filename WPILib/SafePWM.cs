@@ -1,4 +1,6 @@
-﻿namespace WPILib
+﻿using WPILib.Interfaces;
+
+namespace WPILib
 {
     /// <summary>
     /// This class is used to create PWM devices that implement <see cref="IMotorSafety"/>.

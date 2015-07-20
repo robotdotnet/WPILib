@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WPILib
+namespace WPILib.Interfaces
 {
     /// <summary>
     /// Mode for determining how the <see cref="ICANSpeedController"/> is controlled, used internally.

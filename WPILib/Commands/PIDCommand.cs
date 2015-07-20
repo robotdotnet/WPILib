@@ -1,4 +1,5 @@
 ﻿using NetworkTables.Tables;
+using WPILib.Interfaces;
 
 namespace WPILib.Commands
 {

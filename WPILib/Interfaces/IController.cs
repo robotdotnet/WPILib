@@ -1,4 +1,4 @@
-﻿namespace WPILib
+﻿namespace WPILib.Interfaces
 {
     /// <summary>
     /// An interface for controllers. Controllers run control loops, the most command

@@ -1,4 +1,4 @@
-﻿namespace WPILib
+﻿namespace WPILib.Interfaces
 {
     /// <summary>
     /// This interface allows <see cref="PIDController"/> to write it's results to its output.

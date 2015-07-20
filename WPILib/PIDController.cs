@@ -1,6 +1,7 @@
 ﻿using System;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 using WPILib.LiveWindows;
 
 namespace WPILib

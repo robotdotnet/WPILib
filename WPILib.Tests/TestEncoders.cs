@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {

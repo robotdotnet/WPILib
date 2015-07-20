@@ -1,4 +1,4 @@
-﻿namespace WPILib
+﻿namespace WPILib.Interfaces
 {
     /// <summary>
     /// Interface for creating Safe Motors.

@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccumulatorResult.cs" />
     <Compile Include="ADXL345.cs" />
     <Compile Include="ADXL345_I2C.cs" />
     <Compile Include="ADXL345_SPI.cs" />
@@ -72,7 +71,7 @@
     <Compile Include="Exceptions\CheckedAllocationException.cs" />
     <Compile Include="Exceptions\InvalidValueException.cs" />
     <Compile Include="Exceptions\UncleanStatusException.cs" />
-    <Compile Include="ICANSpeedController.cs" />
+    <Compile Include="Interfaces\ICANSpeedController.cs" />
     <Compile Include="CANTalon.cs" />
     <Compile Include="CAN\CANExceptionFactory.cs" />
     <Compile Include="CAN\CANMessageNotFoundException.cs" />
@@ -89,7 +88,7 @@
     <Compile Include="Commands\WaitForChildren.cs" />
     <Compile Include="Commands\WaitUntilCommand.cs" />
     <Compile Include="Compressor.cs" />
-    <Compile Include="IController.cs" />
+    <Compile Include="Interfaces\IController.cs" />
     <Compile Include="ControllerPower.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="DigitalInput.cs" />
@@ -103,17 +102,17 @@
     <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\IAccelerometer.cs" />
-    <Compile Include="ICounterBase.cs" />
+    <Compile Include="Interfaces\ICounterBase.cs" />
     <Compile Include="GenericHID.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
-    <Compile Include="IMotorSafety.cs" />
-    <Compile Include="IPIDInterface.cs" />
-    <Compile Include="IPIDOutput.cs" />
-    <Compile Include="IPIDSource.cs" />
+    <Compile Include="Interfaces\IMotorSafety.cs" />
+    <Compile Include="Interfaces\IPIDInterface.cs" />
+    <Compile Include="Interfaces\IPIDOutput.cs" />
+    <Compile Include="Interfaces\IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />
     <Compile Include="PWMSpeedController.cs" />
     <Compile Include="SmartDashboards\SendableChooser.cs" />
-    <Compile Include="ISpeedController.cs" />
+    <Compile Include="Interfaces\ISpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
@@ -146,7 +145,7 @@
     <Compile Include="Ultrasonic.cs" />
     <Compile Include="Utility.cs" />
     <Compile Include="Exceptions\AnalogTriggerException.cs" />
-    <Compile Include="InterruptableSensorBase.cs" />
+    <Compile Include="Interfaces\InterruptableSensorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.cs" />
     <Compile Include="SensorBase.cs" />

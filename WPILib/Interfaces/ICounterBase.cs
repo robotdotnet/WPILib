@@ -1,4 +1,4 @@
-﻿namespace WPILib
+﻿namespace WPILib.Interfaces
 {
     /// <summary>
     /// Encoding Types for Counters and Encoders.

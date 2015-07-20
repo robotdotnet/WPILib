@@ -1,4 +1,5 @@
 ﻿using System;
+using WPILib.Interfaces;
 
 namespace WPILib
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using WPILib.Interfaces;
 using static WPILib.Timer;
 
 namespace WPILib

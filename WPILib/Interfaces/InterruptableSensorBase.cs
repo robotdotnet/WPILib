@@ -1,9 +1,8 @@
 ﻿using System;
 using HAL_Base;
 using WPILib.Exceptions;
-using static WPILib.Utility;
 
-namespace WPILib
+namespace WPILib.Interfaces
 {
     
     public enum WaitResult
@@ -88,10 +87,10 @@ namespace WPILib
 
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
             SetUpSourceEdge(true, false);
             HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
         }
 
         /// <summary>
@@ -115,10 +114,10 @@ namespace WPILib
 
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
             SetUpSourceEdge(true, false);
             HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
         }
 
         /// <summary>
@@ -139,7 +138,7 @@ namespace WPILib
             int status = 0;
             HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting,
                 AnalogTriggerForRouting, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
             SetUpSourceEdge(true, false);
         }
 
@@ -163,7 +162,7 @@ namespace WPILib
 
             int status = 0;
             m_interrupt = HALInterrupts.InitializeInterrupts(m_interruptIndex, watcher, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
         }
 
         /// <summary>
@@ -178,7 +177,7 @@ namespace WPILib
             }
             int status = 0;
             HALInterrupts.CleanInterrupts(m_interrupt, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
 
             m_interrupt = IntPtr.Zero;
             s_interrupts.Dispose((int)m_interruptIndex);
@@ -199,7 +198,7 @@ namespace WPILib
             }
             int status = 0;
             uint value = HALInterrupts.WaitForInterrupt(m_interrupt, timeout, ignorePrevious, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
             return (WaitResult)value;
         }
 
@@ -231,7 +230,7 @@ namespace WPILib
             }
             int status = 0;
             HALInterrupts.EnableInterrupts(m_interrupt, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
         }
 
         /// <summary>
@@ -249,7 +248,7 @@ namespace WPILib
             }
             int status = 0;
             HALInterrupts.DisableInterrupts(m_interrupt, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
         }
 
         /// <summary>
@@ -266,7 +265,7 @@ namespace WPILib
             }
             int status = 0;
             double timestamp = HALInterrupts.ReadRisingTimestamp(m_interrupt, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
             return timestamp;
         }
 
@@ -284,7 +283,7 @@ namespace WPILib
             }
             int status = 0;
             double timestamp = HALInterrupts.ReadFallingTimestamp(m_interrupt, ref status);
-            CheckStatus(status);
+            Utility.CheckStatus(status);
             return timestamp;
         }
 
@@ -299,7 +298,7 @@ namespace WPILib
             {
                 int status = 0;
                 HALInterrupts.SetInterruptUpSourceEdge(m_interrupt, risingEdge, fallingEdge, ref status);
-                CheckStatus(status);
+                Utility.CheckStatus(status);
             }
             else
             {

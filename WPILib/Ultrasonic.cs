@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using HAL_Base;
 using NetworkTables.Tables;
+using WPILib.Interfaces;
 using WPILib.LiveWindows;
 
 namespace WPILib

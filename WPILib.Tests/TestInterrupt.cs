@@ -5,6 +5,7 @@ using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Telerik.JustMock;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
