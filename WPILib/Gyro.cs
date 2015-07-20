@@ -1,7 +1,9 @@
 ﻿using System;
+using System.CodeDom;
 using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 using WPILib.LiveWindows;
 
 namespace WPILib
@@ -21,16 +23,18 @@ namespace WPILib
         private double m_offset;
         private int m_center;
         bool m_channelAllocated = false;
-        private AccumulatorResult m_result;
         private PIDSourceParameter m_pidSource;
 
         public void InitGyro()
         {
-            m_result = new AccumulatorResult();
             if (m_analog == null)
             {
                 Console.WriteLine("Null m_analog");
                 throw new NullReferenceException("m_analog");
+            }
+            if (!m_analog.IsAccumulatorChannel)
+            {
+                throw new InvalidValueException("channel must be an accumulator channel");
             }
             Sensitivity = kDefaultVoltsPerDegreePerSecond;
             m_analog.AverageBits = kAverageBits;
@@ -45,11 +49,13 @@ namespace WPILib
 
             Timer.Delay(kCalibrationSampleTime);
 
-            m_analog.GetAccumulatorOutput(m_result);
+            long value = 0;
+            uint count = 0;
+            m_analog.GetAccumulatorOutput(ref value, ref count);
 
-            m_center = (int)((double)m_result.Value / (double)m_result.Count + .5);
+            m_center = (int)((double)value / (double)count + .5);
 
-            m_offset = ((double)m_result.Value / (double)m_result.Count)
+            m_offset = ((double)value / (double)count)
                     - m_center;
 
             
@@ -82,6 +88,7 @@ namespace WPILib
 
         public void Reset() => m_analog?.ResetAccumulator();
 
+        ///<inheritdoc/>
         public override void Dispose()
         {
             if (m_analog != null && m_channelAllocated)
@@ -100,9 +107,11 @@ namespace WPILib
             }
             else
             {
-                m_analog.GetAccumulatorOutput(m_result);
+                long rawValue = 0;
+                uint count = 0;
+                m_analog.GetAccumulatorOutput(ref rawValue, ref count);
 
-                long value = m_result.Value - (long) (m_result.Count*m_offset);
+                long value = rawValue - (long) (count*m_offset);
 
                 double scaledValue = value
                                      *1e-9

@@ -3,6 +3,7 @@ using System.Linq;
 using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALAnalog;
@@ -276,23 +277,18 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Read the accumulated value and the number of accumulated values atomically.
+        /// Read the accumulated value and the number of accumulated values atomically
         /// </summary>
-        /// <param name="result">AccumulatorResult object to store the result in.</param>
-        public void GetAccumulatorOutput(AccumulatorResult result)
+        /// <param name="value">The 64 bit accumulated output</param>
+        /// <param name="count">The number of accumulation cycles</param>
+        public void GetAccumulatorOutput(ref long value, ref uint count)
         {
-            if (result == null)
-                throw new ArgumentNullException(nameof(result));
             if (!IsAccumulatorChannel)
                 throw new ArgumentException($"Channel {Channel} is not an accumulator channel.");
-
-            uint count = 0;
-            long value = 0;
             int status = 0;
             HALAnalog.GetAccumulatorOutput(m_port, ref value, ref count, ref status);
             CheckStatus(status);
-            result.Value = value + m_accumulatorOffset;
-            result.Count = count;
+            value += m_accumulatorOffset;
         }
 
         /// <summary>
