@@ -36,7 +36,7 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                Assert.IsTrue(HalData()["solenoid"][0]["initialized"]);
+                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["initialized"]);
             }
         }
 
@@ -92,10 +92,10 @@ namespace WPILib.Tests
             using (Solenoid s = NewSolenoid())
             {
                 s.Set(true);
-                Assert.IsTrue(HalData()["solenoid"][0]["value"]);
+                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["value"]);
 
                 s.Set(false);
-                Assert.IsFalse(HalData()["solenoid"][0]["value"]);
+                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][0]["value"]);
             }
         }
 
@@ -104,10 +104,10 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                HalData()["solenoid"][0]["value"] = true;
+                HalData()["pcm"][0]["solenoid"][0]["value"] = true;
                 Assert.IsTrue(s.Get());
 
-                HalData()["solenoid"][0]["value"] = false;
+                HalData()["pcm"][0]["solenoid"][0]["value"] = false;
                 Assert.IsFalse(s.Get());
             }
         }

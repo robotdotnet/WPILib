@@ -51,5 +51,10 @@ namespace HAL_Simulator
         {
             return ((TalonSRX)Marshal.PtrToStructure(ptr, typeof(TalonSRX))).deviceNumber;
         }
+
+        internal static int GetPCM(IntPtr ptr)
+        {
+            return ((PCM) Marshal.PtrToStructure(ptr, typeof (PCM))).module;
+        }
     }
 }

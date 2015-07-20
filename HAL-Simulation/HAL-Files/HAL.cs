@@ -446,7 +446,7 @@ namespace HAL_Simulator
                     halData["pwm"][instanceNumber]["type"] = "servo";
                     break;
                 case (byte)ResourceType.kResourceType_Solenoid:
-                    halData["solenoid"][instanceNumber]["initialized"] = true;
+                    halData["pcm"][(int)context]["solenoid"][instanceNumber]["initialized"] = true;
                     break;
             }
             if (!halData["reports"].ContainsKey(resource))

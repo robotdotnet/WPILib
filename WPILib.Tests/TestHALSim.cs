@@ -149,7 +149,7 @@ namespace WPILib.Tests
         {
             foreach (var o in data)
             {
-                Assert.IsTrue(o.Key is string);
+                Assert.IsTrue(o.Key is string || o.Key is int);
 
                 if (o.Value is Dictionary<dynamic, dynamic>)
                 {
@@ -180,7 +180,11 @@ namespace WPILib.Tests
         [TestMethod]
         public void TestHalUpdate()
         {
-            Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>()
+            Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>
+            {
+                ["pcm"] = new Dictionary<dynamic, dynamic>()
+            };
+            inDict["pcm"][0] = new Dictionary<dynamic, dynamic>
             {
                 {
                     "compressor", new Dictionary<dynamic, dynamic>()
@@ -190,11 +194,11 @@ namespace WPILib.Tests
                 },
             };
 
-            Assert.IsFalse(HAL.halData["compressor"]["on"]);
+            Assert.IsFalse(HAL.halData["pcm"][0]["compressor"]["on"]);
 
             SimData.UpdateHalData(inDict, HAL.halData);
 
-            Assert.IsTrue(HAL.halData["compressor"]["on"]);
+            Assert.IsTrue(HAL.halData["pcm"][0]["compressor"]["on"]);
         }
     }
 }

@@ -37,8 +37,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid s = NewDoubleSolenoid())
             {
-                Assert.IsTrue(HalData()["solenoid"][0]["initialized"]);
-                Assert.IsTrue(HalData()["solenoid"][1]["initialized"]);
+                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["initialized"]);
+                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][1]["initialized"]);
             }
         }
 
@@ -95,8 +95,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Forward);
-                Assert.IsTrue(HalData()["solenoid"][0]["value"]);
-                Assert.IsFalse(HalData()["solenoid"][1]["value"]);
+                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["value"]);
+                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][1]["value"]);
             }
         }
 
@@ -106,8 +106,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Reverse);
-                Assert.IsTrue(HalData()["solenoid"][1]["value"]);
-                Assert.IsFalse(HalData()["solenoid"][0]["value"]);
+                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][1]["value"]);
+                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][0]["value"]);
             }
         }
 
@@ -117,8 +117,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Off);
-                Assert.IsFalse(HalData()["solenoid"][1]["value"]);
-                Assert.IsFalse(HalData()["solenoid"][0]["value"]);
+                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][1]["value"]);
+                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][0]["value"]);
             }
         }
 
@@ -127,8 +127,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                HalData()["solenoid"][0]["value"] = true;
-                HalData()["solenoid"][1]["value"] = false;
+                HalData()["pcm"][0]["solenoid"][0]["value"] = true;
+                HalData()["pcm"][0]["solenoid"][1]["value"] = false;
 
                 Assert.AreEqual(DoubleSolenoid.Value.Forward, ds.Get());
             }
@@ -139,8 +139,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                HalData()["solenoid"][0]["value"] = false;
-                HalData()["solenoid"][1]["value"] = true;
+                HalData()["pcm"][0]["solenoid"][0]["value"] = false;
+                HalData()["pcm"][0]["solenoid"][1]["value"] = true;
 
                 Assert.AreEqual(DoubleSolenoid.Value.Reverse, ds.Get());
             }
@@ -151,8 +151,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                HalData()["solenoid"][0]["value"] = false;
-                HalData()["solenoid"][1]["value"] = false;
+                HalData()["pcm"][0]["solenoid"][0]["value"] = false;
+                HalData()["pcm"][0]["solenoid"][1]["value"] = false;
 
                 Assert.AreEqual(DoubleSolenoid.Value.Off, ds.Get());
             }

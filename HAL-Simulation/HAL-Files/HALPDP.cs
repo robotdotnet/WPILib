@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static HAL_Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -13,7 +14,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static void initializePDP(int module)
         {
-
+            InitializeNewPDP(module);
         }
 
         /// Return Type: double

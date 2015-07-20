@@ -7,9 +7,9 @@ namespace WPILib.Tests
     [TestClass]
     public class TestCompressor
     {
-        private Dictionary<dynamic, dynamic> GetData()
+        private Dictionary<dynamic, dynamic> GetData(int module)
         {
-            return HAL.halData["compressor"];
+            return HAL.halData["pcm"][module]["compressor"];
         }
 
         public Compressor GetCompressor()
@@ -31,14 +31,14 @@ namespace WPILib.Tests
         [TestMethod]
         public void TestCompressorSwitch()
         {
-            GetData()["pressure_switch"] = true;
+            GetData(0)["pressure_switch"] = true;
             Assert.IsTrue(GetCompressor().GetPressureSwitchValue());
         }
 
         [TestMethod]
         public void TestCompressorCurrent()
         {
-            GetData()["current"] = 42;
+            GetData(0)["current"] = 42;
             Assert.AreEqual((double)GetCompressor().GetCompressorCurrent(), 42);
         }
     }

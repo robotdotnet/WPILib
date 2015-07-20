@@ -34,8 +34,8 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct Port
     {
-        public byte pin;
-        public byte module;
+        public int pin;
+        public int module;
     }
 
     //Analog
@@ -57,7 +57,7 @@ namespace HAL_Simulator
     [StructLayout(LayoutKind.Sequential)]
     internal struct PCM
     {
-        public byte module;
+        public int module;
     }
 
     //Digital
