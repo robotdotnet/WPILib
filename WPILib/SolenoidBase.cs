@@ -16,7 +16,7 @@ namespace WPILib
         /// <summary>
         /// The module number for the solenoid.
         /// </summary>
-        protected int m_moduleNumber;//The number of the solenoid module being used
+        protected int m_moduleNumber;
         /// <summary>
         /// The allocated resources for the solenoid.
         /// </summary>

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HAL_Base
+﻿namespace HAL_Base
 {
     public interface ISimulator
     {

@@ -62,7 +62,7 @@ namespace WPILib.LiveWindows
         /// </remarks>
         private static void InitializeLiveWindowComponents()
         {
-            Console.WriteLine("Initializing the components  first time");
+            Console.WriteLine("Initializing the components first time");
             s_liveWindowTable = NetworkTable.GetTable("LiveWindow");
             s_statusTable = s_liveWindowTable.GetSubTable("~STATUS~");
             foreach (var component in s_components.Keys)
