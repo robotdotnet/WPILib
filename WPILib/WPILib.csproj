@@ -120,7 +120,7 @@
     <Compile Include="LiveWindows\LiveWindow.cs" />
     <Compile Include="LiveWindows\ILiveWindowSendable.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
-    <Compile Include="NamedSendable.cs" />
+    <Compile Include="Interfaces\INamedSendable.cs" />
     <Compile Include="Notifier.cs" />
     <Compile Include="PIDController.cs" />
     <Compile Include="PowerDistributionPanel.cs" />
@@ -132,7 +132,7 @@
     <Compile Include="RobotState.cs" />
     <Compile Include="SafePWM.cs" />
     <Compile Include="SampleRobot.cs" />
-    <Compile Include="Sendable.cs" />
+    <Compile Include="Interfaces\ISendable.cs" />
     <Compile Include="SerialPort.cs" />
     <Compile Include="Servo.cs" />
     <Compile Include="SmartDashboards\SmartDashboard.cs" />

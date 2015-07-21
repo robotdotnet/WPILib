@@ -3,6 +3,7 @@ using NetworkTables.NetworkTables2.Type;
 using NetworkTables.NetworkTables2.Util;
 using NetworkTables.Tables;
 using WPILib.Commands;
+using WPILib.Interfaces;
 
 namespace WPILib.SmartDashboards
 {

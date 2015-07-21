@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NetworkTables.Tables;
+using WPILib.Interfaces;
 using static WPILib.Timer;
 
 namespace WPILib.Commands

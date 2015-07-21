@@ -4,6 +4,7 @@ using System.Linq;
 using NetworkTables.NetworkTables2.Type;
 using NetworkTables.Tables;
 using WPILib.Buttons;
+using WPILib.Interfaces;
 
 namespace WPILib.Commands
 {

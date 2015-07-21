@@ -1,5 +1,6 @@
 ﻿using NetworkTables.Tables;
 using WPILib.Commands;
+using WPILib.Interfaces;
 
 namespace WPILib.Buttons
 {

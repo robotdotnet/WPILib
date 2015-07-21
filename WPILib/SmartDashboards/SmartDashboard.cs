@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NetworkTables;
 using NetworkTables.Tables;
+using WPILib.Interfaces;
 
 namespace WPILib.SmartDashboards
 {

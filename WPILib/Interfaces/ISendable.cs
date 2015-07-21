@@ -1,6 +1,6 @@
 ﻿using NetworkTables.Tables;
 
-namespace WPILib
+namespace WPILib.Interfaces
 {
     /// <summary>
     /// The base interface for objects that can be sent over the network
