@@ -2,9 +2,10 @@
 
 namespace HAL_Base
 {
-    public interface ISimulator : IDisposable
+    public interface ISimulator
     {
-        string AddArguments();
+        string Name { get; }
+        void Initialize();
         void Start();
     }
 }

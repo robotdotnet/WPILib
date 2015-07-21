@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace HAL_Base
 {
@@ -142,9 +143,106 @@ namespace HAL_Base
                     GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
 
                     data(out halData, out halInData, out halDSData);
+
+                    StartSimulator();
                 }
-                s_initialized = true;
             }
+        }
+
+        private static void StartSimulator()
+        {
+            //Get a list of all dll files
+            string[] dllFileNames = null;
+            if (Directory.Exists(Directory.GetCurrentDirectory()))
+            {
+                dllFileNames = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll");
+            }
+
+            //If files not found, just return
+            if (dllFileNames == null)
+                return;
+
+            //Load all assemblies in folder
+            var assemblies = new List<Assembly>(dllFileNames.Length);
+            assemblies.AddRange(dllFileNames.Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
+
+            //Find all types inheriting from ISimulator
+            Type simulatorType = typeof(ISimulator);
+            ICollection<Type> simulatorTypes = new List<Type>();
+            foreach (var type in from assembly in assemblies where assembly != null select assembly.GetTypes() into types from type in types select type)
+            {
+                if (type.IsInterface || type.IsAbstract)
+                {
+                }
+                else
+                {
+                    if (type.GetInterface(simulatorType.FullName) != null)
+                    {
+                        simulatorTypes.Add(type);
+                    }
+                }
+            }
+
+            //If none were found, just return
+            if (simulatorTypes.Count == 0)
+                return;
+
+            //Create an instance of all found ISimulators
+            var simulators = simulatorTypes.Select(type => (ISimulator)Activator.CreateInstance(type)).ToList();
+
+            //If only 1 was found, start it.
+            if (simulatorTypes.Count == 1)
+            {
+                StartSimulator(simulators[0]);
+                return;
+            }
+
+            //Otherwise list all simulators, and select one.
+            int input = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Please select a simulator:\n");
+                for (int i = 0; i < simulators.Count; i++)
+                {
+                    Console.WriteLine($"{i}. {simulators[i].Name}");
+                }
+                Console.WriteLine($"{simulators.Count}. Skip simulator");
+                try
+                {
+                    input = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    input = -1;
+                }
+                if (input == simulators.Count)
+                {
+                    return;
+                }
+            } while ((input < 0) || (input >= simulators.Count));
+
+            StartSimulator(simulators[input]);
+        }
+
+        private static void StartSimulator(ISimulator simulator)
+        {
+            Console.WriteLine($"Starting Simulator: {simulator.Name}");
+            simulator.Initialize();
+            if (s_simThread != null)
+            {
+                s_simThread.Abort();
+                s_simThread.Join();
+            }
+            s_simThread = new Thread(simulator.Start);
+            s_simThread.Start();
+        }
+
+        private static Thread s_simThread;
+
+        public static void KillSimulator()
+        {
+            s_simThread?.Abort();
         }
 
         /// <summary>

@@ -383,10 +383,6 @@ namespace HAL_Simulator
         public static int HALInitialize(int mode)
         {
             ResetHALData();
-            //Uncomment this if we want a constant running driver station thread.
-            //This should be done by the Sim implementation though. But it might be needed for testing.
-
-            //ModeHelpers.StartDSLoop();
 
 
             return 1;
