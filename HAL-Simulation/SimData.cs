@@ -171,7 +171,7 @@ namespace HAL_Simulator
             halData["reports"] = new NotifyDict<dynamic, dynamic>();
 
             halData["joysticks"] = new List<dynamic>();
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < HAL_Base.HAL.DriverStationConstants.JoystickPorts; i++)
             {
                 halData["joysticks"].Add(new NotifyDict<dynamic, dynamic>
                 {

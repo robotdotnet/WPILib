@@ -12,10 +12,11 @@ using static HAL_Simulator.HALErrorConstants;
 
 namespace HAL_Simulator
 {
-    public class CalledSimFunction : Attribute
-    {
-
-    }
+    /// <summary>
+    /// This attribute is added to any Sim functions that are called from base.
+    /// It helps make sure that our delegates will work.
+    /// </summary>
+    public class CalledSimFunction : Attribute { }
 
     /// <summary>
     /// This class is used by HAL-Base, and is used to emulate the HAL. 

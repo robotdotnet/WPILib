@@ -7,6 +7,7 @@ using HAL_Base;
 using static WPILib.Timer;
 using static HAL_Base.HAL;
 using static HAL_Base.HALSemaphore;
+using static HAL_Base.HAL.DriverStationConstants;
 
 namespace WPILib
 {
@@ -15,6 +16,7 @@ namespace WPILib
     /// </summary>
     public class DriverStation : RobotState.Interface
     {
+        /*
         //Constants
         //TODO: Move this to the HAL
         ///The number of joystick ports
@@ -23,6 +25,7 @@ namespace WPILib
         public const int MaxJoystickAxes = 12;
         ///The number of joystick POVs
         public const int MaxJoystickPOVs = 12;
+        */
 
         //Enums
         /// <summary>

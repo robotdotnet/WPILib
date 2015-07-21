@@ -16,9 +16,20 @@ namespace HAL_Base
         public class Constants
         {
             //public const uint dio_kNumSystems;//Find Value
-            public const uint solenoid_kNumDO7_0Elements = 8;
+            //public const uint solenoid_kNumDO7_0Elements = 8;
             //public const uint interrupt_kNumSystems ;//Find value
-            public const uint kSystemClockTicksPerMicrosecond = 40;
+            public const uint SystemClockTicksPerMicrosecond = 40;
+        }
+
+        ///This contains constants used for the DriverStation.
+        public class DriverStationConstants
+        {
+            ///The number of joystick ports
+            public const int JoystickPorts = 6;
+            ///The number of joystick axes
+            public const int MaxJoystickAxes = 12;
+            ///The number of joystick POVs
+            public const int MaxJoystickPOVs = 12;
         }
 
 
