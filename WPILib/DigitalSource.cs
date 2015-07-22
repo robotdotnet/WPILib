@@ -65,6 +65,7 @@ namespace WPILib
             s_channels.Dispose(m_channel);
             int status = 0;
             FreeDIO(m_port, ref status);
+            CheckStatus(status);
             m_channel = 0;
             base.Dispose();
         }

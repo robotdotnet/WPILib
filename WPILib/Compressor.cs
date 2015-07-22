@@ -3,6 +3,7 @@ using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
 using static HAL_Base.HALCompressor;
+using static WPILib.Utility;
 
 namespace WPILib
 {
@@ -74,7 +75,8 @@ namespace WPILib
         {
             int status = 0;
             bool on = GetCompressor(m_pcm, ref status);
-            return @on;
+            CheckStatus(status);
+            return on;
         }
 
         /// <summary>
@@ -84,7 +86,8 @@ namespace WPILib
         {
             int status = 0;
             bool on = GetPressureSwitch(m_pcm, ref status);
-            return @on;
+            CheckStatus(status);
+            return on;
         }
 
 
@@ -92,6 +95,7 @@ namespace WPILib
         {
             int status = 0;
             float current = HALCompressor.GetCompressorCurrent(m_pcm, ref status);
+            CheckStatus(status);
             return current;
         }
 
@@ -101,12 +105,14 @@ namespace WPILib
             {
                 int status = 0;
                 SetClosedLoopControl(m_pcm, value, ref status);
+                CheckStatus(status);
             }
             get
             {
                 int status = 0;
                 bool on = GetClosedLoopControl(m_pcm, ref status);
-                return @on;
+                CheckStatus(status);
+                return on;
             }
         }
 
@@ -114,6 +120,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALCompressor.GetCompressorCurrentTooHighFault(m_pcm, ref status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -121,6 +128,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALCompressor.GetCompressorShortedStickyFault(m_pcm, ref status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -128,6 +136,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALCompressor.GetCompressorShortedFault(m_pcm, ref status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -135,6 +144,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALCompressor.GetCompressorNotConnectedStickyFault(m_pcm, ref status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -142,6 +152,7 @@ namespace WPILib
         {
             int status = 0;
             bool retVal = HALCompressor.GetCompressorNotConnectedFault(m_pcm, ref status);
+            CheckStatus(status);
             return retVal;
         }
 
@@ -149,6 +160,7 @@ namespace WPILib
         {
             int status = 0;
             HALCompressor.ClearAllPCMStickyFaults(m_pcm, ref status);
+            CheckStatus(status);
         }
 
         ///<inheritdoc />

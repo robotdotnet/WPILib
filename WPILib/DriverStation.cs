@@ -8,6 +8,7 @@ using static WPILib.Timer;
 using static HAL_Base.HAL;
 using static HAL_Base.HALSemaphore;
 using static HAL_Base.HAL.DriverStationConstants;
+using static WPILib.Utility;
 
 namespace WPILib
 {
@@ -16,17 +17,6 @@ namespace WPILib
     /// </summary>
     public class DriverStation : RobotState.Interface
     {
-        /*
-        //Constants
-        //TODO: Move this to the HAL
-        ///The number of joystick ports
-        public const int JoystickPorts = 6;
-        ///The number of joystick axes
-        public const int MaxJoystickAxes = 12;
-        ///The number of joystick POVs
-        public const int MaxJoystickPOVs = 12;
-        */
-
         //Enums
         /// <summary>
         /// Alliance value enum.
@@ -172,7 +162,9 @@ namespace WPILib
         public double GetBatteryVoltage()
         {
             int status = 0;
-            return HALPower.GetVinVoltage(ref status);
+            double voltage = HALPower.GetVinVoltage(ref status);
+            CheckStatus(status);
+            return voltage;
         }
 
         /// <summary>
@@ -535,6 +527,7 @@ namespace WPILib
             {
                 int status = 0;
                 bool retVal = HALGetSystemActive(ref status);
+                CheckStatus(status);
                 return retVal;
             }
         }
@@ -548,6 +541,7 @@ namespace WPILib
             {
                 int status = 0;
                 bool retval = HALGetBrownedOut(ref status);
+                CheckStatus(status);
                 return retval;
             }
         }

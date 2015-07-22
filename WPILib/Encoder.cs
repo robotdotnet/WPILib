@@ -6,6 +6,7 @@ using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALDigital;
+using static WPILib.Utility;
 
 namespace WPILib
 {
@@ -52,6 +53,7 @@ namespace WPILib
                         m_aSource.AnalogTriggerForRouting, m_bSource.ModuleForRouting,
                         (uint)m_bSource.ChannelForRouting,
                         m_bSource.AnalogTriggerForRouting, reverseDirection, ref m_index, ref status);
+                    CheckStatus(status);
                     m_counter = null;
                     MaxPeriod = 0.5;
                     break;
@@ -214,6 +216,7 @@ namespace WPILib
             {
                 int status = 0;
                 FreeEncoder(m_encoder, ref status);
+                CheckStatus(status);
             }
         }
 
@@ -228,6 +231,7 @@ namespace WPILib
             {
                 int status = 0;
                 value = GetEncoder(m_encoder, ref status);
+                CheckStatus(status);
             }
             return value;
         }
@@ -242,6 +246,7 @@ namespace WPILib
             {
                 int status = 0;
                 ResetEncoder(m_encoder, ref status);
+                CheckStatus(status);
             }
         }
 
@@ -256,6 +261,7 @@ namespace WPILib
             {
                 int status = 0;
                 measuredPeriod = GetEncoderPeriod(m_encoder, ref status);
+                CheckStatus(status);
             }
             return measuredPeriod;
         }
@@ -272,6 +278,7 @@ namespace WPILib
                 {
                     int status = 0;
                     SetEncoderMaxPeriod(m_encoder, value, ref status);
+                    CheckStatus(status);
                 }
             }
         }
@@ -286,6 +293,7 @@ namespace WPILib
             {
                 int status = 0;
                 bool value = GetEncoderStopped(m_encoder, ref status);
+                CheckStatus(status);
                 return value;
             }
         }
@@ -302,6 +310,7 @@ namespace WPILib
                 {
                     int status = 0;
                     bool value = GetEncoderDirection(m_encoder, ref status);
+                    CheckStatus(status);
                     return value;
                 }
             }
@@ -348,6 +357,7 @@ namespace WPILib
                 {
                     int status = 0;
                     SetEncoderReverseDirection(m_encoder, value, ref status);
+                    CheckStatus(status);
                 }
             }
         }
@@ -365,6 +375,7 @@ namespace WPILib
                         {
                             throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
                         }
+                        CheckStatus(status);
                         break;
                     case EncodingType.K2X:
                         m_counter.SamplesToAverage = value;
@@ -381,6 +392,7 @@ namespace WPILib
                     case EncodingType.K4X:
                         int status = 0;
                         int value = (int) GetEncoderSamplesToAverage(m_encoder, ref status);
+                        CheckStatus(status);
                         return value;
                     case EncodingType.K2X:
                         return m_counter.SamplesToAverage;
@@ -421,6 +433,7 @@ namespace WPILib
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
             SetEncoderIndexSource(m_encoder, (uint) channel, false, activeHigh, edgeSensitive, ref status);
+            CheckStatus(status);
         }
 
         public void SetIndexSource(int channel)
@@ -437,6 +450,7 @@ namespace WPILib
 
             SetEncoderIndexSource(m_encoder, (uint) source.ChannelForRouting,
                 source.AnalogTriggerForRouting, activeHigh, edgeSensitive, ref status);
+            CheckStatus(status);
         }
 
         public void SetIndexSource(DigitalSource source)
@@ -451,6 +465,7 @@ namespace WPILib
             UpdateTable();
         }
 
+        ///<inheritdoc />
         public ITable Table { get; private set; }
 
         ///<inheritdoc />

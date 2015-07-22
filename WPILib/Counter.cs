@@ -137,6 +137,7 @@ namespace WPILib
             m_upSource = source;
             int status = 0;
             SetCounterUpSource(m_counter, (uint)source.ChannelForRouting, source.AnalogTriggerForRouting, ref status);
+            CheckStatus(status);
         }
 
         public void SetUpSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
@@ -153,6 +154,7 @@ namespace WPILib
                 throw new SystemException("Up Source must be set before setting the edge!");
             int status = 0;
             SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            CheckStatus(status);
         }
 
         public void ClearUpSource()
@@ -166,6 +168,7 @@ namespace WPILib
 
             int status = 0;
             ClearCounterUpSource(m_counter, ref status);
+            CheckStatus(status);
         }
 
 
@@ -185,6 +188,7 @@ namespace WPILib
             m_downSource = source;
             int status = 0;
             SetCounterDownSource(m_counter, (uint)source.ChannelForRouting, source.AnalogTriggerForRouting, ref status);
+            CheckStatus(status);
         }
 
         public void SetDownSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
@@ -201,6 +205,7 @@ namespace WPILib
                 throw new SystemException("Up Source must be set before setting the edge!");
             int status = 0;
             SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            CheckStatus(status);
         }
 
         public void ClearDownSource()
@@ -214,36 +219,42 @@ namespace WPILib
 
             int status = 0;
             ClearCounterDownSource(m_counter, ref status);
+            CheckStatus(status);
         }
 
         public void SetUpDownCounterMode()
         {
             int status = 0;
             SetCounterUpDownMode(m_counter, ref status);
+            CheckStatus(status);
         }
 
         public void SetExternalDirectionMode()
         {
             int status = 0;
             SetCounterExternalDirectionMode(m_counter, ref status);
+            CheckStatus(status);
         }
 
         public void SetSemiPeriodMode(bool highSemiPeriod)
         {
             int status = 0;
             SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
+            CheckStatus(status);
         }
 
         public void SetPulseLengthMode(double threshold)
         {
             int status = 0;
             SetCounterPulseLengthMode(m_counter, threshold, ref status);
+            CheckStatus(status);
         }
 
         public int Get()
         {
             int status = 0;
             int value = GetCounter(m_counter, ref status);
+            CheckStatus(status);
             return value;
         }
 
@@ -253,6 +264,7 @@ namespace WPILib
         {
             int status = 0;
             ResetCounter(m_counter, ref status);
+            CheckStatus(status);
         }
 
         public double MaxPeriod
@@ -261,6 +273,7 @@ namespace WPILib
             {
                 int status = 0;
                 SetCounterMaxPeriod(m_counter, value, ref status);
+                CheckStatus(status);
             }
         }
 
@@ -270,6 +283,7 @@ namespace WPILib
             {
                 int status = 0;
                 SetCounterUpdateWhenEmpty(m_counter, value, ref status);
+                CheckStatus(status);
             }
         }
 
@@ -277,6 +291,7 @@ namespace WPILib
         {
             int status = 0;
             bool value = GetCounterStopped(m_counter, ref status);
+            CheckStatus(status);
             return value;
         }
 
@@ -286,12 +301,14 @@ namespace WPILib
             {
                 int status = 0;
                 bool value = GetCounterDirection(m_counter, ref status);
+                CheckStatus(status);
                 return value;
             }
             set
             {
                 int status = 0;
                 SetCounterReverseDirection(m_counter, value, ref status);
+                CheckStatus(status);
             }
         }
 
@@ -299,6 +316,7 @@ namespace WPILib
         {
             int status = 0;
             double value = GetCounterPeriod(m_counter, ref status);
+            CheckStatus(status);
             return value;
         }
 
@@ -314,11 +332,13 @@ namespace WPILib
                 {
                     throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
                 }
+                CheckStatus(status);
             }
             get
             {
                 int status = 0;
                 int value = GetCounterSamplesToAverage(m_counter, ref status);
+                CheckStatus(status);
                 return value;
             }
         }
