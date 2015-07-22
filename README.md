@@ -6,7 +6,8 @@ This repository contains the source code for a DotNet implentation of the WPILib
 Documentation
 =============
 
-TODO
+Install and Support documentation can be found at http://robotdotnet-wpilib.readthedocs.org/
+API documentation can be found at http://robotdotnet.github.io/Documentation/API/html/R_Project_RobotDotNet.htm
 
 Installation
 ============
@@ -37,4 +38,5 @@ See [LICENSE.txt](LICENSE.txt)
 Contributors
 ============
 
-TODO
+Thad House (@thadhouse)
+Jeremy Koritzinsky (@jkoritzinsky)
