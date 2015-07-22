@@ -428,6 +428,7 @@ namespace HAL_Simulator
 
             halData["CAN"] = new NotifyDict<dynamic, dynamic>();
 
+
             //manually filling out DS data. Later this will be automated.
             halDSData["alliance_station"] = 0;
             halDSData["control"] = new Dictionary<dynamic, dynamic>

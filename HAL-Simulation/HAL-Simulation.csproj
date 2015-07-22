@@ -59,6 +59,7 @@
     <Compile Include="HAL-Files\HALSolenoid.cs" />
     <Compile Include="HAL-Files\HALStructures.cs" />
     <Compile Include="HAL-Files\HALUtilities.cs" />
+    <Compile Include="CounterHelper.cs" />
     <Compile Include="SimHooks.cs" />
     <Compile Include="HAL-Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

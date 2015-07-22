@@ -24,9 +24,11 @@ namespace HAL_Simulator
         public const int NumInterrupts = 8;
 
         //Holds a list of our interrupts
-        private static Interrupt[] Interrupts = new Interrupt[NumInterrupts];
+        internal static Interrupt[] Interrupts = new Interrupt[NumInterrupts];
 
-        //Gets an interrupt from and IntPtr
+
+
+        //Gets an interrupt from an IntPtr
         //Since 0 is equal to IntPtr.Zero, and we check for that in the WPILib,
         //We have to use index's 1-8, instead of 0-7. So when we create in 
         //initializeInterrupt, we add one to the index, and when we get the interrupt
@@ -53,7 +55,7 @@ namespace HAL_Simulator
                 status = RESOURCE_IS_ALLOCATED;
                 return IntPtr.Zero;
             }
-            if (interruptIndex > 7)
+            if (interruptIndex >= NumInterrupts)
             {
                 status = NO_AVAILABLE_RESOURCES;
                 return IntPtr.Zero;
@@ -63,7 +65,7 @@ namespace HAL_Simulator
             {
                 Callback = null,
                 Watcher = watcher,
-                DIOPin = 0,
+                DIOPin = -1,
             };
             status = NiFpga_Status_Success;
             Interrupts[interruptIndex] = interrupt;
