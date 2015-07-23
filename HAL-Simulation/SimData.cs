@@ -458,7 +458,6 @@ namespace HAL_Simulator
             }
 
 
-
             FilterHalData(halData, halInData);
         }
 

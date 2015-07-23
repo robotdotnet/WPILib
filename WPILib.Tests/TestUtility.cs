@@ -30,11 +30,14 @@ namespace WPILib.Tests
             Assert.AreEqual(2015, Utility.GetFPGAVersion());
         }
 
+        [TestMethod]
         public void TestFPGAGetRevision()
         {
             Assert.AreEqual(0, Utility.GetFPGARevision());
         }
 
+
+        [TestMethod]
         public void TestGetUserButton()
         {
             HalData()["fpga_button"] = true;
