@@ -28,11 +28,14 @@ namespace WPILib
 
         private static object s_lockObject = new object(); 
 
-        public static Preferences GetInstance()
+        public static Preferences Instance
         {
-            lock(s_lockObject)
+            get
             {
-                return s_instance ?? (s_instance = new Preferences());
+                lock (s_lockObject)
+                {
+                    return s_instance ?? (s_instance = new Preferences());
+                }
             }
         }
 

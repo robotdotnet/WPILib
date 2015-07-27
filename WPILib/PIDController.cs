@@ -57,9 +57,9 @@ namespace WPILib
             double period)
         {
             if (source == null)
-                throw new NullReferenceException("Null PIDSource was given");
+                throw new ArgumentNullException(nameof(source), "Null PIDSource was given");
             if (output == null)
-                throw new NullReferenceException("Null PIDOutput was given");
+                throw new ArgumentNullException(nameof(output), "Null PIDOutput was given");
 
             m_controlLoop = new Notifier(CallCalculate, this);
 
@@ -127,7 +127,7 @@ namespace WPILib
             bool enabled;
             IPIDSource pidInput;
 
-            lock (this)
+            lock (m_lockObject)
             {
                 if (m_ipidInput == null)
                 {
@@ -149,7 +149,7 @@ namespace WPILib
             {
                 input = pidInput.PidGet();
             }
-            lock (this)
+            lock (m_lockObject)
             {
                 m_error = m_setpoint - input;
                 if (m_continuous)
