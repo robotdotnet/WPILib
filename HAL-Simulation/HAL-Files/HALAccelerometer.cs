@@ -9,12 +9,12 @@ using static HAL_Simulator.SimData;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALAccelerometer
+    internal class HALAccelerometer
     {
         /// Return Type: void
         ///param0: boolean
         [CalledSimFunction]
-        public static void setAccelerometerActive(bool param0)
+        internal static void setAccelerometerActive(bool param0)
         {
             halData["accelerometer"]["active"] = param0;
         }
@@ -23,26 +23,26 @@ namespace HAL_Simulator
         /// Return Type: void
         ///param0: AccelerometerRange
         [CalledSimFunction]
-        public static void setAccelerometerRange(AccelerometerRange param0)
+        internal static void setAccelerometerRange(AccelerometerRange param0)
         {
             halData["accelerometer"]["range"] = (int)param0;
         }
 
 
         [CalledSimFunction]
-        public static double getAccelerometerX()
+        internal static double getAccelerometerX()
         {
             return halData["accelerometer"]["x"];
         }
 
         [CalledSimFunction]
-        public static double getAccelerometerY()
+        internal static double getAccelerometerY()
         {
             return halData["accelerometer"]["y"];
         }
 
         [CalledSimFunction]
-        public static double getAccelerometerZ()
+        internal static double getAccelerometerZ()
         {
             return halData["accelerometer"]["z"];
         }

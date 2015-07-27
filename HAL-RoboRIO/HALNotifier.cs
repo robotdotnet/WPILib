@@ -5,16 +5,16 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALNotifier
+    internal class HALNotifier
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeNotifier")]
-        public static extern IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status);
+        internal static extern IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "cleanNotifier")]
-        public static extern void cleanNotifier(IntPtr notifier_pointer, ref int status);
+        internal static extern void cleanNotifier(IntPtr notifier_pointer, ref int status);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "updateNotifierAlarm")]
-        public static extern void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status);
+        internal static extern void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status);
     }
 }

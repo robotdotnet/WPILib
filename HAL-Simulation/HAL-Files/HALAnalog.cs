@@ -13,7 +13,7 @@ using static HAL_Simulator.HALErrorConstants;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALAnalog
+    internal class HALAnalog
     {
         internal const uint Timebase = 40000000;
         internal const int DefaultOversampleBits = 0;
@@ -26,7 +26,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
+        internal static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
         {
             status = 0;
             AnalogPort p = new AnalogPort()
@@ -42,27 +42,27 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status)
+        internal static void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status)
         {
             status = 0;
             halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["output"] = voltage;
         }
 
         [CalledSimFunction]
-        public static double getAnalogOutput(IntPtr analog_port_pointer, ref int status)
+        internal static double getAnalogOutput(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["output"];
         }
 
         [CalledSimFunction]
-        public static bool checkAnalogOutputChannel(uint pin)
+        internal static bool checkAnalogOutputChannel(uint pin)
         {
             return pin < AnalogOutputPins;
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeAnalogInputPort(IntPtr port_pointer, ref int status)
+        internal static IntPtr initializeAnalogInputPort(IntPtr port_pointer, ref int status)
         {
             status = 0;
             AnalogPort p = new AnalogPort()
@@ -78,75 +78,75 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static bool checkAnalogModule(byte module)
+        internal static bool checkAnalogModule(byte module)
         {
             return module == 1;
         }
 
         [CalledSimFunction]
-        public static bool checkAnalogInputChannel(uint pin)
+        internal static bool checkAnalogInputChannel(uint pin)
         {
             return pin < AnalogInputPins;
         }
 
         [CalledSimFunction]
-        public static void setAnalogSampleRate(double samplesPerSecond, ref int status)
+        internal static void setAnalogSampleRate(double samplesPerSecond, ref int status)
         {
             status = 0;
             halData["analog_sample_rate"] = samplesPerSecond;
         }
 
         [CalledSimFunction]
-        public static float getAnalogSampleRate(ref int status)
+        internal static float getAnalogSampleRate(ref int status)
         {
             status = 0;
             return (float)halData["analog_sample_rate"];
         }
 
         [CalledSimFunction]
-        public static void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status)
+        internal static void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status)
         {
             status = 0;
             halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"] = bits;
         }
 
         [CalledSimFunction]
-        public static uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status)
+        internal static uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"];
         }
 
         [CalledSimFunction]
-        public static void setAnalogOversampleBits(IntPtr analog_port_pointer, uint bits, ref int status)
+        internal static void setAnalogOversampleBits(IntPtr analog_port_pointer, uint bits, ref int status)
         {
             status = 0;
             halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"] = bits;
         }
 
         [CalledSimFunction]
-        public static uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status)
+        internal static uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"];
         }
 
         [CalledSimFunction]
-        public static short getAnalogValue(IntPtr analog_port_pointer, ref int status)
+        internal static short getAnalogValue(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["value"];
         }
 
         [CalledSimFunction]
-        public static int getAnalogAverageValue(IntPtr analog_port_pointer, ref int status)
+        internal static int getAnalogAverageValue(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_value"];
         }
 
         [CalledSimFunction]
-        public static int getAnalogVoltsToValue(IntPtr analog_port_pointer, double voltage, ref int status)
+        internal static int getAnalogVoltsToValue(IntPtr analog_port_pointer, double voltage, ref int status)
         {
             status = 0;
             if (voltage > 5.0)
@@ -166,49 +166,49 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
+        internal static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return (float)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
         }
 
         [CalledSimFunction]
-        public static float getAnalogAverageVoltage(IntPtr analog_port_pointer, ref int status)
+        internal static float getAnalogAverageVoltage(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return (float)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_voltage"];
         }
 
         [CalledSimFunction]
-        public static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)
+        internal static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["lsb_weight"];
         }
 
         [CalledSimFunction]
-        public static int getAnalogOffset(IntPtr analog_port_pointer, ref int status)
+        internal static int getAnalogOffset(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["offset"];
         }
 
         [CalledSimFunction]
-        public static bool isAccumulatorChannel(IntPtr analog_port_pointer, ref int status)
+        internal static bool isAccumulatorChannel(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return AccumulatorChannels.Contains(GetAnalogPort(analog_port_pointer).port.pin);
         }
 
         [CalledSimFunction]
-        public static void initAccumulator(IntPtr analog_port_pointer, ref int status)
+        internal static void initAccumulator(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_initialized"] = true;
         }
 
         [CalledSimFunction]
-        public static void resetAccumulator(IntPtr analog_port_pointer, ref int status)
+        internal static void resetAccumulator(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             int pin = GetAnalogPort(analog_port_pointer).port.pin;
@@ -218,35 +218,35 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void setAccumulatorCenter(IntPtr analog_port_pointer, int center, ref int status)
+        internal static void setAccumulatorCenter(IntPtr analog_port_pointer, int center, ref int status)
         {
             status = 0;
             halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_center"] = center;
         }
 
         [CalledSimFunction]
-        public static void setAccumulatorDeadband(IntPtr analog_port_pointer, int deadband, ref int status)
+        internal static void setAccumulatorDeadband(IntPtr analog_port_pointer, int deadband, ref int status)
         {
             status = 0;
             halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_deadband"] = deadband;
         }
 
         [CalledSimFunction]
-        public static long getAccumulatorValue(IntPtr analog_port_pointer, ref int status)
+        internal static long getAccumulatorValue(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_value"];
         }
 
         [CalledSimFunction]
-        public static uint getAccumulatorCount(IntPtr analog_port_pointer, ref int status)
+        internal static uint getAccumulatorCount(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
         }
 
         [CalledSimFunction]
-        public static void getAccumulatorOutput(IntPtr analog_port_pointer, ref long value, ref uint count,
+        internal static void getAccumulatorOutput(IntPtr analog_port_pointer, ref long value, ref uint count,
             ref int status)
         {
             status = 0;
@@ -255,7 +255,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeAnalogTrigger(IntPtr port_pointer, ref uint index, ref int status)
+        internal static IntPtr initializeAnalogTrigger(IntPtr port_pointer, ref uint index, ref int status)
         {
             status = 0;
 
@@ -283,14 +283,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
+        internal static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
         {
             status = 0;
             halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["initialized"] = false;
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerLimitsRaw(IntPtr analog_trigger_pointer, int lower, int upper, ref int status)
+        internal static void setAnalogTriggerLimitsRaw(IntPtr analog_trigger_pointer, int lower, int upper, ref int status)
         {
             if (lower > upper)
             {
@@ -305,7 +305,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerLimitsVoltage(IntPtr analog_trigger_pointer, double lower,
+        internal static void setAnalogTriggerLimitsVoltage(IntPtr analog_trigger_pointer, double lower,
             double upper, ref int status)
         {
             if (lower > upper)
@@ -322,7 +322,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerAveraged(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status)
+        internal static void setAnalogTriggerAveraged(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status)
         {
             var trigPort = GetAnalogTrigger(analog_trigger_pointer);
             if (halData["analog_trigger"][trigPort.index]["trig_type"] == "filtered")
@@ -338,7 +338,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerFiltered(IntPtr analog_trigger_pointer,
+        internal static void setAnalogTriggerFiltered(IntPtr analog_trigger_pointer,
             bool useFilteredValue, ref int status)
         {
             var trigPort = GetAnalogTrigger(analog_trigger_pointer);
@@ -376,7 +376,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static bool getAnalogTriggerInWindow(IntPtr analog_trigger_pointer, ref int status)
+        internal static bool getAnalogTriggerInWindow(IntPtr analog_trigger_pointer, ref int status)
         {
             status = 0;
             var trig = GetAnalogTrigger(analog_trigger_pointer);
@@ -386,7 +386,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static bool getAnalogTriggerTriggerState(IntPtr analog_trigger_pointer, ref int status)
+        internal static bool getAnalogTriggerTriggerState(IntPtr analog_trigger_pointer, ref int status)
         {
             status = 0;
             var trig = GetAnalogTrigger(analog_trigger_pointer);
@@ -407,7 +407,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        public static bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status)
+        internal static bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status)
         {
             if (type == AnalogTriggerType.InWindow)
                 return getAnalogTriggerInWindow(analog_trigger_pointer, ref status);

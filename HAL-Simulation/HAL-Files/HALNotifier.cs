@@ -10,13 +10,13 @@ using System.Threading;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALNotifier
+    internal class HALNotifier
     {
         private static List<Notifier> Notifiers = new List<Notifier>();
 
 
         [CalledSimFunction]
-        public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
+        internal static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
         {
             status = 0;
             Notifier notifier = new Notifier {Callback = ProcessQueue};
@@ -28,7 +28,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void cleanNotifier(IntPtr notifier_pointer, ref int status)
+        internal static void cleanNotifier(IntPtr notifier_pointer, ref int status)
         {
             status = 0;
             Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
@@ -44,7 +44,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        public static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
+        internal static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
         {
             status = 0;
             Notifier notifier = Notifiers[notifier_pointer.ToInt32()];

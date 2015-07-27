@@ -13,10 +13,10 @@ using static HAL_Simulator.SimData;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALCanTalonSRX
+    internal class HALCanTalonSRX
     {
         [CalledSimFunction]
-        public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)
+        internal static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)
         {
             if (halData["CAN"].ContainsKey(deviceNumber))
             {
@@ -150,20 +150,20 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static void c_TalonSRX_Destroy(IntPtr handle)
+        internal static void c_TalonSRX_Destroy(IntPtr handle)
         {
             halData["CAN"].Remove(GetTalonSRX(handle));
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetParam(IntPtr handle, int paramEnum, double value)
+        internal static CTR_Code c_TalonSRX_SetParam(IntPtr handle, int paramEnum, double value)
         {
             halData["CAN"][GetTalonSRX(handle)]["params"][paramEnum] = value;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_RequestParam(IntPtr handle, int paramEnum)
+        internal static CTR_Code c_TalonSRX_RequestParam(IntPtr handle, int paramEnum)
         {
             var param = halData["CAN"][GetTalonSRX(handle)]["params"];
 
@@ -177,7 +177,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetParamResponse(IntPtr handle, int paramEnum, ref double value)
+        internal static CTR_Code c_TalonSRX_GetParamResponse(IntPtr handle, int paramEnum, ref double value)
         {
             var param = halData["CAN"][GetTalonSRX(handle)]["params"];
             if (!param.ContainsKey(paramEnum))
@@ -190,7 +190,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetParamResponseInt32(IntPtr handle, int paramEnum, ref int value)
+        internal static CTR_Code c_TalonSRX_GetParamResponseInt32(IntPtr handle, int paramEnum, ref int value)
         {
             var param = halData["CAN"][GetTalonSRX(handle)]["params"];
             if (!param.ContainsKey(paramEnum))
@@ -203,13 +203,13 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, uint frameEnum, uint periodMs)
+        internal static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, uint frameEnum, uint periodMs)
         {
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_ClearStickyFaults(IntPtr handle)
+        internal static CTR_Code c_TalonSRX_ClearStickyFaults(IntPtr handle)
         {
             halData["CAN"][GetTalonSRX(handle)]["sticky_overtemp"] = 0;
             halData["CAN"][GetTalonSRX(handle)]["stickyfault_undervoltage"] = 0;
@@ -222,14 +222,14 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_OverTemp(IntPtr handle, ref int param)
+        internal static CTR_Code c_TalonSRX_GetFault_OverTemp(IntPtr handle, ref int param)
         {
             param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_overtemp"];
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_UnderVoltage(IntPtr handle, ref int param)
+        internal static CTR_Code c_TalonSRX_GetFault_UnderVoltage(IntPtr handle, ref int param)
         {
             param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_undervoltage"];
             return CTR_Code.CTR_OKAY;
@@ -241,7 +241,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_ForLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_ForLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFault_ForLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -249,7 +249,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_RevLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_RevLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFault_RevLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -257,7 +257,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_HardwareFailure")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_HardwareFailure(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFault_HardwareFailure(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -265,7 +265,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_ForSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_ForSoftLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFault_ForSoftLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -273,7 +273,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_RevSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_RevSoftLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFault_RevSoftLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -281,7 +281,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_OverTemp")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_OverTemp(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetStckyFault_OverTemp(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -289,7 +289,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_UnderVoltage")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_UnderVoltage(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetStckyFault_UnderVoltage(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -297,7 +297,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_ForLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_ForLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetStckyFault_ForLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -305,7 +305,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_RevLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_RevLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetStckyFault_RevLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -313,7 +313,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_ForSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_ForSoftLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetStckyFault_ForSoftLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -321,7 +321,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_RevSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_RevSoftLim(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetStckyFault_RevSoftLim(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -329,7 +329,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetAppliedThrottle")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetAppliedThrottle(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetAppliedThrottle(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -337,7 +337,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetCloseLoopErr")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetCloseLoopErr(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetCloseLoopErr(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -345,7 +345,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFeedbackDeviceSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFeedbackDeviceSelect(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFeedbackDeviceSelect(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -353,7 +353,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetModeSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetModeSelect(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetModeSelect(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -361,7 +361,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetLimitSwitchEn")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetLimitSwitchEn(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetLimitSwitchEn(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -369,7 +369,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetLimitSwitchClosedFor")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -377,7 +377,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetLimitSwitchClosedRev")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -385,7 +385,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetSensorPosition")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetSensorPosition(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetSensorPosition(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -393,7 +393,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetSensorVelocity")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetSensorVelocity(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetSensorVelocity(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -401,7 +401,7 @@ namespace HAL_Simulator
         ///param: double*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetCurrent")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetCurrent(IntPtr handle, ref double param);
+        internal static extern CTR_Code c_TalonSRX_GetCurrent(IntPtr handle, ref double param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -409,7 +409,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetBrakeIsEnabled")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetBrakeIsEnabled(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetBrakeIsEnabled(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -417,7 +417,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetEncPosition")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetEncPosition(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetEncPosition(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -425,7 +425,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetEncVel")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetEncVel(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetEncVel(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -433,7 +433,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetEncIndexRiseEvents")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetEncIndexRiseEvents(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetEncIndexRiseEvents(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -441,7 +441,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetQuadApin")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetQuadApin(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetQuadApin(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -449,7 +449,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetQuadBpin")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetQuadBpin(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetQuadBpin(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -457,7 +457,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetQuadIdxpin")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetQuadIdxpin(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetQuadIdxpin(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -465,7 +465,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetAnalogInWithOv")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetAnalogInWithOv(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetAnalogInWithOv(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -473,7 +473,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetAnalogInVel")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetAnalogInVel(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetAnalogInVel(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -481,7 +481,7 @@ namespace HAL_Simulator
         ///param: double*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetTemp")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetTemp(IntPtr handle, ref double param);
+        internal static extern CTR_Code c_TalonSRX_GetTemp(IntPtr handle, ref double param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -489,7 +489,7 @@ namespace HAL_Simulator
         ///param: double*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetBatteryV")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetBatteryV(IntPtr handle, ref double param);
+        internal static extern CTR_Code c_TalonSRX_GetBatteryV(IntPtr handle, ref double param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -497,7 +497,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetResetCount")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetResetCount(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetResetCount(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -505,7 +505,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetResetFlags")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetResetFlags(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetResetFlags(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -513,7 +513,7 @@ namespace HAL_Simulator
         ///param: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFirmVers")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFirmVers(IntPtr handle, ref int param);
+        internal static extern CTR_Code c_TalonSRX_GetFirmVers(IntPtr handle, ref int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -521,7 +521,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetDemand")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -529,7 +529,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetOverrideLimitSwitchEn")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetOverrideLimitSwitchEn(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetOverrideLimitSwitchEn(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -537,7 +537,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetFeedbackDeviceSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetFeedbackDeviceSelect(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetFeedbackDeviceSelect(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -545,7 +545,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetRevMotDuringCloseLoopEn")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -553,7 +553,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetOverrideBrakeType")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetOverrideBrakeType(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetOverrideBrakeType(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -561,7 +561,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetModeSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -570,7 +570,7 @@ namespace HAL_Simulator
         ///demand: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetModeSelect2")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetModeSelect2(IntPtr handle, int modeSelect, int demand);
+        internal static extern CTR_Code c_TalonSRX_SetModeSelect2(IntPtr handle, int modeSelect, int demand);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -578,7 +578,7 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetProfileSlotSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param);
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -586,11 +586,11 @@ namespace HAL_Simulator
         ///param: int
         [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetRampThrottle")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetRampThrottle(IntPtr handle, int param);
+        internal static extern CTR_Code c_TalonSRX_SetRampThrottle(IntPtr handle, int param);
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetRevFeedbackSensor(IntPtr handle, int param)
+        internal static CTR_Code c_TalonSRX_SetRevFeedbackSensor(IntPtr handle, int param)
         {
             halData["CAN"][GetTalonSRX(handle)]["rev_feedback_sensor"] = param;
             return CTR_Code.CTR_OKAY;

@@ -8,12 +8,12 @@
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALUtilities
+    internal class HALUtilities
     {
         /// Return Type: void
         ///ticks: int
         [CalledSimFunction]
-        public static void delayTicks(int ticks)
+        internal static void delayTicks(int ticks)
         {
             throw new NotImplementedException();
         }
@@ -22,7 +22,7 @@ namespace HAL_Simulator
         /// Return Type: void
         ///ms: double
         [CalledSimFunction]
-        public static void delayMillis(double ms)
+        internal static void delayMillis(double ms)
         {
             SimHooks.DelayMillis(ms);
         }
@@ -31,7 +31,7 @@ namespace HAL_Simulator
         /// Return Type: void
         ///s: double
         [CalledSimFunction]
-        public static void delaySeconds(double s)
+        internal static void delaySeconds(double s)
         {
             SimHooks.DelaySeconds(s);
         }
