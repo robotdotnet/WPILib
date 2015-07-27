@@ -1,9 +1,11 @@
-﻿namespace WPILib.Interfaces
+﻿using System;
+
+namespace WPILib.Interfaces
 {
     /// <summary>
     /// Interface for speed controlling devices
     /// </summary>
-    public interface ISpeedController : IPIDOutput
+    public interface ISpeedController : IPIDOutput, IDisposable
     {
         /// <summary>
         /// Sets the output value for this speed controller.

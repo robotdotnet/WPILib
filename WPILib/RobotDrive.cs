@@ -435,9 +435,7 @@ namespace WPILib
             // Negate y for the joystick.
             yIn = -yIn;
             // Compenstate for gyro angle.
-            double[] rotated = RotateVector(xIn, yIn, gyroAngle);
-            xIn = rotated[0];
-            yIn = rotated[1];
+            RotateVector(ref xIn, ref yIn, gyroAngle);
 
             double[] wheelSpeeds = new double[s_maxNumberOfMotors];
             wheelSpeeds[(int)MotorType.FrontLeft] = xIn + yIn + rotation;
@@ -572,16 +570,31 @@ namespace WPILib
                 }
             }
         }
-        protected static double[] RotateVector(double x, double y, double angle)
+
+        /// <summary>
+        /// Rotates a vector in Cartesian Space
+        /// </summary>
+        /// <param name="x">The X vector</param>
+        /// <param name="y">The Y vector</param>
+        /// <param name="angle">The angle to rotate in degrees</param>
+        protected static void RotateVector(ref double x, ref double y, double angle)
         {
             double cosA = Math.Cos(angle * (3.14159 / 180.0));
             double sinA = Math.Sin(angle * (3.14159 / 180.0));
-            double[] output = new double[2];
-            output[0] = x * cosA - y * sinA;
-            output[1] = x * sinA + y * cosA;
-            return output;
+            double xOut = x * cosA - y * sinA;
+            double yOut = x * sinA + y * cosA;
+            x = xOut;
+            y = yOut;
         }
 
+        /// <summary>
+        /// Invert a motor direction
+        /// </summary>
+        /// <remarks>This is used when a motor should run in the opposite direction
+        /// as the drive code would normally run it. Motors that are direct drive would be inverted,
+        /// the drive code assumes that the motors are geared with 1 reversal.</remarks>
+        /// <param name="motor">The motor index to invert</param>
+        /// <param name="isInverted">True if the motor should be inverted.</param>
         public void SetInvertedMotor(MotorType motor, bool isInverted)
         {
             switch (motor)
@@ -601,63 +614,66 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the turning sensitivity for the <see cref="Drive(double, double)"/> function.
+        /// </summary>
         public double Sensitivity
         {
             set { m_sensitivity = value; }
         }
 
+        /// <summary>
+        /// Sets the maximum output allowed to be outputed by the drive.
+        /// </summary>
         public double MaxOutput
         {
             set { m_maxOutput = value; }
         }
 
+        /// <summary>
+        /// Sets the sync group for the motor controllers if they are <see cref="CANJaguar">CANJaguars</see>
+        /// </summary>
         public byte CANJaguarSyncGroup
         {
             set { m_syncGroup = value; }
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             if (m_allocatedSpeedControllers)
             {
-                if (m_frontLeftMotor != null)
-                {
-                    ((PWM)m_frontLeftMotor).Dispose();
-                }
-                if (m_frontRightMotor != null)
-                {
-                    ((PWM)m_frontRightMotor).Dispose();
-                }
-                if (m_rearLeftMotor != null)
-                {
-                    ((PWM)m_rearLeftMotor).Dispose();
-                }
-                if (m_rearRightMotor != null)
-                {
-                    ((PWM)m_rearRightMotor).Dispose();
-                }
+                m_frontLeftMotor?.Dispose();
+                m_frontRightMotor?.Dispose();
+                m_rearLeftMotor?.Dispose();
+                m_rearRightMotor?.Dispose();
             }
         }
 
+        /// <inheritdoc/>
         public bool Alive => m_safetyHelper.Alive;
 
+        /// <inheritdoc/>
         public double Expiration
         {
             set { m_safetyHelper.Expiration = value; }
             get { return m_safetyHelper.Expiration; }
         }
 
+        /// <inheritdoc/>
         public void StopMotor()
         {
-            m_frontLeftMotor.Set(0.0);
-            m_frontRightMotor.Set(0.0);
-            m_rearLeftMotor.Set(0.0);
-            m_rearRightMotor.Set(0.0);
+            m_frontLeftMotor?.Set(0.0);
+            m_frontRightMotor?.Set(0.0);
+            m_rearLeftMotor?.Set(0.0);
+            m_rearRightMotor?.Set(0.0);
             m_safetyHelper?.Feed();
         }
 
+        /// <inheritdoc/>
         public string Description => "Robot Drive";
 
+        /// <inheritdoc/>
         public bool SafetyEnabled
         {
             set { m_safetyHelper.SafetyEnabled = value; }
@@ -673,14 +689,20 @@ namespace WPILib
             };
         }
 
-        protected int GetNumMotors()
+        /// <summary>
+        /// Gets the number of motors in the drive.
+        /// </summary>
+        protected int NumMotors
         {
-            int motors = 0;
-            if (m_frontLeftMotor != null) motors++;
-            if (m_frontRightMotor != null) motors++;
-            if (m_rearLeftMotor != null) motors++;
-            if (m_rearRightMotor != null) motors++;
-            return motors;
+            get
+            {
+                int motors = 0;
+                if (m_frontLeftMotor != null) motors++;
+                if (m_frontRightMotor != null) motors++;
+                if (m_rearLeftMotor != null) motors++;
+                if (m_rearRightMotor != null) motors++;
+                return motors;
+            }
         }
     }
 }
