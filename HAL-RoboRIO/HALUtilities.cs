@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALUtilities
+    internal class HALUtilities
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "delayTicks")]

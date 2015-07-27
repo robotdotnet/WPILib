@@ -3,7 +3,7 @@ using HAL_Base;
 
 namespace HAL_RoboRIO
 {
-    public class HALCAN
+    internal class HALCAN
     {
         [DllImport(HAL.LibhalathenaSharedSo,
             EntryPoint = "FRC_NetworkCommunication_CANSessionMux_sendMessage")]

@@ -43,7 +43,6 @@ namespace WPILib
         private void InitRelay()
         {
             CheckRelayChannel(m_channel);
-
             try
             {
                 if (m_direction == Direction.Both || m_direction == Direction.Forward)

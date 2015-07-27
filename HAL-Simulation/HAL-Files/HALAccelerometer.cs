@@ -9,7 +9,7 @@ using static HAL_Simulator.SimData;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALAccelerometer
+    internal class HALAccelerometer
     {
         /// Return Type: void
         ///param0: boolean

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALSerialPort
+    internal class HALSerialPort
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "serialInitializePort")]

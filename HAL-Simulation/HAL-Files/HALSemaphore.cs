@@ -10,7 +10,7 @@ using System.Threading;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALSemaphore
+    internal class HALSemaphore
     {
         [CalledSimFunction]
         public static IntPtr initializeMutexRecursive()

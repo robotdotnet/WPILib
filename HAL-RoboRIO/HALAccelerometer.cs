@@ -5,7 +5,7 @@ using HAL_Base;
 
 namespace HAL_RoboRIO
 {
-    public class HALAccelerometer
+    internal class HALAccelerometer
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setAccelerometerActive")]

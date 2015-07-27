@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALPower
+    internal class HALPower
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getVinVoltage")]

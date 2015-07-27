@@ -6,7 +6,7 @@ using HAL_Base;
 
 namespace HAL_RoboRIO
 {
-    public class HALAnalog
+    internal class HALAnalog
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeAnalogOutputPort")]

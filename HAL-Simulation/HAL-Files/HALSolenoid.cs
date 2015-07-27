@@ -11,7 +11,7 @@ using static HAL_Simulator.PortConverters;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALSolenoid
+    internal class HALSolenoid
     {
 
         [CalledSimFunction]

@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALNotifier
+    internal class HALNotifier
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeNotifier")]

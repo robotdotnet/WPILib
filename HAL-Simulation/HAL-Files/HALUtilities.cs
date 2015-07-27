@@ -8,7 +8,7 @@
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALUtilities
+    internal class HALUtilities
     {
         /// Return Type: void
         ///ticks: int

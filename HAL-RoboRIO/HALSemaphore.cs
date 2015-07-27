@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALSemaphore
+    internal class HALSemaphore
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeMutexRecursive")]

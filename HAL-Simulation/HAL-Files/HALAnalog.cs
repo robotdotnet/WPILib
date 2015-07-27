@@ -13,7 +13,7 @@ using static HAL_Simulator.HALErrorConstants;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALAnalog
+    internal class HALAnalog
     {
         internal const uint Timebase = 40000000;
         internal const int DefaultOversampleBits = 0;

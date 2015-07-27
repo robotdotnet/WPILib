@@ -9,7 +9,7 @@ using static HAL_Simulator.SimData;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALPower
+    internal class HALPower
     {
         [CalledSimFunction]
         public static float getVinVoltage(ref int status)

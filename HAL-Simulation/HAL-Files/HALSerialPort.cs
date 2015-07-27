@@ -8,7 +8,7 @@
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALSerialPort
+    internal class HALSerialPort
     {
         /// Return Type: void
         ///port: byte

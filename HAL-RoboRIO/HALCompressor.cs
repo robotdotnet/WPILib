@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALCompressor
+    internal class HALCompressor
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeCompressor")]

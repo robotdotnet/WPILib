@@ -22,7 +22,7 @@ namespace HAL_Simulator
     /// This class is used by HAL-Base, and is used to emulate the HAL. 
     /// Please do not call functions in this class directly. 
     /// </summary>
-    public class HAL
+    internal class HAL
     {
         //Time constants used for GetMatchTime.
         public const double AutonomousTime = 15.0;

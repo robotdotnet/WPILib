@@ -6,7 +6,7 @@ using HAL_Base;
 
 namespace HAL_RoboRIO
 {
-    public class HAL
+    internal class HAL
     {
         internal const string LibhalathenaSharedSo = "libHALAthena_shared.so";
 

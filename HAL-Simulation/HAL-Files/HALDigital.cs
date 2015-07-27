@@ -15,7 +15,7 @@ using static HAL_Simulator.HALErrorConstants;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALDigital
+    internal class HALDigital
     {
         internal const int ExpectedLoopTiming = 40;
         internal const int DigitalPins = 26;

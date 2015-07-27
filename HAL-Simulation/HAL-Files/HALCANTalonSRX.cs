@@ -13,7 +13,7 @@ using static HAL_Simulator.SimData;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALCanTalonSRX
+    internal class HALCanTalonSRX
     {
         [CalledSimFunction]
         public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)

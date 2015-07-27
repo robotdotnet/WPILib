@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALInterrupts
+    internal class HALInterrupts
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeInterrupts")]

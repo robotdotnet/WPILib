@@ -9,7 +9,7 @@ using static HAL_Simulator.SimData;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALPDP
+    internal class HALPDP
     {
         [CalledSimFunction]
         public static void initializePDP(int module)

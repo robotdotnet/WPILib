@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALSolenoid
+    internal class HALSolenoid
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeSolenoidPort")]

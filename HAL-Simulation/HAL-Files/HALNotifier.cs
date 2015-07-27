@@ -10,7 +10,7 @@ using System.Threading;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALNotifier
+    internal class HALNotifier
     {
         private static List<Notifier> Notifiers = new List<Notifier>();
 

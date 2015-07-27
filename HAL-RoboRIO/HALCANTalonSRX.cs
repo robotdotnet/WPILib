@@ -6,7 +6,7 @@ using HAL_Base;
 
 namespace HAL_RoboRIO
 {
-    public class HALCanTalonSRX
+    internal class HALCanTalonSRX
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "c_TalonSRX_Create")]

@@ -9,7 +9,7 @@ using HAL_Base;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALCAN
+    internal class HALCAN
     {
         [CalledSimFunction]
         public static void FRC_NetworkCommunication_CANSessionMux_sendMessage(uint messageID, byte[] data,

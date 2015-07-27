@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace HAL_RoboRIO
 {
-    public class HALPDP
+    internal class HALPDP
     {
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializePDP")]
         public static extern void initializePDP(int module);

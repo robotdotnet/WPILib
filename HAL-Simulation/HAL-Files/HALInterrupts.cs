@@ -11,7 +11,7 @@ using static HAL_Simulator.HALErrorConstants;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    public class HALInterrupts
+    internal class HALInterrupts
     {
         private enum WaitResult
         {

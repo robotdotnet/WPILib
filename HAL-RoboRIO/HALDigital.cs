@@ -6,7 +6,7 @@ using HAL_Base;
 
 namespace HAL_RoboRIO
 {
-    public class HALDigital
+    internal class HALDigital
     {
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeDigitalPort")]
