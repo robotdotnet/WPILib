@@ -15,7 +15,7 @@ using static HAL_Simulator.HALErrorConstants;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    internal class HALDigital
+    public class HALDigital
     {
         internal const int ExpectedLoopTiming = 40;
         internal const int DigitalPins = 26;
@@ -24,7 +24,7 @@ namespace HAL_Simulator
         internal const int NumHeaders = 10;
 
         [CalledSimFunction]
-        internal static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
+        public static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
         {
             DigitalPort p = new DigitalPort { port = (Port)Marshal.PtrToStructure(port_pointer, typeof(Port)) };
             status = 0;
@@ -49,7 +49,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static bool checkPWMChannel(IntPtr digital_port_pointer)
+        public static bool checkPWMChannel(IntPtr digital_port_pointer)
         {
             var dPort = GetDigitalPort(digital_port_pointer);
             return dPort.port.pin < PwmPins;
@@ -57,7 +57,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static bool checkRelayChannel(IntPtr digital_port_pointer)
+        public static bool checkRelayChannel(IntPtr digital_port_pointer)
         {
             var dPort = GetDigitalPort(digital_port_pointer);
             return dPort.port.pin < RelayPins;
@@ -65,7 +65,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setPWM(IntPtr digital_port_pointer, ushort value, ref int status)
+        public static void setPWM(IntPtr digital_port_pointer, ushort value, ref int status)
         {
             status = 0;
             var dPort = GetDigitalPort(digital_port_pointer);
@@ -74,7 +74,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static bool allocatePWMChannel(IntPtr digital_port_pointer, ref int status)
+        public static bool allocatePWMChannel(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
@@ -102,7 +102,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void freePWMChannel(IntPtr digital_port_pointer, ref int status)
+        public static void freePWMChannel(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
@@ -120,28 +120,28 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static ushort getPWM(IntPtr digital_port_pointer, ref int status)
+        public static ushort getPWM(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             return (ushort)halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["raw_value"];
         }
 
         [CalledSimFunction]
-        internal static void latchPWMZero(IntPtr digital_port_pointer, ref int status)
+        public static void latchPWMZero(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["zero_latch"] = true;
         }
 
         [CalledSimFunction]
-        internal static void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status)
+        public static void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status)
         {
             status = 0;
             halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["period_scale"] = squelchMask;
         }
 
         [CalledSimFunction]
-        internal static IntPtr allocatePWM(ref int status)
+        public static IntPtr allocatePWM(ref int status)
         {
             status = 0;
             bool found = false;
@@ -171,7 +171,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void freePWM(IntPtr pwmGenerator, ref int status)
+        public static void freePWM(IntPtr pwmGenerator, ref int status)
         {
             status = 0;
             halData["d0_pwm"][GetPWM(pwmGenerator).idx] = null;
@@ -180,21 +180,21 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setPWMRate(double rate, ref int status)
+        public static void setPWMRate(double rate, ref int status)
         {
             status = 0;
             halData["d0_pwm_rate"] = rate;
         }
 
         [CalledSimFunction]
-        internal static void setPWMDutyCycle(IntPtr pwmGenerator, double dutyCycle, ref int status)
+        public static void setPWMDutyCycle(IntPtr pwmGenerator, double dutyCycle, ref int status)
         {
             status = 0;
             halData["d0_pwm"][GetPWM(pwmGenerator).idx]["duty_cycle"] = dutyCycle;
         }
 
         [CalledSimFunction]
-        internal static void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status)
+        public static void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status)
         {
             status = 0;
             halData["d0_pwm"][GetPWM(pwmGenerator).idx]["pin"] = pin;
@@ -202,7 +202,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setRelayForward(IntPtr digital_port_pointer, bool on, ref int status)
+        public static void setRelayForward(IntPtr digital_port_pointer, bool on, ref int status)
         {
             status = 0;
             var dPort = GetDigitalPort(digital_port_pointer);
@@ -212,7 +212,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setRelayReverse(IntPtr digital_port_pointer, bool on, ref int status)
+        public static void setRelayReverse(IntPtr digital_port_pointer, bool on, ref int status)
         {
             status = 0;
             var dPort = GetDigitalPort(digital_port_pointer);
@@ -222,21 +222,21 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static bool getRelayForward(IntPtr digital_port_pointer, ref int status)
+        public static bool getRelayForward(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["fwd"];
         }
 
         [CalledSimFunction]
-        internal static bool getRelayReverse(IntPtr digital_port_pointer, ref int status)
+        public static bool getRelayReverse(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["rev"];
         }
 
         [CalledSimFunction]
-        internal static bool allocateDIO(IntPtr digital_port_pointer, bool input,
+        public static bool allocateDIO(IntPtr digital_port_pointer, bool input,
             ref int status)
         {
             status = 0;
@@ -266,7 +266,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void freeDIO(IntPtr digital_port_pointer, ref int status)
+        public static void freeDIO(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
@@ -279,28 +279,28 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setDIO(IntPtr digital_port_pointer, short value, ref int status)
+        public static void setDIO(IntPtr digital_port_pointer, short value, ref int status)
         {
             status = 0;
             halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["value"] = value != 0;
         }
 
         [CalledSimFunction]
-        internal static bool getDIO(IntPtr digital_port_pointer, ref int status)
+        public static bool getDIO(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["value"];
         }
 
         [CalledSimFunction]
-        internal static bool getDIODirection(IntPtr digital_port_pointer, ref int status)
+        public static bool getDIODirection(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["is_input"];
         }
 
         [CalledSimFunction]
-        internal static void pulse(IntPtr digital_port_pointer, double pulseLength, ref int status)
+        public static void pulse(IntPtr digital_port_pointer, double pulseLength, ref int status)
         {
             status = 0;
             halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["pulse_length"] = pulseLength;
@@ -308,14 +308,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static bool isPulsing(IntPtr digital_port_pointer, ref int status)
+        public static bool isPulsing(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
             return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["pulse_length"] != 0;
         }
 
         [CalledSimFunction]
-        internal static bool isAnyPulsing(ref int status)
+        public static bool isAnyPulsing(ref int status)
         {
             status = 0;
             foreach (var p in halData["dio"])
@@ -327,7 +327,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static IntPtr initializeCounter(Mode mode, ref uint index, ref int status)
+        public static IntPtr initializeCounter(Mode mode, ref uint index, ref int status)
         {
             status = 0;
             int i = 0;
@@ -354,7 +354,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void freeCounter(IntPtr counter_pointer, ref int status)
+        public static void freeCounter(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["initialized"] = false;
@@ -363,14 +363,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setCounterAverageSize(IntPtr counter_pointer, int size, ref int status)
+        public static void setCounterAverageSize(IntPtr counter_pointer, int size, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["average_size"] = size;
         }
 
         [CalledSimFunction]
-        internal static void setCounterUpSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
+        public static void setCounterUpSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
         {
             var idx = GetCounter(counter_pointer).idx;
             status = 0;
@@ -386,7 +386,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setCounterUpSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
+        public static void setCounterUpSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
             ref int status)
         {
             status = 0;
@@ -396,7 +396,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void clearCounterUpSource(IntPtr counter_pointer, ref int status)
+        public static void clearCounterUpSource(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             var counter = halData["counter"][GetCounter((counter_pointer)).idx];
@@ -407,7 +407,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setCounterDownSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
+        public static void setCounterDownSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
         {
             var idx = GetCounter(counter_pointer).idx;
             status = 0;
@@ -426,7 +426,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setCounterDownSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
+        public static void setCounterDownSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
             ref int status)
         {
             status = 0;
@@ -436,7 +436,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void clearCounterDownSource(IntPtr counter_pointer, ref int status)
+        public static void clearCounterDownSource(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             var counter = halData["counter"][GetCounter((counter_pointer)).idx];
@@ -447,21 +447,21 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setCounterUpDownMode(IntPtr counter_pointer, ref int status)
+        public static void setCounterUpDownMode(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["mode"] = (int)Mode.TwoPulse;
         }
 
         [CalledSimFunction]
-        internal static void setCounterExternalDirectionMode(IntPtr counter_pointer, ref int status)
+        public static void setCounterExternalDirectionMode(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["mode"] = (int)Mode.ExternalDirection;
         }
 
         [CalledSimFunction]
-        internal static void setCounterSemiPeriodMode(IntPtr counter_pointer, bool highSemiPeriod, ref int status)
+        public static void setCounterSemiPeriodMode(IntPtr counter_pointer, bool highSemiPeriod, ref int status)
         {
             status = 0;
             var counter = halData["counter"][GetCounter(counter_pointer).idx];
@@ -471,7 +471,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void setCounterPulseLengthMode(IntPtr counter_pointer, double threshold, ref int status)
+        public static void setCounterPulseLengthMode(IntPtr counter_pointer, double threshold, ref int status)
         {
             status = 0;
             var counter = halData["counter"][GetCounter(counter_pointer).idx];
@@ -480,21 +480,21 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static int getCounterSamplesToAverage(IntPtr counter_pointer, ref int status)
+        public static int getCounterSamplesToAverage(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             return (int)halData["counter"][GetCounter(counter_pointer).idx]["samples_to_average"];
         }
 
         [CalledSimFunction]
-        internal static void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status)
+        public static void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["samples_to_average"] = samplesToAverage;
         }
 
         [CalledSimFunction]
-        internal static void resetCounter(IntPtr counter_pointer, ref int status)
+        public static void resetCounter(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["count"] = 0;
@@ -503,14 +503,14 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static int getCounter(IntPtr counter_pointer, ref int status)
+        public static int getCounter(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             return halData["counter"][GetCounter(counter_pointer).idx]["count"];
         }
 
         [CalledSimFunction]
-        internal static double getCounterPeriod(IntPtr counter_pointer, ref int status)
+        public static double getCounterPeriod(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             return halData["counter"][GetCounter(counter_pointer).idx]["period"];
@@ -519,21 +519,21 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setCounterMaxPeriod(IntPtr counter_pointer, double maxPeriod, ref int status)
+        public static void setCounterMaxPeriod(IntPtr counter_pointer, double maxPeriod, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["max_period"] = maxPeriod;
         }
 
         [CalledSimFunction]
-        internal static void setCounterUpdateWhenEmpty(IntPtr counter_pointer, bool enabled, ref int status)
+        public static void setCounterUpdateWhenEmpty(IntPtr counter_pointer, bool enabled, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["update_when_empty"] = enabled;
         }
 
         [CalledSimFunction]
-        internal static bool getCounterStopped(IntPtr counter_pointer, ref int status)
+        public static bool getCounterStopped(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             var cnt = halData["counter"][GetCounter(counter_pointer).idx];
@@ -541,14 +541,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static bool getCounterDirection(IntPtr counter_pointer, ref int status)
+        public static bool getCounterDirection(IntPtr counter_pointer, ref int status)
         {
             status = 0;
             return halData["counter"][GetCounter(counter_pointer).idx]["direction"];
         }
 
         [CalledSimFunction]
-        internal static void setCounterReverseDirection(IntPtr counter_pointer, bool reverseDirection, ref int status)
+        public static void setCounterReverseDirection(IntPtr counter_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["reverse_direction"] = reverseDirection;
@@ -556,7 +556,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger,
+        public static IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger,
             byte port_b_module, uint port_b_pin, bool port_b_analog_trigger, bool reverseDirection, ref int index,
             ref int status)
         {
@@ -593,7 +593,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void freeEncoder(IntPtr encoder_pointer, ref int status)
+        public static void freeEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             halData["encoder"][GetEncoder(encoder_pointer).idx]["initialized"] = false;
@@ -602,7 +602,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static void resetEncoder(IntPtr encoder_pointer, ref int status)
+        public static void resetEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             halData["encoder"][GetEncoder(encoder_pointer).idx]["count"] = 0;
@@ -610,14 +610,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static int getEncoder(IntPtr encoder_pointer, ref int status)
+        public static int getEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             return halData["encoder"][GetEncoder(encoder_pointer).idx]["count"];
         }
 
         [CalledSimFunction]
-        internal static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
+        public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             return halData["encoder"][GetEncoder(encoder_pointer).idx]["period"];
@@ -625,14 +625,14 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
+        public static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
         {
             status = 0;
             halData["encoder"][GetEncoder(encoder_pointer).idx]["max_period"] = maxPeriod;
         }
 
         [CalledSimFunction]
-        internal static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
+        public static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             var enc = halData["encoder"][GetEncoder(encoder_pointer).idx];
@@ -640,28 +640,28 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
+        public static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             return halData["encoder"][GetEncoder(encoder_pointer).idx]["direction"];
         }
 
         [CalledSimFunction]
-        internal static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
+        public static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
             halData["encoder"][GetEncoder(encoder_pointer).idx]["reverse_direction"] = reverseDirection;
         }
 
         [CalledSimFunction]
-        internal static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
+        public static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
         {
             status = 0;
             halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"] = samplesToAverage;
         }
 
         [CalledSimFunction]
-        internal static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
+        public static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
             return halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"];
@@ -669,7 +669,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setEncoderIndexSource(IntPtr encoder_pointer, uint pin, bool analogTrigger,
+        public static void setEncoderIndexSource(IntPtr encoder_pointer, uint pin, bool analogTrigger,
             bool activeHigh, bool edgeSensitive, ref int status)
         {
             status = 0;
@@ -683,126 +683,126 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static ushort getLoopTiming(ref int status)
+        public static ushort getLoopTiming(ref int status)
         {
             return (ushort)halData["pwm_loop_timing"];
         }
 
         [CalledSimFunction]
-        internal static void spiInitialize(byte port, ref int status)
+        public static void spiInitialize(byte port, ref int status)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size)
+        public static int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static int spiWrite(byte port, byte[] dataToSend, byte sendSize)
+        public static int spiWrite(byte port, byte[] dataToSend, byte sendSize)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static int spiRead(byte port, byte[] buffer, byte count)
+        public static int spiRead(byte port, byte[] buffer, byte count)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static void spiClose(byte port)
+        public static void spiClose(byte port)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static void spiSetSpeed(byte port, uint speed)
+        public static void spiSetSpeed(byte port, uint speed)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static void spiSetBitsPerWord(byte port, byte bpw)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        [CalledSimFunction]
-        internal static void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high)
+        public static void spiSetBitsPerWord(byte port, byte bpw)
         {
             throw new NotImplementedException();
         }
 
 
         [CalledSimFunction]
-        internal static void spiSetChipSelectActiveHigh(byte port, ref int status)
+        public static void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high)
         {
             throw new NotImplementedException();
         }
 
 
         [CalledSimFunction]
-        internal static void spiSetChipSelectActiveLow(byte port, ref int status)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CalledSimFunction]
-        internal static int spiGetHandle(byte port)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CalledSimFunction]
-        internal static void spiSetHandle(byte port, int handle)
-        {
-            throw new NotImplementedException();
-        }
-
-        [CalledSimFunction]
-        internal static IntPtr spiGetSemaphore(byte port)
+        public static void spiSetChipSelectActiveHigh(byte port, ref int status)
         {
             throw new NotImplementedException();
         }
 
 
         [CalledSimFunction]
-        internal static void spiSetSemaphore(byte port, IntPtr semaphore)
+        public static void spiSetChipSelectActiveLow(byte port, ref int status)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static void i2CInitialize(byte port, ref int status)
+        public static int spiGetHandle(byte port)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize,
+        public static void spiSetHandle(byte port, int handle)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
+        public static IntPtr spiGetSemaphore(byte port)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        [CalledSimFunction]
+        public static void spiSetSemaphore(byte port, IntPtr semaphore)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
+        public static void i2CInitialize(byte port, ref int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
+        public static int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize,
             byte[] dataReceived, byte receiveSize)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static int i2CWrite(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize)
+        public static int i2CWrite(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static int i2CRead(byte port, byte deviceAddress, byte[] buffer, byte count)
+        public static int i2CRead(byte port, byte deviceAddress, byte[] buffer, byte count)
         {
             throw new NotImplementedException();
         }
 
         [CalledSimFunction]
-        internal static void i2CClose(byte port)
+        public static void i2CClose(byte port)
         {
             throw new NotImplementedException();
         }

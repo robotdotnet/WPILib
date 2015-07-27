@@ -8,14 +8,14 @@
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    internal class HALSerialPort
+    public class HALSerialPort
     {
         /// Return Type: void
         ///port: byte
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialInitializePort")]
         [CalledSimFunction]
-        internal static extern void serialInitializePort(byte port, ref int status);
+        public static extern void serialInitializePort(byte port, ref int status);
 
 
         /// Return Type: void
@@ -24,7 +24,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetBaudRate")]
         [CalledSimFunction]
-        internal static extern void serialSetBaudRate(byte port, uint baud, ref int status);
+        public static extern void serialSetBaudRate(byte port, uint baud, ref int status);
 
 
         /// Return Type: void
@@ -33,7 +33,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetDataBits")]
         [CalledSimFunction]
-        internal static extern void serialSetDataBits(byte port, byte bits, ref int status);
+        public static extern void serialSetDataBits(byte port, byte bits, ref int status);
 
 
         /// Return Type: void
@@ -42,7 +42,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetParity")]
         [CalledSimFunction]
-        internal static extern void serialSetParity(byte port, byte parity, ref int status);
+        public static extern void serialSetParity(byte port, byte parity, ref int status);
 
 
         /// Return Type: void
@@ -51,7 +51,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetStopBits")]
         [CalledSimFunction]
-        internal static extern void serialSetStopBits(byte port, byte stopBits, ref int status);
+        public static extern void serialSetStopBits(byte port, byte stopBits, ref int status);
 
 
         /// Return Type: void
@@ -60,7 +60,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetWriteMode")]
         [CalledSimFunction]
-        internal static extern void serialSetWriteMode(byte port, byte mode, ref int status);
+        public static extern void serialSetWriteMode(byte port, byte mode, ref int status);
 
 
         /// Return Type: void
@@ -69,7 +69,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetFlowControl")]
         [CalledSimFunction]
-        internal static extern void serialSetFlowControl(byte port, byte flow, ref int status);
+        public static extern void serialSetFlowControl(byte port, byte flow, ref int status);
 
 
         /// Return Type: void
@@ -78,7 +78,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetTimeout")]
         [CalledSimFunction]
-        internal static extern void serialSetTimeout(byte port, float timeout, ref int status);
+        public static extern void serialSetTimeout(byte port, float timeout, ref int status);
 
 
         /// Return Type: void
@@ -87,7 +87,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialEnableTermination")]
         [CalledSimFunction]
-        internal static extern void serialEnableTermination(byte port, byte terminator, ref int status);
+        public static extern void serialEnableTermination(byte port, byte terminator, ref int status);
 
 
         /// Return Type: void
@@ -95,7 +95,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialDisableTermination")]
         [CalledSimFunction]
-        internal static extern void serialDisableTermination(byte port, ref int status);
+        public static extern void serialDisableTermination(byte port, ref int status);
 
 
         /// Return Type: void
@@ -104,7 +104,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetReadBufferSize")]
         [CalledSimFunction]
-        internal static extern void serialSetReadBufferSize(byte port, uint size, ref int status);
+        public static extern void serialSetReadBufferSize(byte port, uint size, ref int status);
 
 
         /// Return Type: void
@@ -113,7 +113,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialSetWriteBufferSize")]
         [CalledSimFunction]
-        internal static extern void serialSetWriteBufferSize(byte port, uint size, ref int status);
+        public static extern void serialSetWriteBufferSize(byte port, uint size, ref int status);
 
 
         /// Return Type: int
@@ -121,7 +121,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialGetBytesReceived")]
         [CalledSimFunction]
-        internal static extern int serialGetBytesReceived(byte port, ref int status);
+        public static extern int serialGetBytesReceived(byte port, ref int status);
 
 
         /// Return Type: unsigned int
@@ -131,7 +131,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialRead")]
         [CalledSimFunction]
-        internal static extern uint serialRead(byte port, byte[] buffer, int count, ref int status);
+        public static extern uint serialRead(byte port, byte[] buffer, int count, ref int status);
 
 
         /// Return Type: unsigned int
@@ -141,7 +141,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialWrite")]
         [CalledSimFunction]
-        internal static extern uint serialWrite(byte port, byte[] buffer, int count, ref int status);
+        public static extern uint serialWrite(byte port, byte[] buffer, int count, ref int status);
 
 
         /// Return Type: void
@@ -149,7 +149,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialFlush")]
         [CalledSimFunction]
-        internal static extern void serialFlush(byte port, ref int status);
+        public static extern void serialFlush(byte port, ref int status);
 
 
         /// Return Type: void
@@ -157,7 +157,7 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialClear")]
         [CalledSimFunction]
-        internal static extern void serialClear(byte port, ref int status);
+        public static extern void serialClear(byte port, ref int status);
 
 
         /// Return Type: void
@@ -165,6 +165,6 @@ namespace HAL_Simulator
         ///status: int*
         [DllImport("libHALAthena_shared.so", EntryPoint = "serialClose")]
         [CalledSimFunction]
-        internal static extern void serialClose(byte port, ref int status);
+        public static extern void serialClose(byte port, ref int status);
     }
 }

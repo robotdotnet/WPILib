@@ -11,11 +11,11 @@ using static HAL_Simulator.PortConverters;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    internal class HALSolenoid
+    public class HALSolenoid
     {
 
         [CalledSimFunction]
-        internal static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)
+        public static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)
         {
             SolenoidPort p = new SolenoidPort
             {
@@ -29,13 +29,13 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static bool checkSolenoidModule(byte module)
+        public static bool checkSolenoidModule(byte module)
         {
             return module < 63;
         }
 
         [CalledSimFunction]
-        internal static bool getSolenoid(IntPtr solenoid_port_pointer, ref int status)
+        public static bool getSolenoid(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
@@ -44,7 +44,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void setSolenoid(IntPtr solenoid_port_pointer, bool value,
+        public static void setSolenoid(IntPtr solenoid_port_pointer, bool value,
             ref int status)
         {
             status = 0;
@@ -53,14 +53,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        internal static int getPCMSolenoidBlackList(IntPtr solenoid_port_pointer, ref int status)
+        public static int getPCMSolenoidBlackList(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
             return 0;
         }
 
         [CalledSimFunction]
-        internal static bool getPCMSolenoidVoltageStickyFault(IntPtr solenoid_port_pointer, ref int status)
+        public static bool getPCMSolenoidVoltageStickyFault(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
             return false;
@@ -68,7 +68,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static bool getPCMSolenoidVoltageFault(IntPtr solenoid_port_pointer, ref int status)
+        public static bool getPCMSolenoidVoltageFault(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
             return false;
@@ -76,7 +76,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        internal static void clearAllPCMStickyFaults_sol(IntPtr solenoid_port_pointer, ref int status)
+        public static void clearAllPCMStickyFaults_sol(IntPtr solenoid_port_pointer, ref int status)
         {
             status = 0;
         }
