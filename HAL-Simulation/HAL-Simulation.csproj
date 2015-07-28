@@ -37,7 +37,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +62,13 @@
     <Compile Include="HAL-Files\HALStructures.cs" />
     <Compile Include="HAL-Files\HALUtilities.cs" />
     <Compile Include="CounterHelper.cs" />
+    <Compile Include="Inputs\SimDigitalInput.cs" />
+    <Compile Include="Outputs\ISimSpeedController.cs" />
+    <Compile Include="Outputs\SimAnalogOutput.cs" />
+    <Compile Include="Outputs\SimCANTalon.cs" />
+    <Compile Include="Outputs\SimDigitalOutput.cs" />
+    <Compile Include="Outputs\SimPWMController.cs" />
+    <Compile Include="Outputs\SimRelay.cs" />
     <Compile Include="SimHooks.cs" />
     <Compile Include="HAL-Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +81,7 @@
       <Name>HAL-Base</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
