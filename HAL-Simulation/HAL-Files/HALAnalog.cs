@@ -135,14 +135,14 @@ namespace HAL_Simulator
         public static short getAnalogValue(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["value"];
+            return (short)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["value"];
         }
 
         [CalledSimFunction]
         public static int getAnalogAverageValue(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_value"];
+            return (int)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_value"];
         }
 
         [CalledSimFunction]

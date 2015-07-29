@@ -219,9 +219,5 @@ namespace HAL_Simulator
                     break;
             }
         }
-
-
-
-
     }
 }

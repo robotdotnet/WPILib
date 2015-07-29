@@ -35,6 +35,10 @@
     <DocumentationFile>Output\WPILib.Extras.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NetworkTables, Version=2015.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.2015.0.5\lib\net45\NetworkTables.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,6 +57,9 @@
       <Project>{cadad4a2-d72a-4906-a4f0-2fa2884f3349}</Project>
       <Name>WPILib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

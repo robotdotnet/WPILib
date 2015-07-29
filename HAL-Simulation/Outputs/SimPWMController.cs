@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator.Outputs
 {
-    class SimPWMController : ISimSpeedController
+    public class SimPWMController : ISimSpeedController
     {
         NotifyDict<dynamic, dynamic> dictionary = null;
 
