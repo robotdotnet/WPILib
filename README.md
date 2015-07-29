@@ -41,3 +41,7 @@ Contributors
 
 Thad House (@thadhouse)
 Jeremy Koritzinsky (@jkoritzinsky)
+
+Code for simulator derived from the following sources:
+* RobotPy (@robotpy)
+* Team254 (@team254)
