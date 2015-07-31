@@ -17,13 +17,13 @@ namespace WPILib
 
         public const int AnalogOutputChannels = 2;
 
-        public const int SolenoidChannels = 4;
+        public const int SolenoidChannels = 8;
 
         public const int SolenoidModules = 2;
 
         public const int PwmChannels = 20;
 
-        public const int RelayChannels = 2;
+        public const int RelayChannels = 4;
 
         public const int PDPChannels = 16;
 
