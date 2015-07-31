@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestControllerPower
     {
         private Dictionary<dynamic, dynamic> GetData()
@@ -12,7 +12,7 @@ namespace WPILib.Tests
             return HAL.halData["power"];
         }
 
-        [TestMethod]
+        [Test]
         public void TestInputVoltage()
         {
             const double testVal = 3.14;
@@ -20,7 +20,7 @@ namespace WPILib.Tests
             Assert.AreEqual(ControllerPower.GetInputVoltage(), testVal, 0.0001);
         }
 
-        [TestMethod]
+        [Test]
         public void TestInputCurrent()
         {
             const double testVal = 3.14;
@@ -28,7 +28,7 @@ namespace WPILib.Tests
             Assert.AreEqual(ControllerPower.GetInputCurrrent(), testVal, 0.0001);
         }
 
-        [TestMethod]
+        [Test]
         public void TestVoltage3V3()
         {
             const double testVal = 3.14;

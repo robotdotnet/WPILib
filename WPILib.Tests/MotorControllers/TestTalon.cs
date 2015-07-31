@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
+using HAL_Base;
 using HAL_Simulator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using HAL = HAL_Base.HAL;
+using NUnit.Framework;
 
 namespace WPILib.Tests.MotorControllers
 {
-    [TestClass]
+    [TestFixture]
     public class TestTalon
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -25,14 +25,14 @@ namespace WPILib.Tests.MotorControllers
             return HAL.halData;
         }
 
-        [TestMethod]
+        [Test]
         public void TestTalonInitialized()
         {
             using (Talon t = new Talon(2))
                 Assert.AreEqual(HalData()["pwm"][2]["type"], "talon");
         }
 
-        [TestMethod]
+        [Test]
         public void TestTalonStarts0()
         {
             using (Talon t = new Talon(2))
@@ -41,7 +41,7 @@ namespace WPILib.Tests.MotorControllers
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestTalonSet()
         {
             using (Talon t = new Talon(2))
@@ -51,7 +51,7 @@ namespace WPILib.Tests.MotorControllers
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPWMHelpers()
         {
             using (Talon t = new Talon(2))
@@ -63,7 +63,7 @@ namespace WPILib.Tests.MotorControllers
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPIDWrite()
         {
             using (Talon t = new Talon(2))
@@ -74,7 +74,7 @@ namespace WPILib.Tests.MotorControllers
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPWMHelpersPID()
         {
             using (Talon t = new Talon(2))

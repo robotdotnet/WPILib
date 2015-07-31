@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Telerik.JustMock;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestNotifier
     {
-        [ClassInitialize]
-        static public void Init(TestContext c)
+        [TestFixtureSetUp]
+        static public void Init()
         {
             TestBase.StartCode();
         }
 
-        [TestMethod]
+        [Test]
         public void TestSingle()
         {
             var delegateMock = Mock.Create<Action>();
@@ -31,7 +31,7 @@ namespace WPILib.Tests
             }
         }
         /*
-        [TestMethod]
+        [Test]
         public void TestMultiple()
         {
             var delegateMock = Mock.Create<Action>();
@@ -50,7 +50,7 @@ namespace WPILib.Tests
         */
 
         /*
-        [TestMethod]
+        [Test]
         public void TestSingle10ms()
         {
 

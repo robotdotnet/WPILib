@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestUtility
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext ctx)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -24,20 +24,20 @@ namespace WPILib.Tests
             return HAL.halData;
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetFPGAVersion()
         {
             Assert.AreEqual(2015, Utility.GetFPGAVersion());
         }
 
-        [TestMethod]
+        [Test]
         public void TestFPGAGetRevision()
         {
             Assert.AreEqual(0, Utility.GetFPGARevision());
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestGetUserButton()
         {
             HalData()["fpga_button"] = true;

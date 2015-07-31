@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using System.Threading;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Telerik.JustMock;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestInterrupt
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -34,7 +34,7 @@ namespace WPILib.Tests
             return new DigitalInput(0);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateAllInterrupts()
         {
             List<DigitalInput> inputs = new List<DigitalInput>();
@@ -54,7 +54,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateLimits()
         {
             List<DigitalInput> inputs = new List<DigitalInput>();
@@ -87,7 +87,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateDispose()
         {
             DigitalInput d1 = new DigitalInput(0);
@@ -105,7 +105,7 @@ namespace WPILib.Tests
             d2.Dispose();
         }
 
-        [TestMethod]
+        [Test]
         public void TestSynchronousTimeout()
         {
             using (DigitalInput d = NewInput())
@@ -117,7 +117,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSynchronousRisingEdgeChecked()
         {
             using (DigitalInput d = NewInput())
@@ -138,7 +138,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSynchronousRisingEdgeNotChecked()
         {
             using (DigitalInput d = NewInput())
@@ -160,7 +160,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSynchronousFallingEdgeChecked()
         {
             using (DigitalInput d = NewInput())
@@ -183,7 +183,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSynchronousFallingEdgeNotChecked()
         {
             using (DigitalInput d = NewInput())
@@ -206,7 +206,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestAsync()
         {
             using (DigitalInput d = NewInput())

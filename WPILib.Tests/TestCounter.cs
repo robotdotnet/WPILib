@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestCounter
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext ctx)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -42,7 +42,7 @@ namespace WPILib.Tests
             Assert.AreEqual(triggerDown, HalData()["counter"][0]["down_source_trigger"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterAllocateAll()
         {
             List<Counter> counters = new List<Counter>();
@@ -69,7 +69,7 @@ namespace WPILib.Tests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterOverAllocate()
         {
             List<Counter> encoders = new List<Counter>();
@@ -99,7 +99,7 @@ namespace WPILib.Tests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterInit1()
         {
             using (Counter ctr = new Counter())
@@ -108,7 +108,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterInit2()
         {
             using (DigitalInput di = new DigitalInput(5))
@@ -120,7 +120,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterInit3()
         {
             using (Counter ctr = new Counter(6))
@@ -129,7 +129,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterInit4()
         {
             using (DigitalInput us = new DigitalInput(3))
@@ -144,7 +144,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterInit5()
         {
             using (AnalogTrigger at = new AnalogTrigger(2))
@@ -156,7 +156,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterSetUpChannel()
         {
             using (Counter ctr = new Counter())
@@ -166,7 +166,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterSetUpSource()
         {
             using (DigitalInput src = new DigitalInput(3))
@@ -179,7 +179,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCounterFree()
         {
             

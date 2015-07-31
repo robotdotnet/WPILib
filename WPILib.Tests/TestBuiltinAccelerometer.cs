@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestBuiltinAccelerometer
     {
         private Dictionary<dynamic, dynamic> GetData()
@@ -21,7 +21,7 @@ namespace WPILib.Tests
             return s_instance ?? new BuiltInAccelerometer(AccelerometerRange.k2G);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetRange()
         {
             GetAcc().AccelerometerRange = AccelerometerRange.k2G;
@@ -36,7 +36,7 @@ namespace WPILib.Tests
             GetData()["active"] = false;
         }
 
-        [TestMethod]
+        [Test]
         public void Test16Failure()
         {
             try
@@ -50,7 +50,7 @@ namespace WPILib.Tests
             Assert.IsFalse(GetData()["active"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetX()
         {
             GetAcc();
@@ -59,7 +59,7 @@ namespace WPILib.Tests
             Assert.AreEqual(GetAcc().GetX(), testVal);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetY()
         {
             GetAcc();
@@ -68,7 +68,7 @@ namespace WPILib.Tests
             Assert.AreEqual(GetAcc().GetY(), testVal);
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetZ()
         {
             GetAcc();

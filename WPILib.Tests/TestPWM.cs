@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestPWM
     {
 
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -38,7 +38,7 @@ namespace WPILib.Tests
             return pwm;
         }
 
-        [TestMethod]
+        [Test]
         public void TestPWMCreate()
         {
             using (PWM pwm = new PWM(5))
@@ -49,7 +49,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestAllocateError()
         {
             using (PWM pwm = new PWM(5))
@@ -65,7 +65,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateLimits()
         {
             try
@@ -87,7 +87,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPWMCreateAll()
         {
             List<PWM> pwms = new List<PWM>();
@@ -102,7 +102,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestPWMDispose()
         {
             PWM pwm = NewPWM();
@@ -115,7 +115,7 @@ namespace WPILib.Tests
             pwm.Dispose();
         }
 
-        [TestMethod]
+        [Test]
         public void TestEnableDeabandElimination()
         {
             using (PWM pwm = NewPWM())
@@ -125,7 +125,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestDisableDeabandElimination()
         {
             using (PWM pwm = NewPWM())
@@ -135,7 +135,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetBounds()
         {
             HAL.halData["pwm_loop_timing"] = SensorBase.SystemClockTicksPerMicrosecond;
@@ -152,7 +152,20 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
+        [TestCase(0.5, 1000)]
+        [TestCase(0.25, 750)]
+        public void TestSetPosition(double position, int rawValue)
+        {
+            using (PWM pwm = NewPWM())
+            {
+                boundPWM(pwm);
+                pwm.SetPosition(position);
+                Assert.AreEqual(PWMData()["raw_value"], rawValue);
+            }
+        }
+        /*
+        [Test]
         public void TestSetPosition5()
         {
             using (PWM pwm = NewPWM())
@@ -163,7 +176,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetPosition25()
         {
             using (PWM pwm = NewPWM())
@@ -173,9 +186,10 @@ namespace WPILib.Tests
                 Assert.AreEqual(PWMData()["raw_value"], 750);
             }
         }
+        */
 
         //Set 1.5, expect 1500;
-        [TestMethod]
+        [Test]
         public void TestSetPositionLimit15()
         {
             using (PWM pwm = NewPWM())
@@ -187,7 +201,7 @@ namespace WPILib.Tests
         }
 
         //Set -.5, expect 500;
-        [TestMethod]
+        [Test]
         public void TestSetPositionLimitNeg5()
         {
             using (PWM pwm = NewPWM())
@@ -198,7 +212,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPosition1000()
         {
             using (PWM pwm = NewPWM())
@@ -209,7 +223,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPosition750()
         {
             using (PWM pwm = NewPWM())
@@ -220,7 +234,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPositionLimits1600()
         {
             using (PWM pwm = NewPWM())
@@ -231,7 +245,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestGetPositionLimits400()
         {
             using (PWM pwm = NewPWM())
@@ -242,7 +256,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSetRaw()
         {
             using (PWM pwm = NewPWM())
@@ -255,7 +269,7 @@ namespace WPILib.Tests
         //Skiping this test for now, because we don't check to see if we are allocated
         //unlike python
         /*
-        [TestMethod]
+        [Test]
         public void TestSetRawFreed()
         {
             PWM pwm = NewPWM();
@@ -274,7 +288,7 @@ namespace WPILib.Tests
         }
         */
 
-        [TestMethod]
+        [Test]
         public void TestGetRaw()
         {
             using (PWM pwm = NewPWM())
@@ -287,7 +301,7 @@ namespace WPILib.Tests
         //Skiping this test for now, because we don't check to see if we are allocated
         //unlike python
         /*
-        [TestMethod]
+        [Test]
         public void TestGetRawFreed()
         {
             PWM pwm = NewPWM();

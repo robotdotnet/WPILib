@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using HAL_Base;
 using HAL_Simulator;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Telerik.JustMock;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestHALSim
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext ctx)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [TestMethod]
+        [Test]
         public void TestNotifyDictAdditonInitialNotify()
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
@@ -30,7 +30,7 @@ namespace WPILib.Tests
             Mock.Assert(delegateMock);
         }
 
-        [TestMethod]
+        [Test]
         public void TestNotifyDictAdditonNoInitialNotify()
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
@@ -44,7 +44,7 @@ namespace WPILib.Tests
             Mock.Assert(delegateMock);
         }
 
-        [TestMethod]
+        [Test]
         public void TestNotifyDictAssignement()
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
@@ -60,7 +60,7 @@ namespace WPILib.Tests
             Mock.Assert(delegateMock);
         }
 
-        [TestMethod]
+        [Test]
         public void TestNotifyDictHalUpdate()
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
@@ -89,7 +89,7 @@ namespace WPILib.Tests
             Mock.Assert(delegateMock);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHalInNotifyDictUpdate()
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
@@ -107,7 +107,7 @@ namespace WPILib.Tests
             Mock.Assert(delegateMock);
         }
 
-        [TestMethod]
+        [Test]
         public void TestNotifyDictRemoveCallback()
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
@@ -127,7 +127,7 @@ namespace WPILib.Tests
             Mock.Assert(delegateMock);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHALDeepCopy()
         {
             SimData.ResetHALData();
@@ -139,7 +139,7 @@ namespace WPILib.Tests
             Assert.AreNotEqual(HAL.halInData["analog_in"][0]["avg_value"], HAL.halData["analog_in"][0]["avg_value"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHAL()
         {
             TestFilteredHAL(HAL.halData);
@@ -177,7 +177,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestHalUpdate()
         {
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>

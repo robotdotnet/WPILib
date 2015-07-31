@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestDriverStation
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -24,7 +24,7 @@ namespace WPILib.Tests
             return HAL.halData;
         }
 
-        [TestMethod]
+        [Test]
         public void TestControlWordTrue()
         {
             HalData()["control"]["enabled"] = true;
@@ -44,7 +44,7 @@ namespace WPILib.Tests
             Assert.IsTrue(ct.GetFMSAttached());
         }
 
-        [TestMethod]
+        [Test]
         public void TestControlWordFalse()
         {
             HalData()["control"]["enabled"] = false;

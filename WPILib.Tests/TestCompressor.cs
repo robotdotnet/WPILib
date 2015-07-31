@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestCompressor
     {
         private Dictionary<dynamic, dynamic> GetData(int module)
@@ -17,7 +17,7 @@ namespace WPILib.Tests
             return new Compressor();
         }
 
-        [TestMethod]
+        [Test]
         public void TestCompressorOperation()
         {
             var comp = GetCompressor();
@@ -28,14 +28,14 @@ namespace WPILib.Tests
             Assert.IsFalse(comp.ClosedLoopControl);
         }
 
-        [TestMethod]
+        [Test]
         public void TestCompressorSwitch()
         {
             GetData(0)["pressure_switch"] = true;
             Assert.IsTrue(GetCompressor().GetPressureSwitchValue());
         }
 
-        [TestMethod]
+        [Test]
         public void TestCompressorCurrent()
         {
             GetData(0)["current"] = 42;

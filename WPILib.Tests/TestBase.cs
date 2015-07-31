@@ -1,5 +1,5 @@
-﻿using HAL_Simulator;
-using HAL = HAL_Base.HAL;
+﻿using HAL_Base;
+using HAL_Simulator;
 
 namespace WPILib.Tests
 {

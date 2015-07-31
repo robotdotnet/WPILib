@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestSolenoid
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -31,7 +31,7 @@ namespace WPILib.Tests
             return HAL.halData;
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidCreate()
         {
             using (Solenoid s = NewSolenoid())
@@ -40,16 +40,19 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod, ExpectedException(typeof(AllocationException), AllowDerivedTypes = true)]
+        [Test]
         public void TestMultipleAllocation()
         {
             using (Solenoid ds = NewSolenoid())
             {
-                var p = NewSolenoid();
+                Assert.Throws(typeof (AllocationException), () =>
+                {
+                    var p = NewSolenoid();
+                });
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidCreateAll()
         {
             List<Solenoid> solenoids = new List<Solenoid>();
@@ -64,7 +67,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateLowerLimit()
         {
             try
@@ -86,7 +89,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidSet()
         {
             using (Solenoid s = NewSolenoid())
@@ -99,7 +102,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidGet()
         {
             using (Solenoid s = NewSolenoid())
@@ -112,7 +115,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestBlackList()
         {
             using (Solenoid s = NewSolenoid())

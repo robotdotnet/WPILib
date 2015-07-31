@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestServo
     {
 
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -31,7 +31,7 @@ namespace WPILib.Tests
         }
 
 
-        [TestMethod]
+        [Test]
         public void TestServoInitialized()
         {
             using (Servo s = NewServo())
@@ -39,7 +39,7 @@ namespace WPILib.Tests
                 Assert.AreEqual(HalData()["pwm"][2]["type"], "servo");
             }
         }
-        [TestMethod]
+        [Test]
         public void TestServoStarts0()
         {
             using (Servo s = NewServo())
@@ -47,7 +47,7 @@ namespace WPILib.Tests
                 Assert.AreEqual(s.Get(), 0);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestServoSet()
         {
             using (Servo s = NewServo())
@@ -56,7 +56,7 @@ namespace WPILib.Tests
                 Assert.AreEqual(s.Get(), 1.0);
             }
         }
-        [TestMethod]
+        [Test]
         public void TestServoSetAngle()
         {
             using (Servo s = NewServo())

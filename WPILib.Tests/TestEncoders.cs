@@ -1,21 +1,21 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestEncoders
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext ctx)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -37,7 +37,7 @@ namespace WPILib.Tests
 
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderOverAllocation()
         {
             List<Encoder> encoders = new List<Encoder>();
@@ -68,7 +68,7 @@ namespace WPILib.Tests
             TestBase.StartCode();
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderAllocateAll()
         {
             List<Encoder> encoders = new List<Encoder>();
@@ -85,7 +85,7 @@ namespace WPILib.Tests
             TestBase.StartCode();
         }
 
-        [TestMethod]
+        [Test]
         public void TestChannelChannelInit()
         {
             using (Encoder x = new Encoder(1, 2))
@@ -101,7 +101,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestChannelChannelReverseInit()
         {
             using (Encoder x = new Encoder(1, 2, true))
@@ -117,7 +117,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestChannelChannelReverseTypeInit()
         {
             using (Encoder x = new Encoder(1, 2, true, EncodingType.K4X))
@@ -133,7 +133,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestChannelChannelChannelReverseInit()
         {
             using (Encoder x = new Encoder(1, 2, 3, true))
@@ -151,7 +151,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][3]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestChannelChannelChannelInit()
         {
             using (Encoder x = new Encoder(1, 2, 3))
@@ -169,7 +169,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][3]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSourceSourceInit()
         {
             using (var s1 = new DigitalInput(1))
@@ -193,7 +193,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSourceSourceReverseTypeInit()
         {
             using (var s1 = new DigitalInput(1))
@@ -217,7 +217,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSourceSourceSourceReverseInit()
         {
             using (var s1 = new DigitalInput(1))
@@ -247,7 +247,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][3]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestSourceSourceSourceInit()
         {
             using (var s1 = new DigitalInput(1))
@@ -277,7 +277,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][3]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderCreate2x()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K2X))
@@ -300,7 +300,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderCreate1x()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K1X))
@@ -324,7 +324,7 @@ namespace WPILib.Tests
             Assert.IsFalse(HalData()["dio"][2]["initialized"]);
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderGet4x()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K4X))
@@ -334,7 +334,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderGet2x()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K2X))
@@ -345,7 +345,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestEncoderGet1x()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K1X))

@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestDoubleSolenoid
     {
 
-        [ClassInitialize]
-        public static void Initialize(TestContext c)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
@@ -32,7 +32,7 @@ namespace WPILib.Tests
             return HAL.halData;
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoubleSolenoidCreate()
         {
             using (DoubleSolenoid s = NewDoubleSolenoid())
@@ -42,16 +42,19 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod, ExpectedException(typeof(AllocationException), AllowDerivedTypes = true)]
+        [Test]
         public void TestMultipleAllocation()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                var p = NewDoubleSolenoid();
+                Assert.Throws(typeof(AllocationException), () =>
+                {
+                    var p = NewDoubleSolenoid();
+                });
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestDoubleSolenoidCreateAll()
         {
             List<DoubleSolenoid> solenoids = new List<DoubleSolenoid>();
@@ -67,7 +70,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateLowerLimit()
         {
             try
@@ -89,7 +92,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidSetForward()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
@@ -100,7 +103,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidSetReverse()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
@@ -111,7 +114,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidSetOff()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
@@ -122,7 +125,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidGetForward()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
@@ -134,7 +137,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidGetReverse()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
@@ -146,7 +149,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestSolenoidGetOff()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
@@ -158,7 +161,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestBlackList()
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())

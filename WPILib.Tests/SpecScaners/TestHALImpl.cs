@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace WPILib.Tests.SpecScaners
 {
-    [TestClass]
+    [TestFixture]
     public class TestHALImpl
     {
-        [TestMethod]
+        [Test]
         public void TestHALBaseMapsToHALSim()
         {
             StringBuilder functionList = new StringBuilder();
@@ -117,7 +117,7 @@ namespace WPILib.Tests.SpecScaners
             Assert.IsTrue(pass);
         }
 
-        [TestMethod]
+        [Test]
         public void TestHALBaseMapsToHALRIO()
         {
             StringBuilder functionList = new StringBuilder();

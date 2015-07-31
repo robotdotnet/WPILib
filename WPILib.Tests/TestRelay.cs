@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestRelay
     {
-        [ClassInitialize]
-        public static void Initialize(TestContext ctx)
+        [TestFixtureSetUp]
+        public static void Initialize()
         {
             TestBase.StartCode();
         }
 
-        [ClassCleanup]
+        [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateAll()
         {
             List<Relay> relays = new List<Relay>();
@@ -37,7 +37,7 @@ namespace WPILib.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestCreateInvalid()
         {
             try
@@ -51,11 +51,11 @@ namespace WPILib.Tests
 
         }
 
-        [TestClass]
+        [TestFixture]
         public class TestRelayBoth
         {
             //Test with Both
-            [TestMethod]
+            [Test]
             public void TestForward()
             {
                 var data = GetSimData();
@@ -67,7 +67,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestReverse()
             {
                 var data = GetSimData();
@@ -79,7 +79,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestOn()
             {
                 var data = GetSimData();
@@ -91,7 +91,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestOff()
             {
                 var data = GetSimData();
@@ -111,11 +111,11 @@ namespace WPILib.Tests
 
 
 
-        [TestClass]
+        [TestFixture]
         public class TestRelayForward
         {
             //Test with Both
-            [TestMethod]
+            [Test]
             public void TestForward()
             {
                 var data = GetSimData();
@@ -127,7 +127,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestReverse()
             {
                 Relay relay = new Relay(0, Relay.Direction.Forward);
@@ -145,7 +145,7 @@ namespace WPILib.Tests
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void TestOn()
             {
                 var data = GetSimData();
@@ -157,7 +157,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestOff()
             {
                 var data = GetSimData();
@@ -175,10 +175,10 @@ namespace WPILib.Tests
             }
         }
 
-        [TestClass]
+        [TestFixture]
         public class TestRelayReverse
         {
-            [TestMethod]
+            [Test]
             public void TestForward()
             {
                 var data = GetSimData();
@@ -198,7 +198,7 @@ namespace WPILib.Tests
                 }
             }
 
-            [TestMethod]
+            [Test]
             public void TestReverse()
             {
                 var data = GetSimData();
@@ -210,7 +210,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestOn()
             {
                 var data = GetSimData();
@@ -222,7 +222,7 @@ namespace WPILib.Tests
                 relay.Dispose();
             }
 
-            [TestMethod]
+            [Test]
             public void TestOff()
             {
                 var data = GetSimData();
