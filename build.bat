@@ -14,7 +14,9 @@ REM Package restore
 call %nuget% restore WPILib\packages.config -OutputDirectory %cd%\packages -NonInteractive
 
 REM Build
-%MsBuildExe% robotdotnet-wpilib.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+"%MsBuildExe%" robotdotnet-wpilib.sln /p:Configuration="%config%" /m /v:M /fl /flp:LogFile=msbuild.log;Verbosity=Normal /nr:false
+
+call "%VsTestConsole% /testcontainer:'.\WPILib.Tests\bin\Release\WPILib.Tests.dll
 
 REM Package
 mkdir Build
