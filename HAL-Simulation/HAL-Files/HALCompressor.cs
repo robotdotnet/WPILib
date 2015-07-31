@@ -16,12 +16,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static IntPtr initializeCompressor(byte module)
         {
-            /*
-            if (module != 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(module), "Must use module 0 for the compressor.");
-            }
-            */
+           
             InitializeNewPCM(module);
             halData["pcm"][(int)module]["compressor"]["initialized"] = true;
             PCM pcm = new PCM { module = module };

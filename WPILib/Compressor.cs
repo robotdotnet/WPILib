@@ -41,6 +41,10 @@ namespace WPILib
 
         private void InitCompressor(int module)
         {
+            if (!CheckCompressorModule((byte) module))
+            {
+                throw new ArgumentOutOfRangeException(nameof(module), "Compressor module out of range");
+            }
             m_pcm = InitializeCompressor((byte) module);
         }
 
