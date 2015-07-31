@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using HAL_Base;
 using NUnit.Framework;
+using Telerik.JustMock.Helpers;
 using WPILib.Exceptions;
 
 namespace WPILib.Tests
@@ -164,78 +165,37 @@ namespace WPILib.Tests
                 Assert.AreEqual(PWMData()["raw_value"], rawValue);
             }
         }
-        /*
+
         [Test]
-        public void TestSetPosition5()
+        [TestCase(1.5, 1500)]
+        [TestCase(-5, 500)]
+        public void TestSetPositionLimit(double position, int raw)
         {
             using (PWM pwm = NewPWM())
             {
                 boundPWM(pwm);
-                pwm.SetPosition(0.5);
-                Assert.AreEqual(PWMData()["raw_value"], 1000);
+                pwm.SetPosition(position);
+                Assert.AreEqual(PWMData()["raw_value"], raw);
             }
         }
 
         [Test]
-        public void TestSetPosition25()
+        [TestCase(0.5, 1000)]
+        [TestCase(0.25, 750)]
+        public void TestGetPosition(double position, int raw)
         {
             using (PWM pwm = NewPWM())
             {
                 boundPWM(pwm);
-                pwm.SetPosition(0.25);
-                Assert.AreEqual(PWMData()["raw_value"], 750);
-            }
-        }
-        */
-
-        //Set 1.5, expect 1500;
-        [Test]
-        public void TestSetPositionLimit15()
-        {
-            using (PWM pwm = NewPWM())
-            {
-                boundPWM(pwm);
-                pwm.SetPosition(1.5);
-                Assert.AreEqual(PWMData()["raw_value"], 1500);
-            }
-        }
-
-        //Set -.5, expect 500;
-        [Test]
-        public void TestSetPositionLimitNeg5()
-        {
-            using (PWM pwm = NewPWM())
-            {
-                boundPWM(pwm);
-                pwm.SetPosition(-0.5);
-                Assert.AreEqual(PWMData()["raw_value"], 500);
+                PWMData()["raw_value"] = raw;
+                Assert.AreEqual(pwm.GetPosition(), position);
             }
         }
 
         [Test]
-        public void TestGetPosition1000()
-        {
-            using (PWM pwm = NewPWM())
-            {
-                boundPWM(pwm);
-                PWMData()["raw_value"] = 1000;
-                Assert.AreEqual(pwm.GetPosition(), 0.5);
-            }
-        }
-
-        [Test]
-        public void TestGetPosition750()
-        {
-            using (PWM pwm = NewPWM())
-            {
-                boundPWM(pwm);
-                PWMData()["raw_value"] = 750;
-                Assert.AreEqual(pwm.GetPosition(), 0.25);
-            }
-        }
-
-        [Test]
-        public void TestGetPositionLimits1600()
+        [TestCase(1.0, 1600)]
+        [TestCase(0.0, 400)]
+        public void TestGetPositionLimits(double position, int raw)
         {
             using (PWM pwm = NewPWM())
             {
@@ -246,13 +206,65 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestGetPositionLimits400()
+        [TestCase(false, 0.0, 1000)]
+        [TestCase(false, 0.5, 1251)]
+        [TestCase(false, -0.5, 750)]
+        [TestCase(true, 0.0, 1000)]
+        [TestCase(true, 0.5, 1275)]
+        [TestCase(true, -0.5, 725)]
+        public void TestSetSpeed(bool db, double speed, int expected)
         {
             using (PWM pwm = NewPWM())
             {
                 boundPWM(pwm);
-                PWMData()["raw_value"] = 400;
-                Assert.AreEqual(pwm.GetPosition(), 0.0);
+                pwm.DeadbandElimination = db;
+                pwm.SetSpeed(speed);
+                Assert.AreEqual(expected, PWMData()["raw_value"]);
+            }
+        }
+
+        [Test]
+        [TestCase(1.5, 1500)]
+        [TestCase(-1.5, 500)]
+        public void TestSetSpeedLimits(double speed, int expected)
+        {
+            using (PWM pwm = NewPWM())
+            {
+                boundPWM(pwm);
+                pwm.SetSpeed(speed);
+                Assert.AreEqual(expected, PWMData()["raw_value"]);
+            }
+        }
+
+        [Test]
+        [TestCase(false, 1251, 0.5)]
+        [TestCase(false, 750, -0.5)]
+        [TestCase(false, 1000, 0.0)]
+        [TestCase(true, 1275, 0.5)]
+        [TestCase(true, 725, -0.5)]
+        [TestCase(true, 1050, 0.0)]
+        [TestCase(true, 950, 0.0)]
+        public void TestGetSpeed(bool db, int speed, double expected)
+        {
+            using (PWM pwm = NewPWM())
+            {
+                boundPWM(pwm);
+                pwm.DeadbandElimination = db;
+                PWMData()["raw_value"] = speed;
+                Assert.AreEqual(expected, Math.Round(pwm.GetSpeed(), 2));
+            }
+        }
+
+        [Test]
+        [TestCase(1600, 1.0)]
+        [TestCase(400, -1.0)]
+        public void TestGetSpeedLimits(int speed, double expected)
+        {
+            using (PWM pwm = NewPWM())
+            {
+                boundPWM(pwm);
+                PWMData()["raw_value"] = speed;
+                Assert.AreEqual(expected, pwm.GetSpeed());
             }
         }
 
@@ -309,5 +321,43 @@ namespace WPILib.Tests
             pwm.GetRaw();
         }
         */
+
+        [Test]
+        [TestCase(PeriodMultiplier.K1X, 0)]
+        [TestCase(PeriodMultiplier.K2X, 1)]
+        [TestCase(PeriodMultiplier.K4X, 3)]
+        public void TestSetPeriodMultiplier(PeriodMultiplier setting, int expected)
+        {
+            using (PWM pwm = NewPWM())
+            {
+                pwm.PeriodMultiplier = setting;
+                Assert.AreEqual(expected, PWMData()["period_scale"]);
+            }
+        }
+
+        [Test]
+        public void TestPWMZeroLatch()
+        {
+            using (PWMOverride pwm = new PWMOverride(2))
+            {
+                pwm.PublicSetZeroLatch();
+                Assert.IsTrue(PWMData()["zero_latch"]);
+            }
+            Assert.IsFalse(PWMData()["zero_latch"]);
+        }
+
+        
+    }
+
+    internal class PWMOverride : PWM
+    {
+        public PWMOverride(int channel) : base(channel)
+        {
+        }
+
+        internal void PublicSetZeroLatch()
+        {
+            SetZeroLatch();
+        }
     }
 }
