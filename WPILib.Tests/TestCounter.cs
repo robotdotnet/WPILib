@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WPILib.Exceptions;
 using WPILib.Interfaces;
 
 namespace WPILib.Tests
@@ -39,6 +40,63 @@ namespace WPILib.Tests
             Assert.AreEqual(downFalling, HalData()["counter"][0]["down_falling_edge"]);
             Assert.AreEqual(triggerUp, HalData()["counter"][0]["up_source_trigger"]);
             Assert.AreEqual(triggerDown, HalData()["counter"][0]["down_source_trigger"]);
+        }
+
+        [TestMethod]
+        public void TestCounterAllocateAll()
+        {
+            List<Counter> counters = new List<Counter>();
+            try
+            {
+                
+                for (int i = 0; i < TestBase.NumCounters; i++)
+                {
+                    counters.Add(new Counter(i));
+                }
+            }
+            catch (AllocationException)
+            {
+                Assert.Fail();
+            }
+
+            finally
+            {
+                foreach (var counter in counters)
+                {
+                    counter?.Dispose();
+                }
+            }
+
+        }
+
+        [TestMethod]
+        public void TestCounterOverAllocate()
+        {
+            List<Counter> encoders = new List<Counter>();
+            for (int i = 0; i < TestBase.NumCounters; i++)
+            {
+                encoders.Add(new Counter(i));
+            }
+
+            Counter enc = null;
+            try
+            {
+                enc = new Counter(TestBase.NumCounters);
+                Assert.Fail();
+            }
+            catch (UncleanStatusException)
+            {
+            }
+            finally
+            {
+                enc?.Dispose();
+            }
+
+            foreach (var encoder in encoders)
+            {
+                encoder?.Dispose();
+            }
+
         }
 
         [TestMethod]
@@ -124,6 +182,8 @@ namespace WPILib.Tests
         [TestMethod]
         public void TestCounterFree()
         {
+            
+
             Assert.IsFalse(HalData()["counter"][0]["initialized"]);
             Assert.IsFalse(HalData()["dio"][0]["initialized"]);
             Assert.IsFalse(HalData()["dio"][1]["initialized"]);

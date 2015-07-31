@@ -55,7 +55,7 @@ namespace WPILib.Tests
         public void TestDoubleSolenoidCreateAll()
         {
             List<DoubleSolenoid> solenoids = new List<DoubleSolenoid>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < TestBase.SolenoidChannels; i++)
             {
                 solenoids.Add(new DoubleSolenoid(i, i+1));
                 i++;
@@ -81,7 +81,7 @@ namespace WPILib.Tests
 
             try
             {
-                var p = new DoubleSolenoid(10, 11);
+                var p = new DoubleSolenoid(TestBase.SolenoidChannels, TestBase.SolenoidChannels + 1);
                 Assert.Fail();
             }
             catch (IndexOutOfRangeException)

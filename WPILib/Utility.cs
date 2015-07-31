@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using HAL_Base;
+using WPILib.Exceptions;
 using static HAL_Base.HAL;
 
 namespace WPILib
@@ -69,7 +70,7 @@ namespace WPILib
             //TODO: Use Caller attributes
             if (status < 0)
             {
-                throw new SystemException($" Code : {status}. {GetErrorMessage(status)}");
+                throw new UncleanStatusException(status, $" Code : {status}. {GetErrorMessage(status)}");
             }
             else if (status > 0)
             {

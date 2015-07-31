@@ -25,7 +25,7 @@ namespace WPILib.Tests
         public void TestCreateAll()
         {
             List<Relay> relays = new List<Relay>();
-            for (int i = 0; i < SensorBase.RelayChannels; i++)
+            for (int i = 0; i < TestBase.RelayChannels; i++)
             {
                 Relay r = new Relay(i);
                 relays.Add(r);
@@ -42,7 +42,7 @@ namespace WPILib.Tests
         {
             try
             {
-                Relay r = new Relay(SensorBase.RelayChannels);
+                Relay r = new Relay(TestBase.RelayChannels);
                 Assert.Fail();
             }
             catch (IndexOutOfRangeException)

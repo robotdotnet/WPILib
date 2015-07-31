@@ -38,7 +38,7 @@ namespace WPILib.Tests
         public void TestCreateAllInterrupts()
         {
             List<DigitalInput> inputs = new List<DigitalInput>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < TestBase.NumInterrupts; i++)
             {
                 inputs.Add(new DigitalInput(i));
             }
@@ -58,7 +58,7 @@ namespace WPILib.Tests
         public void TestCreateLimits()
         {
             List<DigitalInput> inputs = new List<DigitalInput>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < TestBase.NumInterrupts; i++)
             {
                 inputs.Add(new DigitalInput(i));
             }
@@ -67,7 +67,7 @@ namespace WPILib.Tests
             {
                 input.RequestInterrupts();
             }
-            DigitalInput in9 = new DigitalInput(9); ;
+            DigitalInput in9 = new DigitalInput(TestBase.NumInterrupts);
             try
             { 
                 in9.RequestInterrupts();

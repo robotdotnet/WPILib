@@ -19,7 +19,7 @@ namespace WPILib
 
         public const int SolenoidChannels = 8;
 
-        public const int SolenoidModules = 2;
+        public const int SolenoidModules = 63;
 
         public const int PwmChannels = 20;
 
@@ -37,6 +37,10 @@ namespace WPILib
         /// <param name="moduleNumber">The module number to check.</param>
         protected static void CheckSolenoidModule(int moduleNumber)
         {
+            if (moduleNumber < 0 || moduleNumber >= SolenoidModules)
+            {
+                throw new ArgumentOutOfRangeException(nameof(moduleNumber), "Requested Solenoid Module is out of range");
+            }
         }
 
         /// <summary>

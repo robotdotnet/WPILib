@@ -79,7 +79,7 @@ namespace WPILib.Tests
 
             try
             {
-                var pwm = new PWM(SensorBase.PwmChannels);
+                var pwm = new PWM(TestBase.PwmChannels);
                 Assert.Fail();
             }
             catch (IndexOutOfRangeException)
@@ -91,7 +91,7 @@ namespace WPILib.Tests
         public void TestPWMCreateAll()
         {
             List<PWM> pwms = new List<PWM>();
-            for (int i = 0; i < SensorBase.PwmChannels; i++)
+            for (int i = 0; i < TestBase.PwmChannels; i++)
             {
                 pwms.Add(new PWM(i));
             }

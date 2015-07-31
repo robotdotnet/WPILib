@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using WPILib.Exceptions;
 using WPILib.Interfaces;
 
 namespace WPILib.Tests
@@ -34,6 +35,54 @@ namespace WPILib.Tests
             Assert.AreEqual(bPin, config["BSource_Channel"]);
             Assert.AreEqual(bAtr, config["BSource_AnalogTrigger"]);
 
+        }
+
+        [TestMethod]
+        public void TestEncoderOverAllocation()
+        {
+            List<Encoder> encoders = new List<Encoder>();
+            for (int i = 0; i < TestBase.NumEncoders; i++)
+            {
+                encoders.Add(new Encoder(i, i + TestBase.NumEncoders));
+            }
+
+            Encoder enc = null;
+            try
+            {
+                enc = new Encoder(TestBase.NumEncoders, TestBase.NumEncoders + TestBase.NumEncoders);
+                Assert.Fail();
+            }
+            catch (AllocationException)
+            {
+            }
+            finally
+            {
+                enc?.Dispose();
+            }
+
+            foreach (var encoder in encoders)
+            {
+                encoder.Dispose();
+            }
+
+            TestBase.StartCode();
+        }
+
+        [TestMethod]
+        public void TestEncoderAllocateAll()
+        {
+            List<Encoder> encoders = new List<Encoder>();
+            for (int i = 0; i < TestBase.NumEncoders; i++)
+            {
+                encoders.Add(new Encoder(i, i + TestBase.NumEncoders));
+            }
+
+            foreach (var encoder in encoders)
+            {
+                encoder.Dispose();
+            }
+
+            TestBase.StartCode();
         }
 
         [TestMethod]
