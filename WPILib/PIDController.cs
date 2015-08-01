@@ -45,7 +45,7 @@ namespace WPILib
         private double m_period;
         IPIDSource m_ipidInput;
         IPIDOutput m_ipidOutput;
-        private object m_lockObject = new object();
+        private readonly object m_lockObject = new object();
 
         private double m_tolerance = 0.05;
 

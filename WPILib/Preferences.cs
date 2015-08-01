@@ -13,21 +13,32 @@ namespace WPILib
     /// Provides a relatively simple way to save important values to the RoboRIO to access the next
     /// time the RoboRIO is booted.
     /// </summary>
+    /// <remarks>This class loads and saves from a file inside the RoboRIO. The user can not access
+    /// the file directly, but may modify values at specific fields whtich will then be saved
+    /// to the file when <see cref="Save"/> is called.
+    /// <para/>This class is thread safe.
+    /// <para/>This will also interact with <see cref="NetworkTable"/> by creating a table called
+    /// "Preferences" with all the key-value pairs. To save using <see cref="NetworkTable"/>, simply
+    /// set the boolean at position ~S A V E~ to true. Also, if the value of any variable is " in the
+    /// <see cref="NetworkTable"/>, then that represents non-existance in the <see cref="Preferences"/>table.</remarks>
     public class Preferences : ITableListener
     {
 // ReSharper disable InconsistentNaming
-        private static string TABLE_NAME = "Preferences";
-        private static string SAVE_FIELD = "~S A V E~";
-        private static string FILE_NAME = "/home/lvuser/wpilib-preferences.ini";
-        private static char[] VALUE_PREFIX = { '=', '\"' };
-        private static char[] VALUE_SUFFIX = { '\"', '\n' };
-        private static char[] NEW_LINE = { '\n' };
+        private const string TABLE_NAME = "Preferences";
+        private const string SAVE_FIELD = "~S A V E~";
+        private const string FILE_NAME = "/home/lvuser/wpilib-preferences.ini";
+        private static readonly char[] VALUE_PREFIX = { '=', '\"' };
+        private static readonly char[] VALUE_SUFFIX = { '\"', '\n' };
+        private static readonly char[] NEW_LINE = { '\n' };
 // ReSharper restore InconsistentNaming
 
         private static Preferences s_instance;
 
-        private static object s_lockObject = new object(); 
+        private static readonly object s_lockObject = new object(); 
 
+        /// <summary>
+        /// Returns the preferences instance.
+        /// </summary>
         public static Preferences Instance
         {
             get
@@ -39,9 +50,9 @@ namespace WPILib
             }
         }
 
-        private object m_fileLock = new object();
+        private readonly object m_fileLock = new object();
 
-        private object m_lockObject = new object();
+        private readonly object m_lockObject = new object();
 
         private Dictionary<string, string> m_values;
         private List<string> m_keys;
@@ -70,7 +81,9 @@ namespace WPILib
 
             HAL.Report(ResourceType.kResourceType_Preferences, (byte)0);
         }
-
+        /// <summary>
+        /// Gets a list of the Keys
+        /// </summary>
         public List<string> Keys
         {
             get
@@ -98,6 +111,17 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Puts the given string into the preferences table.
+        /// </summary>
+        /// <remarks>The value may not have quotation marks, nor may the key have any
+        /// whitespace nor an equals sign
+        /// <para/>This will <b>NOT</b> save the value to memory between power cycles </remarks>
+        /// <param name="key">The key to write to</param>
+        /// <param name="value">The value to set</param>
+        /// <exception cref="ArgumentNullException">If the value is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If the value contains a quotation mark</exception>
+        /// <exception cref="ImproperPreferenceKeyException">If the key contains any white space of an equals sign</exception>
         public void PutString(string key, string value)
         {
             if (value == null)
@@ -106,7 +130,7 @@ namespace WPILib
             }
             if (value.IndexOf('"') != -1)
             {
-                throw new ArgumentException($"Can not put string:{value} because it contains quotation marks");
+                throw new ArgumentOutOfRangeException(nameof(value), $"Can not put string:{value} because it contains quotation marks");
             }
             Put(key, value);
         }

@@ -14,8 +14,11 @@ namespace WPILib
     /// </summary>
     public enum PeriodMultiplier
     {
+        /// Don't skip pulses
         K1X = 1,
+        /// Skip every other pulse
         K2X = 2,
+        /// Skip three out of 4 pulses
         K4X = 4,
     }
 

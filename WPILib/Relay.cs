@@ -18,9 +18,13 @@ namespace WPILib
         /// </summary>
         public enum Value
         {
+            /// Off
             Off,
+            /// On
             On,
+            /// Forward
             Forward,
+            /// Reverse
             Reverse,
         }
 
@@ -34,11 +38,11 @@ namespace WPILib
             Reverse,
         }
 
-        private int m_channel;
+        private readonly int m_channel;
         private IntPtr m_port;
 
         private Direction m_direction;
-        private static Resource s_relayChannels = new Resource(RelayChannels * 2);
+        private static readonly Resource s_relayChannels = new Resource(RelayChannels * 2);
 
         private void InitRelay()
         {

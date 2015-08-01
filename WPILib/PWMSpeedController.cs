@@ -49,6 +49,7 @@ namespace WPILib
             Feed();
         }
 
+        /// <inheritdoc/>
         public bool Inverted { get; set; }
     }
 }

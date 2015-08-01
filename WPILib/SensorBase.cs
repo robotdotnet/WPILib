@@ -9,24 +9,25 @@ namespace WPILib
     /// utility functions for checking channels and error processing.</remarks>
     public abstract class SensorBase : IDisposable
     {
+        /// The number of clock ticks per microsecond from the FPGA
         public const int SystemClockTicksPerMicrosecond = 40;
-
+        /// The number of Digital Channels found on the RoboRIO
         public const int DigitalChannels = 26;
-
+        /// The number of Analog Inputs found on the RoboRIO
         public const int AnalogInputChannels = 8;
-
+        /// The number of Analog Outputs found on the RoboRIO
         public const int AnalogOutputChannels = 2;
-
+        /// The number of Solenoid Channels found on each PCM
         public const int SolenoidChannels = 8;
-
+        /// The number of PCM Modules allowed on the CAN Bus
         public const int SolenoidModules = 63;
-
+        /// Then number of PWM Channels found the RoboRIO
         public const int PwmChannels = 20;
-
+        /// The number of Relay Channels found on the RoboRIO
         public const int RelayChannels = 4;
-
+        /// The number of Channels found on each PDP
         public const int PDPChannels = 16;
-
+        /// The number of PDP Modules allowed on the CAN Bus
         public const int PDPModules = 63;
 
         private static int s_defaultSolenoidModule = 0;
@@ -126,7 +127,7 @@ namespace WPILib
         /// </summary>
         /// <remarks>Channel numbers are 0 based on the PDP.</remarks>
         /// <param name="channel">The channel number to check.</param>
-        protected static void CheckPdpChannel(int channel)
+        protected static void CheckPDPChannel(int channel)
         {
             if (channel < 0 || channel >= PDPChannels)
             {
@@ -134,6 +135,11 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Check that the PDP CAN ID is in valid.
+        /// </summary>
+        /// <remarks>The default is 0, and this should be used by most teams.</remarks>
+        /// <param name="module">The CAN ID to check</param>
         protected static void CheckPDPModule(int module)
         {
             if (module < 0 || module > PDPModules)
