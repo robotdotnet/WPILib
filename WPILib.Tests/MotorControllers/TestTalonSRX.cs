@@ -22,7 +22,7 @@ namespace WPILib.Tests.MotorControllers
 
         private static Dictionary<dynamic, dynamic> HalData()
         {
-            return HAL.halData;
+            return SimData.halData;
         }
 
         [Test]

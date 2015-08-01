@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using HAL_Base;
 using HAL_Simulator;
 using NUnit.Framework;
 
@@ -22,7 +21,7 @@ namespace WPILib.Tests.MotorControllers
 
         private static Dictionary<dynamic, dynamic> HalData()
         {
-            return HAL.halData;
+            return SimData.halData;
         }
 
         [Test]

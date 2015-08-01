@@ -5,6 +5,8 @@ using HAL_Simulator;
 using NUnit.Framework;
 using Telerik.JustMock;
 
+using HAL = HAL_Base.HAL;
+
 namespace WPILib.Tests
 {
     [TestFixture]

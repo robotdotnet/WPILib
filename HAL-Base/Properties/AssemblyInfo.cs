@@ -34,7 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-//Makes the internal functions of the assembly visible to HAL-Base and test.
-[assembly:InternalsVisibleTo("HAL_Base")]
-[assembly:InternalsVisibleTo("WPILib.Tests")]

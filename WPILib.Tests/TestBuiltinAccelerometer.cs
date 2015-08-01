@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
+using NetworkTables.Tables;
 using NUnit.Framework;
+using Telerik.JustMock;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib.Tests
@@ -22,31 +24,25 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestSetRange()
+        [TestCase(AccelerometerRange.k2G)]
+        [TestCase(AccelerometerRange.k4G)]
+        [TestCase(AccelerometerRange.k8G)]
+        public void TestSetRange(AccelerometerRange range)
         {
-            GetAcc().AccelerometerRange = AccelerometerRange.k2G;
-            Assert.AreEqual(GetData()["range"], (int)AccelerometerRange.k2G);
-
-            GetAcc().AccelerometerRange = AccelerometerRange.k4G;
-            Assert.AreEqual(GetData()["range"], (int)AccelerometerRange.k4G);
-
-            GetAcc().AccelerometerRange = AccelerometerRange.k8G;
-            Assert.AreEqual(GetData()["range"], (int)AccelerometerRange.k8G);
+            GetAcc().AccelerometerRange = range;
+            Assert.AreEqual(GetData()["range"], (int)range);
 
             GetData()["active"] = false;
         }
 
         [Test]
-        public void Test16Failure()
+        public void TestRangeInvalid()
         {
-            try
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var x = new BuiltInAccelerometer(AccelerometerRange.k16G);
-                Assert.Fail("16G should throw an exception");
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-            }
+                x.GetX();
+            });
             Assert.IsFalse(GetData()["active"]);
         }
 
@@ -77,6 +73,10 @@ namespace WPILib.Tests
             Assert.AreEqual(GetAcc().GetZ(), testVal);
         }
 
-
+        [Test]
+        public void TestBaccGetSmartDashboardType()
+        {
+            Assert.AreEqual("3AxisAccelerometer", new BuiltInAccelerometer(AccelerometerRange.k2G).SmartDashboardType);
+        }
     }
 }

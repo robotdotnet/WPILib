@@ -8,7 +8,7 @@ namespace WPILib.Tests
         public static void StartCode()
         {
             RobotBase.InitializeHardwareConfiguration();
-            HAL.Initialize();
+            HAL_Base.HAL.Initialize();
             SimData.ResetHALData();
             Resource.RestartProgram();
         }
