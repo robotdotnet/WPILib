@@ -8,7 +8,7 @@ namespace WPILib
     /// <summary>
     /// Handles inputs from joysticks connected to the driver station.
     /// </summary>
-    public class Joystick : GenericHID
+    public class Joystick : GenericHID, IEquatable<Joystick>
     {
         /// <summary>
         /// Axes enum for Joysticks
@@ -51,8 +51,9 @@ namespace WPILib
         private const byte s_defaultTriggerButton = 1;
         private const byte s_defaultTopButton = 2;
 
+        public int Port { get; }
+
         private DriverStation m_ds;
-        private int m_port;
         private byte[] m_axes;
         private byte[] m_buttons;
         private int m_outputs;
@@ -81,7 +82,7 @@ namespace WPILib
             m_ds = DriverStation.Instance;
             m_axes = new byte[numAxisTypes];
             m_buttons = new byte[numButtonTypes];
-            m_port = port;
+            Port = port;
         }
 
 
@@ -107,7 +108,7 @@ namespace WPILib
 
         public override double GetRawAxis(int axis)
         {
-            return m_ds.GetStickAxis(m_port, axis);
+            return m_ds.GetStickAxis(Port, axis);
         }
 
         public double GetAxis(AxisType axis)
@@ -129,7 +130,7 @@ namespace WPILib
             }
         }
 
-        public int AxisCount => m_ds.GetStickAxisCount(m_port);
+        public int AxisCount => m_ds.GetStickAxisCount(Port);
 
         public override bool GetTrigger(Hand hand)
         {
@@ -148,17 +149,17 @@ namespace WPILib
 
         public override bool GetRawButton(int button)
         {
-            return m_ds.GetStickButton(m_port, (byte)button);
+            return m_ds.GetStickButton(Port, (byte)button);
         }
 
-        public int ButtonCount => m_ds.GetStickButtonCount(m_port);
+        public int ButtonCount => m_ds.GetStickButtonCount(Port);
 
         public override int GetPOV(int pov)
         {
-            return m_ds.GetStickPOV(m_port, pov);
+            return m_ds.GetStickPOV(Port, pov);
         }
 
-        public int POVCount => m_ds.GetStickPOVCount(m_port);
+        public int POVCount => m_ds.GetStickPOVCount(Port);
 
         public bool GetButton(ButtonType button)
         {
@@ -196,17 +197,17 @@ namespace WPILib
 
         public bool GetIsXbox()
         {
-            return m_ds.GetJoystickIsXbox(m_port);
+            return m_ds.GetJoystickIsXbox(Port);
         }
 
         public int GetJoystickType()
         {
-            return m_ds.GetJoystickType(m_port);
+            return m_ds.GetJoystickType(Port);
         }
 
         public string GetName()
         {
-            return m_ds.GetJoystickName(m_port);
+            return m_ds.GetJoystickName(Port);
         }
 
         public void SetRumble(RumbleType type, float value)
@@ -219,19 +220,34 @@ namespace WPILib
                 m_leftRumble = (ushort)(value * 65535);
             else
                 m_rightRumble = (ushort)(value * 65535);
-            HAL.HALSetJoystickOutputs((byte)m_port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutput(int outputNumber, bool value)
         {
             m_outputs = (m_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            HAL.HALSetJoystickOutputs((byte)m_port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutputs(int value)
         {
             m_outputs = value;
-            HAL.HALSetJoystickOutputs((byte)m_port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+        }
+
+        public bool Equals(Joystick other)
+        {
+            return other != null && Port == other.Port;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Joystick);
+        }
+
+        public override int GetHashCode()
+        {
+            return Port;
         }
     }
 }
