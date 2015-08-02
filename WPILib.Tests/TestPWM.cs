@@ -55,37 +55,29 @@ namespace WPILib.Tests
         {
             using (PWM pwm = new PWM(5))
             {
-                try
+                Assert.Throws<AllocationException>(() =>
                 {
                     var p2 = new PWM(5);
-                    Assert.Fail();
-                }
-                catch (AllocationException)
-                {
-                }
+                });
             }
         }
 
         [Test]
-        public void TestCreateLimits()
+        public void TestCreateLimitsLower()
         {
-            try
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 var pwm = new PWM(-1);
-                Assert.Fail();
-            }
-            catch (IndexOutOfRangeException)
-            {
-            }
+            });
+        }
 
-            try
+        [Test]
+        public void TestCreateLimitsUpper()
+        {
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 var pwm = new PWM(TestBase.PwmChannels);
-                Assert.Fail();
-            }
-            catch (IndexOutOfRangeException)
-            {
-            }
+            });
         }
 
         [Test]

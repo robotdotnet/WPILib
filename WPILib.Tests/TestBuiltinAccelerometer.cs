@@ -41,7 +41,6 @@ namespace WPILib.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var x = new BuiltInAccelerometer(AccelerometerRange.k16G);
-                x.GetX();
             });
             Assert.IsFalse(GetData()["active"]);
         }

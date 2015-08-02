@@ -236,7 +236,16 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
         {
-            return (int)halData["alliance_station"];
+            int data = (int) HalData["alliance_station"];
+            if (data < 6 && data >= 0)
+            {
+                allianceStation = (HALAllianceStationID) data;
+            }
+            else
+            {
+                allianceStation = HALAllianceStationID.HALAllianceStationID_red1;
+            }
+            return 0;
         }
 
         [CalledSimFunction]

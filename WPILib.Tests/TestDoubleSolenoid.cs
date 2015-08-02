@@ -73,23 +73,19 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateLowerLimit()
         {
-            try
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 var p = new DoubleSolenoid(-2, -1);
-                Assert.Fail();
-            }
-            catch (IndexOutOfRangeException)
-            {
-            }
+            });
+        }
 
-            try
+        [Test]
+        public void TestCreateUpperLimit()
+        {
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 var p = new DoubleSolenoid(TestBase.SolenoidChannels, TestBase.SolenoidChannels + 1);
-                Assert.Fail();
-            }
-            catch (IndexOutOfRangeException)
-            {
-            }
+            });
         }
 
         [Test]

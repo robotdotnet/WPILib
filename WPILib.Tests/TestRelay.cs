@@ -38,17 +38,21 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestCreateInvalid()
+        public void TestCreateInvalidUpper()
         {
-            try
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 Relay r = new Relay(TestBase.RelayChannels);
-                Assert.Fail();
-            }
-            catch (IndexOutOfRangeException)
-            {
-            }
+            });
+        }
 
+        [Test]
+        public void TestCreateInvalidLower()
+        {
+            Assert.Throws<IndexOutOfRangeException>(() =>
+            {
+                Relay r = new Relay(-1);
+            });
         }
 
         [TestFixture]
@@ -131,18 +135,11 @@ namespace WPILib.Tests
             public void TestReverse()
             {
                 Relay relay = new Relay(0, Relay.Direction.Forward);
-                try
+                Assert.Throws<InvalidValueException>(() =>
                 {
                     relay.Set(Relay.Value.Reverse);
-                    Assert.Fail("No exception thrown. Should Throw an InvalidValueException.");
-                }
-                catch (InvalidValueException)
-                {
-                }
-                finally
-                {
-                    relay.Dispose();
-                }
+                });
+                relay.Dispose();
             }
 
             [Test]
@@ -184,18 +181,11 @@ namespace WPILib.Tests
                 var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
-                try
+                Assert.Throws<InvalidValueException>(() =>
                 {
                     relay.Set(Relay.Value.Forward);
-                    Assert.Fail("No exception thrown. Should Throw an InvalidValueException.");
-                }
-                catch (InvalidValueException)
-                {
-                }
-                finally
-                {
-                    relay.Dispose();
-                }
+                });
+                relay.Dispose();
             }
 
             [Test]

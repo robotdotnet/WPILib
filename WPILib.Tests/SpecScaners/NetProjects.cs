@@ -11,6 +11,7 @@ namespace WPILib.Tests.SpecScaners
 {
     public static class GetNativeMethodExtension
     {
+
         public static string GetNativeMethod(this MethodDeclarationSyntax method)
         {
             try

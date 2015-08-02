@@ -382,14 +382,14 @@ namespace HAL_Simulator
             halData["power"] = new Dictionary<dynamic, dynamic>()
             {
                 {"has_source", new IN(false) },
-                { "vin_voltage", new IN(0) },
+                {"vin_voltage", new IN(0) },
                 {"vin_current", new IN(0) },
                 {"user_voltage_6v", new IN(6.0)},
                 {"user_current_6v", new IN(0)},
                 {"user_active_6v", new  IN(false)},
                 {"user_faults_6v", new  IN(0)},
                 {"user_voltage_5v",new  IN(5.0)},
-                 {"user_current_5v",new  IN(0)},
+                {"user_current_5v",new  IN(0)},
                 {"user_active_5v",  new IN(false)},
                 {"user_faults_5v", new  IN(0)},
                 {"user_voltage_3v3",new IN(3.3)},

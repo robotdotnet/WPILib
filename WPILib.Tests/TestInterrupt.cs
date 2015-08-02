@@ -68,18 +68,8 @@ namespace WPILib.Tests
                 input.RequestInterrupts();
             }
             DigitalInput in9 = new DigitalInput(TestBase.NumInterrupts);
-            try
-            { 
-                in9.RequestInterrupts();
-                Assert.Fail();
-            }
-            catch (AllocationException)
-            {
-            }
-            finally
-            {
-                in9.Dispose();
-            }
+            Assert.Throws<AllocationException>(() => in9.RequestInterrupts());
+            in9.Dispose();
 
             foreach (var input in inputs)
             {
@@ -127,7 +117,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL.halData["dio"][0]["value"] = true;
+                    HalData()["dio"][0]["value"] = true;
                 });
 
                 t.Start();
@@ -149,7 +139,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL.halData["dio"][0]["value"] = true;
+                    HalData()["dio"][0]["value"] = true;
                 });
 
                 t.Start();
@@ -167,12 +157,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, true);
-                HAL.halData["dio"][0]["value"] = true;
+                HalData()["dio"][0]["value"] = true;
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL.halData["dio"][0]["value"] = false;
+                    HalData()["dio"][0]["value"] = false;
                 });
 
                 t.Start();
@@ -190,12 +180,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, false);
-                HAL.halData["dio"][0]["value"] = true;
+                HalData()["dio"][0]["value"] = true;
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HAL.halData["dio"][0]["value"] = false;
+                    HalData()["dio"][0]["value"] = false;
                 });
 
                 t.Start();
@@ -215,12 +205,12 @@ namespace WPILib.Tests
 
                 Mock.Arrange(() => delegateMock()).OccursOnce();
 
-                HAL.halData["dio"][0]["value"] = false;
+                HalData()["dio"][0]["value"] = false;
 
                 d.RequestInterrupts(delegateMock);
                 d.EnableInterrupts();
 
-                HAL.halData["dio"][0]["value"] = true;
+                HalData()["dio"][0]["value"] = true;
 
                 Thread.Sleep(50);
 

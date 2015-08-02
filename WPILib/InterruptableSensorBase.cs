@@ -2,7 +2,7 @@
 using HAL_Base;
 using WPILib.Exceptions;
 
-namespace WPILib.Interfaces
+namespace WPILib
 {
     
     public enum WaitResult
