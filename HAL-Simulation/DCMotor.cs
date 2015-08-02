@@ -21,7 +21,7 @@ namespace HAL_Simulator
         protected double m_current;
 
         // Convenience methods for constructing common motors.
-        static DCMotor MakeRS775()
+        public static DCMotor MakeRS775()
         {
             double KT = 0.009; // 9 mNm / A
             double KV = 1083.0 * (Math.PI * 2.0) / 60.0; // 1083 rpm/V in
@@ -31,7 +31,7 @@ namespace HAL_Simulator
             return new DCMotor(KT, KV, RESISTANCE, INERTIA);
         }
 
-        static DCMotor MakeRS550()
+        public static DCMotor MakeRS550()
         {
             double KT = 0.004862;
             double KV = 1608.0 * (Math.PI * 2.0) / 60.0;
@@ -40,7 +40,7 @@ namespace HAL_Simulator
             return new DCMotor(KT, KV, RESISTANCE, INERTIA);
         }
 
-        static DCMotor MakeCIM()
+        public static DCMotor MakeCIM()
         {
             double KT = 0.018264;
             double KV = 442.5 * (Math.PI * 2.0) / 60.0;
@@ -58,7 +58,7 @@ namespace HAL_Simulator
          * @param efficiency The efficiency of the transmission.
          * @return A DCMotor representing the combined transmission.
          */
-        static DCMotor MakeTransmission(DCMotor motor, int num_motors,
+        public static DCMotor MakeTransmission(DCMotor motor, int num_motors,
                 double gear_reduction, double efficiency)
         {
             return new DCMotor(num_motors * gear_reduction * efficiency

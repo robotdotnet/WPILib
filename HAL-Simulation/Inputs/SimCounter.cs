@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator.Inputs
 {
-    public class SimCounter : IServoFeedback
+    public class SimCounter
     {
         private Dictionary<dynamic, dynamic> dictionary = null;
         private bool k2x = true;
@@ -34,9 +34,14 @@ namespace HAL_Simulator.Inputs
             k2x = dictionary["up_falling_edge"];
         }
 
-        public void Set(double value)
+        public void SetCount(double value)
         {
             dictionary["count"] = (int)(value * (k2x ? 2 : 1));
+        }
+
+        public void SetPeriod(double period)
+        {
+            dictionary["period"] = (float)period;
         }
     }
 }

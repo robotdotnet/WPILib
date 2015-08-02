@@ -11,7 +11,7 @@ namespace HAL_Simulator
     public class ServoMechanism
     {
         protected ISimSpeedController m_input;
-        protected IServoFeedback m_output;
+        protected SimEncoder m_output;
         protected double m_encoder_distance_per_tick;
         protected DCMotor m_model;
         protected double m_start_position;
@@ -31,7 +31,7 @@ namespace HAL_Simulator
             public double max_position = 1E9;
         }
 
-        public ServoMechanism(ISimSpeedController input, IServoFeedback output,
+        public ServoMechanism(ISimSpeedController input, SimEncoder output,
             int pdp_channel, double encoder_distance_per_tick, DCMotor model, 
             double load, Limits limits)
         {
@@ -54,7 +54,8 @@ namespace HAL_Simulator
         {
             m_model.Reset(position,0,0);
             m_start_position = position;
-            m_output.Set(0);
+            m_output.SetCount(0);
+            m_output.SetPeriod(float.MaxValue);
             //Ignoring current
         }
 
@@ -62,7 +63,7 @@ namespace HAL_Simulator
         {
             double command = m_input.Get()*battery_voltage;
             m_model.Step(command, m_load, acceleration, timestep);
-            m_output.Set((m_model.GetPosition() - m_start_position) / m_encoder_distance_per_tick);
+            m_output.SetCount((m_model.GetPosition() - m_start_position) / m_encoder_distance_per_tick);
         }
 
         
