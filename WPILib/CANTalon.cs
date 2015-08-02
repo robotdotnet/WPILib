@@ -82,13 +82,19 @@ namespace WPILib
 
         private int GetParamInt32(ParamID id)
         {
-            C_TalonSRX_RequestParam(m_impl, (int)id);
-            Timer.Delay(DelayForSolicitedSignals);
-            var value = 0;
-            var status = C_TalonSRX_GetParamResponseInt32(m_impl, (int)id, ref value);
+            int value;
+            var status = GetParamInt32(id, out value);
             if (status != CTR_Code.CTR_OKAY)
                 CheckStatus((int)status);
             return value;
+        }
+
+        private CTR_Code GetParamInt32(ParamID id, out int value)
+        {
+            C_TalonSRX_RequestParam(m_impl, (int)id);
+            Timer.Delay(DelayForSolicitedSignals);
+            value = 0;
+            return C_TalonSRX_GetParamResponseInt32(m_impl, (int)id, ref value);
         }
 
         private void SetParam(ParamID id, double value)
@@ -637,52 +643,29 @@ namespace WPILib
         {
             LimitMode = LimitMode.SwitchInputsOnly;
         }
+        
 
         public LimitMode LimitMode
         {
             set
             {
-                CTR_Code status;
                 switch (value)
                 {
                     case LimitMode.SwitchInputsOnly:
-#pragma warning disable 618
-                        status = SetForwardSoftLimitEnabled(false);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
-                        status = SetReverseSoftLimitEnabled(false);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
-                        status = C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
-                            kLimitSwitchOverride_EnableFwd_EnableRev);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
+                        ForwardSoftLimitEnabled = false;
+                        ReverseSoftLimitEnabled = false;
+                        EnableLimitSwitches(true, true);
                         break;
                     case LimitMode.SoftPositionLimits:
-                        status = SetForwardSoftLimitEnabled(true);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
-                        status = SetReverseSoftLimitEnabled(true);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
-                        status = C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
-                            kLimitSwitchOverride_EnableFwd_EnableRev);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
+                        ForwardSoftLimitEnabled = true;
+                        ReverseSoftLimitEnabled = true;
+                        EnableLimitSwitches(true, true);
                         break;
                     case LimitMode.SrxDisableSwitchInputs:
-                        status = SetForwardSoftLimitEnabled(false);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
-                        status = SetReverseSoftLimitEnabled(false);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
-                        status = C_TalonSRX_SetOverrideLimitSwitchEn(m_impl,
-                            kLimitSwitchOverride_DisableFwd_DisableRev);
-                        if (status != CTR_Code.CTR_OKAY)
-                            CheckStatus((int)status);
+                        ForwardSoftLimitEnabled = false;
+                        ReverseSoftLimitEnabled = false;
+                        EnableLimitSwitches(false, false);
                         break;
-#pragma warning restore 618
                 }
             }
         }
@@ -756,9 +739,9 @@ namespace WPILib
         [Obsolete("Use ForwardSoftLimitEnabled property instead.")]
         public bool GetForwardSoftLimitEnabled() { return ForwardSoftLimitEnabled; }
         [Obsolete("Use ForwardSoftLimitEnabled poperty instead.")]
-        public CTR_Code SetForwardSoftLimitEnabled(bool value)
+        public void SetForwardSoftLimitEnabled(bool value)
         {
-            return (CTR_Code)GetParamInt32(ParamID.eProfileParamSoftLimitForEnable);
+            ForwardSoftLimitEnabled = value;
         }
         public bool ForwardSoftLimitEnabled
         {
@@ -794,9 +777,9 @@ namespace WPILib
         [Obsolete("Use ReverseSoftLimitEnabled property instead.")]
         public bool GetReverseSoftLimitEnabled() { return ReverseSoftLimitEnabled; }
         [Obsolete("Use ReverseSoftLimitEnabled poperty instead.")]
-        public CTR_Code SetReverseSoftLimitEnabled(bool value)
+        public void SetReverseSoftLimitEnabled(bool value)
         {
-            return (CTR_Code)GetParamInt32(ParamID.eProfileParamSoftLimitRevEnable);
+            ReverseSoftLimitEnabled = value;
         }
         public bool ReverseSoftLimitEnabled
         {
@@ -818,7 +801,9 @@ namespace WPILib
         public void EnableLimitSwitches(bool forward, bool reverse)
         {
             int mask = 1 << 2 | (forward ? 1 : 0) << 1 | (reverse ? 1 : 0);
-            C_TalonSRX_SetOverrideLimitSwitchEn(m_impl, mask);
+            CTR_Code status = C_TalonSRX_SetOverrideLimitSwitchEn(m_impl, mask);
+            if (status != CTR_Code.CTR_OKAY)
+                CheckStatus((int)status);
         }
 
         [Obsolete("Use ForwardLimitSwitchNormallyOpen property instead.")]
@@ -851,6 +836,8 @@ namespace WPILib
             }
         }
 
+
+        [Obsolete("Use ConfigNeutralMode instead")]
         public void EnableBrakeMode(bool brake)
         {
             C_TalonSRX_SetOverrideBrakeType(m_impl, brake ? 2 : 1);
