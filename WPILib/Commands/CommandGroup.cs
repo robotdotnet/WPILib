@@ -97,12 +97,12 @@ namespace WPILib.Commands
             }
         }
 
-        protected new virtual void _Initialize()
+        protected override void _Initialize()
         {
             m_currentCommandIndex = -1;
         }
 
-        protected new virtual void _Execute()
+        internal protected override void _Execute()
         {
             Entry entry = null;
             Command cmd = null;
@@ -177,7 +177,7 @@ namespace WPILib.Commands
             }
         }
 
-        protected new void _End()
+        internal protected override sealed void _End()
         {
             if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
             {
@@ -195,7 +195,7 @@ namespace WPILib.Commands
             m_children.Clear();
         }
 
-        protected new virtual void _Interrupted()
+        internal protected override void _Interrupted()
         {
             _End();
         }

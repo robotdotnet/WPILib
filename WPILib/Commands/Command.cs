@@ -250,7 +250,7 @@ namespace WPILib.Commands
         /// </summary>
         protected abstract void Execute();
 
-        internal virtual void _Execute()
+        internal protected virtual void _Execute()
         {
 
         }
@@ -273,7 +273,7 @@ namespace WPILib.Commands
         /// like shutting off a motor that was being used in the command.</remarks>
         protected abstract void End();
 
-        internal virtual void _End()
+        internal protected virtual void _End()
         {
 
         }
@@ -288,7 +288,7 @@ namespace WPILib.Commands
         /// within this method.</remarks>
         protected abstract void Interrupted();
 
-        internal virtual void _Interrupted()
+        internal protected virtual void _Interrupted()
         {
 
         }
