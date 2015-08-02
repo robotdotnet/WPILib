@@ -59,7 +59,7 @@ namespace WPILib.Buttons
         /// Cancel the command when the button is pressed.
         /// </summary>
         /// <param name="command">The command to start</param>
-        public void CanceWhenPressed(Command command)
+        public void CancelWhenPressed(Command command)
         {
             CancelWhenActive(command);
         }
