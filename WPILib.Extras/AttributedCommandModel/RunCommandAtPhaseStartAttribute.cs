@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
@@ -17,7 +13,7 @@ namespace WPILib.Extras.AttributedCommandModel
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public class RunCommandAtPhaseStartAttribute : Attribute
     {
-        public MatchPhase Phase { get; set; }
+        public MatchPhase Phase { get; }
 
         RunCommandAtPhaseStartAttribute(MatchPhase phase)
         {

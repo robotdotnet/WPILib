@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WPILib.Commands;
+﻿using WPILib.Commands;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
-    public abstract class AttributedPIDSubsystem : Commands.PIDSubsystem, IAttributedSubsystem
+    public abstract class AttributedPIDSubsystem : PIDSubsystem, IAttributedSubsystem
     {
         public AttributedPIDSubsystem(string name, double p, double i, double d)
             : base(name, p, i, d)

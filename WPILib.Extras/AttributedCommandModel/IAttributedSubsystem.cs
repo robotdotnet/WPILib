@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using WPILib.Commands;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
     interface IAttributedSubsystem
     {
-        void InitDefaultCommand(Commands.Command cmd);
+        void InitDefaultCommand(Command cmd);
     }
 }

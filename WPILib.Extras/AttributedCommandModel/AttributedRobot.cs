@@ -1,8 +1,7 @@
-﻿using System;
+﻿using NetworkTables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WPILib.Buttons;
 using WPILib.Commands;
 
@@ -32,10 +31,10 @@ namespace WPILib.Extras.AttributedCommandModel
                                                                 &&
                                                                   typeof(Subsystem).IsAssignableFrom(type));
             subsystems = new List<Subsystem>();
-            subsystems.AddRange(exportedSubsystems.SelectMany(type => GenerateSubsystems(type)));
+            subsystems.AddRange(exportedSubsystems.SelectMany(type => EnumerateGeneratedSubsystems(type)));
         }
 
-        private static IEnumerable<Subsystem> GenerateSubsystems(Type subsystemType)
+        private static IEnumerable<Subsystem> EnumerateGeneratedSubsystems(Type subsystemType)
         {
             foreach (var attr in subsystemType.CustomAttributes.Where(attr => attr.AttributeType == typeof(ExportSubsystemAttribute)))
             {
@@ -65,34 +64,47 @@ namespace WPILib.Extras.AttributedCommandModel
             {
                 var button = buttons.OfType<JoystickButton>().Where(btn => btn.Joystick is Joystick)
                     .FirstOrDefault(btn => (btn.Joystick as Joystick).Port == attr.ControllerId && btn.ButtonNumber == attr.ButtonId);
-                if(button == null)
+                if (button == null)
                 {
                     buttons.Add(button = new JoystickButton(new Joystick(attr.ControllerId), attr.ButtonId));
                 }
-                switch (attr.ButtonMethod)
+                AttachCommandToButton(commandType, button, attr.ButtonMethod);
+            }
+            foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandOnNetworkKeyAttribute), false).OfType<RunCommandOnNetworkKeyAttribute>())
+            {
+                var button = buttons.OfType<NetworkButton>().FirstOrDefault(btn => btn.SourceTable == NetworkTable.GetTable(attr.TableName) && btn.Field == attr.Key);
+                if(button == null)
                 {
-                    case ButtonMethod.WhenPressed:
-                        button.WhenPressed((Command)Activator.CreateInstance(commandType));
-                        break;
-                    case ButtonMethod.WhenReleased:
-                        button.WhenReleased((Command)Activator.CreateInstance(commandType));
-                        break;
-                    case ButtonMethod.WhileHeld:
-                        button.WhileHeld((Command)Activator.CreateInstance(commandType));
-                        break;
-                    case ButtonMethod.ToggleWhenPressed:
-                        button.ToggleWhenPressed((Command)Activator.CreateInstance(commandType));
-                        break;
-                    case ButtonMethod.CancelWhenPressed:
-                        button.CancelWhenPressed((Command)Activator.CreateInstance(commandType));
-                        break;
-                    default:
-                        throw new NotSupportedException("The button method specified is not supported.");
+                    buttons.Add(button = new NetworkButton(attr.TableName, attr.Key));
                 }
+                AttachCommandToButton(commandType, button, attr.ButtonMethod);
             }
         }
 
-        
+        private static void AttachCommandToButton(Type commandType, Button button, ButtonMethod method)
+        {
+            switch (method)
+            {
+                case ButtonMethod.WhenPressed:
+                    button.WhenPressed((Command)Activator.CreateInstance(commandType));
+                    break;
+                case ButtonMethod.WhenReleased:
+                    button.WhenReleased((Command)Activator.CreateInstance(commandType));
+                    break;
+                case ButtonMethod.WhileHeld:
+                    button.WhileHeld((Command)Activator.CreateInstance(commandType));
+                    break;
+                case ButtonMethod.ToggleWhenPressed:
+                    button.ToggleWhenPressed((Command)Activator.CreateInstance(commandType));
+                    break;
+                case ButtonMethod.CancelWhenPressed:
+                    button.CancelWhenPressed((Command)Activator.CreateInstance(commandType));
+                    break;
+                default:
+                    throw new NotSupportedException("The button method specified is not supported.");
+            }
+        }
+
         private void StartPhaseCommands(MatchPhase phase)
         {
             foreach (var command in PhaseCommands.Where(entry => entry.Key == phase))
