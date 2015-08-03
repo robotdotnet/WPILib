@@ -12,6 +12,7 @@ namespace WPILib.Buttons
         protected Trigger m_button;
         protected Command m_command;
 
+
         protected ButtonScheduler(bool last, Trigger button, Command orders)
         {
             m_pressedLast = last;

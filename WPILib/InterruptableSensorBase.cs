@@ -4,12 +4,18 @@ using WPILib.Exceptions;
 
 namespace WPILib
 {
-    
+    /// <summary>
+    /// The Result returned from a synchronous interrupt
+    /// </summary>
     public enum WaitResult
     {
+        /// The interrupt timed out
         Timeout = 0x0,
+        /// The interrupt occured on the rising edge
         RisingEdge = 0x1,
+        /// The interrupt occured on the falling edge
         FallingEdge = 0x100,
+        /// The interrupt occured on both the rising and falling edge
         Both = 0x101,
     }
 

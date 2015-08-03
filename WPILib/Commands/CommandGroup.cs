@@ -5,27 +5,70 @@ using System.Linq;
 namespace WPILib.Commands
 {
     /// <summary>
-    /// A CommandGroup is a list of commands which are executed in sequence.
+    /// A <see cref="CommandGroup"/> is a list of commands which are executed in sequence.
     /// </summary>
+    /// <remarks>
+    /// Commands in a <see cref="CommandGroup"/> are added using the <see cref="AddSequential(Command)"/> method
+    /// and are called sequentially. <see cref="CommandGroup">Command Groups</see> are themselves <see cref="Command">
+    /// commands</see> and can be given to other <see cref="CommandGroup">Command Groups.</see>
+    /// <para>
+    /// <see cref="CommandGroup">Command Groups</see> will carry all of the requirements of their <see cref="Command">
+    /// subcommands</see> Additional requirements can be specified by calling <see cref="Command.Requires(Subsystem)"/>
+    /// normally in the constructor.
+    /// </para>
+    /// <para>
+    /// Command Groups can also execute commands in parallel, simply by adding them using
+    /// <see cref="AddParallel(Command)"/>.
+    /// </para>
+    /// </remarks>
+    /// <seealso cref="Command"/>
+    /// <seealso cref="Subsystem"/>
+    /// <seealso cref="IllegalUseOfCommandException"/>
     public class CommandGroup : Command
     {
-        private List<Entry> m_commands = new List<Entry>();
-        private List<Entry> m_children = new List<Entry>();
+        private readonly List<Entry> m_commands = new List<Entry>();
+        private readonly List<Entry> m_children = new List<Entry>();
 
         internal List<Entry> Children => m_children; 
 
         private int m_currentCommandIndex = -1;
-        private object m_syncRoot = new object();
+        private readonly object m_syncRoot = new object();
+
+        /// <summary>
+        /// Creates a new <see cref="CommandGroup"/>. The name of this command
+        /// will be set to its class name.
+        /// </summary>
         public CommandGroup()
         {
             
         }
 
+        /// <summary>
+        /// Creates a new <see cref="CommandGroup"/> with the given name.
+        /// </summary>
+        /// <param name="name">The name for this command group.</param>
+        /// <exception cref="ArgumentNullException">If name is null</exception>
         public CommandGroup(string name) : base(name)
         {
             
         }
 
+        /// <summary>
+        /// Adds a new <see cref="Command"/> to the group.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Command"/> will be started after all the previously added <see cref="Command">commands</see>.
+        /// <para>
+        /// Note that any requirements thee given <see cref="Command"/> has will be added to the group. For this reason, a 
+        /// <see cref="Command">Command's</see> requirements cannot be changed after being added to a group.
+        /// </para>
+        /// <para>
+        /// It is recommended that this method be called in the constructor.
+        /// </para>
+        /// </remarks>
+        /// <param name="command">The <see cref="Command"/> to be added.</param>
+        /// <exception cref="IllegalUseOfCommandException">If the command has been started before or been given to another group.</exception>
+        /// <exception cref="ArgumentNullException">If the given <see cref="Command"/> is null</exception>
         public void AddSequential(Command command)
         {
             lock (m_syncRoot)
@@ -42,6 +85,28 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Adds a new <see cref="Command"/> to the group with a given timeout.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Command"/> will be started after all the previously added <see cref="Command">commands</see>.
+        /// <para>
+        /// Once the <see cref="Command"/> is started, it will be run until it finishes or the time expires, whichever is sooner.
+        /// Note that the give <see cref="Command"/> will have no knowledge that it is on a timer.
+        /// </para>
+        /// <para>
+        /// Note that any requirements thee given <see cref="Command"/> has will be added to the group. For this reason, a 
+        /// <see cref="Command">Command's</see> requirements cannot be changed after being added to a group.
+        /// </para>
+        /// <para>
+        /// It is recommended that this method be called in the constructor.
+        /// </para>
+        /// </remarks>
+        /// <param name="command">The <see cref="Command"/> to be added.</param>
+        /// <param name="timeout">The timeout (in seconds).</param>
+        /// <exception cref="IllegalUseOfCommandException">If the group has been started before or been given to another group.</exception>
+        /// <exception cref="ArgumentNullException">If the given <see cref="Command"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If the given timeout is negative.</exception>
         public void AddSequential(Command command, double timeout)
         {
             lock (m_syncRoot)
@@ -60,6 +125,29 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Adds a new <see cref="Command"/> to the group.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Command"/> will be started after all the previously added <see cref="Command">commands</see>.
+        /// <para>
+        /// Instead of waiting for the child to finish, a <see cref="CommandGroup"/> will have it run
+        /// at the same time as the subsequent <see cref="Command">Commands</see>. The child wil run
+        /// either until it finishes, a new child with conflicting requirements is started, or the main
+        /// sequence runs a <see cref="Command"/> with conflicting requirements. In the latter two cases,
+        /// the child will be canceled even if it says it can't be interrupted.
+        /// </para>
+        /// <para>
+        /// Note that any requirements thee given <see cref="Command"/> has will be added to the group. For this reason, a 
+        /// <see cref="Command">Command's</see> requirements cannot be changed after being added to a group.
+        /// </para>
+        /// <para>
+        /// It is recommended that this method be called in the constructor.
+        /// </para>
+        /// </remarks>
+        /// <param name="command">The <see cref="Command"/> to be added.</param>
+        /// <exception cref="IllegalUseOfCommandException">If the command has been started before or been given to another group.</exception>
+        /// <exception cref="ArgumentNullException">If the given <see cref="Command"/> is null</exception>
         public void AddParallel(Command command)
         {
             lock (m_syncRoot)
@@ -77,6 +165,35 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Adds a new <see cref="Command"/> to the group with the given timeout.
+        /// </summary>
+        /// <remarks>
+        /// The <see cref="Command"/> will be started after all the previously added <see cref="Command">commands</see>.
+        /// /// <para>
+        /// Once the <see cref="Command"/> is started, it will be run until it finishes or the time expires, whichever is sooner.
+        /// Note that the give <see cref="Command"/> will have no knowledge that it is on a timer.
+        /// </para>
+        /// <para>
+        /// Instead of waiting for the child to finish, a <see cref="CommandGroup"/> will have it run
+        /// at the same time as the subsequent <see cref="Command">Commands</see>. The child wil run
+        /// either until it finishes, a new child with conflicting requirements is started, or the main
+        /// sequence runs a <see cref="Command"/> with conflicting requirements. In the latter two cases,
+        /// the child will be canceled even if it says it can't be interrupted.
+        /// </para>
+        /// <para>
+        /// Note that any requirements thee given <see cref="Command"/> has will be added to the group. For this reason, a 
+        /// <see cref="Command">Command's</see> requirements cannot be changed after being added to a group.
+        /// </para>
+        /// <para>
+        /// It is recommended that this method be called in the constructor.
+        /// </para>
+        /// </remarks>
+        /// <param name="command">The <see cref="Command"/> to be added.</param>
+        /// <param name="timeout">The timeout (in seconds).</param>
+        /// <exception cref="IllegalUseOfCommandException">If the command has been started before or been given to another group.</exception>
+        /// <exception cref="ArgumentNullException">If the given <see cref="Command"/> is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If the given timeout is negative.</exception>
         public void AddParallel(Command command, double timeout)
         {
             lock (m_syncRoot)
@@ -97,11 +214,10 @@ namespace WPILib.Commands
             }
         }
 
-        protected override void _Initialize()
-        {
-            m_currentCommandIndex = -1;
-        }
+        /// <inheritdoc/>
+        internal protected override void _Initialize() => m_currentCommandIndex = -1;
 
+        /// <inheritdoc/>
         internal protected override void _Execute()
         {
             Entry entry = null;
@@ -177,7 +293,8 @@ namespace WPILib.Commands
             }
         }
 
-        internal protected override sealed void _End()
+        /// <inheritdoc/>
+        internal protected override void _End()
         {
             if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
             {
@@ -195,34 +312,51 @@ namespace WPILib.Commands
             m_children.Clear();
         }
 
+        /// <inheritdoc/>
         internal protected override void _Interrupted()
         {
             _End();
         }
 
+        /// <summary>
+        /// Returns true if all the <see cref="Command">Commands</see> in this group have
+        /// been started and have finished.
+        /// </summary>
+        /// <remarks>
+        /// Teams may override this method, although they probably should reference base.IsFinished()
+        /// if they do.
+        /// </remarks>
+        /// <returns>Whether this <see cref="CommandGroup"/> is finished.</returns>
         protected override bool IsFinished()
         {
             return m_currentCommandIndex >= m_commands.Count && m_children.Count == 0;
         }
 
-
+        /// <inheritdoc/>
         protected override void Execute()
         {
-            
         }
 
+        /// <inheritdoc/>
         protected override void Initialize()
         {
         }
 
+        /// <inheritdoc/>
         protected override void End()
         {
         }
 
+        /// <inheritdoc/>
         protected override void Interrupted()
         {
         }
 
+        /// <summary>
+        /// Returns whether or not this group is interruptible.
+        /// </summary>
+        /// <remarks>A command group will be uninterruptible if <see cref="Interruptible"/> has been set to false or if 
+        /// it is currently running an uninterruptible <see cref="Command"/> or child</remarks>
         public new bool Interruptible
         {
             get
@@ -247,6 +381,7 @@ namespace WPILib.Commands
                     return m_children.All(s => s.command.Interruptible);
                 }
             }
+            protected set { base.Interruptible = value; }
         }
 
         private void CancelConflicts(Command command)

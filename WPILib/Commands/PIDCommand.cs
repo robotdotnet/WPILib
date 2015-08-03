@@ -6,9 +6,12 @@ namespace WPILib.Commands
     /// <summary>
     /// This class defines a <see cref="Command"/> which interacts heavily with a PID loop.
     /// </summary>
+    /// <remarks>It provides some conveniance methods to run an internal <see cref="PIDController"/>.
+    /// It will also start and stop said <see cref="PIDController"/> when the <see cref="PIDCommand"/>
+    /// is first initialized and ended/interrupted.</remarks>
     public abstract class PIDCommand : Command, IPIDSource, IPIDOutput
     {
-        private PIDController m_controller;
+        private readonly PIDController m_controller;
 
         ///<inheritdoc/>
         public double PidGet() => ReturnPIDInput();
@@ -18,30 +21,48 @@ namespace WPILib.Commands
             UsePIDOutput(value);
         }
 
-        public PIDCommand(string name, double p, double i, double d)
+        /// <summary>
+        /// Instantiates a <see cref="PIDCommand"/> that will use the given p, i and d values.
+        /// </summary>
+        /// <param name="name">The name of the command.</param>
+        /// <param name="p">The proportional value.</param>
+        /// <param name="i">The integral value.</param>
+        /// <param name="d">The derivative value.</param>
+        protected PIDCommand(string name, double p, double i, double d)
             : base(name)
         {
             m_controller = new PIDController(p, i, d, this, this);
         }
 
-        public PIDCommand(double p, double i, double d)
+        /// <summary>
+        /// Instantiates a <see cref="PIDCommand"/> that will use the given p, i and d values,
+        /// and use the class name as its name
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="i"></param>
+        /// <param name="d"></param>
+        protected PIDCommand(double p, double i, double d)
         {
             m_controller = new PIDController(p, i, d, this, this);
         }
 
-        public PIDCommand(double p, double i, double d, double period)
+        protected PIDCommand(double p, double i, double d, double period)
         {
             m_controller = new PIDController(p, i, d, this, this, period);
         }
 
-        public PIDCommand(string name, double p, double i, double d, double period)
+        protected PIDCommand(string name, double p, double i, double d, double period)
             : base(name)
         {
             m_controller = new PIDController(p, i, d, this, this, period);
         }
 
+        /// <summary>
+        /// Returns the <see cref="PIDController"/> used by this <see cref="PIDCommand"/>.
+        /// </summary>
+        /// <remarks>Use this if you would like to fine tune the PID loop.</remarks>
+        protected PIDController PIDController => m_controller;
 
-        protected PIDController GetPIDController() => m_controller;
         ///<inheritdoc/>
         protected new virtual void _Initialize()
         {
