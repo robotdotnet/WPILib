@@ -239,7 +239,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="Initialize()"/>
         /// </summary>
-        internal protected virtual void _Initialize()
+        internal virtual void _Initialize()
         {
 
         }
@@ -253,7 +253,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="Execute"/>.
         /// </summary>
-        internal protected virtual void _Execute()
+        internal virtual void _Execute()
         {
 
         }
@@ -279,7 +279,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="End"/>.
         /// </summary>
-        internal protected virtual void _End()
+        internal virtual void _End()
         {
 
         }
@@ -297,7 +297,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="Interrupted"/>.
         /// </summary>
-        internal protected virtual void _Interrupted()
+        internal virtual void _Interrupted()
         {
 
         }
