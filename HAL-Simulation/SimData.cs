@@ -400,12 +400,7 @@ namespace HAL_Simulator
 
             halData["pdp"] = new Dictionary<dynamic, dynamic>();
 
-            InitializeNewPDP(0);
-
             halData["pcm"] = new Dictionary<dynamic, dynamic>();
-
-            InitializeNewPCM(0);
-
 
             halData["CAN"] = new NotifyDict<dynamic, dynamic>();
 
@@ -440,6 +435,12 @@ namespace HAL_Simulator
 
 
             FilterHalData(halData, halInData);
+
+            //We have to force these into the in dictionary so they exist to be checked.
+
+            halInData["pdp"] = new Dictionary<dynamic, dynamic>();
+
+            halInData["pcm"] = new Dictionary<dynamic, dynamic>();
         }
 
         internal static void InitializeNewPCM(int module)
@@ -449,12 +450,12 @@ namespace HAL_Simulator
                 halData["pcm"][module] = new Dictionary<dynamic, dynamic>();
                 halData["pcm"][module]["compressor"] = new Dictionary<dynamic, dynamic>
                 {
-                    {"has_source", new IN(false) },
-                    {"initialized", new OUT(false) },
-                    {"on", new IN(false) },
-                    {"closed_loop_enabled", new OUT(false) },
-                    {"pressure_switch", new IN(false) },
-                    {"current", new IN(0.0) }
+                    {"has_source", false },
+                    {"initialized", false },
+                    {"on", false },
+                    {"closed_loop_enabled", false },
+                    {"pressure_switch", false },
+                    {"current", 0.0 }
                 };
 
                 halData["pcm"][module]["solenoid"] = new List<dynamic>();
@@ -462,10 +463,24 @@ namespace HAL_Simulator
                 {
                     halData["pcm"][module]["solenoid"].Add(new NotifyDict<dynamic, dynamic>
                     {
-                        {"initialized", new OUT(false)},
-                        {"value", new OUT(false)}
+                        {"initialized", false},
+                        {"value", (false)}
                     });
                 };
+
+            }
+
+            if (!halInData["pcm"].ContainsKey(module))
+            {
+                halInData["pcm"][module] = new Dictionary<dynamic, dynamic>();
+                halInData["pcm"][module]["compressor"] = new Dictionary<dynamic, dynamic>
+                {
+                    {"has_source", false },
+                    {"on", false },
+                    {"pressure_switch", false },
+                    {"current", 0.0 }
+                };
+                
             }
         }
 
@@ -475,13 +490,27 @@ namespace HAL_Simulator
             {
                 halData["pdp"][module] = new Dictionary<dynamic, dynamic>
                 {
-                    {"has_source", new IN(false) },
-                    {"temperature", new IN(0) },
-                    {"voltage", new IN(0) },
-                    {"current", new IN(new double[16]) },
-                    {"total_current", new IN(0) },
-                    {"total_power", new IN(0) },
-                    {"total_energy", new IN(0) },
+                    {"has_source", false },
+                    {"temperature", 0 },
+                    {"voltage", (0) },
+                    {"current", (new double[16]) },
+                    {"total_current", (0) },
+                    {"total_power", (0) },
+                    {"total_energy", (0) },
+
+                };
+            }
+            if (!halInData["pdp"].ContainsKey(module))
+            {
+                halInData["pdp"][module] = new Dictionary<dynamic, dynamic>
+                {
+                    {"has_source", false },
+                    {"temperature", 0 },
+                    {"voltage", (0) },
+                    {"current", (new double[16]) },
+                    {"total_current", (0) },
+                    {"total_power", (0) },
+                    {"total_energy", (0) },
 
                 };
             }

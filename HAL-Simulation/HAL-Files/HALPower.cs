@@ -25,35 +25,33 @@ namespace HAL_Simulator
             return (float)halData["power"]["vin_current"];
         }
 
-
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserVoltage6V")]
         [CalledSimFunction]
-        public static extern float getUserVoltage6V(ref int status);
+        public static float getUserVoltage6V(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["user_voltage_6v"];
+        }
 
-
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserCurrent6V")]
         [CalledSimFunction]
-        public static extern float getUserCurrent6V(ref int status);
+        public static float getUserCurrent6V(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["user_current_6v"];
+        }
 
-
-        /// Return Type: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserActive6V")]
-        [return: MarshalAs(UnmanagedType.I1)]
         [CalledSimFunction]
-        public static extern bool getUserActive6V(ref int status);
+        public static bool getUserActive6V(ref int status)
+        {
+            status = 0;
+            return halData["power"]["user_active_6v"];
+        }
 
-
-        /// Return Type: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserCurrentFaults6V")]
         [CalledSimFunction]
-        public static extern int getUserCurrentFaults6V(ref int status);
-
+        public static int getUserCurrentFaults6V(ref int status)
+        {
+            status = 0;
+            return halData["power"]["user_faults_6v"];
+        }
 
         [CalledSimFunction]
         public static float getUserVoltage5V(ref int status)
@@ -62,28 +60,26 @@ namespace HAL_Simulator
             return (float)halData["power"]["user_voltage_5v"];
         }
 
-
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserCurrent5V")]
         [CalledSimFunction]
-        public static extern float getUserCurrent5V(ref int status);
+        public static float getUserCurrent5V(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["user_current_5v"];
+        }
 
-
-        /// Return Type: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserActive5V")]
-        [return: MarshalAs(UnmanagedType.I1)]
         [CalledSimFunction]
-        public static extern bool getUserActive5V(ref int status);
+        public static bool getUserActive5V(ref int status)
+        {
+            status = 0;
+            return halData["power"]["user_active_5v"];
+        }
 
-
-        /// Return Type: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserCurrentFaults5V")]
         [CalledSimFunction]
-        public static extern int getUserCurrentFaults5V(ref int status);
-
+        public static int getUserCurrentFaults5V(ref int status)
+        {
+            status = 0;
+            return halData["power"]["user_faults_5v"];
+        }
 
         [CalledSimFunction]
         public static float getUserVoltage3V3(ref int status)
@@ -92,26 +88,25 @@ namespace HAL_Simulator
             return (float)halData["power"]["user_voltage_3v3"];
         }
 
-
-        /// Return Type: float
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserCurrent3V3")]
         [CalledSimFunction]
-        public static extern float getUserCurrent3V3(ref int status);
+        public static float getUserCurrent3V3(ref int status)
+        {
+            status = 0;
+            return (float)halData["power"]["user_current_3v3"];
+        }
 
-
-        /// Return Type: boolean
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserActive3V3")]
-        [return: MarshalAs(UnmanagedType.I1)]
         [CalledSimFunction]
-        public static extern bool getUserActive3V3(ref int status);
+        public static bool getUserActive3V3(ref int status)
+        {
+            status = 0;
+            return halData["power"]["user_active_3v3"];
+        }
 
-
-        /// Return Type: int
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getUserCurrentFaults3V3")]
         [CalledSimFunction]
-        public static extern int getUserCurrentFaults3V3(ref int status);
+        public static int getUserCurrentFaults3V3(ref int status)
+        {
+            status = 0;
+            return halData["power"]["user_faults_3v3"];
+        }
     }
 }
