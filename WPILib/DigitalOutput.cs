@@ -45,7 +45,7 @@ namespace WPILib
         public void Set(bool value)
         {
             int status = 0;
-            SetDIO(m_port, (short)(value ? 0 : 1), ref status);
+            SetDIO(m_port, (short)(value ? 1 : 0), ref status);
             CheckStatus(status);
         }
 
