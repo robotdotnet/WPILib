@@ -17,9 +17,9 @@ namespace WPILib
     /// </remarks>
     public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
-        private int m_channel;//The channel to control.
+        private readonly int m_channel;//The channel to control.
         private IntPtr m_solenoidPort;
-        private object m_lockObject = new object();
+        private readonly object m_lockObject = new object();
 
         /// <summary>
         /// Common function to implement constructor behavior.
@@ -89,10 +89,15 @@ namespace WPILib
         /// <param name="on">Turn the solenoid output off or on.</param>
         public void Set(bool on)
         {
+            int status = 0;
+            SetSolenoid(m_solenoidPort, on, ref status);
+            CheckStatus(status);
+            /*
             byte value = (byte)(on ? 0xFF : 0x00);
             byte mask = (byte)(1 << m_channel);
 
             Set(value, mask);
+            */
         }
 
         /// <summary>
@@ -101,8 +106,14 @@ namespace WPILib
         /// <returns>The current value of the solenoid.</returns>
         public bool Get()
         {
+            int status = 0;
+            bool value = GetSolenoid(m_solenoidPort, ref status);
+            CheckStatus(status);
+            return value;
+            /*
             int value = GetAll() & (1 << m_channel);
             return (value != 0);
+            */
         }
 
         /// <summary>
