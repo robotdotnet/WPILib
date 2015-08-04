@@ -400,12 +400,7 @@ namespace HAL_Simulator
 
             halData["pdp"] = new Dictionary<dynamic, dynamic>();
 
-            //InitializeNewPDP(0);
-
             halData["pcm"] = new Dictionary<dynamic, dynamic>();
-
-            //InitializeNewPCM(0);
-
 
             halData["CAN"] = new NotifyDict<dynamic, dynamic>();
 
@@ -440,6 +435,12 @@ namespace HAL_Simulator
 
 
             FilterHalData(halData, halInData);
+
+            //We have to force these into the in dictionary so they exist to be checked.
+
+            halInData["pdp"] = new Dictionary<dynamic, dynamic>();
+
+            halInData["pcm"] = new Dictionary<dynamic, dynamic>();
         }
 
         internal static void InitializeNewPCM(int module)
