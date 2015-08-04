@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using NetworkTables.NetworkTables2.Type;
 using NetworkTables.Tables;
 using WPILib.Buttons;
@@ -25,19 +26,20 @@ namespace WPILib.Commands
         /// The Singleton Instance
         private static Scheduler s_instance = null;
 
-        private HashSet<Subsystem> m_subsystems = new HashSet<Subsystem>();
-        private HashSet<Command> m_commands = new HashSet<Command>();
-        private List<Command> m_additions = new List<Command>();
+        private readonly HashSet<Subsystem> m_subsystems = new HashSet<Subsystem>();
+        private readonly Dictionary<Command, LinkedListElement> m_commandTable = new Dictionary<Command, LinkedListElement>();
+        private readonly List<Command> m_additions = new List<Command>();
         private List<ButtonScheduler> m_buttons = new List<ButtonScheduler>();
 
-        private object m_buttonsLock = new object();
-        private object m_additionsLock = new object();
-        private static object s_instanceLock = new object();
+        private static readonly object s_instanceLock = new object();
 
         private bool m_adding;
         private bool m_enabled = true;
 
         private bool m_runningCommandsChanged = false;
+
+        private LinkedListElement m_firstCommand;
+        private LinkedListElement m_lastCommand;
 
         private Scheduler()
         {
@@ -60,109 +62,114 @@ namespace WPILib.Commands
 
         public void AddCommand(Command command)
         {
-            lock (m_additionsLock)
+            if (command != null)
             {
-                if (command != null)
-                    m_additions.Add(command);
+                m_additions.Add(command);
             }
         }
 
         public void AddButton(ButtonScheduler button)
         {
-            lock (m_buttons)
+            if (m_buttons == null)
             {
-                if (button != null)
-                    m_buttons.Add(button);
+                m_buttons = new List<ButtonScheduler>();
             }
+            m_buttons.Add(button);
         }
 
-        private void ProcessCommandAddition(Command command)
+        private void _Add(Command command)
         {
             if (command == null)
-                return;
-            if (m_adding)
             {
-                Console.Error.WriteLine("WARNING: Can not start command from cancel method.  Ignoring:" + command);
                 return;
             }
-
-            if (!m_commands.Contains(command))
+            if (m_adding)
             {
-                if (command.GetRequirements().Any())
+                Console.Error.WriteLine($"WARNING: Cannot start command from cancel method. Ignoring: {command}");
+            }
+            if (!m_commandTable.ContainsKey(command))
+            {
+                IEnumerable<Subsystem> requirements = command.GetRequirements();
+                if (requirements.Any(subsystem => subsystem.GetCurrentCommand() != null && !subsystem.GetCurrentCommand().Interruptible))
                 {
-                    if (command.GetRequirements().Any(s => s.GetCurrentCommand() != null && !s.GetCurrentCommand().Interruptible))
-                    {
-                        return;
-                    } 
+                    return;
                 }
 
                 m_adding = true;
-
-                foreach (var s in command.GetRequirements())
+                requirements = command.GetRequirements();
+                foreach (var subsystem in requirements)
                 {
-                    if (s.GetCurrentCommand() != null)
+                    if (subsystem.GetCurrentCommand() != null)
                     {
-                        s.GetCurrentCommand().Cancel();
-                        Remove(s.GetCurrentCommand());
+                        subsystem.GetCurrentCommand().Cancel();
+                        Remove(subsystem.GetCurrentCommand());
                     }
-                    s.SetCurrentCommand(command);
+                    subsystem.SetCurrentCommand(command);
                 }
-
                 m_adding = false;
 
-                m_commands.Add(command);
-                command.StartRunning();
+                LinkedListElement element = new LinkedListElement();
+                element.SetData(command);
+                if (m_firstCommand == null)
+                {
+                    m_firstCommand = m_lastCommand = element;
+                }
+                else
+                {
+                    m_lastCommand.Add(element);
+                    m_lastCommand = element;
+                }
+                m_commandTable.Add(command, element);
                 m_runningCommandsChanged = true;
+                command.StartRunning();
             }
         }
 
         public void Run()
         {
             m_runningCommandsChanged = false;
+
             if (!m_enabled)
                 return;
-            lock (m_buttonsLock)
+            if (m_buttons != null)
             {
-                if (m_buttons != null)
+                for (int i = m_buttons.Count - 1; i >= 0; i--)
                 {
-                    for (int i = m_buttons.Count - 1; i >= 0; i--)
-                    {
-                        m_buttons[i].Execute();
-                    }
+                    m_buttons[i].Execute();
                 }
             }
 
-            m_runningCommandsChanged = false;
-
-            foreach (var s in m_commands.Where(s => !s.Run()))
+            LinkedListElement e = m_firstCommand;
+            while (e != null)
             {
-                Remove(s);
-                m_runningCommandsChanged = true;
-            }
-
-            lock (m_additionsLock)
-            {
-                foreach (var s in m_additions)
+                Command c = e.GetData();
+                e = e.GetNext();
+                if (!c.Run())
                 {
-                    ProcessCommandAddition(s);
+                    Remove(c);
+                    m_runningCommandsChanged = true;
                 }
-                m_additions.Clear();
             }
 
-            foreach (var s in m_subsystems)
+            foreach (Command t in m_additions)
             {
-                if (s.GetCurrentCommand() == null)
-                {
-                    ProcessCommandAddition(s.GetDefaultCommand());
-                }
-                s.ConfirmCommand();
+                _Add(t);
             }
 
+            m_additions.Clear();
+
+            foreach (var subsystem in m_subsystems)
+            {
+                if (subsystem.GetCurrentCommand() == null)
+                {
+                    _Add(subsystem.GetCurrentCommand());
+                }
+                subsystem.ConfirmCommand();
+            }
             UpdateTable();
-
         }
 
-        public void RegisterSubsystem(Subsystem system)
+        internal void RegisterSubsystem(Subsystem system)
         {
             if (system != null)
             {
@@ -170,25 +177,40 @@ namespace WPILib.Commands
             }
         }
 
-        public void Remove(Command command)
+        internal void Remove(Command command)
         {
-            if (command == null)
-                return;
-            if (!m_commands.Remove(command))
-                return;
-
-            foreach (var s in command.GetRequirements())
+            if (command == null || !m_commandTable.ContainsKey(command))
             {
-                s.SetCurrentCommand(null);
+                return;
             }
+
+            LinkedListElement e = m_commandTable[command];
+            m_commandTable.Remove(command);
+
+            if (e.Equals(m_lastCommand))
+            {
+                m_lastCommand = e.GetPrevious();
+            }
+            if (e.Equals(m_firstCommand))
+            {
+                m_firstCommand = e.GetNext();
+            }
+            e.Remove();
+
+            var requirements = command.GetRequirements();
+            foreach (var requirement in requirements)
+            {
+                requirement.SetCurrentCommand(null);
+            }
+
             command.Removed();
         }
 
         public void RemoveAll()
         {
-            while (m_commands.Count > 0)
+            while (m_firstCommand != null)
             {
-                Remove(m_commands.First());
+                Remove(m_firstCommand.GetData());
             }
         }
 
@@ -233,13 +255,13 @@ namespace WPILib.Commands
             Table.RetrieveValue("Cancel", toCancel);
             if (toCancel.Size() > 0)
             {
-                foreach (var command in m_commands)
+                for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
                 {
                     for (int i = 0; i < toCancel.Size(); i++)
                     {
-                        if (command.GetHashCode() == toCancel.Get(i))
+                        if (e.GetData().GetHashCode() == toCancel.Get(i))
                         {
-                            command.Cancel();
+                            e.GetData().Cancel();
                         }
                     }
                 }
@@ -251,16 +273,14 @@ namespace WPILib.Commands
             {
                 commands.SetSize(0);
                 ids.SetSize(0);
-
-                foreach (var command in m_commands)
+                for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
                 {
-                    commands.Add(command.Name);
-                    ids.Add(command.GetHashCode());
+                    commands.Add(e.GetData().Name);
+                    ids.Add(e.GetData().GetHashCode());
                 }
                 Table.PutValue("Names", commands);
                 Table.PutValue("Ids", ids);
             }
-
         }
 
         ///<inheritdoc/>
