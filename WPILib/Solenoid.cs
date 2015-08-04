@@ -92,12 +92,6 @@ namespace WPILib
             int status = 0;
             SetSolenoid(m_solenoidPort, on, ref status);
             CheckStatus(status);
-            /*
-            byte value = (byte)(on ? 0xFF : 0x00);
-            byte mask = (byte)(1 << m_channel);
-
-            Set(value, mask);
-            */
         }
 
         /// <summary>
@@ -110,10 +104,6 @@ namespace WPILib
             bool value = GetSolenoid(m_solenoidPort, ref status);
             CheckStatus(status);
             return value;
-            /*
-            int value = GetAll() & (1 << m_channel);
-            return (value != 0);
-            */
         }
 
         /// <summary>
