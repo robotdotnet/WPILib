@@ -24,8 +24,7 @@ namespace WPILib.Tests
             {
                 index = trigger.Index;
                 Assert.IsTrue(GetData(index)["initialized"]);
-                Assert.NotNull(GetData(index)["port"]);
-                Assert.AreEqual(pin, GetData(index)["port"].pin);
+                Assert.AreEqual(pin, GetData(index)["pin"].pin);
             }
             Assert.IsFalse(GetData(index)["initialized"]);
         }

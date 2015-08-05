@@ -279,6 +279,7 @@ namespace HAL_Simulator
                 if (cnt["initialized"] == false)
                 {
                     cnt["initialized"] = true;
+					cnt["pin"] = GetHalPort(port_pointer).pin;
                     AnalogTrigger trig = new AnalogTrigger()
                     {
                         analogPortPointer = aPt,

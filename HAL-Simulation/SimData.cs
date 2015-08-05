@@ -249,7 +249,6 @@ namespace HAL_Simulator
                     { "voltage", new IN(0.0) },
                     { "lsb_weight", new IN(1) },
                     { "offset", new IN(65535) },
-
                     {"accumulator_initialized", new OUT(0) },
                     {"accumulator_center", new OUT(0) },
                     { "accumulator_value", new IN(1) },
@@ -266,7 +265,7 @@ namespace HAL_Simulator
                 {
                     {"has_source", new IN(false)},
                     {"initialized", new OUT(false)},
-                    {"port", new OUT(null)},
+                    {"pin", new OUT(-1)},
                     {"trig_lower", new OUT(null)},
                     {"trig_upper", new OUT(null)},
                     {"trig_type", new OUT(null)},

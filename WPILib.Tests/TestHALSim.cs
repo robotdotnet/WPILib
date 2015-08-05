@@ -30,11 +30,11 @@ namespace WPILib.Tests
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("value", Arg.AnyObject)).OccursOnce();
+            Mock.Arrange(() => delegateMock("voltage", Arg.AnyObject)).OccursOnce();
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("value", delegateMock, true);
+            HAL.halData["analog_in"][0].Register("voltage", delegateMock, true);
 
             Mock.Assert(delegateMock);
         }
@@ -44,11 +44,11 @@ namespace WPILib.Tests
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("value", Arg.AnyObject)).OccursNever();
+            Mock.Arrange(() => delegateMock("voltage", Arg.AnyObject)).OccursNever();
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("value", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
 
             Mock.Assert(delegateMock);
         }
@@ -58,13 +58,13 @@ namespace WPILib.Tests
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
+            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("value", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
 
-            HAL.halData["analog_in"][0]["value"] = 1.25;
+            HAL.halData["analog_in"][0]["voltage"] = 1.25;
 
             Mock.Assert(delegateMock);
         }
@@ -74,11 +74,11 @@ namespace WPILib.Tests
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
+            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("value", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
 
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>()
             {
@@ -87,7 +87,7 @@ namespace WPILib.Tests
                     {
                         new Dictionary<dynamic, dynamic>()
                         {
-                            {"value", 1.25 }
+                            {"voltage", 1.25 }
                         }
                     }
                 },
@@ -103,13 +103,13 @@ namespace WPILib.Tests
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
+            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("value", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
 
-            HAL.halInData["analog_in"][0]["value"] = 1.25;
+            HAL.halInData["analog_in"][0]["voltage"] = 1.25;
 
             SimData.UpdateHalData(HAL.halInData, HAL.halData);
 
@@ -121,17 +121,17 @@ namespace WPILib.Tests
         {
             var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
+            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("value", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
 
-            HAL.halData["analog_in"][0]["value"] = 1.25;
+            HAL.halData["analog_in"][0]["voltage"] = 1.25;
 
-            HAL.halData["analog_in"][0].Cancel("value", delegateMock);
+            HAL.halData["analog_in"][0].Cancel("voltage", delegateMock);
 
-            HAL.halData["analog_in"][0]["value"] = 13.84;
+            HAL.halData["analog_in"][0]["voltage"] = 13.84;
 
             Mock.Assert(delegateMock);
         }
@@ -141,11 +141,11 @@ namespace WPILib.Tests
         {
             SimData.ResetHALData(false);
 
-            HAL.halInData["analog_in"][0]["avg_value"] = 1.352;
+            HAL.halInData["analog_in"][0]["voltage"] = 1.352;
 
-            HAL.halData["analog_in"][0]["avg_value"] = 454.57;
+            HAL.halData["analog_in"][0]["voltage"] = 454.57;
 
-            Assert.AreNotEqual(HAL.halInData["analog_in"][0]["avg_value"], HAL.halData["analog_in"][0]["avg_value"]);
+            Assert.AreNotEqual(HAL.halInData["analog_in"][0]["voltage"], HAL.halData["analog_in"][0]["voltage"]);
         }
 
         [Test]
