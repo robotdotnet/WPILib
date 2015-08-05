@@ -41,7 +41,7 @@ namespace WPILib
 
             CheckDigitalChannel(channel);
 
-            s_channels.Allocate(channel);
+            s_channels.Allocate(channel, "Digital input " + channel + " is already allocated");
 
             IntPtr portPointer = HAL.GetPort((byte)channel);
             int status = 0;

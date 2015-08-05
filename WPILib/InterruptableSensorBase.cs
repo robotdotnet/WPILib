@@ -156,7 +156,7 @@ namespace WPILib
         /// to occur.</param>
         protected void AllocateInterrupts(bool watcher)
         {
-            m_interruptIndex = (uint)s_interrupts.Allocate();
+            m_interruptIndex = (uint)s_interrupts.Allocate("No interrupts are left to be allocated");
             m_isSynchronousInterrupt = watcher;
 
             int status = 0;

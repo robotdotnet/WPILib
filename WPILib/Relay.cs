@@ -49,12 +49,12 @@ namespace WPILib
             CheckRelayChannel(m_channel);
             if (m_direction == Direction.Both || m_direction == Direction.Forward)
             {
-                s_relayChannels.Allocate(m_channel * 2);
+                s_relayChannels.Allocate(m_channel * 2, "Relay channel " + m_channel + " is already allocated");
                 HAL.Report(ResourceType.kResourceType_Relay, (byte)m_channel);
             }
             if (m_direction == Direction.Both || m_direction == Direction.Reverse)
             {
-                s_relayChannels.Allocate(m_channel * 2 + 1);
+                s_relayChannels.Allocate(m_channel * 2 + 1, "Relay channel " + m_channel + " is already allocated");
                 HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
             }
             int status = 0;

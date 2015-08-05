@@ -52,7 +52,7 @@ namespace WPILib
 
         public CANJaguar(int deviceNumber)
         {
-            s_allocated.Allocate(deviceNumber - 1);
+            s_allocated.Allocate(deviceNumber - 1, "CANJaguar device " + deviceNumber + " is already allocated");
 
             m_deviceNumber = (byte)deviceNumber;
             m_controlMode = ControlMode.PercentVbus;

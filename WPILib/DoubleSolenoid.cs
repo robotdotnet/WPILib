@@ -40,8 +40,10 @@ namespace WPILib
                 CheckSolenoidChannel(m_forwardChannel);
                 CheckSolenoidChannel(m_reverseChannel);
 
-                s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                s_allocated.Allocate(m_moduleNumber*SolenoidChannels + m_forwardChannel,
+                    "Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
+                s_allocated.Allocate(m_moduleNumber*SolenoidChannels + m_reverseChannel,
+                    "Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
 
                 int status = 0;
                 IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_forwardChannel);

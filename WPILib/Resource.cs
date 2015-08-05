@@ -67,9 +67,10 @@ namespace WPILib
         /// In this case, a free resource value within the range is located
         /// and returned after it is marked allocated.</remarks>
         /// <returns>The index of the allocated block.</returns>
-        /// /// <exception cref="CheckedAllocationException"> If there are no resources
+        /// /// <exception cref="AllocationException"> If there are no resources
         /// available to be allocated.</exception>
-        public int Allocate()
+        /// <param name="error">The string to throw when there is an error.</param>
+        public int Allocate(string error = null)
         {
             for (int i = 0; i < m_size; i++)
             {
@@ -79,7 +80,11 @@ namespace WPILib
                     return i;
                 }
             }
-            throw new AllocationException("No available resources");
+            if (error == null)
+            {
+                error = "No available resources";
+            }
+            throw new AllocationException(error);
         }
 
         /// <summary>
@@ -89,18 +94,27 @@ namespace WPILib
         /// i.e. channel number and it is verified unallocated,
         /// then returned.</remarks>
         /// <param name="index">The resource to allocate.</param>
+        /// <param name="error">The string to throw when there is an error.</param>
         /// <returns>The index of the allocated block.</returns>
-        /// <exception cref="CheckedAllocationException"> If there are no resources
+        /// <exception cref="AllocationException"> If there are no resources
         /// available to be allocated.</exception>
-        public int Allocate(int index)
+        public int Allocate(int index, string error = null)
         {
             if (index >= m_size || index < 0)
             {
-                throw new AllocationException("Index " + index + " out of range");
+                if (error == null)
+                {
+                    error = $"Index {index} out of range";
+                }
+                throw new AllocationException(error);
             }
             if (m_numAllocated[index])
             {
-                throw new AllocationException("Resource at index " + index + " already allocated");
+                if (error == null)
+                {
+                    error = $"Resource at index {index} allready allocated";
+                }
+                throw new AllocationException(error);
             }
             m_numAllocated[index] = true;
             return index;
