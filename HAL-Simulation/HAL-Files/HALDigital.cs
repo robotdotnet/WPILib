@@ -357,6 +357,8 @@ namespace HAL_Simulator
         public static void freeCounter(IntPtr counter_pointer, ref int status)
         {
             status = 0;
+            clearCounterUpSource(counter_pointer, ref status);
+            clearCounterDownSource(counter_pointer, ref status);
             halData["counter"][GetCounter(counter_pointer).idx]["initialized"] = false;
 
             Marshal.FreeHGlobal(counter_pointer);
@@ -375,8 +377,44 @@ namespace HAL_Simulator
             var idx = GetCounter(counter_pointer).idx;
             status = 0;
 
-            halData["counter"][idx]["up_source_channel"] = pin;
+            halData["counter"][idx]["up_source_channel"] = (int)pin;
             halData["counter"][idx]["up_source_trigger"] = analogTrigger;
+			
+			bool prevValue = halData["dio"][(int)pin]["value"];
+			
+			Action<dynamic, dynamic> upCallback = (key, value) =>
+			{
+				//Was low
+				if (!prevValue)
+				{
+					//if still low ignore
+					if (!value)
+						return;
+					//Otherwise if we count on rising edge add 1
+					if (halData["counter"][idx]["up_rising_edge"])
+					{
+						halData["counter"][idx]["count"]++;
+					}
+				}
+				//Was High
+				else
+				{
+					//if still high ignore
+					if (value)
+						return;
+					//Otherwise if we count on falling edge add 1
+					if (halData["counter"][idx]["up_falling_edge"])
+					{
+						halData["counter"][idx]["count"]++;
+					}
+				}
+				prevValue = value;
+			};
+			
+			halData["counter"][idx]["up_callback"] = upCallback;
+			
+			halData["dio"][(int)pin].Register("value", upCallback);
+			
 
             if (halData["counter"][idx]["mode"] == (int)Mode.ExternalDirection ||
                 halData["counter"][idx]["mode"] == (int)Mode.TwoPulse)
@@ -404,6 +442,12 @@ namespace HAL_Simulator
             counter["up_falling_edge"] = false;
             counter["up_source_channel"] = 0u;
             counter["up_source_trigger"] = false;
+			
+			if (counter.ContainsKey["upCallback"] && counter["upCallback"] != null)
+			{
+				halData["dio"][counter["up_source_channel"]].Cancel("value", counter["upCallback"]);
+				counter["upCallback"] = null;
+			}
         }
 
         [CalledSimFunction]
@@ -418,8 +462,43 @@ namespace HAL_Simulator
                 status = PARAMETER_OUT_OF_RANGE;
                 return;
             }
+			
+			bool prevValue = halData["dio"][(int)pin]["value"];
+			
+			Action<dynamic, dynamic> downCallback = (key, value) =>
+			{
+				//Was low
+				if (!prevValue)
+				{
+					//if still low ignore
+					if (!value)
+						return;
+					//Otherwise if we count on rising edge add 1
+					if (halData["counter"][idx]["down_rising_edge"])
+					{
+						halData["counter"][idx]["count"]--;
+					}
+				}
+				//Was High
+				else
+				{
+					//if still high ignore
+					if (value)
+						return;
+					//Otherwise if we count on falling edge add 1
+					if (halData["counter"][idx]["down_falling_edge"])
+					{
+						halData["counter"][idx]["count"]--;
+					}
+				}
+				prevValue = value;
+			};
+			
+			halData["counter"][idx]["down_callback"] = downCallback;
+			
+			halData["dio"][(int)pin].Register("value", downCallback);
 
-            halData["counter"][idx]["down_source_channel"] = pin;
+            halData["counter"][idx]["down_source_channel"] = (int)pin;
             halData["counter"][idx]["down_source_trigger"] = analogTrigger;
 
 
@@ -444,6 +523,12 @@ namespace HAL_Simulator
             counter["down_falling_edge"] = false;
             counter["down_source_channel"] = 0u;
             counter["down_source_trigger"] = false;
+			
+			if (counter.ContainsKey["downCallback"] && counter["downCallback"] != null)
+			{
+				halData["dio"][counter["down_source_channel"]].Cancel("value", counter["downCallback"]);
+				counter["downCallback"] = null;
+			}
         }
 
         [CalledSimFunction]
