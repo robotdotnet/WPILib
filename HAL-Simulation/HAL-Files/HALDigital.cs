@@ -443,7 +443,7 @@ namespace HAL_Simulator
             counter["up_source_channel"] = 0u;
             counter["up_source_trigger"] = false;
 			
-			if (counter.ContainsKey["upCallback"] && counter["upCallback"] != null)
+			if (counter.ContainsKey("upCallback") && counter["upCallback"] != null)
 			{
 				halData["dio"][counter["up_source_channel"]].Cancel("value", counter["upCallback"]);
 				counter["upCallback"] = null;
@@ -524,7 +524,7 @@ namespace HAL_Simulator
             counter["down_source_channel"] = 0u;
             counter["down_source_trigger"] = false;
 			
-			if (counter.ContainsKey["downCallback"] && counter["downCallback"] != null)
+			if (counter.ContainsKey("downCallback") && counter["downCallback"] != null)
 			{
 				halData["dio"][counter["down_source_channel"]].Cancel("value", counter["downCallback"]);
 				counter["downCallback"] = null;
