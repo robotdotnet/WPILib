@@ -41,7 +41,7 @@ namespace WPILib.Commands
         private bool m_canceled = false;
         private bool m_locked = false;
 
-        private object m_syncRoot = new object();
+        private readonly object m_syncRoot = new object();
 
         private CommandGroup m_parent;
 
@@ -237,9 +237,9 @@ namespace WPILib.Commands
         protected abstract void Initialize();
 
         /// <summary>
-        /// A shadow method called before <see cref="Command.Initialize()"/>
+        /// A shadow method called before <see cref="Initialize()"/>
         /// </summary>
-        protected virtual void _Initialize()
+        internal virtual void _Initialize()
         {
 
         }
@@ -250,7 +250,10 @@ namespace WPILib.Commands
         /// </summary>
         protected abstract void Execute();
 
-        internal protected virtual void _Execute()
+        /// <summary>
+        /// A shadow method called before <see cref="Execute"/>.
+        /// </summary>
+        internal virtual void _Execute()
         {
 
         }
@@ -273,7 +276,10 @@ namespace WPILib.Commands
         /// like shutting off a motor that was being used in the command.</remarks>
         protected abstract void End();
 
-        internal protected virtual void _End()
+        /// <summary>
+        /// A shadow method called before <see cref="End"/>.
+        /// </summary>
+        internal virtual void _End()
         {
 
         }
@@ -288,7 +294,10 @@ namespace WPILib.Commands
         /// within this method.</remarks>
         protected abstract void Interrupted();
 
-        internal protected virtual void _Interrupted()
+        /// <summary>
+        /// A shadow method called before <see cref="Interrupted"/>.
+        /// </summary>
+        internal virtual void _Interrupted()
         {
 
         }

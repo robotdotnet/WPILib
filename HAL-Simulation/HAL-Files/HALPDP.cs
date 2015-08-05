@@ -17,60 +17,60 @@ namespace HAL_Simulator
             InitializeNewPDP(module);
         }
 
-        /// Return Type: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPDPTemperature")]
         [CalledSimFunction]
-        public static extern double getPDPTemperature(ref int status, byte module);
+        public static double getPDPTemperature(ref int status, byte module)
+        {
+            status = 0;
+            return halData["pdp"][(int)module]["temperature"];
+        }
 
-
-        /// Return Type: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPDPVoltage")]
         [CalledSimFunction]
-        public static extern double getPDPVoltage(ref int status, byte module);
+        public static double getPDPVoltage(ref int status, byte module)
+        {
+            status = 0;
+            return halData["pdp"][(int)module]["voltage"];
+        }
 
-
-        /// Return Type: double
-        ///channel: byte
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPDPChannelCurrent")]
         [CalledSimFunction]
-        public static extern double getPDPChannelCurrent(byte channel, ref int status, byte module);
+        public static double getPDPChannelCurrent(byte channel, ref int status, byte module)
+        {
+            status = 0;
+            return halData["pdp"][(int)module]["current"][(int)channel];
+        }
 
-
-        /// Return Type: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPDPTotalCurrent")]
         [CalledSimFunction]
-        public static extern double getPDPTotalCurrent(ref int status, byte module);
+        public static double getPDPTotalCurrent(ref int status, byte module)
+        {
+            status = 0;
+            return halData["pdp"][(int)module]["total_current"];
+        }
 
-
-        /// Return Type: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPDPTotalPower")]
         [CalledSimFunction]
-        public static extern double getPDPTotalPower(ref int status, byte module);
+        public static double getPDPTotalPower(ref int status, byte module)
+        {
+            status = 0;
+            return halData["pdp"][(int)module]["total_power"];
+        }
 
-
-        /// Return Type: double
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "getPDPTotalEnergy")]
         [CalledSimFunction]
-        public static extern double getPDPTotalEnergy(ref int status, byte module);
+        public static double getPDPTotalEnergy(ref int status, byte module)
+        {
+            status = 0;
+            return halData["pdp"][(int)module]["total_energy"];
+        }
 
-
-        /// Return Type: void
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "resetPDPTotalEnergy")]
         [CalledSimFunction]
-        public static extern void resetPDPTotalEnergy(ref int status, byte module);
+        public static void resetPDPTotalEnergy(ref int status, byte module)
+        {
+            status = 0;
+            halData["pdp"][(int)module]["total_energy"] = 0;
+        }
 
 
-        /// Return Type: void
-        ///status: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "clearPDPStickyFaults")]
         [CalledSimFunction]
-        public static extern void clearPDPStickyFaults(ref int status, byte module);
+        public static void clearPDPStickyFaults(ref int status, byte module)
+        {
+            status = 0;
+        }
     }
 }

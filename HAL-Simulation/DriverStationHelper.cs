@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using HAL_Base;
 using static HAL_Simulator.SimData;
 
 namespace HAL_Simulator
@@ -35,6 +36,15 @@ namespace HAL_Simulator
 
         private static Timer s_dsTimer;
 
+        internal static void UpdateData()
+        {
+            UpdateHalData(HalDSData);
+            if (HALNewDataSem != IntPtr.Zero)
+            {
+                HALSemaphore.giveMultiWait(HALNewDataSem);
+            }
+        }
+
         /// <summary>
         /// Start the driver station loop at the default 20ms interval
         /// </summary>
@@ -62,11 +72,7 @@ namespace HAL_Simulator
             {
                 s_dsTimer = new Timer(s =>
                 {
-                    UpdateHalData(HalDSData);
-                    if (HALNewDataSem != IntPtr.Zero)
-                    {
-                        HALSemaphore.giveMultiWait(HALNewDataSem);
-                    }
+                    UpdateData();
                 }, null, loopTime, loopTime);
             }
         }
@@ -151,6 +157,18 @@ namespace HAL_Simulator
             HalDSData["joysticks"][joystickNum]["povs"][povNum] = (short)povValue;
         }
 
+        public static void SetJoystickName(int joystickNum, string name)
+        {
+            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(joystickNum),
+                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
+            }
+            HalDSData["joysticks"][joystickNum]["name"] = name;
+        }
+
+
+
         /// <summary>
         /// Sets the robot enabled state
         /// </summary>
@@ -218,6 +236,21 @@ namespace HAL_Simulator
                     HalDSData["control"]["test"] = false;
                     break;
             }
+        }
+
+        public static void SetAllianceStation(HALAllianceStationID station)
+        {
+            HalDSData["alliance_station"] = station;
+        }
+
+        public static void SetFMSAttached(bool attached)
+        {
+            HalDSData["control"]["fms_attached"] = attached;
+        }
+
+        public static void SetDSAttached(bool attached)
+        {
+            HalDSData["control"]["ds_attached"] = attached;
         }
     }
 }

@@ -47,25 +47,17 @@ namespace WPILib.Tests
             }
 
             Encoder enc = null;
-            try
+            Assert.Throws<AllocationException>(() =>
             {
                 enc = new Encoder(TestBase.NumEncoders, TestBase.NumEncoders + TestBase.NumEncoders);
-                Assert.Fail();
-            }
-            catch (AllocationException)
-            {
-            }
-            finally
-            {
-                enc?.Dispose();
-            }
+            });
+            enc?.Dispose();
 
             foreach (var encoder in encoders)
             {
                 encoder.Dispose();
             }
 
-            TestBase.StartCode();
         }
 
         [Test]
@@ -82,7 +74,6 @@ namespace WPILib.Tests
                 encoder.Dispose();
             }
 
-            TestBase.StartCode();
         }
 
         [Test]

@@ -145,7 +145,14 @@ namespace WPILib.LiveWindows
         /// <param name="component">A LiveWindowSendable component that represents a sensor.</param>
         public static void AddSensor(string subsystem, string name, ILiveWindowSendable component)
         {
-            s_components.Add(component, new LiveWindowComponent(subsystem, name, true));
+            try
+            {
+                s_components.Add(component, new LiveWindowComponent(subsystem, name, true));
+            }
+            catch (ArgumentException)
+            {
+                //Component already exists. So we don't need to add it again.
+            }
         }
 
         /// <summary>
@@ -156,7 +163,15 @@ namespace WPILib.LiveWindows
         /// <param name="component">A LiveWindowSendable component that represents an actuator.</param>
         public static void AddActuator(string subsystem, string name, ILiveWindowSendable component)
         {
-            s_components.Add(component, new LiveWindowComponent(subsystem, name, false));
+            try
+            {
+                s_components.Add(component, new LiveWindowComponent(subsystem, name, false));
+            }
+            catch (ArgumentException)
+            {
+                //Component already exists. So we don't need to add it again.
+            }
+
         }
 
         /// <summary>

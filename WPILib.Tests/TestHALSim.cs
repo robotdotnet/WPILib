@@ -184,23 +184,18 @@ namespace WPILib.Tests
         {
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>
             {
-                ["pcm"] = new Dictionary<dynamic, dynamic>()
-            };
-            inDict["pcm"][0] = new Dictionary<dynamic, dynamic>
-            {
+                ["power"] = new Dictionary<dynamic, dynamic>
                 {
-                    "compressor", new Dictionary<dynamic, dynamic>()
-                    {
-                        {"on", true }
-                    }
-                },
+                    ["vin_voltage"] = 3.14
+                }
             };
+            HAL.halData["power"]["vin_voltage"] = 0.0;
 
-            Assert.IsFalse(HAL.halData["pcm"][0]["compressor"]["on"]);
+            Assert.AreEqual(0.0, HAL.halData["power"]["vin_voltage"]);
 
             SimData.UpdateHalData(inDict, HAL.halData);
 
-            Assert.IsTrue(HAL.halData["pcm"][0]["compressor"]["on"]);
+            Assert.AreEqual(3.14, HAL.halData["power"]["vin_voltage"]);
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using HAL_Base;
+﻿using System;
+using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindows;
+using static HAL_Base.HAL;
+using static HAL_Base.HALSolenoid;
+using static WPILib.Utility;
 
 namespace WPILib
 {
@@ -20,11 +24,13 @@ namespace WPILib
             Reverse
         }
 
-        private int m_forwardChannel;
-        private int m_reverseChannel;
-        private byte m_forwardMask;
-        private byte m_reverseMask;
-        private object m_lockObject = new object();
+        private readonly int m_forwardChannel;
+        private readonly int m_reverseChannel;
+
+        private IntPtr m_forwardSolenoid;
+        private IntPtr m_reverseSolenoid;
+
+        private readonly object m_lockObject = new object();
 
         private void InitSolenoid()
         {
@@ -37,8 +43,14 @@ namespace WPILib
                 s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
                 s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
 
-                m_forwardMask = (byte)(1 << m_forwardChannel);
-                m_reverseMask = (byte)(1 << m_reverseChannel);
+                int status = 0;
+                IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_forwardChannel);
+                m_forwardSolenoid = InitializeSolenoidPort(port, ref status);
+                CheckStatus(status);
+
+                port = GetPortWithModule((byte)m_moduleNumber, (byte)m_reverseChannel);
+                m_reverseSolenoid = InitializeSolenoidPort(port, ref status);
+                CheckStatus(status);
 
                 HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
                 HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
@@ -62,6 +74,7 @@ namespace WPILib
             InitSolenoid();
         }
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             lock (m_lockObject)
@@ -73,30 +86,37 @@ namespace WPILib
 
         public void Set(Value value)
         {
-            byte rawValue = 0;
-
+            bool forward = false;
+            bool reverse = false;
             switch (value)
             {
-                case Value.Off:
-                    rawValue = 0x00;
-                    break;
                 case Value.Forward:
-                    rawValue = m_forwardMask;
+                    forward = true;
                     break;
                 case Value.Reverse:
-                    rawValue = m_reverseMask;
+                    reverse = true;
                     break;
             }
+            int status = 0;
+            SetSolenoid(m_forwardSolenoid, forward, ref status);
+            CheckStatus(status);
 
-            Set(rawValue, m_forwardMask | m_reverseMask);
+            SetSolenoid(m_reverseSolenoid, reverse, ref status);
+            CheckStatus(status);
         }
 
         public Value Get()
         {
-            byte value = GetAll();
+            int status = 0;
+            bool valueForward = GetSolenoid(m_forwardSolenoid, ref status);
+            CheckStatus(status);
+            bool valueReverse = GetSolenoid(m_reverseSolenoid, ref status);
+            CheckStatus(status);
 
-            if ((value & m_forwardMask) != 0) return Value.Forward;
-            if ((value & m_reverseMask) != 0) return Value.Reverse;
+            if (valueForward)
+                return Value.Forward;
+            if (valueReverse)
+                return Value.Reverse;
             return Value.Off;
         }
 
@@ -105,7 +125,7 @@ namespace WPILib
             get
             {
                 int blackList = GetPCMSolenoidBlackList();
-                return ((blackList & m_forwardMask) != 0);
+                return ((blackList & (1 << m_forwardChannel)) != 0);
             }
         }
 
@@ -114,7 +134,7 @@ namespace WPILib
             get
             {
                 int blackList = GetPCMSolenoidBlackList();
-                return ((blackList & m_reverseMask) != 0);
+                return ((blackList & (1 << m_reverseChannel)) != 0);
             }
         }
 

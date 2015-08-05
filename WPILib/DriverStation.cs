@@ -37,11 +37,11 @@ namespace WPILib
         //We use native semaphores rather then .NET semaphores for some of these
         //Because the mono semaphores were taking up too much CPU, and not looping
         //In the correct time.
-        private IntPtr m_newControlData;
-        private IntPtr m_packetDataAvailableMultiWait;
-        private IntPtr m_packetDataAvailableMutex;
-        private IntPtr m_waitForDataSem;
-        private IntPtr m_waitForDataMutex;
+        private readonly IntPtr m_newControlData;
+        private readonly IntPtr m_packetDataAvailableMultiWait;
+        private readonly IntPtr m_packetDataAvailableMutex;
+        private readonly IntPtr m_waitForDataSem;
+        private readonly IntPtr m_waitForDataMutex;
 
         //Driver station thread keep alive
         private bool m_threadKeepAlive = true;
@@ -53,7 +53,7 @@ namespace WPILib
         private bool m_userInTest;
 
         //Thread lock objects
-        private object m_lockObject = new object();
+        private readonly object m_lockObject = new object();
 
         //Reporting interval time limiters
         private const double JoystickUnpluggedMessageInterval = 1.0;
@@ -447,6 +447,7 @@ namespace WPILib
                 throw new ArgumentOutOfRangeException(nameof(stick),
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
+            
             //TODO: Remove this when calling for descriptor on empty stick
             if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
             {

@@ -46,55 +46,38 @@ namespace WPILib.Tests
         public void TestCounterAllocateAll()
         {
             List<Counter> counters = new List<Counter>();
-            try
+            Assert.DoesNotThrow(() =>
             {
-                
-                for (int i = 0; i < TestBase.NumCounters; i++)
-                {
-                    counters.Add(new Counter(i));
-                }
-            }
-            catch (AllocationException)
+                    for (int i = 0; i < TestBase.NumCounters; i++)
+                    {
+                        counters.Add(new Counter(i));
+                    }
+            });
+            foreach (var counter in counters)
             {
-                Assert.Fail();
+                counter?.Dispose();
             }
-
-            finally
-            {
-                foreach (var counter in counters)
-                {
-                    counter?.Dispose();
-                }
             }
-
-        }
 
         [Test]
         public void TestCounterOverAllocate()
         {
-            List<Counter> encoders = new List<Counter>();
+            List<Counter> counters = new List<Counter>();
             for (int i = 0; i < TestBase.NumCounters; i++)
             {
-                encoders.Add(new Counter(i));
+                counters.Add(new Counter(i));
             }
 
-            Counter enc = null;
-            try
+            Counter counter = null;
+            Assert.Throws<UncleanStatusException>(() =>
             {
-                enc = new Counter(TestBase.NumCounters);
-                Assert.Fail();
-            }
-            catch (UncleanStatusException)
-            {
-            }
-            finally
-            {
-                enc?.Dispose();
-            }
+                counter = new Counter(TestBase.NumCounters);
+            });
+            counter?.Dispose();
 
-            foreach (var encoder in encoders)
+            foreach (var c in counters)
             {
-                encoder?.Dispose();
+                c?.Dispose();
             }
 
         }

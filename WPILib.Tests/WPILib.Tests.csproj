@@ -66,8 +66,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NetworkTables, Version=2015.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.2015.0.4\lib\net45\NetworkTables.dll</HintPath>
+    <Reference Include="NetworkTables, Version=2015.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.2015.0.5\lib\net45\NetworkTables.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -127,6 +127,7 @@
     <Compile Include="TestAnalogTrigger.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
+    <Compile Include="TestCommand.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
     <Compile Include="TestDriverStation.cs" />

@@ -14,11 +14,11 @@ namespace HAL_Simulator
     /// box the dictionary as a NotifyDict. The recommended way to update the data however
     /// is to update the HalInData dictionary, and then call <see cref="SimData.UpdateHalData"/> 
     /// with that dictionary.</remarks>
-    /// <typeparam name="T">Please use dynamic</typeparam>
-    /// <typeparam name="T2">Please use dynamic</typeparam>
-    public class NotifyDict<T, T2> : Dictionary<T, T2>
+    /// <typeparam name="TKey">Please use dynamic</typeparam>
+    /// <typeparam name="TValue">Please use dynamic</typeparam>
+    public class NotifyDict<TKey, TValue> : Dictionary<TKey, TValue>
     {
-        private Dictionary<T, Action<dynamic, dynamic>> m_callbacks = new Dictionary<T, Action<dynamic, dynamic>>();
+        private readonly Dictionary<TKey, Action<dynamic, dynamic>> m_callbacks = new Dictionary<TKey, Action<dynamic, dynamic>>();
 
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace HAL_Simulator
         /// <param name="key">The key to watch</param>
         /// <param name="action">The callback function</param>
         /// <param name="notify">Whether to notify immediately</param>
-        public void Register(T key, Action<dynamic, dynamic> action, bool notify = false)
+        public void Register(TKey key, Action<dynamic, dynamic> action, bool notify = false)
         {
             if (!ContainsKey(key))
             {
@@ -52,12 +52,17 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="key">The key the function is waiting for</param>
         /// <param name="action">The callback function to cancel.</param>
-        public void Cancel(T key, Action<dynamic, dynamic> action)
+        public void Cancel(TKey key, Action<dynamic, dynamic> action)
         {
             if (action != null && m_callbacks.ContainsKey(key)) m_callbacks[key] -= action;
         }
 
-        public new T2 this[T key]
+        /// <summary>
+        /// Gets or sets the value associated with the specified key. If a callback exists for the key, call it.
+        /// </summary>
+        /// <param name="key">The key of the value to get or set.</param>
+        /// <returns>The value associated with the specified key.</returns>
+        public new TValue this[TKey key]
         {
             get { return base[key]; }
             set
@@ -115,14 +120,23 @@ namespace HAL_Simulator
     {
         internal static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
 
+        /// <summary>
+        /// Gets a reference to the HalData dictionary.
+        /// </summary>
         public static Dictionary<dynamic, dynamic> HalData => halData;
 
         internal static Dictionary<dynamic, dynamic> halInData = new Dictionary<dynamic, dynamic>();
 
+        /// <summary>
+        /// Gets a reference to the HalInData dictionary.
+        /// </summary>
         public static Dictionary<dynamic, dynamic> HalInData => halInData;
 
         internal static Dictionary<dynamic, dynamic> halDSData = new Dictionary<dynamic, dynamic>();
 
+        /// <summary>
+        /// Gets a reference to the HalDSData dictionary.
+        /// </summary>
         public static Dictionary<dynamic, dynamic> HalDSData => halDSData;
 
         /// <summary>
@@ -142,6 +156,9 @@ namespace HAL_Simulator
 
         internal static IntPtr HALNewDataSem = IntPtr.Zero;
 
+        /// <summary>
+        /// Clears all HAL Sim Data and resets it.
+        /// </summary>
         public static void ResetHALData()
         {
             halData.Clear();
@@ -256,18 +273,6 @@ namespace HAL_Simulator
                 });
             }
 
-            /*
-            halData["compressor"] = new NotifyDict<dynamic, dynamic>()
-            {
-                {"has_source", new IN(false) },
-                {"initialized", new OUT(false) },
-                {"on", new IN(false) },
-                {"closed_loop_enabled", new OUT(false) },
-                {"pressure_switch", new IN(false) },
-                {"current", new IN(0.0) },
-            };
-            */
-
             halData["pwm"] = new List<dynamic>();
             for (int i = 0; i < 20; i++)
             {
@@ -377,14 +382,14 @@ namespace HAL_Simulator
             halData["power"] = new Dictionary<dynamic, dynamic>()
             {
                 {"has_source", new IN(false) },
-                { "vin_voltage", new IN(0) },
+                {"vin_voltage", new IN(0) },
                 {"vin_current", new IN(0) },
                 {"user_voltage_6v", new IN(6.0)},
                 {"user_current_6v", new IN(0)},
                 {"user_active_6v", new  IN(false)},
                 {"user_faults_6v", new  IN(0)},
                 {"user_voltage_5v",new  IN(5.0)},
-                 {"user_current_5v",new  IN(0)},
+                {"user_current_5v",new  IN(0)},
                 {"user_active_5v",  new IN(false)},
                 {"user_faults_5v", new  IN(0)},
                 {"user_voltage_3v3",new IN(3.3)},
@@ -393,38 +398,9 @@ namespace HAL_Simulator
                 {"user_faults_3v3", new IN(0)},
             };
 
-            /*
-            halData["solenoid"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
-            {
-                halData["solenoid"].Add(new NotifyDict<dynamic, dynamic>
-                {
-                    {"initialized", new OUT(false)},
-                    {"value", new OUT(false)}
-                });
-            };
-
-            halData["pdp"] = new Dictionary<dynamic, dynamic>
-            {
-                {"has_source", new IN(false) },
-                {"temperature", new IN(0) },
-                {"voltage", new IN(0) },
-                {"current", new IN(new double[16]) },
-                {"total_current", new IN(0) },
-                {"total_power", new IN(0) },
-                {"total_energy", new IN(0) },
-
-            };
-            */
-
             halData["pdp"] = new Dictionary<dynamic, dynamic>();
 
-            InitializeNewPDP(0);
-
             halData["pcm"] = new Dictionary<dynamic, dynamic>();
-
-            InitializeNewPCM(0);
-
 
             halData["CAN"] = new NotifyDict<dynamic, dynamic>();
 
@@ -459,6 +435,12 @@ namespace HAL_Simulator
 
 
             FilterHalData(halData, halInData);
+
+            //We have to force these into the in dictionary so they exist to be checked.
+
+            halInData["pdp"] = new Dictionary<dynamic, dynamic>();
+
+            halInData["pcm"] = new Dictionary<dynamic, dynamic>();
         }
 
         internal static void InitializeNewPCM(int module)
@@ -468,12 +450,12 @@ namespace HAL_Simulator
                 halData["pcm"][module] = new Dictionary<dynamic, dynamic>();
                 halData["pcm"][module]["compressor"] = new Dictionary<dynamic, dynamic>
                 {
-                    {"has_source", new IN(false) },
-                    {"initialized", new OUT(false) },
-                    {"on", new IN(false) },
-                    {"closed_loop_enabled", new OUT(false) },
-                    {"pressure_switch", new IN(false) },
-                    {"current", new IN(0.0) }
+                    {"has_source", false },
+                    {"initialized", false },
+                    {"on", false },
+                    {"closed_loop_enabled", false },
+                    {"pressure_switch", false },
+                    {"current", 0.0 }
                 };
 
                 halData["pcm"][module]["solenoid"] = new List<dynamic>();
@@ -481,10 +463,24 @@ namespace HAL_Simulator
                 {
                     halData["pcm"][module]["solenoid"].Add(new NotifyDict<dynamic, dynamic>
                     {
-                        {"initialized", new OUT(false)},
-                        {"value", new OUT(false)}
+                        {"initialized", false},
+                        {"value", (false)}
                     });
                 };
+
+            }
+
+            if (!halInData["pcm"].ContainsKey(module))
+            {
+                halInData["pcm"][module] = new Dictionary<dynamic, dynamic>();
+                halInData["pcm"][module]["compressor"] = new Dictionary<dynamic, dynamic>
+                {
+                    {"has_source", false },
+                    {"on", false },
+                    {"pressure_switch", false },
+                    {"current", 0.0 }
+                };
+                
             }
         }
 
@@ -494,13 +490,27 @@ namespace HAL_Simulator
             {
                 halData["pdp"][module] = new Dictionary<dynamic, dynamic>
                 {
-                    {"has_source", new IN(false) },
-                    {"temperature", new IN(0) },
-                    {"voltage", new IN(0) },
-                    {"current", new IN(new double[16]) },
-                    {"total_current", new IN(0) },
-                    {"total_power", new IN(0) },
-                    {"total_energy", new IN(0) },
+                    {"has_source", false },
+                    {"temperature", 0 },
+                    {"voltage", (0) },
+                    {"current", (new double[16]) },
+                    {"total_current", (0) },
+                    {"total_power", (0) },
+                    {"total_energy", (0) },
+
+                };
+            }
+            if (!halInData["pdp"].ContainsKey(module))
+            {
+                halInData["pdp"][module] = new Dictionary<dynamic, dynamic>
+                {
+                    {"has_source", false },
+                    {"temperature", 0 },
+                    {"voltage", (0) },
+                    {"current", (new double[16]) },
+                    {"total_current", (0) },
+                    {"total_power", (0) },
+                    {"total_energy", (0) },
 
                 };
             }
