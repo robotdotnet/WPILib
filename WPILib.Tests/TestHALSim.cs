@@ -6,16 +6,23 @@ using NUnit.Framework;
 using Telerik.JustMock;
 
 using HAL = HAL_Base.HAL;
+using static HAL_Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestHALSim
+    public class TestHALSim : TestBase
     {
         [TestFixtureSetUp]
-        public static void Initialize()
+        public static void TestSetup()
         {
-            TestBase.StartCode();
+            StopDSLoop();
+        }
+
+        [TestFixtureTearDown]
+        public static void TestTeardown()
+        {
+            StartDSLoop();
         }
 
         [Test]
@@ -25,7 +32,7 @@ namespace WPILib.Tests
 
             Mock.Arrange(() => delegateMock("value", Arg.AnyObject)).OccursOnce();
 
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halData["analog_in"][0].Register("value", delegateMock, true);
 
@@ -39,7 +46,7 @@ namespace WPILib.Tests
 
             Mock.Arrange(() => delegateMock("value", Arg.AnyObject)).OccursNever();
 
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halData["analog_in"][0].Register("value", delegateMock, false);
 
@@ -53,7 +60,7 @@ namespace WPILib.Tests
 
             Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
 
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halData["analog_in"][0].Register("value", delegateMock, false);
 
@@ -69,7 +76,7 @@ namespace WPILib.Tests
 
             Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
 
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halData["analog_in"][0].Register("value", delegateMock, false);
 
@@ -98,7 +105,7 @@ namespace WPILib.Tests
 
             Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
 
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halData["analog_in"][0].Register("value", delegateMock, false);
 
@@ -116,7 +123,7 @@ namespace WPILib.Tests
 
             Mock.Arrange(() => delegateMock("value", 1.25)).OccursOnce();
 
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halData["analog_in"][0].Register("value", delegateMock, false);
 
@@ -132,7 +139,7 @@ namespace WPILib.Tests
         [Test]
         public void TestHALDeepCopy()
         {
-            SimData.ResetHALData();
+            SimData.ResetHALData(false);
 
             HAL.halInData["analog_in"][0]["avg_value"] = 1.352;
 
@@ -144,6 +151,7 @@ namespace WPILib.Tests
         [Test]
         public void TestHAL()
         {
+            SimData.ResetHALData(false);
             TestFilteredHAL(HAL.halData);
         }
 
@@ -174,6 +182,10 @@ namespace WPILib.Tests
                 else
                 {
                     var vv = o.Value;
+                    if (vv != null)
+                    {
+                        Console.WriteLine(vv);
+                    }
                     Assert.IsTrue(vv == null || vv is double || vv is int || vv is string || vv is bool || vv is float || vv is uint || vv is long);
                 }
             }

@@ -392,7 +392,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALInitialize(int mode)
         {
-            ResetHALData();
+            ResetHALData(true);
 
 
             return 1;

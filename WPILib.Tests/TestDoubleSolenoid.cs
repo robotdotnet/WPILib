@@ -1,27 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
+using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
+using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestDoubleSolenoid
+    public class TestDoubleSolenoid : TestBase
     {
-
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
-
         public DoubleSolenoid NewDoubleSolenoid()
         {
             return new DoubleSolenoid(0,1);

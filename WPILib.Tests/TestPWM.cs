@@ -8,20 +8,8 @@ using WPILib.Exceptions;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestPWM
+    public class TestPWM : TestBase
     {
-
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
 
         public PWM NewPWM()
         {

@@ -10,19 +10,8 @@ using WPILib.Interfaces;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestInterrupt
-    {
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
+    public class TestInterrupt : TestBase
+    { 
 
         private static Dictionary<dynamic, dynamic> HalData()
         {

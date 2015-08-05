@@ -5,19 +5,22 @@ using NUnit.Framework;
 namespace WPILib.Tests.MotorControllers
 {
     [TestFixture]
-    public class TestJaguar
+    public class TestJaguar : TestBase
     {
+        /*
         [TestFixtureSetUp]
         public static void Initialize()
         {
             TestBase.StartCode();
         }
+        
 
         [TestFixtureTearDown]
         public static void Kill()
         {
             DriverStation.Instance.Release();
         }
+        */
 
         private static Dictionary<dynamic, dynamic> HalData()
         {

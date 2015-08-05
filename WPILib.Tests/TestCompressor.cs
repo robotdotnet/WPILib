@@ -6,19 +6,8 @@ using NUnit.Framework;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestCompressor
+    public class TestCompressor : TestBase
     {
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
 
         private Dictionary<dynamic, dynamic> GetData(int module)
         {

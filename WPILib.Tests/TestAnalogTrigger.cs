@@ -8,20 +8,8 @@ using NUnit.Framework;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestAnalogTrigger
+    public class TestAnalogTrigger : TestBase
     {
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            
-            DriverStation.Instance.Release();
-        }
 
         private Dictionary<dynamic, dynamic> GetData(int index)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using HAL_Base;
+using HAL_Simulator;
 using NUnit.Framework;
 using static HAL_Simulator.DriverStationHelper;
 using HAL = HAL_Base.HAL;
@@ -9,18 +10,18 @@ using HAL = HAL_Base.HAL;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestDriverStation
+    public class TestDriverStation : TestBase
     {
         [TestFixtureSetUp]
-        public static void Initialize()
+        public static void TestSetup()
         {
-            TestBase.StartCode();
+            StopDSLoop();
         }
 
         [TestFixtureTearDown]
-        public static void Kill()
+        public static void TestTeardown()
         {
-            DriverStation.Instance.Release();
+            StartDSLoop();
         }
 
         private static Dictionary<dynamic, dynamic> HalData()

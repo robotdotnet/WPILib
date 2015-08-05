@@ -1,10 +1,33 @@
-﻿using HAL_Base;
+﻿using System.Threading;
+using HAL_Base;
 using HAL_Simulator;
+using WPILib.LiveWindows;
 
 namespace WPILib.Tests
 {
-    class TestBase
+    public abstract class TestBase
     {
+        private static bool initialized = false;
+
+        static TestBase()
+        {
+            if (!initialized)
+            {
+                RobotBase.InitializeHardwareConfiguration();
+                HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
+
+                LiveWindow.SetEnabled(false);
+
+                DriverStationHelper.StartDSLoop();
+
+                DriverStationHelper.SetRobotMode(DriverStationHelper.RobotMode.Teleop);
+                DriverStationHelper.SetEnabledState(DriverStationHelper.EnabledState.Enabled);
+                
+                Thread.Sleep(500);
+            }
+
+        }
+        /*
         public static void StartCode()
         {
             RobotBase.InitializeHardwareConfiguration();
@@ -12,6 +35,7 @@ namespace WPILib.Tests
             SimData.ResetHALData();
             Resource.RestartProgram();
         }
+        */
 
         public const int SystemClockTicksPerMicrosecond = 40;
 

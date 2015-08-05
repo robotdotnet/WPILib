@@ -159,12 +159,16 @@ namespace HAL_Simulator
         /// <summary>
         /// Clears all HAL Sim Data and resets it.
         /// </summary>
-        public static void ResetHALData()
+        /// <param name="resetDS">If true, resets the DS data sempahore.</param>
+        public static void ResetHALData(bool resetDS)
         {
             halData.Clear();
             halInData.Clear();
             halDSData.Clear();
-            HALNewDataSem = IntPtr.Zero;
+            if (resetDS)
+            {
+                HALNewDataSem = IntPtr.Zero;
+            }
 
 
             halData["alliance_station"] = new DS(0);

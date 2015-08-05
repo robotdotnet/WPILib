@@ -7,19 +7,8 @@ using WPILib.Exceptions;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestSolenoid
+    public class TestSolenoid : TestBase
     {
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
 
         public Solenoid NewSolenoid()
         {

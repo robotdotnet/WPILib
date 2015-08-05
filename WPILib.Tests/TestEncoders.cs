@@ -7,19 +7,8 @@ using WPILib.Interfaces;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestEncoders
+    public class TestEncoders : TestBase
     {
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
 
         private Dictionary<dynamic, dynamic> HalData()
         {

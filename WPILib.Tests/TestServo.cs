@@ -5,20 +5,9 @@ using NUnit.Framework;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestServo
+    public class TestServo : TestBase
     {
 
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
 
         public Servo NewServo()
         {

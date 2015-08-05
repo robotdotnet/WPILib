@@ -6,13 +6,8 @@ using Telerik.JustMock;
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestNotifier
+    public class TestNotifier : TestBase
     {
-        [TestFixtureSetUp]
-        static public void Init()
-        {
-            TestBase.StartCode();
-        }
 
         [Test]
         public void TestSingle()
