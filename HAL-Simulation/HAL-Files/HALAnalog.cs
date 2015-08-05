@@ -271,13 +271,13 @@ namespace HAL_Simulator
         public static IntPtr initializeAnalogTrigger(IntPtr port_pointer, ref uint index, ref int status)
         {
             status = 0;
-            
-            IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
+
             for (int i = 0; i < halData["analog_trigger"].Count; i++)
             {
                 var cnt = halData["analog_trigger"][i];
                 if (cnt["initialized"] == false)
                 {
+                	IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
                     cnt["initialized"] = true;
 					cnt["pin"] = GetHalPort(port_pointer).pin;
                     AnalogTrigger trig = new AnalogTrigger()
