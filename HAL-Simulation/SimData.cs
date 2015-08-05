@@ -327,7 +327,7 @@ namespace HAL_Simulator
                     {"initialized", new OUT(false) },
                     {"value", new IN(false) },
                     {"pulse_length", new OUT(null) },
-                    {"is_input", new OUT(false) },
+                    {"is_input", new OUT(true) },
 
                 });
             }

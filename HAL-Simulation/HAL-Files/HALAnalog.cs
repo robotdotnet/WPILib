@@ -45,14 +45,14 @@ namespace HAL_Simulator
         public static void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status)
         {
             status = 0;
-            halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["output"] = voltage;
+            halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"] = voltage;
         }
 
         [CalledSimFunction]
         public static double getAnalogOutput(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["output"];
+            return halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
         }
 
         [CalledSimFunction]
@@ -241,6 +241,11 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static uint getAccumulatorCount(IntPtr analog_port_pointer, ref int status)
         {
+            if (!isAccumulatorChannel(analog_port_pointer, ref status))
+            {
+                status = -1004;
+                return 0;
+            }
             status = 0;
             return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
         }
