@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace HAL_Simulator
@@ -43,7 +44,14 @@ namespace HAL_Simulator
         /// <param name="ms">Delay time</param>
         public static void DelayMillis(double ms)
         {
-            Thread.Sleep((int)ms);
+            int milliSeconds = (int) ms;
+            var sw = Stopwatch.StartNew();
+
+            if (milliSeconds >= 100)
+            {
+                Thread.Sleep(milliSeconds - 50);
+            }
+            while (sw.ElapsedMilliseconds < milliSeconds) ;
         }
 
         /// <summary>
@@ -52,7 +60,14 @@ namespace HAL_Simulator
         /// <param name="s">Delay time</param>
         public static void DelaySeconds(double s)
         {
-            Thread.Sleep((int)s * 1000);
+            int milliSeconds = (int)(s * 1e3);
+            var sw = Stopwatch.StartNew();
+
+            if (milliSeconds >= 100)
+            {
+                Thread.Sleep(milliSeconds - 50);
+            }
+            while (sw.ElapsedMilliseconds < milliSeconds) ;
         } 
     }
 }

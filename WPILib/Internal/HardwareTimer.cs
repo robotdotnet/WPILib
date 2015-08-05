@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics;
+using System.Threading;
 using static WPILib.Utility;
 
 namespace WPILib.Internal
@@ -29,14 +30,14 @@ namespace WPILib.Internal
         /// <param name="seconds">Length of time to pause</param>
         public void Delay(double seconds)
         {
-            try
-            {
-                Thread.Sleep((int)(seconds * 1e3));
-            }
-            catch (ThreadInterruptedException)
-            {
+            int milliSeconds = (int) (seconds*1e3);
+            var sw = Stopwatch.StartNew();
 
+            if (milliSeconds >= 100)
+            {
+                Thread.Sleep(milliSeconds - 50);
             }
+            while (sw.ElapsedMilliseconds < milliSeconds) ;
         }
 
         /// <summary>
