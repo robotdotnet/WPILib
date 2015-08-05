@@ -321,9 +321,9 @@ namespace HAL_Simulator
                 var port = GetAnalogTrigger(analog_trigger_pointer).analogPortPointer;
                 status = 0;
                 halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_lower"] 
-                    = getaAnalogValueToVoltage(analogPortPointer, lower, ref status);
+                    = getaAnalogValueToVoltage(port, lower, ref status);
                 halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_upper"] 
-                    = getaAnalogValueToVoltage(analogPortPointer, upper, ref status);
+                    = getaAnalogValueToVoltage(port, upper, ref status);
             }
         }
 
