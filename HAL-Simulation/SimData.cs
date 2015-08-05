@@ -246,10 +246,7 @@ namespace HAL_Simulator
                     {"initialized", new OUT(false) },
                     {"avg_bits", new OUT(0) },
                     {"oversample_bits", new OUT(0) },
-                    { "value", new IN(0) },
-                    { "avg_value", new IN(0) },
-                    { "voltage", new IN(0) },
-                    { "avg_voltage", new IN(0) },
+                    { "voltage", new IN(0.0) },
                     { "lsb_weight", new IN(1) },
                     { "offset", new IN(65535) },
 
