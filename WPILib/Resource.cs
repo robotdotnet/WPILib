@@ -79,7 +79,7 @@ namespace WPILib
                     return i;
                 }
             }
-            throw new CheckedAllocationException("No available resources");
+            throw new AllocationException("No available resources");
         }
 
         /// <summary>
@@ -96,11 +96,11 @@ namespace WPILib
         {
             if (index >= m_size || index < 0)
             {
-                throw new CheckedAllocationException("Index " + index + " out of range");
+                throw new AllocationException("Index " + index + " out of range");
             }
             if (m_numAllocated[index])
             {
-                throw new CheckedAllocationException("Resource at index " + index + " already allocated");
+                throw new AllocationException("Resource at index " + index + " already allocated");
             }
             m_numAllocated[index] = true;
             return index;

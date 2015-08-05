@@ -32,14 +32,7 @@ namespace WPILib
                 CheckSolenoidChannel(m_channel);
 
                 //Check to see if it is already allocated
-                try
-                {
-                    s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_channel);
-                }
-                catch (CheckedAllocationException)
-                {
-                    throw new AllocationException("Solenoid channel " + m_channel + " on module " + m_moduleNumber + " is already allocated");
-                }
+                s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_channel);
 
                 int status = 0;
 

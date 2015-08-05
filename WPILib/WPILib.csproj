@@ -68,7 +68,6 @@
     <Compile Include="Exceptions\AllocationException.cs" />
     <Compile Include="Exceptions\BaseSystemNotInitializedException.cs" />
     <Compile Include="Exceptions\BoundaryException.cs" />
-    <Compile Include="Exceptions\CheckedAllocationException.cs" />
     <Compile Include="Exceptions\InvalidValueException.cs" />
     <Compile Include="Exceptions\UncleanStatusException.cs" />
     <Compile Include="Interfaces\ICANSpeedController.cs" />

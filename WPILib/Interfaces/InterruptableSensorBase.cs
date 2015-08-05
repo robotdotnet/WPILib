@@ -150,14 +150,7 @@ namespace WPILib.Interfaces
         /// to occur.</param>
         protected void AllocateInterrupts(bool watcher)
         {
-            try
-            {
-                m_interruptIndex = (uint)s_interrupts.Allocate();
-            }
-            catch (CheckedAllocationException)
-            {
-                throw new AllocationException("No interrupts are left to be allocated");
-            }
+            m_interruptIndex = (uint)s_interrupts.Allocate();
             m_isSynchronousInterrupt = watcher;
 
             int status = 0;

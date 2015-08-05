@@ -47,22 +47,15 @@ namespace WPILib
         private void InitRelay()
         {
             CheckRelayChannel(m_channel);
-            try
+            if (m_direction == Direction.Both || m_direction == Direction.Forward)
             {
-                if (m_direction == Direction.Both || m_direction == Direction.Forward)
-                {
-                    s_relayChannels.Allocate(m_channel * 2);
-                    HAL.Report(ResourceType.kResourceType_Relay, (byte)m_channel);
-                }
-                if (m_direction == Direction.Both || m_direction == Direction.Reverse)
-                {
-                    s_relayChannels.Allocate(m_channel * 2 + 1);
-                    HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
-                }
+                s_relayChannels.Allocate(m_channel * 2);
+                HAL.Report(ResourceType.kResourceType_Relay, (byte)m_channel);
             }
-            catch (CheckedAllocationException)
+            if (m_direction == Direction.Both || m_direction == Direction.Reverse)
             {
-                throw new AllocationException("Relay channel " + m_channel + " is already allocated");
+                s_relayChannels.Allocate(m_channel * 2 + 1);
+                HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
             }
             int status = 0;
             m_port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)m_channel), ref status);

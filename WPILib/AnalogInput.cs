@@ -40,15 +40,7 @@ namespace WPILib
 
             CheckAnalogInputChannel(channel);
 
-            try
-            {
-                s_channels.Allocate(channel);
-            }
-            catch (CheckedAllocationException)
-            {
-                throw new AllocationException("Analog input channel " + Channel
-                     + " is already allocated");
-            }
+            s_channels.Allocate(channel);
 
             IntPtr portPointer = GetPort((byte)channel);
             int status = 0;

@@ -52,14 +52,7 @@ namespace WPILib
 
         public CANJaguar(int deviceNumber)
         {
-            try
-            {
-                s_allocated.Allocate(deviceNumber - 1);
-            }
-            catch (CheckedAllocationException e1)
-            {
-                throw new AllocationException("CANJaguar device " + e1.Message + "(increment index by one)");
-            }
+            s_allocated.Allocate(deviceNumber - 1);
 
             m_deviceNumber = (byte)deviceNumber;
             m_controlMode = ControlMode.PercentVbus;

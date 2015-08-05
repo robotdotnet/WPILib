@@ -34,22 +34,8 @@ namespace WPILib
                 CheckSolenoidChannel(m_forwardChannel);
                 CheckSolenoidChannel(m_reverseChannel);
 
-                try
-                {
-                    s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                }
-                catch (CheckedAllocationException)
-                {
-                    throw new AllocationException("Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
-                }
-                try
-                {
-                    s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
-                }
-                catch (CheckedAllocationException)
-                {
-                    throw new AllocationException("Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
-                }
+                s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                s_allocated.Allocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
 
                 m_forwardMask = (byte)(1 << m_forwardChannel);
                 m_reverseMask = (byte)(1 << m_reverseChannel);
