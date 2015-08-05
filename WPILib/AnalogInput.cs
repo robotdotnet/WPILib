@@ -108,7 +108,7 @@ namespace WPILib
 
         /// <summary>
         /// Get a scaled sample from the output of the oversample and average engine
-	    /// for this channel.
+        /// for this channel.
         /// </summary>
         /// <returns>A scaled sample from the output of the oversample and average engine for this channel.</returns>
         public double GetAverageVoltage()
