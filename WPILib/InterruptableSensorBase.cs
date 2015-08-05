@@ -179,7 +179,7 @@ namespace WPILib
             Utility.CheckStatus(status);
 
             m_interrupt = IntPtr.Zero;
-            s_interrupts.Dispose((int)m_interruptIndex);
+            s_interrupts.Deallocate((int)m_interruptIndex);
         }
 
         /// /// <summary>

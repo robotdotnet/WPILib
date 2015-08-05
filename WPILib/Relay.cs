@@ -91,11 +91,11 @@ namespace WPILib
         {
             if (m_direction == Direction.Both || m_direction == Direction.Forward)
             {
-                s_relayChannels.Dispose(m_channel * 2);
+                s_relayChannels.Deallocate(m_channel * 2);
             }
             if (m_direction == Direction.Both || m_direction == Direction.Reverse)
             {
-                s_relayChannels.Dispose(m_channel * 2 + 1);
+                s_relayChannels.Deallocate(m_channel * 2 + 1);
             }
 
             int status = 0;

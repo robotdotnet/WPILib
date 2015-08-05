@@ -139,6 +139,7 @@
     <Compile Include="TestRelay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MotorControllers\TestTalon.cs" />
+    <Compile Include="TestResource.cs" />
     <Compile Include="TestServo.cs" />
     <Compile Include="TestDoubleSolenoid.cs" />
     <Compile Include="TestSolenoid.cs" />

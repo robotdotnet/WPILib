@@ -90,7 +90,7 @@ namespace WPILib.Commands
         /// <param name="timeout">The time (in seconds) before this command "times out"</param>
         /// <exception cref="ArgumentOutOfRangeException">If given a negative timeout</exception>
         /// <seealso cref="Command.IsTimedOut()"/>
-        public Command(string name, double timeout)
+        protected Command(string name, double timeout)
             : this(name)
         {
             if (timeout < 0)

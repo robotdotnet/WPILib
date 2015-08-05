@@ -55,7 +55,7 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
-            s_channels.Dispose(m_channel);
+            s_channels.Deallocate(m_channel);
             int status = 0;
             FreeDIO(m_port, ref status);
             CheckStatus(status);

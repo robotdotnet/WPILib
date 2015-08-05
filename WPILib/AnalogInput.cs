@@ -55,7 +55,7 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
-            s_channels.Dispose(Channel);
+            s_channels.Deallocate(Channel);
             Channel = 0;
             m_accumulatorOffset = 0;
         }

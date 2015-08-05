@@ -132,7 +132,7 @@ namespace WPILib
 
         public void Dispose()
         {
-            s_allocated.Dispose(m_deviceNumber - 1);
+            s_allocated.Deallocate(m_deviceNumber - 1);
             m_safetyHelper = null;
             int status = 0;
 

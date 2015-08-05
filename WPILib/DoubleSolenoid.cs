@@ -81,8 +81,8 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                s_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                s_allocated.Dispose(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
+                s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
             }
         }
 

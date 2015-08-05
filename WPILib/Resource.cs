@@ -128,7 +128,7 @@ namespace WPILib
         /// Dispose will release the resource value so it can be reused somewhere else in the program.
         /// </remarks>
         /// <param name="index">The index of the resource to free</param>
-        public void Dispose(int index)
+        public void Deallocate(int index)
         {
             if (!m_numAllocated[index])
             {
