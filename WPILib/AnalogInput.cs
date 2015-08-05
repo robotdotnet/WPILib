@@ -243,29 +243,23 @@ namespace WPILib
         /// <summary>
         /// Read the accumulated value
         /// </summary>
-        public long AccumulatorValue
+        public long GetAccumulatorValue()
         {
-            get
-            {
-                int status = 0;
-                long value = GetAccumulatorValue(m_port, ref status);
-                CheckStatus(status);
-                return value + m_accumulatorOffset;
-            }
+            int status = 0;
+            long value = HALAnalog.GetAccumulatorValue(m_port, ref status);
+            CheckStatus(status);
+            return value + m_accumulatorOffset;
         }
 
         /// <summary>
         /// Read the number of accumulated values
         /// </summary>
-        public long AccumulatorCount
+        public long GetAccumulatorCount()
         {
-            get
-            {
-                int status = 0;
-                long value = GetAccumulatorCount(m_port, ref status);
-                CheckStatus(status);
-                return value;
-            }
+            int status = 0;
+            long value = HALAnalog.GetAccumulatorCount(m_port, ref status);
+            CheckStatus(status);
+            return value;
         }
 
         /// <summary>
