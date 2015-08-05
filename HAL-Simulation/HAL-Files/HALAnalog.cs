@@ -281,7 +281,7 @@ namespace HAL_Simulator
                     cnt["initialized"] = true;
                     AnalogTrigger trig = new AnalogTrigger()
                     {
-                        analogPortPointer = aPt;
+                        analogPortPointer = aPt,
                         index = i,
                     };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
