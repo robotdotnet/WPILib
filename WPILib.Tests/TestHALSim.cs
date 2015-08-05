@@ -182,10 +182,6 @@ namespace WPILib.Tests
                 else
                 {
                     var vv = o.Value;
-                    if (vv != null)
-                    {
-                        Console.WriteLine(vv);
-                    }
                     Assert.IsTrue(vv == null || vv is double || vv is int || vv is string || vv is bool || vv is float || vv is uint || vv is long);
                 }
             }
