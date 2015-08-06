@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib", "WPILib\WPILib.csproj", "{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib.Extras", "WPILib.Extras\WPILib.Extras.csproj", "{C2E50521-7046-463E-86C9-CF567F8E62BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib.Tests", "WPILib.Tests\WPILib.Tests.csproj", "{72EB3037-F595-4352-BEBF-A0C062F510EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib.IntegrationTests", "WPILib.IntegrationTests\WPILib.IntegrationTests.csproj", "{94EAD8AC-121A-4D38-8FE3-959A47FDAF82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{72EB3037-F595-4352-BEBF-A0C062F510EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72EB3037-F595-4352-BEBF-A0C062F510EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72EB3037-F595-4352-BEBF-A0C062F510EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EAD8AC-121A-4D38-8FE3-959A47FDAF82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EAD8AC-121A-4D38-8FE3-959A47FDAF82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EAD8AC-121A-4D38-8FE3-959A47FDAF82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EAD8AC-121A-4D38-8FE3-959A47FDAF82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

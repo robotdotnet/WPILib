@@ -1,5 +1,5 @@
 # RobotDotNet WPILib
-<a href="https://www.myget.org/"><img src="https://www.myget.org/BuildSource/Badge/robotdotnet-build?identifier=48b0fb66-4701-429a-b76e-bae9c28bbef7" alt="robotdotnet-build MyGet Build Status" /></a> 
+[![Build status](https://ci.appveyor.com/api/projects/status/owip0u906jj6j574/branch/master?svg=true)](https://ci.appveyor.com/project/robotdotnet-admin/robotdotnet-wpilib/branch/master)
 
 This repository contains the source code for a DotNet implentation of the WPILib. 
 

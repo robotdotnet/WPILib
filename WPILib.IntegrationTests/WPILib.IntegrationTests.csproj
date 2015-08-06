@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{72EB3037-F595-4352-BEBF-A0C062F510EB}</ProjectGuid>
+    <ProjectGuid>{94EAD8AC-121A-4D38-8FE3-959A47FDAF82}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WPILib.Tests</RootNamespace>
-    <AssemblyName>WPILib.Tests</AssemblyName>
+    <RootNamespace>WPILib.IntegrationTests</RootNamespace>
+    <AssemblyName>WPILib.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -16,15 +16,12 @@
     <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
     <IsCodedUITest>False</IsCodedUITest>
     <TestProjectType>UnitTest</TestProjectType>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>Output\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,20 +29,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>Output\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.0.0\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.0.0\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NetworkTables, Version=2015.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.NetworkTables.2015.0.5\lib\net45\NetworkTables.dll</HintPath>
@@ -56,18 +45,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Collections.Immutable, Version=1.1.36.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.1.36\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.0.21.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.Metadata.1.0.21\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Telerik.JustMock, Version=2015.2.616.2, Culture=neutral, PublicKeyToken=721b6c5bc0326b3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\JustMock.2015.2.616.2\lib\Net35\Telerik.JustMock.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -78,34 +55,34 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="MotorControllers\TestJaguar.cs" />
-    <Compile Include="MotorControllers\TestTalonSRX.cs" />
-    <Compile Include="MotorControllers\TestVictor.cs" />
-    <Compile Include="MotorControllers\TestVictorSP.cs" />
-    <Compile Include="SpecScaners\NativeProjects.cs" />
-    <Compile Include="SpecScaners\NetProjects.cs" />
-    <Compile Include="SpecScaners\TestHALImpl.cs" />
-    <Compile Include="TestAnalogTrigger.cs" />
-    <Compile Include="TestBase.cs" />
-    <Compile Include="TestBuiltinAccelerometer.cs" />
-    <Compile Include="TestCommand.cs" />
-    <Compile Include="TestCompressor.cs" />
-    <Compile Include="TestControllerPower.cs" />
-    <Compile Include="TestDriverStation.cs" />
-    <Compile Include="TestEncoders.cs" />
-    <Compile Include="TestHALSim.cs" />
-    <Compile Include="TestInterrupt.cs" />
-    <Compile Include="TestNotifier.cs" />
-    <Compile Include="TestPWM.cs" />
-    <Compile Include="TestRelay.cs" />
+    <Compile Include="AbstractInterruptTest.cs" />
+    <Compile Include="AnalogCrossConnectTest.cs" />
+    <Compile Include="BuiltInAccelerometerTest.cs" />
+    <Compile Include="Commands\AbstractCommandTest.cs" />
+    <Compile Include="Commands\ButtonTest.cs" />
+    <Compile Include="Commands\CommandScheduleTest.cs" />
+    <Compile Include="Commands\CommandSupersedeTest.cs" />
+    <Compile Include="Commands\CommandTimeoutTest.cs" />
+    <Compile Include="Commands\MockCommand.cs" />
+    <Compile Include="CounterTest.cs" />
+    <Compile Include="DIOCrossConnectTest.cs" />
+    <Compile Include="EncoderTest.cs" />
+    <Compile Include="ExampleTest.cs" />
+    <Compile Include="Fixtures\AbstractCrossConnectFixture.cs" />
+    <Compile Include="Fixtures\DIOCrossConnectFixture.cs" />
+    <Compile Include="Fixtures\FakeCounterFixture.cs" />
+    <Compile Include="Fixtures\FakeEncoderFixture.cs" />
+    <Compile Include="Fixtures\ITestFixture.cs" />
+    <Compile Include="Fixtures\RelayCrossConnectFixture.cs" />
+    <Compile Include="MockHardware\FakeCounterSource.cs" />
+    <Compile Include="MockHardware\FakeEncoderSource.cs" />
+    <Compile Include="MockHardware\FakePotentiometerSource.cs" />
+    <Compile Include="RelayCrossConnectTest.cs" />
+    <Compile Include="SimulatedHardware\SimJumpers.cs" />
+    <Compile Include="Test\AbstractComsSetup.cs" />
+    <Compile Include="Test\TestBench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MotorControllers\TestTalon.cs" />
-    <Compile Include="TestResource.cs" />
-    <Compile Include="TestServo.cs" />
-    <Compile Include="TestDoubleSolenoid.cs" />
-    <Compile Include="TestSolenoid.cs" />
-    <Compile Include="TestCounter.cs" />
-    <Compile Include="TestUtility.cs" />
+    <Compile Include="TimerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
@@ -131,10 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
