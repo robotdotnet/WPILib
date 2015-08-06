@@ -20,6 +20,7 @@ namespace WPILib.IntegrationTests
             Console.WriteLine(input.LSBWeight);
             Console.WriteLine(input.Offset);
             Console.WriteLine(input.OversampleBits);
+            Console.WriteLine(AnalogInput.GlobalSampleRate);
         }
     }
 }

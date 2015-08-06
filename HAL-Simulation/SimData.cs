@@ -224,7 +224,7 @@ namespace HAL_Simulator
                 {"z", new IN(0) },
             };
 
-            halData["analog_sample_rate"] = new OUT(1024.0);
+            halData["analog_sample_rate"] = new OUT(HALAnalog.DefaultSampleRate);
 
             halData["analog_out"] = new List<dynamic>();
             for (int i = 0; i < 8; i++)
@@ -244,11 +244,11 @@ namespace HAL_Simulator
                 {
                     {"has_source", new IN(false) },
                     {"initialized", new OUT(false) },
-                    {"avg_bits", new OUT(0) },
-                    {"oversample_bits", new OUT(0) },
+                    {"avg_bits", new OUT(HALAnalog.DefaultAverageBits) },
+                    {"oversample_bits", new OUT(HALAnalog.DefaultOversampleBits) },
                     { "voltage", new IN(0.0) },
-                    { "lsb_weight", new IN(1) },
-                    { "offset", new IN(65535) },
+                    { "lsb_weight", new IN(HALAnalog.DefaultLSBWeight) },
+                    { "offset", new IN(HALAnalog.DefaultOffset) },
                     {"accumulator_initialized", new OUT(0) },
                     {"accumulator_center", new OUT(0) },
                     { "accumulator_value", new IN(1) },

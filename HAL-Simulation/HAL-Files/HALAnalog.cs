@@ -21,6 +21,9 @@ namespace HAL_Simulator
         internal const int AnalogInputPins = 8;
         internal const int AnalogOutputPins = 2;
         internal const int AccumulatorNumChannels = 2;
+        internal const int DefaultAverageBits = 7;
+        internal const long DefaultLSBWeight = 1220703;
+        internal const int DefaultOffset = 0;
 
         internal static readonly int[] AccumulatorChannels = { 0, 1 };
 
@@ -116,7 +119,7 @@ namespace HAL_Simulator
         public static uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"];
+            return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"];
         }
 
         [CalledSimFunction]
@@ -130,7 +133,7 @@ namespace HAL_Simulator
         public static uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"];
+            return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"];
         }
 
         [CalledSimFunction]
