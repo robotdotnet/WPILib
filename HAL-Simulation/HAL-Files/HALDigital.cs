@@ -378,7 +378,6 @@ namespace HAL_Simulator
             status = 0;
 
             var counter = halData["counter"][idx];
-            Console.WriteLine(pin);
             counter["up_source_channel"] = (int)pin;
             counter["up_source_trigger"] = analogTrigger;
 
@@ -408,7 +407,6 @@ namespace HAL_Simulator
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            Console.WriteLine(trigIndex);
             int analogIn = halData["analog_trigger"][trigIndex]["pin"];
 
             if (analogIn == -1)
