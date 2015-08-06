@@ -39,7 +39,7 @@ namespace WPILib.Tests.SpecScaners
         public static List<HALMethodClass> GetHALSimMethods()
         {
             List<HALMethodClass> HALSimMethods = new List<HALMethodClass>();
-            var dir = "..\\..\\..\\HAL-Simulation\\HAL-Files";
+            var dir = "..\\..\\HAL-Simulation\\HAL-Files";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 HALMethodClass cs = new HALMethodClass
@@ -76,7 +76,7 @@ namespace WPILib.Tests.SpecScaners
         public static List<HALMethodClass> GetHalRoboRIODllImports()
         {
             List<HALMethodClass> HALRoboRioDllImports = new List<HALMethodClass>();
-            var dir = "..\\..\\..\\HAL-RoboRIO";
+            var dir = "..\\..\\HAL-RoboRIO";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 //List<MethodDeclarationSyntax> methodList = new List<MethodDeclarationSyntax>();
@@ -111,7 +111,7 @@ namespace WPILib.Tests.SpecScaners
         public static List<HALMethodClass> GetHalRoboRIOMethods()
         {
             List<HALMethodClass> HalRoboRIOMethods = new List<HALMethodClass>();
-            var dir = "..\\..\\..\\HAL-RoboRIO";
+            var dir = "..\\..\\HAL-RoboRIO";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 HALMethodClass cs = new HALMethodClass
@@ -141,7 +141,7 @@ namespace WPILib.Tests.SpecScaners
         public static List<HALDelegateClass> GetHalBaseDelegates()
         {
             List<HALDelegateClass> HalBaseMethods = new List<HALDelegateClass>();
-            var dir = "..\\..\\..\\HAL-Base\\Generated";
+            var dir = "..\\..\\HAL-Base\\Generated";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 HALDelegateClass cs = new HALDelegateClass
