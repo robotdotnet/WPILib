@@ -438,16 +438,19 @@ namespace HAL_Simulator
         {
             status = 0;
             var counter = halData["counter"][GetCounter((counter_pointer)).idx];
+
+            if (counter.ContainsKey("up_callback") && counter["up_callback"] != null)
+            {
+                halData["dio"][counter["up_source_channel"]].Cancel("value", counter["up_callback"]);
+                counter["up_callback"] = null;
+            }
+
             counter["up_rising_edge"] = false;
             counter["up_falling_edge"] = false;
             counter["up_source_channel"] = 0u;
             counter["up_source_trigger"] = false;
 			
-			if (counter.ContainsKey("upCallback") && counter["upCallback"] != null)
-			{
-				halData["dio"][counter["up_source_channel"]].Cancel("value", counter["upCallback"]);
-				counter["upCallback"] = null;
-			}
+			
         }
 
         [CalledSimFunction]
@@ -519,16 +522,19 @@ namespace HAL_Simulator
         {
             status = 0;
             var counter = halData["counter"][GetCounter((counter_pointer)).idx];
+
+            if (counter.ContainsKey("down_callback") && counter["down_callback"] != null)
+            {
+                halData["dio"][counter["down_source_channel"]].Cancel("value", counter["down_callback"]);
+                counter["down_callback"] = null;
+            }
+
             counter["down_rising_edge"] = false;
             counter["down_falling_edge"] = false;
             counter["down_source_channel"] = 0u;
             counter["down_source_trigger"] = false;
 			
-			if (counter.ContainsKey("downCallback") && counter["downCallback"] != null)
-			{
-				halData["dio"][counter["down_source_channel"]].Cancel("value", counter["downCallback"]);
-				counter["downCallback"] = null;
-			}
+			
         }
 
         [CalledSimFunction]
