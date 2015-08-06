@@ -106,19 +106,13 @@ namespace WPILib.IntegrationTests
 
             long range = 10000;
 
-            bool firedOnTime = (function.interruptFireTime > (interruptTriggerTime - range)) &&
-                               (function.interruptFireTime < interruptTriggerTime + range);
+            string error = "The interrupt did not fire within the expected time period (values in milliseconds)";
+            Assert.Greater(function.interruptFireTime, (interruptTriggerTime - range), error);
+            Assert.Less(function.interruptFireTime, (interruptTriggerTime + range), error);
 
-            Assert.IsTrue(firedOnTime,
-                "The interrupt did not fire within the expected time period (values in milliseconds)" +
-                (interruptTriggerTime - range) + " " + (interruptTriggerTime + range));
-
-
-            bool risingStamp = (GetInterruptable().ReadRisingTimestanp() > (interruptTriggerTime - range) / 1e6)
-                               && (GetInterruptable().ReadRisingTimestanp() < (interruptTriggerTime + range) / 1e6);
-
-
-            Assert.IsTrue(risingStamp, "The ReadRisingTimestamp() did not return the correct value (values in seconds");
+            error = "The ReadRisingTimestamp() did not return the correct value (values in seconds";
+            Assert.Greater(GetInterruptable().ReadRisingTimestanp(), (interruptTriggerTime - range) / 1e6, error);
+            Assert.Less(GetInterruptable().ReadRisingTimestanp(), (interruptTriggerTime + range) / 1e6, error);
 
         }
 
