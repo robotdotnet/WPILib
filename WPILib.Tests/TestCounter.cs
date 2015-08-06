@@ -119,6 +119,8 @@ namespace WPILib.Tests
         [Test]
         public void TestCounterInit5()
         {
+            //Assert.Pass();
+            //return;
             using (AnalogTrigger at = new AnalogTrigger(2))
             {
                 using (Counter ctr = new Counter(at))

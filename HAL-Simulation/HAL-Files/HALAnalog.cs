@@ -290,6 +290,7 @@ namespace HAL_Simulator
                     };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
                     Marshal.StructureToPtr(trig, ptr, true);
+                    cnt["pointer"] = ptr.ToInt64();
                     return ptr;
                 }
             }

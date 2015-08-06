@@ -258,7 +258,7 @@ namespace HAL_Simulator
                 });
             }
             halData["analog_trigger"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 4; i++)
             {
 
                 halData["analog_trigger"].Add(new Dictionary<dynamic, dynamic>()
@@ -266,6 +266,7 @@ namespace HAL_Simulator
                     {"has_source", new IN(false)},
                     {"initialized", new OUT(false)},
                     {"pin", new OUT(-1)},
+                    {"pointer", new OUT(0)},
                     {"trig_lower", new OUT(null)},
                     {"trig_upper", new OUT(null)},
                     {"trig_type", new OUT(null)},
@@ -361,9 +362,9 @@ namespace HAL_Simulator
                     {"mode", new OUT(0) },
                     {"average_size", new OUT(0) },
 
-                    {"up_source_channel", new OUT(0u)},
+                    {"up_source_channel", new OUT(0)},
                     {"up_source_trigger", new OUT(false)},
-                    {"down_source_channel", new OUT(0u)},
+                    {"down_source_channel", new OUT(0)},
                     {"down_source_trigger", new OUT(false)},
 
                     {"update_when_empty", new OUT(false)},

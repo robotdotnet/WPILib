@@ -59,13 +59,14 @@ namespace WPILib
             InitCounter(Mode.TwoPulse);
             SetUpSource(source);
         }
-
+        //TwoPulse
         public Counter(int channel)
         {
             InitCounter(Mode.TwoPulse);
             SetUpSource(channel);
         }
 
+        //External direction is encoder style.
         public Counter(EncodingType encodingType, DigitalSource upSource, DigitalSource downSource, bool inverted)
         {
             InitCounter(Mode.ExternalDirection);
@@ -75,9 +76,9 @@ namespace WPILib
             }
             if (upSource == null)
                 throw new ArgumentNullException(nameof(upSource), "Up Source given was null");
-            SetUpSource(upSource);
             if (downSource == null)
                 throw new ArgumentNullException(nameof(downSource), "Down Source given was null");
+            SetUpSource(upSource);
             SetDownSource(downSource);
             int status = 0;
             if (encodingType == EncodingType.K1X)
