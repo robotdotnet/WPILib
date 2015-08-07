@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using NUnit.Framework;
 using WPILib.Commands;
-using WPILib.IntegrationTests.Test;
 
-namespace WPILib.IntegrationTests.Commands
+namespace WPILib.Tests.Commands
 {
-    public abstract class AbstractCommandTest : AbstractComsSetup
+    public abstract class AbstractCommandTest : TestBase
     {
         [SetUp]
         public void CommandSetup()

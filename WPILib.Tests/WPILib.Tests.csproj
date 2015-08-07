@@ -74,6 +74,15 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Commands\AbstractCommandTest.cs" />
+    <Compile Include="Commands\ButtonTest.cs" />
+    <Compile Include="Commands\CommandParallelGroupTest.cs" />
+    <Compile Include="Commands\CommandScheduleTest.cs" />
+    <Compile Include="Commands\CommandSequentialGroupTest.cs" />
+    <Compile Include="Commands\CommandSupersedeTest.cs" />
+    <Compile Include="Commands\CommandTimeoutTest.cs" />
+    <Compile Include="Commands\DefaultCommandTest.cs" />
+    <Compile Include="Commands\MockCommand.cs" />
     <Compile Include="MotorControllers\TestJaguar.cs" />
     <Compile Include="MotorControllers\TestTalonSRX.cs" />
     <Compile Include="MotorControllers\TestVictor.cs" />
@@ -84,7 +93,7 @@
     <Compile Include="TestAnalogTrigger.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
-    <Compile Include="TestCommand.cs" />
+    <Compile Include="Commands\CommandCreationTest.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
     <Compile Include="TestDriverStation.cs" />
