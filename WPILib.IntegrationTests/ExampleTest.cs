@@ -14,6 +14,7 @@ namespace WPILib.IntegrationTests
         [Test]
         public void PrintData([Range(0,4)] int port)
         {
+            /*
             AnalogInput input = new AnalogInput(port);
             Console.WriteLine("Port" + port);
             Console.WriteLine(input.AverageBits);
@@ -21,6 +22,7 @@ namespace WPILib.IntegrationTests
             Console.WriteLine(input.Offset);
             Console.WriteLine(input.OversampleBits);
             Console.WriteLine(AnalogInput.GlobalSampleRate);
+            */
         }
     }
 }

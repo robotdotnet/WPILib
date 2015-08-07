@@ -28,7 +28,7 @@ namespace WPILib.IntegrationTests.MockHardware
             m_init_output = true;
         }
 
-        public void SetMaxVoltate(double voltage)
+        public void SetMaxVoltage(double voltage)
         {
             potMaxVoltage = voltage;
         }

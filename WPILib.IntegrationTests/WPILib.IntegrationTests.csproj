@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="AbstractInterruptTest.cs" />
     <Compile Include="AnalogCrossConnectTest.cs" />
+    <Compile Include="AnalogPotentiometerTest.cs" />
     <Compile Include="BuiltInAccelerometerTest.cs" />
     <Compile Include="Commands\AbstractCommandTest.cs" />
     <Compile Include="Commands\ButtonTest.cs" />
@@ -77,8 +78,10 @@
     <Compile Include="MockHardware\FakeCounterSource.cs" />
     <Compile Include="MockHardware\FakeEncoderSource.cs" />
     <Compile Include="MockHardware\FakePotentiometerSource.cs" />
+    <Compile Include="PreferencesTest.cs" />
     <Compile Include="RelayCrossConnectTest.cs" />
     <Compile Include="SimulatedHardware\SimJumpers.cs" />
+    <Compile Include="SmartDashboards\SmartDashboardTest.cs" />
     <Compile Include="Test\AbstractComsSetup.cs" />
     <Compile Include="Test\TestBench.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
