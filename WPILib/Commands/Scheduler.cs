@@ -162,7 +162,7 @@ namespace WPILib.Commands
             {
                 if (subsystem.GetCurrentCommand() == null)
                 {
-                    _Add(subsystem.GetCurrentCommand());
+                    _Add(subsystem.GetDefaultCommand());
                 }
                 subsystem.ConfirmCommand();
             }

@@ -28,6 +28,11 @@ namespace WPILib.IntegrationTests.Commands
                     SetDefaultCommand(command);
             }
 
+            public void PublicInitDefaultCommand()
+            {
+                InitDefaultCommand();
+            }
+
             public void Init(Command command)
             {
                 this.command = command;

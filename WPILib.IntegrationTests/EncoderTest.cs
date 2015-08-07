@@ -52,6 +52,16 @@ namespace WPILib.IntegrationTests
             encoder = new FakeEncoderFixture(inputA, outputA, inputB, outputB, type);
         }
 
+        [TestFixtureSetUp]
+        public static void SetUpBeforeClass()
+        {
+            //TODO: Get mock encoders working in sim
+            if (RobotBase.IsSimulation)
+            {
+                Assert.Ignore();
+            }
+        }
+
         [TestFixtureTearDown]
         public static void TearDownAfterClass()
         {

@@ -61,10 +61,13 @@
     <Compile Include="BuiltInAccelerometerTest.cs" />
     <Compile Include="Commands\AbstractCommandTest.cs" />
     <Compile Include="Commands\ButtonTest.cs" />
+    <Compile Include="Commands\CommandParallelGroupTest.cs" />
     <Compile Include="Commands\CommandScheduleTest.cs" />
     <Compile Include="Commands\CommandSupersedeTest.cs" />
     <Compile Include="Commands\CommandTimeoutTest.cs" />
+    <Compile Include="Commands\DefaultCommandTest.cs" />
     <Compile Include="Commands\MockCommand.cs" />
+    <Compile Include="Commands\CommandSequentialGroupTest.cs" />
     <Compile Include="CounterTest.cs" />
     <Compile Include="DIOCrossConnectTest.cs" />
     <Compile Include="EncoderTest.cs" />
