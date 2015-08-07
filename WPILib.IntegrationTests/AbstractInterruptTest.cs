@@ -82,8 +82,7 @@ namespace WPILib.IntegrationTests
             //TODO: Add Analog Interrupts
             if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
             {
-                Assert.Pass();
-                return;
+                Assert.Ignore();
             }
 
 
@@ -130,8 +129,7 @@ namespace WPILib.IntegrationTests
             //TODO: Add Analog Interrupts
             if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
             {
-                Assert.Pass();
-                return;
+                Assert.Ignore();
             }
 
             InterruptCounter counter = new InterruptCounter();
@@ -162,8 +160,7 @@ namespace WPILib.IntegrationTests
             //TODO: Add Analog Interrupts
             if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
             {
-                Assert.Pass();
-                return;
+                Assert.Ignore();
             }
 
             GetInterruptable().RequestInterrupts();
@@ -192,8 +189,7 @@ namespace WPILib.IntegrationTests
             //TODO: Add Analog Interrupts
             if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
             {
-                Assert.Pass();
-                return;
+                Assert.Ignore();
             }
 
             InterruptCounter counter = new InterruptCounter();
