@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
 using HAL_Simulator;
 using NUnit.Framework;
-using Telerik.JustMock;
 
 using HAL = HAL_Base.HAL;
 using static HAL_Simulator.DriverStationHelper;
@@ -28,57 +26,83 @@ namespace WPILib.Tests
         [Test]
         public void TestNotifyDictAdditonInitialNotify()
         {
-            var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
 
-            Mock.Arrange(() => delegateMock("voltage", Arg.AnyObject)).OccursOnce();
+            int count = 0;
+            string key = null;
+            Action<dynamic, dynamic> mockDelegate = (k, v) =>
+            {
+                count++;
+                key = k;
+            };
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", delegateMock, true);
+            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, true);
 
-            Mock.Assert(delegateMock);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual("voltage", key);
+
         }
 
         [Test]
         public void TestNotifyDictAdditonNoInitialNotify()
         {
-            var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
-
-            Mock.Arrange(() => delegateMock("voltage", Arg.AnyObject)).OccursNever();
+            int count = 0;
+            string key = null;
+            Action<dynamic, dynamic> mockDelegate = (k, v) =>
+            {
+                count++;
+                key = k;
+            };
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
 
-            Mock.Assert(delegateMock);
+            Assert.AreEqual(0, count);
+            Assert.AreEqual(null, key);
         }
 
         [Test]
         public void TestNotifyDictAssignement()
         {
-            var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
-
-            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
+            int count = 0;
+            string key = null;
+            dynamic value = -5;
+            Action<dynamic, dynamic> mockDelegate = (k, v) =>
+            {
+                count++;
+                key = k;
+                value = v;
+            };
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
 
             HAL.halData["analog_in"][0]["voltage"] = 1.25;
 
-            Mock.Assert(delegateMock);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual("voltage", key);
+            Assert.AreEqual(1.25, value);
         }
 
         [Test]
         public void TestNotifyDictHalUpdate()
         {
-            var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
-
-            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
+            int count = 0;
+            string key = null;
+            dynamic value = -5;
+            Action<dynamic, dynamic> mockDelegate = (k, v) =>
+            {
+                count++;
+                key = k;
+                value = v;
+            };
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
 
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>()
             {
@@ -95,45 +119,63 @@ namespace WPILib.Tests
 
             SimData.UpdateHalData(inDict, HAL.halData);
 
-            Mock.Assert(delegateMock);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual("voltage", key);
+            Assert.AreEqual(1.25, value);
         }
 
         [Test]
         public void TestHalInNotifyDictUpdate()
         {
-            var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
-
-            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
+            int count = 0;
+            string key = null;
+            dynamic value = -5;
+            Action<dynamic, dynamic> mockDelegate = (k, v) =>
+            {
+                count++;
+                key = k;
+                value = v;
+            };
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
 
             HAL.halInData["analog_in"][0]["voltage"] = 1.25;
 
             SimData.UpdateHalData(HAL.halInData, HAL.halData);
 
-            Mock.Assert(delegateMock);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual("voltage", key);
+            Assert.AreEqual(1.25, value);
         }
 
         [Test]
         public void TestNotifyDictRemoveCallback()
         {
-            var delegateMock = Mock.Create<Action<dynamic, dynamic>>();
-
-            Mock.Arrange(() => delegateMock("voltage", 1.25)).OccursOnce();
+            int count = 0;
+            string key = null;
+            dynamic value = -5;
+            Action<dynamic, dynamic> mockDelegate = (k, v) =>
+            {
+                count++;
+                key = k;
+                value = v;
+            };
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", delegateMock, false);
+            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
 
             HAL.halData["analog_in"][0]["voltage"] = 1.25;
 
-            HAL.halData["analog_in"][0].Cancel("voltage", delegateMock);
+            HAL.halData["analog_in"][0].Cancel("voltage", mockDelegate);
 
             HAL.halData["analog_in"][0]["voltage"] = 13.84;
 
-            Mock.Assert(delegateMock);
+            Assert.AreEqual(1, count);
+            Assert.AreEqual("voltage", key);
+            Assert.AreEqual(1.25, value);
         }
 
         [Test]

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
-using Telerik.JustMock;
 
 namespace WPILib.Tests
 {
@@ -12,18 +11,43 @@ namespace WPILib.Tests
         [Test]
         public void TestSingle()
         {
-            var delegateMock = Mock.Create<Action>();
 
-            Mock.Arrange(() => delegateMock()).OccursOnce();
+            int count = 0;
+            Action mockDelegate = () =>
+            {
+                count++;
+            };
 
-            using (Notifier nt = new Notifier(delegateMock))
+            using (Notifier nt = new Notifier(mockDelegate))
             {
                 nt.StartSingle(0.25);
 
-                Thread.Sleep(750);
-
-                Mock.Assert(delegateMock);
+                Thread.Sleep(500);
             }
+
+            Assert.AreEqual(1, count);
+        }
+
+        [Test]
+        public void TestSingleWithObject()
+        {
+            int count = 0;
+            object obj = null;
+            Action<object> mockDelegate = (o) =>
+            {
+                count++;
+                obj = o;
+            };
+
+            using (Notifier nt = new Notifier(mockDelegate, this))
+            {
+                nt.StartSingle(0.25);
+
+                Thread.Sleep(500);
+            }
+
+            Assert.AreEqual(1, count);
+            Assert.AreEqual(this, obj);
         }
         /*
         [Test]

@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using HAL_Base;
 using NUnit.Framework;
-using Telerik.JustMock;
 using WPILib.Exceptions;
-using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
@@ -190,20 +188,49 @@ namespace WPILib.Tests
         {
             using (DigitalInput d = NewInput())
             {
-                var delegateMock = Mock.Create<Action>();
-
-                Mock.Arrange(() => delegateMock()).OccursOnce();
+                int count = 0;
+                Action mockDelegate = () =>
+                {
+                    count++;
+                };
 
                 HalData()["dio"][0]["value"] = false;
 
-                d.RequestInterrupts(delegateMock);
+                d.RequestInterrupts(mockDelegate);
                 d.EnableInterrupts();
 
                 HalData()["dio"][0]["value"] = true;
 
                 Thread.Sleep(50);
 
-                Mock.Assert(delegateMock);
+                Assert.AreEqual(1, count);
+            }
+        }
+
+        [Test]
+        public void TestAsyncReturnValue()
+        {
+            using (DigitalInput d = NewInput())
+            {
+                int count = 0;
+                object obj = null;
+                Action<uint, object> mockDelegate = (m, o) =>
+                {
+                    count++;
+                    obj = o;
+                };
+
+                HalData()["dio"][0]["value"] = false;
+
+                d.RequestInterrupts(mockDelegate, this);
+                d.EnableInterrupts();
+
+                HalData()["dio"][0]["value"] = true;
+
+                Thread.Sleep(50);
+
+                Assert.AreEqual(1, count);
+                Assert.AreSame(this, obj);
             }
         }
     }

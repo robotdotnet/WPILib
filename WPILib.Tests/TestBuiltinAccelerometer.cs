@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
-using NetworkTables.Tables;
 using NUnit.Framework;
-using Telerik.JustMock;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib.Tests
@@ -16,7 +14,7 @@ namespace WPILib.Tests
             return HAL.halData["accelerometer"];
         }
 
-        private static BuiltInAccelerometer s_instance = null;
+        private static readonly BuiltInAccelerometer s_instance = null;
 
         private static BuiltInAccelerometer GetAcc()
         {

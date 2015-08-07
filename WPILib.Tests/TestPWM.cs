@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using HAL_Base;
 using NUnit.Framework;
-using Telerik.JustMock.Helpers;
 using WPILib.Exceptions;
 
 namespace WPILib.Tests
