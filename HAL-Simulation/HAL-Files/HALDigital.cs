@@ -780,7 +780,8 @@ namespace HAL_Simulator
         {
             status = 0;
             halData["counter"][GetCounter(counter_pointer).idx]["count"] = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["period"] = 0;
+            halData["counter"][GetCounter(counter_pointer).idx]["period"] = double.MaxValue;
+            halData["counter"][GetCounter(counter_pointer).idx]["reset"] = true;
         }
 
 
@@ -888,21 +889,22 @@ namespace HAL_Simulator
         {
             status = 0;
             halData["encoder"][GetEncoder(encoder_pointer).idx]["count"] = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["period "] = 0;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["period "] = double.MaxValue;
+            halData["encoder"][GetEncoder(encoder_pointer).idx]["reset"] = true;
         }
 
         [CalledSimFunction]
         public static int getEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return halData["encoder"][GetEncoder(encoder_pointer).idx]["count"];
+            return (int)halData["encoder"][GetEncoder(encoder_pointer).idx]["count"];
         }
 
         [CalledSimFunction]
         public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return halData["encoder"][GetEncoder(encoder_pointer).idx]["period"];
+            return (double)halData["encoder"][GetEncoder(encoder_pointer).idx]["period"];
         }
 
 

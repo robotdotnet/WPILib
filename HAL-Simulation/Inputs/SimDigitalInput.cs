@@ -12,7 +12,14 @@ namespace HAL_Simulator.Inputs
 
         public SimDigitalInput(int pin)
         {
-
+            dictionary = SimData.halData["dio"][pin];
         }
+
+        public void Set(bool value)
+        {
+            dictionary["value"] = value;
+        }
+
+        public bool GetInput() => dictionary["value"];
     }
 }

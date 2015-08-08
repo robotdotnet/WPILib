@@ -16,14 +16,14 @@ namespace HAL_Simulator.Inputs
         K4X = 2,
     }
 
-    public class SimEncoder
+    public class SimEncoder : IServoFeedback
     {
-        private Dictionary<dynamic, dynamic> dictionary = null;
+        public  NotifyDict<dynamic, dynamic> Dictionary { get; private set; } = null;
 
         private bool encoder = true;
         private bool k2x = true;
 
-        public SimEncoder(int pin, EncodingType type)
+        public SimEncoder(int pin, EncodingType type = EncodingType.K4X)
         {
             if (type == EncodingType.K4X)
             {
@@ -57,7 +57,7 @@ namespace HAL_Simulator.Inputs
                 throw new InvalidOperationException($"Encoder not found for pin {pin}");
             }
 
-            dictionary = SimData.halData["encoder"][index];
+            Dictionary = SimData.halData["encoder"][index];
         }
 
         private void InitCounter(int pin)
@@ -79,26 +79,29 @@ namespace HAL_Simulator.Inputs
                 throw new InvalidOperationException($"Counter not found for pin {pin}");
             }
 
-            dictionary = SimData.halData["counter"][index];
-            k2x = dictionary["up_falling_edge"];
+            Dictionary = SimData.halData["counter"][index];
+            encoder = false;
+            k2x = Dictionary["average_size"] == 2;
         }
 
-        public void SetCount(double value)
+         
+
+        public void Set(double value)
         {
             if (encoder)
             {
                 //All encoders are 4x. So we will multiply by 4.
-                dictionary["count"] = (int) (value*4);
+                Dictionary["count"] = (int) (value*4);
             }
             else
             {
-                dictionary["count"] = (int)(value * (k2x ? 2 : 1));
+                Dictionary["count"] = (int)(value * (k2x ? 2 : 1));
             }
         }
 
         public void SetPeriod(double period)
         {
-            dictionary["period"] = (float) period;
+            Dictionary["period"] = (float) period;
         }
     }
 }

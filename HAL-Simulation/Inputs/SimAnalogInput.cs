@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator.Inputs
 {
-    public class SimAnalogInput
+    public class SimAnalogInput : IServoFeedback
     {
-        private Dictionary<dynamic, dynamic> dictionary = null;
+        private NotifyDict<dynamic, dynamic> dictionary = null;
          
         public SimAnalogInput(int pin)
         {
@@ -22,13 +23,9 @@ namespace HAL_Simulator.Inputs
                 value = 5.0;
             if (value < 0.0)
                 value = 0.0;
-            dictionary["voltage"] = (float)value;
-            dictionary["avg_voltage"] = (float)value;
+            dictionary["voltage"] = value;
         }
 
-        public double GetVoltage()
-        {
-            return dictionary["avg_voltage"];// = (float)value;
-        }
+        public double GetVoltage() => dictionary["voltage"];
     }
 }

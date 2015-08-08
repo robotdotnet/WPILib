@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DCMotor.cs" />
+    <Compile Include="Inputs\IServoFeedback.cs" />
+    <Compile Include="Mechanisms\EncoderMechanism.cs" />
+    <Compile Include="Mechanisms\StringPotentiometerMechanism.cs" />
+    <Compile Include="Outputs\DCMotor.cs" />
     <Compile Include="DriverStationHelper.cs" />
     <Compile Include="HAL-Files\HAL.cs" />
     <Compile Include="HAL-Files\HALAccelerometer.cs" />
@@ -62,7 +65,6 @@
     <Compile Include="HAL-Files\HALSolenoid.cs" />
     <Compile Include="HAL-Files\HALStructures.cs" />
     <Compile Include="HAL-Files\HALUtilities.cs" />
-    <Compile Include="CounterHelper.cs" />
     <Compile Include="Inputs\SimAnalogInput.cs" />
     <Compile Include="Inputs\SimCounter.cs" />
     <Compile Include="Inputs\SimDigitalInput.cs" />
@@ -73,8 +75,8 @@
     <Compile Include="Outputs\SimDigitalOutput.cs" />
     <Compile Include="Outputs\SimPWMController.cs" />
     <Compile Include="Outputs\SimRelay.cs" />
-    <Compile Include="PotentiometerMechanism.cs" />
-    <Compile Include="ServoMechanism.cs" />
+    <Compile Include="Mechanisms\ArmPotentiometerMechanism.cs" />
+    <Compile Include="Mechanisms\ServoMechanism.cs" />
     <Compile Include="SimHooks.cs" />
     <Compile Include="HAL-Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

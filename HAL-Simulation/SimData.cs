@@ -332,13 +332,14 @@ namespace HAL_Simulator
             halData["encoder"] = new List<dynamic>();
             for (int i = 0; i < 4; i++)
             {
-                halData["encoder"].Add(new Dictionary<dynamic, dynamic>()
+                halData["encoder"].Add(new NotifyDict<dynamic, dynamic>()
                 {
                     {"has_source", new IN(false) },
                     {"initialized", new OUT(false) },
                     {"config", new OUT(null)},
                     {"count", new IN(0) },
                     {"period", new IN(float.MaxValue) },
+                    {"reset" , new OUT(false)},
                     {"max_period", new OUT(0) },
                     {"direction", new IN(false) },
                     {"reverse_direction", new OUT(false) },
@@ -348,13 +349,14 @@ namespace HAL_Simulator
             halData["counter"] = new List<dynamic>();
             for (int i = 0; i < 8; i++)
             {
-                halData["counter"].Add(new Dictionary<dynamic, dynamic>()
+                halData["counter"].Add(new NotifyDict<dynamic, dynamic>()
                 {
                     {"has_source", new IN(false) },
                     {"initialized", new OUT(false) },
                     {"config", new OUT(null)},
                     {"count", new IN(0) },
                     {"period", new IN(float.MaxValue) },
+                    {"reset" , new OUT(false)},
                     {"max_period", new OUT(0) },
                     {"direction", new IN(false) },
                     {"reverse_direction", new OUT(false) },

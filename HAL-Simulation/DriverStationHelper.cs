@@ -36,14 +36,9 @@ namespace HAL_Simulator
 
         private static Timer s_dsTimer;
 
-        private static readonly object s_lockObject = new object();
-
         internal static void UpdateData()
         {
-            lock (s_lockObject)
-            {
-                UpdateHalData(HalDSData);
-            }
+            UpdateHalData(HalDSData);
             if (HALNewDataSem != IntPtr.Zero)
             {
                 HALSemaphore.giveMultiWait(HALNewDataSem);
@@ -109,10 +104,7 @@ namespace HAL_Simulator
                 throw new ArgumentOutOfRangeException(nameof(buttonNum),
                     $"Button must be between 1 and {HalDSData["joysticks"][joystickNum]["buttons"].Length - 1}");
             }
-            lock (s_lockObject)
-            {
-                HalDSData["joysticks"][joystickNum]["buttons"][buttonNum] = value; 
-            }
+            HalDSData["joysticks"][joystickNum]["buttons"][buttonNum] = value;
         }
 
         /// <summary>
@@ -137,10 +129,7 @@ namespace HAL_Simulator
                 value = 1.0;
             if (value < -1.0)
                 value = -1.0;
-            lock (s_lockObject)
-            {
-                HalDSData["joysticks"][joystickNum]["axes"][axisNum] = (float) value;
-            }
+            HalDSData["joysticks"][joystickNum]["axes"][axisNum] = (float)value;
         }
 
         /// <summary>
@@ -164,11 +153,8 @@ namespace HAL_Simulator
             if (povValue < -1)
                 povValue = -1;
             if (povValue > 360)
-                povValue = povValue%360;
-            lock (s_lockObject)
-            {
-                HalDSData["joysticks"][joystickNum]["povs"][povNum] = (short) povValue;
-            }
+                povValue = povValue % 360;
+            HalDSData["joysticks"][joystickNum]["povs"][povNum] = (short)povValue;
         }
 
         public static void SetJoystickName(int joystickNum, string name)
@@ -178,10 +164,7 @@ namespace HAL_Simulator
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
                     $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
             }
-            lock (s_lockObject)
-            {
-                HalDSData["joysticks"][joystickNum]["name"] = name;
-            }
+            HalDSData["joysticks"][joystickNum]["name"] = name;
         }
 
 
@@ -192,27 +175,25 @@ namespace HAL_Simulator
         /// <param name="state">The state to set</param>
         public static void SetEnabledState(EnabledState state)
         {
-            lock (s_lockObject)
+            switch (state)
             {
-                switch (state)
-                {
-                    case EnabledState.Disabled:
-                        HalDSData["control"]["enabled"] = false;
-                        HalDSData["control"]["eStop"] = false;
-                        HalDSData["control"]["ds_attached"] = true;
-                        break;
-                    case EnabledState.Enabled:
-                        HalDSData["control"]["enabled"] = true;
-                        HalDSData["control"]["eStop"] = false;
-                        HalDSData["control"]["ds_attached"] = true;
-                        break;
-                    case EnabledState.EStopped:
-                        HalDSData["control"]["enabled"] = false;
-                        HalDSData["control"]["eStop"] = true;
-                        HalDSData["control"]["ds_attached"] = true;
-                        break;
-                } 
+                case EnabledState.Disabled:
+                    HalDSData["control"]["enabled"] = false;
+                    HalDSData["control"]["eStop"] = false;
+                    HalDSData["control"]["ds_attached"] = true;
+                    break;
+                case EnabledState.Enabled:
+                    HalDSData["control"]["enabled"] = true;
+                    HalDSData["control"]["eStop"] = false;
+                    HalDSData["control"]["ds_attached"] = true;
+                    break;
+                case EnabledState.EStopped:
+                    HalDSData["control"]["enabled"] = false;
+                    HalDSData["control"]["eStop"] = true;
+                    HalDSData["control"]["ds_attached"] = true;
+                    break;
             }
+
         }
 
         /// <summary>
@@ -221,43 +202,40 @@ namespace HAL_Simulator
         /// <param name="mode">The robot mode to set</param>
         public static void SetRobotMode(RobotMode mode)
         {
-            lock (s_lockObject)
+            RobotMode prevState = RobotMode.Teleop;
+            if (HalData["control"]["autonomous"])
             {
-                RobotMode prevState = RobotMode.Teleop;
-                if (HalData["control"]["autonomous"])
-                {
-                    prevState = RobotMode.Autonomous;
-                }
-                else if (HalData["control"]["test"])
-                {
-                    prevState = RobotMode.Test;
-                }
-                switch (mode)
-                {
-                    case RobotMode.Autonomous:
-                        if (prevState != RobotMode.Autonomous)
-                            SetEnabledState(EnabledState.Disabled);
-                        HalDSData["control"]["autonomous"] = true;
-                        HalDSData["control"]["test"] = false;
-                        break;
-                    case RobotMode.Teleop:
-                        if (prevState != RobotMode.Teleop)
-                            SetEnabledState(EnabledState.Disabled);
-                        HalDSData["control"]["autonomous"] = false;
-                        HalDSData["control"]["test"] = false;
-                        break;
-                    case RobotMode.Test:
-                        if (prevState != RobotMode.Test)
-                            SetEnabledState(EnabledState.Disabled);
-                        HalDSData["control"]["autonomous"] = false;
-                        HalDSData["control"]["test"] = true;
-                        break;
-                    default:
+                prevState = RobotMode.Autonomous;
+            }
+            else if (HalData["control"]["test"])
+            {
+                prevState = RobotMode.Test;
+            }
+            switch (mode)
+            {
+                case RobotMode.Autonomous:
+                    if (prevState != RobotMode.Autonomous)
                         SetEnabledState(EnabledState.Disabled);
-                        HalDSData["control"]["autonomous"] = false;
-                        HalDSData["control"]["test"] = false;
-                        break;
-                } 
+                    HalDSData["control"]["autonomous"] = true;
+                    HalDSData["control"]["test"] = false;
+                    break;
+                case RobotMode.Teleop:
+                    if (prevState != RobotMode.Teleop)
+                        SetEnabledState(EnabledState.Disabled);
+                    HalDSData["control"]["autonomous"] = false;
+                    HalDSData["control"]["test"] = false;
+                    break;
+                case RobotMode.Test:
+                    if (prevState != RobotMode.Test)
+                        SetEnabledState(EnabledState.Disabled);
+                    HalDSData["control"]["autonomous"] = false;
+                    HalDSData["control"]["test"] = true;
+                    break;
+                default:
+                    SetEnabledState(EnabledState.Disabled);
+                    HalDSData["control"]["autonomous"] = false;
+                    HalDSData["control"]["test"] = false;
+                    break;
             }
         }
 

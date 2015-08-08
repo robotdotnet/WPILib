@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator.Inputs
 {
-    public class SimCounter
+    public class SimCounter : IServoFeedback
     {
         private Dictionary<dynamic, dynamic> dictionary = null;
         private bool k2x = true;
@@ -34,7 +34,7 @@ namespace HAL_Simulator.Inputs
             k2x = dictionary["up_falling_edge"];
         }
 
-        public void SetCount(double value)
+        public void Set(double value)
         {
             dictionary["count"] = (int)(value * (k2x ? 2 : 1));
         }
