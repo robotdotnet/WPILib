@@ -68,6 +68,22 @@ namespace HAL_Simulator
                 Thread.Sleep(milliSeconds - 50);
             }
             while (sw.ElapsedMilliseconds < milliSeconds) ;
-        } 
+        }
+
+        /// <summary>
+        /// Waits for the robot program to say it has started. In the 2 primary robot bases, this is called when RobotInit returns.
+        /// </summary>
+        public static void WaitForProgramStart()
+        {
+            int count = 0;
+            Console.WriteLine("Waiting for program to start. If you are using a Gyro, this should take about 5 seconds. " +
+                              "Otherwise it should start immediately.");
+            while (!SimData.halData["program_started"])
+            {
+                count++;
+                Console.WriteLine("Waiting for program start signal: " + count);
+                Thread.Sleep(500);
+            }
+        }
     }
 }

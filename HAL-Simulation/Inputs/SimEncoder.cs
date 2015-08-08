@@ -20,7 +20,7 @@ namespace HAL_Simulator.Inputs
     {
         public  NotifyDict<dynamic, dynamic> Dictionary { get; private set; } = null;
 
-        private bool encoder = true;
+        private bool isEncoder = true;
         private bool k2x = true;
 
         public SimEncoder(int pin, EncodingType type = EncodingType.K4X)
@@ -80,7 +80,7 @@ namespace HAL_Simulator.Inputs
             }
 
             Dictionary = SimData.halData["counter"][index];
-            encoder = false;
+            isEncoder = false;
             k2x = Dictionary["average_size"] == 2;
         }
 
@@ -88,7 +88,7 @@ namespace HAL_Simulator.Inputs
 
         public void Set(double value)
         {
-            if (encoder)
+            if (isEncoder)
             {
                 //All encoders are 4x. So we will multiply by 4.
                 Dictionary["count"] = (int) (value*4);

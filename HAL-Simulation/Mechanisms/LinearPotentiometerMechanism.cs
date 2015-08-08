@@ -8,10 +8,10 @@ using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
 {
-    public class StringPotentiometerMechanism : ServoMechanism
+    public class LinearPotentiometerMechanism : AbstractFeedbackMechanism
     {
         //String travel and Spool Radius in meters
-        public StringPotentiometerMechanism(ISimSpeedController input, SimAnalogInput output, DCMotor model,
+        public LinearPotentiometerMechanism(ISimSpeedController input, SimAnalogInput output, DCMotor model,
             double startPercentage, double stringTravel, double spoolRadius, bool invertInput)
         {
             m_input = input;
@@ -26,6 +26,7 @@ namespace HAL_Simulator.Mechanisms
             m_minRadians = 0;
 
             CurrentRadians = (m_maxRadians - m_minRadians) * startPercentage;
+            CurrentMeters = CurrentRadians / RadiansPerMeter;
             m_invert = invertInput;
             m_scaler = 5/ (m_maxRadians - m_minRadians);
         }

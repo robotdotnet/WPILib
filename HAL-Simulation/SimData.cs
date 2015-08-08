@@ -170,7 +170,7 @@ namespace HAL_Simulator
                 HALNewDataSem = IntPtr.Zero;
             }
 
-
+            halData["program_started"] = new OUT(false);
             halData["alliance_station"] = new DS(0);
             halData["time"] = new Dictionary<dynamic, dynamic>
             {

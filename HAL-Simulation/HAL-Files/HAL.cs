@@ -402,6 +402,7 @@ namespace HAL_Simulator
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
             halData["user_program_state"] = "starting";
+            halData["program_started"] = true;
         }
 
         [CalledSimFunction]

@@ -8,10 +8,10 @@ using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
 {
-    public class LiftEncoderMechanism : ServoMechanism
+    public class LinearEncoderMechanism : AbstractFeedbackMechanism
     {
         private double m_offset;
-        public LiftEncoderMechanism(ISimSpeedController input, SimEncoder output, double encoderCPR, DCMotor model,
+        public LinearEncoderMechanism(ISimSpeedController input, SimEncoder output, double encoderCPR, DCMotor model,
             double spoolRadius, double startHeight, bool invertInput)//, double topLimit = double.MaxValue / 500)
         {
             m_input = input;
@@ -26,8 +26,6 @@ namespace HAL_Simulator.Mechanisms
             m_offset = startHeight;
 
             CurrentMeters = m_offset;
-
-            //CurrentRadians = startHeight * RadiansPerMeter;
 
             m_maxRadians = double.MaxValue;
             m_minRadians = double.MinValue;
