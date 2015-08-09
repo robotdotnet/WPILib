@@ -16,7 +16,7 @@ namespace HAL_Simulator.Outputs
 
         public double Get()
         {
-            return dictionary["value"];
+            return (double)dictionary["value"] / 1023.0d;
         }
     }
 }
