@@ -81,7 +81,7 @@ namespace WPILib.Commands
             PIDController.SetPercentTolerance(p);
         }
 
-        public bool OnTarget() => PIDController.OnTarget;
+        public bool OnTarget() => PIDController.OnTarget();
 
         protected abstract double ReturnPIDInput();
 

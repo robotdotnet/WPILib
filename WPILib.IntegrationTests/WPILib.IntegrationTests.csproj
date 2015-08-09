@@ -77,10 +77,12 @@
     <Compile Include="Fixtures\FakeCounterFixture.cs" />
     <Compile Include="Fixtures\FakeEncoderFixture.cs" />
     <Compile Include="Fixtures\ITestFixture.cs" />
+    <Compile Include="Fixtures\MotorEncoderFixture.cs" />
     <Compile Include="Fixtures\RelayCrossConnectFixture.cs" />
     <Compile Include="MockHardware\FakeCounterSource.cs" />
     <Compile Include="MockHardware\FakeEncoderSource.cs" />
     <Compile Include="MockHardware\FakePotentiometerSource.cs" />
+    <Compile Include="PIDTest.cs" />
     <Compile Include="PreferencesTest.cs" />
     <Compile Include="RelayCrossConnectTest.cs" />
     <Compile Include="SimulatedHardware\SimJumpers.cs" />

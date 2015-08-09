@@ -25,12 +25,12 @@ namespace WPILib
 
         private static int s_instances = 0;
 
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         private double m_P;     // factor for "proportional" control
         private double m_I;     // factor for "integral" control
         private double m_D;     // factor for "derivative" control
         private double m_F;                 // factor for feedforward term
-// ReSharper restore InconsistentNaming
+                                            // ReSharper restore InconsistentNaming
         private double m_maximumOutput = 1.0; // |maximum output|
         private double m_minimumOutput = -1.0;  // |minimum output|
         private double m_maximumInput = 0.0;    // maximum input - limit setpoint to this
@@ -390,21 +390,18 @@ namespace WPILib
             }
         }
 
-        public bool OnTarget
+        public bool OnTarget()
         {
-            get
+            lock (m_lockObject)
             {
-                lock (m_lockObject)
+                switch (m_toleranceType)
                 {
-                    switch (m_toleranceType)
-                    {
-                        case ToleranceType.PercentTolerance:
-                            return Math.Abs(m_error) < (m_tolerance/100*(m_maximumInput - m_minimumInput));
-                        case ToleranceType.AbsoluteTolerance:
-                            return Math.Abs(m_error) < m_tolerance;
-                        default:
-                            return false;
-                    }
+                    case ToleranceType.PercentTolerance:
+                        return Math.Abs(m_error) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
+                    case ToleranceType.AbsoluteTolerance:
+                        return Math.Abs(m_error) < m_tolerance;
+                    default:
+                        throw new InvalidOperationException("Tolerance type must be set before calling OnTarget");
                 }
             }
         }
