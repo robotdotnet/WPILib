@@ -20,6 +20,6 @@
         double GetPeriod();
         double MaxPeriod { set; }
         bool GetStopped();
-        bool Direction { get; }
+        bool GetDirection();
     }
 }

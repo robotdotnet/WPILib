@@ -121,7 +121,7 @@ namespace WPILib
             m_counter = IntPtr.Zero;
         }
 
-        public int FPGAIndex => (int) m_index;
+        public int FPGAIndex => (int)m_index;
 
         public void SetUpSource(int channel)
         {
@@ -259,7 +259,7 @@ namespace WPILib
             return value;
         }
 
-        public double Distance => Get()*m_distancePerPulse;
+        public double GetDistance() => Get() * m_distancePerPulse;
 
         public void Reset()
         {
@@ -296,21 +296,19 @@ namespace WPILib
             return value;
         }
 
-        public bool Direction
+        public bool GetDirection()
         {
-            get
-            {
-                int status = 0;
-                bool value = GetCounterDirection(m_counter, ref status);
-                CheckStatus(status);
-                return value;
-            }
-            set
-            {
-                int status = 0;
-                SetCounterReverseDirection(m_counter, value, ref status);
-                CheckStatus(status);
-            }
+            int status = 0;
+            bool value = GetCounterDirection(m_counter, ref status);
+            CheckStatus(status);
+            return value;
+        }
+
+        public void SetReverseDirection(bool direction)
+        {
+            int status = 0;
+            SetCounterReverseDirection(m_counter, direction, ref status);
+            CheckStatus(status);
         }
 
         public double GetPeriod()
@@ -321,7 +319,7 @@ namespace WPILib
             return value;
         }
 
-        public double Rate => m_distancePerPulse/GetPeriod();
+        public double GetRate() => m_distancePerPulse / GetPeriod();
 
         public int SamplesToAverage
         {
@@ -346,14 +344,16 @@ namespace WPILib
 
         public double DistancePerPulse
         {
+            get { return m_distancePerPulse; }
             set { m_distancePerPulse = value; }
         }
 
         public PIDSourceParameter PIDSourceParameter
         {
+            get { return m_pidSource; }
             set
             {
-                BoundaryException.AssertWithinBounds((int) value, 0, 1);
+                BoundaryException.AssertWithinBounds((int)value, 0, 1);
                 m_pidSource = value;
             }
         }
@@ -363,9 +363,9 @@ namespace WPILib
             switch (m_pidSource)
             {
                 case PIDSourceParameter.Distance:
-                    return Distance;
+                    return GetDistance();
                 case PIDSourceParameter.Rate:
-                    return Rate;
+                    return GetRate();
                 default:
                     return 0.0;
             }

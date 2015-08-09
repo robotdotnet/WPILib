@@ -83,6 +83,7 @@
     <Compile Include="Commands\CommandTimeoutTest.cs" />
     <Compile Include="Commands\DefaultCommandTest.cs" />
     <Compile Include="Commands\MockCommand.cs" />
+    <Compile Include="MockNetworkTable.cs" />
     <Compile Include="MotorControllers\TestJaguar.cs" />
     <Compile Include="MotorControllers\TestTalonSRX.cs" />
     <Compile Include="MotorControllers\TestVictor.cs" />

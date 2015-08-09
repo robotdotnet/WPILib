@@ -80,6 +80,9 @@ namespace WPILib.Tests
             Assert.IsFalse(comp.Enabled());
         }
 
-        
+        public void TestCompressorSmartDashboardName()
+        {
+            Assert.AreEqual("Compressor", GetCompressor().SmartDashboardType);
+        }
     }
 }
