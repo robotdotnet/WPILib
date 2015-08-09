@@ -515,13 +515,13 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static extern CTR_Code c_TalonSRX_GetFirmVers(IntPtr handle, ref int param);
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetDemand")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param)
+        {
+            var dict = HalData["CAN"][GetTalonSRX(handle)];
+            dict["value"] = (param / 1023.0);
+            return CTR_Code.CTR_OKAY;
+        }
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -556,12 +556,12 @@ namespace HAL_Simulator
         public static extern CTR_Code c_TalonSRX_SetOverrideBrakeType(IntPtr handle, int param);
 
 
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetModeSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
@@ -573,12 +573,11 @@ namespace HAL_Simulator
         public static extern CTR_Code c_TalonSRX_SetModeSelect2(IntPtr handle, int modeSelect, int demand);
 
 
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetProfileSlotSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
 
 
         /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
