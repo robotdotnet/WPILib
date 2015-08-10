@@ -53,7 +53,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= DigitalChannels)
             {
-                throw new IndexOutOfRangeException("Requested digital channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested digital channel number is out of range.");
             }
         }
 
@@ -66,7 +66,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= RelayChannels)
             {
-                throw new IndexOutOfRangeException("Requested relay channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested relay channel number is out of range.");
             }
         }
 
@@ -79,7 +79,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= PwmChannels)
             {
-                throw new IndexOutOfRangeException("Requested PWM channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested PWM channel number is out of range.");
             }
         }
 
@@ -92,7 +92,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= AnalogInputChannels)
             {
-                throw new IndexOutOfRangeException("Requested analog input channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested analog input channel number is out of range.");
             }
         }
 
@@ -105,7 +105,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= AnalogOutputChannels)
             {
-                throw new IndexOutOfRangeException("Requested analog output channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested analog output channel number is out of range.");
             }
         }
 
@@ -118,7 +118,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= SolenoidChannels)
             {
-                throw new IndexOutOfRangeException("Requested solenoid channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested solenoid channel number is out of range.");
             }
         }
 
@@ -131,7 +131,7 @@ namespace WPILib
         {
             if (channel < 0 || channel >= PDPChannels)
             {
-                throw new IndexOutOfRangeException("Requested PDP channel number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(channel), "Requested PDP channel number is out of range.");
             }
         }
 
@@ -142,9 +142,9 @@ namespace WPILib
         /// <param name="module">The CAN ID to check</param>
         protected static void CheckPDPModule(int module)
         {
-            if (module < 0 || module > PDPModules)
+            if (module < 0 || module >= PDPModules)
             {
-                throw new IndexOutOfRangeException("Requested PDP module number is out of range.");
+                throw new ArgumentOutOfRangeException(nameof(module), "Requested PDP module number is out of range.");
             }
 
         }

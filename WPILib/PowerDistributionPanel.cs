@@ -63,7 +63,7 @@ namespace WPILib
             return value;
         }
 
-        public void ResetEnergyTotal()
+        public void ResetTotalEnergy()
         {
             int status = 0;
             ResetPDPTotalEnergy(ref status, (byte)m_module);

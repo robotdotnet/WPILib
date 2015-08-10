@@ -444,6 +444,9 @@ namespace HAL_Simulator
             halInData["pdp"] = new Dictionary<dynamic, dynamic>();
 
             halInData["pcm"] = new Dictionary<dynamic, dynamic>();
+
+            //Always create PDP 0, because all robots are going to have it.
+            InitializeNewPDP(0);
         }
 
         internal static void InitializeNewPCM(int module)

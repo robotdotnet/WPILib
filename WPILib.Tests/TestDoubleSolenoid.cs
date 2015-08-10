@@ -7,12 +7,21 @@ using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
-    [TestFixture]
+    [TestFixture(0)]
+    [TestFixture(7)]
+    [TestFixture(59)]
     public class TestDoubleSolenoid : TestBase
     {
+        private int m_module;
+
+        public TestDoubleSolenoid(int module)
+        {
+            m_module = module;
+        }
+
         public DoubleSolenoid NewDoubleSolenoid()
         {
-            return new DoubleSolenoid(0,1);
+            return new DoubleSolenoid(m_module, 0,1);
         }
 
         private static Dictionary<dynamic, dynamic> HalData()
@@ -21,12 +30,30 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestDoubleSolenoidModuleUnderLimit()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                var s = new DoubleSolenoid(-1, 0, 1);
+            });
+        }
+
+        [Test]
+        public void TestDoubleSolenoidModuleOverLimit()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                var s = new DoubleSolenoid(SolenoidModules, 0, 1);
+            });
+        }
+
+        [Test]
         public void TestDoubleSolenoidCreate()
         {
             using (DoubleSolenoid s = NewDoubleSolenoid())
             {
-                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["initialized"]);
-                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][1]["initialized"]);
+                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][0]["initialized"]);
+                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][1]["initialized"]);
             }
         }
 
@@ -48,7 +75,7 @@ namespace WPILib.Tests
             List<DoubleSolenoid> solenoids = new List<DoubleSolenoid>();
             for (int i = 0; i < TestBase.SolenoidChannels; i++)
             {
-                solenoids.Add(new DoubleSolenoid(i, i+1));
+                solenoids.Add(new DoubleSolenoid(m_module, i, i+1));
                 i++;
             }
 
@@ -63,7 +90,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                var p = new DoubleSolenoid(-2, -1);
+                var p = new DoubleSolenoid(m_module, -2, -1);
             });
         }
 
@@ -72,7 +99,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                var p = new DoubleSolenoid(TestBase.SolenoidChannels, TestBase.SolenoidChannels + 1);
+                var p = new DoubleSolenoid(m_module, TestBase.SolenoidChannels, TestBase.SolenoidChannels + 1);
             });
         }
 
@@ -82,8 +109,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Forward);
-                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["value"]);
-                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][1]["value"]);
+                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
+                Assert.IsFalse(HalData()["pcm"][m_module]["solenoid"][1]["value"]);
             }
         }
 
@@ -93,8 +120,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Reverse);
-                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][1]["value"]);
-                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][0]["value"]);
+                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][1]["value"]);
+                Assert.IsFalse(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
             }
         }
 
@@ -104,8 +131,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Off);
-                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][1]["value"]);
-                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][0]["value"]);
+                Assert.IsFalse(HalData()["pcm"][m_module]["solenoid"][1]["value"]);
+                Assert.IsFalse(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
             }
         }
 
@@ -114,8 +141,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                HalData()["pcm"][0]["solenoid"][0]["value"] = true;
-                HalData()["pcm"][0]["solenoid"][1]["value"] = false;
+                HalData()["pcm"][m_module]["solenoid"][0]["value"] = true;
+                HalData()["pcm"][m_module]["solenoid"][1]["value"] = false;
 
                 Assert.AreEqual(DoubleSolenoid.Value.Forward, ds.Get());
             }
@@ -126,8 +153,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                HalData()["pcm"][0]["solenoid"][0]["value"] = false;
-                HalData()["pcm"][0]["solenoid"][1]["value"] = true;
+                HalData()["pcm"][m_module]["solenoid"][0]["value"] = false;
+                HalData()["pcm"][m_module]["solenoid"][1]["value"] = true;
 
                 Assert.AreEqual(DoubleSolenoid.Value.Reverse, ds.Get());
             }
@@ -138,8 +165,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                HalData()["pcm"][0]["solenoid"][0]["value"] = false;
-                HalData()["pcm"][0]["solenoid"][1]["value"] = false;
+                HalData()["pcm"][m_module]["solenoid"][0]["value"] = false;
+                HalData()["pcm"][m_module]["solenoid"][1]["value"] = false;
 
                 Assert.AreEqual(DoubleSolenoid.Value.Off, ds.Get());
             }

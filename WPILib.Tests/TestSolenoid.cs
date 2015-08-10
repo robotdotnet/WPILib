@@ -6,13 +6,20 @@ using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
-    [TestFixture]
+    [TestFixture(0)]
+    [TestFixture(5)]
+    [TestFixture(58)]
     public class TestSolenoid : TestBase
     {
+        private readonly int m_module;
 
+        public TestSolenoid(int module)
+        {
+            m_module = module;
+        }
         public Solenoid NewSolenoid()
         {
-            return new Solenoid(0);
+            return new Solenoid(m_module, 0);
         }
 
         private static Dictionary<dynamic, dynamic> HalData()
@@ -21,11 +28,29 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestSolenoidModuleUnderLimit()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                var s = new Solenoid(-1, 0);
+            });
+        }
+
+        [Test]
+        public void TestSolenoidModuleOverLimit()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                var s = new Solenoid(SolenoidModules, 0);
+            });
+        }
+
+        [Test]
         public void TestSolenoidCreate()
         {
             using (Solenoid s = NewSolenoid())
             {
-                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["initialized"]);
+                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][0]["initialized"]);
             }
         }
 
@@ -47,7 +72,7 @@ namespace WPILib.Tests
             List<Solenoid> solenoids = new List<Solenoid>();
             for (int i = 0; i < TestBase.SolenoidChannels; i++)
             {
-                solenoids.Add(new Solenoid(i));
+                solenoids.Add(new Solenoid(m_module, i));
             }
 
             foreach (var ds in solenoids)
@@ -61,7 +86,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                var p = new Solenoid(-1);
+                var p = new Solenoid(m_module, -1);
             });
         }
 
@@ -70,7 +95,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                var p = new Solenoid(TestBase.SolenoidChannels);
+                var p = new Solenoid(m_module, TestBase.SolenoidChannels);
             });
         }
 
@@ -80,10 +105,10 @@ namespace WPILib.Tests
             using (Solenoid s = NewSolenoid())
             {
                 s.Set(true);
-                Assert.IsTrue(HalData()["pcm"][0]["solenoid"][0]["value"]);
+                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
 
                 s.Set(false);
-                Assert.IsFalse(HalData()["pcm"][0]["solenoid"][0]["value"]);
+                Assert.IsFalse(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
             }
         }
 
@@ -92,10 +117,10 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                HalData()["pcm"][0]["solenoid"][0]["value"] = true;
+                HalData()["pcm"][m_module]["solenoid"][0]["value"] = true;
                 Assert.IsTrue(s.Get());
 
-                HalData()["pcm"][0]["solenoid"][0]["value"] = false;
+                HalData()["pcm"][m_module]["solenoid"][0]["value"] = false;
                 Assert.IsFalse(s.Get());
             }
         }

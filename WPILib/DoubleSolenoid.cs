@@ -61,11 +61,8 @@ namespace WPILib
         }
 
         public DoubleSolenoid(int forwardChannel, int reverseChannel)
-            : base(DefaultSolenoidModule)
+            : this(DefaultSolenoidModule, forwardChannel, reverseChannel)
         {
-            m_forwardChannel = forwardChannel;
-            m_reverseChannel = reverseChannel;
-            InitSolenoid();
         }
 
         public DoubleSolenoid(int moduleNumber, int forwardChannel, int reverseChannel)
