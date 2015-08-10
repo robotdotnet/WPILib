@@ -242,7 +242,7 @@ namespace HAL_Simulator
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
             var mxpPort = RemapMXPChannel(pin);
-            if (pin > NumHeaders)
+            if (pin >= NumHeaders)
             {
                 if (halData["mxp"][mxpPort]["initialized"])
                 {
@@ -256,7 +256,7 @@ namespace HAL_Simulator
                 status = RESOURCE_IS_ALLOCATED;
                 return false;
             }
-            if (pin > NumHeaders)
+            if (pin >= NumHeaders)
             {
                 halData["mxp"][mxpPort]["initialized"] = true;
             }
@@ -271,7 +271,7 @@ namespace HAL_Simulator
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
             halData["dio"][pin]["initialized"] = false;
-            if (pin > NumHeaders)
+            if (pin >= NumHeaders)
             {
                 halData["mxp"][RemapMXPChannel(pin)]["initialized"] = false;
             }

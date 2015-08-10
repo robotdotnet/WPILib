@@ -84,7 +84,7 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateLowerLimit()
         {
-            Assert.Throws<IndexOutOfRangeException>(() =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var p = new Solenoid(m_module, -1);
             });
@@ -93,7 +93,7 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateUpperLimit()
         {
-            Assert.Throws<IndexOutOfRangeException>(() =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var p = new Solenoid(m_module, TestBase.SolenoidChannels);
             });

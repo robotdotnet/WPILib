@@ -95,5 +95,14 @@ namespace WPILib.Tests
             }
             Assert.Throws<AllocationException>(() => testResource.Allocate());
         }
+
+        [Test]
+        public void TestDeallocateEmptyResource()
+        {
+            Assert.Throws<AllocationException>(() =>
+            {
+                testResource.Deallocate(0);
+            });
+        }
     }
 }

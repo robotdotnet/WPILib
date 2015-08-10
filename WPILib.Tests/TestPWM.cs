@@ -52,7 +52,7 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateLimitsLower()
         {
-            Assert.Throws<IndexOutOfRangeException>(() =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var pwm = new PWM(-1);
             });
@@ -61,7 +61,7 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateLimitsUpper()
         {
-            Assert.Throws<IndexOutOfRangeException>(() =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var pwm = new PWM(TestBase.PwmChannels);
             });
