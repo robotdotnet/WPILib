@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace HAL_Simulator
 {
@@ -227,7 +226,7 @@ namespace HAL_Simulator
             halData["analog_sample_rate"] = new OUT(HALAnalog.DefaultSampleRate);
 
             halData["analog_out"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 2; i++)
             {
                 halData["analog_out"].Add(new NotifyDict<dynamic, dynamic>
                 {
@@ -296,7 +295,7 @@ namespace HAL_Simulator
 
 
             halData["relay"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 4; i++)
             {
                 halData["relay"].Add(new NotifyDict<dynamic, dynamic>
                 {
