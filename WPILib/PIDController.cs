@@ -37,7 +37,7 @@ namespace WPILib
         private double m_minimumInput = 0.0;    // minimum input - limit setpoint to this
         private bool m_continuous = false; // do the endpoints wrap around? eg. Absolute encoder
         private bool m_enabled = false;    //is the pid controller enabled
-        private double m_prevError = 0.0; // the prior sensor input (used to compute velocity)
+        private double m_prevInput = 0.0; // the prior sensor input (used to compute velocity)
         private double m_totalError = 0.0; //the sum of the errors for use in the integral calc
         private double m_setpoint = 0.0;
         private double m_error = 0.0;
@@ -187,8 +187,8 @@ namespace WPILib
                     }
                 }
 
-                m_result = m_P * m_error + m_I * m_totalError + m_D * (m_error - m_prevError) + m_setpoint * m_F;
-                m_prevError = m_error;
+                m_result = m_P * m_error + m_I * m_totalError + m_D * (m_prevInput - input) + m_setpoint * m_F;
+                m_prevInput = input;
 
                 if (m_result > m_maximumOutput)
                 {
@@ -435,7 +435,7 @@ namespace WPILib
             lock (m_lockObject)
             {
                 Disable();
-                m_prevError = 0;
+                m_prevInput = 0;
                 m_totalError = 0;
                 m_result = 0;
             }
