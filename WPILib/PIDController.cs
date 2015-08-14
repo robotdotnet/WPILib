@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
@@ -47,6 +48,10 @@ namespace WPILib
         protected IPIDOutput m_pidOutput;
         private readonly object m_lockObject = new object();
 
+        private int m_bufLength = 0;
+        private Queue<double> m_buf;
+        private double m_bufTotal = 0.0;
+
         private double m_tolerance = 0.05;
 
         private Notifier m_controlLoop;
@@ -78,6 +83,7 @@ namespace WPILib
             HLUsageReporting.ReportPIDController(s_instances);
 
             m_toleranceType = ToleranceType.NoTolerance;
+            m_buf = new Queue<double>();
         }
 
         public PIDController(double Kp, double Ki, double Kd,
@@ -228,6 +234,14 @@ namespace WPILib
                 }
                 pidOutput = m_pidOutput;
                 result = m_result;
+
+                m_buf.Enqueue(m_error);
+                m_bufTotal += m_error;
+                //Remove old elements when the buffer is full
+                if (m_buf.Count > m_bufLength)
+                {
+                    m_bufTotal -= m_buf.Dequeue();
+                }
             }
 
             pidOutput.PidWrite(result);
@@ -379,6 +393,8 @@ namespace WPILib
                     {
                         m_setpoint = value;
                     }
+                    m_buf.Clear();
+                    Table?.PutNumber("setpoint", m_setpoint);
                 }
             }
         }
@@ -399,6 +415,16 @@ namespace WPILib
         internal PIDSourceType GetPIDSourceType()
         {
             return m_pidInput.GetPIDSourceType();
+        }
+
+        public double GetAvgError()
+        {
+            lock (m_lockObject)
+            {
+                double avgError = 0;
+                if (m_buf.Count != 0) avgError = m_bufTotal / m_buf.Count;
+                return avgError;
+            }
         }
 
         [Obsolete]
@@ -429,6 +455,15 @@ namespace WPILib
             }
         }
 
+        public void SetToleranceBuffer(int bufLength)
+        {
+            m_bufLength = bufLength;
+            while (m_buf.Count > bufLength)
+            {
+                m_bufTotal -= m_buf.Dequeue();
+            }
+        }
+
         public bool OnTarget()
         {
             lock (m_lockObject)
@@ -436,9 +471,9 @@ namespace WPILib
                 switch (m_toleranceType)
                 {
                     case ToleranceType.PercentTolerance:
-                        return Math.Abs(m_error) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
+                        return Math.Abs(GetAvgError()) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
                     case ToleranceType.AbsoluteTolerance:
-                        return Math.Abs(m_error) < m_tolerance;
+                        return Math.Abs(GetAvgError()) < m_tolerance;
                     default:
                         throw new InvalidOperationException("Tolerance type must be set before calling OnTarget");
                 }
