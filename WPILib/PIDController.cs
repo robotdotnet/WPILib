@@ -43,8 +43,8 @@ namespace WPILib
         private double m_error = 0.0;
         private double m_result = 0.0;
         private double m_period;
-        IPIDSource m_ipidInput;
-        IPIDOutput m_ipidOutput;
+        protected IPIDSource m_pidInput;
+        protected IPIDOutput m_pidOutput;
         private readonly object m_lockObject = new object();
 
         private double m_tolerance = 0.05;
@@ -68,8 +68,8 @@ namespace WPILib
             m_D = Kd;
             m_F = Kf;
 
-            m_ipidInput = source;
-            m_ipidOutput = output;
+            m_pidInput = source;
+            m_pidOutput = output;
             m_period = period;
 
             m_controlLoop.StartPeriodic(m_period);
@@ -107,8 +107,8 @@ namespace WPILib
             m_controlLoop.Stop();
             lock (this)
             {
-                m_ipidOutput = null;
-                m_ipidInput = null;
+                m_pidOutput = null;
+                m_pidInput = null;
                 m_controlLoop.Dispose();
                 m_controlLoop = null;
             }
@@ -129,16 +129,16 @@ namespace WPILib
 
             lock (m_lockObject)
             {
-                if (m_ipidInput == null)
+                if (m_pidInput == null)
                 {
                     return;
                 }
-                if (m_ipidOutput == null)
+                if (m_pidOutput == null)
                 {
                     return;
                 }
                 enabled = m_enabled; // take snapshot of these values...
-                pidInput = m_ipidInput;
+                pidInput = m_pidInput;
             }
 
             if (!enabled) return;
@@ -167,27 +167,55 @@ namespace WPILib
                     }
                 }
 
-                if (m_I != 0.0)
+
+                if (pidInput.GetPIDSourceType() == PIDSourceType.Rate)
                 {
-                    double potentialIGain = (m_totalError + m_error) * m_I;
-                    if (potentialIGain < m_maximumOutput)
+                    if (m_P != 0)
                     {
-                        if (potentialIGain > m_minimumInput)
+                        double potentialPGain = (m_totalError + m_error) * m_P;
+                        if (potentialPGain < m_maximumOutput)
                         {
-                            m_totalError += m_error;
+                            if (potentialPGain > m_minimumOutput)
+                            {
+                                m_totalError += m_error;
+                            }
+                            else
+                            {
+                                m_totalError = m_minimumOutput / m_P;
+                            }
                         }
                         else
                         {
-                            m_totalError = m_minimumOutput / m_I;
+                            m_totalError = m_maximumOutput / m_P;
                         }
                     }
-                    else
+                    m_result = m_P * m_totalError + m_D * m_error + m_setpoint * m_F;
+                }
+                else
+                {
+                    if (m_I != 0.0)
                     {
-                        m_totalError = m_maximumOutput / m_I;
+                        double potentialIGain = (m_totalError + m_error) * m_I;
+                        if (potentialIGain < m_maximumOutput)
+                        {
+                            if (potentialIGain > m_minimumInput)
+                            {
+                                m_totalError += m_error;
+                            }
+                            else
+                            {
+                                m_totalError = m_minimumOutput / m_I;
+                            }
+                        }
+                        else
+                        {
+                            m_totalError = m_maximumOutput / m_I;
+                        }
                     }
                 }
 
                 m_result = m_P * m_error + m_I * m_totalError + m_D * (m_prevInput - input) + m_setpoint * m_F;
+
                 m_prevInput = input;
 
                 if (m_result > m_maximumOutput)
@@ -198,9 +226,10 @@ namespace WPILib
                 {
                     m_result = m_minimumOutput;
                 }
-                pidOutput = m_ipidOutput;
+                pidOutput = m_pidOutput;
                 result = m_result;
             }
+
             pidOutput.PidWrite(result);
         }
 
@@ -358,8 +387,18 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                return Setpoint - m_ipidInput.PidGet();
+                return Setpoint - m_pidInput.PidGet();
             }
+        }
+
+        internal void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            m_pidInput.SetPIDSourceType(pidSource);
+        }
+
+        internal PIDSourceType GetPIDSourceType()
+        {
+            return m_pidInput.GetPIDSourceType();
         }
 
         [Obsolete]
@@ -416,7 +455,7 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_ipidOutput.PidWrite(0);
+                m_pidOutput.PidWrite(0);
                 m_enabled = false;
             }
         }

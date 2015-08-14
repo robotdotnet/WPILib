@@ -44,10 +44,12 @@ namespace WPILib
 
         private DigitalInput m_echoChannel = null;
         private DigitalOutput m_pingChannel = null;
-        private bool m_allocatedChannels;
+        private readonly bool m_allocatedChannels;
         private Counter m_counter = null;
 
-        private object m_syncRoot = new object();
+        private readonly object m_syncRoot = new object();
+
+        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         private static void GetUltrasonicChecker(object sender, EventArgs args)
         {
@@ -250,6 +252,22 @@ namespace WPILib
                 default:
                     return 0.0;
             }
+        }
+
+        /// <inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            if (pidSource != PIDSourceType.Displacement)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pidSource), "Only displacement PID is allowed for ultrasonics.");
+            }
+            m_pidSource = pidSource;
+        }
+
+        /// <inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return m_pidSource;
         }
 
         /// <summary>

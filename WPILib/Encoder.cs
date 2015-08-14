@@ -39,7 +39,7 @@ namespace WPILib
         private bool m_allocatedA;
         private bool m_allocatedB;
         private bool m_allocatedI;
-        private PIDSourceParameter m_pidSource;
+        private PIDSourceType m_pidSource;
 
         private void InitEncoder(bool reverseDirection)
         {
@@ -70,7 +70,7 @@ namespace WPILib
             }
             DistancePerPulse = 1.0;
 
-            m_pidSource = PIDSourceParameter.Distance;
+            m_pidSource = PIDSourceType.Displacement;
 
             LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
             Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
@@ -397,8 +397,12 @@ namespace WPILib
             }
         }
 
-        public PIDSourceParameter PIDSourceParameter
+        public PIDSourceType PIDSourceType
         {
+            get
+            {
+                return m_pidSource;
+            }
             set
             {
                 BoundaryException.AssertWithinBounds((int)value, 0, 1);
@@ -410,13 +414,23 @@ namespace WPILib
         {
             switch (m_pidSource)
             {
-                case PIDSourceParameter.Distance:
+                case PIDSourceType.Displacement:
                     return GetDistance();
-                case PIDSourceParameter.Rate:
+                case PIDSourceType.Rate:
                     return GetRate();
                 default:
                     return 0.0;
             }
+        }
+
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            PIDSourceType = pidSource;
+        }
+
+        public PIDSourceType GetPIDSourceType()
+        {
+            return PIDSourceType;
         }
 
         public void SetIndexSource(int channel, IndexingType type)

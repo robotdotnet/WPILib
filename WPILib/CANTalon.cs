@@ -12,9 +12,10 @@ namespace WPILib
     /// <summary>
     /// This Class represents a CAN Talon SRX Motor Controller.
     /// </summary>
-    public class CANTalon : IMotorSafety, ICANSpeedController, IPIDInterface, ILiveWindowSendable, ITableListener, IDisposable
+    public class CANTalon : IMotorSafety, ICANSpeedController, IPIDInterface, ILiveWindowSendable, ITableListener, IPIDOutput, IPIDSource
     {
-        private MotorSafetyHelper m_safetyHelper;
+        private readonly MotorSafetyHelper m_safetyHelper;
+        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         /// <summary>
         /// Feedback type for CAN Talon
@@ -995,6 +996,7 @@ namespace WPILib
 
         public string Description => $"CAN TalonSRX ID {DeviceID}";
 
+        /// <inheritdoc/>
         public void PidWrite(double value)
         {
             if (m_controlMode == ControlMode.PercentVbus)
@@ -1005,6 +1007,24 @@ namespace WPILib
             {
                 throw new InvalidOperationException("PID on RoboRIO only supported in Voltage Bus (PWM-like) mode");
             }
+        }
+
+        /// <inheritdoc/>
+        public double PidGet()
+        {
+            return GetPosition();
+        }
+
+        /// <inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            m_pidSource = pidSource;
+        }
+
+        /// <inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return m_pidSource;
         }
 
         public void Set(double value)
@@ -1131,5 +1151,7 @@ namespace WPILib
 
         ///<inheritdoc/>
         public ITable Table { get; private set; }
+
+        
     }
 }

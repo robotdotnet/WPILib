@@ -25,10 +25,11 @@ namespace WPILib
     public class AnalogInput : SensorBase, IPIDSource, ILiveWindowSendable
     {
         //private static int AccumulatorSlot = 1;
-        private static Resource s_channels = new Resource(AnalogInputChannels);
-        private IntPtr m_port;
-        private static int[] s_accumulatorChannels = { 0, 1 };
+        private static readonly Resource s_channels = new Resource(AnalogInputChannels);
+        private readonly IntPtr m_port;
+        private static readonly int[] s_accumulatorChannels = { 0, 1 };
         private long m_accumulatorOffset;
+        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         /// <summary>
         /// Construct an analog channel
@@ -309,6 +310,18 @@ namespace WPILib
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
         public double PidGet() => GetAverageVoltage();
+
+        ///<inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            m_pidSource = pidSource;
+        }
+
+        ///<inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return m_pidSource;
+        }
 
         /// <summary>
         /// Initialize a table for this sendable object.

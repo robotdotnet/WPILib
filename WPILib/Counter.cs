@@ -27,7 +27,7 @@ namespace WPILib
         private bool m_allocatedDownSource;
         private IntPtr m_counter;
         private uint m_index;
-        private PIDSourceParameter m_pidSource;
+        private PIDSourceType m_pidSource;
         private double m_distancePerPulse;
 
         private void InitCounter(Mode mode)
@@ -348,7 +348,7 @@ namespace WPILib
             set { m_distancePerPulse = value; }
         }
 
-        public PIDSourceParameter PIDSourceParameter
+        public PIDSourceType PIDSourceType
         {
             get { return m_pidSource; }
             set
@@ -358,18 +358,32 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public double PidGet()
         {
             switch (m_pidSource)
             {
-                case PIDSourceParameter.Distance:
+                case PIDSourceType.Displacement:
                     return GetDistance();
-                case PIDSourceParameter.Rate:
+                case PIDSourceType.Rate:
                     return GetRate();
                 default:
                     return 0.0;
             }
         }
+
+        /// <inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            PIDSourceType = pidSource;
+        }
+
+        /// <inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return PIDSourceType;
+        }
+
         ///<inheritdoc />
         public void InitTable(ITable subtable)
         {

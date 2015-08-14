@@ -15,6 +15,19 @@ namespace WPILib.Commands
 
         ///<inheritdoc/>
         public double PidGet() => ReturnPIDInput();
+
+        ///<inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            
+        }
+
+        ///<inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return PIDSourceType.Displacement;
+        }
+
         ///<inheritdoc/>
         public void PidWrite(double value)
         {
