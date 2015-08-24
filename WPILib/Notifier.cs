@@ -251,7 +251,6 @@ namespace WPILib
         /// </summary>
         /// <param name="mask"></param>
         /// <param name="param"></param>
-        [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
         static private void ProcessQueue(uint mask, IntPtr param)
         {
             while (true)
