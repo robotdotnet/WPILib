@@ -2,13 +2,14 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using HAL_Base;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALDigital
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeDigitalPort")]
         public static extern IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status);
 

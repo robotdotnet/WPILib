@@ -1,8 +1,10 @@
 ﻿using System.Runtime.InteropServices;
+using System.Security;
 using HAL_Base;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALCAN
     {
         [DllImport(HAL.LibhalathenaSharedSo,

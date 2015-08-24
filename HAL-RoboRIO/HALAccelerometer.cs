@@ -1,13 +1,14 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System.Runtime.InteropServices;
+using System.Security;
 using HAL_Base;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALAccelerometer
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setAccelerometerActive")]
         public static extern void setAccelerometerActive([MarshalAs(UnmanagedType.I1)] bool param0);
 

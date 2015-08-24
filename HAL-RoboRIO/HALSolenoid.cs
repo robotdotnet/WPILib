@@ -2,12 +2,13 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALSolenoid
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeSolenoidPort")]
         public static extern IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status);
 
