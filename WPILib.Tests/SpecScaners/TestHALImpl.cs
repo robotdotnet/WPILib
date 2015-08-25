@@ -11,10 +11,10 @@ namespace WPILib.Tests.SpecScaners
     [TestFixture]
     public class TestHALImpl
     {
-        [Test]
+        /*
         public void TestHALRioMapsToAthena()
         {
-            NativeProjects.clanger();
+            //NativeProjects.clanger();
 
             StringBuilder functionList = new StringBuilder();
 
@@ -120,7 +120,7 @@ namespace WPILib.Tests.SpecScaners
                     baseFunctions.Add(f);
                 }
             }rioFunctions
-            */
+            
             
             List<Function> wrong = (from baseFunction
                                     in baseFunctions
@@ -145,6 +145,7 @@ namespace WPILib.Tests.SpecScaners
 
             Assert.IsTrue(pass);
         }
+        */
 
         [Test]
         public void TestHALBaseMapsToHALSim()

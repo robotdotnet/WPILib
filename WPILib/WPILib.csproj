@@ -60,6 +60,7 @@
     <Compile Include="Buttons\JoystickButton.cs" />
     <Compile Include="Buttons\NetworkButton.cs" />
     <Compile Include="Buttons\Trigger.cs" />
+    <Compile Include="CameraServer.cs" />
     <Compile Include="CANJaguar.cs" />
     <Compile Include="CAN\CANInvalidBufferException.cs" />
     <Compile Include="CAN\CANJaguarVersionException.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="SensorBase.cs" />
     <Compile Include="Victor.cs" />
     <Compile Include="VictorSP.cs" />
+    <Compile Include="Vision\USBCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
@@ -165,6 +167,10 @@
     <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj">
       <Project>{471a8c6b-aa80-492a-85a3-3ef67fc70988}</Project>
       <Name>HAL-Simulation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NIVision\NIVision.csproj">
+      <Project>{d461ad43-b66d-4c66-925d-9759bf1e4654}</Project>
+      <Name>NIVision</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

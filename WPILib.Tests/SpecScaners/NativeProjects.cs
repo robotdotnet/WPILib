@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ClangSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WPILib.Tests.SpecScaners
 {
     public static class NativeProjects
     {
-
+        /*
         public static void clanger()
         {
 
@@ -290,5 +289,7 @@ namespace WPILib.Tests.SpecScaners
         {
             return clang.Location_isInSystemHeader(clang.getCursorLocation(cursor)) != 0;
         }
+    }
+    */
     }
 }
