@@ -7,11 +7,256 @@ using static HAL_Base.HALNotifier;
 
 namespace WPILib
 {
+
+
     /// <summary>
     /// The Notifier class is used to create alarms from the FPGA.
     /// </summary>
     public class Notifier : IDisposable
     {
+        public Notifier(Action<object> handler, object obj)
+        {
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler), "Handler must not be null");
+            m_handler = handler;
+            m_param = obj;
+
+            m_handlerMutex = InitializeMutexNormal();
+
+            try
+            {
+                TakeMutex(s_queueMutex);
+                if (s_refCount == 0)
+                {
+                    int status = 0;
+                    s_notifier = InitializeNotifier(ProcessQueue, ref status);
+                    //Ignoring Check Status for Now
+                }
+                s_refCount++;
+            }
+            finally
+            {
+                GiveMutex(s_queueMutex);
+            }
+        }
+
+        public void Dispose()
+        {
+            try
+            {
+                TakeMutex(s_queueMutex);
+                DeleteFromQueue();
+
+                if ((--s_refCount) == 0)
+                {
+                    int status = 0;
+                    CleanNotifier(s_notifier, ref status);
+                    //Ignoring Check Status for now
+                }
+            }
+            finally
+            {
+                GiveMutex(s_queueMutex);
+            }
+            TakeMutex(m_handlerMutex);
+        }
+
+        public void StartSingle(double delay)
+        {
+            try
+            {
+                TakeMutex(s_queueMutex);
+                m_periodic = false;
+                m_period = delay;
+                DeleteFromQueue();
+                InsertInQueue(false);
+            }
+            finally
+            {
+                GiveMutex(s_queueMutex);
+            }
+        }
+
+        public void StartPeriodic(double period)
+        {
+            try
+            {
+                TakeMutex(s_queueMutex);
+                m_periodic = true;
+                m_period = period;
+                DeleteFromQueue();
+                InsertInQueue(false);
+            }
+            finally
+            {
+                GiveMutex(s_queueMutex);
+            }
+        }
+
+        public void Stop()
+        {
+            try
+            {
+                TakeMutex(s_queueMutex);
+                DeleteFromQueue();
+            }
+            finally
+            {
+                GiveMutex(s_queueMutex);
+            }
+            TakeMutex(m_handlerMutex);
+            GiveMutex(m_handlerMutex);
+        }
+
+        private static Notifier s_timerQueueHead;
+        private static readonly IntPtr s_queueMutex = InitializeMutexRecursive();
+
+        private static IntPtr s_notifier;
+
+        private static int s_refCount;
+
+        private readonly Action<object> m_handler;
+        private readonly object m_param;
+
+        private double m_period = 0;
+        private double m_expirationTime = 0;
+
+        private Notifier m_nextEvent = null;
+
+        private bool m_periodic = false;
+        private bool m_queued = false;
+
+        private readonly IntPtr m_handlerMutex;
+
+        private static void ProcessQueue(uint mask, IntPtr param)
+        {
+            Notifier current = null;
+            while (true)
+            {
+                bool taken = false;
+                try
+                {
+                    try
+                    {
+                        TakeMutex(s_queueMutex);
+                        double currentTime = GetFPGATimestamp();
+                        current = s_timerQueueHead;
+                        if (current == null || current.m_expirationTime > currentTime)
+                        {
+                            break;
+                        }
+                        s_timerQueueHead = current.m_nextEvent;
+                        if (current.m_periodic)
+                        {
+                            current.InsertInQueue(true);
+                        }
+                        else
+                        {
+                            current.m_queued = false;
+                        }
+                        TakeMutex(current.m_handlerMutex);
+                        taken = true;
+                    }
+                    finally
+                    {
+                        GiveMutex(s_queueMutex);
+                    }
+
+                    current.m_handler(current.m_param);
+                }
+                finally
+                {
+                    if (taken) GiveMutex(current.m_handlerMutex);
+                }
+            }
+
+            try
+            {
+                TakeMutex(s_queueMutex);
+                UpdateAlarm();
+            }
+            finally
+            {
+                GiveMutex(s_queueMutex);
+            }
+        }
+
+        private static void UpdateAlarm()
+        {
+            if (s_timerQueueHead != null)
+            {
+                int status = 0;
+                UpdateNotifierAlarm(s_notifier, (uint) (s_timerQueueHead.m_expirationTime * 1e6), ref status);
+                //Skipping Check Status
+            }
+        }
+
+        private void InsertInQueue(bool reschedule)
+        {
+            if (reschedule)
+            {
+                m_expirationTime += m_period;
+            }
+            else
+            {
+                m_expirationTime = GetFPGATimestamp() + m_period;
+            }
+            if (m_expirationTime > ((111 << 32) / 1e6))
+                m_expirationTime -= ((111 << 32) / 1e6);
+            if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= this.m_expirationTime)
+            {
+                this.m_nextEvent = s_timerQueueHead;
+                s_timerQueueHead = this;
+                if (!reschedule)
+                {
+                    UpdateAlarm();
+                }
+            }
+            else
+            {
+                for (Notifier n = s_timerQueueHead; ; n = n.m_nextEvent)
+                {
+                    if (n.m_nextEvent == null || n.m_nextEvent.m_expirationTime > m_expirationTime)
+                    {
+                        m_nextEvent = n.m_nextEvent;
+                        n.m_nextEvent = this;
+                        break;
+                    }
+                }
+            }
+            m_queued = true;
+        }
+
+        private void DeleteFromQueue()
+        {
+            if (m_queued)
+            {
+                m_queued = false;
+                if (s_timerQueueHead == null)
+                    return;
+                if (s_timerQueueHead == this)
+                {
+                    s_timerQueueHead = this.m_nextEvent;
+                    UpdateAlarm();
+                }
+                else
+                {
+                    for (Notifier n = s_timerQueueHead; n != null; n = n.m_nextEvent)
+                    {
+                        if (n.m_nextEvent == this)
+                        {
+                            n.m_nextEvent = m_nextEvent;
+                        }
+                    }
+                }
+            }
+        }
+
+        
+
+        
+
+        /*
         static private Notifier s_timerQueueHead;
         static private int s_refCount = 0;
         static private object s_queueSemaphore = new object();
@@ -251,6 +496,7 @@ namespace WPILib
         /// </summary>
         /// <param name="mask"></param>
         /// <param name="param"></param>
+        [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
         static private void ProcessQueue(uint mask, IntPtr param)
         {
             while (true)
@@ -283,5 +529,6 @@ namespace WPILib
                 UpdateAlarm();
             }
         }
+        */
     }
 }
