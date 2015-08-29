@@ -14,11 +14,11 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public ICollection<Subsystem> Subsystems => subsystems;
 
-        private List<Button> buttons;
+        private List<Button> buttons = new List<Button>();
 
         public ICollection<Button> Buttons => buttons;
 
-        private Dictionary<MatchPhase, Command> phaseCommands;
+        private Dictionary<MatchPhase, Command> phaseCommands = new Dictionary<MatchPhase, Command>();
 
         public IDictionary<MatchPhase, Command> PhaseCommands => phaseCommands;
 
