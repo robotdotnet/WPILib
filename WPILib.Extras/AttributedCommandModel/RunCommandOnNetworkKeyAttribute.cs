@@ -3,7 +3,7 @@
 namespace WPILib.Extras.AttributedCommandModel
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class RunCommandOnNetworkKeyAttribute : Attribute
+    public sealed class RunCommandOnNetworkKeyAttribute : RunCommandAttribute
     {
         public string TableName { get; }
         public string Key { get; }

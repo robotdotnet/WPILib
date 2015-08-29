@@ -4,12 +4,12 @@ namespace WPILib.Extras.AttributedCommandModel
 {
     public abstract class AttributedSubsystem : Subsystem, IAttributedSubsystem
     {
-        public AttributedSubsystem()
+        protected AttributedSubsystem()
             :base()
         {
         }
 
-        public AttributedSubsystem(string name)
+        protected AttributedSubsystem(string name)
             :base(name)
         {
         }
@@ -19,6 +19,7 @@ namespace WPILib.Extras.AttributedCommandModel
             //Purposefully do nothing.  The AttributedCommandModelRobot class will set the default command via InitDefaultCommand(Command).
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CC0068:Unused Method", Justification = "Used in initialization code in the AttributedRobot class.")]
         void IAttributedSubsystem.InitDefaultCommand(Command cmd)
         {
             SetDefaultCommand(cmd);

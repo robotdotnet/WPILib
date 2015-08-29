@@ -3,7 +3,7 @@
 namespace WPILib.Extras.AttributedCommandModel
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public sealed class RunCommandOnJoystickAttribute : Attribute
+    public sealed class RunCommandOnJoystickAttribute : RunCommandAttribute
     {
         public int ControllerId { get; }
         public int ButtonId { get; }

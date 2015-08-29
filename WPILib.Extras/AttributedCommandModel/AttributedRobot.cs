@@ -14,11 +14,11 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public ICollection<Subsystem> Subsystems => subsystems;
 
-        private List<Button> buttons = new List<Button>();
+        private readonly List<Button> buttons = new List<Button>();
 
         public ICollection<Button> Buttons => buttons;
 
-        private Dictionary<MatchPhase, Command> phaseCommands = new Dictionary<MatchPhase, Command>();
+        private readonly Dictionary<MatchPhase, Command> phaseCommands = new Dictionary<MatchPhase, Command>();
 
         public IDictionary<MatchPhase, Command> PhaseCommands => phaseCommands;
 
@@ -32,6 +32,13 @@ namespace WPILib.Extras.AttributedCommandModel
                                                                   typeof(Subsystem).IsAssignableFrom(type));
             subsystems = new List<Subsystem>();
             subsystems.AddRange(exportedSubsystems.SelectMany(type => EnumerateGeneratedSubsystems(type)));
+            var exportedCommands = types.Where(type => type.CustomAttributes.Any(attr => typeof(RunCommandAttribute).IsAssignableFrom(attr.AttributeType))
+                                                                             &&
+                                                                                typeof(Command).IsAssignableFrom(type));
+            foreach (var command in exportedCommands)
+            {
+                GenerateCommands(command);
+            }
         }
 
         private static IEnumerable<Subsystem> EnumerateGeneratedSubsystems(Type subsystemType)

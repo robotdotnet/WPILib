@@ -11,7 +11,7 @@ namespace WPILib.Extras.AttributedCommandModel
     }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class RunCommandAtPhaseStartAttribute : Attribute
+    public sealed class RunCommandAtPhaseStartAttribute : RunCommandAttribute
     {
         public MatchPhase Phase { get; }
 

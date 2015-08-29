@@ -56,6 +56,7 @@
     <Compile Include="AttributedCommandModel\ExportSubsystemAttribute.cs" />
     <Compile Include="AttributedCommandModel\IAttributedSubsystem.cs" />
     <Compile Include="AttributedCommandModel\RunCommandAtPhaseStartAttribute.cs" />
+    <Compile Include="AttributedCommandModel\RunCommandAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnJoystickAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnNetworkKeyAttribute.cs" />
     <Compile Include="NavXMXP.cs" />

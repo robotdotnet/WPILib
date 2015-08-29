@@ -6,6 +6,5 @@ namespace WPILib.Extras.AttributedCommandModel
     public sealed class ExportSubsystemAttribute : Attribute
     {
         public Type DefaultCommandType { get; set; }
-        
     }
 }
