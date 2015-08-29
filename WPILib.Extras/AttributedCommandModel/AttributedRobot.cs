@@ -10,6 +10,8 @@ namespace WPILib.Extras.AttributedCommandModel
 {
     public class AttributedRobot : IterativeRobot
     {
+        private readonly System.Reflection.ReflectionContext reflectionContext;
+
         private List<Subsystem> subsystems;
 
         public ICollection<Subsystem> Subsystems => subsystems;
@@ -22,9 +24,20 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public IDictionary<MatchPhase, Command> PhaseCommands => phaseCommands;
 
+        public AttributedRobot(System.Reflection.ReflectionContext reflectionContext)
+        {
+            this.reflectionContext = reflectionContext;
+        }
+
+        public AttributedRobot()
+            :this(null)
+        {
+        }
+
         public override void RobotInit()
         {
-            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var assembly = reflectionContext != null ? reflectionContext.MapAssembly(System.Reflection.Assembly.GetExecutingAssembly())
+                : System.Reflection.Assembly.GetExecutingAssembly();
             var types = assembly.GetExportedTypes();
             var exportedSubsystems = types.Where(type => type.CustomAttributes
                                                                 .Any(attr => attr.AttributeType == typeof(ExportSubsystemAttribute))
