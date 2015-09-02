@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     internal class HALNotifier
     {
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeNotifier")]
-        public static extern IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status);
+        public static extern IntPtr initializeNotifier(HAL_Base.HALNotifier.NotifierDelegate ProcessQueue, ref int status);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "cleanNotifier")]
         public static extern void cleanNotifier(IntPtr notifier_pointer, ref int status);
