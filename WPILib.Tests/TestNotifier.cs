@@ -7,7 +7,7 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestNotifier : TestBase
     {
-        /*
+
         [Test]
         public void TestSingle()
         {
@@ -49,7 +49,6 @@ namespace WPILib.Tests
             Assert.AreEqual(1, count);
             Assert.AreEqual(this, obj);
         }
-        */
         /*
         [Test]
         public void TestMultiple()
