@@ -1,6 +1,7 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security;
 using HAL_Base;
@@ -44,13 +45,13 @@ namespace HAL_RoboRIO
         public static extern int HALGetAllianceStation(ref HALAllianceStationID allianceStation);
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickAxes")]
-        public static extern int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes);
+        private static unsafe extern int NativeHALGetJoystickAxes(byte joystickNum, HALNativeAxes* axes);
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickPOVs")]
-        public static extern int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs);
+        private static unsafe extern int NativeHALGetJoystickPOVs(byte joystickNum, HALNativePOVs* povs);
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickButtons")]
-        public static extern int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons);
+        private static unsafe extern int NativeHALGetJoystickButtons(byte joystickNum, HALNativeButtons* buttons);
 
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALGetJoystickDescriptor")]
         public static extern int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc);
@@ -106,6 +107,65 @@ namespace HAL_RoboRIO
         public static extern uint HALReport(byte resource, byte instanceNumber, byte context, string feature = null);
 
         
+
+        public static short[] HALGetJoystickAxes(byte joystickNum)
+        {
+            unsafe
+            {
+                HALNativeAxes axes;
+                NativeHALGetJoystickAxes(joystickNum, &axes);
+                short[] retArray = new short[axes.count];
+                fixed (short* s = retArray)
+                {
+                    short* ps = s;
+                    short* pss = axes.axes;
+                    for (int i = 0; i < axes.count; i++)
+                    {
+                        *ps = *pss;
+                        ps++;
+                        pss++;
+                    }
+                }
+                return retArray;
+            }
+
+        }
+
+        public static short[] HALGetJoystickPOVs(byte joystickNum)
+        {
+            unsafe
+            {
+                HALNativePOVs povs;
+                NativeHALGetJoystickPOVs(joystickNum, &povs);
+                short[] retArray = new short[povs.count];
+                fixed (short* s = retArray)
+                {
+                    short* ps = s;
+                    short* pss = povs.povs;
+                    for (int i = 0; i < povs.count; i++)
+                    {
+                        *ps = *pss;
+                        ps++;
+                        pss++;
+                    }
+                }
+                return retArray;
+            }
+
+        }
+
+        public static uint HALGetJoystickButtons(byte joystickNum, ref byte count)
+        {
+            unsafe
+            {
+                HALNativeButtons buttons;
+                NativeHALGetJoystickButtons(joystickNum, &buttons);
+                count = buttons.count;
+                return buttons.buttons;
+            }
+        }
+
+
         /// <summary>
         /// Gets the HAL Control Word
         /// </summary>
@@ -118,5 +178,23 @@ namespace HAL_RoboRIO
             return new HALControlWord((word & 1) != 0, ((word >> 1) & 1) != 0, ((word >> 2) & 1) != 0,
                 ((word >> 3) & 1) != 0, ((word >> 4) & 1) != 0, ((word >> 5) & 1) != 0);
         }
+    }
+
+    internal unsafe struct HALNativeAxes
+    {
+        public ushort count;
+        public fixed short axes[HAL_Base.HAL.DriverStationConstants.MaxJoystickAxes];
+    }
+
+    internal unsafe struct HALNativePOVs
+    {
+        public ushort count;
+        public fixed short povs[HAL_Base.HAL.DriverStationConstants.MaxJoystickPOVs];
+    }
+
+    internal unsafe struct HALNativeButtons
+    {
+        public uint buttons;
+        public byte count;
     }
 }

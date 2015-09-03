@@ -17,6 +17,12 @@ namespace WPILib
     /// </summary>
     public class DriverStation : RobotState.Interface
     {
+        private struct JoystickButtons
+        {
+            public uint buttons;
+            public byte count;
+        }
+
         //Enums
         /// <summary>
         /// Alliance value enum.
@@ -29,9 +35,9 @@ namespace WPILib
         };
 
         //Private Fields
-        private HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
-        private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
-        private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
+        private short[][] m_joystickAxes = new short[JoystickPorts][];
+        private short[][] m_joystickPOVs = new short[JoystickPorts][];
+        private JoystickButtons[] m_joystickButtons = new JoystickButtons[JoystickPorts];
 
         //Pointers to the semaphores to the HAL and FPGA
         //We use native semaphores rather then .NET semaphores for some of these
@@ -76,9 +82,7 @@ namespace WPILib
             //Force all joysticks to have no value.
             for (int i = 0; i < JoystickPorts; i++)
             {
-                m_joystickButtons[i].count = 0;
-                m_joystickAxes[i].count = 0;
-                m_joystickPOVs[i].count = 0;
+                m_joystickButtons[i] = new JoystickButtons();
             }
 
             //Initializes the HAL semaphores
@@ -93,7 +97,7 @@ namespace WPILib
             HALSetNewDataSem(m_packetDataAvailableMultiWait);
 
 
-            //Starts the driver station thread in the background.
+            //Starts the driver station\][ thread in the background.
             var thread = new Thread(Task) { Priority = ThreadPriority.Highest, IsBackground = true };
             thread.Start();
         }
@@ -110,9 +114,12 @@ namespace WPILib
             int safetyCounter = 0;
             while (m_threadKeepAlive)
             {
+               
                 //Wait for new DS data, grab the newest data, and return the semaphore.
                 TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
+                //Thread.Sleep(20);
                 GetData();
+                GiveSemaphore(m_newControlData);
                 GiveMultiWait(m_waitForDataSem);
 
                 //Every 4 loops (80ms) check all of the motors to make sure they have been updated
@@ -147,9 +154,18 @@ namespace WPILib
         {
             for (byte stick = 0; stick < JoystickPorts; stick++)
             {
-                HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
-                HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
-                HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
+                //Console.WriteLine("Axes");
+                m_joystickAxes[stick] = HALGetJoystickAxes(stick);
+                //HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
+                //Console.WriteLine("POVs");
+                m_joystickPOVs[stick] = HALGetJoystickPOVs(stick);
+
+
+                m_joystickButtons[stick].buttons = HALGetJoystickButtons(stick, ref m_joystickButtons[stick].count);
+
+                //HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
+                //nsole.WriteLine("Buttons");
+                //HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
             }
             //Pings the NewControlData function
             GiveSemaphore(m_newControlData);
@@ -199,11 +215,11 @@ namespace WPILib
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
-                if (axis > m_joystickAxes[stick].count)
+                if (axis > m_joystickAxes[stick].Length)
                 {
                     if (axis >= MaxJoystickAxes)
                         throw new ArgumentOutOfRangeException(nameof(axis),
-                            $"Joystick axis is out of range, should be between 0 and {m_joystickAxes[stick].count}");
+                            $"Joystick axis is out of range, should be between 0 and {m_joystickAxes[stick].Length}");
                     else
                     {
                         ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
@@ -212,7 +228,7 @@ namespace WPILib
                     return 0.0;
                 }
 
-                int value = m_joystickAxes[stick].axes[axis];
+                int value = m_joystickAxes[stick][axis];
 
                 if (value < 0)
                 {
@@ -243,7 +259,7 @@ namespace WPILib
                         $"Joystick index is out of range, should be 0-{JoystickPorts}");
                 }
 
-                return m_joystickAxes[stick].count;
+                return m_joystickAxes[stick].Length;
             }
         }
 
@@ -272,14 +288,14 @@ namespace WPILib
                 }
 
 
-                if (pov >= m_joystickPOVs[stick].count)
+                if (pov >= m_joystickPOVs[stick].Length)
                 {
                     ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
                     return -1;
                 }
 
-                return m_joystickPOVs[stick].povs[pov];
+                return m_joystickPOVs[stick][pov];
             }
         }
 
@@ -300,7 +316,7 @@ namespace WPILib
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
 
-                return m_joystickPOVs[stick].count;
+                return m_joystickPOVs[stick].Length;
             }
         }
 
@@ -396,7 +412,7 @@ namespace WPILib
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
                 //TODO: Remove this when calling for descriptor on empty stick no longer crashes
-                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].Length)
                 {
                     ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
                         " not available, check if controller is plugged in\n");
@@ -423,7 +439,7 @@ namespace WPILib
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
                 }
                 //TODO: Remove this when calling for descriptor on empty stick
-                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].Length)
                 {
                     ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
                         " not available, check if controller is plugged in\n");
@@ -449,7 +465,7 @@ namespace WPILib
             }
             
             //TODO: Remove this when calling for descriptor on empty stick
-            if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+            if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].Length)
             {
                 ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
                     " not available, check if controller is plugged in\n");
