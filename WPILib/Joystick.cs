@@ -180,10 +180,7 @@ namespace WPILib
 
         public double GetDirectionDegrees() => RadianToDegree(GetDirectionRadians());
 
-        private double RadianToDegree(double angle)
-        {
-            return angle * (180.0 / Math.PI);
-        }
+        private static double RadianToDegree(double angle) => angle * (180.0 / Math.PI);
 
         public int GetAxisChannel(AxisType axis)
         {
@@ -237,11 +234,16 @@ namespace WPILib
 
         public bool Equals(Joystick other)
         {
-            return other != null && Port == other.Port;
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Port == other.Port;
         }
 
         public override bool Equals(object obj)
         {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
             return Equals(obj as Joystick);
         }
 

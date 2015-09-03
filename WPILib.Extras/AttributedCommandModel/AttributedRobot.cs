@@ -12,7 +12,7 @@ namespace WPILib.Extras.AttributedCommandModel
     {
         private readonly System.Reflection.ReflectionContext reflectionContext;
 
-        private List<Subsystem> subsystems;
+        private List<Subsystem> subsystems = new List<Subsystem>();
 
         public ICollection<Subsystem> Subsystems => subsystems;
 
@@ -36,14 +36,12 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public override void RobotInit()
         {
-            var assembly = reflectionContext != null ? reflectionContext.MapAssembly(System.Reflection.Assembly.GetExecutingAssembly())
-                : System.Reflection.Assembly.GetExecutingAssembly();
-            var types = assembly.GetExportedTypes();
+            var assemblies = GetAssemblies();
+            var types = assemblies.SelectMany(assembly => assembly.GetExportedTypes());
             var exportedSubsystems = types.Where(type => type.CustomAttributes
                                                                 .Any(attr => attr.AttributeType == typeof(ExportSubsystemAttribute))
                                                                 &&
                                                                   typeof(Subsystem).IsAssignableFrom(type));
-            subsystems = new List<Subsystem>();
             subsystems.AddRange(exportedSubsystems.SelectMany(type => EnumerateGeneratedSubsystems(type)));
             var exportedCommands = types.Where(type => type.CustomAttributes.Any(attr => typeof(RunCommandAttribute).IsAssignableFrom(attr.AttributeType))
                                                                              &&
@@ -52,6 +50,13 @@ namespace WPILib.Extras.AttributedCommandModel
             {
                 GenerateCommands(command);
             }
+        }
+
+        private IEnumerable<System.Reflection.Assembly> GetAssemblies()
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            return assemblies.Select(assembly => reflectionContext != null ? reflectionContext.MapAssembly(assembly)
+                : assembly);
         }
 
         private static IEnumerable<Subsystem> EnumerateGeneratedSubsystems(Type subsystemType)
