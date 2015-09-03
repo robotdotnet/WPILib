@@ -3,7 +3,6 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
@@ -27,9 +26,7 @@ namespace HAL_Base
             UpdateNotifierAlarm = (UpdateNotifierAlarmDelegate)Delegate.CreateDelegate(typeof(UpdateNotifierAlarmDelegate), type.GetMethod("updateNotifierAlarm"));
         }
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void NotifierDelegate(uint mask, IntPtr val);
-        public delegate IntPtr InitializeNotifierDelegate(NotifierDelegate ProcessQueue, ref int status);
+        public delegate IntPtr InitializeNotifierDelegate(Action<uint, IntPtr> ProcessQueue, ref int status);
         public static InitializeNotifierDelegate InitializeNotifier;
 
         public delegate void CleanNotifierDelegate(IntPtr notifier_pointer, ref int status);
