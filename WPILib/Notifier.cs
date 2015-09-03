@@ -14,10 +14,6 @@ namespace WPILib
     /// </summary>
     public class Notifier : IDisposable
     {
-        /*
-        private const double kRolloverTime = (1L << 32) / 1e6;
-
-
         public Notifier(Action<object> handler, object obj)
         {
             if (handler == null)
@@ -197,7 +193,6 @@ namespace WPILib
 
         private void InsertInQueue(bool reschedule)
         {
-            Console.WriteLine(m_expirationTime);
             if (reschedule)
             {
                 m_expirationTime += m_period;
@@ -206,8 +201,8 @@ namespace WPILib
             {
                 m_expirationTime = GetFPGATimestamp() + m_period;
             }
-            if (m_expirationTime > kRolloverTime)
-                m_expirationTime -= kRolloverTime;
+            if (m_expirationTime > ((111 << 32) / 1e6))
+                m_expirationTime -= ((111 << 32) / 1e6);
             if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= this.m_expirationTime)
             {
                 this.m_nextEvent = s_timerQueueHead;
@@ -261,7 +256,7 @@ namespace WPILib
 
         
 
-        */
+        /*
         static private Notifier s_timerQueueHead;
         static private int s_refCount = 0;
         static private object s_queueSemaphore = new object();
@@ -368,7 +363,6 @@ namespace WPILib
         /// methods only update the queue after finishing inserting.</param>
         protected void InsertInQueue(bool reschedule)
         {
-            Console.WriteLine(m_expirationTime + " Inserting");
             if (reschedule)
             {
                 m_expirationTime += m_period;
@@ -376,11 +370,10 @@ namespace WPILib
             else
             {
                 m_expirationTime = GetFPGATimestamp() + m_period;
-                Console.WriteLine(GetFPGATimestamp());
             }
-            if (m_expirationTime > ((1L << 32) / 1e6))
+            if (m_expirationTime > ((111 << 32) / 1e6))
             {
-                m_expirationTime -= ((1L << 32) / 1e6);
+                m_expirationTime -= ((111 << 32) / 1e6);
             }
             if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= m_expirationTime)
             {
@@ -466,7 +459,6 @@ namespace WPILib
         {
             lock (s_queueSemaphore)
             {
-                Console.WriteLine("Starting Periodic");
                 m_periodic = true;
                 m_period = period;
                 DeleteFromQueue();
@@ -537,6 +529,6 @@ namespace WPILib
                 UpdateAlarm();
             }
         }
-        
+        */
     }
 }

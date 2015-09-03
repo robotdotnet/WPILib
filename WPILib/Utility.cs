@@ -36,10 +36,10 @@ namespace WPILib
         /// <summary>
         /// Read the microsecond timer from the FPGA
         /// </summary>
-        public static uint GetFPGATime()
+        public static long GetFPGATime()
         {
             int status = 0;
-            uint value = HAL.GetFPGATime(ref status);
+            long value = HAL.GetFPGATime(ref status);
             return value;
         }
 
