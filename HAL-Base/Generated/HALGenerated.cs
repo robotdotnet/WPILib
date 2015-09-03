@@ -85,13 +85,13 @@ namespace HAL_Base
         public delegate int HALGetAllianceStationDelegate(ref HALAllianceStationID allianceStation);
         public static HALGetAllianceStationDelegate HALGetAllianceStation;
 
-        public delegate short[] HALGetJoystickAxesDelegate(byte joystickNum);
+        public delegate int HALGetJoystickAxesDelegate(byte joystickNum, ref HALJoystickAxes axes);
         public static HALGetJoystickAxesDelegate HALGetJoystickAxes;
 
-        public delegate short[] HALGetJoystickPOVsDelegate(byte joystickNum);
+        public delegate int HALGetJoystickPOVsDelegate(byte joystickNum, ref HALJoystickPOVs povs);
         public static HALGetJoystickPOVsDelegate HALGetJoystickPOVs;
 
-        public delegate uint HALGetJoystickButtonsDelegate(byte joystickNum, ref byte buttons);
+        public delegate int HALGetJoystickButtonsDelegate(byte joystickNum, ref HALJoystickButtons buttons);
         public static HALGetJoystickButtonsDelegate HALGetJoystickButtons;
 
         public delegate int HALGetJoystickDescriptorDelegate(byte joystickNum, ref HALJoystickDescriptor desc);
