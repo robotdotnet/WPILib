@@ -126,9 +126,9 @@ namespace WPILib
             {
                 m_expirationTime = GetFPGATimestamp() + m_period;
             }
-            if (m_expirationTime > ((111 << 32) / 1e6))
+            if (m_expirationTime > ((1L << 32) / 1e6))
             {
-                m_expirationTime -= ((111 << 32) / 1e6);
+                m_expirationTime -= ((1L << 32) / 1e6);
             }
             if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= m_expirationTime)
             {
