@@ -7,8 +7,8 @@ namespace WPILib.Buttons
     /// </summary>
     public class NetworkButton : Button
     {
-        private NetworkTable m_table;
-        private string m_field;
+        public NetworkTable SourceTable { get; }
+        public string Field { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkButton"/> class
@@ -26,8 +26,8 @@ namespace WPILib.Buttons
         /// <param name="field">The name of the button</param>
         public NetworkButton(NetworkTable table, string field)
         {
-            m_table = table;
-            m_field = field;
+            SourceTable = table;
+            Field = field;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace WPILib.Buttons
         /// <returns>Whether or not the trigger condition is active.</returns>
         public override bool Get()
         {
-            return m_table.IsConnected() && m_table.GetBoolean(m_field, false);
+            return SourceTable.IsConnected() && SourceTable.GetBoolean(Field, false);
         }
     }
 }
