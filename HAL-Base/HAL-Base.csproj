@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DLLUtils.cs" />
     <Compile Include="Generated\HALAccelerometerGenerated.cs" />
     <Compile Include="Generated\HALAnalogGenerated.cs" />
     <Compile Include="Generated\HALCANGenerated.cs" />

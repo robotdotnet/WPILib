@@ -61,8 +61,8 @@ namespace HAL_Base
         public delegate IntPtr GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
-        private delegate IntPtr GetHALErrorMessageDelegate(int code);
-        private static GetHALErrorMessageDelegate GetHALErrorMessage;
+        public delegate IntPtr GetHALErrorMessageDelegate(int code);
+        public static GetHALErrorMessageDelegate GetHALErrorMessage;
 
         public delegate ushort GetFPGAVersionDelegate(ref int status);
         public static GetFPGAVersionDelegate GetFPGAVersion;
@@ -103,8 +103,8 @@ namespace HAL_Base
         public delegate int HALGetJoystickTypeDelegate(byte joystickNum);
         public static HALGetJoystickTypeDelegate HALGetJoystickType;
 
-        private delegate IntPtr HALGetJoystickNameDelegate(byte joystickNum);
-        private static HALGetJoystickNameDelegate HALGetJoystickName;
+        public delegate IntPtr HALGetJoystickNameDelegate(byte joystickNum);
+        public static HALGetJoystickNameDelegate HALGetJoystickName;
 
         public delegate int HALGetJoystickAxisTypeDelegate(byte joystickNum, byte axis);
         public static HALGetJoystickAxisTypeDelegate HALGetJoystickAxisType;
