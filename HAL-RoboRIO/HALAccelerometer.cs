@@ -23,7 +23,7 @@ namespace HAL_RoboRIO
             HAL_Base.HALAccelerometer.GetAccelerometerZ = (HAL_Base.HALAccelerometer.GetAccelerometerZDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccelerometerZ"), typeof(HAL_Base.HALAccelerometer.GetAccelerometerZDelegate));
 
         }
-
+        /*
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "setAccelerometerActive")]
         public static extern void setAccelerometerActive([MarshalAs(UnmanagedType.I1)] bool param0);
 
@@ -38,5 +38,6 @@ namespace HAL_RoboRIO
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "getAccelerometerZ")]
         public static extern double getAccelerometerZ();
+        */
     }
 }

@@ -51,13 +51,13 @@ namespace HAL_Base
             return result;
         }
 
-        [DllImport("libdl.so")]
+        [DllImport("libdl-2.17.so")]
         private static extern IntPtr dlopen(string fileName, int flags);
 
-        [DllImport("libdl.so")]
+        [DllImport("libdl-2.17.so")]
         private static extern IntPtr dlsym(IntPtr handle, string symbol);
 
-        [DllImport("libdl.so")]
+        [DllImport("libdl-2.17.so")]
         private static extern IntPtr dlerror();
     }
 }

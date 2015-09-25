@@ -108,6 +108,25 @@ namespace HAL_Base
 
                 HALAssembly = Assembly.LoadFrom(asm);
 
+                {
+                    string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
+                    var types = HALAssembly.GetTypes();
+                    var q = from t in types where t.IsClass && t.Name == className select t;
+                    Type type = HALAssembly.GetType(q.ToList()[0].FullName);
+                    try
+                    {
+                        type.GetMethod("InitializeImpl").Invoke(null, null);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        Environment.Exit(1);
+                    }
+                    
+                    //GetPort =
+                        //(GetPortDelegate) Delegate.CreateDelegate(typeof (GetPortDelegate), type.GetMethod("getPort"));
+                }
+                /*
                 //Setup all of our delegates
                 //This allows us to dynamically switch between simulator, RoboRIO
                 //and potentially others later.
@@ -128,7 +147,7 @@ namespace HAL_Base
                 HALSerialPort.SetupDelegates();
                 HALSolenoid.SetupDelegates();
                 HALUtilities.SetupDelegates();
-
+                */
 
                 var rv = HALInitialize(mode);
                 if (rv != 1)
