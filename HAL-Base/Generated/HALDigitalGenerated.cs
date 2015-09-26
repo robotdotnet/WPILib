@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
@@ -107,15 +108,18 @@ namespace HAL_Base
         public delegate IntPtr InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeDigitalPortDelegate InitializeDigitalPort;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool CheckPWMChannelDelegate(IntPtr digital_port_pointer);
         public static CheckPWMChannelDelegate CheckPWMChannel;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool CheckRelayChannelDelegate(IntPtr digital_port_pointer);
         public static CheckRelayChannelDelegate CheckRelayChannel;
 
         public delegate void SetPWMDelegate(IntPtr digital_port_pointer, ushort value, ref int status);
         public static SetPWMDelegate SetPWM;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool AllocatePWMChannelDelegate(IntPtr digital_port_pointer, ref int status);
         public static AllocatePWMChannelDelegate AllocatePWMChannel;
 
@@ -152,12 +156,15 @@ namespace HAL_Base
         public delegate void SetRelayReverseDelegate(IntPtr digital_port_pointer, bool on, ref int status);
         public static SetRelayReverseDelegate SetRelayReverse;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetRelayForwardDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetRelayForwardDelegate GetRelayForward;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetRelayReverseDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetRelayReverseDelegate GetRelayReverse;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool AllocateDIODelegate(IntPtr digital_port_pointer, bool input, ref int status);
         public static AllocateDIODelegate AllocateDIO;
 
@@ -167,18 +174,22 @@ namespace HAL_Base
         public delegate void SetDIODelegate(IntPtr digital_port_pointer, short value, ref int status);
         public static SetDIODelegate SetDIO;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetDIODelegate(IntPtr digital_port_pointer, ref int status);
         public static GetDIODelegate GetDIO;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetDIODirectionDelegate(IntPtr digital_port_pointer, ref int status);
         public static GetDIODirectionDelegate GetDIODirection;
 
         public delegate void PulseDelegate(IntPtr digital_port_pointer, double pulseLength, ref int status);
         public static PulseDelegate Pulse;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool IsPulsingDelegate(IntPtr digital_port_pointer, ref int status);
         public static IsPulsingDelegate IsPulsing;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool IsAnyPulsingDelegate(ref int status);
         public static IsAnyPulsingDelegate IsAnyPulsing;
 
@@ -242,9 +253,11 @@ namespace HAL_Base
         public delegate void SetCounterUpdateWhenEmptyDelegate(IntPtr counter_pointer, bool enabled, ref int status);
         public static SetCounterUpdateWhenEmptyDelegate SetCounterUpdateWhenEmpty;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetCounterStoppedDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterStoppedDelegate GetCounterStopped;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetCounterDirectionDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterDirectionDelegate GetCounterDirection;
 
@@ -269,9 +282,11 @@ namespace HAL_Base
         public delegate void SetEncoderMaxPeriodDelegate(IntPtr encoder_pointer, double maxPeriod, ref int status);
         public static SetEncoderMaxPeriodDelegate SetEncoderMaxPeriod;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetEncoderStoppedDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderStoppedDelegate GetEncoderStopped;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetEncoderDirectionDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderDirectionDelegate GetEncoderDirection;
 

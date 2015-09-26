@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
@@ -28,7 +29,7 @@ namespace HAL_Base
             GetAccelerometerZ = (GetAccelerometerZDelegate)Delegate.CreateDelegate(typeof(GetAccelerometerZDelegate), type.GetMethod("getAccelerometerZ"));
         }
 
-        public delegate void SetAccelerometerActiveDelegate(bool param0);
+        public delegate void SetAccelerometerActiveDelegate([MarshalAs(UnmanagedType.I1)]bool param0);
         public static SetAccelerometerActiveDelegate SetAccelerometerActive;
 
         public delegate void SetAccelerometerRangeDelegate(AccelerometerRange param0);

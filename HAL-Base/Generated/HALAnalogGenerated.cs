@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
@@ -69,15 +70,18 @@ namespace HAL_Base
         public delegate double GetAnalogOutputDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogOutputDelegate GetAnalogOutput;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool CheckAnalogOutputChannelDelegate(uint pin);
         public static CheckAnalogOutputChannelDelegate CheckAnalogOutputChannel;
 
         public delegate IntPtr InitializeAnalogInputPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeAnalogInputPortDelegate InitializeAnalogInputPort;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool CheckAnalogModuleDelegate(byte module);
         public static CheckAnalogModuleDelegate CheckAnalogModule;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool CheckAnalogInputChannelDelegate(uint pin);
         public static CheckAnalogInputChannelDelegate CheckAnalogInputChannel;
 
@@ -120,6 +124,7 @@ namespace HAL_Base
         public delegate int GetAnalogOffsetDelegate(IntPtr analog_port_pointer, ref int status);
         public static GetAnalogOffsetDelegate GetAnalogOffset;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool IsAccumulatorChannelDelegate(IntPtr analog_port_pointer, ref int status);
         public static IsAccumulatorChannelDelegate IsAccumulatorChannel;
 
@@ -156,18 +161,21 @@ namespace HAL_Base
         public delegate void SetAnalogTriggerLimitsVoltageDelegate(IntPtr analog_trigger_pointer, double lower, double upper, ref int status);
         public static SetAnalogTriggerLimitsVoltageDelegate SetAnalogTriggerLimitsVoltage;
 
-        public delegate void SetAnalogTriggerAveragedDelegate(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status);
+        public delegate void SetAnalogTriggerAveragedDelegate(IntPtr analog_trigger_pointer, [MarshalAs(UnmanagedType.I1)]bool useAveragedValue, ref int status);
         public static SetAnalogTriggerAveragedDelegate SetAnalogTriggerAveraged;
 
-        public delegate void SetAnalogTriggerFilteredDelegate(IntPtr analog_trigger_pointer, bool useFilteredValue, ref int status);
+        public delegate void SetAnalogTriggerFilteredDelegate(IntPtr analog_trigger_pointer, [MarshalAs(UnmanagedType.I1)]bool useFilteredValue, ref int status);
         public static SetAnalogTriggerFilteredDelegate SetAnalogTriggerFiltered;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetAnalogTriggerInWindowDelegate(IntPtr analog_trigger_pointer, ref int status);
         public static GetAnalogTriggerInWindowDelegate GetAnalogTriggerInWindow;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetAnalogTriggerTriggerStateDelegate(IntPtr analog_trigger_pointer, ref int status);
         public static GetAnalogTriggerTriggerStateDelegate GetAnalogTriggerTriggerState;
 
+        [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool GetAnalogTriggerOutputDelegate(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status);
         public static GetAnalogTriggerOutputDelegate GetAnalogTriggerOutput;
     }

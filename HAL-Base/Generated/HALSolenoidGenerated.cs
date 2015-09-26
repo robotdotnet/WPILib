@@ -3,6 +3,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
@@ -40,7 +41,7 @@ namespace HAL_Base
         public delegate bool GetSolenoidDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static GetSolenoidDelegate GetSolenoid;
 
-        public delegate void SetSolenoidDelegate(IntPtr solenoid_port_pointer, bool value, ref int status);
+        public delegate void SetSolenoidDelegate(IntPtr solenoid_port_pointer, [MarshalAs(UnmanagedType.I1)]bool value, ref int status);
         public static SetSolenoidDelegate SetSolenoid;
 
         public delegate int GetPCMSolenoidBlackListDelegate(IntPtr solenoid_port_pointer, ref int status);
