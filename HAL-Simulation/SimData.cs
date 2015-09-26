@@ -119,14 +119,27 @@ namespace HAL_Simulator
     public class SimData
     {
         public static Accelerometer Accelerometer = new Accelerometer();
-        public static ProgramData ProgramData = new ProgramData();
+        public static GlobalData GlobalData = new GlobalData();
         public static List<AnalogOutData> AnalogOut = new List<AnalogOutData>();
+
+        public static List<AnalogInData> AnalogIn = new List<AnalogInData>(); 
+        public static List<AnalogTriggerData> AnalogTrigger = new List<AnalogTriggerData>(); 
 
         static SimData()
         {
             for (int i = 0; i < 2; i++)
             {
                 AnalogOut.Add(new AnalogOutData());
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                AnalogIn.Add(new AnalogInData());
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                AnalogTrigger.Add(new AnalogTriggerData());
             }
 
         }

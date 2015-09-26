@@ -6,11 +6,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using HAL_Base;
-using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class ProgramData
+    public class GlobalData
     {
         private bool m_programStarted = false;
         private HALAllianceStationID m_allianceStationId = HALAllianceStationID.HALAllianceStationID_red1;
@@ -80,6 +79,19 @@ namespace HAL_Simulator.Data
             {
                 if (value.Equals(m_matchStart)) return;
                 m_matchStart = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        private double m_analogSampleRate = HALAnalog.DefaultSampleRate;
+
+        public double AnalogSampleRate
+        {
+            get { return m_analogSampleRate;}
+            set
+            {
+                if (value.Equals(m_analogSampleRate)) return;
+                m_analogSampleRate = value;
                 OnPropertyChanged(value);
             }
         }

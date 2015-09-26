@@ -13,6 +13,7 @@ namespace HAL_Simulator.Data
     {
         private double m_voltage = 0.0;
         private bool m_hasSource = false;
+        private bool m_initialized = false;
         private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
 
         public void Register(string key, Action<string, dynamic> action, bool notify = false)
@@ -34,6 +35,17 @@ namespace HAL_Simulator.Data
             if (callback)
             {
                 v?.Invoke(propertyName, value);
+            }
+        }
+
+        public bool Initialized
+        {
+            get { return m_initialized;}
+            set
+            {
+                if (value == m_initialized) return;
+                m_initialized = value;
+                OnPropertyChanged(value);
             }
         }
 
