@@ -46,7 +46,7 @@ namespace HAL_Simulator
                     string loadedPath = LoaderUtilities.ExtractLibrary(type);
                     if (string.IsNullOrEmpty(loadedPath)) throw new FileNotFoundException("Stream not found");
 
-                    library = LoaderUtilities.LoadDll(loadedPath, type);
+                    library = LoaderUtilities.LoadLibrary(loadedPath, type);
 
                     if (library == IntPtr.Zero) throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
                     */

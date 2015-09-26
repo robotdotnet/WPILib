@@ -71,11 +71,11 @@ namespace HAL_Simulator
             {
                 case OsType.Windows32:
                     inputName = "HAL_Simulator.FRC_NetworkCommunication32.dll";
-                    outputName = "FRC_NetworkCommunication.dll";
+                    outputName = "FRC_NetworkCommunication.dlln";
                     break;
                 case OsType.Windows64:
                     inputName = "HAL_Simulator.FRC_NetworkCommunication64.dll";
-                    outputName = "ntcore.dll";
+                    outputName = "FRC_NetworkCommunication.dlln";
                     break;
                 case OsType.Linux32:
                     inputName = "HAL_Simulator.libFRC_NetworkCommunication32.so";
@@ -107,7 +107,7 @@ namespace HAL_Simulator
 
         }
 
-        internal static IntPtr LoadDll(string dllLoc, OsType type)
+        internal static IntPtr LoadLibrary(string dllLoc, OsType type)
         {
             ILibraryLoader loader = null;
             switch (type)
