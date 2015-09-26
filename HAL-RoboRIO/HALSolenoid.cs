@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALSolenoid
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALSolenoid.InitializeSolenoidPort = (HAL_Base.HALSolenoid.InitializeSolenoidPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeSolenoidPort"), typeof(HAL_Base.HALSolenoid.InitializeSolenoidPortDelegate));
 

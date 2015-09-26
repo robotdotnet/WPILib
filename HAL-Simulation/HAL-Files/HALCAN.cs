@@ -11,6 +11,16 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALCAN
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage = FRC_NetworkCommunication_CANSessionMux_sendMessage;
+            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage = FRC_NetworkCommunication_CANSessionMux_receiveMessage;
+            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_openStreamSession = FRC_NetworkCommunication_CANSessionMux_openStreamSession;
+            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_closeStreamSession = FRC_NetworkCommunication_CANSessionMux_closeStreamSession;
+            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSession = FRC_NetworkCommunication_CANSessionMux_readStreamSession;
+            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_getCANStatus = FRC_NetworkCommunication_CANSessionMux_getCANStatus;
+        }
+
         [CalledSimFunction]
         public static void FRC_NetworkCommunication_CANSessionMux_sendMessage(uint messageID, byte[] data,
             byte dataSize, int periodMs, ref int status)

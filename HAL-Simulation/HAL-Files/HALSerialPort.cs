@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using HAL_Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -10,6 +12,28 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALSerialPort
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALSerialPort.SerialInitializePort = serialInitializePort;
+            HAL_Base.HALSerialPort.SerialSetBaudRate = serialSetBaudRate;
+            HAL_Base.HALSerialPort.SerialSetDataBits = serialSetDataBits;
+            HAL_Base.HALSerialPort.SerialSetParity = serialSetParity;
+            HAL_Base.HALSerialPort.SerialSetStopBits = serialSetStopBits;
+            HAL_Base.HALSerialPort.SerialSetWriteMode = serialSetWriteMode;
+            HAL_Base.HALSerialPort.SerialSetFlowControl = serialSetFlowControl;
+            HAL_Base.HALSerialPort.SerialSetTimeout = serialSetTimeout;
+            HAL_Base.HALSerialPort.SerialEnableTermination = serialEnableTermination;
+            HAL_Base.HALSerialPort.SerialDisableTermination = serialDisableTermination;
+            HAL_Base.HALSerialPort.SerialSetReadBufferSize = serialSetReadBufferSize;
+            HAL_Base.HALSerialPort.SerialSetWriteBufferSize = serialSetWriteBufferSize;
+            HAL_Base.HALSerialPort.SerialGetBytesReceived = serialGetBytesReceived;
+            HAL_Base.HALSerialPort.SerialRead = serialRead;
+            HAL_Base.HALSerialPort.SerialWrite = serialWrite;
+            HAL_Base.HALSerialPort.SerialFlush = serialFlush;
+            HAL_Base.HALSerialPort.SerialClear = serialClear;
+            HAL_Base.HALSerialPort.SerialClose = serialClose;
+        }
+
         /// Return Type: void
         ///port: byte
         ///status: int*

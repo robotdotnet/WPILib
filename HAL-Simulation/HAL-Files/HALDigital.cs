@@ -23,6 +23,91 @@ namespace HAL_Simulator
         internal const int RelayPins = 4;
         internal const int NumHeaders = 10;
 
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALDigital.InitializeDigitalPort = initializeDigitalPort;
+            HAL_Base.HALDigital.CheckPWMChannel = checkPWMChannel;
+            HAL_Base.HALDigital.CheckRelayChannel = checkRelayChannel;
+            HAL_Base.HALDigital.SetPWM = setPWM;
+            HAL_Base.HALDigital.AllocatePWMChannel = allocatePWMChannel;
+            HAL_Base.HALDigital.FreePWMChannel = freePWMChannel;
+            HAL_Base.HALDigital.GetPWM = getPWM;
+            HAL_Base.HALDigital.LatchPWMZero = latchPWMZero;
+            HAL_Base.HALDigital.SetPWMPeriodScale = setPWMPeriodScale;
+            HAL_Base.HALDigital.AllocatePWM = allocatePWM;
+            HAL_Base.HALDigital.FreePWM = freePWM;
+            HAL_Base.HALDigital.SetPWMRate = setPWMRate;
+            HAL_Base.HALDigital.SetPWMDutyCycle = setPWMDutyCycle;
+            HAL_Base.HALDigital.SetPWMOutputChannel = setPWMOutputChannel;
+            HAL_Base.HALDigital.SetRelayForward = setRelayForward;
+            HAL_Base.HALDigital.SetRelayReverse = setRelayReverse;
+            HAL_Base.HALDigital.GetRelayForward = getRelayForward;
+            HAL_Base.HALDigital.GetRelayReverse = getRelayReverse;
+            HAL_Base.HALDigital.AllocateDIO = allocateDIO;
+            HAL_Base.HALDigital.FreeDIO = freeDIO;
+            HAL_Base.HALDigital.SetDIO = setDIO;
+            HAL_Base.HALDigital.GetDIO = getDIO;
+            HAL_Base.HALDigital.GetDIODirection = getDIODirection;
+            HAL_Base.HALDigital.Pulse = pulse;
+            HAL_Base.HALDigital.IsPulsing = isPulsing;
+            HAL_Base.HALDigital.IsAnyPulsing = isAnyPulsing;
+            HAL_Base.HALDigital.InitializeCounter = initializeCounter;
+            HAL_Base.HALDigital.FreeCounter = freeCounter;
+            HAL_Base.HALDigital.SetCounterAverageSize = setCounterAverageSize;
+            HAL_Base.HALDigital.SetCounterUpSource = setCounterUpSource;
+            HAL_Base.HALDigital.SetCounterUpSourceEdge = setCounterUpSourceEdge;
+            HAL_Base.HALDigital.ClearCounterUpSource = clearCounterUpSource;
+            HAL_Base.HALDigital.SetCounterDownSource = setCounterDownSource;
+            HAL_Base.HALDigital.SetCounterDownSourceEdge = setCounterDownSourceEdge;
+            HAL_Base.HALDigital.ClearCounterDownSource = clearCounterDownSource;
+            HAL_Base.HALDigital.SetCounterUpDownMode = setCounterUpDownMode;
+            HAL_Base.HALDigital.SetCounterExternalDirectionMode = setCounterExternalDirectionMode;
+            HAL_Base.HALDigital.SetCounterSemiPeriodMode = setCounterSemiPeriodMode;
+            HAL_Base.HALDigital.SetCounterPulseLengthMode = setCounterPulseLengthMode;
+            HAL_Base.HALDigital.GetCounterSamplesToAverage = getCounterSamplesToAverage;
+            HAL_Base.HALDigital.SetCounterSamplesToAverage = setCounterSamplesToAverage;
+            HAL_Base.HALDigital.ResetCounter = resetCounter;
+            HAL_Base.HALDigital.GetCounter = getCounter;
+            HAL_Base.HALDigital.GetCounterPeriod = getCounterPeriod;
+            HAL_Base.HALDigital.SetCounterMaxPeriod = setCounterMaxPeriod;
+            HAL_Base.HALDigital.SetCounterUpdateWhenEmpty = setCounterUpdateWhenEmpty;
+            HAL_Base.HALDigital.GetCounterStopped = getCounterStopped;
+            HAL_Base.HALDigital.GetCounterDirection = getCounterDirection;
+            HAL_Base.HALDigital.SetCounterReverseDirection = setCounterReverseDirection;
+            HAL_Base.HALDigital.InitializeEncoder = initializeEncoder;
+            HAL_Base.HALDigital.ResetEncoder = resetEncoder;
+            HAL_Base.HALDigital.FreeEncoder = freeEncoder;
+            HAL_Base.HALDigital.GetEncoder = getEncoder;
+            HAL_Base.HALDigital.GetEncoderPeriod = getEncoderPeriod;
+            HAL_Base.HALDigital.SetEncoderMaxPeriod = setEncoderMaxPeriod;
+            HAL_Base.HALDigital.GetEncoderStopped = getEncoderStopped;
+            HAL_Base.HALDigital.GetEncoderDirection = getEncoderDirection;
+            HAL_Base.HALDigital.SetEncoderReverseDirection = setEncoderReverseDirection;
+            HAL_Base.HALDigital.SetEncoderSamplesToAverage = setEncoderSamplesToAverage;
+            HAL_Base.HALDigital.GetEncoderSamplesToAverage = getEncoderSamplesToAverage;
+            HAL_Base.HALDigital.SetEncoderIndexSource = setEncoderIndexSource;
+            HAL_Base.HALDigital.GetLoopTiming = getLoopTiming;
+            HAL_Base.HALDigital.SpiInitialize = spiInitialize;
+            HAL_Base.HALDigital.SpiTransaction = spiTransaction;
+            HAL_Base.HALDigital.SpiWrite = spiWrite;
+            HAL_Base.HALDigital.SpiRead = spiRead;
+            HAL_Base.HALDigital.SpiClose = spiClose;
+            HAL_Base.HALDigital.SpiSetSpeed = spiSetSpeed;
+            HAL_Base.HALDigital.SpiSetBitsPerWord = spiSetBitsPerWord;
+            HAL_Base.HALDigital.SpiSetOpts = spiSetOpts;
+            HAL_Base.HALDigital.SpiSetChipSelectActiveHigh = spiSetChipSelectActiveHigh;
+            HAL_Base.HALDigital.SpiSetChipSelectActiveLow = spiSetChipSelectActiveLow;
+            HAL_Base.HALDigital.SpiGetHandle = spiGetHandle;
+            HAL_Base.HALDigital.SpiSetHandle = spiSetHandle;
+            HAL_Base.HALDigital.SpiGetSemaphore = spiGetSemaphore;
+            HAL_Base.HALDigital.SpiSetSemaphore = spiSetSemaphore;
+            HAL_Base.HALDigital.I2CInitialize = i2CInitialize;
+            HAL_Base.HALDigital.I2CTransaction = i2CTransaction;
+            HAL_Base.HALDigital.I2CWrite = i2CWrite;
+            HAL_Base.HALDigital.I2CRead = i2CRead;
+            HAL_Base.HALDigital.I2CClose = i2CClose;
+        }
+
         [CalledSimFunction]
         public static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
         {

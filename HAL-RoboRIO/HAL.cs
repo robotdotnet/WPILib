@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
 {
     internal class HAL
     {
-        private static string ExtractDLL()
+        private static string ExtractLibrary()
         {
             string inputName = "";
             string outputName = "";
@@ -32,47 +32,58 @@ namespace HAL_RoboRIO
 
         }
 
+        private static bool libraryLoaded = false;
+        private static IntPtr library;
+
         public static void InitializeImpl()
         {
-            IDllLoader loader = new LinuxDllLoader();
-            string libLocation = ExtractDLL();
-            if (string.IsNullOrEmpty(libLocation))
+            if (!libraryLoaded)
             {
-                Console.WriteLine("Could not extract lib athena.");
-                Environment.Exit(1);
-            }
-            IntPtr library = loader.LoadLibrary(libLocation);
-            if (library == IntPtr.Zero)
-            {
-                Console.WriteLine("Could not load lib athena.");
-                Environment.Exit(1);
-            }
-            try
-            {
-                Initialize(library, loader);
-                HALAccelerometer.Initialize(library, loader);
-                HALAnalog.Initialize(library, loader);
-                HALCAN.Initialize(library, loader);
-                HALCanTalonSRX.Initialize(library, loader);
-                HALCompressor.Initialize(library, loader);
-                HALDigital.Initialize(library, loader);
-                HALInterrupts.Initialize(library, loader);
-                HALNotifier.Initialize(library, loader);
-                HALPDP.Initialize(library, loader);
-                HALPower.Initialize(library, loader);
-                HALSemaphore.Initialize(library, loader);
-                HALSerialPort.Initialize(library, loader);
-                HALSolenoid.Initialize(library, loader);
-                HALUtilities.Initialize(library, loader);
-            }
-            catch (EntryPointNotFoundException ex)
-            {
-                Console.WriteLine(ex);
-                Environment.Exit(1);
+                try
+                {
+                    //Force OS, since we know we are on Linux and the RIO if this is getting called
+                    ILibraryLoader loader = new RoboRIOLibraryLoader();
+
+                    //Extract our library
+                    string loadedPath = ExtractLibrary();
+                    if (string.IsNullOrEmpty(loadedPath))
+                    {
+                        //If fail to load, throw exception
+                        throw new FileNotFoundException($"Library file could not be found in the resorces. Please contact RobotDotNet for support for this issue");
+                    }
+                    library = loader.LoadLibrary(loadedPath);
+                    if (library == IntPtr.Zero)
+                    {
+                        //If library could not be loaded
+                        throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
+                    }
+                    Initialize(library, loader);
+                    HALAccelerometer.Initialize(library, loader);
+                    HALAnalog.Initialize(library, loader);
+                    HALCAN.Initialize(library, loader);
+                    HALCANTalonSRX.Initialize(library, loader);
+                    HALCompressor.Initialize(library, loader);
+                    HALDigital.Initialize(library, loader);
+                    HALInterrupts.Initialize(library, loader);
+                    HALNotifier.Initialize(library, loader);
+                    HALPDP.Initialize(library, loader);
+                    HALPower.Initialize(library, loader);
+                    HALSemaphore.Initialize(library, loader);
+                    HALSerialPort.Initialize(library, loader);
+                    HALSolenoid.Initialize(library, loader);
+                    HALUtilities.Initialize(library, loader);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    Environment.Exit(1);
+                }
+                libraryLoaded = true;
             }
         }
 
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HAL.GetPort = (HAL_Base.HAL.GetPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPort"), typeof(HAL_Base.HAL.GetPortDelegate));
 
@@ -239,7 +250,7 @@ namespace HAL_RoboRIO
         [DllImport(LibhalathenaSharedSo, EntryPoint = "HALReport")]
         public static extern uint HALReport(byte resource, byte instanceNumber, byte context, string feature = null);
         */
-        
+
         /// <summary>
         /// Gets the HAL Control Word
         /// </summary>

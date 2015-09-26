@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using static HAL_Simulator.SimData;
@@ -27,6 +28,88 @@ namespace HAL_Simulator
         //Time constants used for GetMatchTime.
         public const double AutonomousTime = 15.0;
         public const double TeleopTime = 135.0;
+
+        private static bool libraryLoaded = false;
+        private static IntPtr library;
+
+        public static void InitializeImpl()
+        {
+            if (!libraryLoaded)
+            {
+                try
+                {
+                    /* //These can be ignored for now, since we dont have a native library.
+                    OsType type = LoaderUtilities.GetOsType();
+                    if (!LoaderUtilities.CheckOsValid(type))
+                        throw new InvalidOperationException("OS Not Supported");
+
+                    string loadedPath = LoaderUtilities.ExtractLibrary(type);
+                    if (string.IsNullOrEmpty(loadedPath)) throw new FileNotFoundException("Stream not found");
+
+                    library = LoaderUtilities.LoadDll(loadedPath, type);
+
+                    if (library == IntPtr.Zero) throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
+                    */
+                    ILibraryLoader loader = null;
+                    Initialize(library, loader);
+                    HALAccelerometer.Initialize(library, loader);
+                    HALAnalog.Initialize(library, loader);
+                    HALCAN.Initialize(library, loader);
+                    HALCANTalonSRX.Initialize(library, loader);
+                    HALCompressor.Initialize(library, loader);
+                    HALDigital.Initialize(library, loader);
+                    HALInterrupts.Initialize(library, loader);
+                    HALNotifier.Initialize(library, loader);
+                    HALPDP.Initialize(library, loader);
+                    HALPower.Initialize(library, loader);
+                    HALSemaphore.Initialize(library, loader);
+                    HALSerialPort.Initialize(library, loader);
+                    HALSolenoid.Initialize(library, loader);
+                    HALUtilities.Initialize(library, loader);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    Environment.Exit(1);
+                }
+                libraryLoaded = true;
+            }
+        }
+
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HAL.GetPort = getPort;
+            HAL_Base.HAL.GetPortWithModule = getPortWithModule;
+            HAL_Base.HAL.GetHALErrorMessage = getHALErrorMessage;
+            HAL_Base.HAL.GetFPGAVersion = getFPGAVersion;
+            HAL_Base.HAL.GetFPGARevision = getFPGARevision;
+            HAL_Base.HAL.GetFPGATime = getFPGATime;
+            HAL_Base.HAL.GetFPGAButton = getFPGAButton;
+            HAL_Base.HAL.HALSetErrorData = HALSetErrorData;
+            HAL_Base.HAL.GetControlWord = HALGetControlWord;
+            HAL_Base.HAL.HALGetAllianceStation = HALGetAllianceStation;
+            HAL_Base.HAL.HALGetJoystickAxes = HALGetJoystickAxes;
+            HAL_Base.HAL.HALGetJoystickPOVs = HALGetJoystickPOVs;
+            HAL_Base.HAL.HALGetJoystickButtons = HALGetJoystickButtons;
+            HAL_Base.HAL.HALGetJoystickDescriptor = HALGetJoystickDescriptor;
+            HAL_Base.HAL.HALGetJoystickIsXbox = HALGetJoystickIsXbox;
+            HAL_Base.HAL.HALGetJoystickType = HALGetJoystickType;
+            HAL_Base.HAL.HALGetJoystickName = HALGetJoystickName;
+            HAL_Base.HAL.HALGetJoystickAxisType = HALGetJoystickAxisType;
+            HAL_Base.HAL.HALSetJoystickOutputs = HALSetJoystickOutputs;
+            HAL_Base.HAL.HALGetMatchTime = HALGetMatchTime;
+            HAL_Base.HAL.HALSetNewDataSem = HALSetNewDataSem;
+            HAL_Base.HAL.HALGetSystemActive = HALGetSystemActive;
+            HAL_Base.HAL.HALGetBrownedOut = HALGetBrownedOut;
+            HAL_Base.HAL.HALInitialize = HALInitialize;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStarting = HALNetworkCommunicationObserveUserProgramStarting;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramDisabled = HALNetworkCommunicationObserveUserProgramDisabled;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = HALNetworkCommunicationObserveUserProgramAutonomous;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTeleop = HALNetworkCommunicationObserveUserProgramTeleop;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTest = HALNetworkCommunicationObserveUserProgramTest;
+            HAL_Base.HAL.HALReport = HALReport;
+        }
 
         /// <summary>
         /// Gets a RoboRIO Port.

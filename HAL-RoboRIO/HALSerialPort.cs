@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALSerialPort
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALSerialPort.SerialInitializePort = (HAL_Base.HALSerialPort.SerialInitializePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialInitializePort"), typeof(HAL_Base.HALSerialPort.SerialInitializePortDelegate));
 

@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALUtilities
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALUtilities.DelayTicks = (HAL_Base.HALUtilities.DelayTicksDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delayTicks"), typeof(HAL_Base.HALUtilities.DelayTicksDelegate));
 

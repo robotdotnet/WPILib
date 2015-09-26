@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALAnalog
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALAnalog.InitializeAnalogOutputPort = (HAL_Base.HALAnalog.InitializeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogOutputPort"), typeof(HAL_Base.HALAnalog.InitializeAnalogOutputPortDelegate));
 

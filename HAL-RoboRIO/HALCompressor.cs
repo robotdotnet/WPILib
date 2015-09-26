@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALCompressor
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALCompressor.InitializeCompressor = (HAL_Base.HALCompressor.InitializeCompressorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCompressor"), typeof(HAL_Base.HALCompressor.InitializeCompressorDelegate));
 

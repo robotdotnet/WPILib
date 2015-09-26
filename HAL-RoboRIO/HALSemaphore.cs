@@ -10,7 +10,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALSemaphore
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALSemaphore.InitializeMutexRecursive = (HAL_Base.HALSemaphore.InitializeMutexRecursiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeMutexRecursive"), typeof(HAL_Base.HALSemaphore.InitializeMutexRecursiveDelegate));
 

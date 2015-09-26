@@ -8,7 +8,7 @@ namespace HAL_RoboRIO
     [SuppressUnmanagedCodeSecurity]
     internal class HALCAN
     {
-        internal static void Initialize(IntPtr library, IDllLoader loader)
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage = (HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "FRC_NetworkCommunication_CANSessionMux_sendMessage"), typeof(HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessageDelegate));
 

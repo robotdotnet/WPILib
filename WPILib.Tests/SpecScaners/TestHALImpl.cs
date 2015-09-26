@@ -147,7 +147,6 @@ namespace WPILib.Tests.SpecScaners
         }
         */
 
-        [Test]
         public void TestHALBaseMapsToHALSim()
         {
             StringBuilder functionList = new StringBuilder();
@@ -254,7 +253,6 @@ namespace WPILib.Tests.SpecScaners
             Assert.IsTrue(pass);
         }
 
-        [Test]
         public void TestHALBaseMapsToHALRIO()
         {
             StringBuilder functionList = new StringBuilder();

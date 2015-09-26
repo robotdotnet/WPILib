@@ -136,7 +136,7 @@ namespace HAL_Base
                 HALAccelerometer.SetupDelegates();
                 HALAnalog.SetupDelegates();
                 HALCAN.SetupDelegates();
-                HALCanTalonSRX.SetupDelegates();
+                HALCANTalonSRX.SetupDelegates();
                 HALCompressor.SetupDelegates();
                 HALDigital.SetupDelegates();
                 HALInterrupts.SetupDelegates();

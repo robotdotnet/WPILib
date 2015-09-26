@@ -8,9 +8,9 @@ using System.Reflection;
 
 namespace HAL_Base
 {
-    public partial class HALCanTalonSRX
+    public partial class HALCANTalonSRX
     {
-        static HALCanTalonSRX()
+        static HALCANTalonSRX()
         {
             HAL.Initialize();
         }
