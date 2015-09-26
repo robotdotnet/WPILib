@@ -16,28 +16,6 @@ namespace HAL_Base
             HAL.Initialize();
         }
 
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-            InitializeCompressor = (InitializeCompressorDelegate)Delegate.CreateDelegate(typeof(InitializeCompressorDelegate), type.GetMethod("initializeCompressor"));
-            CheckCompressorModule = (CheckCompressorModuleDelegate)Delegate.CreateDelegate(typeof(CheckCompressorModuleDelegate), type.GetMethod("checkCompressorModule"));
-            GetCompressor = (GetCompressorDelegate)Delegate.CreateDelegate(typeof(GetCompressorDelegate), type.GetMethod("getCompressor"));
-            SetClosedLoopControl = (SetClosedLoopControlDelegate)Delegate.CreateDelegate(typeof(SetClosedLoopControlDelegate), type.GetMethod("setClosedLoopControl"));
-            GetClosedLoopControl = (GetClosedLoopControlDelegate)Delegate.CreateDelegate(typeof(GetClosedLoopControlDelegate), type.GetMethod("getClosedLoopControl"));
-            GetPressureSwitch = (GetPressureSwitchDelegate)Delegate.CreateDelegate(typeof(GetPressureSwitchDelegate), type.GetMethod("getPressureSwitch"));
-            GetCompressorCurrent = (GetCompressorCurrentDelegate)Delegate.CreateDelegate(typeof(GetCompressorCurrentDelegate), type.GetMethod("getCompressorCurrent"));
-            GetCompressorCurrentTooHighFault = (GetCompressorCurrentTooHighFaultDelegate)Delegate.CreateDelegate(typeof(GetCompressorCurrentTooHighFaultDelegate), type.GetMethod("getCompressorCurrentTooHighFault"));
-            GetCompressorCurrentTooHighStickyFault = (GetCompressorCurrentTooHighStickyFaultDelegate)Delegate.CreateDelegate(typeof(GetCompressorCurrentTooHighStickyFaultDelegate), type.GetMethod("getCompressorCurrentTooHighStickyFault"));
-            GetCompressorShortedStickyFault = (GetCompressorShortedStickyFaultDelegate)Delegate.CreateDelegate(typeof(GetCompressorShortedStickyFaultDelegate), type.GetMethod("getCompressorShortedStickyFault"));
-            GetCompressorShortedFault = (GetCompressorShortedFaultDelegate)Delegate.CreateDelegate(typeof(GetCompressorShortedFaultDelegate), type.GetMethod("getCompressorShortedFault"));
-            GetCompressorNotConnectedStickyFault = (GetCompressorNotConnectedStickyFaultDelegate)Delegate.CreateDelegate(typeof(GetCompressorNotConnectedStickyFaultDelegate), type.GetMethod("getCompressorNotConnectedStickyFault"));
-            GetCompressorNotConnectedFault = (GetCompressorNotConnectedFaultDelegate)Delegate.CreateDelegate(typeof(GetCompressorNotConnectedFaultDelegate), type.GetMethod("getCompressorNotConnectedFault"));
-            ClearAllPCMStickyFaults = (ClearAllPCMStickyFaultsDelegate)Delegate.CreateDelegate(typeof(ClearAllPCMStickyFaultsDelegate), type.GetMethod("clearAllPCMStickyFaults"));
-        }
-
         public delegate IntPtr InitializeCompressorDelegate(byte module);
         public static InitializeCompressorDelegate InitializeCompressor;
 

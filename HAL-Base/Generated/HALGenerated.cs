@@ -16,46 +16,6 @@ namespace HAL_Base
             Initialize();
         }
 
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HALAssembly.GetType(q.ToList()[0].FullName);
-            GetPort = (GetPortDelegate)Delegate.CreateDelegate(typeof(GetPortDelegate), type.GetMethod("getPort"));
-            GetPortWithModule = (GetPortWithModuleDelegate)Delegate.CreateDelegate(typeof(GetPortWithModuleDelegate), type.GetMethod("getPortWithModule"));
-            GetHALErrorMessage = (GetHALErrorMessageDelegate)Delegate.CreateDelegate(typeof(GetHALErrorMessageDelegate), type.GetMethod("getHALErrorMessage"));
-            GetFPGAVersion = (GetFPGAVersionDelegate)Delegate.CreateDelegate(typeof(GetFPGAVersionDelegate), type.GetMethod("getFPGAVersion"));
-            GetFPGARevision = (GetFPGARevisionDelegate)Delegate.CreateDelegate(typeof(GetFPGARevisionDelegate), type.GetMethod("getFPGARevision"));
-            GetFPGATime = (GetFPGATimeDelegate)Delegate.CreateDelegate(typeof(GetFPGATimeDelegate), type.GetMethod("getFPGATime"));
-            GetFPGAButton = (GetFPGAButtonDelegate)Delegate.CreateDelegate(typeof(GetFPGAButtonDelegate), type.GetMethod("getFPGAButton"));
-            HALSetErrorData = (HALSetErrorDataDelegate)Delegate.CreateDelegate(typeof(HALSetErrorDataDelegate), type.GetMethod("HALSetErrorData"));
-            GetControlWord = (HALGetControlWordDelegate)Delegate.CreateDelegate(typeof(HALGetControlWordDelegate), type.GetMethod("HALGetControlWord"));
-            HALGetAllianceStation = (HALGetAllianceStationDelegate)Delegate.CreateDelegate(typeof(HALGetAllianceStationDelegate), type.GetMethod("HALGetAllianceStation"));
-            HALGetJoystickAxes = (HALGetJoystickAxesDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickAxesDelegate), type.GetMethod("HALGetJoystickAxes"));
-            HALGetJoystickPOVs = (HALGetJoystickPOVsDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickPOVsDelegate), type.GetMethod("HALGetJoystickPOVs"));
-            HALGetJoystickButtons = (HALGetJoystickButtonsDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickButtonsDelegate), type.GetMethod("HALGetJoystickButtons"));
-            HALGetJoystickDescriptor = (HALGetJoystickDescriptorDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickDescriptorDelegate), type.GetMethod("HALGetJoystickDescriptor"));
-
-            HALGetJoystickIsXbox = (HALGetJoystickIsXboxDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickIsXboxDelegate), type.GetMethod("HALGetJoystickIsXbox"));
-            HALGetJoystickType = (HALGetJoystickTypeDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickTypeDelegate), type.GetMethod("HALGetJoystickType"));
-            HALGetJoystickName = (HALGetJoystickNameDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickNameDelegate), type.GetMethod("HALGetJoystickName"));
-            HALGetJoystickAxisType = (HALGetJoystickAxisTypeDelegate)Delegate.CreateDelegate(typeof(HALGetJoystickAxisTypeDelegate), type.GetMethod("HALGetJoystickAxisType"));
-
-            HALSetJoystickOutputs = (HALSetJoystickOutputsDelegate)Delegate.CreateDelegate(typeof(HALSetJoystickOutputsDelegate), type.GetMethod("HALSetJoystickOutputs"));
-            HALGetMatchTime = (HALGetMatchTimeDelegate)Delegate.CreateDelegate(typeof(HALGetMatchTimeDelegate), type.GetMethod("HALGetMatchTime"));
-            HALSetNewDataSem = (HALSetNewDataSemDelegate)Delegate.CreateDelegate(typeof(HALSetNewDataSemDelegate), type.GetMethod("HALSetNewDataSem"));
-            HALGetSystemActive = (HALGetSystemActiveDelegate)Delegate.CreateDelegate(typeof(HALGetSystemActiveDelegate), type.GetMethod("HALGetSystemActive"));
-            HALGetBrownedOut = (HALGetBrownedOutDelegate)Delegate.CreateDelegate(typeof(HALGetBrownedOutDelegate), type.GetMethod("HALGetBrownedOut"));
-            HALInitialize = (HALInitializeDelegate)Delegate.CreateDelegate(typeof(HALInitializeDelegate), type.GetMethod("HALInitialize"));
-            HALNetworkCommunicationObserveUserProgramStarting = (HALNetworkCommunicationObserveUserProgramStartingDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramStartingDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramStarting"));
-            HALNetworkCommunicationObserveUserProgramDisabled = (HALNetworkCommunicationObserveUserProgramDisabledDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramDisabledDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramDisabled"));
-            HALNetworkCommunicationObserveUserProgramAutonomous = (HALNetworkCommunicationObserveUserProgramAutonomousDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramAutonomousDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramAutonomous"));
-            HALNetworkCommunicationObserveUserProgramTeleop = (HALNetworkCommunicationObserveUserProgramTeleopDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramTeleopDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramTeleop"));
-            HALNetworkCommunicationObserveUserProgramTest = (HALNetworkCommunicationObserveUserProgramTestDelegate)Delegate.CreateDelegate(typeof(HALNetworkCommunicationObserveUserProgramTestDelegate), type.GetMethod("HALNetworkCommunicationObserveUserProgramTest"));
-            HALReport = (HALReportDelegate)Delegate.CreateDelegate(typeof(HALReportDelegate), type.GetMethod("HALReport"));
-        }
-
         public delegate IntPtr GetPortDelegate(byte pin);
         public static GetPortDelegate GetPort;
 

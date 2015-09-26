@@ -16,24 +16,6 @@ namespace HAL_Base
             HAL.Initialize();
         }
 
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-            InitializeInterrupts = (InitializeInterruptsDelegate)Delegate.CreateDelegate(typeof(InitializeInterruptsDelegate), type.GetMethod("initializeInterrupts"));
-            CleanInterrupts = (CleanInterruptsDelegate)Delegate.CreateDelegate(typeof(CleanInterruptsDelegate), type.GetMethod("cleanInterrupts"));
-            WaitForInterrupt = (WaitForInterruptDelegate)Delegate.CreateDelegate(typeof(WaitForInterruptDelegate), type.GetMethod("waitForInterrupt"));
-            EnableInterrupts = (EnableInterruptsDelegate)Delegate.CreateDelegate(typeof(EnableInterruptsDelegate), type.GetMethod("enableInterrupts"));
-            DisableInterrupts = (DisableInterruptsDelegate)Delegate.CreateDelegate(typeof(DisableInterruptsDelegate), type.GetMethod("disableInterrupts"));
-            ReadRisingTimestamp = (ReadRisingTimestampDelegate)Delegate.CreateDelegate(typeof(ReadRisingTimestampDelegate), type.GetMethod("readRisingTimestamp"));
-            ReadFallingTimestamp = (ReadFallingTimestampDelegate)Delegate.CreateDelegate(typeof(ReadFallingTimestampDelegate), type.GetMethod("readFallingTimestamp"));
-            RequestInterrupts = (RequestInterruptsDelegate)Delegate.CreateDelegate(typeof(RequestInterruptsDelegate), type.GetMethod("requestInterrupts"));
-            AttachInterruptHandler = (AttachInterruptHandlerDelegate)Delegate.CreateDelegate(typeof(AttachInterruptHandlerDelegate), type.GetMethod("attachInterruptHandler"));
-            SetInterruptUpSourceEdge = (SetInterruptUpSourceEdgeDelegate)Delegate.CreateDelegate(typeof(SetInterruptUpSourceEdgeDelegate), type.GetMethod("setInterruptUpSourceEdge"));
-        }
-
         public delegate IntPtr InitializeInterruptsDelegate(uint interruptIndex, [MarshalAs(UnmanagedType.I1)]bool watcher, ref int status);
         public static InitializeInterruptsDelegate InitializeInterrupts;
 

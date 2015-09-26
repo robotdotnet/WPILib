@@ -16,22 +16,6 @@ namespace HAL_Base
             HAL.Initialize();
         }
 
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-            InitializeSolenoidPort = (InitializeSolenoidPortDelegate)Delegate.CreateDelegate(typeof(InitializeSolenoidPortDelegate), type.GetMethod("initializeSolenoidPort"));
-            CheckSolenoidModule = (CheckSolenoidModuleDelegate)Delegate.CreateDelegate(typeof(CheckSolenoidModuleDelegate), type.GetMethod("checkSolenoidModule"));
-            GetSolenoid = (GetSolenoidDelegate)Delegate.CreateDelegate(typeof(GetSolenoidDelegate), type.GetMethod("getSolenoid"));
-            SetSolenoid = (SetSolenoidDelegate)Delegate.CreateDelegate(typeof(SetSolenoidDelegate), type.GetMethod("setSolenoid"));
-            GetPCMSolenoidBlackList = (GetPCMSolenoidBlackListDelegate)Delegate.CreateDelegate(typeof(GetPCMSolenoidBlackListDelegate), type.GetMethod("getPCMSolenoidBlackList"));
-            GetPCMSolenoidVoltageStickyFault = (GetPCMSolenoidVoltageStickyFaultDelegate)Delegate.CreateDelegate(typeof(GetPCMSolenoidVoltageStickyFaultDelegate), type.GetMethod("getPCMSolenoidVoltageStickyFault"));
-            GetPCMSolenoidVoltageFault = (GetPCMSolenoidVoltageFaultDelegate)Delegate.CreateDelegate(typeof(GetPCMSolenoidVoltageFaultDelegate), type.GetMethod("getPCMSolenoidVoltageFault"));
-            ClearAllPCMStickyFaults_sol = (ClearAllPCMStickyFaults_solDelegate)Delegate.CreateDelegate(typeof(ClearAllPCMStickyFaults_solDelegate), type.GetMethod("clearAllPCMStickyFaults_sol"));
-        }
-
         public delegate IntPtr InitializeSolenoidPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeSolenoidPortDelegate InitializeSolenoidPort;
 
