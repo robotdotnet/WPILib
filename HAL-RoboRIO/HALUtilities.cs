@@ -19,14 +19,5 @@ namespace HAL_RoboRIO
             HAL_Base.HALUtilities.DelaySeconds = (HAL_Base.HALUtilities.DelaySecondsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delaySeconds"), typeof(HAL_Base.HALUtilities.DelaySecondsDelegate));
 
         }
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "delayTicks")]
-        public static extern void delayTicks(int ticks);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "delayMillis")]
-        public static extern void delayMillis(double ms);
-
-        [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "delaySeconds")]
-        public static extern void delaySeconds(double s);
     }
 }

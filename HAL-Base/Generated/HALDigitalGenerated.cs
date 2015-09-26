@@ -150,10 +150,10 @@ namespace HAL_Base
         public delegate void SetPWMOutputChannelDelegate(IntPtr pwmGenerator, uint pin, ref int status);
         public static SetPWMOutputChannelDelegate SetPWMOutputChannel;
 
-        public delegate void SetRelayForwardDelegate(IntPtr digital_port_pointer, bool on, ref int status);
+        public delegate void SetRelayForwardDelegate(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool on, ref int status);
         public static SetRelayForwardDelegate SetRelayForward;
 
-        public delegate void SetRelayReverseDelegate(IntPtr digital_port_pointer, bool on, ref int status);
+        public delegate void SetRelayReverseDelegate(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool on, ref int status);
         public static SetRelayReverseDelegate SetRelayReverse;
 
         [return: MarshalAs(UnmanagedType.I1)]
@@ -165,7 +165,7 @@ namespace HAL_Base
         public static GetRelayReverseDelegate GetRelayReverse;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool AllocateDIODelegate(IntPtr digital_port_pointer, bool input, ref int status);
+        public delegate bool AllocateDIODelegate(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool input, ref int status);
         public static AllocateDIODelegate AllocateDIO;
 
         public delegate void FreeDIODelegate(IntPtr digital_port_pointer, ref int status);
@@ -202,19 +202,19 @@ namespace HAL_Base
         public delegate void SetCounterAverageSizeDelegate(IntPtr counter_pointer, int size, ref int status);
         public static SetCounterAverageSizeDelegate SetCounterAverageSize;
 
-        public delegate void SetCounterUpSourceDelegate(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status);
+        public delegate void SetCounterUpSourceDelegate(IntPtr counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, ref int status);
         public static SetCounterUpSourceDelegate SetCounterUpSource;
 
-        public delegate void SetCounterUpSourceEdgeDelegate(IntPtr counter_pointer, bool risingEdge, bool fallingEdge, ref int status);
+        public delegate void SetCounterUpSourceEdgeDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool risingEdge, [MarshalAs(UnmanagedType.I1)]bool fallingEdge, ref int status);
         public static SetCounterUpSourceEdgeDelegate SetCounterUpSourceEdge;
 
         public delegate void ClearCounterUpSourceDelegate(IntPtr counter_pointer, ref int status);
         public static ClearCounterUpSourceDelegate ClearCounterUpSource;
 
-        public delegate void SetCounterDownSourceDelegate(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status);
+        public delegate void SetCounterDownSourceDelegate(IntPtr counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, ref int status);
         public static SetCounterDownSourceDelegate SetCounterDownSource;
 
-        public delegate void SetCounterDownSourceEdgeDelegate(IntPtr counter_pointer, bool risingEdge, bool fallingEdge, ref int status);
+        public delegate void SetCounterDownSourceEdgeDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool risingEdge, [MarshalAs(UnmanagedType.I1)]bool fallingEdge, ref int status);
         public static SetCounterDownSourceEdgeDelegate SetCounterDownSourceEdge;
 
         public delegate void ClearCounterDownSourceDelegate(IntPtr counter_pointer, ref int status);
@@ -226,7 +226,7 @@ namespace HAL_Base
         public delegate void SetCounterExternalDirectionModeDelegate(IntPtr counter_pointer, ref int status);
         public static SetCounterExternalDirectionModeDelegate SetCounterExternalDirectionMode;
 
-        public delegate void SetCounterSemiPeriodModeDelegate(IntPtr counter_pointer, bool highSemiPeriod, ref int status);
+        public delegate void SetCounterSemiPeriodModeDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool highSemiPeriod, ref int status);
         public static SetCounterSemiPeriodModeDelegate SetCounterSemiPeriodMode;
 
         public delegate void SetCounterPulseLengthModeDelegate(IntPtr counter_pointer, double threshold, ref int status);
@@ -250,7 +250,7 @@ namespace HAL_Base
         public delegate void SetCounterMaxPeriodDelegate(IntPtr counter_pointer, double maxPeriod, ref int status);
         public static SetCounterMaxPeriodDelegate SetCounterMaxPeriod;
 
-        public delegate void SetCounterUpdateWhenEmptyDelegate(IntPtr counter_pointer, bool enabled, ref int status);
+        public delegate void SetCounterUpdateWhenEmptyDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool enabled, ref int status);
         public static SetCounterUpdateWhenEmptyDelegate SetCounterUpdateWhenEmpty;
 
         [return: MarshalAs(UnmanagedType.I1)]
@@ -261,10 +261,10 @@ namespace HAL_Base
         public delegate bool GetCounterDirectionDelegate(IntPtr counter_pointer, ref int status);
         public static GetCounterDirectionDelegate GetCounterDirection;
 
-        public delegate void SetCounterReverseDirectionDelegate(IntPtr counter_pointer, bool reverseDirection, ref int status);
+        public delegate void SetCounterReverseDirectionDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int status);
         public static SetCounterReverseDirectionDelegate SetCounterReverseDirection;
 
-        public delegate IntPtr InitializeEncoderDelegate(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, bool port_b_analog_trigger, bool reverseDirection, ref int index, ref int status);
+        public delegate IntPtr InitializeEncoderDelegate(byte port_a_module, uint port_a_pin, [MarshalAs(UnmanagedType.I1)]bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, [MarshalAs(UnmanagedType.I1)]bool port_b_analog_trigger, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int index, ref int status);
         public static InitializeEncoderDelegate InitializeEncoder;
 
         public delegate void ResetEncoderDelegate(IntPtr encoder_pointer, ref int status);
@@ -290,7 +290,7 @@ namespace HAL_Base
         public delegate bool GetEncoderDirectionDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderDirectionDelegate GetEncoderDirection;
 
-        public delegate void SetEncoderReverseDirectionDelegate(IntPtr encoder_pointer, bool reverseDirection, ref int status);
+        public delegate void SetEncoderReverseDirectionDelegate(IntPtr encoder_pointer, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int status);
         public static SetEncoderReverseDirectionDelegate SetEncoderReverseDirection;
 
         public delegate void SetEncoderSamplesToAverageDelegate(IntPtr encoder_pointer, uint samplesToAverage, ref int status);
@@ -299,7 +299,7 @@ namespace HAL_Base
         public delegate uint GetEncoderSamplesToAverageDelegate(IntPtr encoder_pointer, ref int status);
         public static GetEncoderSamplesToAverageDelegate GetEncoderSamplesToAverage;
 
-        public delegate void SetEncoderIndexSourceDelegate(IntPtr encoder_pointer, uint pin, bool analogTrigger, bool activeHigh, bool edgeSensitive, ref int status);
+        public delegate void SetEncoderIndexSourceDelegate(IntPtr encoder_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, [MarshalAs(UnmanagedType.I1)]bool activeHigh, [MarshalAs(UnmanagedType.I1)]bool edgeSensitive, ref int status);
         public static SetEncoderIndexSourceDelegate SetEncoderIndexSource;
 
         public delegate ushort GetLoopTimingDelegate(ref int status);
