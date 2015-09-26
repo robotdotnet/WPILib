@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace HAL_Simulator
 {
@@ -227,7 +226,7 @@ namespace HAL_Simulator
             halData["analog_sample_rate"] = new OUT(HALAnalog.DefaultSampleRate);
 
             halData["analog_out"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 2; i++)
             {
                 halData["analog_out"].Add(new NotifyDict<dynamic, dynamic>
                 {
@@ -296,7 +295,7 @@ namespace HAL_Simulator
 
 
             halData["relay"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 4; i++)
             {
                 halData["relay"].Add(new NotifyDict<dynamic, dynamic>
                 {
@@ -322,7 +321,7 @@ namespace HAL_Simulator
                 {
                     {"has_source", new IN(false) },
                     {"initialized", new OUT(false) },
-                    {"value", new IN(false) },
+                    {"value", new IN(true) },
                     {"pulse_length", new OUT(null) },
                     {"is_input", new OUT(true) },
 
@@ -444,6 +443,9 @@ namespace HAL_Simulator
             halInData["pdp"] = new Dictionary<dynamic, dynamic>();
 
             halInData["pcm"] = new Dictionary<dynamic, dynamic>();
+
+            //Always create PDP 0, because all robots are going to have it.
+            InitializeNewPDP(0);
         }
 
         internal static void InitializeNewPCM(int module)

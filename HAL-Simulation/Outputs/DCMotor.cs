@@ -15,13 +15,6 @@ namespace HAL_Simulator
 
         public double Efficiency { get; set; } // Efficiency percentage
 
-        public double Load { get; set; }// Load in Newtons
-
-        public static double PoundsToNewtons(double pounds)
-        {
-            return pounds*4.4482216;
-        }
-
 
         // Convenience methods for constructing common motors.
         public static DCMotor MakeRS775()

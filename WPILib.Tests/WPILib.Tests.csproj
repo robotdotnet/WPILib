@@ -28,6 +28,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,6 +84,7 @@
     <Compile Include="Commands\CommandTimeoutTest.cs" />
     <Compile Include="Commands\DefaultCommandTest.cs" />
     <Compile Include="Commands\MockCommand.cs" />
+    <Compile Include="MockNetworkTable.cs" />
     <Compile Include="MotorControllers\TestJaguar.cs" />
     <Compile Include="MotorControllers\TestTalonSRX.cs" />
     <Compile Include="MotorControllers\TestVictor.cs" />
@@ -90,17 +92,22 @@
     <Compile Include="SpecScaners\NativeProjects.cs" />
     <Compile Include="SpecScaners\NetProjects.cs" />
     <Compile Include="SpecScaners\TestHALImpl.cs" />
+    <Compile Include="TestAnalogInput.cs" />
+    <Compile Include="TestAnalogOutput.cs" />
     <Compile Include="TestAnalogTrigger.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
     <Compile Include="Commands\CommandCreationTest.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
+    <Compile Include="TestDigitalInput.cs" />
+    <Compile Include="TestDigitalOutput.cs" />
     <Compile Include="TestDriverStation.cs" />
     <Compile Include="TestEncoders.cs" />
     <Compile Include="TestHALSim.cs" />
     <Compile Include="TestInterrupt.cs" />
     <Compile Include="TestNotifier.cs" />
+    <Compile Include="TestPowerDistributionPanel.cs" />
     <Compile Include="TestPWM.cs" />
     <Compile Include="TestRelay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

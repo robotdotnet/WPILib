@@ -1,5 +1,8 @@
-﻿namespace WPILib.Interfaces
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace WPILib.Interfaces
 {
+    /*
     /// <summary>
     /// A description for the type of output value to provide to a <see cref="PIDController"/>
     /// </summary>
@@ -12,6 +15,13 @@
         ///The source is an Angle
         Angle = 2,
     }
+    */
+
+    public enum PIDSourceType
+    {
+        Displacement = 0,
+        Rate = 1,
+    }
 
     /// <summary>
     /// This interface allows for <see cref="PIDController"/> to automatically read from this object
@@ -23,5 +33,9 @@
         /// </summary>
         /// <returns>The result to use in <see cref="PIDController"/></returns>
         double PidGet();
+
+        void SetPIDSourceType(PIDSourceType pidSource);
+
+        PIDSourceType GetPIDSourceType();
     }
 }

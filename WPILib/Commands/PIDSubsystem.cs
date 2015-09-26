@@ -81,7 +81,7 @@ namespace WPILib.Commands
             PIDController.SetPercentTolerance(p);
         }
 
-        public bool OnTarget() => PIDController.OnTarget;
+        public bool OnTarget() => PIDController.OnTarget();
 
         protected abstract double ReturnPIDInput();
 
@@ -101,6 +101,18 @@ namespace WPILib.Commands
 
         ///<inheritdoc/>
         public double PidGet() => ReturnPIDInput();
+
+        ///<inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            
+        }
+
+        ///<inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return PIDSourceType.Displacement;
+        }
 
         ///<inheritdoc/>
         public void PidWrite(double value)

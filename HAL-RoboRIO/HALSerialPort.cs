@@ -1,12 +1,13 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALSerialPort
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "serialInitializePort")]
         public static extern void serialInitializePort(byte port, ref int status);
 

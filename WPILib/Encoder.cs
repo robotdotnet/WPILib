@@ -39,7 +39,7 @@ namespace WPILib
         private bool m_allocatedA;
         private bool m_allocatedB;
         private bool m_allocatedI;
-        private PIDSourceParameter m_pidSource;
+        private PIDSourceType m_pidSource;
 
         private void InitEncoder(bool reverseDirection)
         {
@@ -70,7 +70,7 @@ namespace WPILib
             }
             DistancePerPulse = 1.0;
 
-            m_pidSource = PIDSourceParameter.Distance;
+            m_pidSource = PIDSourceType.Displacement;
 
             LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
             Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
@@ -236,7 +236,7 @@ namespace WPILib
             return value;
         }
 
-        public int Get() => (int) (GetRaw()*DecodingScaleFactor);
+        public int Get() => (int)(GetRaw() * DecodingScaleFactor);
 
         public void Reset()
         {
@@ -255,7 +255,7 @@ namespace WPILib
             double measuredPeriod;
             if (m_counter != null)
             {
-                measuredPeriod = m_counter.GetPeriod()/DecodingScaleFactor;
+                measuredPeriod = m_counter.GetPeriod() / DecodingScaleFactor;
             }
             else
             {
@@ -272,7 +272,7 @@ namespace WPILib
             {
                 if (m_counter != null)
                 {
-                    m_counter.MaxPeriod = value*DecodingScaleFactor;
+                    m_counter.MaxPeriod = value * DecodingScaleFactor;
                 }
                 else
                 {
@@ -298,21 +298,18 @@ namespace WPILib
             }
         }
 
-        public bool Direction
+        public bool GetDirection()
         {
-            get
+            if (m_counter != null)
             {
-                if (m_counter != null)
-                {
-                    return m_counter.Direction;
-                }
-                else
-                {
-                    int status = 0;
-                    bool value = GetEncoderDirection(m_encoder, ref status);
-                    CheckStatus(status);
-                    return value;
-                }
+                return m_counter.GetDirection();
+            }
+            else
+            {
+                int status = 0;
+                bool value = GetEncoderDirection(m_encoder, ref status);
+                CheckStatus(status);
+                return value;
             }
         }
 
@@ -334,31 +331,28 @@ namespace WPILib
             }
         }
 
-        public double GetDistance() => GetRaw()*DecodingScaleFactor*DistancePerPulse;
+        public double GetDistance() => GetRaw() * DecodingScaleFactor * DistancePerPulse;
 
-        public double GetRate() => DistancePerPulse/GetPeriod();
+        public double GetRate() => DistancePerPulse / GetPeriod();
 
         public double MinRate
         {
-            set { MaxPeriod = DistancePerPulse/value; }
+            set { MaxPeriod = DistancePerPulse / value; }
         }
 
         public double DistancePerPulse { get; set; }
 
-        public bool ReverseDirection
+        public void SetReverseDirection(bool direction)
         {
-            set
+            if (m_counter != null)
             {
-                if (m_counter != null)
-                {
-                    m_counter.Direction = value;
-                }
-                else
-                {
-                    int status = 0;
-                    SetEncoderReverseDirection(m_encoder, value, ref status);
-                    CheckStatus(status);
-                }
+                m_counter.SetReverseDirection(direction);
+            }
+            else
+            {
+                int status = 0;
+                SetEncoderReverseDirection(m_encoder, direction, ref status);
+                CheckStatus(status);
             }
         }
 
@@ -370,7 +364,7 @@ namespace WPILib
                 {
                     case EncodingType.K4X:
                         int status = 0;
-                        SetEncoderSamplesToAverage(m_encoder, (uint) value, ref status);
+                        SetEncoderSamplesToAverage(m_encoder, (uint)value, ref status);
                         if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
                         {
                             throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
@@ -391,7 +385,7 @@ namespace WPILib
                 {
                     case EncodingType.K4X:
                         int status = 0;
-                        int value = (int) GetEncoderSamplesToAverage(m_encoder, ref status);
+                        int value = (int)GetEncoderSamplesToAverage(m_encoder, ref status);
                         CheckStatus(status);
                         return value;
                     case EncodingType.K2X:
@@ -403,11 +397,15 @@ namespace WPILib
             }
         }
 
-        public PIDSourceParameter PIDSourceParameter
+        public PIDSourceType PIDSourceType
         {
+            get
+            {
+                return m_pidSource;
+            }
             set
             {
-                BoundaryException.AssertWithinBounds((int) value, 0, 1);
+                BoundaryException.AssertWithinBounds((int)value, 0, 1);
                 m_pidSource = value;
             }
         }
@@ -416,13 +414,23 @@ namespace WPILib
         {
             switch (m_pidSource)
             {
-                case PIDSourceParameter.Distance:
+                case PIDSourceType.Displacement:
                     return GetDistance();
-                case PIDSourceParameter.Rate:
+                case PIDSourceType.Rate:
                     return GetRate();
                 default:
                     return 0.0;
             }
+        }
+
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            PIDSourceType = pidSource;
+        }
+
+        public PIDSourceType GetPIDSourceType()
+        {
+            return PIDSourceType;
         }
 
         public void SetIndexSource(int channel, IndexingType type)
@@ -432,7 +440,7 @@ namespace WPILib
             bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
-            SetEncoderIndexSource(m_encoder, (uint) channel, false, activeHigh, edgeSensitive, ref status);
+            SetEncoderIndexSource(m_encoder, (uint)channel, false, activeHigh, edgeSensitive, ref status);
             CheckStatus(status);
         }
 
@@ -448,7 +456,7 @@ namespace WPILib
             bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
             bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
 
-            SetEncoderIndexSource(m_encoder, (uint) source.ChannelForRouting,
+            SetEncoderIndexSource(m_encoder, (uint)source.ChannelForRouting,
                 source.AnalogTriggerForRouting, activeHigh, edgeSensitive, ref status);
             CheckStatus(status);
         }

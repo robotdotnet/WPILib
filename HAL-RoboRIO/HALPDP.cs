@@ -1,9 +1,11 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALPDP
     {
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializePDP")]

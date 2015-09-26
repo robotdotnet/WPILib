@@ -30,7 +30,7 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateInvalidUpper()
         {
-            Assert.Throws<IndexOutOfRangeException>(() =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 Relay r = new Relay(TestBase.RelayChannels);
             });
@@ -39,7 +39,7 @@ namespace WPILib.Tests
         [Test]
         public void TestCreateInvalidLower()
         {
-            Assert.Throws<IndexOutOfRangeException>(() =>
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 Relay r = new Relay(-1);
             });

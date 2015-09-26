@@ -17,6 +17,7 @@ namespace WPILib
         private double m_fullRange, m_offset;
         private AnalogInput m_analogInput;
         private bool m_initAnalogInput;
+        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         private void InitPot(AnalogInput input, double fullRange, double offset)
         {
@@ -80,6 +81,22 @@ namespace WPILib
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
         public double PidGet() => Get();
+
+        ///<inheritdoc/>
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            if (pidSource != PIDSourceType.Displacement)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pidSource), "Only displacement PID is allowed for potentiometers");
+            }
+            m_pidSource = pidSource;
+        }
+
+        /// <inheritdoc/>
+        public PIDSourceType GetPIDSourceType()
+        {
+            return m_pidSource;
+        }
 
         /// <summary>
         /// Frees the potentiometer.

@@ -1,10 +1,13 @@
 ﻿
+using System;
+
 namespace WPILib.Buttons
 {
-    class JoystickButton : Button
+    public class JoystickButton : Button, IEquatable<JoystickButton>
     {
-        private GenericHID m_joystick;
-        private int m_buttonNumber;
+
+        public GenericHID Joystick { get; }
+        public int ButtonNumber { get; }
 
         /// <summary>
         /// Create a joystick button for triggering commands
@@ -13,8 +16,8 @@ namespace WPILib.Buttons
         /// <param name="buttonNumber">The button number (see <see cref="GenericHID.GetRawButton(int)"/>)</param>
         public JoystickButton(GenericHID joystick, int buttonNumber)
         {
-            m_joystick = joystick;
-            m_buttonNumber = buttonNumber;
+            Joystick = joystick;
+            ButtonNumber = buttonNumber;
         }
 
         /// <summary>
@@ -23,7 +26,22 @@ namespace WPILib.Buttons
         /// <returns>The value of the joystick button</returns>
         public override bool Get()
         {
-            return m_joystick.GetRawButton(m_buttonNumber);
+            return Joystick.GetRawButton(ButtonNumber);
+        }
+
+        public bool Equals(JoystickButton other)
+        {
+            return other != null && Joystick.Equals(other.Joystick) && ButtonNumber == other.ButtonNumber;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as Joystick);
+        }
+
+        public override int GetHashCode()
+        {
+            return Joystick.GetHashCode() * 13 + ButtonNumber;
         }
     }
 }

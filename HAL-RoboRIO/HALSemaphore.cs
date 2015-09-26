@@ -2,12 +2,13 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALSemaphore
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeMutexRecursive")]
         public static extern IntPtr initializeMutexRecursive();
 

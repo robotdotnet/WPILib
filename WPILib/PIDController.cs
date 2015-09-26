@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
@@ -25,27 +26,31 @@ namespace WPILib
 
         private static int s_instances = 0;
 
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         private double m_P;     // factor for "proportional" control
         private double m_I;     // factor for "integral" control
         private double m_D;     // factor for "derivative" control
         private double m_F;                 // factor for feedforward term
-// ReSharper restore InconsistentNaming
+                                            // ReSharper restore InconsistentNaming
         private double m_maximumOutput = 1.0; // |maximum output|
         private double m_minimumOutput = -1.0;  // |minimum output|
         private double m_maximumInput = 0.0;    // maximum input - limit setpoint to this
         private double m_minimumInput = 0.0;    // minimum input - limit setpoint to this
         private bool m_continuous = false; // do the endpoints wrap around? eg. Absolute encoder
         private bool m_enabled = false;    //is the pid controller enabled
-        private double m_prevError = 0.0; // the prior sensor input (used to compute velocity)
+        private double m_prevInput = 0.0; // the prior sensor input (used to compute velocity)
         private double m_totalError = 0.0; //the sum of the errors for use in the integral calc
         private double m_setpoint = 0.0;
         private double m_error = 0.0;
         private double m_result = 0.0;
         private double m_period;
-        IPIDSource m_ipidInput;
-        IPIDOutput m_ipidOutput;
+        protected IPIDSource m_pidInput;
+        protected IPIDOutput m_pidOutput;
         private readonly object m_lockObject = new object();
+
+        private int m_bufLength = 0;
+        private Queue<double> m_buf;
+        private double m_bufTotal = 0.0;
 
         private double m_tolerance = 0.05;
 
@@ -68,8 +73,8 @@ namespace WPILib
             m_D = Kd;
             m_F = Kf;
 
-            m_ipidInput = source;
-            m_ipidOutput = output;
+            m_pidInput = source;
+            m_pidOutput = output;
             m_period = period;
 
             m_controlLoop.StartPeriodic(m_period);
@@ -78,6 +83,7 @@ namespace WPILib
             HLUsageReporting.ReportPIDController(s_instances);
 
             m_toleranceType = ToleranceType.NoTolerance;
+            m_buf = new Queue<double>();
         }
 
         public PIDController(double Kp, double Ki, double Kd,
@@ -107,8 +113,8 @@ namespace WPILib
             m_controlLoop.Stop();
             lock (this)
             {
-                m_ipidOutput = null;
-                m_ipidInput = null;
+                m_pidOutput = null;
+                m_pidInput = null;
                 m_controlLoop.Dispose();
                 m_controlLoop = null;
             }
@@ -129,16 +135,16 @@ namespace WPILib
 
             lock (m_lockObject)
             {
-                if (m_ipidInput == null)
+                if (m_pidInput == null)
                 {
                     return;
                 }
-                if (m_ipidOutput == null)
+                if (m_pidOutput == null)
                 {
                     return;
                 }
                 enabled = m_enabled; // take snapshot of these values...
-                pidInput = m_ipidInput;
+                pidInput = m_pidInput;
             }
 
             if (!enabled) return;
@@ -167,28 +173,56 @@ namespace WPILib
                     }
                 }
 
-                if (m_I != 0.0)
+
+                if (pidInput.GetPIDSourceType() == PIDSourceType.Rate)
                 {
-                    double potentialIGain = (m_totalError + m_error) * m_I;
-                    if (potentialIGain < m_maximumOutput)
+                    if (m_P != 0)
                     {
-                        if (potentialIGain > m_minimumInput)
+                        double potentialPGain = (m_totalError + m_error) * m_P;
+                        if (potentialPGain < m_maximumOutput)
                         {
-                            m_totalError += m_error;
+                            if (potentialPGain > m_minimumOutput)
+                            {
+                                m_totalError += m_error;
+                            }
+                            else
+                            {
+                                m_totalError = m_minimumOutput / m_P;
+                            }
                         }
                         else
                         {
-                            m_totalError = m_minimumOutput / m_I;
+                            m_totalError = m_maximumOutput / m_P;
                         }
                     }
-                    else
+                    m_result = m_P * m_totalError + m_D * m_error + m_setpoint * m_F;
+                }
+                else
+                {
+                    if (m_I != 0.0)
                     {
-                        m_totalError = m_maximumOutput / m_I;
+                        double potentialIGain = (m_totalError + m_error) * m_I;
+                        if (potentialIGain < m_maximumOutput)
+                        {
+                            if (potentialIGain > m_minimumInput)
+                            {
+                                m_totalError += m_error;
+                            }
+                            else
+                            {
+                                m_totalError = m_minimumOutput / m_I;
+                            }
+                        }
+                        else
+                        {
+                            m_totalError = m_maximumOutput / m_I;
+                        }
                     }
                 }
 
-                m_result = m_P * m_error + m_I * m_totalError + m_D * (m_error - m_prevError) + m_setpoint * m_F;
-                m_prevError = m_error;
+                m_result = m_P * m_error + m_I * m_totalError + m_D * (m_prevInput - input) + m_setpoint * m_F;
+
+                m_prevInput = input;
 
                 if (m_result > m_maximumOutput)
                 {
@@ -198,9 +232,18 @@ namespace WPILib
                 {
                     m_result = m_minimumOutput;
                 }
-                pidOutput = m_ipidOutput;
+                pidOutput = m_pidOutput;
                 result = m_result;
+
+                m_buf.Enqueue(m_error);
+                m_bufTotal += m_error;
+                //Remove old elements when the buffer is full
+                if (m_buf.Count > m_bufLength)
+                {
+                    m_bufTotal -= m_buf.Dequeue();
+                }
             }
+
             pidOutput.PidWrite(result);
         }
 
@@ -350,6 +393,8 @@ namespace WPILib
                     {
                         m_setpoint = value;
                     }
+                    m_buf.Clear();
+                    Table?.PutNumber("setpoint", m_setpoint);
                 }
             }
         }
@@ -358,7 +403,27 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                return Setpoint - m_ipidInput.PidGet();
+                return Setpoint - m_pidInput.PidGet();
+            }
+        }
+
+        internal void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            m_pidInput.SetPIDSourceType(pidSource);
+        }
+
+        internal PIDSourceType GetPIDSourceType()
+        {
+            return m_pidInput.GetPIDSourceType();
+        }
+
+        public double GetAvgError()
+        {
+            lock (m_lockObject)
+            {
+                double avgError = 0;
+                if (m_buf.Count != 0) avgError = m_bufTotal / m_buf.Count;
+                return avgError;
             }
         }
 
@@ -390,21 +455,27 @@ namespace WPILib
             }
         }
 
-        public bool OnTarget
+        public void SetToleranceBuffer(int bufLength)
         {
-            get
+            m_bufLength = bufLength;
+            while (m_buf.Count > bufLength)
             {
-                lock (m_lockObject)
+                m_bufTotal -= m_buf.Dequeue();
+            }
+        }
+
+        public bool OnTarget()
+        {
+            lock (m_lockObject)
+            {
+                switch (m_toleranceType)
                 {
-                    switch (m_toleranceType)
-                    {
-                        case ToleranceType.PercentTolerance:
-                            return Math.Abs(m_error) < (m_tolerance/100*(m_maximumInput - m_minimumInput));
-                        case ToleranceType.AbsoluteTolerance:
-                            return Math.Abs(m_error) < m_tolerance;
-                        default:
-                            return false;
-                    }
+                    case ToleranceType.PercentTolerance:
+                        return Math.Abs(GetAvgError()) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
+                    case ToleranceType.AbsoluteTolerance:
+                        return Math.Abs(GetAvgError()) < m_tolerance;
+                    default:
+                        throw new InvalidOperationException("Tolerance type must be set before calling OnTarget");
                 }
             }
         }
@@ -419,7 +490,7 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_ipidOutput.PidWrite(0);
+                m_pidOutput.PidWrite(0);
                 m_enabled = false;
             }
         }
@@ -438,7 +509,7 @@ namespace WPILib
             lock (m_lockObject)
             {
                 Disable();
-                m_prevError = 0;
+                m_prevInput = 0;
                 m_totalError = 0;
                 m_result = 0;
             }

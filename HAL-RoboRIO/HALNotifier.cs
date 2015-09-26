@@ -2,12 +2,13 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALNotifier
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeNotifier")]
         public static extern IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status);
 

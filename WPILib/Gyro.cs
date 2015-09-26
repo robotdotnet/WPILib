@@ -23,7 +23,7 @@ namespace WPILib
         private double m_offset;
         private int m_center;
         bool m_channelAllocated = false;
-        private PIDSourceParameter m_pidSource;
+        private PIDSourceType m_pidSource;
 
         public void InitGyro()
         {
@@ -58,13 +58,13 @@ namespace WPILib
             m_offset = ((double)value / (double)count)
                     - m_center;
 
-            
+
             m_analog.AccumulatorCenter = m_center;
             m_analog.ResetAccumulator();
 
             Deadband = 0.0;
 
-            PIDSourceParameter = PIDSourceParameter.Angle;
+            PIDSourceType = PIDSourceType.Displacement;
 
             HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
             LiveWindow.AddSensor("Gyro", m_analog.Channel, this);
@@ -111,13 +111,13 @@ namespace WPILib
                 uint count = 0;
                 m_analog.GetAccumulatorOutput(ref rawValue, ref count);
 
-                long value = rawValue - (long) (count*m_offset);
+                long value = rawValue - (long)(count * m_offset);
 
                 double scaledValue = value
-                                     *1e-9
-                                     *m_analog.LSBWeight
-                                     *(1 << m_analog.AverageBits)
-                                     /(AnalogInput.GlobalSampleRate*Sensitivity);
+                                     * 1e-9
+                                     * m_analog.LSBWeight
+                                     * (1 << m_analog.AverageBits)
+                                     / (AnalogInput.GlobalSampleRate * Sensitivity);
 
                 return scaledValue;
             }
@@ -132,9 +132,9 @@ namespace WPILib
             else
             {
                 return (m_analog.GetAverageValue() - (m_center + m_offset))
-                       *1e-9
-                       *m_analog.LSBWeight
-                       /((1 << m_analog.OversampleBits)*Sensitivity);
+                       * 1e-9
+                       * m_analog.LSBWeight
+                       / ((1 << m_analog.OversampleBits) * Sensitivity);
             }
         }
 
@@ -144,16 +144,16 @@ namespace WPILib
         {
             set
             {
-                int deadband = (int) (value*1e9/m_analog.LSBWeight*(1 << m_analog.OversampleBits));
+                int deadband = (int)(value * 1e9 / m_analog.LSBWeight * (1 << m_analog.OversampleBits));
                 m_analog.AccumulatorDeadband = deadband;
             }
         }
 
-        public PIDSourceParameter PIDSourceParameter
+        public PIDSourceType PIDSourceType
         {
+            get { return m_pidSource; }
             set
             {
-                BoundaryException.AssertWithinBounds((int) value, 1, 2);
                 m_pidSource = value;
             }
         }
@@ -162,14 +162,25 @@ namespace WPILib
         {
             switch (m_pidSource)
             {
-                case PIDSourceParameter.Rate:
+                case PIDSourceType.Rate:
                     return GetRate();
-                case PIDSourceParameter.Angle:
+                case PIDSourceType.Displacement:
                     return GetAngle();
                 default:
                     return 0.0;
             }
         }
+
+        public void SetPIDSourceType(PIDSourceType pidSource)
+        {
+            PIDSourceType = pidSource;
+        }
+
+        public PIDSourceType GetPIDSourceType()
+        {
+            return PIDSourceType;
+        }
+
         ///<inheritdoc />
         public void InitTable(ITable subtable)
         {

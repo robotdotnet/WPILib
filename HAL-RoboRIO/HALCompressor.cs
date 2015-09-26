@@ -2,12 +2,13 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALCompressor
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeCompressor")]
         public static extern IntPtr initializeCompressor(byte module);
 

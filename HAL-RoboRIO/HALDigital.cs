@@ -2,13 +2,14 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using HAL_Base;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALDigital
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeDigitalPort")]
         public static extern IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status);
 
@@ -213,13 +214,13 @@ namespace HAL_RoboRIO
         public static extern void spiInitialize(byte port, ref int status);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "spiTransaction")]
-        public static extern int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size);
+        public static extern int spiTransaction(byte port, byte[] dataToSend, [Out] byte[] dataReceived, byte size);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "spiWrite")]
         public static extern int spiWrite(byte port, byte[] dataToSend, byte sendSize);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "spiRead")]
-        public static extern int spiRead(byte port, byte[] buffer, byte count);
+        public static extern int spiRead(byte port, [Out] byte[] buffer, byte count);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "spiClose")]
         public static extern void spiClose(byte port);
@@ -255,15 +256,17 @@ namespace HAL_RoboRIO
         public static extern void i2CInitialize(byte port, ref int status);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "i2CTransaction")]
-        public static extern int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize, byte[] dataReceived, byte receiveSize);
+        public static extern int i2CTransaction(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize, [Out] byte[] dataReceived, byte receiveSize);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "i2CWrite")]
         public static extern int i2CWrite(byte port, byte deviceAddress, byte[] dataToSend, byte sendSize);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "i2CRead")]
-        public static extern int i2CRead(byte port, byte deviceAddress, byte[] buffer, byte count);
+        public static extern int i2CRead(byte port, byte deviceAddress, [Out] byte[] buffer, byte count);
 
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "i2CClose")]
         public static extern void i2CClose(byte port);
+
+
     }
 }

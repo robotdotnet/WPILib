@@ -2,12 +2,13 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALInterrupts
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeInterrupts")]
         public static extern IntPtr initializeInterrupts(uint interruptIndex, [MarshalAs(UnmanagedType.I1)] bool watcher, ref int status);
 

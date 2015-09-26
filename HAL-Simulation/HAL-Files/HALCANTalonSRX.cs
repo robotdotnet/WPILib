@@ -235,358 +235,316 @@ namespace HAL_Simulator
             return CTR_Code.CTR_OKAY;
         }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_ForLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_ForLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFault_ForLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_forlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_RevLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_RevLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFault_RevLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_revlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_HardwareFailure")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_HardwareFailure(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFault_HardwareFailure(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_hwfailure"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_ForSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_ForSoftLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFault_ForSoftLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_forsoftlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFault_RevSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFault_RevSoftLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFault_RevSoftLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["fault_revsoftlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_OverTemp")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_OverTemp(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetStckyFault_OverTemp(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["stickyfault_overtemp"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_UnderVoltage")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_UnderVoltage(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetStckyFault_UnderVoltage(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["stickyfault_undervoltage"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_ForLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_ForLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetStckyFault_ForLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["stickyfault_forlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_RevLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_RevLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetStckyFault_RevLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["stickyfault_revlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_ForSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_ForSoftLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetStckyFault_ForSoftLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["stickyfault_forsoftlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetStckyFault_RevSoftLim")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetStckyFault_RevSoftLim(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetStckyFault_RevSoftLim(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["stickyfault_revsoftlim"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetAppliedThrottle")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetAppliedThrottle(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetAppliedThrottle(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["applied_throttle"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetCloseLoopErr")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetCloseLoopErr(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetCloseLoopErr(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["closeloop_err"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFeedbackDeviceSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFeedbackDeviceSelect(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFeedbackDeviceSelect(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["feedback_device_select"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetModeSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetModeSelect(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetModeSelect(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["mode_select"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetLimitSwitchEn")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetLimitSwitchEn(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetLimitSwitchEn(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["limit_switch_en"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetLimitSwitchClosedFor")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["limit_switch_closed_for"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetLimitSwitchClosedRev")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["limit_switch_closed_rev"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetSensorPosition")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetSensorPosition(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetSensorPosition(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["sensor_position"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetSensorVelocity")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetSensorVelocity(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetSensorVelocity(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["sensor_velocity"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: double*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetCurrent")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetCurrent(IntPtr handle, ref double param);
+        public static CTR_Code c_TalonSRX_GetCurrent(IntPtr handle, ref double param)
+        {
+            param = (double)halData["CAN"][GetTalonSRX(handle)]["current"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetBrakeIsEnabled")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetBrakeIsEnabled(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetBrakeIsEnabled(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["brake_enabled"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetEncPosition")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetEncPosition(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetEncPosition(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["enc_position"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetEncVel")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetEncVel(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetEncVel(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["enc_velocity"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetEncIndexRiseEvents")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetEncIndexRiseEvents(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetEncIndexRiseEvents(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["enc_index_rise_events"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetQuadApin")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetQuadApin(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetQuadApin(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["quad_apin"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetQuadBpin")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetQuadBpin(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetQuadBpin(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["quad_bpin"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetQuadIdxpin")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetQuadIdxpin(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetQuadIdxpin(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["quad_idxpin"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetAnalogInWithOv")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetAnalogInWithOv(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetAnalogInWithOv(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["analog_in_with_ov"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetAnalogInVel")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetAnalogInVel(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetAnalogInVel(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["analog_in_vel"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: double*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetTemp")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetTemp(IntPtr handle, ref double param);
+        public static CTR_Code c_TalonSRX_GetTemp(IntPtr handle, ref double param)
+        {
+            param = (double)halData["CAN"][GetTalonSRX(handle)]["temp"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: double*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetBatteryV")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetBatteryV(IntPtr handle, ref double param);
+        public static CTR_Code c_TalonSRX_GetBatteryV(IntPtr handle, ref double param)
+        {
+            param = halData["CAN"][GetTalonSRX(handle)]["battery"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetResetCount")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetResetCount(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetResetCount(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["reset_count"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetResetFlags")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetResetFlags(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetResetFlags(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["reset_flags"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int*
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_GetFirmVers")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_GetFirmVers(IntPtr handle, ref int param);
+        public static CTR_Code c_TalonSRX_GetFirmVers(IntPtr handle, ref int param)
+        {
+            param = (int)halData["CAN"][GetTalonSRX(handle)]["firmware_version"];
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetDemand")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["value"] = (double)param;
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetOverrideLimitSwitchEn")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetOverrideLimitSwitchEn(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetOverrideLimitSwitchEn(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["override_limit_switch"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetFeedbackDeviceSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetFeedbackDeviceSelect(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetFeedbackDeviceSelect(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["feedback_device"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetRevMotDuringCloseLoopEn")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["rev_motor_during_close_loop"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetOverrideBrakeType")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetOverrideBrakeType(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetOverrideBrakeType(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["override_braketype"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
 
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetModeSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["mode_select"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///modeSelect: int
-        ///demand: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetModeSelect2")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetModeSelect2(IntPtr handle, int modeSelect, int demand);
+        public static CTR_Code c_TalonSRX_SetModeSelect2(IntPtr handle, int modeSelect, int demand)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["mode_select"] = modeSelect;
+            halData["CAN"][GetTalonSRX(handle)]["value"] = demand;
+            return CTR_Code.CTR_OKAY;
+        }
 
 
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetProfileSlotSelect")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["profile_slot_select"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
-
-        /// Return Type: CTR_Code->Anonymous_f52fbd73_f226_4861_9aae_a3b7d481be8b
-        ///handle: void*
-        ///param: int
-        [DllImport("libHALAthena_shared.so", EntryPoint = "c_TalonSRX_SetRampThrottle")]
         [CalledSimFunction]
-        public static extern CTR_Code c_TalonSRX_SetRampThrottle(IntPtr handle, int param);
+        public static CTR_Code c_TalonSRX_SetRampThrottle(IntPtr handle, int param)
+        {
+            halData["CAN"][GetTalonSRX(handle)]["ramp_throttle"] = param;
+            return CTR_Code.CTR_OKAY;
+        }
 
 
         [CalledSimFunction]

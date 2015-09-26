@@ -242,7 +242,7 @@ namespace HAL_Simulator
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
             var mxpPort = RemapMXPChannel(pin);
-            if (pin > NumHeaders)
+            if (pin >= NumHeaders)
             {
                 if (halData["mxp"][mxpPort]["initialized"])
                 {
@@ -256,7 +256,7 @@ namespace HAL_Simulator
                 status = RESOURCE_IS_ALLOCATED;
                 return false;
             }
-            if (pin > NumHeaders)
+            if (pin >= NumHeaders)
             {
                 halData["mxp"][mxpPort]["initialized"] = true;
             }
@@ -271,7 +271,7 @@ namespace HAL_Simulator
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
             halData["dio"][pin]["initialized"] = false;
-            if (pin > NumHeaders)
+            if (pin >= NumHeaders)
             {
                 halData["mxp"][RemapMXPChannel(pin)]["initialized"] = false;
             }
@@ -338,6 +338,7 @@ namespace HAL_Simulator
                 {
                     cnt["initialized"] = true;
                     cnt["mode"] = (int)mode;
+                    cnt["update_when_empty"] = false;
 
                     Counter c = new Counter() { idx = i };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
@@ -758,7 +759,7 @@ namespace HAL_Simulator
             status = 0;
             var counter = halData["counter"][GetCounter(counter_pointer).idx];
             counter["mode"] = (int)Mode.PulseLength;
-            counter["pulse_lenght_threshold"] = threshold;
+            counter["pulse_length_threshold"] = threshold;
         }
 
         [CalledSimFunction]

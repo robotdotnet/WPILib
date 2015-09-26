@@ -10,12 +10,6 @@ namespace WPILib.Tests.Commands
         private InternalButton button1;
         private InternalButton button2;
 
-        [TestFixtureSetUp]
-        public static void SetUpBeforeClass()
-        {
-
-        }
-
         [TestFixtureTearDown]
         public static void TearDownAfterClass()
         {

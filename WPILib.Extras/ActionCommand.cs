@@ -8,7 +8,7 @@ namespace WPILib.Extras
 {
     public class ActionCommand : Commands.Command
     {
-        private Action action;
+        private readonly Action action;
 
         public ActionCommand(Action action)
         {
@@ -31,7 +31,7 @@ namespace WPILib.Extras
 
         protected override void Initialize()
         {
-            action();
+            action?.Invoke();
         }
 
         protected override void Interrupted()

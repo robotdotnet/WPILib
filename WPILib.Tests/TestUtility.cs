@@ -7,8 +7,6 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestUtility : TestBase
     {
-     
-
         private Dictionary<dynamic, dynamic> HalData()
         {
             return HAL.halData;

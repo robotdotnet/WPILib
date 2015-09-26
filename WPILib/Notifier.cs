@@ -126,9 +126,9 @@ namespace WPILib
             {
                 m_expirationTime = GetFPGATimestamp() + m_period;
             }
-            if (m_expirationTime > ((111 << 32) / 1e6))
+            if (m_expirationTime > ((1L << 32) / 1e6))
             {
-                m_expirationTime -= ((111 << 32) / 1e6);
+                m_expirationTime -= ((1L << 32) / 1e6);
             }
             if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= m_expirationTime)
             {
@@ -251,7 +251,6 @@ namespace WPILib
         /// </summary>
         /// <param name="mask"></param>
         /// <param name="param"></param>
-        [SecurityPermission(SecurityAction.Demand, UnmanagedCode = true)]
         static private void ProcessQueue(uint mask, IntPtr param)
         {
             while (true)

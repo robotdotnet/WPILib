@@ -2,13 +2,14 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Security;
 using HAL_Base;
 
 namespace HAL_RoboRIO
 {
+    [SuppressUnmanagedCodeSecurity]
     internal class HALAnalog
     {
-
         [DllImport(HAL.LibhalathenaSharedSo, EntryPoint = "initializeAnalogOutputPort")]
         public static extern IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status);
 

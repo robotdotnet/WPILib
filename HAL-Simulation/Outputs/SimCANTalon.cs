@@ -11,12 +11,12 @@ namespace HAL_Simulator.Outputs
         public NotifyDict<dynamic, dynamic> dictionary = null;
         public SimCANTalon(int id)
         {
-
+            dictionary = SimData.HalData["CAN"][id];
         }
 
         public double Get()
         {
-            return 0.0;
+            return (double)dictionary["value"] / 1023.0d;
         }
     }
 }

@@ -50,10 +50,8 @@ namespace WPILib
         /// </summary>
         /// <param name="channel">The channel on the PCM to control (0..7).</param>
         public Solenoid(int channel)
-            : base(DefaultSolenoidModule)
+            : this(DefaultSolenoidModule, channel)
         {
-            m_channel = channel;
-            InitSolenoid();
         }
 
         /// <summary>
