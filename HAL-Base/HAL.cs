@@ -164,9 +164,9 @@ namespace HAL_Base
         {
             //Get a list of all dll files
             string[] dllFileNames = null;
-            if (Directory.Exists(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugins"))
+            if (Directory.Exists(Directory.GetCurrentDirectory()))
             {
-                dllFileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugins", "*.dll");
+                dllFileNames = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll");
             }
 
             //If files not found, just return
