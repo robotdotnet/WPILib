@@ -10,18 +10,34 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class ProgramData : INotifyPropertyChanged
+    public class ProgramData
     {
         private bool m_programStarted = false;
         private HALAllianceStationID m_allianceStationId = HALAllianceStationID.HALAllianceStationID_red1;
         private long m_programStart = SimHooks.GetTime();
         private double m_matchStart = 0.0;
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void Register(string key, Action<string, dynamic> action, bool notify = false)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (!callbacks.ContainsKey(key))
+            {
+                callbacks.Add(key, action);
+            }
+            else
+            {
+                callbacks[key] += action;
+            }
+        }
+        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
+        {
+            Action<string, dynamic> v;
+            var callback = callbacks.TryGetValue(propertyName, out v);
+
+            if (callback)
+            {
+                v?.Invoke(propertyName, value);
+            }
         }
 
         public bool ProgramStarted
@@ -31,7 +47,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_programStarted) return;
                 m_programStarted = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -42,7 +58,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_allianceStationId) return;
                 m_allianceStationId = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -53,7 +69,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_programStart) return;
                 m_programStart = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -64,7 +80,7 @@ namespace HAL_Simulator.Data
             {
                 if (value.Equals(m_matchStart)) return;
                 m_matchStart = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
     }

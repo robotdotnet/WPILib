@@ -9,16 +9,32 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class AnalogOutData : INotifyPropertyChanged
+    public class AnalogOutData
     {
         private double m_voltage = 0.0;
         private bool m_hasSource = false;
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void Register(string key, Action<string, dynamic> action, bool notify = false)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (!callbacks.ContainsKey(key))
+            {
+                callbacks.Add(key, action);
+            }
+            else
+            {
+                callbacks[key] += action;
+            }
+        }
+        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
+        {
+            Action<string, dynamic> v;
+            var callback = callbacks.TryGetValue(propertyName, out v);
+
+            if (callback)
+            {
+                v?.Invoke(propertyName, value);
+            }
         }
 
         public bool HasSource
@@ -28,7 +44,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_hasSource) return;
                 m_hasSource = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -39,7 +55,7 @@ namespace HAL_Simulator.Data
             {
                 if (value.Equals(m_voltage)) return;
                 m_voltage = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
     }

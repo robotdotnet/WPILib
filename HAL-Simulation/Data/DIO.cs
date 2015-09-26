@@ -10,19 +10,35 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    internal class Dio : INotifyPropertyChanged
+    internal class Dio
     {
         private bool m_initialized = false;
         private bool m_hasSource = false;
         private bool m_value = true;
         private double m_pulseLength = 0;
         private bool m_isInput = true;
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void Register(string key, Action<string, dynamic> action, bool notify = false)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (!callbacks.ContainsKey(key))
+            {
+                callbacks.Add(key, action);
+            }
+            else
+            {
+                callbacks[key] += action;
+            }
+        }
+        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
+        {
+            Action<string, dynamic> v;
+            var callback = callbacks.TryGetValue(propertyName, out v);
+
+            if (callback)
+            {
+                v?.Invoke(propertyName, value);
+            }
         }
 
         public bool HasSource
@@ -32,7 +48,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_hasSource) return;
                 m_hasSource = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -43,7 +59,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_initialized) return;
                 m_initialized = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -54,7 +70,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_value) return;
                 m_value = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -65,7 +81,7 @@ namespace HAL_Simulator.Data
             {
                 if (value.Equals(m_pulseLength)) return;
                 m_pulseLength = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
 
@@ -76,7 +92,7 @@ namespace HAL_Simulator.Data
             {
                 if (value == m_isInput) return;
                 m_isInput = value;
-                OnPropertyChanged();
+                OnPropertyChanged(value);
             }
         }
     }
