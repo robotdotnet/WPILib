@@ -147,7 +147,7 @@ namespace HAL_RoboRIO
             HAL_Base.HALDigital.SpiClose = (HAL_Base.HALDigital.SpiCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiClose"), typeof(HAL_Base.HALDigital.SpiCloseDelegate));
 
             HAL_Base.HALDigital.SpiSetSpeed = (HAL_Base.HALDigital.SpiSetSpeedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetSpeed"), typeof(HAL_Base.HALDigital.SpiSetSpeedDelegate));
-            //TODO:FIX THIS
+            //TODO:FIX THIS - Not getting exported properly. Check when we get a new build.
             //HAL_Base.HALDigital.SpiSetBitsPerWord = (HAL_Base.HALDigital.SpiSetBitsPerWordDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetBitsPerWord"), typeof(HAL_Base.HALDigital.SpiSetBitsPerWordDelegate));
 
             HAL_Base.HALDigital.SpiSetOpts = (HAL_Base.HALDigital.SpiSetOptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetOpts"), typeof(HAL_Base.HALDigital.SpiSetOptsDelegate));
@@ -159,10 +159,6 @@ namespace HAL_RoboRIO
             HAL_Base.HALDigital.SpiGetHandle = (HAL_Base.HALDigital.SpiGetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiGetHandle"), typeof(HAL_Base.HALDigital.SpiGetHandleDelegate));
 
             HAL_Base.HALDigital.SpiSetHandle = (HAL_Base.HALDigital.SpiSetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetHandleDelegate));
-
-            //HAL_Base.HALDigital.SpiGetSemaphore = (HAL_Base.HALDigital.SpiGetSemaphoreDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiGetSemaphore"), typeof(HAL_Base.HALDigital.SpiGetSemaphoreDelegate));
-
-            //HAL_Base.HALDigital.SpiSetSemaphore = (HAL_Base.HALDigital.SpiSetSemaphoreDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetSemaphore"), typeof(HAL_Base.HALDigital.SpiSetSemaphoreDelegate));
 
             HAL_Base.HALDigital.I2CInitialize = (HAL_Base.HALDigital.I2CInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CInitialize"), typeof(HAL_Base.HALDigital.I2CInitializeDelegate));
 

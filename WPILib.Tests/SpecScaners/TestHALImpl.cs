@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -146,9 +147,30 @@ namespace WPILib.Tests.SpecScaners
             Assert.IsTrue(pass);
         }
         */
-
         public void TestHALBaseMapsToHALSim()
         {
+
+                List<string> fd = new List<string>();
+            System.Reflection.FieldInfo[] fields = typeof (HAL_Base.HAL).GetFields();
+
+            foreach (var fieldInfo in fields)
+            {
+                if ((fieldInfo.FieldType).IsSubclassOf(typeof (MulticastDelegate)))
+                {
+                    var x = fieldInfo.GetValue(null);
+                    if (x == null)
+                    {
+                        fd.Add(fieldInfo.Name);
+                    }
+                }
+            }
+
+            foreach (var VARIABLE in fd)
+            {
+                Console.WriteLine(VARIABLE);
+            }
+
+
             StringBuilder functionList = new StringBuilder();
 
             functionList.AppendLine("HAL-Simulator Functions\n");

@@ -15,7 +15,7 @@ namespace HAL_RoboRIO
             string inputName = "";
             string outputName = "";
             inputName = "HAL_RoboRIO.libHALAthena_shared.so";
-            outputName = "/home/lvuser/libHALAthena_shared2.so";
+            outputName = "/home/lvuser/libHALAthena_shared.so";
             byte[] bytes = null;
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
             {
@@ -114,13 +114,13 @@ namespace HAL_RoboRIO
             HAL_Base.HAL.HALGetJoystickButtons = (HAL_Base.HAL.HALGetJoystickButtonsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickButtons"), typeof(HAL_Base.HAL.HALGetJoystickButtonsDelegate));
 
             HAL_Base.HAL.HALGetJoystickDescriptor = (HAL_Base.HAL.HALGetJoystickDescriptorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickDescriptor"), typeof(HAL_Base.HAL.HALGetJoystickDescriptorDelegate));
+            
+            HAL_Base.HAL.HALGetJoystickIsXbox = (HAL_Base.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(HAL_Base.HAL.HALGetJoystickIsXboxDelegate));
+
+            HAL_Base.HAL.HALGetJoystickType = (HAL_Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(HAL_Base.HAL.HALGetJoystickTypeDelegate));
+
+            HAL_Base.HAL.HALGetJoystickName = (HAL_Base.HAL.HALGetJoystickNameDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickName"), typeof(HAL_Base.HAL.HALGetJoystickNameDelegate));
             //TODO: FIX THIS
-            //HAL_Base.HAL.HALGetJoystickIsXbox = (HAL_Base.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(HAL_Base.HAL.HALGetJoystickIsXboxDelegate));
-
-            //HAL_Base.HAL.HALGetJoystickType = (HAL_Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(HAL_Base.HAL.HALGetJoystickTypeDelegate));
-
-            //HAL_Base.HAL.HALGetJoystickName = (HAL_Base.HAL.HALGetJoystickNameDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickName"), typeof(HAL_Base.HAL.HALGetJoystickNameDelegate));
-
             //HAL_Base.HAL.HALGetJoystickAxisType = (HAL_Base.HAL.HALGetJoystickAxisTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxisType"), typeof(HAL_Base.HAL.HALGetJoystickAxisTypeDelegate));
 
             HAL_Base.HAL.HALSetJoystickOutputs = (HAL_Base.HAL.HALSetJoystickOutputsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetJoystickOutputs"), typeof(HAL_Base.HAL.HALSetJoystickOutputsDelegate));
@@ -147,15 +147,11 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.HALReport = (HAL_Base.HAL.HALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALReport"), typeof(HAL_Base.HAL.HALReportDelegate));
 
-            //HAL_Base.HAL.HALGetControlWord = (HAL_Base.HAL.HALGetControlWordDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, ""), typeof(HAL_Base.HAL.HALGetControlWordDelegate));
-
         }
 
         private delegate int NativeHALGetControlWordDelegate(ref uint data);
 
         private static NativeHALGetControlWordDelegate NativeHALGetControlWord;
-
-        internal const string LibhalathenaSharedSo = "libHALAthena_shared.so";
 
         /// <summary>
         /// Gets the HAL Control Word
