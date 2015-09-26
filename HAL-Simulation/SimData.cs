@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator
 {
@@ -117,6 +118,22 @@ namespace HAL_Simulator
     /// </summary>
     public class SimData
     {
+        public static Accelerometer Accelerometer = new Accelerometer();
+        public static ProgramData ProgramData = new ProgramData();
+        public static List<AnalogOutData> AnalogOut = new List<AnalogOutData>();
+
+        static SimData()
+        {
+            for (int i = 0; i < 2; i++)
+            {
+                AnalogOut.Add(new AnalogOutData());
+            }
+
+        }
+
+
+
+
         internal static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
 
         /// <summary>
@@ -161,6 +178,7 @@ namespace HAL_Simulator
         /// <param name="resetDS">If true, resets the DS data sempahore.</param>
         public static void ResetHALData(bool resetDS)
         {
+
             halData.Clear();
             halInData.Clear();
             halDSData.Clear();

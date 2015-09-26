@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Base;
+using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
@@ -9,9 +11,9 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestBuiltinAccelerometer
     {
-        private Dictionary<dynamic, dynamic> GetData()
+        private Accelerometer GetData()
         {
-            return HAL.halData["accelerometer"];
+            return SimData.Accelerometer;
         }
 
         private static readonly BuiltInAccelerometer s_instance = null;
@@ -28,9 +30,9 @@ namespace WPILib.Tests
         public void TestSetRange(AccelerometerRange range)
         {
             GetAcc().AccelerometerRange = range;
-            Assert.AreEqual(GetData()["range"], (int)range);
+            Assert.AreEqual(GetData().Range, (HAL_Base.AccelerometerRange)range);
 
-            GetData()["active"] = false;
+            GetData().Active = false;
         }
 
         [Test]
@@ -40,7 +42,7 @@ namespace WPILib.Tests
             {
                 var x = new BuiltInAccelerometer(AccelerometerRange.k16G);
             });
-            Assert.IsFalse(GetData()["active"]);
+            Assert.IsFalse(GetData().Active);
         }
 
         [Test]
@@ -48,7 +50,7 @@ namespace WPILib.Tests
         {
             GetAcc();
             const double testVal = 3.14;
-            GetData()["x"] = testVal;
+            GetData().X = testVal;
             Assert.AreEqual(GetAcc().GetX(), testVal);
         }
 
@@ -57,7 +59,7 @@ namespace WPILib.Tests
         {
             GetAcc();
             const double testVal = 3.14;
-            GetData()["y"] = testVal;
+            GetData().Y = testVal;
             Assert.AreEqual(GetAcc().GetY(), testVal);
         }
 
@@ -66,7 +68,7 @@ namespace WPILib.Tests
         {
             GetAcc();
             const double testVal = 3.14;
-            GetData()["z"] = testVal;
+            GetData().Z = testVal;
             Assert.AreEqual(GetAcc().GetZ(), testVal);
         }
 

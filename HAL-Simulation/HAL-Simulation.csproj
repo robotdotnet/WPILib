@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Accelerometer.cs" />
+    <Compile Include="Data\Dio.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />
     <Compile Include="Mechanisms\AngularEncoderMechanism.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Outputs\SimRelay.cs" />
     <Compile Include="Mechanisms\AngularPotentiometerMechanism.cs" />
     <Compile Include="Mechanisms\AbstractFeedbackMechanism.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SimHooks.cs" />
     <Compile Include="HAL-Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
