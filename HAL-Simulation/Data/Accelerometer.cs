@@ -10,38 +10,14 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class Accelerometer
+    public class Accelerometer : DataBase
     {
         private bool m_hasSource = false;
         private bool m_active = false;
         private AccelerometerRange m_range = AccelerometerRange.Range_2G;
         private double m_x = 0;
         private double m_y = 0;
-        private double m_z = 0;
-
-        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
-
-        public void Register(string key, Action<string, dynamic> action, bool notify = false)
-        {
-            if (!callbacks.ContainsKey(key))
-            {
-                callbacks.Add(key, action);
-            }
-            else
-            {
-                callbacks[key] += action;
-            }
-        }
-        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
-        {
-            Action<string, dynamic> v;
-            var callback = callbacks.TryGetValue(propertyName, out v);
-
-            if (callback)
-            {
-                v?.Invoke(propertyName, value);
-            }
-        }
+        private double m_z = 1;
 
         public bool HasSource
         {
@@ -107,6 +83,16 @@ namespace HAL_Simulator.Data
                 m_z = value;
                 OnPropertyChanged(value);
             }
+        }
+
+        public override void ResetData()
+        {
+            m_hasSource = false;
+            m_active = false;
+            m_range = AccelerometerRange.Range_2G;
+            m_x = 0.0;
+            m_y = 0.0;
+            m_z = 1.0;
         }
     }
 }

@@ -9,7 +9,7 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class AnalogInData
+    public class AnalogInData : NotifyDataBase
     {
         private bool m_hasSource = false;
         private bool m_initialized = false;
@@ -21,29 +21,23 @@ namespace HAL_Simulator.Data
         private bool m_accumulatorInitialized = false;
         private long m_accumulatorValue = 1;
         private uint m_accumulatorCount = 1;
+        private int m_accumulatorCenter = 0;
+        private int m_accumulatorDeadband = 0;
 
-        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
-
-        public void Register(string key, Action<string, dynamic> action, bool notify = false)
+        public override void ResetData()
         {
-            if (!callbacks.ContainsKey(key))
-            {
-                callbacks.Add(key, action);
-            }
-            else
-            {
-                callbacks[key] += action;
-            }
-        }
-        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
-        {
-            Action<string, dynamic> v;
-            var callback = callbacks.TryGetValue(propertyName, out v);
-
-            if (callback)
-            {
-                v?.Invoke(propertyName, value);
-            }
+            m_hasSource = false;
+            m_initialized = false;
+            m_averageBits = HALAnalog.DefaultAverageBits;
+            m_oversampleBits = HALAnalog.DefaultOversampleBits;
+            m_voltage = 0.0;
+            m_lsbWeight = HALAnalog.DefaultLSBWeight;
+            m_offset = HALAnalog.DefaultOffset;
+            m_accumulatorInitialized = false;
+            m_accumulatorValue = 1;
+            m_accumulatorCount = 1;
+            m_accumulatorCenter = 0;
+            m_accumulatorDeadband = 0;
         }
 
         public bool HasSource
@@ -134,8 +128,6 @@ namespace HAL_Simulator.Data
             }
         }
 
-        private int m_accumulatorCenter = 0;
-
         public int AccumulatorCenter
         {
             get { return m_accumulatorCenter; }
@@ -169,11 +161,9 @@ namespace HAL_Simulator.Data
             }
         }
 
-        private int m_accumulatorDeadband = 0;
-
         public int AccumulatorDeadband
         {
-            get { return m_accumulatorDeadband;}
+            get { return m_accumulatorDeadband; }
             set
             {
                 if (value == m_accumulatorDeadband) return;

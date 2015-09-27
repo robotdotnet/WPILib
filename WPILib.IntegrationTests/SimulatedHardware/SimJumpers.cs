@@ -49,11 +49,10 @@ namespace WPILib.IntegrationTests.SimulatedHardware
         {
             Action<dynamic, dynamic> callback = (key, value) =>
             {
-                SimData.HalData["analog_in"][input]["voltage"] = value;
-                SimData.HalData["analog_in"][input]["value"] = (int)(value * 204.8);
+                SimData.AnalogIn[input].Voltage = value;
             };
 
-            SimData.HalData["analog_out"][output].Register("voltage", callback);
+            SimData.AnalogOut[output].Register("Voltage", callback);
         }
     }
 }

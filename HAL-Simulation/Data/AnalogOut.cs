@@ -9,38 +9,22 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class AnalogOutData
+    public class AnalogOutData : NotifyDataBase
     {
         private double m_voltage = 0.0;
         private bool m_hasSource = false;
         private bool m_initialized = false;
-        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
 
-        public void Register(string key, Action<string, dynamic> action, bool notify = false)
+        public override void ResetData()
         {
-            if (!callbacks.ContainsKey(key))
-            {
-                callbacks.Add(key, action);
-            }
-            else
-            {
-                callbacks[key] += action;
-            }
-        }
-        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
-        {
-            Action<string, dynamic> v;
-            var callback = callbacks.TryGetValue(propertyName, out v);
-
-            if (callback)
-            {
-                v?.Invoke(propertyName, value);
-            }
+            m_voltage = 0.0;
+            m_hasSource = false;
+            m_initialized = false;
         }
 
         public bool Initialized
         {
-            get { return m_initialized;}
+            get { return m_initialized; }
             set
             {
                 if (value == m_initialized) return;

@@ -191,6 +191,22 @@ namespace HAL_Simulator
         /// <param name="resetDS">If true, resets the DS data sempahore.</param>
         public static void ResetHALData(bool resetDS)
         {
+            Accelerometer.ResetData();
+            foreach (var analogInData in AnalogIn)
+            {
+                analogInData.ResetData();
+            }
+            foreach (var analogOutData in AnalogOut)
+            {
+                analogOutData.ResetData();
+            }
+            foreach (var analogTriggerData in AnalogTrigger)
+            {
+                analogTriggerData.ResetData();
+            }
+
+
+
 
             halData.Clear();
             halInData.Clear();

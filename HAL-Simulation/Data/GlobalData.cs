@@ -9,33 +9,33 @@ using HAL_Base;
 
 namespace HAL_Simulator.Data
 {
-    public class GlobalData
+    public class GlobalData : DataBase
     {
         private bool m_programStarted = false;
         private HALAllianceStationID m_allianceStationId = HALAllianceStationID.HALAllianceStationID_red1;
         private long m_programStart = SimHooks.GetTime();
         private double m_matchStart = 0.0;
-        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
+        private double m_analogSampleRate = HALAnalog.DefaultSampleRate;
+        private bool m_button = false;
 
-        public void Register(string key, Action<string, dynamic> action, bool notify = false)
+        public override void ResetData()
         {
-            if (!callbacks.ContainsKey(key))
-            {
-                callbacks.Add(key, action);
-            }
-            else
-            {
-                callbacks[key] += action;
-            }
+            m_programStarted = false;
+            m_allianceStationId = HALAllianceStationID.HALAllianceStationID_red1;
+            m_programStart = SimHooks.GetTime();
+            m_matchStart = 0.0;
+            m_analogSampleRate = HALAnalog.DefaultSampleRate;
+            m_button = false;
         }
-        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
-        {
-            Action<string, dynamic> v;
-            var callback = callbacks.TryGetValue(propertyName, out v);
 
-            if (callback)
+        public bool FPGAButton
+        {
+            get { return m_button; }
+            set
             {
-                v?.Invoke(propertyName, value);
+                if (value == m_button) return;
+                m_button = value;
+                OnPropertyChanged(value);
             }
         }
 
@@ -61,7 +61,7 @@ namespace HAL_Simulator.Data
             }
         }
 
-        public long ProgramStart
+        public long ProgramStartTime
         {
             get { return m_programStart; }
             set
@@ -83,11 +83,9 @@ namespace HAL_Simulator.Data
             }
         }
 
-        private double m_analogSampleRate = HALAnalog.DefaultSampleRate;
-
         public double AnalogSampleRate
         {
-            get { return m_analogSampleRate;}
+            get { return m_analogSampleRate; }
             set
             {
                 if (value.Equals(m_analogSampleRate)) return;

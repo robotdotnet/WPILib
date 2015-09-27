@@ -16,7 +16,7 @@ namespace HAL_Simulator.Data
         Unassigned
     }
 
-    public class AnalogTriggerData
+    public class AnalogTriggerData : DataBase
     {
         private bool m_hasSource = false;
         private bool m_initialized = false;
@@ -27,29 +27,16 @@ namespace HAL_Simulator.Data
         private double m_trigUpper = 0;
         private double m_trigLower = 0;
 
-
-        private readonly Dictionary<string, Action<string, dynamic>> callbacks = new Dictionary<string, Action<string, dynamic>>();
-
-        public void Register(string key, Action<string, dynamic> action, bool notify = false)
+        public override void ResetData()
         {
-            if (!callbacks.ContainsKey(key))
-            {
-                callbacks.Add(key, action);
-            }
-            else
-            {
-                callbacks[key] += action;
-            }
-        }
-        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
-        {
-            Action<string, dynamic> v;
-            var callback = callbacks.TryGetValue(propertyName, out v);
-
-            if (callback)
-            {
-                v?.Invoke(propertyName, value);
-            }
+            m_hasSource = false;
+            m_initialized = false;
+            m_pin = -1;
+            m_pointer = 0;
+            m_trigType = TrigerType.Unassigned;
+            m_trigState = false;
+            m_trigUpper = 0;
+            m_trigLower = 0;
         }
 
         public bool HasSource

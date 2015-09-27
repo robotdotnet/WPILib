@@ -408,7 +408,7 @@ namespace HAL_Simulator
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            int analogIn = halData["analog_trigger"][trigIndex]["pin"];
+            int analogIn = SimData.AnalogTrigger[trigIndex].Pin;//halData["analog_trigger"][trigIndex]["pin"];
 
             if (analogIn == -1)
             {
@@ -417,10 +417,10 @@ namespace HAL_Simulator
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr) halData["analog_trigger"][trigIndex]["pointer"],
+                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].Pointer,
                     ref status);
 
-            double prevAnalogVoltage = halData["analog_in"][analogIn]["voltage"];
+            double prevAnalogVoltage = SimData.AnalogIn[analogIn].Voltage;//halData["analog_in"][analogIn]["voltage"];
 
             Action<dynamic, dynamic> upCallback = (key, value) =>
             {
@@ -430,7 +430,7 @@ namespace HAL_Simulator
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr) halData["analog_trigger"][trigIndex]["pointer"], ref status);
+                            (IntPtr)SimData.AnalogTrigger[trigIndex].Pointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -462,8 +462,7 @@ namespace HAL_Simulator
             };
 
             counter["up_callback"] = upCallback;
-
-            halData["analog_in"][analogIn].Register("voltage", upCallback);
+            SimData.AnalogIn[analogIn].Register("Voltage", upCallback);
         }
 
         private static void SetCounterUpAsTwoPulseDigital(dynamic counter, int pin)
@@ -529,7 +528,7 @@ namespace HAL_Simulator
             {
                 if (counter["up_source_trigger"])
                 {
-                    halData["analog_in"][counter["up_source_channel"]].Cancel("voltage", counter["up_callback"]);
+                    SimData.AnalogIn[counter["up_source_channel"]].Cancel("Voltage", counter["up_callback"]);
                 }
                 else
                 {
@@ -633,7 +632,7 @@ namespace HAL_Simulator
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            int analogIn = halData["analog_trigger"][trigIndex]["pin"];
+            int analogIn = SimData.AnalogTrigger[trigIndex].Pin;
 
             if (analogIn == -1)
             {
@@ -642,10 +641,10 @@ namespace HAL_Simulator
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr)halData["analog_trigger"][trigIndex]["pointer"],
+                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].Pointer,
                     ref status);
 
-            double prevAnalogVoltage = halData["analog_in"][analogIn]["voltage"];
+            double prevAnalogVoltage = SimData.AnalogIn[analogIn].Voltage;
 
             Action<dynamic, dynamic> downCallback = (key, value) =>
             {
@@ -655,7 +654,7 @@ namespace HAL_Simulator
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr)halData["analog_trigger"][trigIndex]["pointer"], ref status);
+                            (IntPtr)SimData.AnalogTrigger[trigIndex].Pointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -688,7 +687,7 @@ namespace HAL_Simulator
 
             counter["down_callback"] = downCallback;
 
-            halData["analog_in"][analogIn].Register("voltage", downCallback);
+            SimData.AnalogIn[analogIn].Register("Voltage", downCallback);
         }
 
         [CalledSimFunction]

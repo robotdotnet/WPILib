@@ -47,8 +47,11 @@
     <Compile Include="Data\AnalogIn.cs" />
     <Compile Include="Data\AnalogOut.cs" />
     <Compile Include="Data\AnalogTrigger.cs" />
+    <Compile Include="Data\DataBase.cs" />
     <Compile Include="Data\Dio.cs" />
     <Compile Include="Data\GlobalData.cs" />
+    <Compile Include="Data\NotifyDataBase.cs" />
+    <Compile Include="Data\PCM.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />
     <Compile Include="Mechanisms\AngularEncoderMechanism.cs" />
