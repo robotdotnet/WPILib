@@ -33,9 +33,9 @@ namespace WPILib.Internal
             int milliSeconds = (int) (seconds*1e3);
             var sw = Stopwatch.StartNew();
 
-            if (milliSeconds >= 100)
+            if (milliSeconds >= 20)
             {
-                Thread.Sleep(milliSeconds - 50);
+                Thread.Sleep(milliSeconds - 12);
             }
             while (sw.ElapsedMilliseconds < milliSeconds) ;
         }
