@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
@@ -1137,7 +1138,7 @@ namespace WPILib
         public string SmartDashboardType => "Speed Controller";
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             Set((double)value);
         }

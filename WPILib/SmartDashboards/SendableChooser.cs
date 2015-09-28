@@ -1,6 +1,5 @@
 ﻿using System;
-using NetworkTables.NetworkTables2.Type;
-using NetworkTables.NetworkTables2.Util;
+using System.Collections.Generic;
 using NetworkTables.Tables;
 using WPILib.Commands;
 using WPILib.Interfaces;
@@ -26,8 +25,8 @@ namespace WPILib.SmartDashboards
 
         private static readonly string OPTIONS = "options";
 
-        private StringArray m_choices = new StringArray();
-        private List m_values = new List();
+        private List<string> m_choices = new List<string>();
+        private List<object> m_values = new List<object>();
         private string m_defaultChoice = null;
         private object m_defaultValue = null;
 
@@ -52,12 +51,12 @@ namespace WPILib.SmartDashboards
                 return;
             }
 
-            for (int i = 0; i < m_choices.Size(); i++)
+            for (int i = 0; i < m_choices.Count; i++)
             {
-                if (m_choices.Get(i).Equals(name))
+                if (m_choices[i].Equals(name))
                 {
-                    m_choices.Set(i, name);
-                    m_values.Set(i, obj);
+                    m_choices[i] = name;
+                    m_values[i] = obj;
                     return;
                 }
             }
@@ -97,11 +96,11 @@ namespace WPILib.SmartDashboards
         public object GetSelected()
         {
             string selected = Table.GetString(SELECTED, null);
-            for (int i = 0; i < m_values.Size(); ++i)
+            for (int i = 0; i < m_values.Count; ++i)
             {
-                if (m_choices.Get(i).Equals(selected))
+                if (m_choices[i].Equals(selected))
                 {
-                    return m_values.Get(i);
+                    return m_values[i];
                 }
             }
             return m_defaultValue;

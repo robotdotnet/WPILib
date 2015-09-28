@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindows;
@@ -146,7 +147,7 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             Set((bool)value);
         }

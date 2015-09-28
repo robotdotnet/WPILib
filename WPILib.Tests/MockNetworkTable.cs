@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetworkTables;
 using NetworkTables.Tables;
 
 namespace WPILib.Tests
@@ -28,27 +29,67 @@ namespace WPILib.Tests
             return this;
         }
 
+        public HashSet<string> GetKeys(int types)
+        {
+            throw new NotImplementedException();
+        }
+
+        public HashSet<string> GetKeys()
+        {
+            throw new NotImplementedException();
+        }
+
+        public HashSet<string> GetSubTables()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPersistent(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearPersistent(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsPersistent(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetFlags(string key, EntryFlags flags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ClearFlags(string key, EntryFlags flags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public EntryFlags GetFlags(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public object GetValue(string key)
         {
             throw new NotImplementedException();
         }
 
-        public void PutValue(string key, object value)
+        public bool PutValue(string key, object value)
         {
             throw new NotImplementedException();
         }
 
-        public void RetrieveValue(string key, object externalValue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PutNumber(string key, double value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetNumber(string key)
+        public bool PutNumber(string key, double value)
         {
             throw new NotImplementedException();
         }
@@ -58,12 +99,12 @@ namespace WPILib.Tests
             throw new NotImplementedException();
         }
 
-        public void PutString(string key, string value)
+        public double GetNumber(string key)
         {
             throw new NotImplementedException();
         }
 
-        public string GetString(string key)
+        public bool PutString(string key, string value)
         {
             throw new NotImplementedException();
         }
@@ -73,12 +114,12 @@ namespace WPILib.Tests
             throw new NotImplementedException();
         }
 
-        public void PutBoolean(string key, bool value)
+        public string GetString(string key)
         {
             throw new NotImplementedException();
         }
 
-        public bool GetBoolean(string key)
+        public bool PutBoolean(string key, bool value)
         {
             throw new NotImplementedException();
         }
@@ -88,12 +129,72 @@ namespace WPILib.Tests
             throw new NotImplementedException();
         }
 
-        public void AddTableListener(ITableListener listener)
+        public bool GetBoolean(string key)
         {
             throw new NotImplementedException();
         }
 
-        public void AddTableListener(ITableListener listener, bool immediateNotify)
+        public bool PutBooleanArray(string key, bool[] value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool[] GetBooleanArray(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool[] GetBooleanArray(string key, bool[] defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutNumberArray(string key, double[] value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double[] GetNumberArray(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public double[] GetNumberArray(string key, double[] defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutStringArray(string key, string[] value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetStringArray(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string[] GetStringArray(string key, string[] defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListenerEx(ITableListener listener, NotifyFlags flags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListenerEx(string key, ITableListener listener, NotifyFlags flags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddSubTableListener(ITableListener listener, bool localNotify)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListener(ITableListener listener, bool immediateNotify = false)
         {
             throw new NotImplementedException();
         }

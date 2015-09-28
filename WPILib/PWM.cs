@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindows;
@@ -419,7 +420,7 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public virtual void ValueChanged(ITable table, string key, object value, bool bin)
+        public virtual void ValueChanged(ITable table, string key, object value, NotifyFlags flags)
         {
             SetSpeed((double)value);
         }

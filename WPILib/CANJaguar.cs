@@ -1,4 +1,5 @@
 ﻿using System;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.CAN;
 using WPILib.Exceptions;
@@ -1254,7 +1255,7 @@ namespace WPILib
             m_table.AddTableListener("Value", this, true);
         }
 
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             Set((double)value);
         }
