@@ -17,6 +17,8 @@ namespace HAL_Simulator.Data
         private double m_matchStart = 0.0;
         private double m_analogSampleRate = HALAnalog.DefaultSampleRate;
         private bool m_button = false;
+        private ushort m_pwmLoopTiming = 40;
+        private double m_digitalPWMRate = 0;
 
         public override void ResetData()
         {
@@ -26,6 +28,8 @@ namespace HAL_Simulator.Data
             m_matchStart = 0.0;
             m_analogSampleRate = HALAnalog.DefaultSampleRate;
             m_button = false;
+            m_pwmLoopTiming = 40;
+            m_digitalPWMRate = 0;
         }
 
         public bool FPGAButton
@@ -92,6 +96,23 @@ namespace HAL_Simulator.Data
                 m_analogSampleRate = value;
                 OnPropertyChanged(value);
             }
+        }
+
+        public ushort PWMLoopTiming
+        {
+            get { return m_pwmLoopTiming; }
+            set
+            {
+                if (value == m_pwmLoopTiming) return;
+                m_pwmLoopTiming = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public double DigitalPWMRate
+        {
+            get { return m_digitalPWMRate;}
+            set { m_digitalPWMRate = value; }
         }
     }
 }

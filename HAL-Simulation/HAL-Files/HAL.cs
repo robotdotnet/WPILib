@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -435,22 +436,22 @@ namespace HAL_Simulator
             switch (resource)
             {
                 case (byte)ResourceType.kResourceType_Jaguar:
-                    halData["pwm"][instanceNumber]["type"] = "jaguar";
+                    SimData.PWM[instanceNumber].Type = ControllerType.Jaguar;
                     break;
                 case (byte)ResourceType.kResourceType_Talon:
-                    halData["pwm"][instanceNumber]["type"] = "talon";
+                    SimData.PWM[instanceNumber].Type = ControllerType.Talon;
                     break;
                 case (byte)ResourceType.kResourceType_TalonSRX:
-                    halData["pwm"][instanceNumber]["type"] = "talonsrx";
+                    SimData.PWM[instanceNumber].Type = ControllerType.TalonSRX;
                     break;
                 case (byte)ResourceType.kResourceType_Victor:
-                    halData["pwm"][instanceNumber]["type"] = "victor";
+                    SimData.PWM[instanceNumber].Type = ControllerType.Victor;
                     break;
                 case (byte)ResourceType.kResourceType_VictorSP:
-                    halData["pwm"][instanceNumber]["type"] = "victorsp";
+                    SimData.PWM[instanceNumber].Type = ControllerType.VictorSP;
                     break;
                 case (byte)ResourceType.kResourceType_Servo:
-                    halData["pwm"][instanceNumber]["type"] = "servo";
+                    SimData.PWM[instanceNumber].Type = ControllerType.Servo;
                     break;
                 case (byte)ResourceType.kResourceType_Solenoid:
                     halData["pcm"][(int)context]["solenoid"][instanceNumber]["initialized"] = true;

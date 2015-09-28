@@ -125,6 +125,18 @@ namespace HAL_Simulator
         public static List<AnalogInData> AnalogIn = new List<AnalogInData>(); 
         public static List<AnalogTriggerData> AnalogTrigger = new List<AnalogTriggerData>(); 
 
+        public static List<DIOData> DIO = new List<DIOData>(); 
+
+        public static List<PWMData> PWM = new List<PWMData>(); 
+
+        public static List<MXPData> MXP = new List<MXPData>(); 
+
+        public static List<DigitalPWMData> DigitalPWM = new List<DigitalPWMData>(); 
+
+        public static List<RelayData> Relay = new List<RelayData>(); 
+
+        public static List<CounterData> Counter = new List<CounterData>(); 
+
         static SimData()
         {
             for (int i = 0; i < 2; i++)
@@ -142,6 +154,31 @@ namespace HAL_Simulator
                 AnalogTrigger.Add(new AnalogTriggerData());
             }
 
+            for (int i = 0; i < 26; i++)
+            {
+                DIO.Add(new DIOData());
+            }
+
+            for (int i = 0; i < 20; i++)
+            {
+                PWM.Add(new PWMData());
+            }
+
+            for (int i = 0; i < 16; i++)
+            {
+                MXP.Add(new MXPData());
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                Relay.Add(new RelayData());
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                Counter.Add(new CounterData());
+            }
+            
         }
 
 
@@ -204,9 +241,25 @@ namespace HAL_Simulator
             {
                 analogTriggerData.ResetData();
             }
+            foreach (var dioData in DIO)
+            {
+                dioData.ResetData();
+            }
+            foreach (var pwmData in PWM)
+            {
+                pwmData.ResetData();
+            }
+            foreach (var relayData in Relay)
+            {
+                relayData.ResetData();
+            }
+            DigitalPWM.Clear();
+            foreach (var counterData in Counter)
+            {
+                counterData.ResetData();
+            }
 
-
-
+            GlobalData.ProgramStartTime = SimHooks.GetTime();
 
             halData.Clear();
             halInData.Clear();
@@ -215,15 +268,6 @@ namespace HAL_Simulator
             {
                 HALNewDataSem = IntPtr.Zero;
             }
-
-            halData["program_started"] = new OUT(false);
-            halData["alliance_station"] = new DS(0);
-            halData["time"] = new Dictionary<dynamic, dynamic>
-            {
-                {"has_source", new IN(false) },
-                {"program_start", new OUT(SimHooks.GetTime())},
-                {"match_start", new OUT(0.0)}
-            };
 
             halData["control"] = new Dictionary<dynamic, dynamic>
             {
@@ -255,125 +299,7 @@ namespace HAL_Simulator
                     {"buttonCount", new DS(12) }
                 });
             }
-
-
-            halData["fpga_button"] = new IN(false);
             halData["error_data"] = new OUT(null);
-
-            halData["accelerometer"] = new Dictionary<dynamic, dynamic>()
-            {
-                {"has_source", new IN(false) },
-                {"active", new OUT(false) },
-                {"range", new OUT(0) },
-                {"x", new IN(0) },
-                {"y", new IN(0) },
-                {"z", new IN(0) },
-            };
-
-            halData["analog_sample_rate"] = new OUT(HALAnalog.DefaultSampleRate);
-
-            halData["analog_out"] = new List<dynamic>();
-            for (int i = 0; i < 2; i++)
-            {
-                halData["analog_out"].Add(new NotifyDict<dynamic, dynamic>
-                {
-                    {"initialized", new OUT(false) },
-                    {"voltage", new OUT(0.0) },
-
-                });
-            }
-
-            halData["analog_in"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
-            {
-                halData["analog_in"].Add(new NotifyDict<dynamic, dynamic>
-                {
-                    {"has_source", new IN(false) },
-                    {"initialized", new OUT(false) },
-                    {"avg_bits", new OUT(HALAnalog.DefaultAverageBits) },
-                    {"oversample_bits", new OUT(HALAnalog.DefaultOversampleBits) },
-                    { "voltage", new IN(0.0) },
-                    { "lsb_weight", new IN(HALAnalog.DefaultLSBWeight) },
-                    { "offset", new IN(HALAnalog.DefaultOffset) },
-                    {"accumulator_initialized", new OUT(0) },
-                    {"accumulator_center", new OUT(0) },
-                    { "accumulator_value", new IN(1) },
-                    { "accumulator_count", new IN(1) },
-                    {"accumulator_deadband", new OUT(0) },
-
-                });
-            }
-            halData["analog_trigger"] = new List<dynamic>();
-            for (int i = 0; i < 4; i++)
-            {
-
-                halData["analog_trigger"].Add(new Dictionary<dynamic, dynamic>()
-                {
-                    {"has_source", new IN(false)},
-                    {"initialized", new OUT(false)},
-                    {"pin", new OUT(-1)},
-                    {"pointer", new OUT(0)},
-                    {"trig_lower", new OUT(null)},
-                    {"trig_upper", new OUT(null)},
-                    {"trig_type", new OUT(null)},
-                    {"trig_state", new OUT(false)},
-                });
-            }
-
-            halData["pwm"] = new List<dynamic>();
-            for (int i = 0; i < 20; i++)
-            {
-                halData["pwm"].Add(new NotifyDict<dynamic, dynamic>
-                {
-                    {"initialized", new OUT(false) },
-                    {"type", new OUT(null) },
-                    {"raw_value", new OUT(0.0) },
-                    {"value", new OUT(0.0) },
-                    {"period_scale", new OUT(null) },
-                    {"zero_latch", new OUT(false) },
-
-                });
-            }
-
-            halData["pwm_loop_timing"] = new IN(40);
-
-            halData["d0_pwm"] = new OUT(new Dictionary<dynamic, dynamic>[6]); //# dict with keys: duty_cycle, pin
-            halData["d0_pwm_rate"] = new OUT(null);
-
-
-            halData["relay"] = new List<dynamic>();
-            for (int i = 0; i < 4; i++)
-            {
-                halData["relay"].Add(new NotifyDict<dynamic, dynamic>
-                {
-                    {"initialized", new OUT(false) },
-                    {"fwd", new OUT(false) },
-                    {"rev", new OUT(false) },
-                });
-            }
-
-            halData["mxp"] = new List<dynamic>();
-            for (int i = 0; i < 16; i++)
-            {
-                halData["mxp"].Add(new Dictionary<dynamic, dynamic>
-                    {
-                        {"initialized", new OUT(false)},
-                    }
-                );
-            }
-            halData["dio"] = new List<dynamic>();
-            for (int i = 0; i < 26; i++)
-            {
-                halData["dio"].Add(new NotifyDict<dynamic, dynamic>
-                {
-                    {"has_source", new IN(false) },
-                    {"initialized", new OUT(false) },
-                    {"value", new IN(true) },
-                    {"pulse_length", new OUT(null) },
-                    {"is_input", new OUT(true) },
-
-                });
-            }
 
             halData["encoder"] = new List<dynamic>();
             for (int i = 0; i < 4; i++)

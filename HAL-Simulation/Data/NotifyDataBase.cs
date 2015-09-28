@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator.Data
 {
-    public abstract class NotifyDataBase
+    public abstract class NotifyDataBase : DataBase
     {
         private readonly Dictionary<string, Action<string, dynamic>> m_callbacks = new Dictionary<string, Action<string, dynamic>>();
 
-        public void Register(string key, Action<string, dynamic> action, bool notify = false)
+        public void Register(string key, Action<string, dynamic> action)
         {
             if (!m_callbacks.ContainsKey(key))
             {
@@ -38,11 +38,9 @@ namespace HAL_Simulator.Data
         /// </summary>
         /// <param name="key">The key the function is waiting for</param>
         /// <param name="action">The callback function to cancel.</param>
-        public void Cancel(string key, Action<dynamic, dynamic> action)
+        public void Cancel(string key, Action<string, dynamic> action)
         {
             if (action != null && m_callbacks.ContainsKey(key)) m_callbacks[key] -= action;
         }
-
-        public abstract void ResetData();
     }
 }

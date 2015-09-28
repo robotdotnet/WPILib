@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using HAL_Base;
+using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
+using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -104,7 +105,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HalData()["dio"][0]["value"] = true;
+                    SimData.DIO[0].Value = true;
                 });
 
                 t.Start();
@@ -126,7 +127,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HalData()["dio"][0]["value"] = true;
+                    SimData.DIO[0].Value = true;
                 });
 
                 t.Start();
@@ -144,12 +145,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, true);
-                HalData()["dio"][0]["value"] = true;
+                SimData.DIO[0].Value = true;
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HalData()["dio"][0]["value"] = false;
+                    SimData.DIO[0].Value = false;
                 });
 
                 t.Start();
@@ -167,12 +168,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, false);
-                HalData()["dio"][0]["value"] = true;
+                SimData.DIO[0].Value = true;
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    HalData()["dio"][0]["value"] = false;
+                    SimData.DIO[0].Value = false;
                 });
 
                 t.Start();
@@ -194,12 +195,12 @@ namespace WPILib.Tests
                     count++;
                 };
 
-                HalData()["dio"][0]["value"] = false;
+                SimData.DIO[0].Value = false;
 
                 d.RequestInterrupts(mockDelegate);
                 d.EnableInterrupts();
 
-                HalData()["dio"][0]["value"] = true;
+                SimData.DIO[0].Value = true;
 
                 Thread.Sleep(50);
 
@@ -220,12 +221,12 @@ namespace WPILib.Tests
                     obj = o;
                 };
 
-                HalData()["dio"][0]["value"] = false;
+                SimData.DIO[0].Value = false;
 
                 d.RequestInterrupts(mockDelegate, this);
                 d.EnableInterrupts();
 
-                HalData()["dio"][0]["value"] = true;
+                SimData.DIO[0].Value = true;
 
                 Thread.Sleep(50);
 

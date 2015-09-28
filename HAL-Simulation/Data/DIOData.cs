@@ -10,7 +10,7 @@ using HAL_Simulator.Annotations;
 
 namespace HAL_Simulator.Data
 {
-    public class Dio : NotifyDataBase
+    public class DIOData : NotifyDataBase
     {
         private bool m_initialized = false;
         private bool m_hasSource = false;

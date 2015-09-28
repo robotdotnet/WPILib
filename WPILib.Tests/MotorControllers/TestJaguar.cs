@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests.MotorControllers
@@ -31,7 +32,7 @@ namespace WPILib.Tests.MotorControllers
         public void TestJaguarInitialized()
         {
             using (Jaguar t = new Jaguar(2))
-                Assert.AreEqual(HalData()["pwm"][2]["type"], "jaguar");
+                Assert.AreEqual(SimData.PWM[2].Type, ControllerType.Jaguar);
         }
 
         [Test]
@@ -59,9 +60,7 @@ namespace WPILib.Tests.MotorControllers
             using (Jaguar t = new Jaguar(2))
             {
                 t.Set(1);
-                Assert.AreEqual(PWMHelpers.ReverseByType(nameof(Jaguar), HalData()["pwm"][2]["raw_value"]), 1);
-                Assert.AreEqual(PWMHelpers.ReverseByType(2), 1);
-                Assert.AreEqual(HalData()["pwm"][2]["value"], 1);
+                Assert.AreEqual(SimData.PWM[2].Value, 1);
             }
         }
 
@@ -82,10 +81,7 @@ namespace WPILib.Tests.MotorControllers
             using (Jaguar t = new Jaguar(2))
             {
                 t.PidWrite(-1);
-
-                Assert.AreEqual(PWMHelpers.ReverseByType(nameof(Jaguar), HalData()["pwm"][2]["raw_value"]), -1);
-                Assert.AreEqual(PWMHelpers.ReverseByType(2), -1);
-                Assert.AreEqual(HalData()["pwm"][2]["value"], -1);
+                Assert.AreEqual(SimData.PWM[2].Value, -1);
             }
         }
     }

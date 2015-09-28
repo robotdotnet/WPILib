@@ -86,7 +86,7 @@ namespace HAL_Simulator
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
             if (interrupt.DictCallback != null)
             {
-                halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
+                DIO[interrupt.DIOPin].Cancel("Value", interrupt.DictCallback);
             }
             interrupt.DictCallback = null;
             Interrupts[interrupt_pointer.ToInt32() - 1] = null;
@@ -118,7 +118,7 @@ namespace HAL_Simulator
             object lockObject = new object();
 
             //Store the previous state of the interrupt, so we can check for rising or falling edges
-            interrupt.PreviousState = halData["dio"][interrupt.DIOPin]["value"];
+            interrupt.PreviousState = DIO[interrupt.DIOPin].Value;
 
             interrupt.DictCallback = (k, v) =>
             {
@@ -139,7 +139,7 @@ namespace HAL_Simulator
             };
 
             //Register our interrupt with the NotifyDict
-            halData["dio"][interrupt.DIOPin].Register("value", interrupt.DictCallback);
+            DIO[interrupt.DIOPin].Register("Value", interrupt.DictCallback);
 
             WaitResult retVal = WaitResult.Timeout;
             //We are using a lock to wait for the interrupt.
@@ -147,7 +147,7 @@ namespace HAL_Simulator
             {
                 bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
                 //Cancel the interrupt, because we don't want it to fire again.
-                halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
+                DIO[interrupt.DIOPin].Cancel("Value", interrupt.DictCallback);
                 if (timedout)
                 {
                     retVal = WaitResult.Timeout;
@@ -226,8 +226,8 @@ namespace HAL_Simulator
                 }).Start();
             };
             //Set our previous state, and register
-            interrupt.PreviousState = halData["dio"][interrupt.DIOPin]["value"];
-            halData["dio"][interrupt.DIOPin].Register("value", interrupt.DictCallback, false);
+            interrupt.PreviousState = DIO[interrupt.DIOPin].Value;
+            DIO[interrupt.DIOPin].Register("Value", interrupt.DictCallback);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace HAL_Simulator
         {
             status = NiFpga_Status_Success;
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
-            halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
+            DIO[interrupt.DIOPin].Cancel("Value", interrupt.DictCallback);
         }
 
         /// <summary>

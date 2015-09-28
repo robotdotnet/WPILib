@@ -17,7 +17,7 @@ namespace HAL_Simulator
         /// <returns>The FPGA time on a 10 nanosecond scale.</returns>
         public static long GetFPGATime()
         {
-            return (long)((DateTime.Now.Ticks - SimData.halData["time"]["program_start"]) / 10.0);
+            return (long)((DateTime.Now.Ticks - SimData.GlobalData.ProgramStartTime) / 10.0);
         }
 
         /// <summary>
