@@ -18,9 +18,9 @@ namespace WPILib
             MXP = 1
         }
 
-        private object m_synchronizeRoot = new object();
-        private Port m_port;
-        private int m_deviceAddress;
+        private readonly object m_synchronizeRoot = new object();
+        private readonly Port m_port;
+        private readonly int m_deviceAddress;
 
         public I2C(Port port, int deviceAddress)
         {
@@ -75,14 +75,20 @@ namespace WPILib
 
         public bool Read(int registerAddress, int count, byte[] buffer)
         {
-            BoundaryException.AssertWithinBounds(count, 1, 7);
+            if (count < 1)
+            {
+                throw new BoundaryException($"Value given must be at least 1, {count} given");
+            }
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             return Transaction(new byte[] { (byte)registerAddress }, 1, buffer, count);
         }
 
         public bool ReadOnly(byte[] buffer, int count)
         {
-            BoundaryException.AssertWithinBounds(count, 1, 7);
+            if (count < 1)
+            {
+                throw new BoundaryException($"Value given must be at least 1, {count} given");
+            }
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             byte[] received = new byte[count];
             int retVal = I2CRead((byte)m_port, (byte)m_deviceAddress, received, (byte)count);
