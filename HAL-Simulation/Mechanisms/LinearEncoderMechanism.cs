@@ -58,16 +58,31 @@ namespace HAL_Simulator.Mechanisms
             };
 
             Action<dynamic, dynamic> handler = null;
-            handler = (k, v) =>
+            SimEncoder encoder = (SimEncoder)m_output;
+            if (encoder.IsEncoder)
             {
-                m_offset = CurrentMeters;
-                CurrentRadians = 0;
-                ((SimEncoder)m_output).Dictionary.Cancel(k, handler);
-                ((SimEncoder)m_output).Dictionary["reset"] = false;
-            };
-            ((SimEncoder)m_output).Dictionary.Register("reset", handler);
+                handler = (k, v) =>
+                {
+                    m_offset = CurrentMeters;
+                    CurrentRadians = 0;
+                    ((SimEncoder)m_output).EncoderData.Cancel(k, handler);
+                    ((SimEncoder)m_output).EncoderData.Reset = false;
+                };
+                ((SimEncoder)m_output).EncoderData.Register("Reset", handler);
+            }
+            else
+            {
+                handler = (k, v) =>
+                {
+                    m_offset = CurrentMeters;
+                    CurrentRadians = 0;
+                    ((SimEncoder)m_output).CounterData.Cancel(k, handler);
+                    ((SimEncoder)m_output).CounterData.Reset = false;
+                };
+                ((SimEncoder)m_output).CounterData.Register("Reset", handler);
+            }
 
-            
+
         }
     }
 }

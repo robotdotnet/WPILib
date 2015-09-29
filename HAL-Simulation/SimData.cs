@@ -136,6 +136,7 @@ namespace HAL_Simulator
         public static List<RelayData> Relay = new List<RelayData>(); 
 
         public static List<CounterData> Counter = new List<CounterData>(); 
+        public static List<EncoderData> Encoder = new List<EncoderData>(); 
 
         static SimData()
         {
@@ -178,7 +179,11 @@ namespace HAL_Simulator
             {
                 Counter.Add(new CounterData());
             }
-            
+
+            for (int i = 0; i < 4; i++)
+            {
+                Encoder.Add(new EncoderData());
+            }
         }
 
 
@@ -258,6 +263,10 @@ namespace HAL_Simulator
             {
                 counterData.ResetData();
             }
+            foreach (var encoderData in Encoder)
+            {
+                encoderData.ResetData();
+            }
 
             GlobalData.ProgramStartTime = SimHooks.GetTime();
 
@@ -300,57 +309,6 @@ namespace HAL_Simulator
                 });
             }
             halData["error_data"] = new OUT(null);
-
-            halData["encoder"] = new List<dynamic>();
-            for (int i = 0; i < 4; i++)
-            {
-                halData["encoder"].Add(new NotifyDict<dynamic, dynamic>()
-                {
-                    {"has_source", new IN(false) },
-                    {"initialized", new OUT(false) },
-                    {"config", new OUT(null)},
-                    {"count", new IN(0) },
-                    {"period", new IN(float.MaxValue) },
-                    {"reset" , new OUT(false)},
-                    {"max_period", new OUT(0) },
-                    {"direction", new IN(false) },
-                    {"reverse_direction", new OUT(false) },
-                    {"samples_to_average", new OUT(0) }
-                });
-            }
-            halData["counter"] = new List<dynamic>();
-            for (int i = 0; i < 8; i++)
-            {
-                halData["counter"].Add(new NotifyDict<dynamic, dynamic>()
-                {
-                    {"has_source", new IN(false) },
-                    {"initialized", new OUT(false) },
-                    {"config", new OUT(null)},
-                    {"count", new IN(0) },
-                    {"period", new IN(float.MaxValue) },
-                    {"reset" , new OUT(false)},
-                    {"max_period", new OUT(0) },
-                    {"direction", new IN(false) },
-                    {"reverse_direction", new OUT(false) },
-                    {"samples_to_average", new OUT(0) },
-                    {"mode", new OUT(0) },
-                    {"average_size", new OUT(0) },
-
-                    {"up_source_channel", new OUT(0)},
-                    {"up_source_trigger", new OUT(false)},
-                    {"down_source_channel", new OUT(0)},
-                    {"down_source_trigger", new OUT(false)},
-
-                    {"update_when_empty", new OUT(false)},
-
-                    {"up_rising_edge", new OUT(false)},
-                    {"up_falling_edge", new OUT(false)},
-                    {"down_rising_edge",new OUT(false)},
-                    {"down_falling_edge",new OUT(false)},
-
-                    {"pulse_length_threshold" ,new OUT(0)},
-                });
-            }
 
             halData["user_program_state"] = new OUT(null);
 

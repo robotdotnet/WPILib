@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Inputs
 {
     public class SimDigitalInput
     {
-        NotifyDict<dynamic, dynamic> dictionary = null;
+        DIOData DIOData = null;
 
         public SimDigitalInput(int pin)
         {
-            dictionary = SimData.halData["dio"][pin];
+            DIOData = SimData.DIO[pin];
         }
 
         public void Set(bool value)
         {
-            dictionary["value"] = value;
+            DIOData.Value = value;
         }
 
-        public bool GetInput() => dictionary["value"];
+        public bool GetInput() => DIOData.Value;
     }
 }

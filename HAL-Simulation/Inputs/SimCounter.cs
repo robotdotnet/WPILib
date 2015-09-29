@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Inputs
 {
     public class SimCounter : IServoFeedback
     {
-        private Dictionary<dynamic, dynamic> dictionary = null;
-        private bool k2x = true;
+        private readonly CounterData CounterData = null;
+        private readonly bool k2x = true;
          
         public SimCounter(int pin)
         {
             int index = -1;
             for (int i = 0; i < 8; i++)
             {
-                var counter = SimData.halData["counter"][i];
-                if (!counter["initialized"])
+                var counter = SimData.Counter[i];
+                if (!counter.Initialized)
                     continue;
-                if (counter["up_source_channel"] == pin || counter["down_source_channel"] == pin)
+                if (counter.UpSourceChannel == pin || counter.DownSourceChannel == pin)
                 {
                     index = i;
                 }
@@ -30,18 +31,18 @@ namespace HAL_Simulator.Inputs
                 throw new InvalidOperationException($"Counter not found for pin {pin}");
             }
 
-            dictionary = SimData.halData["counter"][index];
-            k2x = dictionary["up_falling_edge"];
+            CounterData = SimData.Counter[index];
+            k2x = CounterData.UpFallingEdge;
         }
 
         public void Set(double value)
         {
-            dictionary["count"] = (int)(value * (k2x ? 2 : 1));
+            CounterData.Count = (int)(value * (k2x ? 2 : 1));
         }
 
         public void SetPeriod(double period)
         {
-            dictionary["period"] = (float)period;
+            CounterData.Period = (float)period;
         }
     }
 }

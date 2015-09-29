@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Outputs
 {
     public class SimPWMController : ISimSpeedController
     {
-        NotifyDict<dynamic, dynamic> dictionary = null;
+        readonly PWMData PWMData = null;
 
         public SimPWMController(int port)
         {
-            dictionary = SimData.halData["pwm"][port];
+            PWMData = SimData.PWM[port];
         }
 
         public double Get()
         {
-            return (double)dictionary["value"];
+            return PWMData.Value;
         }
     }
 }

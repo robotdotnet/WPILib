@@ -704,7 +704,7 @@ namespace HAL_Simulator
                 }
                 else
                 {
-                    DIO[(int)counter.DownSourceChannel].Cancel("value", counter.DownCallback);
+                    DIO[(int)counter.DownSourceChannel].Cancel("Value", counter.DownCallback);
                 }
                 
                 counter.DownCallback = null;
@@ -834,13 +834,13 @@ namespace HAL_Simulator
             ref int status)
         {
             status = 0;
-            for (int i = 0; i < halData["encoder"].Count; i++)
+            for (int i = 0; i < SimData.Encoder.Count; i++)
             {
-                var enc = halData["encoder"][i];
-                if (!enc["initialized"])
+                var enc = SimData.Encoder[i];
+                if (!enc.Initialized)
                 {
-                    enc["initialized"] = true;
-                    enc["config"] = new Dictionary<dynamic, dynamic>()
+                    enc.Initialized = true;
+                    enc.Config = new Dictionary<string, dynamic>()
                     {
                         ["ASource_Module"] = port_a_module,
                         ["ASource_Channel"] = port_a_pin,
@@ -850,7 +850,7 @@ namespace HAL_Simulator
                         ["BSource_AnalogTrigger"] = port_b_analog_trigger,
                     };
 
-                    enc["reverse_direction"] = reverseDirection;
+                    enc.ReverseDirection = reverseDirection;
 
                     EncoderStruct e = new EncoderStruct { idx = i };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
@@ -869,7 +869,7 @@ namespace HAL_Simulator
         public static void freeEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["initialized"] = false;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].Initialized = false;
 
             Marshal.FreeHGlobal(encoder_pointer);
         }
@@ -878,23 +878,23 @@ namespace HAL_Simulator
         public static void resetEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx].Count = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["period "] = double.MaxValue;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["reset"] = true;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].Count = 0;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].Period = double.MaxValue;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].Reset = true;
         }
 
         [CalledSimFunction]
         public static int getEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (int)halData["encoder"][GetEncoder(encoder_pointer).idx]["count"];
+            return (int)SimData.Encoder[GetEncoder(encoder_pointer).idx].Count;
         }
 
         [CalledSimFunction]
         public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (double)halData["encoder"][GetEncoder(encoder_pointer).idx]["period"];
+            return (double)SimData.Encoder[GetEncoder(encoder_pointer).idx].Period;
         }
 
 
@@ -902,43 +902,43 @@ namespace HAL_Simulator
         public static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["max_period"] = maxPeriod;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].MaxPeriod = maxPeriod;
         }
 
         [CalledSimFunction]
         public static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            var enc = halData["encoder"][GetEncoder(encoder_pointer).idx];
-            return enc["period"] > enc["max_period"];
+            var enc = SimData.Encoder[GetEncoder(encoder_pointer).idx];
+            return enc.Period > enc.MaxPeriod;
         }
 
         [CalledSimFunction]
         public static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return halData["encoder"][GetEncoder(encoder_pointer).idx]["direction"];
+            return SimData.Encoder[GetEncoder(encoder_pointer).idx].Direction;
         }
 
         [CalledSimFunction]
         public static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["reverse_direction"] = reverseDirection;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].ReverseDirection = reverseDirection;
         }
 
         [CalledSimFunction]
         public static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"] = samplesToAverage;
+            SimData.Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage = samplesToAverage;
         }
 
         [CalledSimFunction]
         public static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"];
+            return SimData.Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage;
         }
 
 
@@ -947,7 +947,7 @@ namespace HAL_Simulator
             bool activeHigh, bool edgeSensitive, ref int status)
         {
             status = 0;
-            var enc = halData["encoder"][GetEncoder(encoder_pointer).idx]["config"];
+            var enc = SimData.Encoder[GetEncoder(encoder_pointer).idx].Config;
             enc["IndexSource_Channel"] = pin;
             enc["IndexSource_Module"] = 0;
             enc["IndexSource_AnalogTrigger"] = analogTrigger;

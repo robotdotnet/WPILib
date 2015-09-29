@@ -51,6 +51,7 @@
     <Compile Include="Data\DataBase.cs" />
     <Compile Include="Data\DigitalPWMData.cs" />
     <Compile Include="Data\DIOData.cs" />
+    <Compile Include="Data\EncoderData.cs" />
     <Compile Include="Data\GlobalData.cs" />
     <Compile Include="Data\MXPData.cs" />
     <Compile Include="Data\NotifyDataBase.cs" />

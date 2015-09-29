@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Inputs
 {
@@ -18,9 +19,11 @@ namespace HAL_Simulator.Inputs
 
     public class SimEncoder : IServoFeedback
     {
-        public  NotifyDict<dynamic, dynamic> Dictionary { get; private set; } = null;
+        //public  NotifyDict<dynamic, dynamic> Dictionary { get; private set; } = null;
+        internal EncoderData EncoderData { get; private set; } = null;
+        internal CounterData CounterData { get; private set; } = null;
 
-        private bool isEncoder = true;
+        public bool IsEncoder { get; private set; } = true;
         private bool k2x = true;
 
         public SimEncoder(int pin, EncodingType type = EncodingType.K4X)
@@ -40,12 +43,12 @@ namespace HAL_Simulator.Inputs
             int index = -1;
             for (int i = 0; i < 4; i++)
             {
-                var encoder = SimData.halData["encoder"][i];
-                if (!encoder["initialized"])
+                var encoder = SimData.Encoder[i];
+                if (!encoder.Initialized)
                     continue;
-                if (encoder.ContainsKey("config"))
+                if (encoder.Config != null)
                 {
-                    if (encoder["config"]["ASource_Channel"] == pin || encoder["config"]["BSource_Channel"] == pin)
+                    if (encoder.Config["ASource_Channel"] == pin || encoder.Config["BSource_Channel"] == pin)
                     {
                         index = i;
                     }
@@ -57,7 +60,7 @@ namespace HAL_Simulator.Inputs
                 throw new InvalidOperationException($"Encoder not found for pin {pin}");
             }
 
-            Dictionary = SimData.halData["encoder"][index];
+            EncoderData = SimData.Encoder[index];
         }
 
         private void InitCounter(int pin)
@@ -65,10 +68,10 @@ namespace HAL_Simulator.Inputs
             int index = -1;
             for (int i = 0; i < 8; i++)
             {
-                var counter = SimData.halData["counter"][i];
-                if (!counter["initialized"])
+                var counter = SimData.Counter[i];
+                if (!counter.Initialized)
                     continue;
-                if (counter["up_source_channel"] == pin || counter["down_source_channel"] == pin)
+                if (counter.UpSourceChannel == pin || counter.DownSourceChannel == pin)
                 {
                     index = i;
                 }
@@ -79,29 +82,36 @@ namespace HAL_Simulator.Inputs
                 throw new InvalidOperationException($"Counter not found for pin {pin}");
             }
 
-            Dictionary = SimData.halData["counter"][index];
-            isEncoder = false;
-            k2x = Dictionary["average_size"] == 2;
+            CounterData = SimData.Counter[index];
+            IsEncoder = false;
+            k2x = CounterData.AverageSize == 2;
         }
 
          
 
         public void Set(double value)
         {
-            if (isEncoder)
+            if (IsEncoder)
             {
                 //All encoders are 4x. So we will multiply by 4.
-                Dictionary["count"] = (int) (value*4);
+                EncoderData.Count = (int) (value*4);
             }
             else
             {
-                Dictionary["count"] = (int)(value * (k2x ? 2 : 1));
+                CounterData.Count = (int)(value * (k2x ? 2 : 1));
             }
         }
 
         public void SetPeriod(double period)
         {
-            Dictionary["period"] = (float) period;
+            if (IsEncoder)
+            {
+                EncoderData.Period = period;
+            }
+            else
+            {
+                CounterData.Period = period;
+            }
         }
     }
 }

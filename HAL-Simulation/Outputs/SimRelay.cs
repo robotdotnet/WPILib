@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Outputs
 {
     public class SimRelay
     {
-        NotifyDict<dynamic, dynamic> dictionary = null;
+        readonly RelayData RelayData = null;
 
         public SimRelay(int port)
         {
-            dictionary = SimData.halData["relay"][port];
+            RelayData = SimData.Relay[port];
         }
 
         public bool GetForward()
         {
-            return dictionary["fwd"];
+            return RelayData.Forward;
         }
 
         public bool GetReverse()
         {
-            return dictionary["rev"];
+            return RelayData.Reverse;
         }
     }
 }

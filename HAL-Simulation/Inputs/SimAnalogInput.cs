@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Inputs
 {
     public class SimAnalogInput : IServoFeedback
     {
-        private NotifyDict<dynamic, dynamic> dictionary = null;
+        private AnalogInData AnalogInData = null;
          
         public SimAnalogInput(int pin)
         {
-            dictionary = SimData.halData["analog_in"][pin];
+            AnalogInData = SimData.AnalogIn[pin];
         }
 
         //Volts
@@ -23,9 +24,9 @@ namespace HAL_Simulator.Inputs
                 value = 5.0;
             if (value < 0.0)
                 value = 0.0;
-            dictionary["voltage"] = value;
+            AnalogInData.Voltage = value;
         }
 
-        public double GetVoltage() => dictionary["voltage"];
+        public double GetVoltage() => AnalogInData.Voltage;
     }
 }
