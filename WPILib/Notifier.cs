@@ -27,6 +27,8 @@ namespace WPILib
         private Notifier m_nextEvent;
         private IntPtr m_handlerSemaphore;
 
+        private Action<uint, IntPtr> ProcessCallback;
+
         /// <summary>
         /// Create a notifier for the timer event notification.
         /// </summary>
@@ -44,6 +46,7 @@ namespace WPILib
                 if (s_refCount == 0)
                 {
                     int status = 0;
+                    ProcessCallback = ProcessQueue;
                     s_notifier = InitializeNotifier(ProcessQueue, ref status);
                 }
                 s_refCount++;
@@ -68,7 +71,8 @@ namespace WPILib
                 if (s_refCount == 0)
                 {
                     int status = 0;
-                    s_notifier = InitializeNotifier(ProcessQueue, ref status);
+                    ProcessCallback = ProcessQueue;
+                    s_notifier = InitializeNotifier(ProcessCallback, ref status);
                 }
                 s_refCount++;
             }
