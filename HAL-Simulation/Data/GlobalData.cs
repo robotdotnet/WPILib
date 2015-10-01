@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using HAL_Base;
-
-namespace HAL_Simulator.Data
+﻿namespace HAL_Simulator.Data
 {
     public class GlobalData : DataBase
     {

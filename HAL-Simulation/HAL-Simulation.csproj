@@ -98,7 +98,6 @@
     <Compile Include="Outputs\SimRelay.cs" />
     <Compile Include="Mechanisms\AngularPotentiometerMechanism.cs" />
     <Compile Include="Mechanisms\AbstractFeedbackMechanism.cs" />
-    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SimHooks.cs" />
     <Compile Include="HAL-Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

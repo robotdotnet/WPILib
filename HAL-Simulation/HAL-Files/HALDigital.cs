@@ -70,7 +70,7 @@ namespace HAL_Simulator
         public static void setPWM(IntPtr digital_port_pointer, ushort value, ref int status)
         {
             status = 0;
-            var pwm = SimData.PWM[GetDigitalPort(digital_port_pointer).port.pin];
+            var pwm = PWM[GetDigitalPort(digital_port_pointer).port.pin];
             pwm.RawValue = value;
             pwm.Value = MotorRawToValue(pwm);
         }
@@ -89,12 +89,12 @@ namespace HAL_Simulator
                     return false;
                 }
             }
-            if (SimData.PWM[pin].Initialized)
+            if (PWM[pin].Initialized)
             {
                 status = RESOURCE_IS_ALLOCATED;
                 return false;
             }
-            SimData.PWM[pin].Initialized = true;
+            PWM[pin].Initialized = true;
 
             if (pin > NumHeaders)
             {
@@ -108,11 +108,11 @@ namespace HAL_Simulator
         {
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
-            SimData.PWM[pin].Initialized = false;
-            SimData.PWM[pin].RawValue = 0;
-            SimData.PWM[pin].Value = 0;
-            SimData.PWM[pin].PeriodScale = 0;
-            SimData.PWM[pin].ZeroLatch = false;
+            PWM[pin].Initialized = false;
+            PWM[pin].RawValue = 0;
+            PWM[pin].Value = 0;
+            PWM[pin].PeriodScale = 0;
+            PWM[pin].ZeroLatch = false;
 
             if (pin > NumHeaders)
             {
@@ -125,21 +125,21 @@ namespace HAL_Simulator
         public static ushort getPWM(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return (ushort)SimData.PWM[GetDigitalPort(digital_port_pointer).port.pin].RawValue;
+            return (ushort)PWM[GetDigitalPort(digital_port_pointer).port.pin].RawValue;
         }
 
         [CalledSimFunction]
         public static void latchPWMZero(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            SimData.PWM[GetDigitalPort(digital_port_pointer).port.pin].ZeroLatch = true;
+            PWM[GetDigitalPort(digital_port_pointer).port.pin].ZeroLatch = true;
         }
 
         [CalledSimFunction]
         public static void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status)
         {
             status = 0;
-            SimData.PWM[GetDigitalPort(digital_port_pointer).port.pin].PeriodScale = squelchMask;
+            PWM[GetDigitalPort(digital_port_pointer).port.pin].PeriodScale = squelchMask;
         }
 
         [CalledSimFunction]
@@ -417,7 +417,7 @@ namespace HAL_Simulator
                 HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
-            double prevAnalogVoltage = SimData.AnalogIn[analogIn].Voltage;//halData["analog_in"][analogIn]["voltage"];
+            double prevAnalogVoltage = AnalogIn[analogIn].Voltage;//halData["analog_in"][analogIn]["voltage"];
 
             Action<string, dynamic> upCallback = (key, value) =>
             {
@@ -459,7 +459,7 @@ namespace HAL_Simulator
             };
 
             counter.UpCallback= upCallback;
-            SimData.AnalogIn[analogIn].Register("Voltage", upCallback);
+            AnalogIn[analogIn].Register("Voltage", upCallback);
         }
 
         private static void SetCounterUpAsTwoPulseDigital(CounterData counter, int pin)
@@ -634,7 +634,7 @@ namespace HAL_Simulator
                 HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
-            double prevAnalogVoltage = SimData.AnalogIn[analogIn].Voltage;
+            double prevAnalogVoltage = AnalogIn[analogIn].Voltage;
 
             Action<dynamic, dynamic> downCallback = (key, value) =>
             {
@@ -677,7 +677,7 @@ namespace HAL_Simulator
 
             counter.DownCallback = downCallback;
 
-            SimData.AnalogIn[analogIn].Register("Voltage", downCallback);
+            AnalogIn[analogIn].Register("Voltage", downCallback);
         }
 
         [CalledSimFunction]
@@ -834,9 +834,9 @@ namespace HAL_Simulator
             ref int status)
         {
             status = 0;
-            for (int i = 0; i < SimData.Encoder.Count; i++)
+            for (int i = 0; i < Encoder.Count; i++)
             {
-                var enc = SimData.Encoder[i];
+                var enc = Encoder[i];
                 if (!enc.Initialized)
                 {
                     enc.Initialized = true;
@@ -869,7 +869,7 @@ namespace HAL_Simulator
         public static void freeEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].Initialized = false;
+            Encoder[GetEncoder(encoder_pointer).idx].Initialized = false;
 
             Marshal.FreeHGlobal(encoder_pointer);
         }
@@ -878,23 +878,23 @@ namespace HAL_Simulator
         public static void resetEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].Count = 0;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].Period = double.MaxValue;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].Reset = true;
+            Encoder[GetEncoder(encoder_pointer).idx].Count = 0;
+            Encoder[GetEncoder(encoder_pointer).idx].Period = double.MaxValue;
+            Encoder[GetEncoder(encoder_pointer).idx].Reset = true;
         }
 
         [CalledSimFunction]
         public static int getEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (int)SimData.Encoder[GetEncoder(encoder_pointer).idx].Count;
+            return (int)Encoder[GetEncoder(encoder_pointer).idx].Count;
         }
 
         [CalledSimFunction]
         public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (double)SimData.Encoder[GetEncoder(encoder_pointer).idx].Period;
+            return (double)Encoder[GetEncoder(encoder_pointer).idx].Period;
         }
 
 
@@ -902,14 +902,14 @@ namespace HAL_Simulator
         public static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
         {
             status = 0;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].MaxPeriod = maxPeriod;
+            Encoder[GetEncoder(encoder_pointer).idx].MaxPeriod = maxPeriod;
         }
 
         [CalledSimFunction]
         public static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            var enc = SimData.Encoder[GetEncoder(encoder_pointer).idx];
+            var enc = Encoder[GetEncoder(encoder_pointer).idx];
             return enc.Period > enc.MaxPeriod;
         }
 
@@ -917,28 +917,28 @@ namespace HAL_Simulator
         public static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return SimData.Encoder[GetEncoder(encoder_pointer).idx].Direction;
+            return Encoder[GetEncoder(encoder_pointer).idx].Direction;
         }
 
         [CalledSimFunction]
         public static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].ReverseDirection = reverseDirection;
+            Encoder[GetEncoder(encoder_pointer).idx].ReverseDirection = reverseDirection;
         }
 
         [CalledSimFunction]
         public static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
         {
             status = 0;
-            SimData.Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage = samplesToAverage;
+            Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage = samplesToAverage;
         }
 
         [CalledSimFunction]
         public static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return SimData.Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage;
+            return Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage;
         }
 
 
@@ -947,7 +947,7 @@ namespace HAL_Simulator
             bool activeHigh, bool edgeSensitive, ref int status)
         {
             status = 0;
-            var enc = SimData.Encoder[GetEncoder(encoder_pointer).idx].Config;
+            var enc = Encoder[GetEncoder(encoder_pointer).idx].Config;
             enc["IndexSource_Channel"] = pin;
             enc["IndexSource_Module"] = 0;
             enc["IndexSource_AnalogTrigger"] = analogTrigger;

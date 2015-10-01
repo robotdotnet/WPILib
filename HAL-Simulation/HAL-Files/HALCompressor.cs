@@ -18,7 +18,7 @@ namespace HAL_Simulator
         {
            
             InitializePCM(module);
-            SimData.GetPCM(module).Compressor.Initialized = true;
+            GetPCM(module).Compressor.Initialized = true;
             PCM pcm = new PCM { module = module };
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(pcm));
             Marshal.StructureToPtr(pcm, ptr, true);

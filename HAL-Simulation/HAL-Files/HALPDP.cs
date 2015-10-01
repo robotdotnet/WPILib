@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Runtime.InteropServices;
 using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 
@@ -23,28 +22,28 @@ namespace HAL_Simulator
         public static double getPDPTemperature(ref int status, byte module)
         {
             status = 0;
-            return SimData.GetPDP(module).Temperature;
+            return GetPDP(module).Temperature;
         }
 
         [CalledSimFunction]
         public static double getPDPVoltage(ref int status, byte module)
         {
             status = 0;
-            return SimData.GetPDP(module).Voltage;
+            return GetPDP(module).Voltage;
         }
 
         [CalledSimFunction]
         public static double getPDPChannelCurrent(byte channel, ref int status, byte module)
         {
             status = 0;
-            return SimData.GetPDP(module).Current[channel];
+            return GetPDP(module).Current[channel];
         }
 
         [CalledSimFunction]
         public static double getPDPTotalCurrent(ref int status, byte module)
         {
             status = 0;
-            PDPData data = SimData.GetPDP(module);
+            PDPData data = GetPDP(module);
             return data.Current.Sum();
         }
 
@@ -59,14 +58,14 @@ namespace HAL_Simulator
         public static double getPDPTotalEnergy(ref int status, byte module)
         {
             status = 0;
-            return SimData.GetPDP(module).TotalEnergy;
+            return GetPDP(module).TotalEnergy;
         }
 
         [CalledSimFunction]
         public static void resetPDPTotalEnergy(ref int status, byte module)
         {
             status = 0;
-            SimData.GetPDP(module).TotalEnergy = 0;
+            GetPDP(module).TotalEnergy = 0;
         }
 
 

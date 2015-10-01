@@ -39,7 +39,7 @@ namespace HAL_Simulator
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
-            return SimData.GetPCM(p.port.module).Solenoids[p.port.pin].Value;
+            return GetPCM(p.port.module).Solenoids[p.port.pin].Value;
         }
 
 
@@ -49,7 +49,7 @@ namespace HAL_Simulator
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
-            SimData.GetPCM(p.port.module).Solenoids[p.port.pin].Value = value;
+            GetPCM(p.port.module).Solenoids[p.port.pin].Value = value;
         }
 
         [CalledSimFunction]

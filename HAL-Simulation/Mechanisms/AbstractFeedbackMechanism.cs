@@ -1,5 +1,4 @@
-﻿using System;
-using HAL_Simulator.Inputs;
+﻿using HAL_Simulator.Inputs;
 using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms

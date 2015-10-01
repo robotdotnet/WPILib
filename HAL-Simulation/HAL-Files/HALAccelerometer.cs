@@ -16,7 +16,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static void setAccelerometerActive(bool active)
         {
-            SimData.Accelerometer.Active = active;
+            Accelerometer.Active = active;
         }
 
 
