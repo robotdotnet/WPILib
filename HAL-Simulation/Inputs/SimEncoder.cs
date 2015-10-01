@@ -87,9 +87,7 @@ namespace HAL_Simulator.Inputs
             k2x = CounterData.AverageSize == 2;
         }
 
-         
-
-        public void Set(double value)
+        public void SetPosition(double value)
         {
             if (IsEncoder)
             {

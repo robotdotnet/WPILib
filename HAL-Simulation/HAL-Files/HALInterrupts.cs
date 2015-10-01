@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -284,10 +285,22 @@ namespace HAL_Simulator
             bool routing_analog_trigger, ref int status)
         {
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
-            if (routing_analog_trigger)
-                throw new NotImplementedException("We currently do not support interrupting on an analog port.");
+
             if (routing_module != 0)
                 throw new ArgumentOutOfRangeException(nameof(routing_module), "Routing module must be 0.");
+
+            if (routing_analog_trigger)
+            {
+                uint mask = (1 << 2) - 1;
+                AnalogTriggerType triggerType = (AnalogTriggerType)(routing_pin & mask);
+                int index = routing_module >> 2;
+                
+
+            }
+            else
+            {
+                interrupt.DIOPin = (int)routing_pin;
+            }
             status = NiFpga_Status_Success;
             interrupt.DIOPin = (int)routing_pin;
         }

@@ -35,14 +35,14 @@ namespace HAL_Simulator.Inputs
             k2x = CounterData.UpFallingEdge;
         }
 
-        public void Set(double value)
+        public void SetPosition(double value)
         {
             CounterData.Count = (int)(value * (k2x ? 2 : 1));
         }
 
         public void SetPeriod(double period)
         {
-            CounterData.Period = (float)period;
+            CounterData.Period = period;
         }
     }
 }
