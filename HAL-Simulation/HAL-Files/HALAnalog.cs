@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using HAL_Simulator.Data;
@@ -281,15 +282,18 @@ namespace HAL_Simulator
                 {
                     IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
                     cnt.Initialized = true;
-                    cnt.Pin = GetHalPort(port_pointer).pin;
+                    cnt.AnalogPin = GetHalPort(port_pointer).pin;
                     AnalogTrigger trig = new AnalogTrigger()
                     {
                         analogPortPointer = aPt,
-                        index = i,
+                        
                     };
+                    index = (uint)i;
+                    trig.index = i;
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
                     Marshal.StructureToPtr(trig, ptr, true);
-                    cnt.Pointer = ptr.ToInt64();
+                    cnt.TriggerPointer = ptr.ToInt64();
+                    
                     return ptr;
                 }
             }

@@ -1,4 +1,7 @@
-﻿namespace HAL_Simulator.Data
+﻿using System;
+using HAL_Base;
+
+namespace HAL_Simulator.Data
 {
     public enum TrigerType
     {
@@ -20,8 +23,8 @@
         {
             m_hasSource = false;
             m_initialized = false;
-            Pin = -1;
-            Pointer = 0;
+            AnalogPin = -1;
+            TriggerPointer = -1;
             m_trigType = TrigerType.Unassigned;
             m_trigState = false;
             m_trigUpper = 0;
@@ -39,9 +42,9 @@
             }
         }
 
-        public int Pin { get; internal set; } = -1;
+        public int AnalogPin { get; internal set; } = -1;
 
-        public long Pointer { get; internal set; } = -1;
+        public long TriggerPointer { get; internal set; } = -1;
 
         public TrigerType TrigType
         {
@@ -85,6 +88,11 @@
                 m_trigLower = value;
                 OnPropertyChanged(value);
             }
+        }
+
+        public bool GetTriggerValue(AnalogTriggerType type, ref int status)
+        {
+            return HALAnalog.getAnalogTriggerOutput((IntPtr) TriggerPointer, type, ref status);
         }
     }
 }

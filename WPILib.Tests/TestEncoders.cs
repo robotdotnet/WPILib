@@ -11,11 +11,6 @@ namespace WPILib.Tests
     public class TestEncoders : TestBase
     {
 
-        private Dictionary<dynamic, dynamic> HalData()
-        {
-            return HAL.halData;
-        }
-
         public void CheckConfig(dynamic config, uint aMod, uint aPin, bool aAtr, uint bMod, uint bPin, bool bAtr)
         {
             Assert.AreEqual(aMod, config["ASource_Module"]);

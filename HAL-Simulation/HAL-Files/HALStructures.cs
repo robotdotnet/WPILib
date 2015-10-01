@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using HAL_Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -88,7 +89,9 @@ namespace HAL_Simulator
     //[StructLayout(LayoutKind.Sequential)]
     internal class Interrupt
     {
-        public int DIOPin;
+        public bool IsAnalog;
+        public int Pin;
+        public AnalogTriggerType AnalogType;
         public Action<uint, IntPtr> Callback;
         public Action<string, dynamic> DictCallback;
         public IntPtr Param;

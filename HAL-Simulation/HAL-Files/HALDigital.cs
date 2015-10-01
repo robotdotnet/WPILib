@@ -401,11 +401,11 @@ namespace HAL_Simulator
         {
             if (!counter.UpSourceTrigger)
             {
-                throw new InvalidOperationException("Analog should only be called for analog triggers");
+                throw new InvalidOperationException("Analog should only be called for IsAnalog triggers");
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            int analogIn = SimData.AnalogTrigger[trigIndex].Pin;//halData["analog_trigger"][trigIndex]["pin"];
+            int analogIn = SimData.AnalogTrigger[trigIndex].AnalogPin;//halData["analog_trigger"][trigIndex]["pin"];
 
             if (analogIn == -1)
             {
@@ -414,20 +414,20 @@ namespace HAL_Simulator
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].Pointer,
+                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
             double prevAnalogVoltage = SimData.AnalogIn[analogIn].Voltage;//halData["analog_in"][analogIn]["voltage"];
 
             Action<string, dynamic> upCallback = (key, value) =>
             {
-                //If our analog has actually changed
+                //If our IsAnalog has actually changed
                 if (prevAnalogVoltage != value)
                 {
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr)SimData.AnalogTrigger[trigIndex].Pointer, ref status);
+                            (IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -618,11 +618,11 @@ namespace HAL_Simulator
         {
             if (!counter.DownSourceTrigger)
             {
-                throw new InvalidOperationException("Analog should only be called for analog triggers");
+                throw new InvalidOperationException("Analog should only be called for Analog triggers");
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            int analogIn = SimData.AnalogTrigger[trigIndex].Pin;
+            int analogIn = SimData.AnalogTrigger[trigIndex].AnalogPin;
 
             if (analogIn == -1)
             {
@@ -631,20 +631,20 @@ namespace HAL_Simulator
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].Pointer,
+                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
             double prevAnalogVoltage = SimData.AnalogIn[analogIn].Voltage;
 
             Action<dynamic, dynamic> downCallback = (key, value) =>
             {
-                //If our analog has actually changed
+                //If our IsAnalog has actually changed
                 if (prevAnalogVoltage != value)
                 {
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr)SimData.AnalogTrigger[trigIndex].Pointer, ref status);
+                            (IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)

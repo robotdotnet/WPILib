@@ -31,7 +31,7 @@ namespace HAL_Simulator.Mechanisms
         {
             if (output is SimAnalogInput)
             {
-                throw new ArgumentOutOfRangeException(nameof(output), "Shooter Wheels do not support analog inputs");
+                throw new ArgumentOutOfRangeException(nameof(output), "Shooter Wheels do not support IsAnalog inputs");
             }
             m_input = input;
             m_output = output;

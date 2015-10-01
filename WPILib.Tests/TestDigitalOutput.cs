@@ -19,7 +19,7 @@ namespace WPILib.Tests
         {
             if (pin < 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(pin), "Pin is not an MXP pin");
+                throw new ArgumentOutOfRangeException(nameof(pin), "AnalogPin is not an MXP pin");
             }
             return SimData.MXP[pin - 10];
         } 

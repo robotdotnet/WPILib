@@ -72,7 +72,7 @@
     <Compile Include="DIOCrossConnectTest.cs" />
     <Compile Include="EncoderTest.cs" />
     <Compile Include="ExampleTest.cs" />
-    <Compile Include="Fixtures\AbstractCrossConnectFixture.cs" />
+    <Compile Include="Fixtures\AnalogCrossConnectFixture.cs" />
     <Compile Include="Fixtures\DIOCrossConnectFixture.cs" />
     <Compile Include="Fixtures\FakeCounterFixture.cs" />
     <Compile Include="Fixtures\FakeEncoderFixture.cs" />

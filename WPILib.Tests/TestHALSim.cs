@@ -8,6 +8,7 @@ using static HAL_Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
 {
+    /*
     [TestFixture]
     public class TestHALSim : TestBase
     {
@@ -242,4 +243,5 @@ namespace WPILib.Tests
             Assert.AreEqual(3.14, HAL.halData["power"]["vin_voltage"]);
         }
     }
+    */
 }

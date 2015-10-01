@@ -1,55 +1,57 @@
 ﻿using System.Collections.Generic;
 using HAL_Base;
+using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests
 {
     [TestFixture]
-    public class TestControllerPower
+    public class TestControllerPower : TestBase
     {
-        private Dictionary<dynamic, dynamic> GetData()
+        private RoboRioData GetData()
         {
-            return HAL.halData["power"];
+            return SimData.RoboRioData;
         }
 
         [Test]
         public void TestInputVoltage()
         {
-            const double testVal = 3.14;
-            GetData()["vin_voltage"] = testVal;
+            const float testVal = 3.14f;
+            GetData().VInVoltage = testVal;
             Assert.AreEqual(ControllerPower.GetInputVoltage(), testVal, 0.0001);
         }
 
         [Test]
         public void TestInputCurrent()
         {
-            const double testVal = 3.14;
-            GetData()["vin_current"] = testVal;
+            const float testVal = 3.14f;
+            GetData().VInCurrent = testVal;
             Assert.AreEqual(ControllerPower.GetInputCurrrent(), testVal, 0.0001);
         }
 
         [Test]
         public void TestVoltage3V3()
         {
-            const double testVal = 3.14;
-            GetData()["user_voltage_3v3"] = testVal;
+            const float testVal = 3.14f;
+            GetData().UserVoltage3V3 = testVal;
             Assert.AreEqual(ControllerPower.GetVoltage3V3(), testVal, 0.0001);
         }
 
         [Test]
         public void TestCurrent3V3()
         {
-            const double testVal = 3.14;
-            GetData()["user_current_3v3"] = testVal;
+            const float testVal = 3.14f;
+            GetData().UserCurrent3V3 = testVal;
             Assert.AreEqual(ControllerPower.GetCurrent3V3(), testVal, 0.0001);
         }
 
         [Test]
         public void TestEnabled3V3()
         {
-            GetData()["user_active_3v3"] = true;
+            GetData().UserActive3V3 = true;
             Assert.IsTrue(ControllerPower.GetEnabled3V3());
-            GetData()["user_active_3v3"] = false;
+            GetData().UserActive3V3 = false;
             Assert.IsFalse(ControllerPower.GetEnabled3V3());
         }
 
@@ -57,32 +59,32 @@ namespace WPILib.Tests
         public void TestFaultCount3V3()
         {
             const int testVal = 3;
-            GetData()["user_faults_3v3"] = testVal;
+            GetData().UserFaults3V3 = testVal;
             Assert.AreEqual(ControllerPower.GetFaultCount3V3(), testVal);
         }
 
         [Test]
         public void TestVoltage5V()
         {
-            const double testVal = 3.14;
-            GetData()["user_voltage_5v"] = testVal;
+            const float testVal = 3.14f;
+            GetData().UserVoltage5V = testVal;
             Assert.AreEqual(ControllerPower.GetVoltage5V(), testVal, 0.0001);
         }
 
         [Test]
         public void TestCurrent5V()
         {
-            const double testVal = 3.14;
-            GetData()["user_current_5v"] = testVal;
+            const float testVal = 3.14f;
+            GetData().UserCurrent5V = testVal;
             Assert.AreEqual(ControllerPower.GetCurrent5V(), testVal, 0.0001);
         }
 
         [Test]
         public void TestEnabled5V()
         {
-            GetData()["user_active_5v"] = true;
+            GetData().UserActive5V = true;
             Assert.IsTrue(ControllerPower.GetEnabled5V());
-            GetData()["user_active_5v"] = false;
+            GetData().UserActive5V = false;
             Assert.IsFalse(ControllerPower.GetEnabled5V());
         }
 
@@ -90,32 +92,32 @@ namespace WPILib.Tests
         public void TestFaultCount5V()
         {
             const int testVal = 3;
-            GetData()["user_faults_5v"] = testVal;
+            GetData().UserFaults5V = testVal;
             Assert.AreEqual(ControllerPower.GetFaultCount5V(), testVal);
         }
 
         [Test]
         public void TestVoltage6V()
         {
-            const double testVal = 3.14;
-            GetData()["user_voltage_6v"] = testVal;
+            const float testVal = 3.14f;
+            GetData().UserVoltage6V = testVal;
             Assert.AreEqual(ControllerPower.GetVoltage6V(), testVal, 0.0001);
         }
 
         [Test]
         public void TestCurrent6V()
         {
-            const double testVal = 3.14;
-            GetData()["user_current_6v"] = testVal;
+            const float testVal = 3.14f;
+            GetData().UserCurrent6V = testVal;
             Assert.AreEqual(ControllerPower.GetCurrent6V(), testVal, 0.0001);
         }
 
         [Test]
         public void TestEnabled6V()
         {
-            GetData()["user_active_6v"] = true;
+            GetData().UserActive6V = true;
             Assert.IsTrue(ControllerPower.GetEnabled6V());
-            GetData()["user_active_6v"] = false;
+            GetData().UserActive6V = false;
             Assert.IsFalse(ControllerPower.GetEnabled6V());
         }
 
@@ -123,7 +125,7 @@ namespace WPILib.Tests
         public void TestFaultCount6V()
         {
             const int testVal = 3;
-            GetData()["user_faults_6v"] = testVal;
+            GetData().UserFaults6V = testVal;
             Assert.AreEqual(ControllerPower.GetFaultCount6V(), testVal);
         }
     }

@@ -25,7 +25,7 @@ namespace WPILib.Tests
             {
                 index = trigger.Index;
                 Assert.IsTrue(GetData(index).Initialized);
-                Assert.AreEqual(pin, GetData(index).Pin);
+                Assert.AreEqual(pin, GetData(index).AnalogPin);
             }
             Assert.IsFalse(GetData(index).Initialized);
         }

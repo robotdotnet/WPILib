@@ -12,11 +12,6 @@ namespace WPILib.Tests
     public class TestInterrupt : TestBase
     { 
 
-        private static Dictionary<dynamic, dynamic> HalData()
-        {
-            return HAL.halData;
-        }
-
         public DigitalInput NewInput()
         {
             return new DigitalInput(0);

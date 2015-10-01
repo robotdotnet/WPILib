@@ -23,9 +23,9 @@ namespace HAL_Simulator.Data
 
         public PCMData()
         {
-            foreach (SolenoidData t in Solenoids)
+            for (int i = 0; i < Solenoids.Length; i++)
             {
-                t.ResetData();
+                Solenoids[i] = new SolenoidData();
             }
             Compressor.ResetData();
         }
