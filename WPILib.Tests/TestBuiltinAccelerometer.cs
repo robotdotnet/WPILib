@@ -11,7 +11,7 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestBuiltinAccelerometer
     {
-        private Accelerometer GetData()
+        private AccelerometerData GetData()
         {
             return SimData.Accelerometer;
         }

@@ -22,7 +22,7 @@ namespace HAL_Simulator.Data
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 m_initialized = value;
             }
@@ -31,7 +31,7 @@ namespace HAL_Simulator.Data
         public double DutyCycle
         {
             get { return m_dutyCycle; }
-            set
+            internal set
             {
                 m_dutyCycle = value;
             }
@@ -40,7 +40,7 @@ namespace HAL_Simulator.Data
         public uint Pin
         {
             get { return m_pin; }
-            set
+            internal set
             {
                 m_pin = value;
             }

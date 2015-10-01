@@ -22,7 +22,7 @@ namespace HAL_Simulator
                 port = GetHalPort(port_pointer)
             };
             status = 0;
-            InitializeNewPCM(p.port.module);
+            InitializePCM(p.port.module);
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
             return ptr;
@@ -39,7 +39,7 @@ namespace HAL_Simulator
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
-            return halData["pcm"][p.port.module]["solenoid"][p.port.pin]["value"];
+            return SimData.GetPCM(p.port.module).Solenoids[p.port.pin].Value;
         }
 
 
@@ -49,7 +49,7 @@ namespace HAL_Simulator
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
-            halData["pcm"][p.port.module]["solenoid"][p.port.pin]["value"] = value;
+            SimData.GetPCM(p.port.module).Solenoids[p.port.pin].Value = value;
         }
 
         [CalledSimFunction]

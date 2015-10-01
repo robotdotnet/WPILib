@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using HAL_Simulator.Annotations;
-
-namespace HAL_Simulator.Data
+﻿namespace HAL_Simulator.Data
 {
     public class AnalogInData : NotifyDataBase
     {
@@ -38,6 +29,7 @@ namespace HAL_Simulator.Data
             m_accumulatorCount = 1;
             m_accumulatorCenter = 0;
             m_accumulatorDeadband = 0;
+            base.ResetData();
         }
 
         public bool HasSource
@@ -54,7 +46,7 @@ namespace HAL_Simulator.Data
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 if (value == m_initialized) return;
                 m_initialized = value;
@@ -65,7 +57,7 @@ namespace HAL_Simulator.Data
         public uint AverageBits
         {
             get { return m_averageBits; }
-            set
+            internal set
             {
                 if (value == m_averageBits) return;
                 m_averageBits = value;
@@ -76,7 +68,7 @@ namespace HAL_Simulator.Data
         public uint OversampleBits
         {
             get { return m_oversampleBits; }
-            set
+            internal set
             {
                 if (value == m_oversampleBits) return;
                 m_oversampleBits = value;
@@ -120,7 +112,7 @@ namespace HAL_Simulator.Data
         public bool AccumulatorInitialized
         {
             get { return m_accumulatorInitialized; }
-            set
+            internal set
             {
                 if (value == m_accumulatorInitialized) return;
                 m_accumulatorInitialized = value;
@@ -131,7 +123,7 @@ namespace HAL_Simulator.Data
         public int AccumulatorCenter
         {
             get { return m_accumulatorCenter; }
-            set
+            internal set
             {
                 if (value == m_accumulatorCenter) return;
                 m_accumulatorCenter = value;
@@ -164,7 +156,7 @@ namespace HAL_Simulator.Data
         public int AccumulatorDeadband
         {
             get { return m_accumulatorDeadband; }
-            set
+            internal set
             {
                 if (value == m_accumulatorDeadband) return;
                 m_accumulatorDeadband = value;

@@ -380,7 +380,7 @@ namespace HAL_Simulator
             }
         }
 
-        private static dynamic getTriggerValue(AnalogTrigger trigger)
+        private static double getTriggerValue(AnalogTrigger trigger)
         {
             var ain = AnalogIn[GetAnalogPort(trigger.analogPortPointer).port.pin];
             var atr = SimData.AnalogTrigger[trigger.index];

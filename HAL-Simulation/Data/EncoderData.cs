@@ -23,13 +23,23 @@ namespace HAL_Simulator.Data
 
         public override void ResetData()
         {
+            m_hasSource = false;
+            m_initialized = false;
+            count = 0;
+            period = double.MaxValue;
+            reset = false;
+            maxPeriod = 0;
+            direction = false;
+            reverseDirection = false;
+            samplesToAverage = 0;
 
+            base.ResetData();
         }
 
         public uint SamplesToAverage
         {
             get { return samplesToAverage; }
-            set
+            internal set
             {
                 if (value == samplesToAverage) return;
                 samplesToAverage = value;
@@ -64,7 +74,7 @@ namespace HAL_Simulator.Data
         public double MaxPeriod
         {
             get { return maxPeriod; }
-            set
+            internal set
             {
                 if (value.Equals(maxPeriod)) return;
                 maxPeriod = value;
@@ -88,7 +98,7 @@ namespace HAL_Simulator.Data
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 if (m_initialized == value) return;
                 m_initialized = value;
@@ -99,7 +109,7 @@ namespace HAL_Simulator.Data
         public bool Reset
         {
             get { return reset; }
-            set
+            internal set
             {
                 if (reset == value) return;
                 reset = value;
@@ -121,7 +131,7 @@ namespace HAL_Simulator.Data
         public bool ReverseDirection
         {
             get { return reverseDirection; }
-            set
+            internal set
             {
                 if (reverseDirection == value) return;
                 reverseDirection = value;

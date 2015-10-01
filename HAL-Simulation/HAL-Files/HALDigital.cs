@@ -762,7 +762,7 @@ namespace HAL_Simulator
         public static void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status)
         {
             status = 0;
-            Counter[GetCounter(counter_pointer).idx].SamplesToAverage = samplesToAverage;
+            Counter[GetCounter(counter_pointer).idx].SamplesToAverage = (uint)samplesToAverage;
         }
 
         [CalledSimFunction]

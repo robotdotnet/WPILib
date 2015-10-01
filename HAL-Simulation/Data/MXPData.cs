@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HAL_Simulator.Data
+﻿namespace HAL_Simulator.Data
 {
     public class MXPData : DataBase
     {
@@ -18,7 +12,7 @@ namespace HAL_Simulator.Data
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 m_initialized = value;
             }

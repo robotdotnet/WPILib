@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using HAL_Simulator.Annotations;
-
-namespace HAL_Simulator.Data
+﻿namespace HAL_Simulator.Data
 {
     public class DIOData : NotifyDataBase
     {
@@ -25,6 +15,8 @@ namespace HAL_Simulator.Data
             m_value = true;
             m_pulseLength = 0;
             m_isInput = true;
+
+            base.ResetData();
         }
 
         public bool HasSource
@@ -41,7 +33,7 @@ namespace HAL_Simulator.Data
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 if (value == m_initialized) return;
                 m_initialized = value;
@@ -63,7 +55,7 @@ namespace HAL_Simulator.Data
         public double PulseLength
         {
             get { return m_pulseLength; }
-            set
+            internal set
             {
                 if (value.Equals(m_pulseLength)) return;
                 m_pulseLength = value;
@@ -74,7 +66,7 @@ namespace HAL_Simulator.Data
         public bool IsInput
         {
             get { return m_isInput; }
-            set
+            internal set
             {
                 if (value == m_isInput) return;
                 m_isInput = value;

@@ -21,7 +21,6 @@ namespace HAL_Simulator.Inputs
     {
         //public  NotifyDict<dynamic, dynamic> Dictionary { get; private set; } = null;
         internal EncoderData EncoderData { get; private set; } = null;
-        internal CounterData CounterData { get; private set; } = null;
 
         public bool IsEncoder { get; private set; } = true;
         private bool k2x = true;
@@ -82,9 +81,9 @@ namespace HAL_Simulator.Inputs
                 throw new InvalidOperationException($"Counter not found for pin {pin}");
             }
 
-            CounterData = SimData.Counter[index];
+            EncoderData = SimData.Counter[index];
             IsEncoder = false;
-            k2x = CounterData.AverageSize == 2;
+            k2x = SimData.Counter[index].AverageSize == 2;
         }
 
         public void SetPosition(double value)
@@ -96,20 +95,13 @@ namespace HAL_Simulator.Inputs
             }
             else
             {
-                CounterData.Count = (int)(value * (k2x ? 2 : 1));
+                EncoderData.Count = (int)(value * (k2x ? 2 : 1));
             }
         }
 
         public void SetPeriod(double period)
         {
-            if (IsEncoder)
-            {
-                EncoderData.Period = period;
-            }
-            else
-            {
-                CounterData.Period = period;
-            }
+            EncoderData.Period = period;
         }
     }
 }

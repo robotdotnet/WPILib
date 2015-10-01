@@ -65,6 +65,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="sem"></param>
         [CalledSimFunction]
+        //Replaced
         public static void HALSetNewDataSem(IntPtr sem)
         {
             HALNewDataSem = sem;
@@ -76,6 +77,7 @@ namespace HAL_Simulator
         /// <param name="code">The Error Code</param>
         /// <returns>IntPtr containing the Error message</returns>
         [CalledSimFunction]
+        //Replaced
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
@@ -161,6 +163,7 @@ namespace HAL_Simulator
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
+        //Replaced
         public static ushort getFPGAVersion(ref int status)
         {
             status = 0;
@@ -200,7 +203,7 @@ namespace HAL_Simulator
         public static bool getFPGAButton(ref int status)
         {
             status = 0;
-            return halData["fpga_button"];
+            return SimData.RoboRioData.FPGAButton;
         }
 
         /// <summary>
@@ -403,7 +406,7 @@ namespace HAL_Simulator
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
             halData["user_program_state"] = "starting";
-            halData["program_started"] = true;
+            SimData.GlobalData.ProgramStarted = true;
         }
 
         [CalledSimFunction]
@@ -454,7 +457,7 @@ namespace HAL_Simulator
                     SimData.PWM[instanceNumber].Type = ControllerType.Servo;
                     break;
                 case (byte)ResourceType.kResourceType_Solenoid:
-                    halData["pcm"][(int)context]["solenoid"][instanceNumber]["initialized"] = true;
+                    SimData.GetPCM(context).Solenoids[instanceNumber].Initialized = true;
                     break;
             }
             if (!halData["reports"].ContainsKey(resource))

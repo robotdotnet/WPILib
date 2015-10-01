@@ -118,25 +118,100 @@ namespace HAL_Simulator
     /// </summary>
     public class SimData
     {
-        public static Accelerometer Accelerometer = new Accelerometer();
-        public static GlobalData GlobalData = new GlobalData();
-        public static List<AnalogOutData> AnalogOut = new List<AnalogOutData>();
+        public static AccelerometerData Accelerometer { get; } = new AccelerometerData();
+        public static GlobalData GlobalData { get; } = new GlobalData();
+        public static List<AnalogOutData> AnalogOut { get; } = new List<AnalogOutData>();
 
-        public static List<AnalogInData> AnalogIn = new List<AnalogInData>(); 
-        public static List<AnalogTriggerData> AnalogTrigger = new List<AnalogTriggerData>(); 
+        public static List<AnalogInData> AnalogIn { get; } = new List<AnalogInData>();
+        public static List<AnalogTriggerData> AnalogTrigger { get; } = new List<AnalogTriggerData>();
 
-        public static List<DIOData> DIO = new List<DIOData>(); 
+        public static List<DIOData> DIO { get; } = new List<DIOData>();
 
-        public static List<PWMData> PWM = new List<PWMData>(); 
+        public static List<PWMData> PWM { get; } = new List<PWMData>();
 
-        public static List<MXPData> MXP = new List<MXPData>(); 
+        public static List<MXPData> MXP { get; } = new List<MXPData>();
 
-        public static List<DigitalPWMData> DigitalPWM = new List<DigitalPWMData>(); 
+        public static List<DigitalPWMData> DigitalPWM { get; } = new List<DigitalPWMData>();
 
-        public static List<RelayData> Relay = new List<RelayData>(); 
+        public static List<RelayData> Relay { get; } = new List<RelayData>();
 
-        public static List<CounterData> Counter = new List<CounterData>(); 
-        public static List<EncoderData> Encoder = new List<EncoderData>(); 
+        public static List<CounterData> Counter { get; } = new List<CounterData>();
+        public static List<EncoderData> Encoder { get; } = new List<EncoderData>();
+
+        private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
+
+        public static RoboRioData RoboRioData { get; } = new RoboRioData();
+        private static readonly Dictionary<int, PDPData> s_pdp  = new Dictionary<int, PDPData>();
+
+        public static PCMData GetPCM(int id)
+        {
+            PCMData data;
+            bool retVal = s_pcm.TryGetValue(id, out data);
+            if (retVal)
+            {
+                //Contains key. Just return it
+                return data;
+            }
+            else
+            {
+                data = new PCMData();
+                s_pcm.Add(id, data);
+                return data;
+            }
+        }
+
+        public static bool InitializePCM(int id)
+        {
+            PCMData data;
+            bool retVal = s_pcm.TryGetValue(id, out data);
+            if (retVal)
+            {
+                //Contains key. return false saying we did not initialize a new one.
+                return false;
+            }
+            else
+            {
+                //Create a new PCM data and return true.
+                data = new PCMData();
+                s_pcm.Add(id, data);
+                return true;
+            }
+        }
+
+        public static PDPData GetPDP(int id)
+        {
+            PDPData data;
+            bool retVal = s_pdp.TryGetValue(id, out data);
+            if (retVal)
+            {
+                //Contains key. Just return it
+                return data;
+            }
+            else
+            {
+                data = new PDPData();
+                s_pdp.Add(id, data);
+                return data;
+            }
+        }
+
+        public static bool InitializePDP(int id)
+        {
+            PDPData data;
+            bool retVal = s_pdp.TryGetValue(id, out data);
+            if (retVal)
+            {
+                //Contains key. return false saying we did not initialize a new one.
+                return false;
+            }
+            else
+            {
+                //Create a new PCM data and return true.
+                data = new PDPData();
+                s_pdp.Add(id, data);
+                return true;
+            }
+        }
 
         static SimData()
         {
@@ -184,6 +259,8 @@ namespace HAL_Simulator
             {
                 Encoder.Add(new EncoderData());
             }
+
+            InitializePDP(0);
         }
 
 
@@ -254,6 +331,14 @@ namespace HAL_Simulator
             {
                 pwmData.ResetData();
             }
+            foreach (var digitalPWMData in DigitalPWM)
+            {
+                digitalPWMData.ResetData();
+            }
+            foreach (var mxpData in MXP)
+            {
+                mxpData.ResetData();
+            }
             foreach (var relayData in Relay)
             {
                 relayData.ResetData();
@@ -267,8 +352,19 @@ namespace HAL_Simulator
             {
                 encoderData.ResetData();
             }
+            RoboRioData.ResetData();
 
+            foreach (var pdpData in s_pdp.Values)
+            {
+                pdpData.ResetData();
+            }
+
+            foreach (var pcmData in s_pcm.Values)
+            {
+                pcmData.ResetData();
+            }
             GlobalData.ProgramStartTime = SimHooks.GetTime();
+
 
             halData.Clear();
             halInData.Clear();
@@ -277,6 +373,13 @@ namespace HAL_Simulator
             {
                 HALNewDataSem = IntPtr.Zero;
             }
+
+            halData["time"] = new Dictionary<dynamic, dynamic>
+            {
+                {"has_source", new IN(false) },
+                {"program_start", new OUT(SimHooks.GetTime())},
+                {"match_start", new OUT(0.0)}
+            };
 
             halData["control"] = new Dictionary<dynamic, dynamic>
             {
@@ -288,6 +391,7 @@ namespace HAL_Simulator
                 {"fms_attached", new DS(false)},
                 {"ds_attached", new DS(false)},
             };
+
             halData["reports"] = new NotifyDict<dynamic, dynamic>();
 
             halData["joysticks"] = new List<dynamic>();
@@ -312,28 +416,6 @@ namespace HAL_Simulator
 
             halData["user_program_state"] = new OUT(null);
 
-            halData["power"] = new Dictionary<dynamic, dynamic>()
-            {
-                {"has_source", new IN(false) },
-                {"vin_voltage", new IN(0) },
-                {"vin_current", new IN(0) },
-                {"user_voltage_6v", new IN(6.0)},
-                {"user_current_6v", new IN(0)},
-                {"user_active_6v", new  IN(false)},
-                {"user_faults_6v", new  IN(0)},
-                {"user_voltage_5v",new  IN(5.0)},
-                {"user_current_5v",new  IN(0)},
-                {"user_active_5v",  new IN(false)},
-                {"user_faults_5v", new  IN(0)},
-                {"user_voltage_3v3",new IN(3.3)},
-                {"user_current_3v3",new IN(0)},
-                {"user_active_3v3", new IN(false)},
-                {"user_faults_3v3", new IN(0)},
-            };
-
-            halData["pdp"] = new Dictionary<dynamic, dynamic>();
-
-            halData["pcm"] = new Dictionary<dynamic, dynamic>();
 
             halData["CAN"] = new NotifyDict<dynamic, dynamic>();
 
@@ -368,89 +450,9 @@ namespace HAL_Simulator
 
 
             FilterHalData(halData, halInData);
-
-            //We have to force these into the in dictionary so they exist to be checked.
-
-            halInData["pdp"] = new Dictionary<dynamic, dynamic>();
-
-            halInData["pcm"] = new Dictionary<dynamic, dynamic>();
-
-            //Always create PDP 0, because all robots are going to have it.
-            InitializeNewPDP(0);
         }
 
-        internal static void InitializeNewPCM(int module)
-        {
-            if (!halData["pcm"].ContainsKey(module))
-            {
-                halData["pcm"][module] = new Dictionary<dynamic, dynamic>();
-                halData["pcm"][module]["compressor"] = new Dictionary<dynamic, dynamic>
-                {
-                    {"has_source", false },
-                    {"initialized", false },
-                    {"on", false },
-                    {"closed_loop_enabled", false },
-                    {"pressure_switch", false },
-                    {"current", 0.0 }
-                };
-
-                halData["pcm"][module]["solenoid"] = new List<dynamic>();
-                for (int i = 0; i < 8; i++)
-                {
-                    halData["pcm"][module]["solenoid"].Add(new NotifyDict<dynamic, dynamic>
-                    {
-                        {"initialized", false},
-                        {"value", (false)}
-                    });
-                };
-
-            }
-
-            if (!halInData["pcm"].ContainsKey(module))
-            {
-                halInData["pcm"][module] = new Dictionary<dynamic, dynamic>();
-                halInData["pcm"][module]["compressor"] = new Dictionary<dynamic, dynamic>
-                {
-                    {"has_source", false },
-                    {"on", false },
-                    {"pressure_switch", false },
-                    {"current", 0.0 }
-                };
-                
-            }
-        }
-
-        internal static void InitializeNewPDP(int module)
-        {
-            if (!halData["pdp"].ContainsKey(module))
-            {
-                halData["pdp"][module] = new Dictionary<dynamic, dynamic>
-                {
-                    {"has_source", false },
-                    {"temperature", 0 },
-                    {"voltage", (0) },
-                    {"current", (new double[16]) },
-                    {"total_current", (0) },
-                    {"total_power", (0) },
-                    {"total_energy", (0) },
-
-                };
-            }
-            if (!halInData["pdp"].ContainsKey(module))
-            {
-                halInData["pdp"][module] = new Dictionary<dynamic, dynamic>
-                {
-                    {"has_source", false },
-                    {"temperature", 0 },
-                    {"voltage", (0) },
-                    {"current", (new double[16]) },
-                    {"total_current", (0) },
-                    {"total_power", (0) },
-                    {"total_energy", (0) },
-
-                };
-            }
-        }
+        
 
         private static void FilterHalData(Dictionary<dynamic, dynamic> both, Dictionary<dynamic, dynamic> inData)
         {

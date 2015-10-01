@@ -34,12 +34,14 @@ namespace HAL_Simulator.Data
             m_value = 0.0;
             m_periodScale = 0;
             m_zeroLatch = false;
+
+            base.ResetData();
         }
 
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 if (value == m_initialized) return;
                 m_initialized = value;
@@ -50,7 +52,7 @@ namespace HAL_Simulator.Data
         public ControllerType Type
         {
             get { return m_type; }
-            set
+            internal set
             {
                 if (value == m_type) return;
                 m_type = value;
@@ -61,7 +63,7 @@ namespace HAL_Simulator.Data
         public uint RawValue
         {
             get { return m_rawValue; }
-            set
+            internal set
             {
                 if (value == m_rawValue) return;
                 m_rawValue = value;
@@ -72,7 +74,7 @@ namespace HAL_Simulator.Data
         public bool ZeroLatch
         {
             get { return m_zeroLatch; }
-            set
+            internal set
             {
                 if (value == m_zeroLatch) return;
                 m_zeroLatch = value;
@@ -83,7 +85,7 @@ namespace HAL_Simulator.Data
         public uint PeriodScale
         {
             get { return m_periodScale; }
-            set
+            internal set
             {
                 if (value == m_periodScale) return;
                 m_periodScale = value;
@@ -94,7 +96,7 @@ namespace HAL_Simulator.Data
         public double Value
         {
             get { return m_value; }
-            set
+            internal set
             {
                 if (value.Equals(m_value)) return;
                 m_value = value;

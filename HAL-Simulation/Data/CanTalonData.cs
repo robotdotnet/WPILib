@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace HAL_Simulator.Data
 {
-    public class PCMData
+    public class CanTalonData : NotifyDataBase
     {
-
-    }
-
-    public class Compressor
-    {
-        
     }
 }

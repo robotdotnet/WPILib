@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using static HAL_Simulator.SimData;
+﻿using static HAL_Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -15,98 +14,98 @@ namespace HAL_Simulator
         public static float getVinVoltage(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["vin_voltage"];
+            return RoboRioData.VInVoltage;
         }
 
         [CalledSimFunction]
         public static float getVinCurrent(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["vin_current"];
+            return RoboRioData.VInCurrent;
         }
 
         [CalledSimFunction]
         public static float getUserVoltage6V(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["user_voltage_6v"];
+            return RoboRioData.UserVoltage6V;
         }
 
         [CalledSimFunction]
         public static float getUserCurrent6V(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["user_current_6v"];
+            return RoboRioData.UserCurrent6V;
         }
 
         [CalledSimFunction]
         public static bool getUserActive6V(ref int status)
         {
             status = 0;
-            return halData["power"]["user_active_6v"];
+            return RoboRioData.UserActive6V;
         }
 
         [CalledSimFunction]
         public static int getUserCurrentFaults6V(ref int status)
         {
             status = 0;
-            return halData["power"]["user_faults_6v"];
+            return RoboRioData.UserFaults6V;
         }
 
         [CalledSimFunction]
         public static float getUserVoltage5V(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["user_voltage_5v"];
+            return RoboRioData.UserVoltage5V;
         }
 
         [CalledSimFunction]
         public static float getUserCurrent5V(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["user_current_5v"];
+            return RoboRioData.UserCurrent5V;
         }
 
         [CalledSimFunction]
         public static bool getUserActive5V(ref int status)
         {
             status = 0;
-            return halData["power"]["user_active_5v"];
+            return RoboRioData.UserActive5V;
         }
 
         [CalledSimFunction]
         public static int getUserCurrentFaults5V(ref int status)
         {
             status = 0;
-            return halData["power"]["user_faults_5v"];
+            return RoboRioData.UserFaults5V;
         }
 
         [CalledSimFunction]
         public static float getUserVoltage3V3(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["user_voltage_3v3"];
+            return RoboRioData.UserVoltage3V3;
         }
 
         [CalledSimFunction]
         public static float getUserCurrent3V3(ref int status)
         {
             status = 0;
-            return (float)halData["power"]["user_current_3v3"];
+            return RoboRioData.UserCurrent3V3;
         }
 
         [CalledSimFunction]
         public static bool getUserActive3V3(ref int status)
         {
             status = 0;
-            return halData["power"]["user_active_3v3"];
+            return RoboRioData.UserActive3V3;
         }
 
         [CalledSimFunction]
         public static int getUserCurrentFaults3V3(ref int status)
         {
             status = 0;
-            return halData["power"]["user_faults_3v3"];
+            return RoboRioData.UserFaults3V3;
         }
     }
 }

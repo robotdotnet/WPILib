@@ -42,5 +42,10 @@ namespace HAL_Simulator.Data
         {
             if (action != null && m_callbacks.ContainsKey(key)) m_callbacks[key] -= action;
         }
+
+        public override void ResetData()
+        {
+            m_callbacks.Clear();
+        }
     }
 }

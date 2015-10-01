@@ -43,10 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Accelerometer.cs" />
-    <Compile Include="Data\AnalogIn.cs" />
-    <Compile Include="Data\AnalogOut.cs" />
-    <Compile Include="Data\AnalogTrigger.cs" />
+    <Compile Include="Data\AccelerometerData.cs" />
+    <Compile Include="Data\AnalogInData.cs" />
+    <Compile Include="Data\AnalogOutData.cs" />
+    <Compile Include="Data\AnalogTriggerData.cs" />
     <Compile Include="Data\CounterData.cs" />
     <Compile Include="Data\DataBase.cs" />
     <Compile Include="Data\DigitalPWMData.cs" />
@@ -55,9 +55,11 @@
     <Compile Include="Data\GlobalData.cs" />
     <Compile Include="Data\MXPData.cs" />
     <Compile Include="Data\NotifyDataBase.cs" />
-    <Compile Include="Data\PCM.cs" />
+    <Compile Include="Data\PCMData.cs" />
+    <Compile Include="Data\PDPData.cs" />
     <Compile Include="Data\PWMData.cs" />
     <Compile Include="Data\RelayData.cs" />
+    <Compile Include="Data\RoboRIOData.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />
     <Compile Include="Mechanisms\AngularEncoderMechanism.cs" />

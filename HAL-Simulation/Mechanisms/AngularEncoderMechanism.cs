@@ -87,9 +87,6 @@ namespace HAL_Simulator.Mechanisms
             };
 
             Action<dynamic, dynamic> handler = null;
-            SimEncoder encoder = (SimEncoder) m_output;
-            if (encoder.IsEncoder)
-            {
                 handler = (k, v) =>
                 {
                     m_offset = AdjustedRadians;
@@ -98,18 +95,7 @@ namespace HAL_Simulator.Mechanisms
                     ((SimEncoder) m_output).EncoderData.Reset = false;
                 };
                 ((SimEncoder) m_output).EncoderData.Register("Reset", handler);
-            }
-            else
-            {
-                handler = (k, v) =>
-                {
-                    m_offset = AdjustedRadians;
-                    CurrentRadians = 0;
-                    ((SimEncoder)m_output).CounterData.Cancel(k, handler);
-                    ((SimEncoder)m_output).CounterData.Reset = false;
-                };
-                ((SimEncoder)m_output).CounterData.Register("Reset", handler);
-            }
+            
 
 
         }

@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using HAL_Base;
-using HAL_Simulator.Annotations;
+﻿using HAL_Base;
 
 namespace HAL_Simulator.Data
 {
-    public class Accelerometer : DataBase
+    public class AccelerometerData : DataBase
     {
         private bool m_hasSource = false;
         private bool m_active = false;
@@ -33,7 +25,7 @@ namespace HAL_Simulator.Data
         public bool Active
         {
             get { return m_active; }
-            set
+            internal set
             {
                 if (value == m_active) return;
                 m_active = value;
@@ -44,7 +36,7 @@ namespace HAL_Simulator.Data
         public AccelerometerRange Range
         {
             get { return m_range; }
-            set
+            internal set
             {
                 if (value == m_range) return;
                 m_range = value;

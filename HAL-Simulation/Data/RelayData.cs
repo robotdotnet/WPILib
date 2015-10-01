@@ -17,12 +17,13 @@ namespace HAL_Simulator.Data
             m_initialized = false;
             m_forward = false;
             m_reverse = false;
+            base.ResetData();
         }
 
         public bool Initialized
         {
             get { return m_initialized; }
-            set
+            internal set
             {
                 if (m_initialized == value) return;
                 m_initialized = value;
@@ -33,7 +34,7 @@ namespace HAL_Simulator.Data
         public bool Forward
         {
             get { return m_forward; }
-            set
+            internal set
             {
                 if (m_forward == value) return;
                 m_forward = value;
@@ -44,7 +45,7 @@ namespace HAL_Simulator.Data
         public bool Reverse
         {
             get { return m_reverse; }
-            set
+            internal set
             {
                 if (m_reverse == value) return;
                 m_reverse = value;
