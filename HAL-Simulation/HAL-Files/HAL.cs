@@ -228,8 +228,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static HALControlWord HALGetControlWord()
         {
-            var h = halData["control"];
-            return new HALControlWord(h["enabled"], h["autonomous"], h["test"], h["eStop"], h["fms_attached"], h["ds_attached"]);
+            return new HALControlWord(true, false, false, false, false, true);
         }
 
         /// <summary>
@@ -439,25 +438,25 @@ namespace HAL_Simulator
             switch (resource)
             {
                 case (byte)ResourceType.kResourceType_Jaguar:
-                    SimData.PWM[instanceNumber].Type = ControllerType.Jaguar;
+                    PWM[instanceNumber].Type = ControllerType.Jaguar;
                     break;
                 case (byte)ResourceType.kResourceType_Talon:
-                    SimData.PWM[instanceNumber].Type = ControllerType.Talon;
+                    PWM[instanceNumber].Type = ControllerType.Talon;
                     break;
                 case (byte)ResourceType.kResourceType_TalonSRX:
-                    SimData.PWM[instanceNumber].Type = ControllerType.TalonSRX;
+                    PWM[instanceNumber].Type = ControllerType.TalonSRX;
                     break;
                 case (byte)ResourceType.kResourceType_Victor:
-                    SimData.PWM[instanceNumber].Type = ControllerType.Victor;
+                    PWM[instanceNumber].Type = ControllerType.Victor;
                     break;
                 case (byte)ResourceType.kResourceType_VictorSP:
-                    SimData.PWM[instanceNumber].Type = ControllerType.VictorSP;
+                    PWM[instanceNumber].Type = ControllerType.VictorSP;
                     break;
                 case (byte)ResourceType.kResourceType_Servo:
-                    SimData.PWM[instanceNumber].Type = ControllerType.Servo;
+                    PWM[instanceNumber].Type = ControllerType.Servo;
                     break;
                 case (byte)ResourceType.kResourceType_Solenoid:
-                    SimData.GetPCM(context).Solenoids[instanceNumber].Initialized = true;
+                    GetPCM(context).Solenoids[instanceNumber].Initialized = true;
                     break;
             }
             if (!halData["reports"].ContainsKey(resource))

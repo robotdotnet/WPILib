@@ -38,7 +38,7 @@ namespace HAL_Simulator
 
         internal static void UpdateData()
         {
-            UpdateHalData(HalDSData);
+            //UpdateHalData(HalDSData);
             if (HALNewDataSem != IntPtr.Zero)
             {
                 HALSemaphore.giveMultiWait(HALNewDataSem);

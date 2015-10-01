@@ -9,6 +9,7 @@ using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
+    /*
     [TestFixture]
     public class TestDriverStation : TestBase
     {
@@ -245,6 +246,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.AreEqual(stick.ToString(), DriverStation.Instance.GetJoystickName(stick));
         }
-        */
+        
     }
+    */
 }
