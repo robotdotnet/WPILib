@@ -9,7 +9,7 @@ namespace HAL_Simulator.Inputs
 {
     public class SimDigitalInput
     {
-        DIOData DIOData = null;
+        readonly DIOData DIOData = null;
 
         public SimDigitalInput(int pin)
         {

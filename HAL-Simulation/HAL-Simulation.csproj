@@ -47,6 +47,7 @@
     <Compile Include="Data\AnalogInData.cs" />
     <Compile Include="Data\AnalogOutData.cs" />
     <Compile Include="Data\AnalogTriggerData.cs" />
+    <Compile Include="Data\CanTalonData.cs" />
     <Compile Include="Data\CounterData.cs" />
     <Compile Include="Data\DataBase.cs" />
     <Compile Include="Data\DigitalPWMData.cs" />
