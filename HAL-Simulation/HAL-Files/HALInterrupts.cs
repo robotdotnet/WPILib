@@ -91,14 +91,13 @@ namespace HAL_Simulator
                 if (interrupt.IsAnalog)
                 {
                     AnalogTriggerData trigData = SimData.AnalogTrigger[interrupt.Pin];
-                    if (trigData.AnalogPin != -1)
-                    {
-                        AnalogIn[trigData.AnalogPin].Cancel("Voltage", interrupt.DictCallback);
-                    }
+                    var ain = AnalogIn[trigData.AnalogPin];
+                    ain.Cancel(nameof(ain.Voltage), interrupt.DictCallback);
                 }
                 else
                 {
-                    DIO[interrupt.Pin].Cancel("Value", interrupt.DictCallback);
+                    var dio = DIO[interrupt.Pin];
+                    dio.Cancel(nameof(dio.Value), interrupt.DictCallback);
                 }
             }
             interrupt.DictCallback = null;
@@ -131,7 +130,8 @@ namespace HAL_Simulator
             };
 
             //Register our interrupt with the NotifyDict
-            DIO[interrupt.Pin].Register("Value", interrupt.DictCallback);
+            var dio = DIO[interrupt.Pin];
+            dio.Register(nameof(dio.Value), interrupt.DictCallback);
 
             WaitResult retVal = WaitResult.Timeout;
             //We are using a lock to wait for the interrupt.
@@ -139,7 +139,7 @@ namespace HAL_Simulator
             {
                 bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
                 //Cancel the interrupt, because we don't want it to fire again.
-                DIO[interrupt.Pin].Cancel("Value", interrupt.DictCallback);
+                dio.Cancel(nameof(dio.Value), interrupt.DictCallback);
                 if (timedout)
                 {
                     retVal = WaitResult.Timeout;
@@ -198,7 +198,8 @@ namespace HAL_Simulator
             };
 
             //Register our interrupt with the NotifyDict
-            AnalogIn[trigData.AnalogPin].Register("Voltage", interrupt.DictCallback);
+            var aIn = AnalogIn[trigData.AnalogPin];
+            aIn.Register(nameof(aIn.Voltage), interrupt.DictCallback);
 
             WaitResult retVal = WaitResult.Timeout;
             //We are using a lock to wait for the interrupt.
@@ -206,7 +207,7 @@ namespace HAL_Simulator
             {
                 bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
                 //Cancel the interrupt, because we don't want it to fire again.
-                AnalogIn[trigData.AnalogPin].Cancel("Voltage", interrupt.DictCallback);
+                aIn.Cancel(nameof(aIn.Voltage), interrupt.DictCallback);
                 if (timedout)
                 {
                     retVal = WaitResult.Timeout;
@@ -309,7 +310,8 @@ namespace HAL_Simulator
             };
             //Set our previous state, and register
             interrupt.PreviousState = trigData.GetTriggerValue(interrupt.AnalogType, ref status);
-            AnalogIn[trigData.AnalogPin].Register("Voltage", interrupt.DictCallback);
+            var aIn = AnalogIn[trigData.AnalogPin];
+            aIn.Register(nameof(aIn.Voltage), interrupt.DictCallback);
         }
 
         private static void enableInterruptsDigital(Interrupt interrupt, ref int status)
@@ -349,7 +351,8 @@ namespace HAL_Simulator
             };
             //Set our previous state, and register
             interrupt.PreviousState = DIO[interrupt.Pin].Value;
-            DIO[interrupt.Pin].Register("Value", interrupt.DictCallback);
+            var dio = DIO[interrupt.Pin];
+            dio.Register(nameof(dio.Value), interrupt.DictCallback);
         }
 
         /// <summary>
@@ -395,11 +398,13 @@ namespace HAL_Simulator
             if (interrupt.IsAnalog)
             {
                 AnalogTriggerData trigData = SimData.AnalogTrigger[interrupt.Pin];
-                AnalogIn[trigData.AnalogPin].Cancel("Voltage", interrupt.DictCallback);
+                var ain = AnalogIn[trigData.AnalogPin];
+                ain.Cancel(nameof(ain.Voltage), interrupt.DictCallback);
             }
             else
             {
-                DIO[interrupt.Pin].Cancel("Value", interrupt.DictCallback);
+                var dio = DIO[interrupt.Pin];
+                dio.Cancel(nameof(dio.Value), interrupt.DictCallback);
             }
         }
 
