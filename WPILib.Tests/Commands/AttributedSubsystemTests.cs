@@ -16,11 +16,6 @@ namespace WPILib.Tests.Commands
     {
         internal class TestReflectionContext : CustomReflectionContext
         {
-            public override TypeInfo MapType(TypeInfo type)
-            {
-                string name = type.Name;
-                return base.MapType(type);
-            }
             protected override IEnumerable<object> GetCustomAttributes(MemberInfo member, IEnumerable<object> declaredAttributes)
             {
                 if(member == typeof(ASubsystem))
