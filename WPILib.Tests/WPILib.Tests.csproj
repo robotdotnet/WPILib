@@ -77,7 +77,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Commands\AbstractCommandTest.cs" />
-    <Compile Include="Commands\AttributedSubsystemTests.cs" />
+    <Compile Include="Commands\PhaseAttributedCommandTest.cs" />
+    <Compile Include="Commands\AttributedSubsystemTest.cs" />
     <Compile Include="Commands\ButtonTest.cs" />
     <Compile Include="Commands\CommandParallelGroupTest.cs" />
     <Compile Include="Commands\CommandScheduleTest.cs" />

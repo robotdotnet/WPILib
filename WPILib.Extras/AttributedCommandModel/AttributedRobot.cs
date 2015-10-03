@@ -20,9 +20,9 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public ICollection<Button> Buttons => buttons;
 
-        private readonly Dictionary<MatchPhase, Command> phaseCommands = new Dictionary<MatchPhase, Command>();
+        private readonly MultiValueDictionary<MatchPhase, Command> phaseCommands = new MultiValueDictionary<MatchPhase, Command>();
 
-        public IDictionary<MatchPhase, Command> PhaseCommands => phaseCommands;
+        public IReadOnlyDictionary<MatchPhase, IReadOnlyCollection<Command>> PhaseCommands => phaseCommands;
 
         public AttributedRobot(ReflectionContext reflectionContext)
         {
@@ -152,9 +152,9 @@ namespace WPILib.Extras.AttributedCommandModel
 
         private void StartPhaseCommands(MatchPhase phase)
         {
-            foreach (var command in PhaseCommands.Where(entry => entry.Key == phase))
+            foreach (var command in PhaseCommands[phase])
             {
-                command.Value.Start();
+                command.Start();
             }
         }
 

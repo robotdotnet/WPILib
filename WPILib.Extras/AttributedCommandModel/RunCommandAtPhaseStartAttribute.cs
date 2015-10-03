@@ -15,7 +15,7 @@ namespace WPILib.Extras.AttributedCommandModel
     {
         public MatchPhase Phase { get; }
 
-        RunCommandAtPhaseStartAttribute(MatchPhase phase)
+        public RunCommandAtPhaseStartAttribute(MatchPhase phase)
         {
             Phase = phase;
         }

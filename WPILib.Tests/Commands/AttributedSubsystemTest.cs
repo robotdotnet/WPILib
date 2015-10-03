@@ -12,7 +12,7 @@ using WPILib.Commands;
 namespace WPILib.Tests.Commands
 {
     [TestFixture]
-    public class AttributedSubsystemTests : AbstractCommandTest
+    public class AttributedSubsystemTest : AbstractCommandTest
     {
         internal class TestReflectionContext : CustomReflectionContext
         {

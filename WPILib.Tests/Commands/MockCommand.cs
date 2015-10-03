@@ -13,7 +13,7 @@ namespace WPILib.Tests.Commands
 
         public MockCommand(string name) : base(name)
         {
-
+            RunWhenDisabled = true;
         }
 
         public MockCommand()
