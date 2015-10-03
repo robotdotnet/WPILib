@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using WPILib.Buttons;
 using WPILib.Commands;
 
@@ -10,7 +11,7 @@ namespace WPILib.Extras.AttributedCommandModel
 {
     public class AttributedRobot : IterativeRobot
     {
-        private readonly System.Reflection.ReflectionContext reflectionContext;
+        private readonly ReflectionContext reflectionContext;
 
         private readonly List<Subsystem> subsystems = new List<Subsystem>();
 
@@ -24,7 +25,7 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public IDictionary<MatchPhase, Command> PhaseCommands => phaseCommands;
 
-        public AttributedRobot(System.Reflection.ReflectionContext reflectionContext)
+        public AttributedRobot(ReflectionContext reflectionContext)
         {
             this.reflectionContext = reflectionContext;
         }
@@ -37,15 +38,26 @@ namespace WPILib.Extras.AttributedCommandModel
         public sealed override void RobotInit()
         {
             var assemblies = GetAssemblies();
-            var types = assemblies.SelectMany(assembly => assembly.GetExportedTypes());
-            var exportedSubsystems = types.Where(type => type.CustomAttributes
-                                                                .Any(attr => attr.AttributeType == typeof(ExportSubsystemAttribute))
-                                                                &&
-                                                                  typeof(Subsystem).IsAssignableFrom(type));
+            var types = assemblies.SelectMany(assembly =>
+                {
+                    // This is wrapped in a try-catch with catching NotSupportedException to prevent
+                    // the program from crashing if a dynamic assembly is loaded in the AppDomain
+                    try
+                    {
+                        return assembly.GetExportedTypes()
+                            .Select(type => reflectionContext != null ? reflectionContext.MapType(type.GetTypeInfo())
+                                                                      : type.GetTypeInfo());
+                    }
+                    catch (NotSupportedException)
+                    {
+                        return Enumerable.Empty<TypeInfo>();
+                    }
+                });
+            var exportedSubsystems = types.Where(type => type.GetCustomAttributes<ExportSubsystemAttribute>().Any()
+                                                                  && typeof(Subsystem).IsAssignableFrom(type));
             subsystems.AddRange(exportedSubsystems.SelectMany(type => EnumerateGeneratedSubsystems(type)));
-            var exportedCommands = types.Where(type => type.CustomAttributes.Any(attr => typeof(RunCommandAttribute).IsAssignableFrom(attr.AttributeType))
-                                                                             &&
-                                                                                typeof(Command).IsAssignableFrom(type));
+            var exportedCommands = types.Where(type => type.GetCustomAttributes<RunCommandAttribute>().Any()
+                                                                             && typeof(Command).IsAssignableFrom(type));
             foreach (var command in exportedCommands)
             {
                 GenerateCommands(command);
@@ -58,41 +70,43 @@ namespace WPILib.Extras.AttributedCommandModel
 
         }
 
-        private IEnumerable<System.Reflection.Assembly> GetAssemblies()
+        private IEnumerable<Assembly> GetAssemblies()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             return assemblies.Select(assembly => reflectionContext != null ? reflectionContext.MapAssembly(assembly)
                 : assembly);
         }
 
-        private static IEnumerable<Subsystem> EnumerateGeneratedSubsystems(Type subsystemType)
+        private static IEnumerable<Subsystem> EnumerateGeneratedSubsystems(TypeInfo subsystemType)
         {
-            foreach (var attr in subsystemType.CustomAttributes.Where(attr => attr.AttributeType == typeof(ExportSubsystemAttribute)))
+            foreach (var attr in subsystemType.GetCustomAttributes<ExportSubsystemAttribute>())
             {
                 var subsystem = (Subsystem)Activator.CreateInstance(subsystemType);
-                if (attr.NamedArguments.Any(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)) && subsystem is Subsystem)
+                if (attr.DefaultCommandType != null && subsystem is Subsystem)
                 {
-                    var defaultCommandType = (Type)attr.NamedArguments
-                                .First(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)).TypedValue.Value;
+                    var defaultCommandType = attr.DefaultCommandType;
                     if (!typeof(Command).IsAssignableFrom(defaultCommandType))
                     {
                         throw new IllegalUseOfCommandException("Default command type is not an attributed commmand.");
                     }
-                    var defaultCommand = (Command)Activator.CreateInstance(defaultCommandType);
-                    defaultCommand.Requires(subsystem);
+                    var defaultCommand = (Command)Activator.CreateInstance(defaultCommandType, subsystem);
+                    if (!defaultCommand.DoesRequire(subsystem))
+                    {
+                        defaultCommand.Requires(subsystem); 
+                    }
                     (subsystem).SetDefaultCommand(defaultCommand);
                 }
                 yield return subsystem;
             }
         }
 
-        private void GenerateCommands(Type commandType)
+        private void GenerateCommands(TypeInfo commandType)
         {
-            foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandAtPhaseStartAttribute), false).OfType<RunCommandAtPhaseStartAttribute>())
+            foreach (var attr in commandType.GetCustomAttributes<RunCommandAtPhaseStartAttribute>())
             {
                 phaseCommands.Add(attr.Phase, (Command)Activator.CreateInstance(commandType));
             }
-            foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandOnJoystickAttribute), false).OfType<RunCommandOnJoystickAttribute>())
+            foreach (var attr in commandType.GetCustomAttributes<RunCommandOnJoystickAttribute>())
             {
                 var button = buttons.OfType<JoystickButton>().Where(btn => btn.Joystick is Joystick)
                     .FirstOrDefault(btn => (btn.Joystick as Joystick).Port == attr.ControllerId && btn.ButtonNumber == attr.ButtonId);
@@ -102,7 +116,7 @@ namespace WPILib.Extras.AttributedCommandModel
                 }
                 AttachCommandToButton(commandType, button, attr.ButtonMethod);
             }
-            foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandOnNetworkKeyAttribute), false).OfType<RunCommandOnNetworkKeyAttribute>())
+            foreach (var attr in commandType.GetCustomAttributes<RunCommandOnNetworkKeyAttribute>())
             {
                 var button = buttons.OfType<NetworkButton>().FirstOrDefault(btn => btn.SourceTable == NetworkTable.GetTable(attr.TableName) && btn.Field == attr.Key);
                 if(button == null)
