@@ -22,6 +22,7 @@ namespace WPILib.Tests
             return SimData.PWM[2];
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CS0618", Justification = "Need exact setpoints for unit testing")]
         private static PWM boundPWM(PWM pwm)
         {
             pwm.SetBounds(1500, 1050, 1000, 950, 500);

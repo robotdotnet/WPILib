@@ -19,7 +19,7 @@ namespace HAL_Simulator.Data
                 m_callbacks[key] += action;
             }
         }
-        protected virtual void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
+        protected override void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)
         {
             Action<string, dynamic> v;
             var callback = m_callbacks.TryGetValue(propertyName, out v);
