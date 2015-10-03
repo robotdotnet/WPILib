@@ -1,11 +1,10 @@
-﻿using NetworkTables;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NetworkTables;
 using WPILib.Buttons;
 using WPILib.Commands;
-
 
 namespace WPILib.Extras.AttributedCommandModel
 {
@@ -92,7 +91,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     var defaultCommand = (Command)Activator.CreateInstance(defaultCommandType, subsystem);
                     if (!defaultCommand.DoesRequire(subsystem))
                     {
-                        defaultCommand.Requires(subsystem); 
+                    defaultCommand.Requires(subsystem);
                     }
                     (subsystem).SetDefaultCommand(defaultCommand);
                 }

@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Outputs
 {
     class SimDigitalOutput
     {
-        NotifyDict<dynamic, dynamic> dictionary = null;
+        readonly DIOData DIOData = null;
 
         public SimDigitalOutput(int pin)
         {
-            dictionary = SimData.halData["dio"][pin];
+            DIOData = SimData.DIO[pin];
         }
 
         public bool Get()
         {
-            return dictionary["value"];
+            return DIOData.Value;
         }
     }
 }

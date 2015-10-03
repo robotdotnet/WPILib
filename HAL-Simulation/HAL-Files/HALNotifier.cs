@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using HAL_Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -12,8 +13,14 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALNotifier
     {
-        private static List<Notifier> Notifiers = new List<Notifier>();
+        private static readonly List<Notifier> Notifiers = new List<Notifier>();
 
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALNotifier.InitializeNotifier = initializeNotifier;
+            HAL_Base.HALNotifier.CleanNotifier = cleanNotifier;
+            HAL_Base.HALNotifier.UpdateNotifierAlarm = updateNotifierAlarm;
+        }
 
         [CalledSimFunction]
         public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)

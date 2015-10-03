@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HAL_Simulator.Data;
 
 namespace HAL_Simulator.Outputs
 {
     public class SimCANTalon : ISimSpeedController
     {
-        public NotifyDict<dynamic, dynamic> dictionary = null;
+        public CanTalonData data = null;
         public SimCANTalon(int id)
         {
-            dictionary = SimData.HalData["CAN"][id];
+            data = SimData.GetCanTalon(id);
         }
 
         public double Get()
         {
-            return (double)dictionary["value"] / 1023.0d;
+            return data.Demand / 1023.0d;
         }
     }
 }

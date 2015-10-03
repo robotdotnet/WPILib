@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using HAL_Base;
+﻿using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests
@@ -14,18 +14,13 @@ namespace WPILib.Tests
             return new Servo(2);
         }
 
-        private static Dictionary<dynamic, dynamic> HalData()
-        {
-            return HAL.halData;
-        }
-
 
         [Test]
         public void TestServoInitialized()
         {
             using (Servo s = NewServo())
             {
-                Assert.AreEqual(HalData()["pwm"][2]["type"], "servo");
+                Assert.AreEqual(SimData.PWM[2].Type, ControllerType.Servo);
             }
         }
         [Test]

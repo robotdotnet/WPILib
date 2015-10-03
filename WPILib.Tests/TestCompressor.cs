@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
+using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests
@@ -9,9 +10,9 @@ namespace WPILib.Tests
     public class TestCompressor : TestBase
     {
 
-        private Dictionary<dynamic, dynamic> GetData(int module)
+        private CompressorData GetData(int module)
         {
-            return HAL.halData["pcm"][module]["compressor"];
+            return SimData.GetPCM(module).Compressor;//[module]["compressor"];
         }
 
         public Compressor GetCompressor()
@@ -23,7 +24,7 @@ namespace WPILib.Tests
         public void TestCompressorAllModules()
         {
             List<Compressor> compressors = new List<Compressor>();
-            for (int i = 0; i < TestBase.SolenoidModules; i++)
+            for (int i = 0; i < SolenoidModules; i++)
             {
                 compressors.Add(new Compressor(i));
             }
@@ -39,7 +40,7 @@ namespace WPILib.Tests
         {
             Assert.Throws(typeof (ArgumentOutOfRangeException), () =>
             {
-                var cmp = new Compressor(TestBase.SolenoidModules);
+                var cmp = new Compressor(SolenoidModules);
             });           
         }
 
@@ -57,14 +58,14 @@ namespace WPILib.Tests
         [Test]
         public void TestCompressorSwitch()
         {
-            GetData(0)["pressure_switch"] = true;
+            GetData(0).PressureSwitch = true;
             Assert.IsTrue(GetCompressor().GetPressureSwitchValue());
         }
 
         [Test]
         public void TestCompressorCurrent()
         {
-            GetData(0)["current"] = 42;
+            GetData(0).Current = 42;
             Assert.AreEqual((double)GetCompressor().GetCompressorCurrent(), 42);
         }
 
@@ -73,10 +74,10 @@ namespace WPILib.Tests
         {
             var comp = GetCompressor();
 
-            GetData(0)["on"] = true;
+            GetData(0).On = true;
             Assert.IsTrue(comp.Enabled());
 
-            GetData(0)["on"] = false;
+            GetData(0).On = false;
             Assert.IsFalse(comp.Enabled());
         }
 

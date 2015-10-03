@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using HAL_Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -67,19 +68,19 @@ namespace HAL_Simulator
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct PWM
+    internal struct DigitalPWMStruct
     {
         public int idx;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Counter
+    internal struct CounterStruct
     {
         public int idx;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct Encoder
+    internal struct EncoderStruct
     {
         public int idx;
     }
@@ -88,9 +89,11 @@ namespace HAL_Simulator
     //[StructLayout(LayoutKind.Sequential)]
     internal class Interrupt
     {
-        public int DIOPin;
+        public bool IsAnalog;
+        public int Pin;
+        public AnalogTriggerType AnalogType;
         public Action<uint, IntPtr> Callback;
-        public Action<dynamic, dynamic> DictCallback;
+        public Action<string, dynamic> DictCallback;
         public IntPtr Param;
         public bool Watcher;
         public double RisingTimestamp;

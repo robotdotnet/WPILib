@@ -1,5 +1,4 @@
-﻿using HAL_Base;
-using NetworkTables;
+﻿using NetworkTables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.IntegrationTests.Fixtures;
@@ -59,7 +58,6 @@ namespace WPILib.IntegrationTests
         {
             relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
             relayFixture.GetRelay().Set(Relay.Value.Forward);
-            var data = HAL.halData;
             relayFixture.GetRelay().UpdateTable();
             Assert.IsFalse(relayFixture.GetInputOne().Get(), "Input one was not low when relay set Value.Forward.");
             Assert.IsTrue(relayFixture.GetInputTwo().Get(), "Input two was not high when relay set Value.Forward.");

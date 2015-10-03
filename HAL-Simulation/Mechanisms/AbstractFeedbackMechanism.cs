@@ -1,5 +1,4 @@
-﻿using System;
-using HAL_Simulator.Inputs;
+﻿using HAL_Simulator.Inputs;
 using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
@@ -64,8 +63,15 @@ namespace HAL_Simulator.Mechanisms
             CurrentMeters = CurrentRadians / RadiansPerMeter;
 
             double outputValue = CurrentRadians;
-            m_output.Set(outputValue * m_scaler);
-            
+            m_output.SetPosition(outputValue * m_scaler);
+
+            double output;
+            if (radiansPerSecondAtPWMValue == 0)
+                output = double.NaN;
+            else
+                output = 1 / radiansPerSecondAtPWMValue;
+
+            m_output.SetPeriod(output);
         }
     }
 

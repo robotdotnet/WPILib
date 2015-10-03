@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using HAL_Simulator;
-using NUnit.Framework;
-
-using HAL = HAL_Base.HAL;
-using static HAL_Simulator.DriverStationHelper;
-
-namespace WPILib.Tests
+﻿namespace WPILib.Tests
 {
+    /*
     [TestFixture]
     public class TestHALSim : TestBase
     {
@@ -23,7 +16,6 @@ namespace WPILib.Tests
             StartDSLoop();
         }
 
-        [Test]
         public void TestNotifyDictAdditonInitialNotify()
         {
 
@@ -37,10 +29,10 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, true);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
 
             Assert.AreEqual(1, count);
-            Assert.AreEqual("voltage", key);
+            Assert.AreEqual("Voltage", key);
 
         }
 
@@ -57,7 +49,7 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
 
             Assert.AreEqual(0, count);
             Assert.AreEqual(null, key);
@@ -78,16 +70,15 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
 
-            HAL.halData["analog_in"][0]["voltage"] = 1.25;
+            SimData.AnalogIn[0].Voltage = 1.25;
 
             Assert.AreEqual(1, count);
-            Assert.AreEqual("voltage", key);
+            Assert.AreEqual("Voltage", key);
             Assert.AreEqual(1.25, value);
         }
 
-        [Test]
         public void TestNotifyDictHalUpdate()
         {
             int count = 0;
@@ -102,7 +93,7 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
 
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>()
             {
@@ -139,14 +130,14 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
 
-            HAL.halInData["analog_in"][0]["voltage"] = 1.25;
+            SimData.AnalogIn[0].Voltage = 1.25;
 
             SimData.UpdateHalData(HAL.halInData, HAL.halData);
 
             Assert.AreEqual(1, count);
-            Assert.AreEqual("voltage", key);
+            Assert.AreEqual("Voltage", key);
             Assert.AreEqual(1.25, value);
         }
 
@@ -165,32 +156,30 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            HAL.halData["analog_in"][0].Register("voltage", mockDelegate, false);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
 
-            HAL.halData["analog_in"][0]["voltage"] = 1.25;
+            SimData.AnalogIn[0].Voltage = 1.25;
 
-            HAL.halData["analog_in"][0].Cancel("voltage", mockDelegate);
+            SimData.AnalogIn[0].Cancel("Voltage", mockDelegate);
 
-            HAL.halData["analog_in"][0]["voltage"] = 13.84;
+            SimData.AnalogIn[0].Voltage = 13.84;
 
             Assert.AreEqual(1, count);
-            Assert.AreEqual("voltage", key);
+            Assert.AreEqual("Voltage", key);
             Assert.AreEqual(1.25, value);
         }
 
-        [Test]
         public void TestHALDeepCopy()
         {
             SimData.ResetHALData(false);
 
-            HAL.halInData["analog_in"][0]["voltage"] = 1.352;
+            SimData.AnalogIn[0].Voltage = 1.352;
 
-            HAL.halData["analog_in"][0]["voltage"] = 454.57;
+            SimData.AnalogIn[0].Voltage = 454.57;
 
             Assert.AreNotEqual(HAL.halInData["analog_in"][0]["voltage"], HAL.halData["analog_in"][0]["voltage"]);
         }
 
-        [Test]
         public void TestHAL()
         {
             SimData.ResetHALData(false);
@@ -228,8 +217,6 @@ namespace WPILib.Tests
                 }
             }
         }
-
-        [Test]
         public void TestHalUpdate()
         {
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>
@@ -248,4 +235,5 @@ namespace WPILib.Tests
             Assert.AreEqual(3.14, HAL.halData["power"]["vin_voltage"]);
         }
     }
+    */
 }

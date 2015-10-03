@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using HAL_Base;
 using WPILib.Interfaces;
-using System.Collections.Generic;
 
 namespace WPILib
 {

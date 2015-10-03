@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WPILib.Commands;
 
 namespace WPILib.Extras
 {
-    public class ActionCommand : Commands.Command
+    public class ActionCommand : Command
     {
         private readonly Action action;
 

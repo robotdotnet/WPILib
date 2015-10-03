@@ -32,19 +32,19 @@ namespace HAL_Simulator
             return (AnalogTrigger)Marshal.PtrToStructure(ptr, typeof(AnalogTrigger));
         }
 
-        internal static PWM GetPWM(IntPtr ptr)
+        internal static DigitalPWMStruct GetPWM(IntPtr ptr)
         {
-            return (PWM)Marshal.PtrToStructure(ptr, typeof(PWM));
+            return (DigitalPWMStruct)Marshal.PtrToStructure(ptr, typeof(DigitalPWMStruct));
         }
 
-        internal static Encoder GetEncoder(IntPtr ptr)
+        internal static EncoderStruct GetEncoder(IntPtr ptr)
         {
-            return (Encoder)Marshal.PtrToStructure(ptr, typeof(Encoder));
+            return (EncoderStruct)Marshal.PtrToStructure(ptr, typeof(EncoderStruct));
         }
 
-        internal static Counter GetCounter(IntPtr ptr)
+        internal static CounterStruct GetCounter(IntPtr ptr)
         {
-            return (Counter)Marshal.PtrToStructure(ptr, typeof(Counter));
+            return (CounterStruct)Marshal.PtrToStructure(ptr, typeof(CounterStruct));
         }
 
         internal static int GetTalonSRX(IntPtr ptr)

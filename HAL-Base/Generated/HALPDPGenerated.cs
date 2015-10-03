@@ -1,9 +1,5 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
-using System;
-using System.Linq;
-using System.Reflection;
-
 // ReSharper disable CheckNamespace
 
 namespace HAL_Base
@@ -13,23 +9,6 @@ namespace HAL_Base
         static HALPDP()
         {
             HAL.Initialize();
-        }
-
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-            InitializePDP = (InitializePDPDelegate)Delegate.CreateDelegate(typeof (InitializePDPDelegate), type.GetMethod("initializePDP"));
-            GetPDPTemperature = (GetPDPTemperatureDelegate)Delegate.CreateDelegate(typeof(GetPDPTemperatureDelegate), type.GetMethod("getPDPTemperature"));
-            GetPDPVoltage = (GetPDPVoltageDelegate)Delegate.CreateDelegate(typeof(GetPDPVoltageDelegate), type.GetMethod("getPDPVoltage"));
-            GetPDPChannelCurrent = (GetPDPChannelCurrentDelegate)Delegate.CreateDelegate(typeof(GetPDPChannelCurrentDelegate), type.GetMethod("getPDPChannelCurrent"));
-            GetPDPTotalCurrent = (GetPDPTotalCurrentDelegate)Delegate.CreateDelegate(typeof(GetPDPTotalCurrentDelegate), type.GetMethod("getPDPTotalCurrent"));
-            GetPDPTotalPower = (GetPDPTotalPowerDelegate)Delegate.CreateDelegate(typeof(GetPDPTotalPowerDelegate), type.GetMethod("getPDPTotalPower"));
-            GetPDPTotalEnergy = (GetPDPTotalEnergyDelegate)Delegate.CreateDelegate(typeof(GetPDPTotalEnergyDelegate), type.GetMethod("getPDPTotalEnergy"));
-            ResetPDPTotalEnergy = (ResetPDPTotalEnergyDelegate)Delegate.CreateDelegate(typeof(ResetPDPTotalEnergyDelegate), type.GetMethod("resetPDPTotalEnergy"));
-            ClearPDPStickyFaults = (ClearPDPStickyFaultsDelegate)Delegate.CreateDelegate(typeof(ClearPDPStickyFaultsDelegate), type.GetMethod("clearPDPStickyFaults"));
         }
 
         public delegate void InitializePDPDelegate(int module);

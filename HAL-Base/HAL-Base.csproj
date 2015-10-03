@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LibraryLoader.cs" />
     <Compile Include="Generated\HALAccelerometerGenerated.cs" />
     <Compile Include="Generated\HALAnalogGenerated.cs" />
     <Compile Include="Generated\HALCANGenerated.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />
     <Compile Include="HALCAN.cs" />
-    <Compile Include="HALCANTalonSRX.cs" />
+    <Compile Include="HALCanTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />
     <Compile Include="HALErrors.cs" />

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace WPILib.IntegrationTests.MockHardware
 {
@@ -104,7 +100,7 @@ namespace WPILib.IntegrationTests.MockHardware
 
             }
             m_task = new Thread(Run);
-            WPILib.Timer.Delay(0.01);
+            Timer.Delay(0.01);
         }
 
         public void Execute()

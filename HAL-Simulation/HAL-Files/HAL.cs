@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -27,6 +28,88 @@ namespace HAL_Simulator
         //Time constants used for GetMatchTime.
         public const double AutonomousTime = 15.0;
         public const double TeleopTime = 135.0;
+
+        private static bool libraryLoaded = false;
+        private static IntPtr library;
+
+        public static void InitializeImpl()
+        {
+            if (!libraryLoaded)
+            {
+                try
+                {
+                    /* //These can be ignored for now, since we dont have a native library.
+                    OsType type = LoaderUtilities.GetOsType();
+                    if (!LoaderUtilities.CheckOsValid(type))
+                        throw new InvalidOperationException("OS Not Supported");
+
+                    string loadedPath = LoaderUtilities.ExtractLibrary(type);
+                    if (string.IsNullOrEmpty(loadedPath)) throw new FileNotFoundException("Stream not found");
+
+                    library = LoaderUtilities.LoadLibrary(loadedPath, type);
+
+                    if (library == IntPtr.Zero) throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
+                    */
+                    ILibraryLoader loader = null;
+                    Initialize(library, loader);
+                    HALAccelerometer.Initialize(library, loader);
+                    HALAnalog.Initialize(library, loader);
+                    HALCAN.Initialize(library, loader);
+                    HALCanTalonSRX.Initialize(library, loader);
+                    HALCompressor.Initialize(library, loader);
+                    HALDigital.Initialize(library, loader);
+                    HALInterrupts.Initialize(library, loader);
+                    HALNotifier.Initialize(library, loader);
+                    HALPDP.Initialize(library, loader);
+                    HALPower.Initialize(library, loader);
+                    HALSemaphore.Initialize(library, loader);
+                    HALSerialPort.Initialize(library, loader);
+                    HALSolenoid.Initialize(library, loader);
+                    HALUtilities.Initialize(library, loader);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    Environment.Exit(1);
+                }
+                libraryLoaded = true;
+            }
+        }
+
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HAL.GetPort = getPort;
+            HAL_Base.HAL.GetPortWithModule = getPortWithModule;
+            HAL_Base.HAL.GetHALErrorMessage = getHALErrorMessage;
+            HAL_Base.HAL.GetFPGAVersion = getFPGAVersion;
+            HAL_Base.HAL.GetFPGARevision = getFPGARevision;
+            HAL_Base.HAL.GetFPGATime = getFPGATime;
+            HAL_Base.HAL.GetFPGAButton = getFPGAButton;
+            HAL_Base.HAL.HALSetErrorData = HALSetErrorData;
+            HAL_Base.HAL.GetControlWord = HALGetControlWord;
+            HAL_Base.HAL.HALGetAllianceStation = HALGetAllianceStation;
+            HAL_Base.HAL.HALGetJoystickAxes = HALGetJoystickAxes;
+            HAL_Base.HAL.HALGetJoystickPOVs = HALGetJoystickPOVs;
+            HAL_Base.HAL.HALGetJoystickButtons = HALGetJoystickButtons;
+            HAL_Base.HAL.HALGetJoystickDescriptor = HALGetJoystickDescriptor;
+            HAL_Base.HAL.HALGetJoystickIsXbox = HALGetJoystickIsXbox;
+            HAL_Base.HAL.HALGetJoystickType = HALGetJoystickType;
+            HAL_Base.HAL.HALGetJoystickName = HALGetJoystickName;
+            HAL_Base.HAL.HALGetJoystickAxisType = HALGetJoystickAxisType;
+            HAL_Base.HAL.HALSetJoystickOutputs = HALSetJoystickOutputs;
+            HAL_Base.HAL.HALGetMatchTime = HALGetMatchTime;
+            HAL_Base.HAL.HALSetNewDataSem = HALSetNewDataSem;
+            HAL_Base.HAL.HALGetSystemActive = HALGetSystemActive;
+            HAL_Base.HAL.HALGetBrownedOut = HALGetBrownedOut;
+            HAL_Base.HAL.HALInitialize = HALInitialize;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStarting = HALNetworkCommunicationObserveUserProgramStarting;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramDisabled = HALNetworkCommunicationObserveUserProgramDisabled;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = HALNetworkCommunicationObserveUserProgramAutonomous;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTeleop = HALNetworkCommunicationObserveUserProgramTeleop;
+            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTest = HALNetworkCommunicationObserveUserProgramTest;
+            HAL_Base.HAL.HALReport = HALReport;
+        }
 
         /// <summary>
         /// Gets a RoboRIO Port.
@@ -64,6 +147,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="sem"></param>
         [CalledSimFunction]
+        //Replaced
         public static void HALSetNewDataSem(IntPtr sem)
         {
             HALNewDataSem = sem;
@@ -75,6 +159,7 @@ namespace HAL_Simulator
         /// <param name="code">The Error Code</param>
         /// <returns>IntPtr containing the Error message</returns>
         [CalledSimFunction]
+        //Replaced
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
@@ -160,6 +245,7 @@ namespace HAL_Simulator
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
+        //Replaced
         public static ushort getFPGAVersion(ref int status)
         {
             status = 0;
@@ -199,7 +285,7 @@ namespace HAL_Simulator
         public static bool getFPGAButton(ref int status)
         {
             status = 0;
-            return halData["fpga_button"];
+            return SimData.RoboRioData.FPGAButton;
         }
 
         /// <summary>
@@ -224,8 +310,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static HALControlWord HALGetControlWord()
         {
-            var h = halData["control"];
-            return new HALControlWord(h["enabled"], h["autonomous"], h["test"], h["eStop"], h["fms_attached"], h["ds_attached"]);
+            return new HALControlWord(true, false, false, false, false, true);
         }
 
         /// <summary>
@@ -402,7 +487,7 @@ namespace HAL_Simulator
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
             halData["user_program_state"] = "starting";
-            halData["program_started"] = true;
+            SimData.GlobalData.ProgramStarted = true;
         }
 
         [CalledSimFunction]
@@ -435,25 +520,25 @@ namespace HAL_Simulator
             switch (resource)
             {
                 case (byte)ResourceType.kResourceType_Jaguar:
-                    halData["pwm"][instanceNumber]["type"] = "jaguar";
+                    PWM[instanceNumber].Type = ControllerType.Jaguar;
                     break;
                 case (byte)ResourceType.kResourceType_Talon:
-                    halData["pwm"][instanceNumber]["type"] = "talon";
+                    PWM[instanceNumber].Type = ControllerType.Talon;
                     break;
                 case (byte)ResourceType.kResourceType_TalonSRX:
-                    halData["pwm"][instanceNumber]["type"] = "talonsrx";
+                    PWM[instanceNumber].Type = ControllerType.TalonSRX;
                     break;
                 case (byte)ResourceType.kResourceType_Victor:
-                    halData["pwm"][instanceNumber]["type"] = "victor";
+                    PWM[instanceNumber].Type = ControllerType.Victor;
                     break;
                 case (byte)ResourceType.kResourceType_VictorSP:
-                    halData["pwm"][instanceNumber]["type"] = "victorsp";
+                    PWM[instanceNumber].Type = ControllerType.VictorSP;
                     break;
                 case (byte)ResourceType.kResourceType_Servo:
-                    halData["pwm"][instanceNumber]["type"] = "servo";
+                    PWM[instanceNumber].Type = ControllerType.Servo;
                     break;
                 case (byte)ResourceType.kResourceType_Solenoid:
-                    halData["pcm"][(int)context]["solenoid"][instanceNumber]["initialized"] = true;
+                    GetPCM(context).Solenoids[instanceNumber].Initialized = true;
                     break;
             }
             if (!halData["reports"].ContainsKey(resource))

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace WPILib.Tests.SpecScaners
+﻿namespace WPILib.Tests.SpecScaners
 {
     public static class NativeProjects
     {

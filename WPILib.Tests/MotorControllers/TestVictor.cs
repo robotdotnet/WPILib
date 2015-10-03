@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using HAL_Base;
-using HAL_Simulator;
+﻿using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests.MotorControllers
@@ -9,16 +8,11 @@ namespace WPILib.Tests.MotorControllers
     public class TestVictor : TestBase
     {
 
-        private static Dictionary<dynamic, dynamic> HalData()
-        {
-            return SimData.halData;
-        }
-
         [Test]
         public void TestVictorInitialized()
         {
             using (Victor t = new Victor(2))
-                Assert.AreEqual(HalData()["pwm"][2]["type"], "victor");
+                Assert.AreEqual(SimData.PWM[2].Type, ControllerType.Victor);
         }
 
         [Test]
@@ -46,9 +40,7 @@ namespace WPILib.Tests.MotorControllers
             using (Victor t = new Victor(2))
             {
                 t.Set(1);
-                Assert.AreEqual(PWMHelpers.ReverseByType(nameof(Victor), HalData()["pwm"][2]["raw_value"]), 1);
-                Assert.AreEqual(PWMHelpers.ReverseByType(2), 1);
-                Assert.AreEqual(HalData()["pwm"][2]["value"], 1);
+                Assert.AreEqual(SimData.PWM[2].Value, 1);
             }
         }
 
@@ -69,10 +61,7 @@ namespace WPILib.Tests.MotorControllers
             using (Victor t = new Victor(2))
             {
                 t.PidWrite(-1);
-
-                Assert.AreEqual(PWMHelpers.ReverseByType(nameof(Victor), HalData()["pwm"][2]["raw_value"]), -1);
-                Assert.AreEqual(PWMHelpers.ReverseByType(2), -1);
-                Assert.AreEqual(HalData()["pwm"][2]["value"], -1);
+                Assert.AreEqual(SimData.PWM[2].Value, -1);
             }
         }
     }

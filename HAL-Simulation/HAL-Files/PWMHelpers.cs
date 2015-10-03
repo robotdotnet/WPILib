@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL_Simulator.Data;
 
 // ReSharper disable CheckNamespace
 // ReSharper disable InconsistentNaming
@@ -68,51 +69,35 @@ namespace HAL_Simulator
             return rev_pwm(value, maxPosPWM, minPosPWM, posScale, maxNegPWM, minNegPWM, negScale);
         }
 
-
-        public static double ReverseByType(dynamic definingVal, dynamic value = null)
+        public static double MotorRawToValue(PWMData pwm)
         {
-            var halData = SimData.halData;
-            string type;
-            double transVal;
-            if (definingVal is string)
-            {
-                type = definingVal.ToLower();
-                if (value != null)
-                {
-                    transVal = (double)value;
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(value), "Must have a value to translate");
-                }
-            }
-            else
-            {
-                type = halData["pwm"][definingVal]["type"];
-                transVal = (double)halData["pwm"][definingVal]["raw_value"];
-            }
+            if (pwm == null) return 0.0;
+
+            ControllerType type = pwm.Type;
+            double transVal = pwm.RawValue;
 
             switch (type)
             {
-                case "jaguar":
-                    return ReverseJaguarPWM((double)transVal);
-                case "talon":
-                    return ReverseTalonPWM((double) transVal);
-                case "talonsrx":
+                case ControllerType.None:
+                    return 0.0;
+                case ControllerType.Jaguar:
+                    return ReverseJaguarPWM(transVal);
+                case ControllerType.Talon:
+                    return ReverseTalonPWM((double)transVal);
+                case ControllerType.TalonSRX:
                     return ReverseTalonSRXPWM((double)transVal);
-                case "victor":
+                case ControllerType.Victor:
                     return ReverseVictorPWM((double)transVal);
-                case "victorsp":
+                case ControllerType.VictorSP:
                     return ReverseVictorSPPWM((double)transVal);
-                case "servo":
+                case ControllerType.Servo:
                     return 0.0;
                 default:
-                    if (type != null)
-                        throw new InvalidOperationException($"The type {type} is not a usable motor controller type");
-                    return 0.0;
+                    throw new InvalidOperationException($"The type {type} is not a usable motor controller type");
             }
         }
 
+        
         public static double rev_pwm(double value, ushort maxPosPWM, ushort minPosPWM, ushort posScale,
             ushort maxNegPWM, ushort minNegPWM, ushort negScale)
         {
@@ -121,9 +106,9 @@ namespace HAL_Simulator
             else if (value < minNegPWM)
                 return -1.0;
             else if (value > minPosPWM)
-                return (value - minPosPWM)/ posScale;
+                return (value - minPosPWM) / posScale;
             else if (value < maxNegPWM)
-                return (value - maxNegPWM)/negScale;
+                return (value - maxNegPWM) / negScale;
             else
                 return 0.0;
         }

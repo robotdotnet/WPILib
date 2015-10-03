@@ -43,7 +43,7 @@
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />
     <Compile Include="HALCAN.cs" />
-    <Compile Include="HALCANTalonSRX.cs" />
+    <Compile Include="HALCanTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />
     <Compile Include="HALNotifier.cs" />
@@ -61,6 +61,9 @@
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL-Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="libHALAthena_shared.so" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

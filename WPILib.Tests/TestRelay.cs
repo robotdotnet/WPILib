@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
+using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
 
@@ -15,7 +15,7 @@ namespace WPILib.Tests
         public void TestCreateAll()
         {
             List<Relay> relays = new List<Relay>();
-            for (int i = 0; i < TestBase.RelayChannels; i++)
+            for (int i = 0; i < RelayChannels; i++)
             {
                 Relay r = new Relay(i);
                 relays.Add(r);
@@ -32,7 +32,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                Relay r = new Relay(TestBase.RelayChannels);
+                Relay r = new Relay(RelayChannels);
             });
         }
 
@@ -52,54 +52,45 @@ namespace WPILib.Tests
             [Test]
             public void TestForward()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.Forward);
-                Assert.AreEqual(true, data["relay"][0]["fwd"]);
-                Assert.AreEqual(false, data["relay"][0]["rev"]);
+                Assert.AreEqual(true, SimData.Relay[0].Forward);
+                Assert.AreEqual(false, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
             [Test]
             public void TestReverse()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.Reverse);
-                Assert.AreEqual(false, data["relay"][0]["fwd"]);
-                Assert.AreEqual(true, data["relay"][0]["rev"]);
+                Assert.AreEqual(false, SimData.Relay[0].Forward);
+                Assert.AreEqual(true, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
             [Test]
             public void TestOn()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.On);
-                Assert.AreEqual(true, data["relay"][0]["fwd"]);
-                Assert.AreEqual(true, data["relay"][0]["rev"]);
+                Assert.AreEqual(true, SimData.Relay[0].Forward);
+                Assert.AreEqual(true, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
             [Test]
             public void TestOff()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.Off);
-                Assert.AreEqual(false, data["relay"][0]["fwd"]);
-                Assert.AreEqual(false, data["relay"][0]["rev"]);
+                Assert.AreEqual(false, SimData.Relay[0].Forward);
+                Assert.AreEqual(false, SimData.Relay[0].Reverse);
                 relay.Dispose();
-            }
-
-            private Dictionary<dynamic,dynamic> GetSimData()
-            {
-                return HAL.halData;
             }
         }
 
@@ -112,12 +103,11 @@ namespace WPILib.Tests
             [Test]
             public void TestForward()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Forward);
                 relay.Set(Relay.Value.Forward);
-                Assert.AreEqual(true, data["relay"][0]["fwd"]);
-                Assert.AreEqual(false, data["relay"][0]["rev"]);
+                Assert.AreEqual(true, SimData.Relay[0].Forward);
+                Assert.AreEqual(false, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
@@ -135,30 +125,22 @@ namespace WPILib.Tests
             [Test]
             public void TestOn()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Forward);
                 relay.Set(Relay.Value.On);
-                Assert.AreEqual(true, data["relay"][0]["fwd"]);
-                Assert.AreEqual(false, data["relay"][0]["rev"]);
+                Assert.AreEqual(true, SimData.Relay[0].Forward);
+                Assert.AreEqual(false, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
             [Test]
             public void TestOff()
             {
-                var data = GetSimData();
-
                 Relay relay = new Relay(0, Relay.Direction.Forward);
                 relay.Set(Relay.Value.Off);
-                Assert.AreEqual(false, data["relay"][0]["fwd"]);
-                Assert.AreEqual(false, data["relay"][0]["rev"]);
+                Assert.AreEqual(false, SimData.Relay[0].Forward);
+                Assert.AreEqual(false, SimData.Relay[0].Reverse);
                 relay.Dispose();
-            }
-
-            private Dictionary<dynamic, dynamic> GetSimData()
-            {
-                return HAL.halData;
             }
         }
 
@@ -168,7 +150,6 @@ namespace WPILib.Tests
             [Test]
             public void TestForward()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 Assert.Throws<InvalidValueException>(() =>
@@ -181,42 +162,34 @@ namespace WPILib.Tests
             [Test]
             public void TestReverse()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 relay.Set(Relay.Value.Reverse);
-                Assert.AreEqual(false, data["relay"][0]["fwd"]);
-                Assert.AreEqual(true, data["relay"][0]["rev"]);
+                Assert.AreEqual(false, SimData.Relay[0].Forward);
+                Assert.AreEqual(true, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
             [Test]
             public void TestOn()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 relay.Set(Relay.Value.On);
-                Assert.AreEqual(false, data["relay"][0]["fwd"]);
-                Assert.AreEqual(true, data["relay"][0]["rev"]);
+                Assert.AreEqual(false, SimData.Relay[0].Forward);
+                Assert.AreEqual(true, SimData.Relay[0].Reverse);
                 relay.Dispose();
             }
 
             [Test]
             public void TestOff()
             {
-                var data = GetSimData();
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 relay.Set(Relay.Value.Off);
-                Assert.AreEqual(false, data["relay"][0]["fwd"]);
-                Assert.AreEqual(false, data["relay"][0]["rev"]);
+                Assert.AreEqual(false, SimData.Relay[0].Forward);
+                Assert.AreEqual(false, SimData.Relay[0].Reverse);
                 relay.Dispose();
-            }
-
-            private Dictionary<dynamic, dynamic> GetSimData()
-            {
-                return HAL.halData;
             }
         }
     }

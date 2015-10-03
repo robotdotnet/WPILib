@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
+using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 
@@ -22,9 +23,9 @@ namespace WPILib.Tests
             return new Solenoid(m_module, 0);
         }
 
-        private static Dictionary<dynamic, dynamic> HalData()
+        private SolenoidData[] GetSolenoids()
         {
-            return HAL.halData;
+            return SimData.GetPCM(m_module).Solenoids;
         }
 
         [Test]
@@ -50,7 +51,7 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][0]["initialized"]);
+                Assert.IsTrue(GetSolenoids()[0].Initialized);
             }
         }
 
@@ -70,7 +71,7 @@ namespace WPILib.Tests
         public void TestSolenoidCreateAll()
         {
             List<Solenoid> solenoids = new List<Solenoid>();
-            for (int i = 0; i < TestBase.SolenoidChannels; i++)
+            for (int i = 0; i < SolenoidChannels; i++)
             {
                 solenoids.Add(new Solenoid(m_module, i));
             }
@@ -95,7 +96,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var p = new Solenoid(m_module, TestBase.SolenoidChannels);
+                var p = new Solenoid(m_module, SolenoidChannels);
             });
         }
 
@@ -105,10 +106,10 @@ namespace WPILib.Tests
             using (Solenoid s = NewSolenoid())
             {
                 s.Set(true);
-                Assert.IsTrue(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
+                Assert.IsTrue(GetSolenoids()[0].Value);
 
                 s.Set(false);
-                Assert.IsFalse(HalData()["pcm"][m_module]["solenoid"][0]["value"]);
+                Assert.IsFalse(GetSolenoids()[0].Value);
             }
         }
 
@@ -117,10 +118,10 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                HalData()["pcm"][m_module]["solenoid"][0]["value"] = true;
+                GetSolenoids()[0].Value = true;
                 Assert.IsTrue(s.Get());
 
-                HalData()["pcm"][m_module]["solenoid"][0]["value"] = false;
+                GetSolenoids()[0].Value = false;
                 Assert.IsFalse(s.Get());
             }
         }

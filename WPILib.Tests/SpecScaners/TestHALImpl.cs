@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using HAL_Base;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace WPILib.Tests.SpecScaners
 {
@@ -146,10 +147,30 @@ namespace WPILib.Tests.SpecScaners
             Assert.IsTrue(pass);
         }
         */
-
-        [Test]
         public void TestHALBaseMapsToHALSim()
         {
+
+                List<string> fd = new List<string>();
+            FieldInfo[] fields = typeof (HAL).GetFields();
+
+            foreach (var fieldInfo in fields)
+            {
+                if ((fieldInfo.FieldType).IsSubclassOf(typeof (MulticastDelegate)))
+                {
+                    var x = fieldInfo.GetValue(null);
+                    if (x == null)
+                    {
+                        fd.Add(fieldInfo.Name);
+                    }
+                }
+            }
+
+            foreach (var VARIABLE in fd)
+            {
+                Console.WriteLine(VARIABLE);
+            }
+
+
             StringBuilder functionList = new StringBuilder();
 
             functionList.AppendLine("HAL-Simulator Functions\n");
@@ -254,7 +275,6 @@ namespace WPILib.Tests.SpecScaners
             Assert.IsTrue(pass);
         }
 
-        [Test]
         public void TestHALBaseMapsToHALRIO()
         {
             StringBuilder functionList = new StringBuilder();

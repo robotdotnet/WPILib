@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 
@@ -14,6 +15,18 @@ namespace HAL_Simulator
     internal class HALSolenoid
     {
 
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
+            HAL_Base.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
+            HAL_Base.HALSolenoid.GetSolenoid = getSolenoid;
+            HAL_Base.HALSolenoid.SetSolenoid = setSolenoid;
+            HAL_Base.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
+            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
+            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageFault = getPCMSolenoidVoltageFault;
+            HAL_Base.HALSolenoid.ClearAllPCMStickyFaults_sol = clearAllPCMStickyFaults_sol;
+        }
+
         [CalledSimFunction]
         public static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)
         {
@@ -22,7 +35,7 @@ namespace HAL_Simulator
                 port = GetHalPort(port_pointer)
             };
             status = 0;
-            InitializeNewPCM(p.port.module);
+            InitializePCM(p.port.module);
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
             return ptr;
@@ -39,7 +52,7 @@ namespace HAL_Simulator
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
-            return halData["pcm"][p.port.module]["solenoid"][p.port.pin]["value"];
+            return GetPCM(p.port.module).Solenoids[p.port.pin].Value;
         }
 
 
@@ -49,7 +62,7 @@ namespace HAL_Simulator
         {
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
-            halData["pcm"][p.port.module]["solenoid"][p.port.pin]["value"] = value;
+            GetPCM(p.port.module).Solenoids[p.port.pin].Value = value;
         }
 
         [CalledSimFunction]

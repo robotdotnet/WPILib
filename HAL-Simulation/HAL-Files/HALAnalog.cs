@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.HALErrorConstants;
@@ -27,6 +28,47 @@ namespace HAL_Simulator
 
         internal static readonly int[] AccumulatorChannels = { 0, 1 };
 
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALAnalog.InitializeAnalogOutputPort = initializeAnalogOutputPort;
+            HAL_Base.HALAnalog.SetAnalogOutput = setAnalogOutput;
+            HAL_Base.HALAnalog.GetAnalogOutput = getAnalogOutput;
+            HAL_Base.HALAnalog.CheckAnalogOutputChannel = checkAnalogOutputChannel;
+            HAL_Base.HALAnalog.InitializeAnalogInputPort = initializeAnalogInputPort;
+            HAL_Base.HALAnalog.CheckAnalogModule = checkAnalogModule;
+            HAL_Base.HALAnalog.CheckAnalogInputChannel = checkAnalogInputChannel;
+            HAL_Base.HALAnalog.SetAnalogSampleRate = setAnalogSampleRate;
+            HAL_Base.HALAnalog.GetAnalogSampleRate = getAnalogSampleRate;
+            HAL_Base.HALAnalog.SetAnalogAverageBits = setAnalogAverageBits;
+            HAL_Base.HALAnalog.GetAnalogAverageBits = getAnalogAverageBits;
+            HAL_Base.HALAnalog.SetAnalogOversampleBits = setAnalogOversampleBits;
+            HAL_Base.HALAnalog.GetAnalogOversampleBits = getAnalogOversampleBits;
+            HAL_Base.HALAnalog.GetAnalogValue = getAnalogValue;
+            HAL_Base.HALAnalog.GetAnalogAverageValue = getAnalogAverageValue;
+            HAL_Base.HALAnalog.GetAnalogVoltsToValue = getAnalogVoltsToValue;
+            HAL_Base.HALAnalog.GetAnalogVoltage = getAnalogVoltage;
+            HAL_Base.HALAnalog.GetAnalogAverageVoltage = getAnalogAverageVoltage;
+            HAL_Base.HALAnalog.GetAnalogLSBWeight = getAnalogLSBWeight;
+            HAL_Base.HALAnalog.GetAnalogOffset = getAnalogOffset;
+            HAL_Base.HALAnalog.IsAccumulatorChannel = isAccumulatorChannel;
+            HAL_Base.HALAnalog.InitAccumulator = initAccumulator;
+            HAL_Base.HALAnalog.ResetAccumulator = resetAccumulator;
+            HAL_Base.HALAnalog.SetAccumulatorCenter = setAccumulatorCenter;
+            HAL_Base.HALAnalog.SetAccumulatorDeadband = setAccumulatorDeadband;
+            HAL_Base.HALAnalog.GetAccumulatorValue = getAccumulatorValue;
+            HAL_Base.HALAnalog.GetAccumulatorCount = getAccumulatorCount;
+            HAL_Base.HALAnalog.GetAccumulatorOutput = getAccumulatorOutput;
+            HAL_Base.HALAnalog.InitializeAnalogTrigger = initializeAnalogTrigger;
+            HAL_Base.HALAnalog.CleanAnalogTrigger = cleanAnalogTrigger;
+            HAL_Base.HALAnalog.SetAnalogTriggerLimitsRaw = setAnalogTriggerLimitsRaw;
+            HAL_Base.HALAnalog.SetAnalogTriggerLimitsVoltage = setAnalogTriggerLimitsVoltage;
+            HAL_Base.HALAnalog.SetAnalogTriggerAveraged = setAnalogTriggerAveraged;
+            HAL_Base.HALAnalog.SetAnalogTriggerFiltered = setAnalogTriggerFiltered;
+            HAL_Base.HALAnalog.GetAnalogTriggerInWindow = getAnalogTriggerInWindow;
+            HAL_Base.HALAnalog.GetAnalogTriggerTriggerState = getAnalogTriggerTriggerState;
+            HAL_Base.HALAnalog.GetAnalogTriggerOutput = getAnalogTriggerOutput;
+        }
+
         //The HAL by default stores raw values instead of voltage behind the scenes. We are using voltage
         [CalledSimFunction]
         public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
@@ -36,7 +78,7 @@ namespace HAL_Simulator
             {
                 port = GetHalPort(port_pointer)
             };
-            halData["analog_out"][p.port.pin]["initialized"] = true;
+            AnalogOut[p.port.pin].Initialized = true;
 
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
@@ -48,14 +90,14 @@ namespace HAL_Simulator
         public static void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status)
         {
             status = 0;
-            halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"] = voltage;
+            AnalogOut[GetAnalogPort(analog_port_pointer).port.pin].Voltage = voltage;
         }
 
         [CalledSimFunction]
         public static double getAnalogOutput(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_out"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
+            return AnalogOut[GetAnalogPort(analog_port_pointer).port.pin].Voltage;
         }
 
         [CalledSimFunction]
@@ -72,9 +114,7 @@ namespace HAL_Simulator
             {
                 port = GetHalPort(port_pointer)
             };
-            halData["analog_in"][p.port.pin]["initialized"] = true;
-            
-            //Set default values here when we get them.
+            AnalogIn[p.port.pin].Initialized = true;
 
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
@@ -98,42 +138,42 @@ namespace HAL_Simulator
         public static void setAnalogSampleRate(double samplesPerSecond, ref int status)
         {
             status = 0;
-            halData["analog_sample_rate"] = samplesPerSecond;
+            SimData.GlobalData.AnalogSampleRate = samplesPerSecond;
         }
 
         [CalledSimFunction]
         public static float getAnalogSampleRate(ref int status)
         {
             status = 0;
-            return (float)halData["analog_sample_rate"];
+            return (float)SimData.GlobalData.AnalogSampleRate;
         }
 
         [CalledSimFunction]
         public static void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status)
         {
             status = 0;
-            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"] = bits;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AverageBits = bits;
         }
 
         [CalledSimFunction]
         public static uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["avg_bits"];
+            return AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AverageBits;
         }
 
         [CalledSimFunction]
         public static void setAnalogOversampleBits(IntPtr analog_port_pointer, uint bits, ref int status)
         {
             status = 0;
-            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"] = bits;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].OversampleBits = bits;
         }
 
         [CalledSimFunction]
         public static uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["oversample_bits"];
+            return AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].OversampleBits;
         }
 
         [CalledSimFunction]
@@ -141,8 +181,8 @@ namespace HAL_Simulator
         {
             status = 0;
             //Will need to port this to use voltage and scale it
-            var value = getAnalogVoltsToValue(analog_port_pointer, 
-                halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"], ref status);
+            var value = getAnalogVoltsToValue(analog_port_pointer,
+                AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].Voltage, ref status);
             return (short)value;
         }
 
@@ -173,13 +213,13 @@ namespace HAL_Simulator
             var offset = getAnalogOffset(analog_port_pointer, ref status);
             return (int)((voltage + offset * 1.0e-9) / (LSBWeight * 1.0e-9));
         }
-        
+
 
         [CalledSimFunction]
         public static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return (float)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
+            return (float)AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].Voltage;
         }
 
         [CalledSimFunction]
@@ -187,21 +227,21 @@ namespace HAL_Simulator
         {
             status = 0;
             //Just use regular voltage. Averaging doesn't work without constant updating
-            return (float)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["voltage"];
+            return (float)AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].Voltage;
         }
 
         [CalledSimFunction]
         public static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["lsb_weight"];
+            return (uint)AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].LSBWeight;
         }
 
         [CalledSimFunction]
         public static int getAnalogOffset(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["offset"];
+            return AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].Offset;
         }
 
         [CalledSimFunction]
@@ -215,7 +255,7 @@ namespace HAL_Simulator
         public static void initAccumulator(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_initialized"] = true;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorInitialized = true;
         }
 
         [CalledSimFunction]
@@ -223,30 +263,30 @@ namespace HAL_Simulator
         {
             status = 0;
             int pin = GetAnalogPort(analog_port_pointer).port.pin;
-            halData["analog_in"][pin]["accumulator_center"] = 0;
-            halData["analog_in"][pin]["accumulator_count"] = 1;
-            halData["analog_in"][pin]["accumulator_value"] = 0;
+            AnalogIn[pin].AccumulatorCenter = 0;
+            AnalogIn[pin].AccumulatorCount = 1;
+            AnalogIn[pin].AccumulatorValue = 0;
         }
 
         [CalledSimFunction]
         public static void setAccumulatorCenter(IntPtr analog_port_pointer, int center, ref int status)
         {
             status = 0;
-            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_center"] = center;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorCenter = center;
         }
 
         [CalledSimFunction]
         public static void setAccumulatorDeadband(IntPtr analog_port_pointer, int deadband, ref int status)
         {
             status = 0;
-            halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_deadband"] = deadband;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorDeadband = deadband;
         }
 
         [CalledSimFunction]
         public static long getAccumulatorValue(IntPtr analog_port_pointer, ref int status)
         {
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_value"];
+            return AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorValue;
         }
 
         [CalledSimFunction]
@@ -258,7 +298,7 @@ namespace HAL_Simulator
                 return 0;
             }
             status = 0;
-            return halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
+            return AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorCount;
         }
 
         [CalledSimFunction]
@@ -266,8 +306,8 @@ namespace HAL_Simulator
             ref int status)
         {
             status = 0;
-            count = (uint)halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_count"];
-            value = halData["analog_in"][GetAnalogPort(analog_port_pointer).port.pin]["accumulator_value"];
+            count = AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorCount;
+            value = AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorValue;
         }
 
         [CalledSimFunction]
@@ -275,22 +315,25 @@ namespace HAL_Simulator
         {
             status = 0;
 
-            for (int i = 0; i < halData["analog_trigger"].Count; i++)
+            for (int i = 0; i < SimData.AnalogTrigger.Count; i++)
             {
-                var cnt = halData["analog_trigger"][i];
-                if (cnt["initialized"] == false)
+                var cnt = SimData.AnalogTrigger[i];
+                if (cnt.Initialized == false)
                 {
-                	IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
-                    cnt["initialized"] = true;
-					cnt["pin"] = GetHalPort(port_pointer).pin;
+                    IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
+                    cnt.Initialized = true;
+                    cnt.AnalogPin = GetHalPort(port_pointer).pin;
                     AnalogTrigger trig = new AnalogTrigger()
                     {
                         analogPortPointer = aPt,
-                        index = i,
+                        
                     };
+                    index = (uint)i;
+                    trig.index = i;
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
                     Marshal.StructureToPtr(trig, ptr, true);
-                    cnt["pointer"] = ptr.ToInt64();
+                    cnt.TriggerPointer = ptr.ToInt64();
+                    
                     return ptr;
                 }
             }
@@ -302,14 +345,14 @@ namespace HAL_Simulator
         public static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
         {
             status = 0;
-            halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["initialized"] = false;
+            SimData.AnalogTrigger[GetAnalogTrigger(analog_trigger_pointer).index].Initialized = false;
         }
-        
+
         private static double getaAnalogValueToVoltage(IntPtr analog_port_pointer, int value, ref int status)
         {
             uint LSBWeight = getAnalogLSBWeight(analog_port_pointer, ref status);
             int offset = getAnalogOffset(analog_port_pointer, ref status);
-            
+
             double voltage = LSBWeight * 1.0e-9 * value - offset * 1.0e-9;
             return voltage;
         }
@@ -325,9 +368,9 @@ namespace HAL_Simulator
             {
                 var port = GetAnalogTrigger(analog_trigger_pointer).analogPortPointer;
                 status = 0;
-                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_lower"] 
+                SimData.AnalogTrigger[GetAnalogTrigger(analog_trigger_pointer).index].TrigLower
                     = getaAnalogValueToVoltage(port, lower, ref status);
-                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_upper"] 
+                SimData.AnalogTrigger[GetAnalogTrigger(analog_trigger_pointer).index].TrigUpper
                     = getaAnalogValueToVoltage(port, upper, ref status);
             }
         }
@@ -343,8 +386,8 @@ namespace HAL_Simulator
             else
             {
                 status = 0;
-                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_lower"] = lower;
-                halData["analog_trigger"][GetAnalogTrigger(analog_trigger_pointer).index]["trig_upper"] = upper;
+                SimData.AnalogTrigger[GetAnalogTrigger(analog_trigger_pointer).index].TrigLower = lower;
+                SimData.AnalogTrigger[GetAnalogTrigger(analog_trigger_pointer).index].TrigUpper = upper;
             }
         }
 
@@ -352,15 +395,15 @@ namespace HAL_Simulator
         public static void setAnalogTriggerAveraged(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status)
         {
             var trigPort = GetAnalogTrigger(analog_trigger_pointer);
-            if (halData["analog_trigger"][trigPort.index]["trig_type"] == "filtered")
+            if (SimData.AnalogTrigger[trigPort.index].TrigType == TrigerType.Filtered)
             {
                 status = INCOMPATIBLE_STATE;
             }
             else
             {
                 status = 0;
-                string val = useAveragedValue ? "averaged" : null;
-                halData["analog_trigger"][trigPort.index]["trig_type"] = val;
+                TrigerType val = useAveragedValue ? TrigerType.Averaged : TrigerType.Unassigned;
+                SimData.AnalogTrigger[trigPort.index].TrigType = val;
             }
         }
 
@@ -369,34 +412,31 @@ namespace HAL_Simulator
             bool useFilteredValue, ref int status)
         {
             var trigPort = GetAnalogTrigger(analog_trigger_pointer);
-            if (halData["analog_trigger"][trigPort.index]["trig_type"] == "averaged")
+            if (SimData.AnalogTrigger[trigPort.index].TrigType == TrigerType.Averaged)
             {
                 status = INCOMPATIBLE_STATE;
             }
             else
             {
                 status = 0;
-                string val = useFilteredValue ? "filtered" : null;
-                halData["analog_trigger"][trigPort.index]["trig_type"] = val;
+                TrigerType val = useFilteredValue ? TrigerType.Filtered : TrigerType.Unassigned;
+                SimData.AnalogTrigger[trigPort.index].TrigType = val;
             }
         }
 
-        private static dynamic getTriggerValue(AnalogTrigger trigger)
+        private static double getTriggerValue(AnalogTrigger trigger)
         {
-            var ain = halData["analog_in"][GetAnalogPort(trigger.analogPortPointer).port.pin];
-            var atr = halData["analog_trigger"][trigger.index];
-            var trigType = atr["trig_type"];
-            if (trigType == null)
+            var ain = AnalogIn[GetAnalogPort(trigger.analogPortPointer).port.pin];
+            var atr = SimData.AnalogTrigger[trigger.index];
+            var trigType = atr.TrigType;
+            switch (trigType)
             {
-                return ain["voltage"];
-            }
-            if (trigType == "averaged")
-            {
-                return ain["voltage"];
-            }
-            if (trigType == "filtered")
-            {
-                return ain["voltage"];
+                case TrigerType.Unassigned:
+                    return ain.Voltage;
+                case TrigerType.Averaged:
+                    return ain.Voltage;
+                case TrigerType.Filtered:
+                    return ain.Voltage;
             }
             throw new ArgumentOutOfRangeException(nameof(trigger), "Analog Trigger must be either filtered, averaged or null.");
 
@@ -408,8 +448,8 @@ namespace HAL_Simulator
             status = 0;
             var trig = GetAnalogTrigger(analog_trigger_pointer);
             var val = getTriggerValue(trig);
-            var atr = halData["analog_trigger"][trig.index];
-            return val >= atr["trig_lower"] && val <= atr["trig_upper"];
+            var atr = SimData.AnalogTrigger[trig.index];
+            return val >= atr.TrigLower && val <= atr.TrigUpper;
         }
 
         [CalledSimFunction]
@@ -418,18 +458,18 @@ namespace HAL_Simulator
             status = 0;
             var trig = GetAnalogTrigger(analog_trigger_pointer);
             var val = getTriggerValue(trig);
-            var atr = halData["analog_trigger"][trig.index];
-            if (val < atr["trig_lower"])
+            var atr = SimData.AnalogTrigger[trig.index];
+            if (val < atr.TrigLower)
             {
-                atr["trig_state"] = false;
+                atr.TrigState = false;
                 return false;
             }
-            if (val > atr["trig_upper"])
+            if (val > atr.TrigUpper)
             {
-                atr["trig_state"] = true;
+                atr.TrigState = true;
                 return true;
             }
-            return atr["trig_state"];
+            return atr.TrigState;
         }
 
 
