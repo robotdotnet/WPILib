@@ -5,6 +5,7 @@ using System.Reflection;
 using NetworkTables;
 using WPILib.Buttons;
 using WPILib.Commands;
+using System.Collections.ObjectModel;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
@@ -20,9 +21,16 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public ICollection<Button> Buttons => buttons;
 
-        private readonly MultiValueDictionary<MatchPhase, Command> phaseCommands = new MultiValueDictionary<MatchPhase, Command>();
+        private readonly IDictionary<MatchPhase, IList<Command>> phaseCommands = new Dictionary<MatchPhase, IList<Command>>();
 
-        public IReadOnlyDictionary<MatchPhase, IReadOnlyCollection<Command>> PhaseCommands => phaseCommands;
+        public IReadOnlyDictionary<MatchPhase, IList<Command>> PhaseCommands
+        {
+            get
+            {
+                var dictionary = new ReadOnlyDictionary<MatchPhase, IList<Command>>(phaseCommands);
+                return dictionary;
+            }
+        }
 
         public AttributedRobot(ReflectionContext reflectionContext)
         {
@@ -103,7 +111,9 @@ namespace WPILib.Extras.AttributedCommandModel
         {
             foreach (var attr in commandType.GetCustomAttributes<RunCommandAtPhaseStartAttribute>())
             {
-                phaseCommands.Add(attr.Phase, (Command)Activator.CreateInstance(commandType));
+                if (!phaseCommands.ContainsKey(attr.Phase))
+                    phaseCommands.Add(attr.Phase, new List<Command>());
+                phaseCommands[attr.Phase].Add((Command)Activator.CreateInstance(commandType));
             }
             foreach (var attr in commandType.GetCustomAttributes<RunCommandOnJoystickAttribute>())
             {
