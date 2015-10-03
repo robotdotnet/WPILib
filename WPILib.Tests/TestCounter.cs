@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
 using HAL_Base;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -40,7 +38,7 @@ namespace WPILib.Tests
             List<Counter> counters = new List<Counter>();
             Assert.DoesNotThrow(() =>
             {
-                for (int i = 0; i < TestBase.NumCounters; i++)
+                for (int i = 0; i < NumCounters; i++)
                 {
                     counters.Add(new Counter(i));
                 }
@@ -55,7 +53,7 @@ namespace WPILib.Tests
         public void TestCounterOverAllocate()
         {
             List<Counter> counters = new List<Counter>();
-            for (int i = 0; i < TestBase.NumCounters; i++)
+            for (int i = 0; i < NumCounters; i++)
             {
                 counters.Add(new Counter(i));
             }
@@ -63,7 +61,7 @@ namespace WPILib.Tests
             Counter counter = null;
             Assert.Throws<UncleanStatusException>(() =>
             {
-                counter = new Counter(TestBase.NumCounters);
+                counter = new Counter(NumCounters);
             });
             counter?.Dispose();
 

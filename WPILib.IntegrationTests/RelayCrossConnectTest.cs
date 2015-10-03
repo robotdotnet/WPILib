@@ -1,5 +1,4 @@
-﻿using HAL_Base;
-using NetworkTables;
+﻿using NetworkTables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.IntegrationTests.Fixtures;

@@ -2,7 +2,6 @@
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.CAN;
-using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using static HAL_Base.HALCAN;

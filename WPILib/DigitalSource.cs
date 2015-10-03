@@ -1,7 +1,5 @@
 ﻿using System;
 using HAL_Base;
-using WPILib.Exceptions;
-using WPILib.Interfaces;
 using static HAL_Base.HALDigital;
 using static WPILib.Utility;
 

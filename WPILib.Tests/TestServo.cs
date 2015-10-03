@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using HAL_Simulator;
+﻿using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {

@@ -3,7 +3,6 @@ using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -26,15 +25,15 @@ namespace WPILib.Tests
         public void TestEncoderOverAllocation()
         {
             List<Encoder> encoders = new List<Encoder>();
-            for (int i = 0; i < TestBase.NumEncoders; i++)
+            for (int i = 0; i < NumEncoders; i++)
             {
-                encoders.Add(new Encoder(i, i + TestBase.NumEncoders));
+                encoders.Add(new Encoder(i, i + NumEncoders));
             }
 
             Encoder enc = null;
             Assert.Throws<AllocationException>(() =>
             {
-                enc = new Encoder(TestBase.NumEncoders, TestBase.NumEncoders + TestBase.NumEncoders);
+                enc = new Encoder(NumEncoders, NumEncoders + NumEncoders);
             });
             enc?.Dispose();
 
@@ -49,9 +48,9 @@ namespace WPILib.Tests
         public void TestEncoderAllocateAll()
         {
             List<Encoder> encoders = new List<Encoder>();
-            for (int i = 0; i < TestBase.NumEncoders; i++)
+            for (int i = 0; i < NumEncoders; i++)
             {
-                encoders.Add(new Encoder(i, i + TestBase.NumEncoders));
+                encoders.Add(new Encoder(i, i + NumEncoders));
             }
 
             foreach (var encoder in encoders)

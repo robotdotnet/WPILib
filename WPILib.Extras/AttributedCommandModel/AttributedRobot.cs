@@ -1,16 +1,16 @@
-﻿using NetworkTables;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using NetworkTables;
 using WPILib.Buttons;
 using WPILib.Commands;
-
 
 namespace WPILib.Extras.AttributedCommandModel
 {
     public class AttributedRobot : IterativeRobot
     {
-        private readonly System.Reflection.ReflectionContext reflectionContext;
+        private readonly ReflectionContext reflectionContext;
 
         private readonly List<Subsystem> subsystems = new List<Subsystem>();
 
@@ -24,7 +24,7 @@ namespace WPILib.Extras.AttributedCommandModel
 
         public IDictionary<MatchPhase, Command> PhaseCommands => phaseCommands;
 
-        public AttributedRobot(System.Reflection.ReflectionContext reflectionContext)
+        public AttributedRobot(ReflectionContext reflectionContext)
         {
             this.reflectionContext = reflectionContext;
         }
@@ -58,7 +58,7 @@ namespace WPILib.Extras.AttributedCommandModel
 
         }
 
-        private IEnumerable<System.Reflection.Assembly> GetAssemblies()
+        private IEnumerable<Assembly> GetAssemblies()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             return assemblies.Select(assembly => reflectionContext != null ? reflectionContext.MapAssembly(assembly)

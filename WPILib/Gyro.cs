@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using HAL_Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;

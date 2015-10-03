@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Permissions;
 using System.Threading;
 using static WPILib.Timer;
 using static HAL_Base.HALSemaphore;

@@ -4,7 +4,6 @@ using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -74,7 +73,7 @@ namespace WPILib.Tests
         public void TestDoubleSolenoidCreateAll()
         {
             List<DoubleSolenoid> solenoids = new List<DoubleSolenoid>();
-            for (int i = 0; i < TestBase.SolenoidChannels; i++)
+            for (int i = 0; i < SolenoidChannels; i++)
             {
                 solenoids.Add(new DoubleSolenoid(m_module, i, i+1));
                 i++;
@@ -100,7 +99,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var p = new DoubleSolenoid(m_module, TestBase.SolenoidChannels, TestBase.SolenoidChannels + 1);
+                var p = new DoubleSolenoid(m_module, SolenoidChannels, SolenoidChannels + 1);
             });
         }
 

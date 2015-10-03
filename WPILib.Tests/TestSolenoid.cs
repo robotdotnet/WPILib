@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
@@ -72,7 +71,7 @@ namespace WPILib.Tests
         public void TestSolenoidCreateAll()
         {
             List<Solenoid> solenoids = new List<Solenoid>();
-            for (int i = 0; i < TestBase.SolenoidChannels; i++)
+            for (int i = 0; i < SolenoidChannels; i++)
             {
                 solenoids.Add(new Solenoid(m_module, i));
             }
@@ -97,7 +96,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var p = new Solenoid(m_module, TestBase.SolenoidChannels);
+                var p = new Solenoid(m_module, SolenoidChannels);
             });
         }
 

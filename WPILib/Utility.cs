@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using HAL_Base;
 using WPILib.Exceptions;
 using static HAL_Base.HAL;

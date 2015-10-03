@@ -4,7 +4,6 @@ using System.Threading;
 using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -21,7 +20,7 @@ namespace WPILib.Tests
         public void TestCreateAllInterrupts()
         {
             List<DigitalInput> inputs = new List<DigitalInput>();
-            for (int i = 0; i < TestBase.NumInterrupts; i++)
+            for (int i = 0; i < NumInterrupts; i++)
             {
                 inputs.Add(new DigitalInput(i));
             }
@@ -41,7 +40,7 @@ namespace WPILib.Tests
         public void TestCreateLimits()
         {
             List<DigitalInput> inputs = new List<DigitalInput>();
-            for (int i = 0; i < TestBase.NumInterrupts; i++)
+            for (int i = 0; i < NumInterrupts; i++)
             {
                 inputs.Add(new DigitalInput(i));
             }
@@ -50,7 +49,7 @@ namespace WPILib.Tests
             {
                 input.RequestInterrupts();
             }
-            DigitalInput in9 = new DigitalInput(TestBase.NumInterrupts);
+            DigitalInput in9 = new DigitalInput(NumInterrupts);
             Assert.Throws<AllocationException>(() => in9.RequestInterrupts());
             in9.Dispose();
 

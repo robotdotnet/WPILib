@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
@@ -25,7 +24,7 @@ namespace WPILib.Tests
         public void TestCompressorAllModules()
         {
             List<Compressor> compressors = new List<Compressor>();
-            for (int i = 0; i < TestBase.SolenoidModules; i++)
+            for (int i = 0; i < SolenoidModules; i++)
             {
                 compressors.Add(new Compressor(i));
             }
@@ -41,7 +40,7 @@ namespace WPILib.Tests
         {
             Assert.Throws(typeof (ArgumentOutOfRangeException), () =>
             {
-                var cmp = new Compressor(TestBase.SolenoidModules);
+                var cmp = new Compressor(SolenoidModules);
             });           
         }
 

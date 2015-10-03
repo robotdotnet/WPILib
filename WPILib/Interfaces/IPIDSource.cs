@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace WPILib.Interfaces
+﻿namespace WPILib.Interfaces
 {
     /*
     /// <summary>

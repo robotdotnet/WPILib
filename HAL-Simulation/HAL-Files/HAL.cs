@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using HAL_Simulator.Data;

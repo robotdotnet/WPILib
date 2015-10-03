@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using HAL_Base;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 
 namespace WPILib.Tests.SpecScaners
 {
@@ -151,7 +151,7 @@ namespace WPILib.Tests.SpecScaners
         {
 
                 List<string> fd = new List<string>();
-            System.Reflection.FieldInfo[] fields = typeof (HAL_Base.HAL).GetFields();
+            FieldInfo[] fields = typeof (HAL).GetFields();
 
             foreach (var fieldInfo in fields)
             {

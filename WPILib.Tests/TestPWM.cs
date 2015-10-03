@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -22,7 +22,7 @@ namespace WPILib.Tests
             return SimData.PWM[2];
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CS0618", Justification = "Need exact setpoints for unit testing")]
+        [SuppressMessage("Usage", "CS0618", Justification = "Need exact setpoints for unit testing")]
         private static PWM boundPWM(PWM pwm)
         {
             pwm.SetBounds(1500, 1050, 1000, 950, 500);
@@ -66,7 +66,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var pwm = new PWM(TestBase.PwmChannels);
+                var pwm = new PWM(PwmChannels);
             });
         }
 
@@ -74,7 +74,7 @@ namespace WPILib.Tests
         public void TestPWMCreateAll()
         {
             List<PWM> pwms = new List<PWM>();
-            for (int i = 0; i < TestBase.PwmChannels; i++)
+            for (int i = 0; i < PwmChannels; i++)
             {
                 pwms.Add(new PWM(i));
             }

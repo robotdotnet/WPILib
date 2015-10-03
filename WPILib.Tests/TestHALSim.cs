@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using HAL_Simulator;
-using NUnit.Framework;
-
-using HAL = HAL_Base.HAL;
-using static HAL_Simulator.DriverStationHelper;
-
-namespace WPILib.Tests
+﻿namespace WPILib.Tests
 {
     /*
     [TestFixture]

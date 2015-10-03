@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Simulator;
-using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
-using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
@@ -17,7 +15,7 @@ namespace WPILib.Tests
         public void TestCreateAll()
         {
             List<Relay> relays = new List<Relay>();
-            for (int i = 0; i < TestBase.RelayChannels; i++)
+            for (int i = 0; i < RelayChannels; i++)
             {
                 Relay r = new Relay(i);
                 relays.Add(r);
@@ -34,7 +32,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                Relay r = new Relay(TestBase.RelayChannels);
+                Relay r = new Relay(RelayChannels);
             });
         }
 

@@ -1,6 +1,6 @@
-﻿using WPILib.Interfaces;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
+using WPILib.Interfaces;
 
 namespace WPILib.IntegrationTests
 {

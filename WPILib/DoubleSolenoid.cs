@@ -2,7 +2,6 @@
 using HAL_Base;
 using NetworkTables;
 using NetworkTables.Tables;
-using WPILib.Exceptions;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
 using static HAL_Base.HALSolenoid;

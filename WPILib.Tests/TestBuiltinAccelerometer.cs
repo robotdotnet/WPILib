@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using HAL_Base;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
-using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
+using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {

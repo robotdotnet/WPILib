@@ -1,7 +1,7 @@
-﻿﻿using System;
-﻿using System.Linq;
-﻿using HAL_Base;
-﻿using HAL_Simulator.Data;
+﻿using System;
+using System.Linq;
+using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 
 // ReSharper disable RedundantAssignment

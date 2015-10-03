@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using HAL_Base;
 using HAL_Simulator;
 using WPILib.IntegrationTests.SimulatedHardware;
 using WPILib.LiveWindows;
@@ -15,7 +16,7 @@ namespace WPILib.IntegrationTests.Test
             if (!m_initialized)
             {
                 RobotBase.InitializeHardwareConfiguration();
-                HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
+                HAL.HALNetworkCommunicationObserveUserProgramStarting();
 
                 LiveWindow.SetEnabled(false);
                 Console.WriteLine("Started coms");
