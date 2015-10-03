@@ -23,6 +23,7 @@ namespace WPILib
             m_testInitialized = false;
         }
 
+        ///<inheritdoc/>
         protected override void Prestart()
         {
         }
@@ -130,6 +131,7 @@ namespace WPILib
         }
 
         private bool NextPeriodReady => m_ds.NewControlData;
+
 
         public virtual void RobotInit()
         {
