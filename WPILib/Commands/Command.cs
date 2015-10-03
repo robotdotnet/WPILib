@@ -150,7 +150,7 @@ namespace WPILib.Commands
         /// <exception cref="ArgumentNullException">If subsystem is null</exception>
         /// <exception cref="IllegalUseOfCommandException">If this command has started before or if it has been given to a <see cref="CommandGroup"/></exception>
         /// <seealso cref="Subsystem"/>
-        protected void Requires(Subsystem subsystem)
+        protected internal void Requires(Subsystem subsystem)
         {
             lock (m_syncRoot)
             {

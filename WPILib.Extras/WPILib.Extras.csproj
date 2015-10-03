@@ -50,11 +50,8 @@
   <ItemGroup>
     <Compile Include="ActionCommand.cs" />
     <Compile Include="AttributedCommandModel\AttributedRobot.cs" />
-    <Compile Include="AttributedCommandModel\AttributedPIDSubsystem.cs" />
-    <Compile Include="AttributedCommandModel\AttributedSubsystem.cs" />
     <Compile Include="AttributedCommandModel\ButtonMethod.cs" />
     <Compile Include="AttributedCommandModel\ExportSubsystemAttribute.cs" />
-    <Compile Include="AttributedCommandModel\IAttributedSubsystem.cs" />
     <Compile Include="AttributedCommandModel\RunCommandAtPhaseStartAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnJoystickAttribute.cs" />

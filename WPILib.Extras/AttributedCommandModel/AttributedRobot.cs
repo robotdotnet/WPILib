@@ -12,7 +12,7 @@ namespace WPILib.Extras.AttributedCommandModel
     {
         private readonly System.Reflection.ReflectionContext reflectionContext;
 
-        private List<Subsystem> subsystems = new List<Subsystem>();
+        private readonly List<Subsystem> subsystems = new List<Subsystem>();
 
         public ICollection<Subsystem> Subsystems => subsystems;
 
@@ -70,16 +70,17 @@ namespace WPILib.Extras.AttributedCommandModel
             foreach (var attr in subsystemType.CustomAttributes.Where(attr => attr.AttributeType == typeof(ExportSubsystemAttribute)))
             {
                 var subsystem = (Subsystem)Activator.CreateInstance(subsystemType);
-                if (attr.NamedArguments.Any(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)) && subsystem is IAttributedSubsystem)
+                if (attr.NamedArguments.Any(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)) && subsystem is Subsystem)
                 {
                     var defaultCommandType = (Type)attr.NamedArguments
                                 .First(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)).TypedValue.Value;
                     if (!typeof(Command).IsAssignableFrom(defaultCommandType))
                     {
-                        throw new IllegalUseOfCommandException("Default command type is not a commmand.");
+                        throw new IllegalUseOfCommandException("Default command type is not an attributed commmand.");
                     }
                     var defaultCommand = (Command)Activator.CreateInstance(defaultCommandType);
-                    ((IAttributedSubsystem)subsystem).InitDefaultCommand(defaultCommand);
+                    defaultCommand.Requires(subsystem);
+                    (subsystem).SetDefaultCommand(defaultCommand);
                 }
                 yield return subsystem;
             }
@@ -89,7 +90,7 @@ namespace WPILib.Extras.AttributedCommandModel
         {
             foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandAtPhaseStartAttribute), false).OfType<RunCommandAtPhaseStartAttribute>())
             {
-                phaseCommands.Add(attr.Phase, (Command)Activator.CreateInstance(commandType));   
+                phaseCommands.Add(attr.Phase, (Command)Activator.CreateInstance(commandType));
             }
             foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandOnJoystickAttribute), false).OfType<RunCommandOnJoystickAttribute>())
             {
