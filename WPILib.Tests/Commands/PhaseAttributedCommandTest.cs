@@ -1,13 +1,8 @@
 ﻿using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Context;
-using System.Text;
-using System.Threading.Tasks;
-using WPILib.Commands;
-using WPILib.Extras.AttributedCommandModel;
 using System.Reflection;
+using System.Reflection.Context;
+using WPILib.Extras.AttributedCommandModel;
 
 namespace WPILib.Tests.Commands
 {
