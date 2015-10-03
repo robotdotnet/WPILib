@@ -175,7 +175,7 @@ namespace HAL_Base
 
             //Load all assemblies in folder
             var assemblies = new List<Assembly>(dllFileNames.Length);
-            assemblies.AddRange(dllFileNames.Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
+            assemblies.AddRange(dllFileNames.Where(name => new FileInfo(name).Extension == ".dll").Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
 
             //Find all types inheriting from ISimulator
             Type simulatorType = typeof(ISimulator);
