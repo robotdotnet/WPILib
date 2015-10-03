@@ -1,4 +1,6 @@
-﻿﻿using static HAL_Simulator.SimData;
+﻿﻿using System;
+﻿using HAL_Base;
+﻿using static HAL_Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
