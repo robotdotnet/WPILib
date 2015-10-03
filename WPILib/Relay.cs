@@ -1,7 +1,9 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using static WPILib.Utility;
 
@@ -11,7 +13,7 @@ namespace WPILib
     /// The Relay class is used to interface with the Relay ports on the RoboRIO. 
     /// These are usually used with Spike Relays.
     /// </summary>
-    public class Relay : SensorBase, ILiveWindowSendable, ITableListener
+    public class Relay : SensorBase, IMotorSafety, ILiveWindowSendable, ITableListener
     {
         /// <summary>
         /// The value to set the relay to.
@@ -44,6 +46,8 @@ namespace WPILib
         private Direction m_direction;
         private static readonly Resource s_relayChannels = new Resource(RelayChannels * 2);
 
+        private MotorSafetyHelper m_safetyHelper;
+
         private void InitRelay()
         {
             CheckRelayChannel(m_channel);
@@ -60,6 +64,10 @@ namespace WPILib
             int status = 0;
             m_port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)m_channel), ref status);
             CheckStatus(status);
+
+            m_safetyHelper = new MotorSafetyHelper(this);
+            m_safetyHelper.SafetyEnabled = false;
+
             LiveWindow.AddActuator("Relay", m_channel, this);
         }
 
@@ -264,6 +272,9 @@ namespace WPILib
                 }
             }
         }
+
+        
+
         ///<inheritdoc />
         public void StartLiveWindowMode()
         {
@@ -276,7 +287,7 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             string val = ((string)value);
             if (val.Equals("Off"))
@@ -296,5 +307,24 @@ namespace WPILib
                 Set(Value.Reverse);
             }
         }
+
+        public int Channel => m_channel;
+
+        public double Expiration {
+            get { return m_safetyHelper.Expiration; }
+            set { m_safetyHelper.Expiration = value; } }
+
+        public bool Alive => m_safetyHelper.Alive;
+
+        public void StopMotor()
+        {
+            Set(Value.Off);
+        }
+
+        public bool SafetyEnabled {
+            get { return m_safetyHelper.SafetyEnabled; }
+            set { m_safetyHelper.SafetyEnabled = value; } }
+
+        public string Description => $"Relay ID {Channel}";
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HAL_Base;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
@@ -114,7 +115,7 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public override void ValueChanged(ITable table, string key, object value, bool bin)
+        public override void ValueChanged(ITable table, string key, object value, NotifyFlags flags)
         {
             Set((double)value);
         }

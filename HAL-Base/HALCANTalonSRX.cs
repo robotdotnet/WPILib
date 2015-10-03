@@ -2,7 +2,7 @@
 namespace HAL_Base
 {
 
-    public partial class HALCanTalonSRX
+    public partial class HALCANTalonSRX
     {
         public class Constants
         {

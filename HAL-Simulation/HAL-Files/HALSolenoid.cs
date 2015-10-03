@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 
@@ -13,6 +14,18 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALSolenoid
     {
+
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
+            HAL_Base.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
+            HAL_Base.HALSolenoid.GetSolenoid = getSolenoid;
+            HAL_Base.HALSolenoid.SetSolenoid = setSolenoid;
+            HAL_Base.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
+            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
+            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageFault = getPCMSolenoidVoltageFault;
+            HAL_Base.HALSolenoid.ClearAllPCMStickyFaults_sol = clearAllPCMStickyFaults_sol;
+        }
 
         [CalledSimFunction]
         public static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)

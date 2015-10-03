@@ -58,7 +58,7 @@ namespace WPILib.Commands
         /// subsystem is a singleton.</remarks>
         /// <param name="command">The default command(or null if there should be none.</param>
         /// <exception cref="IllegalUseOfCommandException">If the command does not require the subsystem.</exception>
-        protected void SetDefaultCommand(Command command)
+        protected internal void SetDefaultCommand(Command command)
         {
             if (command == null)
             {

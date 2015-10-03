@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
 using static HAL_Base.HALDigital;
@@ -207,7 +208,7 @@ namespace WPILib
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="isNew"></param>
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             Set((bool)value);
         }

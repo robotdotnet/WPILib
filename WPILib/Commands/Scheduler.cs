@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using NetworkTables.NetworkTables2.Type;
 using NetworkTables.Tables;
 using WPILib.Buttons;
 using WPILib.Interfaces;
@@ -224,8 +222,8 @@ namespace WPILib.Commands
             m_enabled = true;
         }
 
-        private StringArray commands;
-        private NumberArray ids, toCancel;
+        private List<string> commands;
+        private List<double> ids, toCancel;
 
         ///<inheritdoc/>
         public string Name => "Scheduler";
@@ -240,46 +238,46 @@ namespace WPILib.Commands
         public void InitTable(ITable subtable)
         {
             Table = subtable;
-            commands = new StringArray();
-            ids = new NumberArray();
-            toCancel = new NumberArray();
+            commands = new List<string>();
+            ids = new List<double>();
+            toCancel = new List<double>();
 
-            Table.PutValue("Names", commands);
-            Table.PutValue("Ids", ids);
-            Table.PutValue("Cancel", toCancel);
+            Table.PutValue("Names", commands.ToArray());
+            Table.PutValue("Ids", ids.ToArray());
+            Table.PutValue("Cancel", toCancel.ToArray());
         }
 
         private void UpdateTable()
         {
             if (Table == null) return;
-            Table.RetrieveValue("Cancel", toCancel);
-            if (toCancel.Size() > 0)
+            toCancel = Table.GetNumberArray("Cancel").ToList();
+            if (toCancel.Count > 0)
             {
                 for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
                 {
-                    for (int i = 0; i < toCancel.Size(); i++)
+                    for (int i = 0; i < toCancel.Count; i++)
                     {
-                        if (e.GetData().GetHashCode() == toCancel.Get(i))
+                        if (e.GetData().GetHashCode() == toCancel[i])
                         {
                             e.GetData().Cancel();
                         }
                     }
                 }
-                toCancel.SetSize(0);
-                Table.PutValue("Cancel", toCancel);
+                toCancel.Clear();
+                Table.PutValue("Cancel", toCancel.ToArray());
             }
 
             if (m_runningCommandsChanged)
             {
-                commands.SetSize(0);
-                ids.SetSize(0);
+                commands.Clear();
+                ids.Clear();
                 for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
                 {
                     commands.Add(e.GetData().Name);
                     ids.Add(e.GetData().GetHashCode());
                 }
-                Table.PutValue("Names", commands);
-                Table.PutValue("Ids", ids);
+                Table.PutValue("Names", commands.ToArray());
+                Table.PutValue("Ids", ids.ToArray());
             }
         }
 

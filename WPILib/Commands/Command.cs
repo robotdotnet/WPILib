@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using static WPILib.Timer;
@@ -149,7 +150,7 @@ namespace WPILib.Commands
         /// <exception cref="ArgumentNullException">If subsystem is null</exception>
         /// <exception cref="IllegalUseOfCommandException">If this command has started before or if it has been given to a <see cref="CommandGroup"/></exception>
         /// <seealso cref="Subsystem"/>
-        protected void Requires(Subsystem subsystem)
+        protected internal void Requires(Subsystem subsystem)
         {
             lock (m_syncRoot)
             {
@@ -560,7 +561,7 @@ namespace WPILib.Commands
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="isNew"></param>
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             if ((bool)value)
             {

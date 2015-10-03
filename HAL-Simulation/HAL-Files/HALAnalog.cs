@@ -28,6 +28,47 @@ namespace HAL_Simulator
 
         internal static readonly int[] AccumulatorChannels = { 0, 1 };
 
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALAnalog.InitializeAnalogOutputPort = initializeAnalogOutputPort;
+            HAL_Base.HALAnalog.SetAnalogOutput = setAnalogOutput;
+            HAL_Base.HALAnalog.GetAnalogOutput = getAnalogOutput;
+            HAL_Base.HALAnalog.CheckAnalogOutputChannel = checkAnalogOutputChannel;
+            HAL_Base.HALAnalog.InitializeAnalogInputPort = initializeAnalogInputPort;
+            HAL_Base.HALAnalog.CheckAnalogModule = checkAnalogModule;
+            HAL_Base.HALAnalog.CheckAnalogInputChannel = checkAnalogInputChannel;
+            HAL_Base.HALAnalog.SetAnalogSampleRate = setAnalogSampleRate;
+            HAL_Base.HALAnalog.GetAnalogSampleRate = getAnalogSampleRate;
+            HAL_Base.HALAnalog.SetAnalogAverageBits = setAnalogAverageBits;
+            HAL_Base.HALAnalog.GetAnalogAverageBits = getAnalogAverageBits;
+            HAL_Base.HALAnalog.SetAnalogOversampleBits = setAnalogOversampleBits;
+            HAL_Base.HALAnalog.GetAnalogOversampleBits = getAnalogOversampleBits;
+            HAL_Base.HALAnalog.GetAnalogValue = getAnalogValue;
+            HAL_Base.HALAnalog.GetAnalogAverageValue = getAnalogAverageValue;
+            HAL_Base.HALAnalog.GetAnalogVoltsToValue = getAnalogVoltsToValue;
+            HAL_Base.HALAnalog.GetAnalogVoltage = getAnalogVoltage;
+            HAL_Base.HALAnalog.GetAnalogAverageVoltage = getAnalogAverageVoltage;
+            HAL_Base.HALAnalog.GetAnalogLSBWeight = getAnalogLSBWeight;
+            HAL_Base.HALAnalog.GetAnalogOffset = getAnalogOffset;
+            HAL_Base.HALAnalog.IsAccumulatorChannel = isAccumulatorChannel;
+            HAL_Base.HALAnalog.InitAccumulator = initAccumulator;
+            HAL_Base.HALAnalog.ResetAccumulator = resetAccumulator;
+            HAL_Base.HALAnalog.SetAccumulatorCenter = setAccumulatorCenter;
+            HAL_Base.HALAnalog.SetAccumulatorDeadband = setAccumulatorDeadband;
+            HAL_Base.HALAnalog.GetAccumulatorValue = getAccumulatorValue;
+            HAL_Base.HALAnalog.GetAccumulatorCount = getAccumulatorCount;
+            HAL_Base.HALAnalog.GetAccumulatorOutput = getAccumulatorOutput;
+            HAL_Base.HALAnalog.InitializeAnalogTrigger = initializeAnalogTrigger;
+            HAL_Base.HALAnalog.CleanAnalogTrigger = cleanAnalogTrigger;
+            HAL_Base.HALAnalog.SetAnalogTriggerLimitsRaw = setAnalogTriggerLimitsRaw;
+            HAL_Base.HALAnalog.SetAnalogTriggerLimitsVoltage = setAnalogTriggerLimitsVoltage;
+            HAL_Base.HALAnalog.SetAnalogTriggerAveraged = setAnalogTriggerAveraged;
+            HAL_Base.HALAnalog.SetAnalogTriggerFiltered = setAnalogTriggerFiltered;
+            HAL_Base.HALAnalog.GetAnalogTriggerInWindow = getAnalogTriggerInWindow;
+            HAL_Base.HALAnalog.GetAnalogTriggerTriggerState = getAnalogTriggerTriggerState;
+            HAL_Base.HALAnalog.GetAnalogTriggerOutput = getAnalogTriggerOutput;
+        }
+
         //The HAL by default stores raw values instead of voltage behind the scenes. We are using voltage
         [CalledSimFunction]
         public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)

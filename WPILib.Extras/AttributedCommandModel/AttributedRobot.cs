@@ -12,7 +12,7 @@ namespace WPILib.Extras.AttributedCommandModel
     {
         private readonly System.Reflection.ReflectionContext reflectionContext;
 
-        private List<Subsystem> subsystems = new List<Subsystem>();
+        private readonly List<Subsystem> subsystems = new List<Subsystem>();
 
         public ICollection<Subsystem> Subsystems => subsystems;
 
@@ -34,7 +34,7 @@ namespace WPILib.Extras.AttributedCommandModel
         {
         }
 
-        public override void RobotInit()
+        public sealed override void RobotInit()
         {
             var assemblies = GetAssemblies();
             var types = assemblies.SelectMany(assembly => assembly.GetExportedTypes());
@@ -50,6 +50,12 @@ namespace WPILib.Extras.AttributedCommandModel
             {
                 GenerateCommands(command);
             }
+            RobotInitCore();
+        }
+
+        protected virtual void RobotInitCore()
+        {
+
         }
 
         private IEnumerable<System.Reflection.Assembly> GetAssemblies()
@@ -64,16 +70,17 @@ namespace WPILib.Extras.AttributedCommandModel
             foreach (var attr in subsystemType.CustomAttributes.Where(attr => attr.AttributeType == typeof(ExportSubsystemAttribute)))
             {
                 var subsystem = (Subsystem)Activator.CreateInstance(subsystemType);
-                if (attr.NamedArguments.Any(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)) && subsystem is IAttributedSubsystem)
+                if (attr.NamedArguments.Any(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)) && subsystem is Subsystem)
                 {
                     var defaultCommandType = (Type)attr.NamedArguments
                                 .First(arg => arg.MemberName == nameof(ExportSubsystemAttribute.DefaultCommandType)).TypedValue.Value;
                     if (!typeof(Command).IsAssignableFrom(defaultCommandType))
                     {
-                        throw new IllegalUseOfCommandException("Default command type is not a commmand.");
+                        throw new IllegalUseOfCommandException("Default command type is not an attributed commmand.");
                     }
                     var defaultCommand = (Command)Activator.CreateInstance(defaultCommandType);
-                    ((IAttributedSubsystem)subsystem).InitDefaultCommand(defaultCommand);
+                    defaultCommand.Requires(subsystem);
+                    (subsystem).SetDefaultCommand(defaultCommand);
                 }
                 yield return subsystem;
             }
@@ -83,7 +90,7 @@ namespace WPILib.Extras.AttributedCommandModel
         {
             foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandAtPhaseStartAttribute), false).OfType<RunCommandAtPhaseStartAttribute>())
             {
-                phaseCommands.Add(attr.Phase, (Command)Activator.CreateInstance(commandType));   
+                phaseCommands.Add(attr.Phase, (Command)Activator.CreateInstance(commandType));
             }
             foreach (var attr in commandType.GetCustomAttributes(typeof(RunCommandOnJoystickAttribute), false).OfType<RunCommandOnJoystickAttribute>())
             {
@@ -138,44 +145,77 @@ namespace WPILib.Extras.AttributedCommandModel
             }
         }
 
-        public override void AutonomousInit()
+        public sealed override void AutonomousInit()
         {
             StartPhaseCommands(MatchPhase.Autonomous);
+            AutonomousInitCore();
         }
 
-        public override void AutonomousPeriodic()
+        protected virtual void AutonomousInitCore()
+        { }
+
+        public sealed override void AutonomousPeriodic()
         {
             Scheduler.Instance.Run();
+            AutonomousPeriodicCore();
         }
 
-        public override void TeleopInit()
+        protected virtual void AutonomousPeriodicCore()
+        { }
+
+        public sealed override void TeleopInit()
         {
             StartPhaseCommands(MatchPhase.Teleoperated);
+            TeleopInitCore();
         }
 
-        public override void TeleopPeriodic()
+        protected virtual void TeleopInitCore()
+        { }
+
+        public sealed override void TeleopPeriodic()
         {
             Scheduler.Instance.Run();
+            TeleopPeriodicCore();
         }
 
-        public override void DisabledInit()
+        protected virtual void TeleopPeriodicCore()
+        { }
+
+        public sealed override void DisabledInit()
         {
             StartPhaseCommands(MatchPhase.Disabled);
+            DisabledInitCore();
         }
 
-        public override void DisabledPeriodic()
+        protected virtual void DisabledInitCore()
+        { }
+
+        public sealed override void DisabledPeriodic()
         {
             Scheduler.Instance.Run();
+            DisabledPeriodicCore();
         }
 
-        public override void TestInit()
+        protected virtual void DisabledPeriodicCore()
+        { }
+
+        public sealed override void TestInit()
         {
             StartPhaseCommands(MatchPhase.Test);
+            TestInitCore();
         }
 
-        public override void TestPeriodic()
+        protected virtual void TestInitCore()
+        { }
+
+        public sealed override void TestPeriodic()
         {
             Scheduler.Instance.Run();
+            TestPeriodicCore();
         }
+
+        protected virtual void TestPeriodicCore()
+        { }
+
     }
 }

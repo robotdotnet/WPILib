@@ -523,7 +523,7 @@ namespace WPILib
             NetworkTable.GetTable(TABLE_NAME).AddTableListener(this);//Figure this out
         }
 
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             if (key.Equals(SAVE_FIELD))
             {

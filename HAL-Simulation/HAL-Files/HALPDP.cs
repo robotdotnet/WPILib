@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿﻿using System.Linq;
 using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 
@@ -12,6 +12,20 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALPDP
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALPDP.InitializePDP = initializePDP;
+            HAL_Base.HALPDP.GetPDPTemperature = getPDPTemperature;
+            HAL_Base.HALPDP.GetPDPVoltage = getPDPVoltage;
+            HAL_Base.HALPDP.GetPDPChannelCurrent = getPDPChannelCurrent;
+            HAL_Base.HALPDP.GetPDPTotalCurrent = getPDPTotalCurrent;
+            HAL_Base.HALPDP.GetPDPTotalPower = getPDPTotalPower;
+            HAL_Base.HALPDP.GetPDPTotalEnergy = getPDPTotalEnergy;
+            HAL_Base.HALPDP.ResetPDPTotalEnergy = resetPDPTotalEnergy;
+            HAL_Base.HALPDP.ClearPDPStickyFaults = clearPDPStickyFaults;
+        }
+
+
         [CalledSimFunction]
         public static void initializePDP(int module)
         {

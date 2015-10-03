@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
@@ -548,7 +549,7 @@ namespace WPILib
         ///<inheritdoc/>
         public string SmartDashboardType => "PIDController";
 
-        public void ValueChanged(ITable source, string key, object value, bool isNew)
+        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             if (key == ("p") || key == ("i") || key == ("d") || key == ("f"))
             {

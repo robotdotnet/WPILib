@@ -12,8 +12,68 @@ using static HAL_Simulator.PortConverters;
 namespace HAL_Simulator
 {
     ///<inheritdoc cref="HAL"/>
-    internal class HALCanTalonSRX
+    internal class HALCANTalonSRX
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_Create = c_TalonSRX_Create;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_Destroy = c_TalonSRX_Destroy;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetParam = c_TalonSRX_SetParam;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_RequestParam = c_TalonSRX_RequestParam;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetParamResponse = c_TalonSRX_GetParamResponse;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetParamResponseInt32 = c_TalonSRX_GetParamResponseInt32;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetStatusFrameRate = c_TalonSRX_SetStatusFrameRate;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_ClearStickyFaults = c_TalonSRX_ClearStickyFaults;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_OverTemp = c_TalonSRX_GetFault_OverTemp;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_UnderVoltage = c_TalonSRX_GetFault_UnderVoltage;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_ForLim = c_TalonSRX_GetFault_ForLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_RevLim = c_TalonSRX_GetFault_RevLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_HardwareFailure = c_TalonSRX_GetFault_HardwareFailure;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_ForSoftLim = c_TalonSRX_GetFault_ForSoftLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFault_RevSoftLim = c_TalonSRX_GetFault_RevSoftLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetStckyFault_OverTemp = c_TalonSRX_GetStckyFault_OverTemp;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetStckyFault_UnderVoltage = c_TalonSRX_GetStckyFault_UnderVoltage;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetStckyFault_ForLim = c_TalonSRX_GetStckyFault_ForLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetStckyFault_RevLim = c_TalonSRX_GetStckyFault_RevLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetStckyFault_ForSoftLim = c_TalonSRX_GetStckyFault_ForSoftLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetStckyFault_RevSoftLim = c_TalonSRX_GetStckyFault_RevSoftLim;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetAppliedThrottle = c_TalonSRX_GetAppliedThrottle;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetCloseLoopErr = c_TalonSRX_GetCloseLoopErr;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFeedbackDeviceSelect = c_TalonSRX_GetFeedbackDeviceSelect;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetModeSelect = c_TalonSRX_GetModeSelect;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetLimitSwitchEn = c_TalonSRX_GetLimitSwitchEn;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetLimitSwitchClosedFor = c_TalonSRX_GetLimitSwitchClosedFor;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetLimitSwitchClosedRev = c_TalonSRX_GetLimitSwitchClosedRev;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetSensorPosition = c_TalonSRX_GetSensorPosition;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetSensorVelocity = c_TalonSRX_GetSensorVelocity;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetCurrent = c_TalonSRX_GetCurrent;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetBrakeIsEnabled = c_TalonSRX_GetBrakeIsEnabled;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetEncPosition = c_TalonSRX_GetEncPosition;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetEncVel = c_TalonSRX_GetEncVel;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetEncIndexRiseEvents = c_TalonSRX_GetEncIndexRiseEvents;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetQuadApin = c_TalonSRX_GetQuadApin;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetQuadBpin = c_TalonSRX_GetQuadBpin;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetQuadIdxpin = c_TalonSRX_GetQuadIdxpin;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetAnalogInWithOv = c_TalonSRX_GetAnalogInWithOv;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetAnalogInVel = c_TalonSRX_GetAnalogInVel;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetTemp = c_TalonSRX_GetTemp;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetBatteryV = c_TalonSRX_GetBatteryV;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetResetCount = c_TalonSRX_GetResetCount;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetResetFlags = c_TalonSRX_GetResetFlags;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_GetFirmVers = c_TalonSRX_GetFirmVers;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetDemand = c_TalonSRX_SetDemand;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetOverrideLimitSwitchEn = c_TalonSRX_SetOverrideLimitSwitchEn;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetFeedbackDeviceSelect = c_TalonSRX_SetFeedbackDeviceSelect;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetRevMotDuringCloseLoopEn = c_TalonSRX_SetRevMotDuringCloseLoopEn;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetOverrideBrakeType = c_TalonSRX_SetOverrideBrakeType;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetModeSelect = c_TalonSRX_SetModeSelect;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetModeSelect2 = c_TalonSRX_SetModeSelect2;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetProfileSlotSelect = c_TalonSRX_SetProfileSlotSelect;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetRampThrottle = c_TalonSRX_SetRampThrottle;
+            HAL_Base.HALCANTalonSRX.C_TalonSRX_SetRevFeedbackSensor = c_TalonSRX_SetRevFeedbackSensor;
+        }
+
+
         [CalledSimFunction]
         public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)
         {
@@ -21,7 +81,6 @@ namespace HAL_Simulator
             {
                 throw new ArgumentOutOfRangeException(nameof(deviceNumber), "Device Already Allocated.");
             }
-
 
 
             TalonSRX srx = new TalonSRX { deviceNumber = deviceNumber };

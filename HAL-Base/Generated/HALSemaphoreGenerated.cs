@@ -15,29 +15,6 @@ namespace HAL_Base
             HAL.Initialize();
         }
 
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-            InitializeMutexRecursive = (InitializeMutexRecursiveDelegate)Delegate.CreateDelegate(typeof(InitializeMutexRecursiveDelegate), type.GetMethod("initializeMutexRecursive"));
-            InitializeMutexNormal = (InitializeMutexNormalDelegate)Delegate.CreateDelegate(typeof(InitializeMutexNormalDelegate), type.GetMethod("initializeMutexNormal"));
-            DeleteMutex = (DeleteMutexDelegate)Delegate.CreateDelegate(typeof(DeleteMutexDelegate), type.GetMethod("deleteMutex"));
-            TakeMutex = (TakeMutexDelegate)Delegate.CreateDelegate(typeof(TakeMutexDelegate), type.GetMethod("takeMutex"));
-            TryTakeMutex = (TryTakeMutexDelegate)Delegate.CreateDelegate(typeof(TryTakeMutexDelegate), type.GetMethod("tryTakeMutex"));
-            GiveMutex = (GiveMutexDelegate)Delegate.CreateDelegate(typeof(GiveMutexDelegate), type.GetMethod("giveMutex"));
-            InitializeSemaphore = (InitializeSemaphoreDelegate)Delegate.CreateDelegate(typeof(InitializeSemaphoreDelegate), type.GetMethod("initializeSemaphore"));
-            DeleteSemaphore = (DeleteSemaphoreDelegate)Delegate.CreateDelegate(typeof(DeleteSemaphoreDelegate), type.GetMethod("deleteSemaphore"));
-            TakeSemaphore = (TakeSemaphoreDelegate)Delegate.CreateDelegate(typeof(TakeSemaphoreDelegate), type.GetMethod("takeSemaphore"));
-            TryTakeSemaphore = (TryTakeSemaphoreDelegate)Delegate.CreateDelegate(typeof(TryTakeSemaphoreDelegate), type.GetMethod("tryTakeSemaphore"));
-            GiveSemaphore = (GiveSemaphoreDelegate)Delegate.CreateDelegate(typeof(GiveSemaphoreDelegate), type.GetMethod("giveSemaphore"));
-            InitializeMultiWait = (InitializeMultiWaitDelegate)Delegate.CreateDelegate(typeof(InitializeMultiWaitDelegate), type.GetMethod("initializeMultiWait"));
-            DeleteMultiWait = (DeleteMultiWaitDelegate)Delegate.CreateDelegate(typeof(DeleteMultiWaitDelegate), type.GetMethod("deleteMultiWait"));
-            TakeMultiWait = (TakeMultiWaitDelegate)Delegate.CreateDelegate(typeof(TakeMultiWaitDelegate), type.GetMethod("takeMultiWait"));
-            GiveMultiWait = (GiveMultiWaitDelegate)Delegate.CreateDelegate(typeof(GiveMultiWaitDelegate), type.GetMethod("giveMultiWait"));
-        }
-
         public delegate IntPtr InitializeMutexRecursiveDelegate();
         public static InitializeMutexRecursiveDelegate InitializeMutexRecursive;
 

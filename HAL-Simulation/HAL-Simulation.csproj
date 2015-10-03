@@ -62,6 +62,7 @@
     <Compile Include="Data\RelayData.cs" />
     <Compile Include="Data\RoboRIOData.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
+    <Compile Include="HAL-Files\LoaderUtilities.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />
     <Compile Include="Mechanisms\AngularEncoderMechanism.cs" />
     <Compile Include="Mechanisms\LinearEncoderMechanism.cs" />

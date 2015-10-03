@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetworkTables;
-using NetworkTables.NetworkTables;
+using NetworkTables.Native.Exceptions;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
 using WPILib.SmartDashboards;
@@ -33,7 +33,7 @@ namespace WPILib.IntegrationTests.SmartDashboards
                 Assert.Pass();
                 return;
             }
-            Assert.Throws<NetworkTableKeyNotDefined>(() =>
+            Assert.Throws<TableKeyNotDefinedException>(() =>
             {
                 SmartDashboard.GetString("_404_STRING_KEY_SHOULD_NOT_BE_FOUND_");
             });
