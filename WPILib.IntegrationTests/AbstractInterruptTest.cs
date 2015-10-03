@@ -79,13 +79,6 @@ namespace WPILib.IntegrationTests
         [Test, Timeout(1300)]
         public void TestSingleInterruptsTriggering()
         {
-            //TODO: Add Analog Interrupts
-            if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
-            {
-                Assert.Ignore();
-            }
-
-
             InterruptCounter counter = new InterruptCounter();
 
 
@@ -126,12 +119,6 @@ namespace WPILib.IntegrationTests
         [Test, Timeout(1800)]
         public void TestMultipleInterruptsTriggering()
         {
-            //TODO: Add Analog Interrupts
-            if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
-            {
-                Assert.Ignore();
-            }
-
             InterruptCounter counter = new InterruptCounter();
             TestHandlerFunction function = new TestHandlerFunction(counter);
 
@@ -157,15 +144,9 @@ namespace WPILib.IntegrationTests
         [Test, Timeout((int)(synchronousTimeout * 1e3))]
         public void TestSynchronousInterruptsTriggering()
         {
-            //TODO: Add Analog Interrupts
-            if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
-            {
-                Assert.Ignore();
-            }
-
             GetInterruptable().RequestInterrupts();
 
-            double synchronousDelay = synchronousTimeout / 2;
+            double synchronousDelay = synchronousTimeout / 2.0;
 
             long startTimeStamp = Utility.GetFPGATime();
             new Thread(() =>
@@ -186,12 +167,6 @@ namespace WPILib.IntegrationTests
         [Test, Timeout(3000)]
         public void TestDisableStopsInterruptFiring()
         {
-            //TODO: Add Analog Interrupts
-            if (RobotBase.IsSimulation && this is AnalogCrossConnectTest)
-            {
-                Assert.Ignore();
-            }
-
             InterruptCounter counter = new InterruptCounter();
             TestHandlerFunction function = new TestHandlerFunction(counter);
 

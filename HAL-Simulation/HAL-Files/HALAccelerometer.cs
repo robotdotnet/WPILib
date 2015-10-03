@@ -22,39 +22,39 @@ namespace HAL_Simulator
         }
 
         /// Return Type: void
-        ///param0: boolean
+        ///range: boolean
         [CalledSimFunction]
-        public static void setAccelerometerActive(bool param0)
+        public static void setAccelerometerActive(bool active)
         {
-            halData["accelerometer"]["active"] = param0;
+            Accelerometer.Active = active;
         }
 
 
         /// Return Type: void
-        ///param0: AccelerometerRange
+        ///range: AccelerometerRange
         [CalledSimFunction]
-        public static void setAccelerometerRange(AccelerometerRange param0)
+        public static void setAccelerometerRange(AccelerometerRange range)
         {
-            halData["accelerometer"]["range"] = (int)param0;
+            Accelerometer.Range = range;
         }
 
 
         [CalledSimFunction]
         public static double getAccelerometerX()
         {
-            return halData["accelerometer"]["x"];
+            return Accelerometer.X;
         }
 
         [CalledSimFunction]
         public static double getAccelerometerY()
         {
-            return halData["accelerometer"]["y"];
+            return Accelerometer.Y;
         }
 
         [CalledSimFunction]
         public static double getAccelerometerZ()
         {
-            return halData["accelerometer"]["z"];
+            return Accelerometer.Z;
         }
     }
 }

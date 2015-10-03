@@ -9,6 +9,7 @@ using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
+    /*
     [TestFixture]
     public class TestDriverStation : TestBase
     {
@@ -26,7 +27,7 @@ namespace WPILib.Tests
 
         private static Dictionary<dynamic, dynamic> HalData()
         {
-            return HAL.halData;
+            return SimData.HalData;
         }
 
         [Test]
@@ -72,7 +73,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetBatteryVoltage()
         {
-            HalData()["power"]["vin_voltage"] = 7.928;
+            SimData.RoboRioData.VInVoltage = 7.928f;
             Assert.AreEqual(7.928, DriverStation.Instance.GetBatteryVoltage(), 0.0001);
         }
 
@@ -245,6 +246,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.AreEqual(stick.ToString(), DriverStation.Instance.GetJoystickName(stick));
         }
-        */
+        
     }
+    */
 }

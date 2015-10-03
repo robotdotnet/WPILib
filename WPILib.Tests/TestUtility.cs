@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
-using HAL_Base;
+using HAL_Simulator;
 using NUnit.Framework;
+using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
     [TestFixture]
     public class TestUtility : TestBase
     {
-        private Dictionary<dynamic, dynamic> HalData()
-        {
-            return HAL.halData;
-        }
 
         [Test]
         public void TestGetFPGAVersion()
@@ -28,7 +25,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetUserButton()
         {
-            HalData()["fpga_button"] = true;
+            SimData.RoboRioData.FPGAButton = true;
             Assert.IsTrue(Utility.GetUserButton());
         }
     }

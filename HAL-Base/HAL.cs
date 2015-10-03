@@ -56,7 +56,7 @@ namespace HAL_Base
         }
 
         public static HALTypes HALType = HALTypes.None;
-
+        /*
         //These are used to get us a copy of the dictionary from the simulator.
         //This is so we can debug it, because we cannot look at private members
         //of a reflected assembly.
@@ -66,7 +66,7 @@ namespace HAL_Base
         public static Dictionary<dynamic, dynamic> halData;
         public static Dictionary<dynamic, dynamic> halInData;
         public static Dictionary<dynamic, dynamic> halDSData;
-
+        */
 
 
         /// <summary>
@@ -150,9 +150,9 @@ namespace HAL_Base
                     var q = from t in types where t.IsClass && t.Name == className select t;
                     Type type = HALAssembly.GetType(q.ToList()[0].FullName);
 
-                    GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
+                    //GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
 
-                    data(out halData, out halInData, out halDSData);
+                    //data(out halData, out halInData, out halDSData);
 
                     //Attempt to start a simulator if one exists.
                     StartSimulator();

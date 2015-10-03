@@ -61,7 +61,7 @@ namespace HAL_RoboRIO
                     HALAccelerometer.Initialize(library, loader);
                     HALAnalog.Initialize(library, loader);
                     HALCAN.Initialize(library, loader);
-                    HALCANTalonSRX.Initialize(library, loader);
+                    HALCanTalonSRX.Initialize(library, loader);
                     HALCompressor.Initialize(library, loader);
                     HALDigital.Initialize(library, loader);
                     HALInterrupts.Initialize(library, loader);

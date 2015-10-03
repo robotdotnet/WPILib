@@ -17,7 +17,7 @@ namespace HAL_Simulator
         /// <returns>The FPGA time on a 10 nanosecond scale.</returns>
         public static long GetFPGATime()
         {
-            return (long)((DateTime.Now.Ticks - SimData.halData["time"]["program_start"]) / 10.0);
+            return (long)((DateTime.Now.Ticks - SimData.GlobalData.ProgramStartTime) / 10.0);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace HAL_Simulator
             int count = 0;
             Console.WriteLine("Waiting for program to start. If you are using a Gyro, this should take about 5 seconds. " +
                               "Otherwise it should start immediately.");
-            while (!SimData.halData["program_started"])
+            while (!SimData.GlobalData.ProgramStarted)
             {
                 count++;
                 Console.WriteLine("Waiting for program start signal: " + count);

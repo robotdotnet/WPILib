@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.PortConverters;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PWMHelpers;
@@ -153,9 +155,9 @@ namespace HAL_Simulator
         public static void setPWM(IntPtr digital_port_pointer, ushort value, ref int status)
         {
             status = 0;
-            var dPort = GetDigitalPort(digital_port_pointer);
-            halData["pwm"][dPort.port.pin]["raw_value"] = value;
-            halData["pwm"][dPort.port.pin]["value"] = ReverseByType(dPort.port.pin);
+            var pwm = PWM[GetDigitalPort(digital_port_pointer).port.pin];
+            pwm.RawValue = value;
+            pwm.Value = MotorRawToValue(pwm);
         }
 
         [CalledSimFunction]
@@ -166,22 +168,22 @@ namespace HAL_Simulator
             var mxp_port = RemapMXPPWMChannel(pin);
             if (pin >= NumHeaders)
             {
-                if (halData["mxp"][mxp_port]["initialized"])
+                if (MXP[mxp_port].Initialized)
                 {
                     status = RESOURCE_IS_ALLOCATED;
                     return false;
                 }
             }
-            if (halData["pwm"][pin]["initialized"])
+            if (PWM[pin].Initialized)
             {
                 status = RESOURCE_IS_ALLOCATED;
                 return false;
             }
-            halData["pwm"][pin]["initialized"] = true;
+            PWM[pin].Initialized = true;
 
             if (pin > NumHeaders)
             {
-                halData["mxp"][mxp_port]["initialized"] = true;
+                MXP[mxp_port].Initialized = true;
             }
             return true;
         }
@@ -191,16 +193,16 @@ namespace HAL_Simulator
         {
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
-            halData["pwm"][pin]["initialized"] = false;
-            halData["pwm"][pin]["raw_value"] = 0;
-            halData["pwm"][pin]["value"] = 0;
-            halData["pwm"][pin]["period_scale"] = false;
-            halData["pwm"][pin]["zero_latch"] = false;
+            PWM[pin].Initialized = false;
+            PWM[pin].RawValue = 0;
+            PWM[pin].Value = 0;
+            PWM[pin].PeriodScale = 0;
+            PWM[pin].ZeroLatch = false;
 
             if (pin > NumHeaders)
             {
                 var mxp_port = RemapMXPPWMChannel(pin);
-                halData["mxp"][mxp_port]["initialized"] = false;
+                MXP[mxp_port].Initialized = false;
             }
         }
 
@@ -208,21 +210,21 @@ namespace HAL_Simulator
         public static ushort getPWM(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return (ushort)halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["raw_value"];
+            return (ushort)PWM[GetDigitalPort(digital_port_pointer).port.pin].RawValue;
         }
 
         [CalledSimFunction]
         public static void latchPWMZero(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["zero_latch"] = true;
+            PWM[GetDigitalPort(digital_port_pointer).port.pin].ZeroLatch = true;
         }
 
         [CalledSimFunction]
         public static void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status)
         {
             status = 0;
-            halData["pwm"][GetDigitalPort(digital_port_pointer).port.pin]["period_scale"] = squelchMask;
+            PWM[GetDigitalPort(digital_port_pointer).port.pin].PeriodScale = squelchMask;
         }
 
         [CalledSimFunction]
@@ -231,9 +233,9 @@ namespace HAL_Simulator
             status = 0;
             bool found = false;
             int i = 0;
-            for (i = 0; i < halData["d0_pwm"].Count; i++)
+            for (i = 0; i < DigitalPWM.Count; i++)
             {
-                if (halData["d0_pwm"][i] == null)
+                if (DigitalPWM[i] == null)
                 {
                     found = true;
                     break;
@@ -242,13 +244,13 @@ namespace HAL_Simulator
             if (!found)
                 return IntPtr.Zero;
 
-            halData["d0_pwm"][i] = new Dictionary<dynamic, dynamic>()
+            DigitalPWM[i] = new DigitalPWMData
             {
-                ["duty_cycle"] = null,
-                ["pin"] = null,
+                DutyCycle = 0,
+                Pin = 0,
             };
 
-            PWM p = new PWM { idx = i };
+            DigitalPWMStruct p = new DigitalPWMStruct { idx = i };
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
 
@@ -259,7 +261,7 @@ namespace HAL_Simulator
         public static void freePWM(IntPtr pwmGenerator, ref int status)
         {
             status = 0;
-            halData["d0_pwm"][GetPWM(pwmGenerator).idx] = null;
+            DigitalPWM[GetPWM(pwmGenerator).idx] = null;
         }
 
 
@@ -268,21 +270,21 @@ namespace HAL_Simulator
         public static void setPWMRate(double rate, ref int status)
         {
             status = 0;
-            halData["d0_pwm_rate"] = rate;
+            SimData.GlobalData.DigitalPWMRate = rate;
         }
 
         [CalledSimFunction]
         public static void setPWMDutyCycle(IntPtr pwmGenerator, double dutyCycle, ref int status)
         {
             status = 0;
-            halData["d0_pwm"][GetPWM(pwmGenerator).idx]["duty_cycle"] = dutyCycle;
+            DigitalPWM[GetPWM(pwmGenerator).idx].DutyCycle = dutyCycle;
         }
 
         [CalledSimFunction]
         public static void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status)
         {
             status = 0;
-            halData["d0_pwm"][GetPWM(pwmGenerator).idx]["pin"] = pin;
+            DigitalPWM[GetPWM(pwmGenerator).idx].Pin = pin;
         }
 
 
@@ -291,9 +293,9 @@ namespace HAL_Simulator
         {
             status = 0;
             var dPort = GetDigitalPort(digital_port_pointer);
-            var relay = halData["relay"][dPort.port.pin];
-            relay["initialized"] = true;
-            relay["fwd"] = on;
+            var relay = Relay[dPort.port.pin];
+            relay.Initialized = true;
+            relay.Forward = on;
         }
 
         [CalledSimFunction]
@@ -301,23 +303,23 @@ namespace HAL_Simulator
         {
             status = 0;
             var dPort = GetDigitalPort(digital_port_pointer);
-            var relay = halData["relay"][dPort.port.pin];
-            relay["initialized"] = true;
-            relay["rev"] = on;
+            var relay = Relay[dPort.port.pin];
+            relay.Initialized = true;
+            relay.Reverse = on;
         }
 
         [CalledSimFunction]
         public static bool getRelayForward(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["fwd"];
+            return Relay[GetDigitalPort(digital_port_pointer).port.pin].Forward;
         }
 
         [CalledSimFunction]
         public static bool getRelayReverse(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return halData["relay"][GetDigitalPort(digital_port_pointer).port.pin]["rev"];
+            return Relay[GetDigitalPort(digital_port_pointer).port.pin].Reverse;
         }
 
         [CalledSimFunction]
@@ -329,24 +331,24 @@ namespace HAL_Simulator
             var mxpPort = RemapMXPChannel(pin);
             if (pin >= NumHeaders)
             {
-                if (halData["mxp"][mxpPort]["initialized"])
+                if (MXP[mxpPort].Initialized)
                 {
                     status = RESOURCE_IS_ALLOCATED;
                     return false;
                 }
             }
-            var dio = halData["dio"][pin];
-            if (dio["initialized"])
+            var dio = DIO[pin];
+            if (dio.Initialized)
             {
                 status = RESOURCE_IS_ALLOCATED;
                 return false;
             }
             if (pin >= NumHeaders)
             {
-                halData["mxp"][mxpPort]["initialized"] = true;
+                MXP[mxpPort].Initialized = true;
             }
-            dio["initialized"] = true;
-            dio["is_input"] = input;
+            dio.Initialized = true;
+            dio.IsInput = input;
             return true;
         }
 
@@ -355,10 +357,10 @@ namespace HAL_Simulator
         {
             status = 0;
             var pin = GetDigitalPort(digital_port_pointer).port.pin;
-            halData["dio"][pin]["initialized"] = false;
+            DIO[pin].Initialized = false;
             if (pin >= NumHeaders)
             {
-                halData["mxp"][RemapMXPChannel(pin)]["initialized"] = false;
+                MXP[RemapMXPChannel(pin)].Initialized = false;
             }
 
         }
@@ -367,28 +369,28 @@ namespace HAL_Simulator
         public static void setDIO(IntPtr digital_port_pointer, short value, ref int status)
         {
             status = 0;
-            halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["value"] = value != 0;
+            DIO[GetDigitalPort(digital_port_pointer).port.pin].Value = value != 0;
         }
 
         [CalledSimFunction]
         public static bool getDIO(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["value"];
+            return DIO[GetDigitalPort(digital_port_pointer).port.pin].Value;
         }
 
         [CalledSimFunction]
         public static bool getDIODirection(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["is_input"];
+            return DIO[GetDigitalPort(digital_port_pointer).port.pin].IsInput;
         }
 
         [CalledSimFunction]
         public static void pulse(IntPtr digital_port_pointer, double pulseLength, ref int status)
         {
             status = 0;
-            halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["pulse_length"] = pulseLength;
+            DIO[GetDigitalPort(digital_port_pointer).port.pin].PulseLength = pulseLength;
 
         }
 
@@ -396,19 +398,14 @@ namespace HAL_Simulator
         public static bool isPulsing(IntPtr digital_port_pointer, ref int status)
         {
             status = 0;
-            return halData["dio"][GetDigitalPort(digital_port_pointer).port.pin]["pulse_length"] != 0;
+            return DIO[GetDigitalPort(digital_port_pointer).port.pin].PulseLength != 0;
         }
 
         [CalledSimFunction]
         public static bool isAnyPulsing(ref int status)
         {
             status = 0;
-            foreach (var p in halData["dio"])
-            {
-                if (p != null && p["pulse_lenght"] != null)
-                    return true;
-            }
-            return false;
+            return DIO.Any(p => p != null && p.PulseLength != 0);
         }
 
         [CalledSimFunction]
@@ -416,16 +413,16 @@ namespace HAL_Simulator
         {
             status = 0;
             int i = 0;
-            for (i = 0; i < halData["counter"].Count; i++)
+            for (i = 0; i < Counter.Count; i++)
             {
-                var cnt = halData["counter"][i];
-                if (!cnt["initialized"])
+                var cnt = Counter[i];
+                if (!cnt.Initialized)
                 {
-                    cnt["initialized"] = true;
-                    cnt["mode"] = (int)mode;
-                    cnt["update_when_empty"] = false;
+                    cnt.Initialized = true;
+                    cnt.Mode = mode;
+                    cnt.UpdateWhenEmpty = false;
 
-                    Counter c = new Counter() { idx = i };
+                    CounterStruct c = new CounterStruct() { idx = i };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
                     Marshal.StructureToPtr(c, ptr, true);
                     index = (uint)i;
@@ -445,7 +442,7 @@ namespace HAL_Simulator
             status = 0;
             clearCounterUpSource(counter_pointer, ref status);
             clearCounterDownSource(counter_pointer, ref status);
-            halData["counter"][GetCounter(counter_pointer).idx]["initialized"] = false;
+            Counter[GetCounter(counter_pointer).idx].Initialized = false;
 
             Marshal.FreeHGlobal(counter_pointer);
         }
@@ -454,7 +451,7 @@ namespace HAL_Simulator
         public static void setCounterAverageSize(IntPtr counter_pointer, int size, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["average_size"] = size;
+            Counter[GetCounter(counter_pointer).idx].AverageSize = size;
         }
 
         [CalledSimFunction]
@@ -463,15 +460,15 @@ namespace HAL_Simulator
             var idx = GetCounter(counter_pointer).idx;
             status = 0;
 
-            var counter = halData["counter"][idx];
-            counter["up_source_channel"] = (int)pin;
-            counter["up_source_trigger"] = analogTrigger;
+            var counter = Counter[idx];
+            counter.UpSourceChannel = pin;
+            counter.UpSourceTrigger = analogTrigger;
 
-            if (counter["mode"] == (int) Mode.ExternalDirection)
+            if (counter.Mode == Mode.ExternalDirection)
             {
                 setCounterUpSourceEdge(counter_pointer, true, false, ref status);
             }
-            else if (counter["mode"] == (int)Mode.TwoPulse)
+            else if (counter.Mode == Mode.TwoPulse)
             {
                 if (!analogTrigger)
                 {
@@ -485,15 +482,15 @@ namespace HAL_Simulator
             }
         }
 
-        private static void SetCounterUpAsTwoPulseAnalog(dynamic counter, int pin)
+        private static void SetCounterUpAsTwoPulseAnalog(CounterData counter, int pin)
         {
-            if (!counter["up_source_trigger"])
+            if (!counter.UpSourceTrigger)
             {
-                throw new InvalidOperationException("Analog should only be called for analog triggers");
+                throw new InvalidOperationException("Analog should only be called for IsAnalog triggers");
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            int analogIn = halData["analog_trigger"][trigIndex]["pin"];
+            int analogIn = SimData.AnalogTrigger[trigIndex].AnalogPin;//halData["analog_trigger"][trigIndex]["pin"];
 
             if (analogIn == -1)
             {
@@ -502,20 +499,20 @@ namespace HAL_Simulator
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr) halData["analog_trigger"][trigIndex]["pointer"],
+                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
-            double prevAnalogVoltage = halData["analog_in"][analogIn]["voltage"];
+            double prevAnalogVoltage = AnalogIn[analogIn].Voltage;//halData["analog_in"][analogIn]["voltage"];
 
-            Action<dynamic, dynamic> upCallback = (key, value) =>
+            Action<string, dynamic> upCallback = (key, value) =>
             {
-                //If our analog has actually changed
+                //If our IsAnalog has actually changed
                 if (prevAnalogVoltage != value)
                 {
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr) halData["analog_trigger"][trigIndex]["pointer"], ref status);
+                            (IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -524,9 +521,9 @@ namespace HAL_Simulator
                         if (!trigValue)
                             return;
                         //Otherwise if we count on rising edge add 1
-                        if (counter["up_rising_edge"])
+                        if (counter.UpRisingEdge)
                         {
-                            counter["count"]++;
+                            counter.Count++;
                         }
                     }
                     //Was High
@@ -536,9 +533,9 @@ namespace HAL_Simulator
                         if (trigValue)
                             return;
                         //Otherwise if we count on falling edge add 1
-                        if (counter["up_falling_edge"])
+                        if (counter.UpFallingEdge)
                         {
-                            counter["count"]++;
+                            counter.Count++;
                         }
                     }
                     prevTrigValue = trigValue;
@@ -546,21 +543,20 @@ namespace HAL_Simulator
                 }
             };
 
-            counter["up_callback"] = upCallback;
-
-            halData["analog_in"][analogIn].Register("voltage", upCallback);
+            counter.UpCallback= upCallback;
+            AnalogIn[analogIn].Register("Voltage", upCallback);
         }
 
-        private static void SetCounterUpAsTwoPulseDigital(dynamic counter, int pin)
+        private static void SetCounterUpAsTwoPulseDigital(CounterData counter, int pin)
         {
-            if (counter["up_source_trigger"])
+            if (counter.UpSourceTrigger)
             {
                 throw new InvalidOperationException("Digital should only be called for digital ports");
             }
 
-            bool prevValue = halData["dio"][pin]["value"];
+            bool prevValue = DIO[pin].Value;
 
-            Action<dynamic, dynamic> upCallback = (key, value) =>
+            Action<string, dynamic> upCallback = (key, value) =>
             {
                 //Was low
                 if (!prevValue)
@@ -569,9 +565,9 @@ namespace HAL_Simulator
                     if (!value)
                         return;
                     //Otherwise if we count on rising edge add 1
-                    if (counter["up_rising_edge"])
+                    if (counter.UpRisingEdge)
                     {
-                        counter["count"]++;
+                        counter.Count++;
                     }
                 }
                 //Was High
@@ -581,17 +577,16 @@ namespace HAL_Simulator
                     if (value)
                         return;
                     //Otherwise if we count on falling edge add 1
-                    if (counter["up_falling_edge"])
+                    if (counter.UpFallingEdge)
                     {
-                        counter["count"]++;
+                        counter.Count++;
                     }
                 }
                 prevValue = value;
             };
 
-            counter["up_callback"] = upCallback;
-
-            halData["dio"][pin].Register("value", upCallback);
+            counter.UpCallback = upCallback;
+            DIO[pin].Register("Value", upCallback);
         }
 
         [CalledSimFunction]
@@ -600,34 +595,34 @@ namespace HAL_Simulator
         {
             status = 0;
             var idx = GetCounter(counter_pointer).idx;
-            halData["counter"][idx]["up_rising_edge"] = risingEdge;
-            halData["counter"][idx]["up_falling_edge"] = fallingEdge;
+            Counter[idx].UpRisingEdge = risingEdge;
+            Counter[idx].UpFallingEdge = fallingEdge;
         }
 
         [CalledSimFunction]
         public static void clearCounterUpSource(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            var counter = halData["counter"][GetCounter((counter_pointer)).idx];
+            var counter = Counter[GetCounter((counter_pointer)).idx];
 
-            if (counter.ContainsKey("up_callback") && counter["up_callback"] != null)
+            if (counter.UpCallback != null)
             {
-                if (counter["up_source_trigger"])
+                if (counter.UpSourceTrigger)
                 {
-                    halData["analog_in"][counter["up_source_channel"]].Cancel("voltage", counter["up_callback"]);
+                    AnalogIn[(int)counter.UpSourceChannel].Cancel("Voltage", counter.UpCallback);
                 }
                 else
                 {
-                    halData["dio"][counter["up_source_channel"]].Cancel("value", counter["up_callback"]);
+                    DIO[(int)counter.UpSourceChannel].Cancel("Value", counter.UpCallback);
                 }
                 
-                counter["up_callback"] = null;
+                counter.UpCallback = null;
             }
 
-            counter["up_rising_edge"] = false;
-            counter["up_falling_edge"] = false;
-            counter["up_source_channel"] = 0;
-            counter["up_source_trigger"] = false;
+            counter.UpRisingEdge = false;
+            counter.UpFallingEdge = false;
+            counter.UpSourceChannel = 0;
+            counter.UpSourceTrigger = false;
 			
 			
         }
@@ -638,22 +633,22 @@ namespace HAL_Simulator
             var idx = GetCounter(counter_pointer).idx;
             status = 0;
 
-            if (halData["counter"][idx]["mode"] != (int)Mode.ExternalDirection &&
-                halData["counter"][idx]["mode"] != (int)Mode.TwoPulse)
+            if (Counter[idx].Mode != Mode.ExternalDirection &&
+                Counter[idx].Mode != Mode.TwoPulse)
             {
                 status = PARAMETER_OUT_OF_RANGE;
                 return;
             }
 
-            halData["counter"][idx]["down_source_channel"] = (int)pin;
-            halData["counter"][idx]["down_source_trigger"] = analogTrigger;
+            Counter[idx].DownSourceChannel = pin;
+            Counter[idx].DownSourceTrigger = analogTrigger;
 
-            var counter = halData["counter"][idx];
+            var counter = Counter[idx];
 
-            if (counter["mode"] == (int)Mode.ExternalDirection)
+            if (counter.Mode == Mode.ExternalDirection)
             {
             }
-            else if (counter["mode"] == (int)Mode.TwoPulse)
+            else if (counter.Mode == Mode.TwoPulse)
             {
                 if (!analogTrigger)
                 {
@@ -663,20 +658,14 @@ namespace HAL_Simulator
                 {
                     SetCounterDownAsTwoPulseAnalog(counter, (int)pin);
                 }
-                //SetCounterDownAsTwoPulseDigital(counter, (int)pin);
             }
-
-
-            
-
-
         }
 
-        private static void SetCounterDownAsTwoPulseDigital(dynamic counter, int pin)
+        private static void SetCounterDownAsTwoPulseDigital(CounterData counter, int pin)
         {
-            bool prevValue = halData["dio"][(int)pin]["value"];
+            bool prevValue = DIO[(int)pin].Value;
 
-            Action<dynamic, dynamic> downCallback = (key, value) =>
+            Action<string, dynamic> downCallback = (key, value) =>
             {
                 //Was low
                 if (!prevValue)
@@ -685,9 +674,9 @@ namespace HAL_Simulator
                     if (!value)
                         return;
                     //Otherwise if we count on rising edge add 1
-                    if (counter["down_rising_edge"])
+                    if (counter.DownRisingEdge)
                     {
-                        counter["count"]--;
+                        counter.Count--;
                     }
                 }
                 //Was High
@@ -697,28 +686,28 @@ namespace HAL_Simulator
                     if (value)
                         return;
                     //Otherwise if we count on falling edge add 1
-                    if (counter["down_falling_edge"])
+                    if (counter.DownFallingEdge)
                     {
-                        counter["count"]--;
+                        counter.Count--;
                     }
                 }
                 prevValue = value;
             };
 
-            counter["down_callback"] = downCallback;
+            counter.DownCallback = downCallback;
 
-            halData["dio"][(int)pin].Register("value", downCallback);
+            DIO[(int)pin].Register("Value", downCallback);
         }
 
-        private static void SetCounterDownAsTwoPulseAnalog(dynamic counter, int pin)
+        private static void SetCounterDownAsTwoPulseAnalog(CounterData counter, int pin)
         {
-            if (!counter["down_source_trigger"])
+            if (!counter.DownSourceTrigger)
             {
-                throw new InvalidOperationException("Analog should only be called for analog triggers");
+                throw new InvalidOperationException("Analog should only be called for Analog triggers");
             }
             pin = pin - 1;
             int trigIndex = (pin >> 2);
-            int analogIn = halData["analog_trigger"][trigIndex]["pin"];
+            int analogIn = SimData.AnalogTrigger[trigIndex].AnalogPin;
 
             if (analogIn == -1)
             {
@@ -727,20 +716,20 @@ namespace HAL_Simulator
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr)halData["analog_trigger"][trigIndex]["pointer"],
+                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
-            double prevAnalogVoltage = halData["analog_in"][analogIn]["voltage"];
+            double prevAnalogVoltage = AnalogIn[analogIn].Voltage;
 
             Action<dynamic, dynamic> downCallback = (key, value) =>
             {
-                //If our analog has actually changed
+                //If our IsAnalog has actually changed
                 if (prevAnalogVoltage != value)
                 {
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr)halData["analog_trigger"][trigIndex]["pointer"], ref status);
+                            (IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -749,9 +738,9 @@ namespace HAL_Simulator
                         if (!trigValue)
                             return;
                         //Otherwise if we count on rising edge add 1
-                        if (counter["down_rising_edge"])
+                        if (counter.DownRisingEdge)
                         {
-                            counter["count"]--;
+                            counter.Count--;
                         }
                     }
                     //Was High
@@ -761,9 +750,9 @@ namespace HAL_Simulator
                         if (trigValue)
                             return;
                         //Otherwise if we count on falling edge add 1
-                        if (counter["down_falling_edge"])
+                        if (counter.DownFallingEdge)
                         {
-                            counter["count"]--;
+                            counter.Count--;
                         }
                     }
                     prevTrigValue = trigValue;
@@ -771,9 +760,9 @@ namespace HAL_Simulator
                 }
             };
 
-            counter["down_callback"] = downCallback;
+            counter.DownCallback = downCallback;
 
-            halData["analog_in"][analogIn].Register("voltage", downCallback);
+            AnalogIn[analogIn].Register("Voltage", downCallback);
         }
 
         [CalledSimFunction]
@@ -782,34 +771,34 @@ namespace HAL_Simulator
         {
             status = 0;
             var idx = GetCounter(counter_pointer).idx;
-            halData["counter"][idx]["down_rising_edge"] = risingEdge;
-            halData["counter"][idx]["down_falling_edge"] = fallingEdge;
+            Counter[idx].DownRisingEdge = risingEdge;
+            Counter[idx].DownFallingEdge = fallingEdge;
         }
 
         [CalledSimFunction]
         public static void clearCounterDownSource(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            var counter = halData["counter"][GetCounter((counter_pointer)).idx];
+            var counter = Counter[GetCounter((counter_pointer)).idx];
 
-            if (counter.ContainsKey("down_callback") && counter["down_callback"] != null)
+            if (counter.DownCallback != null)
             {
-                if (counter["down_source_trigger"])
+                if (counter.DownSourceTrigger)
                 {
-                    halData["analog_in"][counter["down_source_channel"]].Cancel("voltage", counter["down_callback"]);
+                    AnalogIn[(int)counter.DownSourceChannel].Cancel("Voltage", counter.DownCallback);
                 }
                 else
                 {
-                    halData["dio"][counter["down_source_channel"]].Cancel("value", counter["down_callback"]);
+                    DIO[(int)counter.DownSourceChannel].Cancel("Value", counter.DownCallback);
                 }
                 
-                counter["down_callback"] = null;
+                counter.DownCallback = null;
             }
 
-            counter["down_rising_edge"] = false;
-            counter["down_falling_edge"] = false;
-            counter["down_source_channel"] = 0;
-            counter["down_source_trigger"] = false;
+            counter.DownRisingEdge = false;
+            counter.DownFallingEdge = false;
+            counter.DownSourceChannel = 0;
+            counter.DownSourceTrigger = false;
 			
 			
         }
@@ -818,56 +807,56 @@ namespace HAL_Simulator
         public static void setCounterUpDownMode(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["mode"] = (int)Mode.TwoPulse;
+            Counter[GetCounter(counter_pointer).idx].Mode = (int)Mode.TwoPulse;
         }
 
         [CalledSimFunction]
         public static void setCounterExternalDirectionMode(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["mode"] = (int)Mode.ExternalDirection;
+            Counter[GetCounter(counter_pointer).idx].Mode = Mode.ExternalDirection;
         }
 
         [CalledSimFunction]
         public static void setCounterSemiPeriodMode(IntPtr counter_pointer, bool highSemiPeriod, ref int status)
         {
             status = 0;
-            var counter = halData["counter"][GetCounter(counter_pointer).idx];
-            counter["mode"] = (int)Mode.Semiperiod;
-            counter["up_rising_edge"] = highSemiPeriod;
-            counter["update_when_empty"] = false;
+            var counter = Counter[GetCounter(counter_pointer).idx];
+            counter.Mode = Mode.Semiperiod;
+            counter.UpRisingEdge = highSemiPeriod;
+            counter.UpdateWhenEmpty = false;
         }
 
         [CalledSimFunction]
         public static void setCounterPulseLengthMode(IntPtr counter_pointer, double threshold, ref int status)
         {
             status = 0;
-            var counter = halData["counter"][GetCounter(counter_pointer).idx];
-            counter["mode"] = (int)Mode.PulseLength;
-            counter["pulse_length_threshold"] = threshold;
+            var counter = Counter[GetCounter(counter_pointer).idx];
+            counter.Mode = Mode.PulseLength;
+            counter.PulseLengthThreshold = threshold;
         }
 
         [CalledSimFunction]
         public static int getCounterSamplesToAverage(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            return (int)halData["counter"][GetCounter(counter_pointer).idx]["samples_to_average"];
+            return (int)Counter[GetCounter(counter_pointer).idx].SamplesToAverage;
         }
 
         [CalledSimFunction]
         public static void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["samples_to_average"] = samplesToAverage;
+            Counter[GetCounter(counter_pointer).idx].SamplesToAverage = (uint)samplesToAverage;
         }
 
         [CalledSimFunction]
         public static void resetCounter(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["count"] = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["period"] = double.MaxValue;
-            halData["counter"][GetCounter(counter_pointer).idx]["reset"] = true;
+            Counter[GetCounter(counter_pointer).idx].Count = 0;
+            Counter[GetCounter(counter_pointer).idx].Period = double.MaxValue;
+            Counter[GetCounter(counter_pointer).idx].Reset = true;
         }
 
 
@@ -875,14 +864,14 @@ namespace HAL_Simulator
         public static int getCounter(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            return halData["counter"][GetCounter(counter_pointer).idx]["count"];
+            return Counter[GetCounter(counter_pointer).idx].Count;
         }
 
         [CalledSimFunction]
         public static double getCounterPeriod(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            return halData["counter"][GetCounter(counter_pointer).idx]["period"];
+            return Counter[GetCounter(counter_pointer).idx].Period;
         }
 
 
@@ -891,36 +880,36 @@ namespace HAL_Simulator
         public static void setCounterMaxPeriod(IntPtr counter_pointer, double maxPeriod, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["max_period"] = maxPeriod;
+            Counter[GetCounter(counter_pointer).idx].MaxPeriod = maxPeriod;
         }
 
         [CalledSimFunction]
         public static void setCounterUpdateWhenEmpty(IntPtr counter_pointer, bool enabled, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["update_when_empty"] = enabled;
+            Counter[GetCounter(counter_pointer).idx].UpdateWhenEmpty = enabled;
         }
 
         [CalledSimFunction]
         public static bool getCounterStopped(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            var cnt = halData["counter"][GetCounter(counter_pointer).idx];
-            return cnt["period"] > cnt["max_period"];
+            var cnt = Counter[GetCounter(counter_pointer).idx];
+            return cnt.Period > cnt.MaxPeriod;
         }
 
         [CalledSimFunction]
         public static bool getCounterDirection(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            return halData["counter"][GetCounter(counter_pointer).idx]["direction"];
+            return Counter[GetCounter(counter_pointer).idx].Direction;
         }
 
         [CalledSimFunction]
         public static void setCounterReverseDirection(IntPtr counter_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
-            halData["counter"][GetCounter(counter_pointer).idx]["reverse_direction"] = reverseDirection;
+            Counter[GetCounter(counter_pointer).idx].ReverseDirection = reverseDirection;
         }
 
 
@@ -930,13 +919,13 @@ namespace HAL_Simulator
             ref int status)
         {
             status = 0;
-            for (int i = 0; i < halData["encoder"].Count; i++)
+            for (int i = 0; i < Encoder.Count; i++)
             {
-                var enc = halData["encoder"][i];
-                if (!enc["initialized"])
+                var enc = Encoder[i];
+                if (!enc.Initialized)
                 {
-                    enc["initialized"] = true;
-                    enc["config"] = new Dictionary<dynamic, dynamic>()
+                    enc.Initialized = true;
+                    enc.Config = new Dictionary<string, dynamic>()
                     {
                         ["ASource_Module"] = port_a_module,
                         ["ASource_Channel"] = port_a_pin,
@@ -946,9 +935,9 @@ namespace HAL_Simulator
                         ["BSource_AnalogTrigger"] = port_b_analog_trigger,
                     };
 
-                    enc["reverse_direction"] = reverseDirection;
+                    enc.ReverseDirection = reverseDirection;
 
-                    Encoder e = new Encoder { idx = i };
+                    EncoderStruct e = new EncoderStruct { idx = i };
                     IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
                     Marshal.StructureToPtr(e, ptr, true);
 
@@ -965,7 +954,7 @@ namespace HAL_Simulator
         public static void freeEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["initialized"] = false;
+            Encoder[GetEncoder(encoder_pointer).idx].Initialized = false;
 
             Marshal.FreeHGlobal(encoder_pointer);
         }
@@ -974,23 +963,23 @@ namespace HAL_Simulator
         public static void resetEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["count"] = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["period "] = double.MaxValue;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["reset"] = true;
+            Encoder[GetEncoder(encoder_pointer).idx].Count = 0;
+            Encoder[GetEncoder(encoder_pointer).idx].Period = double.MaxValue;
+            Encoder[GetEncoder(encoder_pointer).idx].Reset = true;
         }
 
         [CalledSimFunction]
         public static int getEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (int)halData["encoder"][GetEncoder(encoder_pointer).idx]["count"];
+            return (int)Encoder[GetEncoder(encoder_pointer).idx].Count;
         }
 
         [CalledSimFunction]
         public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (double)halData["encoder"][GetEncoder(encoder_pointer).idx]["period"];
+            return (double)Encoder[GetEncoder(encoder_pointer).idx].Period;
         }
 
 
@@ -998,43 +987,43 @@ namespace HAL_Simulator
         public static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["max_period"] = maxPeriod;
+            Encoder[GetEncoder(encoder_pointer).idx].MaxPeriod = maxPeriod;
         }
 
         [CalledSimFunction]
         public static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            var enc = halData["encoder"][GetEncoder(encoder_pointer).idx];
-            return enc["period"] > enc["max_period"];
+            var enc = Encoder[GetEncoder(encoder_pointer).idx];
+            return enc.Period > enc.MaxPeriod;
         }
 
         [CalledSimFunction]
         public static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return halData["encoder"][GetEncoder(encoder_pointer).idx]["direction"];
+            return Encoder[GetEncoder(encoder_pointer).idx].Direction;
         }
 
         [CalledSimFunction]
         public static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["reverse_direction"] = reverseDirection;
+            Encoder[GetEncoder(encoder_pointer).idx].ReverseDirection = reverseDirection;
         }
 
         [CalledSimFunction]
         public static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
         {
             status = 0;
-            halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"] = samplesToAverage;
+            Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage = samplesToAverage;
         }
 
         [CalledSimFunction]
         public static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return halData["encoder"][GetEncoder(encoder_pointer).idx]["samples_to_average"];
+            return Encoder[GetEncoder(encoder_pointer).idx].SamplesToAverage;
         }
 
 
@@ -1043,7 +1032,7 @@ namespace HAL_Simulator
             bool activeHigh, bool edgeSensitive, ref int status)
         {
             status = 0;
-            var enc = halData["encoder"][GetEncoder(encoder_pointer).idx]["config"];
+            var enc = Encoder[GetEncoder(encoder_pointer).idx].Config;
             enc["IndexSource_Channel"] = pin;
             enc["IndexSource_Module"] = 0;
             enc["IndexSource_AnalogTrigger"] = analogTrigger;
@@ -1055,7 +1044,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static ushort getLoopTiming(ref int status)
         {
-            return (ushort)halData["pwm_loop_timing"];
+            return SimData.GlobalData.PWMLoopTiming;
         }
 
         [CalledSimFunction]

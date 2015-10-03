@@ -23,7 +23,7 @@ namespace WPILib
         public AnalogTriggerOutput(AnalogTrigger trigger, AnalogTriggerType outputType)
         {
             if (trigger == null)
-                throw new NullReferenceException("Analog Trigger give was null");
+                throw new NullReferenceException("Analog Trigger given was null");
             m_trigger = trigger;
             m_outputType = outputType;
             

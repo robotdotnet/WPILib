@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -55,7 +56,7 @@ namespace HAL_Simulator
                     HALAccelerometer.Initialize(library, loader);
                     HALAnalog.Initialize(library, loader);
                     HALCAN.Initialize(library, loader);
-                    HALCANTalonSRX.Initialize(library, loader);
+                    HALCanTalonSRX.Initialize(library, loader);
                     HALCompressor.Initialize(library, loader);
                     HALDigital.Initialize(library, loader);
                     HALInterrupts.Initialize(library, loader);
@@ -147,6 +148,7 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="sem"></param>
         [CalledSimFunction]
+        //Replaced
         public static void HALSetNewDataSem(IntPtr sem)
         {
             HALNewDataSem = sem;
@@ -158,6 +160,7 @@ namespace HAL_Simulator
         /// <param name="code">The Error Code</param>
         /// <returns>IntPtr containing the Error message</returns>
         [CalledSimFunction]
+        //Replaced
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
@@ -243,6 +246,7 @@ namespace HAL_Simulator
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
+        //Replaced
         public static ushort getFPGAVersion(ref int status)
         {
             status = 0;
@@ -282,7 +286,7 @@ namespace HAL_Simulator
         public static bool getFPGAButton(ref int status)
         {
             status = 0;
-            return halData["fpga_button"];
+            return SimData.RoboRioData.FPGAButton;
         }
 
         /// <summary>
@@ -307,8 +311,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static HALControlWord HALGetControlWord()
         {
-            var h = halData["control"];
-            return new HALControlWord(h["enabled"], h["autonomous"], h["test"], h["eStop"], h["fms_attached"], h["ds_attached"]);
+            return new HALControlWord(true, false, false, false, false, true);
         }
 
         /// <summary>
@@ -485,7 +488,7 @@ namespace HAL_Simulator
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
             halData["user_program_state"] = "starting";
-            halData["program_started"] = true;
+            SimData.GlobalData.ProgramStarted = true;
         }
 
         [CalledSimFunction]
@@ -518,25 +521,25 @@ namespace HAL_Simulator
             switch (resource)
             {
                 case (byte)ResourceType.kResourceType_Jaguar:
-                    halData["pwm"][instanceNumber]["type"] = "jaguar";
+                    PWM[instanceNumber].Type = ControllerType.Jaguar;
                     break;
                 case (byte)ResourceType.kResourceType_Talon:
-                    halData["pwm"][instanceNumber]["type"] = "talon";
+                    PWM[instanceNumber].Type = ControllerType.Talon;
                     break;
                 case (byte)ResourceType.kResourceType_TalonSRX:
-                    halData["pwm"][instanceNumber]["type"] = "talonsrx";
+                    PWM[instanceNumber].Type = ControllerType.TalonSRX;
                     break;
                 case (byte)ResourceType.kResourceType_Victor:
-                    halData["pwm"][instanceNumber]["type"] = "victor";
+                    PWM[instanceNumber].Type = ControllerType.Victor;
                     break;
                 case (byte)ResourceType.kResourceType_VictorSP:
-                    halData["pwm"][instanceNumber]["type"] = "victorsp";
+                    PWM[instanceNumber].Type = ControllerType.VictorSP;
                     break;
                 case (byte)ResourceType.kResourceType_Servo:
-                    halData["pwm"][instanceNumber]["type"] = "servo";
+                    PWM[instanceNumber].Type = ControllerType.Servo;
                     break;
                 case (byte)ResourceType.kResourceType_Solenoid:
-                    halData["pcm"][(int)context]["solenoid"][instanceNumber]["initialized"] = true;
+                    GetPCM(context).Solenoids[instanceNumber].Initialized = true;
                     break;
             }
             if (!halData["reports"].ContainsKey(resource))

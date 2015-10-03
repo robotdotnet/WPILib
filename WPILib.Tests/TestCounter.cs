@@ -1,35 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using HAL_Base;
+using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
+using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
     [TestFixture]
     public class TestCounter : TestBase
     {
-
-        private Dictionary<dynamic, dynamic> HalData()
+        private List<CounterData> GetCounterData()
         {
-            return HAL.halData;
+            return SimData.Counter;
         }
 
 
-        public void TestInit(int mode, uint up, uint down, bool upRising, bool upFalling, bool downRising,
+        public void TestInit(Mode mode, uint up, uint down, bool upRising, bool upFalling, bool downRising,
             bool downFalling, bool triggerUp = false, bool triggerDown = false)
         {
-            Assert.IsTrue(HalData()["counter"][0]["initialized"]);
-            Assert.AreEqual(mode, HalData()["counter"][0]["mode"]);
-            Assert.AreEqual(up, HalData()["counter"][0]["up_source_channel"]);
-            Assert.AreEqual(down, HalData()["counter"][0]["down_source_channel"]);
-            Assert.AreEqual(upRising, HalData()["counter"][0]["up_rising_edge"]);
-            Assert.AreEqual(upFalling, HalData()["counter"][0]["up_falling_edge"]);
-            Assert.AreEqual(downRising, HalData()["counter"][0]["down_rising_edge"]);
-            Assert.AreEqual(downFalling, HalData()["counter"][0]["down_falling_edge"]);
-            Assert.AreEqual(triggerUp, HalData()["counter"][0]["up_source_trigger"]);
-            Assert.AreEqual(triggerDown, HalData()["counter"][0]["down_source_trigger"]);
+            Assert.IsTrue(GetCounterData()[0].Initialized);
+            Assert.AreEqual(mode, GetCounterData()[0].Mode);
+            Assert.AreEqual(up, GetCounterData()[0].UpSourceChannel);
+            Assert.AreEqual(down, GetCounterData()[0].DownSourceChannel);
+            Assert.AreEqual(upRising, GetCounterData()[0].UpRisingEdge);
+            Assert.AreEqual(upFalling, GetCounterData()[0].UpFallingEdge);
+            Assert.AreEqual(downRising, GetCounterData()[0].DownRisingEdge);
+            Assert.AreEqual(downFalling, GetCounterData()[0].DownFallingEdge);
+            Assert.AreEqual(triggerUp, GetCounterData()[0].UpSourceTrigger);
+            Assert.AreEqual(triggerDown, GetCounterData()[0].DownSourceTrigger);
         }
 
         [Test]
@@ -111,7 +113,7 @@ namespace WPILib.Tests
                 {
                     using (Counter ctr = new Counter(EncodingType.K1X, us, ds, true))
                     {
-                        TestInit(3, 3, 4, true, false, true, true);
+                        TestInit(Mode.ExternalDirection, 3, 4, true, false, true, true);
                     }
                 }
             }
@@ -159,9 +161,9 @@ namespace WPILib.Tests
         {
 
 
-            Assert.IsFalse(HalData()["counter"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
+            Assert.IsFalse(GetCounterData()[0].Initialized);
+            Assert.IsFalse(SimData.DIO[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
             Counter ctr = null;
             try
             {
@@ -169,17 +171,17 @@ namespace WPILib.Tests
                 ctr.SetUpSource(0);
                 ctr.SetDownSource(1);
 
-                Assert.IsTrue(HalData()["counter"][0]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][0]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
+                Assert.IsTrue(GetCounterData()[0].Initialized);
+                Assert.IsTrue(SimData.DIO[0].Initialized);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
             }
             finally
             {
                 ctr?.Dispose();
             }
-            Assert.IsFalse(HalData()["counter"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
+            Assert.IsFalse(GetCounterData()[0].Initialized);
+            Assert.IsFalse(SimData.DIO[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
         }
 
         [TestCase(false, false)]
@@ -192,8 +194,8 @@ namespace WPILib.Tests
             {
                 c.SetUpSource(2);
                 c.SetUpSourceEdge(rising, falling);
-                Assert.AreEqual(rising, HalData()["counter"][0]["up_rising_edge"]);
-                Assert.AreEqual(falling, HalData()["counter"][0]["up_falling_edge"]);
+                Assert.AreEqual(rising, GetCounterData()[0].UpRisingEdge);
+                Assert.AreEqual(falling, GetCounterData()[0].UpFallingEdge);
             }
         }
 
@@ -207,8 +209,8 @@ namespace WPILib.Tests
             {
                 c.SetDownSource(2);
                 c.SetDownSourceEdge(rising, falling);
-                Assert.AreEqual(rising, HalData()["counter"][0]["down_rising_edge"]);
-                Assert.AreEqual(falling, HalData()["counter"][0]["down_falling_edge"]);
+                Assert.AreEqual(rising, GetCounterData()[0].DownRisingEdge);
+                Assert.AreEqual(falling, GetCounterData()[0].DownFallingEdge);
             }
         }
 
@@ -218,7 +220,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.SetUpDownCounterMode();
-                Assert.AreEqual(0, HalData()["counter"][0]["mode"]);
+                Assert.AreEqual(Mode.TwoPulse, GetCounterData()[0].Mode);
             }
         }
 
@@ -228,7 +230,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.SetExternalDirectionMode();
-                Assert.AreEqual(3, HalData()["counter"][0]["mode"]);
+                Assert.AreEqual(Mode.ExternalDirection, GetCounterData()[0].Mode);
             }
         }
 
@@ -239,9 +241,9 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.SetSemiPeriodMode(high);
-                Assert.AreEqual(1, HalData()["counter"][0]["mode"]);
-                Assert.AreEqual(high, HalData()["counter"][0]["up_rising_edge"]);
-                Assert.IsFalse(HalData()["counter"][0]["update_when_empty"]);
+                Assert.AreEqual(Mode.Semiperiod, GetCounterData()[0].Mode);
+                Assert.AreEqual(high, GetCounterData()[0].UpRisingEdge);
+                Assert.IsFalse(GetCounterData()[0].UpdateWhenEmpty);
             }
         }
 
@@ -253,8 +255,8 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.SetPulseLengthMode(thresh);
-                Assert.AreEqual(2, HalData()["counter"][0]["mode"]);
-                Assert.AreEqual(thresh, HalData()["counter"][0]["pulse_length_threshold"]);
+                Assert.AreEqual(Mode.PulseLength, GetCounterData()[0].Mode);
+                Assert.AreEqual(thresh, GetCounterData()[0].PulseLengthThreshold);
             }
         }
 
@@ -263,10 +265,10 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                HalData()["counter"][0]["count"] = 5;
+                GetCounterData()[0].Count = 5;
                 Assert.AreEqual(5, c.Get());
 
-                HalData()["counter"][0]["count"] = 258;
+                GetCounterData()[0].Count = 258;
                 Assert.AreEqual(258, c.Get());
             }
         }
@@ -278,11 +280,11 @@ namespace WPILib.Tests
             {
                 c.DistancePerPulse = 2;
 
-                HalData()["counter"][0]["count"] = 5;
+                GetCounterData()[0].Count = 5;
                 Assert.AreEqual(5 * 2, c.GetDistance());
 
                 c.DistancePerPulse = 5;
-                HalData()["counter"][0]["count"] = 258;
+                GetCounterData()[0].Count = 258;
                 Assert.AreEqual(258 * 5, c.GetDistance());
             }
         }
@@ -292,15 +294,15 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                HalData()["counter"][0]["count"] = 5;
+                GetCounterData()[0].Count = 5;
                 Assert.AreEqual(5, c.Get());
-                Assert.IsFalse(HalData()["counter"][0]["reset"]);
+                Assert.IsFalse(GetCounterData()[0].Reset);
 
                 c.Reset();
 
-                Assert.AreEqual(0, HalData()["counter"][0]["count"]);
+                Assert.AreEqual(0, GetCounterData()[0].Count);
                 Assert.AreEqual(0, c.Get());
-                Assert.IsTrue(HalData()["counter"][0]["reset"]);
+                Assert.IsTrue(GetCounterData()[0].Reset);
             }
         }
 
@@ -311,9 +313,9 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                Assert.AreEqual(0.5, HalData()["counter"][0]["max_period"], 0.0001);
+                Assert.AreEqual(0.5, GetCounterData()[0].MaxPeriod, 0.0001);
                 c.MaxPeriod = period;
-                Assert.AreEqual(period, HalData()["counter"][0]["max_period"], 0.0001);
+                Assert.AreEqual(period, GetCounterData()[0].MaxPeriod, 0.0001);
             }
         }
 
@@ -323,9 +325,9 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                Assert.IsFalse(HalData()["counter"][0]["update_when_empty"]);
+                Assert.IsFalse(GetCounterData()[0].UpdateWhenEmpty);
                 c.UpdateWhenEmpty = enabled;
-                Assert.AreEqual(enabled, HalData()["counter"][0]["update_when_empty"]);
+                Assert.AreEqual(enabled, GetCounterData()[0].UpdateWhenEmpty);
             }
         }
 
@@ -334,11 +336,11 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                HalData()["counter"][0]["period"] = 6;
-                HalData()["counter"][0]["max_period"] = 7;
+                GetCounterData()[0].Period = 6;
+                GetCounterData()[0].MaxPeriod = 7;
                 Assert.IsFalse(c.GetStopped());
-                HalData()["counter"][0]["period"] = 7;
-                HalData()["counter"][0]["max_period"] = 3;
+                GetCounterData()[0].Period = 7;
+                GetCounterData()[0].MaxPeriod = 3;
                 Assert.IsTrue(c.GetStopped());
             }
         }
@@ -349,7 +351,7 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                HalData()["counter"][0]["direction"] = dir;
+                GetCounterData()[0].Direction = dir;
                 Assert.AreEqual(dir, c.GetDirection());
             }
         }
@@ -361,7 +363,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.SetReverseDirection(dir);
-                Assert.AreEqual(dir, HalData()["counter"][0]["reverse_direction"]);
+                Assert.AreEqual(dir, GetCounterData()[0].ReverseDirection);
             }
         }
 
@@ -372,7 +374,7 @@ namespace WPILib.Tests
         {
             using (Counter c = new Counter())
             {
-                HalData()["counter"][0]["period"] = period;
+                GetCounterData()[0].Period = period;
                 Assert.AreEqual(period, c.GetPeriod(), 0.00001);
             }
         }
@@ -385,7 +387,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.SamplesToAverage = samples;
-                Assert.AreEqual(samples, HalData()["counter"][0]["samples_to_average"]);
+                Assert.AreEqual(samples, GetCounterData()[0].SamplesToAverage);
                 Assert.AreEqual(samples, c.SamplesToAverage);
             }
         }

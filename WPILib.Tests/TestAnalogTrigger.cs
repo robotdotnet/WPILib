@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HAL_Base;
 using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests
@@ -11,9 +12,9 @@ namespace WPILib.Tests
     public class TestAnalogTrigger : TestBase
     {
 
-        private Dictionary<dynamic, dynamic> GetData(int index)
+        private AnalogTriggerData GetData(int index)
         {
-            return SimData.halData["analog_trigger"][index];
+            return SimData.AnalogTrigger[index];
         }
 
         [Test]
@@ -23,10 +24,10 @@ namespace WPILib.Tests
             using (AnalogTrigger trigger = new AnalogTrigger(pin))
             {
                 index = trigger.Index;
-                Assert.IsTrue(GetData(index)["initialized"]);
-                Assert.AreEqual(pin, GetData(index)["pin"]);
+                Assert.IsTrue(GetData(index).Initialized);
+                Assert.AreEqual(pin, GetData(index).AnalogPin);
             }
-            Assert.IsFalse(GetData(index)["initialized"]);
+            Assert.IsFalse(GetData(index).Initialized);
         }
 
         [Test]
@@ -35,7 +36,7 @@ namespace WPILib.Tests
             using (AnalogTrigger at = new AnalogTrigger(2))
             {
                 at.Filtered = true;
-                Assert.AreEqual("filtered", GetData(at.Index)["trig_type"]);
+                Assert.AreEqual(TrigerType.Filtered, GetData(at.Index).TrigType);
             }
         }
     }

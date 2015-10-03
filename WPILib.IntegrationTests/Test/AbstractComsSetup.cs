@@ -35,9 +35,9 @@ namespace WPILib.IntegrationTests.Test
                     SimJumpers.AttachRelay(0, 19, 18);
                     SimJumpers.AttachAIO(2, 0);
 
-                    SimData.HalData["accelerometer"]["x"] = 0.0;
-                    SimData.HalData["accelerometer"]["y"] = 0.0;
-                    SimData.HalData["accelerometer"]["z"] = 1.0;
+                    SimData.Accelerometer.X = 0.0;
+                    SimData.Accelerometer.Y = 0.0;
+                    SimData.Accelerometer.Z = 1.0;
                     return;
                 }
 

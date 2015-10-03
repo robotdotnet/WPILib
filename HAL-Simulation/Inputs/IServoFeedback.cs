@@ -2,6 +2,7 @@
 {
     public interface IServoFeedback
     {
-        void Set(double value);
+        void SetPosition(double value);
+        void SetPeriod(double period);
     }
 }

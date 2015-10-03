@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using HAL_Base;
+using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -78,7 +79,7 @@ namespace HAL_Simulator
             {
                 Callback = null,
                 Watcher = watcher,
-                DIOPin = -1,
+                Pin = -1,
             };
             status = NiFpga_Status_Success;
             Interrupts[interruptIndex] = interrupt;
@@ -99,10 +100,150 @@ namespace HAL_Simulator
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
             if (interrupt.DictCallback != null)
             {
-                halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
+                if (interrupt.IsAnalog)
+                {
+                    AnalogTriggerData trigData = SimData.AnalogTrigger[interrupt.Pin];
+                    var ain = AnalogIn[trigData.AnalogPin];
+                    ain.Cancel(nameof(ain.Voltage), interrupt.DictCallback);
+                }
+                else
+                {
+                    var dio = DIO[interrupt.Pin];
+                    dio.Cancel(nameof(dio.Value), interrupt.DictCallback);
+                }
             }
             interrupt.DictCallback = null;
             Interrupts[interrupt_pointer.ToInt32() - 1] = null;
+        }
+
+        private static uint WaitForInterruptDigital(Interrupt interrupt, double timeout, bool ignorePrevious)
+        {
+            object lockObject = new object();
+
+            //Store the previous state of the interrupt, so we can check for rising or falling edges
+            interrupt.PreviousState = DIO[interrupt.Pin].Value;
+
+            interrupt.DictCallback = (k, v) =>
+            {
+                //If no change, do nothing
+                if (v == interrupt.PreviousState)
+                    return;
+                //If its a falling change, and we dont fire on falling return
+                if (interrupt.PreviousState && !interrupt.FireOnDown)
+                    return;
+                //If its a rising change, and we dont fire on rising return.
+                if (!interrupt.PreviousState && !interrupt.FireOnUp)
+                    return;
+                //Otherwise pulse the lock.
+                lock (lockObject)
+                {
+                    Monitor.PulseAll(lockObject);
+                }
+            };
+
+            //Register our interrupt with the NotifyDict
+            var dio = DIO[interrupt.Pin];
+            dio.Register(nameof(dio.Value), interrupt.DictCallback);
+
+            WaitResult retVal = WaitResult.Timeout;
+            //We are using a lock to wait for the interrupt.
+            lock (lockObject)
+            {
+                bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
+                //Cancel the interrupt, because we don't want it to fire again.
+                dio.Cancel(nameof(dio.Value), interrupt.DictCallback);
+                if (timedout)
+                {
+                    retVal = WaitResult.Timeout;
+                }
+                else
+                {
+                    //True => false, Falling
+                    if (interrupt.PreviousState)
+                    {
+                        //Set our return value and our timestamps
+                        retVal = WaitResult.FallingEdge;
+                        interrupt.FallingTimestamp = SimHooks.GetFPGATimestamp();
+                        interrupt.RisingTimestamp = 0;
+                    }
+                    else
+                    {
+                        retVal = WaitResult.RisingEdge;
+                        interrupt.RisingTimestamp = SimHooks.GetFPGATimestamp();
+                        interrupt.FallingTimestamp = 0;
+                    }
+                }
+            }
+
+            return (uint)retVal;
+        }
+
+        private static uint WaitForInterruptAnalog(Interrupt interrupt, double timeout, bool ignorePrevious, ref int status)
+        {
+            object lockObject = new object();
+
+            AnalogTriggerData trigData = SimData.AnalogTrigger[interrupt.Pin];
+
+            //Store the previous state of the interrupt, so we can check for rising or falling edges
+            interrupt.PreviousState = trigData.GetTriggerValue(interrupt.AnalogType, ref status);
+
+
+            interrupt.DictCallback = (k, val) =>
+            {
+                //V is new analog value
+                int status2 = 0;
+                bool v = trigData.GetTriggerValue(interrupt.AnalogType, ref status2);
+                //If no change, do nothing
+                if (v == interrupt.PreviousState)
+                    return;
+                //If its a falling change, and we dont fire on falling return
+                if (interrupt.PreviousState && !interrupt.FireOnDown)
+                    return;
+                //If its a rising change, and we dont fire on rising return.
+                if (!interrupt.PreviousState && !interrupt.FireOnUp)
+                    return;
+                //Otherwise pulse the lock.
+                lock (lockObject)
+                {
+                    Monitor.PulseAll(lockObject);
+                }
+            };
+
+            //Register our interrupt with the NotifyDict
+            var aIn = AnalogIn[trigData.AnalogPin];
+            aIn.Register(nameof(aIn.Voltage), interrupt.DictCallback);
+
+            WaitResult retVal = WaitResult.Timeout;
+            //We are using a lock to wait for the interrupt.
+            lock (lockObject)
+            {
+                bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
+                //Cancel the interrupt, because we don't want it to fire again.
+                aIn.Cancel(nameof(aIn.Voltage), interrupt.DictCallback);
+                if (timedout)
+                {
+                    retVal = WaitResult.Timeout;
+                }
+                else
+                {
+                    //True => false, Falling
+                    if (interrupt.PreviousState)
+                    {
+                        //Set our return value and our timestamps
+                        retVal = WaitResult.FallingEdge;
+                        interrupt.FallingTimestamp = SimHooks.GetFPGATimestamp();
+                        interrupt.RisingTimestamp = 0;
+                    }
+                    else
+                    {
+                        retVal = WaitResult.RisingEdge;
+                        interrupt.RisingTimestamp = SimHooks.GetFPGATimestamp();
+                        interrupt.FallingTimestamp = 0;
+                    }
+                }
+            }
+
+            return (uint)retVal;
         }
 
         /// <summary>
@@ -128,83 +269,65 @@ namespace HAL_Simulator
                 status = NiFpga_Status_InvalidParameter;
                 return (uint)WaitResult.Timeout;
             }
-            object lockObject = new object();
-
-            //Store the previous state of the interrupt, so we can check for rising or falling edges
-            interrupt.PreviousState = halData["dio"][interrupt.DIOPin]["value"];
-
-            interrupt.DictCallback = (k, v) =>
+            if (interrupt.IsAnalog)
             {
-                //If no change, do nothing
-                if (v == interrupt.PreviousState)
-                    return;
-                //If its a falling change, and we dont fire on falling return
-                if (interrupt.PreviousState && !interrupt.FireOnDown)
-                    return;
-                //If its a rising change, and we dont fire on rising return.
-                if (!interrupt.PreviousState && !interrupt.FireOnUp)
-                    return;
-                //Otherwise pulse the lock.
-                lock (lockObject)
-                {
-                    Monitor.PulseAll(lockObject);
-                }
-            };
-
-            //Register our interrupt with the NotifyDict
-            halData["dio"][interrupt.DIOPin].Register("value", interrupt.DictCallback);
-
-            WaitResult retVal = WaitResult.Timeout;
-            //We are using a lock to wait for the interrupt.
-            lock (lockObject)
-            {
-                bool timedout = !Monitor.Wait(lockObject, TimeSpan.FromSeconds(timeout));
-                //Cancel the interrupt, because we don't want it to fire again.
-                halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
-                if (timedout)
-                {
-                    retVal = WaitResult.Timeout;
-                }
-                else
-                {
-                    //True => false, Falling
-                    if (interrupt.PreviousState)
-                    {
-                        //Set our return value and our timestamps
-                        retVal = WaitResult.FallingEdge;
-                        interrupt.FallingTimestamp = SimHooks.GetFPGATimestamp();
-                        interrupt.RisingTimestamp = 0;
-                    }
-                    else
-                    {
-                        retVal = WaitResult.RisingEdge;
-                        interrupt.RisingTimestamp = SimHooks.GetFPGATimestamp();
-                        interrupt.FallingTimestamp = 0;
-                    }
-                }
+                return WaitForInterruptAnalog(interrupt, timeout, ignorePrevious, ref status);
             }
-
-            return (uint)retVal;
+            else
+            {
+                return WaitForInterruptDigital(interrupt, timeout, ignorePrevious);
+            }
 
         }
 
-        /// <summary>
-        /// Enable async interrupts
-        /// </summary>
-        /// <param name="interrupt_pointer"></param>
-        /// <param name="status"></param>
-        [CalledSimFunction]
-        public static void enableInterrupts(IntPtr interrupt_pointer, ref int status)
+        private static void enableInterruptsAnalog(Interrupt interrupt, ref int status)
         {
-            status = NiFpga_Status_Success;
+            AnalogTriggerData trigData = SimData.AnalogTrigger[interrupt.Pin];
 
-            Interrupt interrupt = GetInterrupt(interrupt_pointer);
-            if (interrupt == null)
+            interrupt.DictCallback = (k, val) =>
             {
-                //We throw an error here instead of returning a status since the HAL doesnt check for
-                //null, and would instead just segfault.
-                throw new ArgumentNullException(nameof(interrupt_pointer), "The interrupt cannot be null");
-            }
+
+                int status2 = 0;
+                bool v = trigData.GetTriggerValue(interrupt.AnalogType, ref status2);
+                //Since the NotifyDict will fire even if the state is the same,
+                //We ignore if the state is the same.
+                if (v == interrupt.PreviousState)
+                    return;
+                //True => false, Falling
+                if (interrupt.PreviousState)
+                {
+                    //Set previous state, so next trigger will work.
+                    interrupt.PreviousState = v;
+                    //If we dont fire on down, return
+                    if (!interrupt.FireOnDown)
+                        return;
+                    //Set out timestamps
+                    interrupt.FallingTimestamp = SimHooks.GetFPGATimestamp();
+                    interrupt.RisingTimestamp = 0;
+                }
+                else
+                {
+                    interrupt.PreviousState = v;
+                    //If we dont fire on up, return
+                    if (!interrupt.FireOnUp)
+                        return;
+                    interrupt.RisingTimestamp = SimHooks.GetFPGATimestamp();
+                    interrupt.FallingTimestamp = 0;
+                }
+                //Call our callback in a new thread. This is what the FPGA does as well.
+                new Thread(() =>
+                {
+                    interrupt.Callback((uint)interrupt.Pin, interrupt.Param);
+                }).Start();
+            };
+            //Set our previous state, and register
+            interrupt.PreviousState = trigData.GetTriggerValue(interrupt.AnalogType, ref status);
+            var aIn = AnalogIn[trigData.AnalogPin];
+            aIn.Register(nameof(aIn.Voltage), interrupt.DictCallback);
+        }
+
+        private static void enableInterruptsDigital(Interrupt interrupt, ref int status)
+        {
             interrupt.DictCallback = (k, v) =>
             {
                 //Since the NotifyDict will fire even if the state is the same,
@@ -235,12 +358,41 @@ namespace HAL_Simulator
                 //Call our callback in a new thread. This is what the FPGA does as well.
                 new Thread(() =>
                 {
-                    interrupt.Callback((uint)interrupt.DIOPin, interrupt.Param);
+                    interrupt.Callback((uint)interrupt.Pin, interrupt.Param);
                 }).Start();
             };
             //Set our previous state, and register
-            interrupt.PreviousState = halData["dio"][interrupt.DIOPin]["value"];
-            halData["dio"][interrupt.DIOPin].Register("value", interrupt.DictCallback, false);
+            interrupt.PreviousState = DIO[interrupt.Pin].Value;
+            var dio = DIO[interrupt.Pin];
+            dio.Register(nameof(dio.Value), interrupt.DictCallback);
+        }
+
+        /// <summary>
+        /// Enable async interrupts
+        /// </summary>
+        /// <param name="interrupt_pointer"></param>
+        /// <param name="status"></param>
+        [CalledSimFunction]
+        public static void enableInterrupts(IntPtr interrupt_pointer, ref int status)
+        {
+            status = NiFpga_Status_Success;
+
+            Interrupt interrupt = GetInterrupt(interrupt_pointer);
+            if (interrupt == null)
+            {
+                //We throw an error here instead of returning a status since the HAL doesnt check for
+                //null, and would instead just segfault.
+                throw new ArgumentNullException(nameof(interrupt_pointer), "The interrupt cannot be null");
+            }
+
+            if (interrupt.IsAnalog)
+            {
+                enableInterruptsAnalog(interrupt, ref status);
+            }
+            else
+            {
+                enableInterruptsDigital(interrupt, ref status);
+            }
         }
 
         /// <summary>
@@ -253,7 +405,19 @@ namespace HAL_Simulator
         {
             status = NiFpga_Status_Success;
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
-            halData["dio"][interrupt.DIOPin].Cancel("value", interrupt.DictCallback);
+
+
+            if (interrupt.IsAnalog)
+            {
+                AnalogTriggerData trigData = SimData.AnalogTrigger[interrupt.Pin];
+                var ain = AnalogIn[trigData.AnalogPin];
+                ain.Cancel(nameof(ain.Voltage), interrupt.DictCallback);
+            }
+            else
+            {
+                var dio = DIO[interrupt.Pin];
+                dio.Cancel(nameof(dio.Value), interrupt.DictCallback);
+            }
         }
 
         /// <summary>
@@ -284,25 +448,50 @@ namespace HAL_Simulator
 
         /// <summary>
         /// Request our interrupts on a specific port.
-        /// Currently, we do not support analog triggers. They are going to be
+        /// Currently, we do not support IsAnalog triggers. They are going to be
         /// much harder to implement.
         /// </summary>
         /// <param name="interrupt_pointer"></param>
         /// <param name="routing_module">Our module (must be 0)</param>
-        /// <param name="routing_pin">Our DIO Pin</param>
-        /// <param name="routing_analog_trigger">If analog trigger (must be false)</param>
+        /// <param name="routing_pin">Our DIO AnalogPin</param>
+        /// <param name="routing_analog_trigger">If IsAnalog trigger (must be false)</param>
         /// <param name="status"></param>
         [CalledSimFunction]
         public static void requestInterrupts(IntPtr interrupt_pointer, byte routing_module, uint routing_pin,
             bool routing_analog_trigger, ref int status)
         {
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
-            if (routing_analog_trigger)
-                throw new NotImplementedException("We currently do not support interrupting on an analog port.");
+
             if (routing_module != 0)
                 throw new ArgumentOutOfRangeException(nameof(routing_module), "Routing module must be 0.");
+
+            if (routing_analog_trigger)
+            {
+                uint mask = (1 << 2) - 1;
+                AnalogTriggerType triggerType = (AnalogTriggerType)(routing_pin & mask);
+                int index = routing_module >> 2;
+
+                interrupt.IsAnalog = true;
+
+                if (triggerType == AnalogTriggerType.InWindow || triggerType == AnalogTriggerType.State)
+                {
+                    interrupt.Pin = index;
+                    interrupt.AnalogType = triggerType;
+                }
+                else
+                {
+                    //What the other states do is complicated. It actually triggers if a 
+                    //continous output rolls over. 
+                    throw new InvalidOperationException("We do not support rollover analog triggers yet.");
+                }
+
+
+            }
+            else
+            {
+                interrupt.Pin = (int)routing_pin;
+            }
             status = NiFpga_Status_Success;
-            interrupt.DIOPin = (int)routing_pin;
         }
 
         /// <summary>

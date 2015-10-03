@@ -13,7 +13,7 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALNotifier
     {
-        private static List<Notifier> Notifiers = new List<Notifier>();
+        private static readonly List<Notifier> Notifiers = new List<Notifier>();
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 
@@ -12,18 +13,18 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestDigitalInput : TestBase
     {
-        public Dictionary<dynamic, dynamic> GetInputDictionary(int pin)
+        public DIOData GetInputDictionary(int pin)
         {
-            return SimData.HalData["dio"][pin];
+            return SimData.DIO[pin];
         }
 
-        public Dictionary<dynamic, dynamic> GetInputMXPDictionary(int pin)
+        public MXPData GetInputMXPDictionary(int pin)
         {
             if (pin < 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(pin), "Pin is not an MXP pin");
+                throw new ArgumentOutOfRangeException(nameof(pin), "AnalogPin is not an MXP pin");
             }
-            return SimData.HalData["mxp"][pin - 10];
+            return SimData.MXP[pin - 10];
         }
 
         public DigitalInput GetDigitalInput(int pin)
@@ -54,8 +55,8 @@ namespace WPILib.Tests
         {
             using (DigitalInput Input = GetDigitalInput(0))
             {
-                Assert.IsTrue(GetInputDictionary(0)["initialized"]);
-                Assert.IsTrue(GetInputDictionary(0)["is_input"]);
+                Assert.IsTrue(GetInputDictionary(0).Initialized);
+                Assert.IsTrue(GetInputDictionary(0).IsInput);
             }
         }
 
@@ -78,11 +79,11 @@ namespace WPILib.Tests
             for (int i = 0; i < DigitalChannels; i++)
             {
                 Inputs.Add(GetDigitalInput(i));
-                Assert.IsTrue(GetInputDictionary(0)["initialized"]);
-                Assert.IsTrue(GetInputDictionary(0)["is_input"]);
+                Assert.IsTrue(GetInputDictionary(0).Initialized);
+                Assert.IsTrue(GetInputDictionary(0).IsInput);
                 if (i > 9)
                 {
-                    Assert.IsTrue(GetInputMXPDictionary(i)["initialized"]);
+                    Assert.IsTrue(GetInputMXPDictionary(i).Initialized);
                 }
             }
 
@@ -96,12 +97,12 @@ namespace WPILib.Tests
         public void TestDigitalInputDispose()
         {
             DigitalInput Input = GetDigitalInput(0);
-            Assert.IsTrue(GetInputDictionary(0)["initialized"]);
+            Assert.IsTrue(GetInputDictionary(0).Initialized);
             Input.Dispose();
-            Assert.IsFalse(GetInputDictionary(0)["initialized"]);
+            Assert.IsFalse(GetInputDictionary(0).Initialized);
             Input = null;
             Input = GetDigitalInput(0);
-            Assert.IsTrue(GetInputDictionary(0)["initialized"]);
+            Assert.IsTrue(GetInputDictionary(0).Initialized);
             Input.Dispose();
         }
 
@@ -110,9 +111,9 @@ namespace WPILib.Tests
         {
             using (DigitalInput input = GetDigitalInput(channel))
             {
-                GetInputDictionary(channel)["value"] = false;
+                GetInputDictionary(channel).Value = false;
                 Assert.IsFalse(input.Get());
-                GetInputDictionary(channel)["value"] = true;
+                GetInputDictionary(channel).Value = true;
                 Assert.IsTrue(input.Get());
             }
         }

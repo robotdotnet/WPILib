@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 
@@ -12,9 +13,9 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestAnalogOutput : TestBase
     {
-        public Dictionary<dynamic, dynamic> GetOutputDictionary(int pin)
+        public AnalogOutData GetOutputData(int pin)
         {
-            return SimData.HalData["analog_out"][pin];
+            return SimData.AnalogOut[pin];
         }
 
         public AnalogOutput GetAnalogOutput(int pin)
@@ -51,7 +52,7 @@ namespace WPILib.Tests
         {
             using (AnalogOutput input = GetAnalogOutput(0))
             {
-                Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
+                Assert.IsTrue(GetOutputData(0).Initialized);
             }
         }
 
@@ -74,7 +75,7 @@ namespace WPILib.Tests
             for (int i = 0; i < AnalogOutputChannels; i++)
             {
                 inputs.Add(GetAnalogOutput(i));
-                Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
+                Assert.IsTrue(GetOutputData(0).Initialized);
             }
 
             foreach (var input in inputs)
@@ -87,11 +88,11 @@ namespace WPILib.Tests
         public void TestAnalogOutputDispose()
         {
             AnalogOutput input = GetAnalogOutput(0);
-            Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
+            Assert.IsTrue(GetOutputData(0).Initialized);
             input.Dispose();
             input = null;
             input = GetAnalogOutput(0);
-            Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
+            Assert.IsTrue(GetOutputData(0).Initialized);
             input.Dispose();
         }
 
@@ -101,9 +102,9 @@ namespace WPILib.Tests
             using (AnalogOutput output = GetAnalogOutput(channel))
             {
                 output.SetVoltage(0.5);
-                Assert.AreEqual(0.5, GetOutputDictionary(channel)["voltage"], 0.0001);
+                Assert.AreEqual(0.5, GetOutputData(channel).Voltage, 0.0001);
                 output.SetVoltage(4.25);
-                Assert.AreEqual(4.25, GetOutputDictionary(channel)["voltage"], 0.0001);
+                Assert.AreEqual(4.25, GetOutputData(channel).Voltage, 0.0001);
             }
         }
     }

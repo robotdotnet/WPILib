@@ -59,7 +59,6 @@ namespace WPILib.IntegrationTests
         {
             relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
             relayFixture.GetRelay().Set(Relay.Value.Forward);
-            var data = HAL.halData;
             relayFixture.GetRelay().UpdateTable();
             Assert.IsFalse(relayFixture.GetInputOne().Get(), "Input one was not low when relay set Value.Forward.");
             Assert.IsTrue(relayFixture.GetInputTwo().Get(), "Input two was not high when relay set Value.Forward.");

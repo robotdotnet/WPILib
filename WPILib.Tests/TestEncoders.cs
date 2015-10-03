@@ -1,19 +1,15 @@
 ﻿using System.Collections.Generic;
-using HAL_Base;
+using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
+using HAL = HAL_Base.HAL;
 
 namespace WPILib.Tests
 {
     [TestFixture]
     public class TestEncoders : TestBase
     {
-
-        private Dictionary<dynamic, dynamic> HalData()
-        {
-            return HAL.halData;
-        }
 
         public void CheckConfig(dynamic config, uint aMod, uint aPin, bool aAtr, uint bMod, uint bPin, bool bAtr)
         {
@@ -70,15 +66,15 @@ namespace WPILib.Tests
         {
             using (Encoder x = new Encoder(1, 2))
             {
-                Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                CheckConfig(HalData()["encoder"][0]["config"], 0 ,1 , false, 0 ,2, false);
-                Assert.IsFalse(HalData()["encoder"][0]["reverse_direction"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                Assert.IsTrue(SimData.Encoder[0].Initialized);
+                CheckConfig(SimData.Encoder[0].Config, 0 ,1 , false, 0 ,2, false);
+                Assert.IsFalse(SimData.Encoder[0].ReverseDirection);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -86,15 +82,15 @@ namespace WPILib.Tests
         {
             using (Encoder x = new Encoder(1, 2, true))
             {
-                Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                Assert.IsTrue(HalData()["encoder"][0]["reverse_direction"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                Assert.IsTrue(SimData.Encoder[0].Initialized);
+                CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                Assert.IsTrue(SimData.Encoder[0].ReverseDirection);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -102,15 +98,15 @@ namespace WPILib.Tests
         {
             using (Encoder x = new Encoder(1, 2, true, EncodingType.K4X))
             {
-                Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                Assert.IsTrue(HalData()["encoder"][0]["reverse_direction"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                Assert.IsTrue(SimData.Encoder[0].Initialized);
+                CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                Assert.IsTrue(SimData.Encoder[0].ReverseDirection);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -118,17 +114,17 @@ namespace WPILib.Tests
         {
             using (Encoder x = new Encoder(1, 2, 3, true))
             {
-                Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                Assert.IsTrue(HalData()["encoder"][0]["reverse_direction"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][3]["initialized"]);
+                Assert.IsTrue(SimData.Encoder[0].Initialized);
+                CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                Assert.IsTrue(SimData.Encoder[0].ReverseDirection);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
+                Assert.IsTrue(SimData.DIO[3].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][3]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
+            Assert.IsFalse(SimData.DIO[3].Initialized);
         }
 
         [Test]
@@ -136,17 +132,17 @@ namespace WPILib.Tests
         {
             using (Encoder x = new Encoder(1, 2, 3))
             {
-                Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                Assert.IsFalse(HalData()["encoder"][0]["reverse_direction"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][3]["initialized"]);
+                Assert.IsTrue(SimData.Encoder[0].Initialized);
+                CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                Assert.IsFalse(SimData.Encoder[0].ReverseDirection);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
+                Assert.IsTrue(SimData.DIO[3].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][3]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
+            Assert.IsFalse(SimData.DIO[3].Initialized);
         }
 
         [Test]
@@ -158,19 +154,19 @@ namespace WPILib.Tests
                 {
                     using (var x = new Encoder(s1, s2))
                     {
-                        Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                        CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                        Assert.IsFalse(HalData()["encoder"][0]["reverse_direction"]);
+                        Assert.IsTrue(SimData.Encoder[0].Initialized);
+                        CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                        Assert.IsFalse(SimData.Encoder[0].ReverseDirection);
                     }
-                    Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-                    Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                    Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                    Assert.IsFalse(SimData.Encoder[0].Initialized);
+                    Assert.IsTrue(SimData.DIO[1].Initialized);
+                    Assert.IsTrue(SimData.DIO[2].Initialized);
                 }
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsFalse(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -182,19 +178,19 @@ namespace WPILib.Tests
                 {
                     using (var x = new Encoder(s1, s2, true, EncodingType.K4X))
                     {
-                        Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                        CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                        Assert.IsTrue(HalData()["encoder"][0]["reverse_direction"]);
+                        Assert.IsTrue(SimData.Encoder[0].Initialized);
+                        CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                        Assert.IsTrue(SimData.Encoder[0].ReverseDirection);
                     }
-                    Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-                    Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                    Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                    Assert.IsFalse(SimData.Encoder[0].Initialized);
+                    Assert.IsTrue(SimData.DIO[1].Initialized);
+                    Assert.IsTrue(SimData.DIO[2].Initialized);
                 }
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsFalse(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -208,23 +204,23 @@ namespace WPILib.Tests
                     {
                         using (var x = new Encoder(s1, s2, s3, true))
                         {
-                            Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                            CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                            Assert.IsTrue(HalData()["encoder"][0]["reverse_direction"]);
+                            Assert.IsTrue(SimData.Encoder[0].Initialized);
+                            CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                            Assert.IsTrue(SimData.Encoder[0].ReverseDirection);
                         }
-                        Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-                        Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                        Assert.IsTrue(HalData()["dio"][2]["initialized"]);
-                        Assert.IsTrue(HalData()["dio"][3]["initialized"]);
+                        Assert.IsFalse(SimData.Encoder[0].Initialized);
+                        Assert.IsTrue(SimData.DIO[1].Initialized);
+                        Assert.IsTrue(SimData.DIO[2].Initialized);
+                        Assert.IsTrue(SimData.DIO[3].Initialized);
                     }
                 }
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsFalse(HalData()["dio"][2]["initialized"]);
-                Assert.IsFalse(HalData()["dio"][3]["initialized"]);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsFalse(SimData.DIO[2].Initialized);
+                Assert.IsFalse(SimData.DIO[3].Initialized);
             }
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][3]["initialized"]);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
+            Assert.IsFalse(SimData.DIO[3].Initialized);
         }
 
         [Test]
@@ -238,23 +234,23 @@ namespace WPILib.Tests
                     {
                         using (var x = new Encoder(s1, s2, s3))
                         {
-                            Assert.IsTrue(HalData()["encoder"][0]["initialized"]);
-                            CheckConfig(HalData()["encoder"][0]["config"], 0, 1, false, 0, 2, false);
-                            Assert.IsFalse(HalData()["encoder"][0]["reverse_direction"]);
+                            Assert.IsTrue(SimData.Encoder[0].Initialized);
+                            CheckConfig(SimData.Encoder[0].Config, 0, 1, false, 0, 2, false);
+                            Assert.IsFalse(SimData.Encoder[0].ReverseDirection);
                         }
-                        Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-                        Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                        Assert.IsTrue(HalData()["dio"][2]["initialized"]);
-                        Assert.IsTrue(HalData()["dio"][3]["initialized"]);
+                        Assert.IsFalse(SimData.Encoder[0].Initialized);
+                        Assert.IsTrue(SimData.DIO[1].Initialized);
+                        Assert.IsTrue(SimData.DIO[2].Initialized);
+                        Assert.IsTrue(SimData.DIO[3].Initialized);
                     }
                 }
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsFalse(HalData()["dio"][2]["initialized"]);
-                Assert.IsFalse(HalData()["dio"][3]["initialized"]);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsFalse(SimData.DIO[2].Initialized);
+                Assert.IsFalse(SimData.DIO[3].Initialized);
             }
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][3]["initialized"]);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
+            Assert.IsFalse(SimData.DIO[3].Initialized);
         }
 
         [Test]
@@ -262,22 +258,22 @@ namespace WPILib.Tests
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K2X))
             {
-                Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-                Assert.IsTrue(HalData()["counter"][0]["initialized"]);
-                Assert.AreEqual(2, HalData()["counter"][0]["average_size"]);
+                Assert.IsFalse(SimData.Encoder[0].Initialized);
+                Assert.IsTrue(SimData.Counter[0].Initialized);
+                Assert.AreEqual(2, SimData.Counter[0].AverageSize);
 
-                Assert.AreEqual(true, HalData()["counter"][0]["up_rising_edge"]);
-                Assert.AreEqual(true, HalData()["counter"][0]["up_falling_edge"]);
+                Assert.AreEqual(true, SimData.Counter[0].UpRisingEdge);
+                Assert.AreEqual(true, SimData.Counter[0].UpFallingEdge);
 
-                Assert.AreEqual(false, HalData()["counter"][0]["down_rising_edge"]);
-                Assert.AreEqual(true, HalData()["counter"][0]["down_falling_edge"]);
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                Assert.AreEqual(false, SimData.Counter[0].DownRisingEdge);
+                Assert.AreEqual(true, SimData.Counter[0].DownFallingEdge);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["counter"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.Counter[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -285,23 +281,23 @@ namespace WPILib.Tests
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K1X))
             {
-                Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-                Assert.IsTrue(HalData()["counter"][0]["initialized"]);
-                Assert.AreEqual(1, HalData()["counter"][0]["average_size"]);
+                Assert.IsFalse(SimData.Encoder[0].Initialized);
+                Assert.IsTrue(SimData.Counter[0].Initialized);
+                Assert.AreEqual(1, SimData.Counter[0].AverageSize);
 
-                Assert.AreEqual(true, HalData()["counter"][0]["up_rising_edge"]);
-                Assert.AreEqual(false, HalData()["counter"][0]["up_falling_edge"]);
+                Assert.AreEqual(true, SimData.Counter[0].UpRisingEdge);
+                Assert.AreEqual(false, SimData.Counter[0].UpFallingEdge);
 
-                Assert.AreEqual(false, HalData()["counter"][0]["down_rising_edge"]);
-                Assert.AreEqual(true, HalData()["counter"][0]["down_falling_edge"]);
+                Assert.AreEqual(false, SimData.Counter[0].DownRisingEdge);
+                Assert.AreEqual(true, SimData.Counter[0].DownFallingEdge);
 
-                Assert.IsTrue(HalData()["dio"][1]["initialized"]);
-                Assert.IsTrue(HalData()["dio"][2]["initialized"]);
+                Assert.IsTrue(SimData.DIO[1].Initialized);
+                Assert.IsTrue(SimData.DIO[2].Initialized);
             }
-            Assert.IsFalse(HalData()["encoder"][0]["initialized"]);
-            Assert.IsFalse(HalData()["counter"][0]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][1]["initialized"]);
-            Assert.IsFalse(HalData()["dio"][2]["initialized"]);
+            Assert.IsFalse(SimData.Encoder[0].Initialized);
+            Assert.IsFalse(SimData.Counter[0].Initialized);
+            Assert.IsFalse(SimData.DIO[1].Initialized);
+            Assert.IsFalse(SimData.DIO[2].Initialized);
         }
 
         [Test]
@@ -309,7 +305,7 @@ namespace WPILib.Tests
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K4X))
             {
-                HalData()["encoder"][0]["count"] = 1234;
+                SimData.Encoder[0].Count = 1234;
                 Assert.AreEqual(1234 / 4, x.Get());
             }
         }
@@ -320,7 +316,7 @@ namespace WPILib.Tests
             using (var x = new Encoder(1, 2, false, EncodingType.K2X))
             {
                 
-                HalData()["counter"][0]["count"] = 1234;
+                SimData.Counter[0].Count = 1234;
                 Assert.AreEqual(1234 / 2, x.Get());
             }
         }
@@ -330,7 +326,7 @@ namespace WPILib.Tests
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K1X))
             {
-                HalData()["counter"][0]["count"] = 1234;
+                SimData.Counter[0].Count = 1234;
                 Assert.AreEqual(1234, x.Get());
             }
         }

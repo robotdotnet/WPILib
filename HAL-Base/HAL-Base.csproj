@@ -50,7 +50,7 @@
     <Compile Include="Generated\HALAccelerometerGenerated.cs" />
     <Compile Include="Generated\HALAnalogGenerated.cs" />
     <Compile Include="Generated\HALCANGenerated.cs" />
-    <Compile Include="Generated\HALCANTalonSRXGenerated.cs" />
+    <Compile Include="Generated\HALCanTalonSRXGenerated.cs" />
     <Compile Include="Generated\HALCompressorGenerated.cs" />
     <Compile Include="Generated\HALDigitalGenerated.cs" />
     <Compile Include="Generated\HALGenerated.cs" />
@@ -66,7 +66,7 @@
     <Compile Include="HALAccelerometer.cs" />
     <Compile Include="HALAnalog.cs" />
     <Compile Include="HALCAN.cs" />
-    <Compile Include="HALCANTalonSRX.cs" />
+    <Compile Include="HALCanTalonSRX.cs" />
     <Compile Include="HALCompressor.cs" />
     <Compile Include="HALDigital.cs" />
     <Compile Include="HALErrors.cs" />

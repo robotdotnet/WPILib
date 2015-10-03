@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 
@@ -9,18 +10,18 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestDigitalOutput : TestBase
     {
-        public Dictionary<dynamic, dynamic> GetOutputDictionary(int pin)
+        public DIOData GetOutputDictionary(int pin)
         {
-            return SimData.HalData["dio"][pin];
+            return SimData.DIO[pin];
         }
 
-        public Dictionary<dynamic, dynamic> GetOutputMXPDictionary(int pin)
+        public MXPData GetOutputMXPDictionary(int pin)
         {
             if (pin < 10)
             {
-                throw new ArgumentOutOfRangeException(nameof(pin), "Pin is not an MXP pin");
+                throw new ArgumentOutOfRangeException(nameof(pin), "AnalogPin is not an MXP pin");
             }
-            return SimData.HalData["mxp"][pin - 10];
+            return SimData.MXP[pin - 10];
         } 
 
         public DigitalOutput GetDigitalOutput(int pin)
@@ -51,8 +52,8 @@ namespace WPILib.Tests
         {
             using (DigitalOutput output = GetDigitalOutput(0))
             {
-                Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
-                Assert.IsFalse(GetOutputDictionary(0)["is_input"]);
+                Assert.IsTrue(GetOutputDictionary(0).Initialized);
+                Assert.IsFalse(GetOutputDictionary(0).IsInput);
             }
         }
 
@@ -75,11 +76,11 @@ namespace WPILib.Tests
             for (int i = 0; i < DigitalChannels; i++)
             {
                 outputs.Add(GetDigitalOutput(i));
-                Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
-                Assert.IsFalse(GetOutputDictionary(0)["is_input"]);
+                Assert.IsTrue(GetOutputDictionary(0).Initialized);
+                Assert.IsFalse(GetOutputDictionary(0).IsInput);
                 if (i > 9)
                 {
-                    Assert.IsTrue(GetOutputMXPDictionary(i)["initialized"]);
+                    Assert.IsTrue(GetOutputMXPDictionary(i).Initialized);
                 }
             }
 
@@ -93,12 +94,12 @@ namespace WPILib.Tests
         public void TestDigitalOutputDispose()
         {
             DigitalOutput output = GetDigitalOutput(0);
-            Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
+            Assert.IsTrue(GetOutputDictionary(0).Initialized);
             output.Dispose();
-            Assert.IsFalse(GetOutputDictionary(0)["initialized"]);
+            Assert.IsFalse(GetOutputDictionary(0).Initialized);
             output = null;
             output = GetDigitalOutput(0);
-            Assert.IsTrue(GetOutputDictionary(0)["initialized"]);
+            Assert.IsTrue(GetOutputDictionary(0).Initialized);
             output.Dispose();
         }
 
@@ -108,9 +109,9 @@ namespace WPILib.Tests
             using (DigitalOutput output = GetDigitalOutput(channel))
             {
                 output.Set(false);
-                Assert.IsFalse(GetOutputDictionary(channel)["value"]);
+                Assert.IsFalse(GetOutputDictionary(channel).Value);
                 output.Set(true);
-                Assert.IsTrue(GetOutputDictionary(channel)["value"]);
+                Assert.IsTrue(GetOutputDictionary(channel).Value);
             }
         }
     }

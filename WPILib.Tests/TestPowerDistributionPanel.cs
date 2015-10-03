@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using HAL_Simulator;
+using HAL_Simulator.Data;
 using NUnit.Framework;
 
 namespace WPILib.Tests
@@ -21,21 +22,14 @@ namespace WPILib.Tests
             m_module = module;
         }
 
-        public Dictionary<dynamic, dynamic> PDPData(int module)
+        public PDPData PDPData()
         {
-            return SimData.HalData["pdp"][module];
+            return SimData.GetPDP(m_module);
         }
 
         public PowerDistributionPanel GetPDP(int module)
         {
             return new PowerDistributionPanel(m_module);
-        }
-
-        [Test]
-        public void TestPDP0InitializedByDefault()
-        {
-            SimData.ResetHALData(false);
-            Assert.AreEqual(1, SimData.HalData["pdp"].Count);
         }
 
         [TestCase(1)]
@@ -72,7 +66,7 @@ namespace WPILib.Tests
         public void TestPDPGetVoltage()
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["voltage"] = 3.14;
+            PDPData().Voltage = 3.14;
             Assert.AreEqual(3.14, pdp.GetVoltage());
         }
 
@@ -80,7 +74,7 @@ namespace WPILib.Tests
         public void TestPDPGetTemperature()
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["temperature"] = 90;
+            PDPData().Temperature = 90;
             Assert.AreEqual(90, pdp.GetTemperature());
         }
 
@@ -88,7 +82,7 @@ namespace WPILib.Tests
         public void TestPDPGetCurrent([Range(0, 15)]int channel)
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["current"][channel] = channel*3;
+            PDPData().Current[channel] = channel*3;
             Assert.AreEqual(channel *3, pdp.GetCurrent(channel));
         }
 
@@ -107,23 +101,37 @@ namespace WPILib.Tests
         public void TestPDPGetTotalCurrent()
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["total_current"] = 42;
-            Assert.AreEqual(42, pdp.GetTotalCurrent());
+            double sum = 0;
+            for (int i = 0; i < PDPData().Current.Length; i++)
+            {
+                double set = 3.14 * i;
+                PDPData().Current[i] = set;
+                sum += set;
+            }
+            Assert.AreEqual(sum, pdp.GetTotalCurrent());
         }
 
         [Test]
         public void TestPDPGetTotalPower()
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["total_power"] = 42;
-            Assert.AreEqual(42, pdp.GetTotalPower());
+            double sum = 0;
+            for (int i = 0; i < PDPData().Current.Length; i++)
+            {
+                double set = 3.14 * i;
+                PDPData().Current[i] = set;
+                sum += set;
+            }
+            PDPData().Voltage = 12.5;
+            sum *= 12.5;
+            Assert.AreEqual(sum, pdp.GetTotalPower());
         }
 
         [Test]
         public void TestPDPGetTotalEnergy()
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["total_energy"] = 42;
+            PDPData().TotalEnergy = 42;
             Assert.AreEqual(42, pdp.GetTotalEnergy());
         }
 
@@ -131,7 +139,7 @@ namespace WPILib.Tests
         public void TestPDPResetTotalEnergy()
         {
             var pdp = GetPDP(m_module);
-            PDPData(m_module)["total_energy"] = 42;
+            PDPData().TotalEnergy = 42;
             Assert.AreEqual(42, pdp.GetTotalEnergy());
             pdp.ResetTotalEnergy();
             Assert.AreEqual(0, pdp.GetTotalEnergy());

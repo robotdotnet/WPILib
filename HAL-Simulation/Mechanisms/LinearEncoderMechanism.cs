@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HAL_Simulator.Inputs;
 using HAL_Simulator.Outputs;
 
@@ -58,16 +54,19 @@ namespace HAL_Simulator.Mechanisms
             };
 
             Action<dynamic, dynamic> handler = null;
+
             handler = (k, v) =>
             {
                 m_offset = CurrentMeters;
                 CurrentRadians = 0;
-                ((SimEncoder)m_output).Dictionary.Cancel(k, handler);
-                ((SimEncoder)m_output).Dictionary["reset"] = false;
+                ((SimEncoder)m_output).EncoderData.Cancel(k, handler);
+                ((SimEncoder)m_output).EncoderData.Reset = false;
             };
-            ((SimEncoder)m_output).Dictionary.Register("reset", handler);
+            ((SimEncoder)m_output).EncoderData.Register("Reset", handler);
 
-            
+
+
+
         }
     }
 }
