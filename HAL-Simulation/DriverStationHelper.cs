@@ -10,6 +10,7 @@ namespace HAL_Simulator
     /// </summary>
     public static class DriverStationHelper
     {
+        
         /// The Robot Modes
         public enum RobotMode
         {
@@ -253,5 +254,7 @@ namespace HAL_Simulator
         {
             HalDSData["control"]["ds_attached"] = attached;
         }
+        
     }
+   
 }

@@ -10,11 +10,6 @@ namespace WPILib.Tests.MotorControllers
     public class TestTalon : TestBase
     {
 
-        private static Dictionary<dynamic, dynamic> HalData()
-        {
-            return SimData.halData;
-        }
-
         [Test]
         public void TestTalonInitialized()
         {

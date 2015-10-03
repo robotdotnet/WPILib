@@ -143,6 +143,48 @@ namespace HAL_Simulator
         public static RoboRioData RoboRioData { get; } = new RoboRioData();
         private static readonly Dictionary<int, PDPData> s_pdp  = new Dictionary<int, PDPData>();
 
+        private static readonly Dictionary<int, CanTalonData> s_canTalon = new Dictionary<int, CanTalonData>();
+
+        public static CanTalonData GetCanTalon(int id)
+        {
+            CanTalonData data;
+            bool retVal = s_canTalon.TryGetValue(id, out data);
+            if (retVal)
+            {
+                //Contains key. Just return it
+                return data;
+            }
+            else
+            {
+                data = new CanTalonData();
+                s_canTalon.Add(id, data);
+                return data;
+            }
+        }
+
+        public static bool InitializeCanTalon(int id)
+        {
+            CanTalonData data;
+            bool retVal = s_canTalon.TryGetValue(id, out data);
+            if (retVal)
+            {
+                //Contains key. return false saying we did not initialize a new one.
+                return false;
+            }
+            else
+            {
+                //Create a new Can Talon data and return true.
+                data = new CanTalonData();
+                s_canTalon.Add(id, data);
+                return true;
+            }
+        }
+
+        public static void RemoveCanTalon(int id)
+        {
+            s_canTalon.Remove(id);
+        }
+
         public static PCMData GetPCM(int id)
         {
             PCMData data;
@@ -265,7 +307,7 @@ namespace HAL_Simulator
 
 
 
-
+        
         internal static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
 
         /// <summary>
@@ -301,7 +343,7 @@ namespace HAL_Simulator
             halInDataOut = halInData;
             halDSDataOut = halDSData;
         }
-
+        
         internal static IntPtr HALNewDataSem = IntPtr.Zero;
 
         /// <summary>
@@ -365,15 +407,18 @@ namespace HAL_Simulator
             }
             GlobalData.ProgramStartTime = SimHooks.GetTime();
 
-
+            
             halData.Clear();
             halInData.Clear();
             halDSData.Clear();
+
+            
             if (resetDS)
             {
                 HALNewDataSem = IntPtr.Zero;
             }
 
+            
             halData["time"] = new Dictionary<dynamic, dynamic>
             {
                 {"has_source", new IN(false) },
@@ -417,9 +462,6 @@ namespace HAL_Simulator
             halData["user_program_state"] = new OUT(null);
 
 
-            halData["CAN"] = new NotifyDict<dynamic, dynamic>();
-
-
             //manually filling out DS data. Later this will be automated.
             halDSData["alliance_station"] = 0;
             halDSData["control"] = new Dictionary<dynamic, dynamic>
@@ -450,6 +492,7 @@ namespace HAL_Simulator
 
 
             FilterHalData(halData, halInData);
+            
         }
 
         

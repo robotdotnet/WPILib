@@ -8,26 +8,6 @@ namespace WPILib.Tests.MotorControllers
     [TestFixture]
     public class TestJaguar : TestBase
     {
-        /*
-        [TestFixtureSetUp]
-        public static void Initialize()
-        {
-            TestBase.StartCode();
-        }
-        
-
-        [TestFixtureTearDown]
-        public static void Kill()
-        {
-            DriverStation.Instance.Release();
-        }
-        */
-
-        private static Dictionary<dynamic, dynamic> HalData()
-        {
-            return SimData.halData;
-        }
-
         [Test]
         public void TestJaguarInitialized()
         {
