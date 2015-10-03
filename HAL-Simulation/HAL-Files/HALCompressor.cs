@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 
@@ -13,6 +14,24 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALCompressor
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALCompressor.InitializeCompressor = initializeCompressor;
+            HAL_Base.HALCompressor.CheckCompressorModule = checkCompressorModule;
+            HAL_Base.HALCompressor.GetCompressor = getCompressor;
+            HAL_Base.HALCompressor.SetClosedLoopControl = setClosedLoopControl;
+            HAL_Base.HALCompressor.GetClosedLoopControl = getClosedLoopControl;
+            HAL_Base.HALCompressor.GetPressureSwitch = getPressureSwitch;
+            HAL_Base.HALCompressor.GetCompressorCurrent = getCompressorCurrent;
+            HAL_Base.HALCompressor.GetCompressorCurrentTooHighFault = getCompressorCurrentTooHighFault;
+            HAL_Base.HALCompressor.GetCompressorCurrentTooHighStickyFault = getCompressorCurrentTooHighStickyFault;
+            HAL_Base.HALCompressor.GetCompressorShortedStickyFault = getCompressorShortedStickyFault;
+            HAL_Base.HALCompressor.GetCompressorShortedFault = getCompressorShortedFault;
+            HAL_Base.HALCompressor.GetCompressorNotConnectedStickyFault = getCompressorNotConnectedStickyFault;
+            HAL_Base.HALCompressor.GetCompressorNotConnectedFault = getCompressorNotConnectedFault;
+            HAL_Base.HALCompressor.ClearAllPCMStickyFaults = clearAllPCMStickyFaults;
+        }
+
         [CalledSimFunction]
         public static IntPtr initializeCompressor(byte module)
         {

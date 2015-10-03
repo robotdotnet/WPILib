@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using HAL_Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -12,6 +13,26 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALSemaphore
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALSemaphore.InitializeMutexRecursive = initializeMutexRecursive;
+            HAL_Base.HALSemaphore.InitializeMutexNormal = initializeMutexNormal;
+            HAL_Base.HALSemaphore.DeleteMutex = deleteMutex;
+            HAL_Base.HALSemaphore.TakeMutex = takeMutex;
+            HAL_Base.HALSemaphore.TryTakeMutex = tryTakeMutex;
+            HAL_Base.HALSemaphore.GiveMutex = giveMutex;
+            HAL_Base.HALSemaphore.InitializeSemaphore = initializeSemaphore;
+            HAL_Base.HALSemaphore.DeleteSemaphore = deleteSemaphore;
+            HAL_Base.HALSemaphore.TakeSemaphore = takeSemaphore;
+            HAL_Base.HALSemaphore.TryTakeSemaphore = tryTakeSemaphore;
+            HAL_Base.HALSemaphore.GiveSemaphore = giveSemaphore;
+            HAL_Base.HALSemaphore.InitializeMultiWait = initializeMultiWait;
+            HAL_Base.HALSemaphore.DeleteMultiWait = deleteMultiWait;
+            HAL_Base.HALSemaphore.TakeMultiWait = takeMultiWait;
+            HAL_Base.HALSemaphore.GiveMultiWait = giveMultiWait;
+        }
+
+
         [CalledSimFunction]
         public static IntPtr initializeMutexRecursive()
         {

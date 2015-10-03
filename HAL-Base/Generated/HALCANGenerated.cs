@@ -13,45 +13,6 @@ namespace HAL_Base
             HAL.Initialize();
         }
 
-        internal static void SetupDelegates()
-        {
-            string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-            var types = HAL.HALAssembly.GetTypes();
-            var q = from t in types where t.IsClass && t.Name == className select t;
-            Type type = HAL.HALAssembly.GetType(q.ToList()[0].FullName);
-
-            FRC_NetworkCommunication_CANSessionMux_sendMessage =
-                (FRC_NetworkCommunication_CANSessionMux_sendMessageDelegate)
-                    Delegate.CreateDelegate(typeof (FRC_NetworkCommunication_CANSessionMux_sendMessageDelegate),
-                        type.GetMethod("FRC_NetworkCommunication_CANSessionMux_sendMessage"));
-
-            FRC_NetworkCommunication_CANSessionMux_receiveMessage =
-                (FRC_NetworkCommunication_CANSessionMux_receiveMessageDelegate)
-                    Delegate.CreateDelegate(typeof(FRC_NetworkCommunication_CANSessionMux_receiveMessageDelegate),
-                        type.GetMethod("FRC_NetworkCommunication_CANSessionMux_receiveMessage"));
-
-            FRC_NetworkCommunication_CANSessionMux_openStreamSession =
-                (FRC_NetworkCommunication_CANSessionMux_openStreamSessionDelegate)
-                    Delegate.CreateDelegate(typeof(FRC_NetworkCommunication_CANSessionMux_openStreamSessionDelegate),
-                        type.GetMethod("FRC_NetworkCommunication_CANSessionMux_openStreamSession"));
-
-            FRC_NetworkCommunication_CANSessionMux_closeStreamSession =
-                (FRC_NetworkCommunication_CANSessionMux_closeStreamSessionDelegate)
-                    Delegate.CreateDelegate(typeof(FRC_NetworkCommunication_CANSessionMux_closeStreamSessionDelegate),
-                        type.GetMethod("FRC_NetworkCommunication_CANSessionMux_closeStreamSession"));
-
-            FRC_NetworkCommunication_CANSessionMux_readStreamSession =
-                (FRC_NetworkCommunication_CANSessionMux_readStreamSessionDelegate)
-                    Delegate.CreateDelegate(typeof(FRC_NetworkCommunication_CANSessionMux_readStreamSessionDelegate),
-                        type.GetMethod("FRC_NetworkCommunication_CANSessionMux_readStreamSession"));
-
-            FRC_NetworkCommunication_CANSessionMux_getCANStatus =
-                (FRC_NetworkCommunication_CANSessionMux_getCANStatusDelegate)
-                    Delegate.CreateDelegate(typeof(FRC_NetworkCommunication_CANSessionMux_getCANStatusDelegate),
-                        type.GetMethod("FRC_NetworkCommunication_CANSessionMux_getCANStatus"));
-
-        }
-
         public delegate void FRC_NetworkCommunication_CANSessionMux_sendMessageDelegate(uint messageID, byte[] data,
             byte dataSize, int periodMs, ref int status);
 

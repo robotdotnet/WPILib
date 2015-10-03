@@ -46,10 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LibraryLoader.cs" />
     <Compile Include="Generated\HALAccelerometerGenerated.cs" />
     <Compile Include="Generated\HALAnalogGenerated.cs" />
     <Compile Include="Generated\HALCANGenerated.cs" />
-    <Compile Include="Generated\HALCanTalonSRXGenerated.cs" />
+    <Compile Include="Generated\HALCANTalonSRXGenerated.cs" />
     <Compile Include="Generated\HALCompressorGenerated.cs" />
     <Compile Include="Generated\HALDigitalGenerated.cs" />
     <Compile Include="Generated\HALGenerated.cs" />

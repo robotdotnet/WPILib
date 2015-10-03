@@ -45,7 +45,7 @@ namespace HAL_Base
         //We use this so we can call initialize multiple times, without it crashing with itself
         private static bool s_initialized = false;
         //Makes it so if we call initialize from different threads, its safe.
-        private static object s_lockObject = new object();
+        private static readonly object s_lockObject = new object();
 
         public enum HALTypes
         {
@@ -106,29 +106,28 @@ namespace HAL_Base
                         break;
                 }
 
+                //Load our HAL assembly
                 HALAssembly = Assembly.LoadFrom(asm);
 
-                //Setup all of our delegates
-                //This allows us to dynamically switch between simulator, RoboRIO
-                //and potentially others later.
-                //Using delegates speeds the method calls up directly over
-                //invoking the method using reflection, by about 20x.
-                SetupDelegates();
-                HALAccelerometer.SetupDelegates();
-                HALAnalog.SetupDelegates();
-                HALCAN.SetupDelegates();
-                HALCanTalonSRX.SetupDelegates();
-                HALCompressor.SetupDelegates();
-                HALDigital.SetupDelegates();
-                HALInterrupts.SetupDelegates();
-                HALNotifier.SetupDelegates();
-                HALPDP.SetupDelegates();
-                HALPower.SetupDelegates();
-                HALSemaphore.SetupDelegates();
-                HALSerialPort.SetupDelegates();
-                HALSolenoid.SetupDelegates();
-                HALUtilities.SetupDelegates();
-
+                {
+                    //Find our initialize function
+                    string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
+                    var types = HALAssembly.GetTypes();
+                    var q = from t in types where t.IsClass && t.Name == className select t;
+                    Type type = HALAssembly.GetType(q.ToList()[0].FullName);
+                    //Initialize our delegates. The InitializeImpl code need to assign all delegates.
+                    try
+                    {
+                        type.GetMethod("InitializeImpl").Invoke(null, null);
+                    }
+                    catch (Exception e)
+                    {
+                        //If our loading ever causes an exception, print it, print the stack trace, and kill the program.
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine(e.StackTrace);
+                        Environment.Exit(1);
+                    }
+                }
 
                 var rv = HALInitialize(mode);
                 if (rv != 1)
@@ -155,6 +154,7 @@ namespace HAL_Base
 
                     data(out halData, out halInData, out halDSData);
 
+                    //Attempt to start a simulator if one exists.
                     StartSimulator();
                 }
             }
@@ -164,9 +164,9 @@ namespace HAL_Base
         {
             //Get a list of all dll files
             string[] dllFileNames = null;
-            if (Directory.Exists(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugins"))
+            if (Directory.Exists(Directory.GetCurrentDirectory()))
             {
-                dllFileNames = Directory.GetFiles(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Plugins", "*.dll");
+                dllFileNames = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll");
             }
 
             //If files not found, just return

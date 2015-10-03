@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL_Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -10,6 +11,13 @@ namespace HAL_Simulator
     ///<inheritdoc cref="HAL"/>
     internal class HALUtilities
     {
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALUtilities.DelayTicks = delayTicks;
+            HAL_Base.HALUtilities.DelayMillis = delayMillis;
+            HAL_Base.HALUtilities.DelaySeconds = delaySeconds;
+        }
+
         /// Return Type: void
         ///ticks: int
         [CalledSimFunction]

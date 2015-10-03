@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using HAL_Base;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -26,7 +27,19 @@ namespace HAL_Simulator
         //Holds a list of our interrupts
         internal static Interrupt[] Interrupts = new Interrupt[NumInterrupts];
 
-
+        internal static void Initialize(IntPtr library, ILibraryLoader loader)
+        {
+            HAL_Base.HALInterrupts.InitializeInterrupts = initializeInterrupts;
+            HAL_Base.HALInterrupts.CleanInterrupts = cleanInterrupts;
+            HAL_Base.HALInterrupts.WaitForInterrupt = waitForInterrupt;
+            HAL_Base.HALInterrupts.EnableInterrupts = enableInterrupts;
+            HAL_Base.HALInterrupts.DisableInterrupts = disableInterrupts;
+            HAL_Base.HALInterrupts.ReadRisingTimestamp = readRisingTimestamp;
+            HAL_Base.HALInterrupts.ReadFallingTimestamp = readFallingTimestamp;
+            HAL_Base.HALInterrupts.RequestInterrupts = requestInterrupts;
+            HAL_Base.HALInterrupts.AttachInterruptHandler = attachInterruptHandler;
+            HAL_Base.HALInterrupts.SetInterruptUpSourceEdge = setInterruptUpSourceEdge;
+        }
 
         //Gets an interrupt from an IntPtr
         //Since 0 is equal to IntPtr.Zero, and we check for that in the WPILib,
