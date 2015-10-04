@@ -147,15 +147,16 @@ namespace WPILib.Tests.SpecScaners
             Assert.IsTrue(pass);
         }
         */
+        [Test]
         public void TestHALBaseMapsToHALSim()
         {
 
-                List<string> fd = new List<string>();
-            FieldInfo[] fields = typeof (HAL).GetFields();
+            List<string> fd = new List<string>();
+            FieldInfo[] fields = typeof(HAL).GetFields();
 
             foreach (var fieldInfo in fields)
             {
-                if ((fieldInfo.FieldType).IsSubclassOf(typeof (MulticastDelegate)))
+                if ((fieldInfo.FieldType).IsSubclassOf(typeof(MulticastDelegate)))
                 {
                     var x = fieldInfo.GetValue(null);
                     if (x == null)
@@ -164,13 +165,20 @@ namespace WPILib.Tests.SpecScaners
                     }
                 }
             }
-
             foreach (var VARIABLE in fd)
             {
                 Console.WriteLine(VARIABLE);
             }
 
+            Assert.IsTrue(fd.Count == 0);
 
+            /*
+            foreach (var VARIABLE in fd)
+            {
+                Console.WriteLine(VARIABLE);
+            }
+
+            ;
             StringBuilder functionList = new StringBuilder();
 
             functionList.AppendLine("HAL-Simulator Functions\n");
@@ -273,6 +281,7 @@ namespace WPILib.Tests.SpecScaners
             Console.WriteLine(functionList.ToString());
 
             Assert.IsTrue(pass);
+            */
         }
 
         public void TestHALBaseMapsToHALRIO()
@@ -328,7 +337,7 @@ namespace WPILib.Tests.SpecScaners
                 functionList.AppendLine(func.ClassName);
                 foreach (var syntax in func.Methods)
                 {
-                    
+
                     string ret = syntax.ReturnType.ToString();
                     string id = syntax.Identifier.ToString();
                     List<string> param = new List<string>();
@@ -356,12 +365,12 @@ namespace WPILib.Tests.SpecScaners
                     baseFunctions.Add(f);
                 }
             }
-            List<Function> wrong = (from baseFunction 
+            List<Function> wrong = (from baseFunction
                                     in baseFunctions
                                     let found = rioFunctions.Any(baseFunction.Equals)
                                     where !found
                                     select baseFunction).ToList();
-            bool pass = false;              
+            bool pass = false;
             if (wrong.Count == 0)
             {
                 pass = true;

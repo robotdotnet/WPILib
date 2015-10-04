@@ -107,9 +107,6 @@ namespace WPILib.Extras.NavX
         private Thread m_ioThread;
         //IOThread io_thread;
 
-        /***********************************************************/
-        /* Public Interface Implementation                         */
-        /***********************************************************/
 
         /**
          * Constructs the AHRS class using SPI communication, overriding the 
@@ -754,9 +751,6 @@ namespace WPILib.Extras.NavX
             return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[2] : 0.0f);
         }
 
-        /***********************************************************/
-        /* Internal Implementation                                  */
-        /***********************************************************/
 
         private void CommonInit(byte updateRateHz)
         {
@@ -768,9 +762,6 @@ namespace WPILib.Extras.NavX
             m_yawAngleTracker = new ContinuousAngleTracker();
         }
 
-        /***********************************************************/
-        /* PIDSource Interface Implementation                      */
-        /***********************************************************/
 
         /**
          * Returns the current yaw value reported by the sensor.  This
@@ -1049,36 +1040,6 @@ namespace WPILib.Extras.NavX
             return fwVersion;
         }
 
-        /***********************************************************/
-        /* Runnable Interface Implementation                       */
-        /***********************************************************/
-        /*
-        class IOThread : Runnable
-        {
-
-            Thread m_thread;
-            bool stop;
-
-            public void start()
-            {
-                m_thread = new Thread(this);
-                m_thread.start();
-            }
-
-            public void run()
-            {
-                io.run();
-            }
-
-            public void stop()
-            {
-            }
-        }
-        */
-
-        /***********************************************************/
-        /* IBoardCapabilities Interface Implementation             */
-        /***********************************************************/
 
         class BoardCapabilities : IBoardCapabilities
         {
@@ -1105,9 +1066,7 @@ namespace WPILib.Extras.NavX
                 return (((m_ahrs.m_capabilityFlags & AHRSProtocol.NavxCapabilityFlagVelAndDisp) != 0) ? true : false);
             }
         }
-        /***********************************************************/
-        /* IIOCompleteNotification Interface Implementation        */
-        /***********************************************************/
+
 
         class IoCompleteNotification : IIoCompleteNotification
         {
@@ -1316,9 +1275,7 @@ namespace WPILib.Extras.NavX
             }
         };
 
-        /***********************************************************/
-        /* LiveWindowSendable Interface Implementation             */
-        /***********************************************************/
+
 
         public void UpdateTable()
         {
