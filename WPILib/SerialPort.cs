@@ -7,81 +7,84 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
-    /// <summary>
-    /// Specifies the serial port to use on the RoboRIO.
-    /// </summary>
-    public enum Port
-    {
-        /// Onboard
-        Onboard = 0,
-        /// MXP
-        MXP = 1,
-        /// USB
-        USB = 2,
-    }
-
-    /// <summary>
-    /// Specifies the parity bit for a <see cref="SerialPort"/> object.
-    /// </summary>
-    public enum Parity
-    {
-        /// None
-        None = 0,
-        /// Odd
-        Odd = 1,
-        /// Even
-        Even = 2,
-        /// Mark
-        Mark = 3,
-        /// Space
-        Space = 4,
-    }
-
-    /// <summary>
-    /// Specifies the number of stop bits used for a <see cref="SerialPort"/> object.
-    /// </summary>
-    public enum StopBits
-    {
-        /// One
-        One = 10,
-        /// OnePointFive
-        OnePointFive = 15,
-        /// Two
-        Two = 20,
-    }
-
-    /// <summary>
-    /// Specifies the FlowControl settings for a <see cref="SerialPort"/> object
-    /// </summary>
-    public enum FlowControl
-    {
-        /// None
-        None = 0,
-        /// XonXoff
-        XonXoff = 1,
-        /// RtsCts
-        RtsCts = 2,
-        /// DtrDsr
-        DtrDsr = 4,
-
-    }
-
-    /// <summary>
-    /// Specifies the WriteBufferMode for a <see cref="SerialPort"/> object.
-    /// </summary>
-    public enum WriteBufferMode
-    {
-        /// Flushes on access.
-        FlushOnAccess = 1,
-        /// Flushes when full.
-        FlushWhenFull = 2,
-    }
+    
 
     /// <summary>
     /// Driver for the serial ports onboard the RoboRIO.
     /// </summary>
     public class SerialPort : IDisposable
     {
+        /// <summary>
+        /// Specifies the serial port to use on the RoboRIO.
+        /// </summary>
+        public enum Port
+        {
+            /// Onboard
+            Onboard = 0,
+            /// MXP
+            MXP = 1,
+            /// USB
+            USB = 2,
+        }
+
+        /// <summary>
+        /// Specifies the parity bit for a <see cref="SerialPort"/> object.
+        /// </summary>
+        public enum Parity
+        {
+            /// None
+            None = 0,
+            /// Odd
+            Odd = 1,
+            /// Even
+            Even = 2,
+            /// Mark
+            Mark = 3,
+            /// Space
+            Space = 4,
+        }
+
+        /// <summary>
+        /// Specifies the number of stop bits used for a <see cref="SerialPort"/> object.
+        /// </summary>
+        public enum StopBits
+        {
+            /// One
+            One = 10,
+            /// OnePointFive
+            OnePointFive = 15,
+            /// Two
+            Two = 20,
+        }
+
+        /// <summary>
+        /// Specifies the FlowControl settings for a <see cref="SerialPort"/> object
+        /// </summary>
+        public enum FlowControlEnum
+        {
+            /// None
+            None = 0,
+            /// XonXoff
+            XonXoff = 1,
+            /// RtsCts
+            RtsCts = 2,
+            /// DtrDsr
+            DtrDsr = 4,
+
+        }
+
+        /// <summary>
+        /// Specifies the WriteBufferMode for a <see cref="SerialPort"/> object.
+        /// </summary>
+        public enum WriteBufferModeEnum
+        {
+            /// Flushes on access.
+            FlushOnAccess = 1,
+            /// Flushes when full.
+            FlushWhenFull = 2,
+        }
+
+
         private readonly byte m_port;
 
         
@@ -116,7 +119,7 @@ namespace WPILib
             Timeout = 5.0f;
 
             //Don't wait until the buffer is full to transmit
-            WriteBufferMode = WriteBufferMode.FlushOnAccess;
+            WriteBufferMode = WriteBufferModeEnum.FlushOnAccess;
 
             DisableTermination();
 
@@ -136,7 +139,7 @@ namespace WPILib
         /// Sets the type of flow control to enable on this port.
         /// </summary>
         /// <remarks>By default, flow control is disabled.</remarks>
-        public FlowControl FlowControl
+        public FlowControlEnum FlowControl
         {
             set
             {
@@ -184,16 +187,14 @@ namespace WPILib
         /// <summary>
         /// Gets the number of bytes current available to read from the serial port.
         /// </summary>
-        public int BytesReceived
+        /// <returns>The number of bytes received.</returns>
+        public int GetBytesReceived()
         {
-            get
-            {
                 int retVal = 0;
                 int status = 0;
                 retVal = SerialGetBytesReceived(m_port, ref status);
                 CheckStatus(status);
                 return retVal;
-            }
         }
 
         /// <summary>
@@ -202,7 +203,7 @@ namespace WPILib
         /// <returns>The read string</returns>
         public string ReadString()
         {
-            return ReadString(BytesReceived);
+            return ReadString(GetBytesReceived());
         }
 
         /// <summary>
@@ -319,12 +320,12 @@ namespace WPILib
         /// <summary>
         /// Sets the flushing behavior of the output buffer
         /// </summary>
-        /// <remarks>When set to <see cref="WriteBufferMode.FlushOnAccess"/>, data is 
+        /// <remarks>When set to <see cref="WriteBufferModeEnum.FlushOnAccess"/>, data is 
         /// synchronously written to the serial port after each call to <see cref="Write"/>
-        /// <para/>When set to <see cref="WriteBufferMode.FlushWhenFull"/>, data is only
+        /// <para/>When set to <see cref="WriteBufferModeEnum.FlushWhenFull"/>, data is only
         /// written to the serial port when the buffer is full or
         /// <see cref="Flush"/> is called.</remarks>
-        public WriteBufferMode WriteBufferMode
+        public WriteBufferModeEnum WriteBufferMode
         {
             set
             {
@@ -337,7 +338,7 @@ namespace WPILib
         /// <summary>
         /// Force the output buffer to be written to the port.
         /// </summary>
-        /// <remarks>This is used when <see cref="WriteBufferMode"/> is set to <see cref="WriteBufferMode.FlushWhenFull"/> 
+        /// <remarks>This is used when <see cref="WriteBufferMode"/> is set to <see cref="WriteBufferModeEnum.FlushWhenFull"/> 
         /// to force a flush before the buffer is full.</remarks>
         public void Flush()
         {
