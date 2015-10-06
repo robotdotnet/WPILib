@@ -1,6 +1,7 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -23,11 +24,49 @@ namespace HAL_RoboRIO
                     return null;
                 bytes = new byte[(int)s.Length];
                 s.Read(bytes, 0, (int)s.Length);
+            }
+            bool isFileSame = true;
 
+            //If file exists
+            if (File.Exists(outputName))
+            {
+                //Load existing file into memory
+                byte[] existingFile = File.ReadAllBytes(outputName);
+                //If files are different length they are different,
+                //and we can automatically assume they are different.
+                if (existingFile.Length != bytes.Length)
+                {
+                    isFileSame = false;
+                }
+                else
+                {
+                    //Otherwise directly compare the files
+                    //I first tried hashing, but that took 1.5-2.0 seconds,
+                    //wheras this took 0.3 seconds.
+                    for (int i = 0; i < existingFile.Length; i++)
+                    {
+                        if (bytes[i] != existingFile[i])
+                        {
+                            isFileSame = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                isFileSame = false;
+            }
+
+            //If file is different write the new file
+            if (!isFileSame)
+            {
                 if (File.Exists(outputName))
                     File.Delete(outputName);
                 File.WriteAllBytes(outputName, bytes);
             }
+            //Force a garbage collection, since we just wasted about 12 MB of RAM.
+            GC.Collect();
+
             return outputName;
 
         }
@@ -114,7 +153,7 @@ namespace HAL_RoboRIO
             HAL_Base.HAL.HALGetJoystickButtons = (HAL_Base.HAL.HALGetJoystickButtonsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickButtons"), typeof(HAL_Base.HAL.HALGetJoystickButtonsDelegate));
 
             HAL_Base.HAL.HALGetJoystickDescriptor = (HAL_Base.HAL.HALGetJoystickDescriptorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickDescriptor"), typeof(HAL_Base.HAL.HALGetJoystickDescriptorDelegate));
-            
+
             HAL_Base.HAL.HALGetJoystickIsXbox = (HAL_Base.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(HAL_Base.HAL.HALGetJoystickIsXboxDelegate));
 
             HAL_Base.HAL.HALGetJoystickType = (HAL_Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(HAL_Base.HAL.HALGetJoystickTypeDelegate));
