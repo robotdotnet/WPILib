@@ -12,17 +12,35 @@ namespace WPILib
     public class ADXL345_I2C : ADXL345
     {
         private const byte Address = 0x1D;
+        private const byte AlternateAddress = 0x53;
 
-        private I2C m_i2C;
+        private readonly I2C m_i2C;
 
         /// <summary>
-        /// Constructor
+        /// Creates a new ADXL345_I2C Accelerometer using the default address of 0x1D.
         /// </summary>
         /// <param name="port">The I2C port the accelerometer is attached to</param>
         /// <param name="range">The range (+ or -) that the accelerometer will measure.</param>
         public ADXL345_I2C(I2C.Port port, AccelerometerRange range)
         {
             m_i2C = new I2C(port, Address);
+            m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
+            AccelerometerRange = range;
+            HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
+            LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
+        }
+
+        /// <summary>
+        /// Creates a new ADXL345_I2C Accelerometer, specifing the address.
+        /// </summary>
+        /// <param name="port">The I2C port the accelerometer is attached to</param>
+        /// <param name="range">The range (+ or -) that the accelerometer will measure.</param>
+        /// <param name="useAlternateAddress">True to use address 0x53, which is used by the sparkfun board.
+        /// False to use address 0x1D, which is used by the KOP board.</param>
+        public ADXL345_I2C(I2C.Port port, AccelerometerRange range, bool useAlternateAddress)
+        {
+            byte address = useAlternateAddress ? AlternateAddress : Address;
+            m_i2C = new I2C(port, address);
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
             AccelerometerRange = range;
             HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);

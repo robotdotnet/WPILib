@@ -16,7 +16,7 @@ namespace HAL_Base
         public delegate void SetAccelerometerActiveDelegate([MarshalAs(UnmanagedType.I1)]bool param0);
         public static SetAccelerometerActiveDelegate SetAccelerometerActive;
 
-        public delegate void SetAccelerometerRangeDelegate(AccelerometerRange param0);
+        public delegate void SetAccelerometerRangeDelegate(HALAccelerometerRange param0);
         public static SetAccelerometerRangeDelegate SetAccelerometerRange;
 
         public delegate double GetAccelerometerXDelegate();

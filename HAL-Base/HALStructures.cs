@@ -446,7 +446,7 @@ namespace HAL_Base
 
     #region Accelerometer
 
-    public enum AccelerometerRange
+    public enum HALAccelerometerRange
     {
         /// kRange_2G -> 0
         Range_2G = 0,

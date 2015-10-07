@@ -14,7 +14,7 @@ namespace WPILib
         private const int AddressRead = 0x80;
         private const int AddressMultiByte = 0x40;
 
-        private SPI m_spi;
+        private readonly SPI m_spi;
 
         /// <summary>
         /// Constructor

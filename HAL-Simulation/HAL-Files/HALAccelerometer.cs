@@ -31,9 +31,9 @@ namespace HAL_Simulator
 
 
         /// Return Type: void
-        ///range: AccelerometerRange
+        ///range: HALAccelerometerRange
         [CalledSimFunction]
-        public static void setAccelerometerRange(AccelerometerRange range)
+        public static void setAccelerometerRange(HALAccelerometerRange range)
         {
             Accelerometer.Range = range;
         }

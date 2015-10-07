@@ -28,7 +28,7 @@ namespace WPILib.Tests
         public void TestSetRange(AccelerometerRange range)
         {
             GetAcc().AccelerometerRange = range;
-            Assert.AreEqual(GetData().Range, (HAL_Base.AccelerometerRange)range);
+            Assert.AreEqual(GetData().Range, (HAL_Base.HALAccelerometerRange)range);
 
             GetData().Active = false;
         }
