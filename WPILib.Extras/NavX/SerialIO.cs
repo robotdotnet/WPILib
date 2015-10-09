@@ -30,8 +30,13 @@ namespace WPILib.Extras.NavX
         double m_lastValidPacketTime;
 
         const bool Debug = true; /* Set to true to enable debug output (to smart dashboard) */
-    
-    public SerialIo(SerialPort.Port portId, byte updateRateHz, bool processedData, IIoCompleteNotification notifySink, IBoardCapabilities boardCapabilities)
+
+        public void Init()
+        {
+            
+        }
+
+        public SerialIo(SerialPort.Port portId, byte updateRateHz, bool processedData, IIoCompleteNotification notifySink, IBoardCapabilities boardCapabilities)
         {
             this.m_serialPortId = portId;
             m_yprUpdateData = new IMUProtocol.YprUpdate();
@@ -153,7 +158,7 @@ namespace WPILib.Extras.NavX
             return packetLength;
         }
 
-        public void Run()
+        public void Run(object o)
         {
 
             m_stop = false;
@@ -254,7 +259,7 @@ namespace WPILib.Extras.NavX
                     if (remainderBytes > 0)
                     {
                         byte[] resizedArray = new byte[remainderBytes + bytesRead];
-                        Array.Copy(remainderData, 0, resizedArray, 0 ,remainderBytes);
+                        Array.Copy(remainderData, 0, resizedArray, 0, remainderBytes);
                         Array.Copy(receivedData, 0, resizedArray, remainderBytes, bytesRead);
                         receivedData = resizedArray;
                         bytesRead += remainderBytes;
@@ -640,28 +645,28 @@ namespace WPILib.Extras.NavX
             return m_updateCount;
         }
 
-        
-    public void SetUpdateRateHz(byte updateRate)
+
+        public void SetUpdateRateHz(byte updateRate)
         {
             m_updateRateHz = updateRate;
         }
 
-        
-    public void ZeroYaw()
+
+        public void ZeroYaw()
         {
             EnqueueIntegrationControlMessage(AHRSProtocol.NavxIntegrationCtlResetYaw);
         }
 
-        
-    public void ZeroDisplacement()
+
+        public void ZeroDisplacement()
         {
             EnqueueIntegrationControlMessage((byte)(AHRSProtocol.NavxIntegrationCtlResetDispX |
                                                      AHRSProtocol.NavxIntegrationCtlResetDispY |
                                                      AHRSProtocol.NavxIntegrationCtlResetDispZ));
         }
 
-        
-    public void Stop()
+
+        public void Stop()
         {
             m_stop = true;
         }

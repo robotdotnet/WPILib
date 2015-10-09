@@ -15,22 +15,22 @@ namespace WPILib.Extras.NavX
             m_port = i2CPort;
         }
 
-        
-    public bool Init()
+
+        public bool Init()
         {
             return true;
         }
 
-        
-    public bool Write(byte address, byte value)
+
+        public bool Write(byte address, byte value)
         {
             return m_port.Write(address | 0x80, value);
         }
 
         const int MaxWpilibI2CReadBytes = 7;
 
-        
-    public bool Read(byte firstAddress, byte[] buffer)
+
+        public bool Read(byte firstAddress, byte[] buffer)
         {
             int len = buffer.Length;
             int bufferOffset = 0;
@@ -53,8 +53,8 @@ namespace WPILib.Extras.NavX
             return (len == 0);
         }
 
-        
-    public bool Shutdown()
+
+        public bool Shutdown()
         {
             return true;
         }

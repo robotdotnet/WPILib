@@ -125,10 +125,18 @@ namespace WPILib.Extras.NavX
         {
             CommonInit(updateRateHz);
             m_io = new RegisterIo(new RegisterIoSpi(new SPI(spiPortId)), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
-            m_ioThread = new Thread(m_io.Run);
-            m_ioThread.Start();
+            m_io.Init();
+            timer = new System.Threading.Timer(m_io.Run, null, 20, 20);
+            //m_ioThread = new Thread(m_io.Run);
+            //m_ioThread.Start();
         }
 
+        public void GrabData()
+        {
+            //m_io.Run(null);
+        }
+
+        private System.Threading.Timer timer;
         /**
          * The AHRS class provides an interface to AHRS capabilities
          * of the KauaiLabs navX Robotics Navigation Sensor via SPI, I2C and

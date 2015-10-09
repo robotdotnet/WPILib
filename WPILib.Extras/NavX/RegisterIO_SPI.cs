@@ -62,7 +62,7 @@ namespace WPILib.Extras.NavX
                 return false; // WRITE ERROR
             }
             // delay 200 us /* TODO:  What is min. granularity of delay()? */
-            Timer.Delay(0.001);
+            Timer.Delay(0.0002);
             byte[] receivedData = new byte[buffer.Length + 1];
             if (m_port.Read(true, receivedData, receivedData.Length) != receivedData.Length)
             {

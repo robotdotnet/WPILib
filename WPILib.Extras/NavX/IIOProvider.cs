@@ -8,13 +8,14 @@ namespace WPILib.Extras.NavX
 {
     interface IIoProvider
     {
-         bool IsConnected();
-         double GetByteCount();
-         double GetUpdateCount();
-         void SetUpdateRateHz(byte updateRate);
-         void ZeroYaw();
-         void ZeroDisplacement();
-         void Run();
-         void Stop();
+        void Init();
+        bool IsConnected();
+        double GetByteCount();
+        double GetUpdateCount();
+        void SetUpdateRateHz(byte updateRate);
+        void ZeroYaw();
+        void ZeroDisplacement();
+        void Run(object o);
+        void Stop();
     }
 }

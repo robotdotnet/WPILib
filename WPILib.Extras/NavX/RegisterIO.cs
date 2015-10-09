@@ -43,25 +43,19 @@ namespace WPILib.Extras.NavX
             m_stop = true;
         }
 
-        public void Run()
+        public void Init()
         {
-
             m_ioProvider.Init();
 
             /* Initial Device Configuration */
             SetUpdateRateHz(this.m_updateRateHz);
             GetConfiguration();
+        }
 
-            /* IO Loop */
-            while (!m_stop)
-            {
-                if (m_boardState.UpdateRateHz != this.m_updateRateHz)
-                {
-                    SetUpdateRateHz(this.m_updateRateHz);
-                }
+        public void Run(object state)
+        {
                 GetCurrentData();
-                Timer.Delay(1.0 / this.m_updateRateHz);
-            }
+            
         }
 
         private bool GetConfiguration()
@@ -198,40 +192,40 @@ namespace WPILib.Extras.NavX
             }
         }
 
-        
-    public bool IsConnected()
+
+        public bool IsConnected()
         {
             double timeSinceLastUpdate = Timer.GetFPGATimestamp() - this.m_lastUpdateTime;
             return timeSinceLastUpdate <= IoTimeoutSeconds;
         }
 
-        
-    public double GetByteCount()
+
+        public double GetByteCount()
         {
             return m_byteCount;
         }
 
-        
-    public double GetUpdateCount()
+
+        public double GetUpdateCount()
         {
             return m_updateCount;
         }
 
-        
-    public void SetUpdateRateHz(byte updateRate)
+
+        public void SetUpdateRateHz(byte updateRate)
         {
             m_ioProvider.Write(IMURegisters.NavxRegUpdateRateHz, updateRate);
         }
 
-        
-    public void ZeroYaw()
+
+        public void ZeroYaw()
         {
             m_ioProvider.Write(IMURegisters.NavxRegIntegrationCtl,
                                        AHRSProtocol.NavxIntegrationCtlResetYaw);
         }
 
-        
-    public void ZeroDisplacement()
+
+        public void ZeroDisplacement()
         {
             m_ioProvider.Write(IMURegisters.NavxRegIntegrationCtl,
                                 (byte)(AHRSProtocol.NavxIntegrationCtlResetDispX |
