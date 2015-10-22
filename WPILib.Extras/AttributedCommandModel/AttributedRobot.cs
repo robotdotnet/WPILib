@@ -13,9 +13,9 @@ namespace WPILib.Extras.AttributedCommandModel
     {
         private readonly ReflectionContext reflectionContext;
 
-        private readonly List<Subsystem> subsystems = new List<Subsystem>();
+        private readonly List<KeyValuePair<Subsystem, string>> subsystems = new List<KeyValuePair<Subsystem, string>>();
 
-        public ICollection<Subsystem> Subsystems => subsystems;
+        public ICollection<Subsystem> Subsystems => new ReadOnlyCollection<Subsystem>(subsystems.Select(pair => pair.Key).ToList());
 
         private readonly List<Button> buttons = new List<Button>();
 
@@ -84,7 +84,7 @@ namespace WPILib.Extras.AttributedCommandModel
                 : assembly);
         }
 
-        private static IEnumerable<Subsystem> EnumerateGeneratedSubsystems(TypeInfo subsystemType)
+        private static IEnumerable<KeyValuePair<Subsystem, string>> EnumerateGeneratedSubsystems(TypeInfo subsystemType)
         {
             foreach (var attr in subsystemType.GetCustomAttributes<ExportSubsystemAttribute>())
             {
@@ -99,11 +99,11 @@ namespace WPILib.Extras.AttributedCommandModel
                     var defaultCommand = (Command)Activator.CreateInstance(defaultCommandType, subsystem);
                     if (!defaultCommand.DoesRequire(subsystem))
                     {
-                    defaultCommand.Requires(subsystem);
+                        defaultCommand.Requires(subsystem);
                     }
-                    (subsystem).SetDefaultCommand(defaultCommand);
+                    subsystem.SetDefaultCommand(defaultCommand);
                 }
-                yield return subsystem;
+                yield return new KeyValuePair<Subsystem, string>(subsystem, attr.Name);
             }
         }
 
@@ -113,7 +113,7 @@ namespace WPILib.Extras.AttributedCommandModel
             {
                 if (!phaseCommands.ContainsKey(attr.Phase))
                     phaseCommands.Add(attr.Phase, new List<Command>());
-                phaseCommands[attr.Phase].Add((Command)Activator.CreateInstance(commandType));
+                phaseCommands[attr.Phase].Add(CreateCommand(commandType));
             }
             foreach (var attr in commandType.GetCustomAttributes<RunCommandOnJoystickAttribute>())
             {
@@ -136,32 +136,53 @@ namespace WPILib.Extras.AttributedCommandModel
             }
         }
 
-        private static void AttachCommandToButton(Type commandType, Button button, ButtonMethod method)
+        private void AttachCommandToButton(Type commandType, Button button, ButtonMethod method)
         {
             switch (method)
             {
                 case ButtonMethod.WhenPressed:
-                    button.WhenPressed((Command)Activator.CreateInstance(commandType));
+                    button.WhenPressed(CreateCommand(commandType));
                     break;
                 case ButtonMethod.WhenReleased:
-                    button.WhenReleased((Command)Activator.CreateInstance(commandType));
+                    button.WhenReleased(CreateCommand(commandType));
                     break;
                 case ButtonMethod.WhileHeld:
-                    button.WhileHeld((Command)Activator.CreateInstance(commandType));
+                    button.WhileHeld(CreateCommand(commandType));
                     break;
                 case ButtonMethod.ToggleWhenPressed:
-                    button.ToggleWhenPressed((Command)Activator.CreateInstance(commandType));
+                    button.ToggleWhenPressed(CreateCommand(commandType));
                     break;
                 case ButtonMethod.CancelWhenPressed:
-                    button.CancelWhenPressed((Command)Activator.CreateInstance(commandType));
+                    button.CancelWhenPressed(CreateCommand(commandType));
                     break;
                 default:
                     throw new NotSupportedException("The button method specified is not supported.");
             }
         }
 
+        private Command CreateCommand(Type commandType)
+        {
+            var constructors = commandType.GetConstructors();
+            //If command has a constructor that takes parameters, that constructor is passed subsystems of the specified types.
+            foreach(var constructor in constructors.Where(constr => constr.GetParameters().Length > 0))
+            {
+                if (constructor.GetParameters().Any(param => !typeof(Subsystem).IsAssignableFrom(param.ParameterType)))
+                    continue;
+                var requiredSubsystems = new List<Subsystem>();
+                foreach (var subsystemParam in constructor.GetParameters())
+                {
+                    var subsystemType = subsystemParam.ParameterType;
+                    var name = subsystemParam.GetCustomAttribute<ImportSubsystemAttribute>()?.Name;
+                    requiredSubsystems.Add(subsystems.First(pair => pair.Key.GetType() == subsystemType).Key);
+                }
+                return (Command)constructor.Invoke(requiredSubsystems.ToArray());
+            }
+            return (Command)Activator.CreateInstance(commandType);
+        }
+
         private void StartPhaseCommands(MatchPhase phase)
         {
+            if (!PhaseCommands.ContainsKey(phase)) return;
             foreach (var command in PhaseCommands[phase])
             {
                 command.Start();

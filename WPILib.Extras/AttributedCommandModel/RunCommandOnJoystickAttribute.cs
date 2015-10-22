@@ -2,6 +2,9 @@
 
 namespace WPILib.Extras.AttributedCommandModel
 {
+    /// <summary>
+    /// Run a command on a <see cref="WPILib.Buttons.JoystickButton"/> event.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
     public sealed class RunCommandOnJoystickAttribute : RunCommandAttribute
     {

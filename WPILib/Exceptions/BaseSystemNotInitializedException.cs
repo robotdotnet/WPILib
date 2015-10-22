@@ -25,7 +25,7 @@ namespace WPILib.Exceptions
         /// <param name="offender">The class or interface that was not properly initialized.</param>
         /// <param name="affected">The class that was affected by this missing initialization.</param>
         public BaseSystemNotInitializedException(object offender, object affected)
-            : base("The " + offender.GetType().Name + " for the " + affected.GetType().Name + " was never set.")
+            : base("The " + (offender?.GetType()?.Name ?? "Implementation") + " for the " + affected.GetType().Name + " was never set.")
         {
 
         }

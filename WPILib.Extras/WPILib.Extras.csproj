@@ -56,6 +56,7 @@
     <Compile Include="AttributedCommandModel\AttributedRobot.cs" />
     <Compile Include="AttributedCommandModel\ButtonMethod.cs" />
     <Compile Include="AttributedCommandModel\ExportSubsystemAttribute.cs" />
+    <Compile Include="AttributedCommandModel\ImportSubsystemAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandAtPhaseStartAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnJoystickAttribute.cs" />

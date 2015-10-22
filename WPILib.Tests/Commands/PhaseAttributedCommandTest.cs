@@ -9,6 +9,7 @@ namespace WPILib.Tests.Commands
     [TestFixture]
     public class PhaseAttributedCommandTest : AbstractCommandTest
     {
+
         class TestReflectionContext : CustomReflectionContext
         {
             protected override IEnumerable<object> GetCustomAttributes(MemberInfo member, IEnumerable<object> declaredAttributes)
