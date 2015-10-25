@@ -24,9 +24,11 @@ namespace WPILib
         private bool m_periodic = false;
         private bool m_queued = false;
         private Notifier m_nextEvent;
-        private IntPtr m_handlerSemaphore;
+        private object m_handlerSemaphore;
 
         private Action<uint, IntPtr> ProcessCallback;
+
+        
 
         /// <summary>
         /// Create a notifier for the timer event notification.
@@ -38,7 +40,7 @@ namespace WPILib
             m_handler = o => handler();
             m_param = null;
             m_nextEvent = null;
-            m_handlerSemaphore = InitializeSemaphore(SEMAPHORE_FULL);
+            m_handlerSemaphore = new object();//InitializeSemaphore(SEMAPHORE_FULL);
 
             lock (s_queueSemaphore)
             {
@@ -63,7 +65,7 @@ namespace WPILib
             m_handler = handler;
             m_param = param;
             m_nextEvent = null;
-            m_handlerSemaphore = InitializeSemaphore(SEMAPHORE_FULL);
+            m_handlerSemaphore = new object();//InitializeSemaphore(SEMAPHORE_FULL);
 
             lock (s_queueSemaphore)
             {
@@ -239,8 +241,11 @@ namespace WPILib
             }
             try
             {
-                TakeSemaphore(m_handlerSemaphore);
-                GiveSemaphore(m_handlerSemaphore);
+                Monitor.Enter(m_handlerSemaphore);
+                //TakeSemaphore(m_handlerSemaphore);
+                if (Monitor.IsEntered(m_handlerSemaphore))
+                    Monitor.Exit(m_handlerSemaphore);
+                //GiveSemaphore(m_handlerSemaphore);
             }
             catch (ThreadInterruptedException)
             {
@@ -276,10 +281,13 @@ namespace WPILib
                     {
                         current.m_queued = false;
                     }
-                    TakeSemaphore(current.m_handlerSemaphore);
+                    //TakeSemaphore(current.m_handlerSemaphore);
+                    Monitor.Enter(current.m_handlerSemaphore);
                 }
                 current.m_handler(current.m_param);
-                GiveSemaphore(current.m_handlerSemaphore);
+                //GiveSemaphore(current.m_handlerSemaphore);
+                if (Monitor.IsEntered(current.m_handlerSemaphore))
+                    Monitor.Exit(current.m_handlerSemaphore);
             }
             lock (s_queueSemaphore)
             {
