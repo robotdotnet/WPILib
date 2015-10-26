@@ -15,17 +15,11 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALSemaphore.InitializeMutexRecursive = initializeMutexRecursive;
             HAL_Base.HALSemaphore.InitializeMutexNormal = initializeMutexNormal;
             HAL_Base.HALSemaphore.DeleteMutex = deleteMutex;
             HAL_Base.HALSemaphore.TakeMutex = takeMutex;
             HAL_Base.HALSemaphore.TryTakeMutex = tryTakeMutex;
             HAL_Base.HALSemaphore.GiveMutex = giveMutex;
-            HAL_Base.HALSemaphore.InitializeSemaphore = initializeSemaphore;
-            HAL_Base.HALSemaphore.DeleteSemaphore = deleteSemaphore;
-            HAL_Base.HALSemaphore.TakeSemaphore = takeSemaphore;
-            HAL_Base.HALSemaphore.TryTakeSemaphore = tryTakeSemaphore;
-            HAL_Base.HALSemaphore.GiveSemaphore = giveSemaphore;
             HAL_Base.HALSemaphore.InitializeMultiWait = initializeMultiWait;
             HAL_Base.HALSemaphore.DeleteMultiWait = deleteMultiWait;
             HAL_Base.HALSemaphore.TakeMultiWait = takeMultiWait;
@@ -61,28 +55,25 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static sbyte takeMutex(IntPtr sem)
+        public static void takeMutex(IntPtr sem)
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
             Monitor.Enter(temp.lockObject);
-
-            return 0;
         }
 
         [CalledSimFunction]
-        public static sbyte tryTakeMutex(IntPtr sem)
+        public static bool tryTakeMutex(IntPtr sem)
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
             bool retVal = Monitor.TryEnter(temp.lockObject);
-            return retVal ? (sbyte)1 : (sbyte)0;
+            return retVal;
         }
 
         [CalledSimFunction]
-        public static sbyte giveMutex(IntPtr sem)
+        public static void giveMutex(IntPtr sem)
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
             Monitor.Exit(temp.lockObject);
-            return 0;
         }
 
         [CalledSimFunction]
@@ -147,7 +138,7 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static sbyte takeMultiWait(IntPtr sem, IntPtr m, int timeout)
+        public static void takeMultiWait(IntPtr sem, IntPtr m)
         {
             var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
 
@@ -161,13 +152,10 @@ namespace HAL_Simulator
                 {
                 }
             }
-
-
-            return 0;
         }
 
         [CalledSimFunction]
-        public static sbyte giveMultiWait(IntPtr sem)
+        public static void giveMultiWait(IntPtr sem)
         {
             var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
             lock (temp.lockObject)
@@ -181,7 +169,6 @@ namespace HAL_Simulator
 
                 }
             }
-            return 0;
         }
     }
 }

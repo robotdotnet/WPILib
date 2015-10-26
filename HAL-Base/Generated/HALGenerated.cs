@@ -32,7 +32,8 @@ namespace HAL_Base
         public delegate uint GetFPGATimeDelegate(ref int status);
         public static GetFPGATimeDelegate GetFPGATime;
 
-        [return: MarshalAs(UnmanagedType.I1)]public delegate bool GetFPGAButtonDelegate(ref int status);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public delegate bool GetFPGAButtonDelegate(ref int status);
         public static GetFPGAButtonDelegate GetFPGAButton;
 
         public delegate int HALSetErrorDataDelegate(string errors, int errorsLength, int wait_ms);
@@ -77,10 +78,12 @@ namespace HAL_Base
         public delegate void HALSetNewDataSemDelegate(IntPtr sem);
         public static HALSetNewDataSemDelegate HALSetNewDataSem;
 
-        [return: MarshalAs(UnmanagedType.I1)]public delegate bool HALGetSystemActiveDelegate(ref int status);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public delegate bool HALGetSystemActiveDelegate(ref int status);
         public static HALGetSystemActiveDelegate HALGetSystemActive;
 
-        [return: MarshalAs(UnmanagedType.I1)]public delegate bool HALGetBrownedOutDelegate(ref int status);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public delegate bool HALGetBrownedOutDelegate(ref int status);
         public static HALGetBrownedOutDelegate HALGetBrownedOut;
 
         public delegate int HALInitializeDelegate(int mode);
