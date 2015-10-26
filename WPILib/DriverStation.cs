@@ -37,7 +37,7 @@ namespace WPILib
         //We use native semaphores rather then .NET semaphores for some of these
         //Because the mono semaphores were taking up too much CPU, and not looping
         //In the correct time.
-        private readonly object m_newControlData;
+        private readonly IntPtr m_newControlData;
         private readonly IntPtr m_packetDataAvailableMultiWait;
         private readonly IntPtr m_packetDataAvailableMutex;
         private readonly IntPtr m_waitForDataSem;
@@ -83,7 +83,7 @@ namespace WPILib
 
             //Initializes the HAL semaphores
             m_packetDataAvailableMultiWait = InitializeMultiWait();
-            m_newControlData = new object();//InitializeSemaphore(0);
+            m_newControlData = InitializeSemaphore(0);
 
             m_waitForDataSem = InitializeMultiWait();
             m_waitForDataMutex = InitializeMutexNormal();
@@ -111,7 +111,7 @@ namespace WPILib
             while (m_threadKeepAlive)
             {
                 //Wait for new DS data, grab the newest data, and return the semaphore.
-                TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex);
+                TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex, 0);
                 GetData();
                 GiveMultiWait(m_waitForDataSem);
 
@@ -138,7 +138,7 @@ namespace WPILib
         /// Wait for new data from the driver station.
         /// </summary>
         /// <param name="timeout">The timeout in ms</param>
-        public void WaitForData(long timeout = 0) => TakeMultiWait(m_waitForDataSem, m_waitForDataMutex);
+        public void WaitForData(long timeout = 0) => TakeMultiWait(m_waitForDataSem, m_waitForDataMutex, -1);
 
         /// <summary>
         /// Grabs the newest Joystick data and stores it
@@ -152,9 +152,7 @@ namespace WPILib
                 HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
             }
             //Pings the NewControlData function
-            //GiveSemaphore(m_newControlData);
-            if (Monitor.IsEntered(m_newControlData))
-                Monitor.Exit(m_newControlData);
+            GiveSemaphore(m_newControlData);
         }
 
         /// <summary>
@@ -553,7 +551,7 @@ namespace WPILib
         /// Gets whether a new control packet from the driver station has arrived since
         /// the last time this was called.
         /// </summary>
-        public bool NewControlData => Monitor.TryEnter(m_newControlData);//TryTakeSemaphore(m_newControlData) == 0;
+        public bool NewControlData => TryTakeSemaphore(m_newControlData) == 0;
 
         /// <summary>
         /// Gets the current alliance and station from the FMS.
