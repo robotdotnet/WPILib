@@ -34,14 +34,6 @@ namespace WPILib
         private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
 
         //Pointers to the semaphores to the HAL and FPGA
-        //We use native semaphores rather then .NET semaphores for some of these
-        //Because the mono semaphores were taking up too much CPU, and not looping
-        //In the correct time.
-        //private readonly object m_newControlData;
-        //private readonly IntPtr m_packetDataAvailableMultiWait;
-        //private readonly IntPtr m_packetDataAvailableMutex;
-        //private readonly IntPtr m_waitForDataSem;
-        //private readonly IntPtr m_waitForDataMutex;
         private readonly object m_mutex;
 
         private readonly IntPtr m_packetDataAvailableMutex;
@@ -87,14 +79,6 @@ namespace WPILib
             }
 
             //Initializes the HAL semaphores
-            //m_packetDataAvailableMultiWait = InitializeMultiWait();
-            //m_newControlData = new object();//InitializeSemaphore(0);
-
-            //m_waitForDataSem = InitializeMultiWait();
-            //m_waitForDataMutex = InitializeMutexNormal();
-
-
-            //m_packetDataAvailableMutex = InitializeMutexNormal();
             m_mutex = new object();
             
 
@@ -128,7 +112,6 @@ namespace WPILib
                 //Wait for new DS data, grab the newest data, and return the semaphore.
                 TakeMultiWait(m_packetDataAvailableSem, m_packetDataAvailableMutex);
                 GetData();
-                //GiveMultiWait(m_waitForDataSem);
                 try
                 {
                     Monitor.Enter(m_mutex);
@@ -181,9 +164,6 @@ namespace WPILib
         /// </summary>
         protected void GetData()
         {
-            
-            //Pings the NewControlData function
-            //GiveSemaphore(m_newControlData);
             try
             {
                 Monitor.Enter(m_mutex);

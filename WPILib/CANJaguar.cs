@@ -1241,22 +1241,72 @@ namespace WPILib
 
         public ITable Table => m_table;
 
-        public string SmartDashboardType => "Speed Controller";
+        public string SmartDashboardType => "CANSpeedController";
 
         public void UpdateTable()
         {
-            m_table?.PutNumber("Value", Get());
+            if (Table != null)
+            {
+                Table.PutString("~TYPE~", SmartDashboardType);
+                Table.PutString("Type", nameof(CANJaguar)); // "CANTalon", "CANJaguar" 	
+                Table.PutNumber("Mode", (int)MotorControlMode);
+                if (MotorControlMode.IsPID())
+                {
+
+                    // CANJaguar throws an exception if you try to get its PID constants 
+                    // when it's not in a PID-compatible mode 	
+                    Table.PutNumber("p", P);
+                    Table.PutNumber("i", I);
+                    Table.PutNumber("d", D);
+                    Table.PutNumber("f", F);
+                }
+
+                Table.PutBoolean("Enabled", Enabled);
+                Table.PutNumber("Value", Get());
+            }
         }
 
         public void StartLiveWindowMode()
         {
             Set(0.0);
-            m_table.AddTableListener("Value", this, true);
+            m_table.AddTableListener(this, true);
         }
 
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
-            Set((double)value);
+            switch (key)
+            {
+                case "Enabled":
+                    if ((bool)value)
+                        Enable();
+                    else
+                        Disable();
+                    break;
+                case "Value":
+                    Set((double)value);
+                    break;
+                case "Mode":
+                    MotorControlMode = (ControlMode)(int)((double)value);
+                    break;
+            }
+            if (MotorControlMode.IsPID())
+            {
+                switch (key)
+                {
+                    case "p":
+                        P = (double)value;
+                        break;
+                    case "i":
+                        I = (double)value;
+                        break;
+                    case "d":
+                        D = (double)value;
+                        break;
+                    case "f":
+                        F = (double)value;
+                        break;
+                }
+            }
         }
 
         public void StopLiveWindowMode()
@@ -1299,6 +1349,15 @@ namespace WPILib
         *
         * @param p The proportional gain of the Jaguar's PID controller.
         */
+
+        public ControlMode MotorControlMode
+        {
+            get { return m_controlMode; }
+            set
+            {
+                ChangeControlMode(value);
+            }
+        }
 
         public double P
         {
@@ -1428,6 +1487,9 @@ namespace WPILib
                 return m_d;
             }
         }
+
+        public double F {
+            get { return 0.0; } set {} }
 
         /**
         * Set the P, I, and D constants for the closed loop modes.
@@ -1568,18 +1630,6 @@ namespace WPILib
             // Update the local mode
             m_controlMode = controlMode;
             m_controlModeVerified = false;
-        }
-
-        /**
-        * Get the active control mode from the Jaguar.
-        *
-        * Ask the Jagaur what mode it is in.
-        *
-        * @return ControlMode that the Jag is in.
-        */
-        public ControlMode GetControlMode()
-        {
-            return m_controlMode;
         }
 
         /**

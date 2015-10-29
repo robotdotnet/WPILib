@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using HAL_Base;
 using NetworkTables;
 using NetworkTables.Tables;
@@ -13,7 +14,7 @@ namespace WPILib
     /// <summary>
     /// This Class represents a CAN Talon SRX Motor Controller.
     /// </summary>
-    public class CANTalon : IMotorSafety, ICANSpeedController, IPIDInterface, ILiveWindowSendable, ITableListener, IPIDOutput, IPIDSource
+    public class CANTalon : IMotorSafety, ICANSpeedController, ITableListener, IPIDOutput, IPIDSource
     {
         private readonly MotorSafetyHelper m_safetyHelper;
         protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
@@ -229,7 +230,7 @@ namespace WPILib
         {
             int throttle = 0;
             C_TalonSRX_GetAppliedThrottle(m_impl, ref throttle);
-            return GetBusVoltage()*(throttle/1023.0);
+            return GetBusVoltage() * (throttle / 1023.0);
         }
 
         public double GetBusVoltage()
@@ -282,7 +283,7 @@ namespace WPILib
 
             if (status != CTR_Code.CTR_OKAY)
             {
-                CheckStatus((int) status);
+                CheckStatus((int)status);
             }
 
             retVal |= (val != 0) ? Faults.TemperatureFault : 0;
@@ -293,7 +294,7 @@ namespace WPILib
 
             if (status != CTR_Code.CTR_OKAY)
             {
-                CheckStatus((int) status);
+                CheckStatus((int)status);
             }
 
             retVal |= (val != 0) ? Faults.BusVoltageFault : 0;
@@ -304,7 +305,7 @@ namespace WPILib
 
             if (status != CTR_Code.CTR_OKAY)
             {
-                CheckStatus((int) status);
+                CheckStatus((int)status);
             }
 
             retVal |= (val != 0) ? Faults.FwdLimitSwitch : 0;
@@ -315,7 +316,7 @@ namespace WPILib
 
             if (status != CTR_Code.CTR_OKAY)
             {
-                CheckStatus((int) status);
+                CheckStatus((int)status);
             }
 
             retVal |= (val != 0) ? Faults.RevLimitSwitch : 0;
@@ -326,7 +327,7 @@ namespace WPILib
 
             if (status != CTR_Code.CTR_OKAY)
             {
-                CheckStatus((int) status);
+                CheckStatus((int)status);
             }
 
             retVal |= (val != 0) ? Faults.FwdSoftLimit : 0;
@@ -337,7 +338,7 @@ namespace WPILib
 
             if (status != CTR_Code.CTR_OKAY)
             {
-                CheckStatus((int) status);
+                CheckStatus((int)status);
             }
 
             retVal |= (val != 0) ? Faults.RevSoftLimit : 0;
@@ -504,7 +505,8 @@ namespace WPILib
                 EnsureInPIDMode();
                 return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_IZone : ParamID.eProfileParamSlot1_IZone);
             }
-            set {
+            set
+            {
                 SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_IZone : ParamID.eProfileParamSlot1_IZone, value);
             }
         }
@@ -533,7 +535,8 @@ namespace WPILib
                 EnsureInPIDMode();
                 return GetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_CloseLoopRampRate : ParamID.eProfileParamSlot1_CloseLoopRampRate);
             }
-            set {
+            set
+            {
                 SetParam(m_profile == 0
                     ? ParamID.eProfileParamSlot0_CloseLoopRampRate
                     : ParamID.eProfileParamSlot1_CloseLoopRampRate, value);
@@ -645,7 +648,7 @@ namespace WPILib
         {
             LimitMode = LimitMode.SwitchInputsOnly;
         }
-        
+
 
         public LimitMode LimitMode
         {
@@ -1038,17 +1041,17 @@ namespace WPILib
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        C_TalonSRX_SetDemand(m_impl, Inverted ? -((int) (value*1023)) : ((int)(value * 1023)));
+                        C_TalonSRX_SetDemand(m_impl, Inverted ? -((int)(value * 1023)) : ((int)(value * 1023)));
                         status = CTR_Code.CTR_OKAY;
                         break;
                     case ControlMode.Voltage:
-                        int volts = (int) (value*256);
+                        int volts = (int)(value * 256);
                         status = C_TalonSRX_SetDemand(m_impl, Inverted ? -volts : volts);
                         break;
                     case ControlMode.Position:
                     case ControlMode.Speed:
                     case ControlMode.Follower:
-                        status = C_TalonSRX_SetDemand(m_impl, Inverted ? (int) -value : (int) value);
+                        status = C_TalonSRX_SetDemand(m_impl, Inverted ? (int)-value : (int)value);
                         break;
                     case ControlMode.Current:
                     default:
@@ -1056,7 +1059,7 @@ namespace WPILib
                         break;
                 }
                 CheckStatus((int)status);
-                status = C_TalonSRX_SetModeSelect(m_impl, (int) MotorControlMode);
+                status = C_TalonSRX_SetModeSelect(m_impl, (int)MotorControlMode);
                 CheckStatus((int)status);
 
             }
@@ -1081,7 +1084,7 @@ namespace WPILib
                 case ControlMode.PercentVbus:
                 default:
                     C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
-                    return value/1023.0;
+                    return value / 1023.0;
             }
         }
 
@@ -1117,14 +1120,32 @@ namespace WPILib
         ///<inheritdoc/>
         public void UpdateTable()
         {
-            Table?.PutNumber("Value", Get());
+            if (Table != null)
+            {
+                Table.PutString("~TYPE~", SmartDashboardType);
+                Table.PutString("Type", nameof(CANTalon)); // "CANTalon", "CANJaguar" 	
+                Table.PutNumber("Mode", (int)MotorControlMode);
+                if (MotorControlMode.IsPID())
+                {
+
+                    // CANJaguar throws an exception if you try to get its PID constants 	144
+                    // when it's not in a PID-compatible mode 	
+                    Table.PutNumber("p", P);
+                    Table.PutNumber("i", I);
+                    Table.PutNumber("d", D);
+                    Table.PutNumber("f", F);
+                }
+
+                Table.PutBoolean("Enabled", Enabled);
+                Table.PutNumber("Value", Get());
+            }
         }
 
         ///<inheritdoc/>
         public void StartLiveWindowMode()
         {
             Set(0.0);
-            Table.AddTableListener("Value", this, true);
+            Table.AddTableListener(this, true);
         }
 
         ///<inheritdoc/>
@@ -1135,12 +1156,44 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public string SmartDashboardType => "Speed Controller";
+        public string SmartDashboardType => "CANSpeedController";
 
         ///<inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
-            Set((double)value);
+            switch (key)
+            {
+                case "Enabled":
+                    if ((bool)value)
+                        Enable();
+                    else
+                        Disable();
+                    break;
+                case "Value":
+                    Set((double)value);
+                    break;
+                case "Mode":
+                    MotorControlMode = (ControlMode)(int)((double)value);
+                    break;
+            }
+            if (MotorControlMode.IsPID())
+            {
+                switch (key)
+                {
+                    case "p":
+                        P = (double)value;
+                        break;
+                    case "i":
+                        I = (double)value;
+                        break;
+                    case "d":
+                        D = (double)value;
+                        break;
+                    case "f":
+                        F = (double)value;
+                        break;
+                }
+            }
         }
 
         ///<inheritdoc/>
@@ -1152,7 +1205,5 @@ namespace WPILib
 
         ///<inheritdoc/>
         public ITable Table { get; private set; }
-
-        
     }
 }
