@@ -5,6 +5,15 @@ namespace WPILib.Extras.AttributedCommandModel
     /// <summary>
     /// Apply this attribute to subsystems to have <see cref="AttributedRobot"/> auto-load it.
     /// </summary>
+    /// <example>
+    /// <code>
+    /// [ExportSubsystem(DefaultCommandType = typeof(DriveRobot)]
+    /// public class DriveTrain : Subsystem
+    /// {
+    ///     //Subsystem code
+    /// }
+    /// </code>
+    /// </example>
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class ExportSubsystemAttribute : Attribute
     {

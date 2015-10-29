@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPILib.IntegrationTests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NIVision", "NIVision\NIVision.csproj", "{D461AD43-B66D-4C66-925D-9759BF1E4654}"
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Sandcastle", "Sandcastle\Sandcastle.shfbproj", "{593E8FD3-07E5-453F-8883-08F5EF2123FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{D461AD43-B66D-4C66-925D-9759BF1E4654}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D461AD43-B66D-4C66-925D-9759BF1E4654}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D461AD43-B66D-4C66-925D-9759BF1E4654}.Release|Any CPU.Build.0 = Release|Any CPU
+		{593E8FD3-07E5-453F-8883-08F5EF2123FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{593E8FD3-07E5-453F-8883-08F5EF2123FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{593E8FD3-07E5-453F-8883-08F5EF2123FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{593E8FD3-07E5-453F-8883-08F5EF2123FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
