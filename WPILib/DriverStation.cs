@@ -37,11 +37,16 @@ namespace WPILib
         //We use native semaphores rather then .NET semaphores for some of these
         //Because the mono semaphores were taking up too much CPU, and not looping
         //In the correct time.
-        private readonly object m_newControlData;
-        private readonly IntPtr m_packetDataAvailableMultiWait;
+        //private readonly object m_newControlData;
+        //private readonly IntPtr m_packetDataAvailableMultiWait;
+        //private readonly IntPtr m_packetDataAvailableMutex;
+        //private readonly IntPtr m_waitForDataSem;
+        //private readonly IntPtr m_waitForDataMutex;
+        private readonly object m_mutex;
+
         private readonly IntPtr m_packetDataAvailableMutex;
-        private readonly IntPtr m_waitForDataSem;
-        private readonly IntPtr m_waitForDataMutex;
+        private readonly IntPtr m_packetDataAvailableSem;
+        private bool m_newControlData = false;
 
         //Driver station thread keep alive
         private bool m_threadKeepAlive = true;
@@ -82,19 +87,29 @@ namespace WPILib
             }
 
             //Initializes the HAL semaphores
-            m_packetDataAvailableMultiWait = InitializeMultiWait();
-            m_newControlData = new object();//InitializeSemaphore(0);
+            //m_packetDataAvailableMultiWait = InitializeMultiWait();
+            //m_newControlData = new object();//InitializeSemaphore(0);
 
-            m_waitForDataSem = InitializeMultiWait();
-            m_waitForDataMutex = InitializeMutexNormal();
+            //m_waitForDataSem = InitializeMultiWait();
+            //m_waitForDataMutex = InitializeMutexNormal();
 
+
+            //m_packetDataAvailableMutex = InitializeMutexNormal();
+            m_mutex = new object();
+            
 
             m_packetDataAvailableMutex = InitializeMutexNormal();
-            HALSetNewDataSem(m_packetDataAvailableMultiWait);
+            m_packetDataAvailableSem = InitializeMultiWait();
+            HALSetNewDataSem(m_packetDataAvailableSem);
 
 
             //Starts the driver station thread in the background.
-            var thread = new Thread(Task) { Priority = ThreadPriority.Highest, IsBackground = true };
+            var thread = new Thread(Task)
+            {
+                Priority = ThreadPriority.Highest,
+                IsBackground = true,
+                Name = "FRCDriverStation"
+            };
             thread.Start();
         }
 
@@ -111,9 +126,19 @@ namespace WPILib
             while (m_threadKeepAlive)
             {
                 //Wait for new DS data, grab the newest data, and return the semaphore.
-                TakeMultiWait(m_packetDataAvailableMultiWait, m_packetDataAvailableMutex);
+                TakeMultiWait(m_packetDataAvailableSem, m_packetDataAvailableMutex);
                 GetData();
-                GiveMultiWait(m_waitForDataSem);
+                //GiveMultiWait(m_waitForDataSem);
+                try
+                {
+                    Monitor.Enter(m_mutex);
+                    Monitor.PulseAll(m_mutex);
+                }
+                finally 
+                {
+                    Monitor.Exit(m_mutex);
+                }
+                
 
                 //Every 4 loops (80ms) check all of the motors to make sure they have been updated
                 if (++safetyCounter >= 4)
@@ -138,23 +163,42 @@ namespace WPILib
         /// Wait for new data from the driver station.
         /// </summary>
         /// <param name="timeout">The timeout in ms</param>
-        public void WaitForData(long timeout = 0) => TakeMultiWait(m_waitForDataSem, m_waitForDataMutex);
+        public void WaitForData(int timeout = Timeout.Infinite)
+        {
+            try
+            {
+                Monitor.Enter(m_mutex);
+                Monitor.Wait(timeout);
+            }
+            finally 
+            {
+                Monitor.Exit(m_mutex);
+            }
+        }
 
         /// <summary>
         /// Grabs the newest Joystick data and stores it
         /// </summary>
         protected void GetData()
         {
-            for (byte stick = 0; stick < JoystickPorts; stick++)
-            {
-                HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
-                HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
-                HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
-            }
+            
             //Pings the NewControlData function
             //GiveSemaphore(m_newControlData);
-            if (Monitor.IsEntered(m_newControlData))
-                Monitor.Exit(m_newControlData);
+            try
+            {
+                Monitor.Enter(m_mutex);
+                for (byte stick = 0; stick < JoystickPorts; stick++)
+                {
+                    HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
+                    HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
+                    HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
+                }
+                m_newControlData = true;
+            }
+            finally
+            {
+                Monitor.Exit(m_mutex);
+            }
         }
 
         /// <summary>
@@ -449,7 +493,7 @@ namespace WPILib
                 throw new ArgumentOutOfRangeException(nameof(stick),
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
-            
+
             //TODO: Remove this when calling for descriptor on empty stick
             if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
             {
@@ -553,7 +597,23 @@ namespace WPILib
         /// Gets whether a new control packet from the driver station has arrived since
         /// the last time this was called.
         /// </summary>
-        public bool NewControlData => Monitor.TryEnter(m_newControlData);//TryTakeSemaphore(m_newControlData) == 0;
+        public bool NewControlData
+        {
+            get
+            {
+                try
+                {
+                    Monitor.Enter(m_mutex);
+                    bool result = m_newControlData;
+                    m_newControlData = false;
+                    return result;
+                }
+                finally
+                {
+                    Monitor.Exit(m_mutex);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the current alliance and station from the FMS.
