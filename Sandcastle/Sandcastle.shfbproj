@@ -36,13 +36,21 @@
     <KeepLogFile>True</KeepLogFile>
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CleanIntermediates>True</CleanIntermediates>
-    <PlugInConfigurations />
+    <PlugInConfigurations>
+      <PlugInConfig id="IntelliSense Only" enabled="True">
+        <configuration />
+      </PlugInConfig>
+    </PlugInConfigurations>
     <ComponentConfigurations>
-      <ComponentConfig id="API Token Resolution" enabled="True" xmlns="">
+      <ComponentConfig id="API Token Resolution" enabled="True">
         <component id="API Token Resolution">{@TokenFiles}
 <replace elements="/*//token" item="string(.)" /></component>
       </ComponentConfig>
-    </ComponentConfigurations>
+<ComponentConfig id="IntelliSense Component" enabled="True"><component id="IntelliSense Component"><!-- Output options (optional)
+  Attributes:
+    Include namespaces (false by default)
+    Namespaces comments filename ("Namespaces" if not specified or empty)
+    Output folder (current folder if not specified or empty) --><output includeNamespaces="true" namespacesFile="Namespaces" folder="{@OutputFolder}" /></component></ComponentConfig></ComponentConfigurations>
     <HelpFileVersion>1.0.0.0</HelpFileVersion>
     <MaximumGroupParts>2</MaximumGroupParts>
     <NamespaceGrouping>False</NamespaceGrouping>
