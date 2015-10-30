@@ -1,4 +1,5 @@
 ﻿using System;
+using WPILib.LiveWindows;
 
 namespace WPILib.Interfaces
 {
@@ -14,6 +15,14 @@ namespace WPILib.Interfaces
         Speed = 2,
         Current = 3,
         Disabled = 15
+    }
+
+    public static class ControlModeExtensions
+    {
+        public static bool IsPID(this ControlMode mode)
+        {
+            return mode == ControlMode.Current || mode == ControlMode.Speed || mode == ControlMode.Position;
+        }
     }
 
     /// <summary>
@@ -73,11 +82,13 @@ namespace WPILib.Interfaces
     /// <summary>
     /// Interface for CAN Speed Controllers like <see cref="CANTalon"/> and <see cref="CANJaguar"/>
     /// </summary>
-    public interface ICANSpeedController : ISpeedController
+    public interface ICANSpeedController : ISpeedController, IPIDInterface, ILiveWindowSendable
     {
+        ControlMode MotorControlMode { set; get; }
         double P { set; get; }
         double I { set; get; }
         double D { set; get; }
+        double F { get; set; }
         void SetPID(double p, double i, double d);
         double GetBusVoltage();
         double GetOutputVoltage();

@@ -6,6 +6,7 @@ using WPILib.IntegrationTests.Test;
 
 namespace WPILib.IntegrationTests
 {
+    /*
     [TestFixture]
     public class PreferencesTest : AbstractComsSetup
     {
@@ -111,4 +112,5 @@ namespace WPILib.IntegrationTests
             pref.Remove(networkedNumber);
         }
     }
+    */
 }

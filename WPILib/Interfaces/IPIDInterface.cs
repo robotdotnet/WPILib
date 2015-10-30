@@ -1,6 +1,6 @@
 ﻿namespace WPILib.Interfaces
 {
-    interface IPIDInterface
+    public interface IPIDInterface
     {
         void SetPID(double p, double i, double d);
         double P { get; set; }
