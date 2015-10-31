@@ -53,7 +53,7 @@ namespace WPILib
         private Preferences()
         {
             m_table = NetworkTable.GetTable(TableName);
-            m_table.AddTableListenerEx(this, NotifyFlags.NOTIFY_NEW | NotifyFlags.NOTIFY_IMMEDIATE);
+            m_table.AddTableListenerEx(this, NotifyFlags.NotifyNew | NotifyFlags.NotifyImmediate);
             HAL.Report(ResourceType.kResourceType_Preferences, (byte)0);
         }
 

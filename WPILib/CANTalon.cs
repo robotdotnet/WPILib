@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using HAL_Base;
 using NetworkTables;
 using NetworkTables.Tables;
@@ -21,6 +20,12 @@ namespace WPILib
         /// The current feedback value being used.
         /// </summary>
         protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
+
+        private const int NativeAdcUnitsPerRotation = 1024;
+
+        private const double NativePwdUnitsPerRotation = 4096.0;
+
+        private const double MinutesPer100msUnits = 1.0 / 600.0;
 
         /// <summary>
         /// Feedback type for CAN Talon
@@ -46,7 +51,13 @@ namespace WPILib
             /// <summary>
             /// An encoder that only reports when it hits a falling edge.
             /// </summary>
-            EncoderFalling = 5
+            /// <summary>
+            /// An encoder that only reports when it hits a falling edge.
+            /// </summary>
+            EncoderFalling = 5,
+            CtreMagEncoder_Relative = 6,
+            CtreMagEncoder_Absolute = 7,
+            PulseWidth = 8
         }
 
         /// <summary>
@@ -57,7 +68,15 @@ namespace WPILib
             General = 0,
             Feedback = 1,
             QuadEncoder = 2,
-            AnalogTempVbat = 3
+            AnalogTempVbat = 3,
+            PulseWidth = 4
+        }
+
+        public enum FeedbackDeviceStatus
+        {
+            FeedbackStatusUnknown = 0,
+            FeedbackStatusPresent = 1,
+            FeedbackStatusNotPresent = 2
         }
 
 
@@ -69,6 +88,12 @@ namespace WPILib
         private double m_setPoint;
 
         public bool Inverted { get; set; }
+
+        private int m_codesPerRev;
+
+        private int m_numPotTurns;
+
+        private FeedbackDevice m_feedbackDevice;
 
 
         /// <summary>
@@ -84,6 +109,9 @@ namespace WPILib
             m_controlEnabled = true;
             m_setPoint = 0;
             Profile = 0;
+            m_codesPerRev = 0;
+            m_numPotTurns = 0;
+            m_feedbackDevice = FeedbackDevice.QuadEncoder;
             ApplyControlMode(ControlMode.PercentVbus);
             LiveWindow.AddActuator("CANTalonSRX", deviceNumber, this);
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
@@ -162,6 +190,11 @@ namespace WPILib
             return pos;
         }
 
+        public void SetEncoderPostition(int newPosition)
+        {
+            SetParam(ParamID.eEncPosition, newPosition);
+        }
+
         /// <summary>
         /// Gets the current encoder velocity.
         /// </summary>
@@ -171,6 +204,52 @@ namespace WPILib
             int vel = 0;
             C_TalonSRX_GetEncVel(m_impl, ref vel);
             return vel;
+        }
+
+        public int GetPulseWidthPosition()
+        {
+            throw new NotImplementedException("Waiting on additions to the HAL");
+        }
+
+        public void SetPulseWidthPosition(int newPosition)
+        {
+            SetParam(ParamID.ePwdPosition, newPosition);
+        }
+
+        public int GetPulseWidthVelocity()
+        {
+            throw new NotImplementedException("Waiting on additions to the HAL");
+        }
+
+        public int GetPulseWidthRiseToFallUs()
+        {
+            throw new NotImplementedException("Waiting on additions to the HAL");
+        }
+
+        public int GetPulseWidthRiseToRiseUs()
+        {
+            throw new NotImplementedException("Waiting on additions to the HAL");
+        }
+
+        public FeedbackDeviceStatus IsSensorPresent(FeedbackDevice feedbackDevice)
+        {
+            FeedbackDeviceStatus retVal = FeedbackDeviceStatus.FeedbackStatusUnknown;
+            switch (feedbackDevice)
+            {
+                case FeedbackDevice.QuadEncoder:
+                case FeedbackDevice.AnalogPotentiometer:
+                case FeedbackDevice.AnalogEncoder:
+                case FeedbackDevice.EncoderRising:
+                case FeedbackDevice.EncoderFalling:
+                    break;
+                case FeedbackDevice.CtreMagEncoder_Relative:
+                case FeedbackDevice.CtreMagEncoder_Absolute:
+                case FeedbackDevice.PulseWidth:
+                    long value = 0;
+                    throw new NotImplementedException("Waiting for additions to the HAL");
+                    break;
+            }
+            return retVal;
         }
 
         public int GetNumberOfQuadIdxRises()
@@ -201,6 +280,11 @@ namespace WPILib
             return state;
         }
 
+        public void SetAnalogPosition(int newPosition)
+        {
+            SetParam(ParamID.eAinPosition, (double)newPosition);
+        }
+
         public int GetAnalogInPosition()
         {
             int position = 0;
@@ -227,6 +311,18 @@ namespace WPILib
             return error;
         }
 
+        public void SetAllowableClosedLoopErr(int allowableCloseLoopError)
+        {
+            if (m_profile == 0)
+            {
+                SetParam(ParamID.eProfileParamSlot0_AllowableClosedLoopErr, (double)allowableCloseLoopError);
+            }
+            else
+            {
+                SetParam(ParamID.eProfileParamSlot1_AllowableClosedLoopErr, (double)allowableCloseLoopError);
+            }
+        }
+
         public bool IsForwardLimitSwitchClosed()
         {
             int state = 0;
@@ -241,11 +337,23 @@ namespace WPILib
             return state != 0;
         }
 
-        public bool IsBreakEnabledduringNeutral()
+        public bool IsBreakEnabledDuringNeutral()
         {
             int state = 0;
             C_TalonSRX_GetBrakeIsEnabled(m_impl, ref state);
             return state != 0;
+        }
+
+        public void ConfigEncoderCodesPerRev(int codesPerRev)
+        {
+            m_codesPerRev = codesPerRev;
+            SetParam(ParamID.eNumberEncoderCPR, m_codesPerRev);
+        }
+
+        public void ConfigPotentiometerTurns(int turns)
+        {
+            m_numPotTurns = turns;
+            SetParam(ParamID.eNumberPotTurns, m_numPotTurns);
         }
 
         public double GetTemperature()
@@ -280,19 +388,20 @@ namespace WPILib
         {
             int pos = 0;
             C_TalonSRX_GetSensorPosition(m_impl, ref pos);
-            return pos;
+            return ScaleNativeUnitsToRotations(m_feedbackDevice, pos);
         }
 
         public void SetPosition(double pos)
         {
-            SetParam(ParamID.eSensorPosition, pos);
+            int nativePos = ScaleRotationsToNativeUnits(m_feedbackDevice, pos);
+            SetParam(ParamID.eSensorPosition, nativePos);
         }
 
         public double GetSpeed()
         {
             int vel = 0;
             C_TalonSRX_GetSensorVelocity(m_impl, ref vel);
-            return vel;
+            return ScaleNativeUnitsToRpm(m_feedbackDevice, vel);
         }
 
         public bool GetForwardLimitOK()
@@ -432,6 +541,7 @@ namespace WPILib
             }
             set
             {
+                m_feedbackDevice = value;
                 C_TalonSRX_SetFeedbackDeviceSelect(m_impl, (int)value);
             }
         }
@@ -640,6 +750,11 @@ namespace WPILib
         [Obsolete("Use VoltageRampRate property instead.")]
         public void SetVoltageRampRate(double rate) { VoltageRampRate = rate; }
 
+        public void SetVoltageCompensationRampRate(double rampRate)
+        {
+            throw new NotImplementedException("Waiting on additions to the HAL");
+        }
+
         public NeutralMode ConfigNeutralMode
         {
             set
@@ -776,8 +891,8 @@ namespace WPILib
             }
             set
             {
-
-                SetParam(ParamID.eProfileParamSoftLimitForThreshold, value);
+                double nativeLimitPos = ScaleRotationsToNativeUnits(m_feedbackDevice, value);
+                SetParam(ParamID.eProfileParamSoftLimitForThreshold, nativeLimitPos);
             }
         }
 
@@ -796,7 +911,6 @@ namespace WPILib
             }
             set
             {
-
                 SetParam(ParamID.eProfileParamSoftLimitForEnable, value ? 1 : 0);
             }
         }
@@ -814,8 +928,8 @@ namespace WPILib
             }
             set
             {
-
-                SetParam(ParamID.eProfileParamSoftLimitRevThreshold, value);
+                double nativeLimitPos = ScaleRotationsToNativeUnits(m_feedbackDevice, value);
+                SetParam(ParamID.eProfileParamSoftLimitRevThreshold, nativeLimitPos);
             }
         }
 
@@ -834,7 +948,6 @@ namespace WPILib
             }
             set
             {
-
                 SetParam(ParamID.eProfileParamSoftLimitRevEnable, value ? 1 : 0);
             }
         }
@@ -879,6 +992,39 @@ namespace WPILib
             {
                 SetParam(ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, value ? 0 : 1);
             }
+        }
+
+        public void ConfigMaxOutputVoltage(double voltage)
+        {
+            ConfigPeakOutputVoltage(voltage, -voltage);
+        }
+
+        public void ConfigPeakOutputVoltage(double forwardVoltage, double reverseVoltage)
+        {
+            if (forwardVoltage > 12)
+                forwardVoltage = 12;
+            else if (forwardVoltage < 0)
+                forwardVoltage = 0;
+            if (reverseVoltage > 0)
+                reverseVoltage = 0;
+            else if (reverseVoltage < -12)
+                reverseVoltage = -12;
+            SetParam(ParamID.ePeakPosOutput, 1023 * forwardVoltage / 12.0);
+            SetParam(ParamID.ePeakNegOutput, 1023 * reverseVoltage / 12.0);
+        }
+
+        public void ConfigNominalOutputVoltage(double forwardVoltage, double reverseVoltage)
+        {
+            if (forwardVoltage > 12)
+                forwardVoltage = 12;
+            else if (forwardVoltage < 0)
+                forwardVoltage = 0;
+            if (reverseVoltage > 0)
+                reverseVoltage = 0;
+            else if (reverseVoltage < -12)
+                reverseVoltage = -12;
+            SetParam(ParamID.eNominalPosOutput, 1023 * forwardVoltage / 12.0);
+            SetParam(ParamID.eNominalNegOutput, 1023 * reverseVoltage / 12.0);
         }
 
 
@@ -1089,11 +1235,19 @@ namespace WPILib
                         status = C_TalonSRX_SetDemand(m_impl, Inverted ? -volts : volts);
                         break;
                     case ControlMode.Position:
+                        status = C_TalonSRX_SetDemand(m_impl, ScaleRotationsToNativeUnits(m_feedbackDevice, value));
+                        break;
                     case ControlMode.Speed:
+                        status = C_TalonSRX_SetDemand(m_impl,
+                            ScaleVelocityToNativeUnits(m_feedbackDevice, (Inverted ? -value : value)));
+                        break;
                     case ControlMode.Follower:
-                        status = C_TalonSRX_SetDemand(m_impl, Inverted ? (int)-value : (int)value);
+                        status = C_TalonSRX_SetDemand(m_impl, (int)value);
                         break;
                     case ControlMode.Current:
+                        double milliamperes = (Inverted ? -value : value) * 1000.0;
+                        status = C_TalonSRX_SetDemand(m_impl, (int)milliamperes);
+                        break;
                     default:
                         status = CTR_Code.CTR_OKAY;
                         break;
@@ -1107,31 +1261,168 @@ namespace WPILib
 
         public double Get()
         {
+            double retVal = 0.0;
             int value = 0;
             switch (m_controlMode)
             {
                 case ControlMode.Voltage:
-                    return GetOutputVoltage();
-                case ControlMode.Position:
-                    C_TalonSRX_GetSensorPosition(m_impl, ref value);
-                    return value;
+                    retVal = GetOutputVoltage();
+                    break;
+                case ControlMode.Current:
+                    retVal = GetOutputCurrent();
+                    break;
                 case ControlMode.Speed:
                     C_TalonSRX_GetSensorVelocity(m_impl, ref value);
-                    return value;
-                case ControlMode.Current:
-                    return GetOutputCurrent();
+                    retVal = ScaleNativeUnitsToRpm(m_feedbackDevice, value);
+                    break;
+                case ControlMode.Position:
+                    C_TalonSRX_GetSensorPosition(m_impl, ref value);
+                    retVal = ScaleNativeUnitsToRotations(m_feedbackDevice, value);
+                    break;
                 case ControlMode.Follower:
                 case ControlMode.PercentVbus:
                 default:
                     C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
-                    return value / 1023.0;
+                    retVal = (double)value / 1023.0;
+                    break;
             }
+            return retVal;
         }
 
         [Obsolete("This is only here to make CAN Jaguars happy")]
         public void Set(double value, byte syncGroup)
         {
             Set(value);
+        }
+
+        double GetNativeUnitsPerRotationScalar(FeedbackDevice devToLookup)
+        {
+            double retVal = 0;
+            bool scalingAvail = false;
+            switch (devToLookup)
+            {
+                case FeedbackDevice.QuadEncoder:
+                    int qeiPulsePerCount = 4;
+                    switch (m_feedbackDevice)
+                    {
+                        case FeedbackDevice.CtreMagEncoder_Relative:
+                        case FeedbackDevice.CtreMagEncoder_Absolute:
+                            retVal = NativePwdUnitsPerRotation;
+                            scalingAvail = true;
+                            break;
+                        case FeedbackDevice.EncoderRising:
+                        case FeedbackDevice.EncoderFalling:
+                            qeiPulsePerCount = 1;
+                            break;
+
+                    }
+                    if (scalingAvail)
+                    {
+
+                    }
+                    else
+                    {
+                        if (0 == m_codesPerRev)
+                        {
+
+                        }
+                        else
+                        {
+                            retVal = 4 * m_codesPerRev;
+                            scalingAvail = true;
+                        }
+                    }
+                    break;
+                case FeedbackDevice.AnalogPotentiometer:
+                case FeedbackDevice.AnalogEncoder:
+                    if (0 == m_numPotTurns)
+                    {
+
+                    }
+                    else
+                    {
+                        retVal = (double)NativeAdcUnitsPerRotation / m_numPotTurns;
+                        scalingAvail = true;
+                    }
+                    break;
+                case FeedbackDevice.EncoderRising:
+                case FeedbackDevice.EncoderFalling:
+                    if (0 == m_codesPerRev)
+                    {
+
+                    }
+                    else
+                    {
+                        retVal = 1 * m_codesPerRev;
+                        scalingAvail = true;
+                    }
+                    break;
+                case FeedbackDevice.CtreMagEncoder_Relative:
+                case FeedbackDevice.CtreMagEncoder_Absolute:
+                case FeedbackDevice.PulseWidth:
+                    retVal = NativePwdUnitsPerRotation;
+                    scalingAvail = true;
+                    break;
+            }
+            return !scalingAvail ? 0 : retVal;
+        }
+
+        int ScaleRotationsToNativeUnits(FeedbackDevice devToLookup, double fullRotations)
+        {
+            int retVal = (int)fullRotations;
+            double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
+            if (scalar > 0)
+            {
+                retVal = (int)(fullRotations * scalar);
+            }
+            return retVal;
+        }
+
+        int ScaleVelocityToNativeUnits(FeedbackDevice devToLookup, double rpm)
+        {
+            int retVal = (int)rpm;
+            double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
+            if (scalar > 0)
+            {
+                retVal = (int)(rpm * MinutesPer100msUnits * scalar);
+            }
+            return retVal;
+        }
+
+        double ScaleNativeUnitsToRotations(FeedbackDevice devToLookup, int nativePos)
+        {
+            double retVal = (double)nativePos;
+            double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
+            if (scalar > 0)
+            {
+                retVal = ((double)nativePos) / scalar;
+            }
+            return retVal;
+        }
+
+        double ScaleNativeUnitsToRpm(FeedbackDevice devToLookup, long nativeVel)
+        {
+            double retVal = (double)nativeVel;
+            double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
+            if (scalar > 0)
+            {
+                retVal = ((double)nativeVel) / (scalar * MinutesPer100msUnits);
+            }
+            return retVal;
+        }
+
+        public void EnableZeroSensorPositionOnIndex(bool enable, bool risingEdge)
+        {
+            if (enable)
+            {
+                SetParam(ParamID.eQuadIdxPolarity, risingEdge ? 1 : 0);
+                SetParam(ParamID.eClearPositionOnIdx, 1);
+            }
+            else
+            {
+                SetParam(ParamID.eClearPositionOnIdx, 0);
+                SetParam(ParamID.eQuadIdxPolarity, risingEdge ? 1 : 0);
+            }
         }
 
         public void Reset()
