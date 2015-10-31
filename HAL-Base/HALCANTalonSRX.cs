@@ -110,6 +110,30 @@ namespace HAL_Base
             eSettingsChanged = 90,
             eQuadFilterEn = 91,
             ePidIaccum = 93,
+            eStatus1FrameRate = 94, // TALON_Status_1_General_10ms_t
+            eStatus2FrameRate = 95, // TALON_Status_2_Feedback_20ms_t
+            eStatus3FrameRate = 96, // TALON_Status_3_Enc_100ms_t
+            eStatus4FrameRate = 97, // TALON_Status_4_AinTempVbat_100ms_t
+            eStatus6FrameRate = 98, // TALON_Status_6_Eol_t
+            eStatus7FrameRate = 99, // TALON_Status_7_Debug_200ms_t
+            eClearPositionOnIdx = 100,
+            //reserved,
+            //reserved,
+            //reserved,
+            ePeakPosOutput = 104,
+            eNominalPosOutput = 105,
+            ePeakNegOutput = 106,
+            eNominalNegOutput = 107,
+            eQuadIdxPolarity = 108,
+            eStatus8FrameRate = 109, // TALON_Status_8_PulseWid_100ms_t
+            eAllowPosOverflow = 110,
+            eProfileParamSlot0_AllowableClosedLoopErr = 111,
+            eNumberPotTurns = 112,
+            eNumberEncoderCPR = 113,
+            ePwdPosition = 114,
+            eAinPosition = 115,
+            eProfileParamVcompRate = 116,
+            eProfileParamSlot1_AllowableClosedLoopErr = 117,
         }
     }
 }
