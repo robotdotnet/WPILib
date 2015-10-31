@@ -17,6 +17,9 @@ namespace WPILib
     public class CANTalon : IMotorSafety, ICANSpeedController, ITableListener, IPIDOutput, IPIDSource
     {
         private readonly MotorSafetyHelper m_safetyHelper;
+        /// <summary>
+        /// The current feedback value being used.
+        /// </summary>
         protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         /// <summary>
@@ -24,10 +27,25 @@ namespace WPILib
         /// </summary>
         public enum FeedbackDevice
         {
+            /// <summary>
+            /// A quadrature encoder.
+            /// </summary>
             QuadEncoder = 0,
+            /// <summary>
+            /// An analog potentiometer.
+            /// </summary>
             AnalogPotentiometer = 2,
+            /// <summary>
+            /// An analog encoder.
+            /// </summary>
             AnalogEncoder = 3,
+            /// <summary>
+            /// An encoder that only reports when it hits a rising edge.
+            /// </summary>
             EncoderRising = 4,
+            /// <summary>
+            /// An encoder that only reports when it hits a falling edge.
+            /// </summary>
             EncoderFalling = 5
         }
 
@@ -53,7 +71,11 @@ namespace WPILib
         public bool Inverted { get; set; }
 
 
-
+        /// <summary>
+        /// Constructs a CANTalon object.
+        /// </summary>
+        /// <param name="deviceNumber">The id of the Talon SRX this object will communicate with.</param>
+        /// <param name="controlPeriodMs">The update period to the Talon SRX.  Defaults to 10ms.</param>
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
             DeviceID = deviceNumber;
@@ -67,6 +89,9 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
+        /// <summary>
+        /// Disposes of the internal resources used to connect to the Talon SRX.
+        /// </summary>
         public void Dispose()
         {
             C_TalonSRX_Destroy(m_impl);
@@ -107,6 +132,9 @@ namespace WPILib
                 CheckStatus((int)errorCode);
         }
 
+        /// <summary>
+        /// Deletes the internal resources that connect to the Talon SRX.  Use the <see cref="Dispose"/> method instead.
+        /// </summary>
         [Obsolete("Use the Dispose method or a using block instead of Delete")]
         public void Delete()
         {
@@ -123,6 +151,10 @@ namespace WPILib
             C_TalonSRX_SetRevMotDuringCloseLoopEn(m_impl, flip ? 1 : 0);
         }
 
+        /// <summary>
+        /// Gets the current encoder position.
+        /// </summary>
+        /// <returns>The current encoder position.</returns>
         public int GetEncoderPosition()
         {
             int pos = 0;
@@ -130,6 +162,10 @@ namespace WPILib
             return pos;
         }
 
+        /// <summary>
+        /// Gets the current encoder velocity.
+        /// </summary>
+        /// <returns>The current encoder velocity</returns>
         public int GetEncoderVelocity()
         {
             int vel = 0;
@@ -273,6 +309,10 @@ namespace WPILib
             return (softLim == 0 && limSwitch == 0);
         }
 
+        /// <summary>
+        /// Gets the faults currently on this Talon SRX.
+        /// </summary>
+        /// <returns>The faults currently triggered.</returns>
         public Faults GetFaults()
         {
             Faults retVal = 0;
@@ -1112,6 +1152,7 @@ namespace WPILib
                 CheckStatus((int)status);
         }
 
+        /// <inheritdoc/>
         public void Disable()
         {
             ControlEnabled = false;

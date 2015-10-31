@@ -70,12 +70,18 @@ namespace WPILib.Interfaces
     /// </summary>
     public enum LimitMode
     {
-        ///Only use switches for limits
+        /// <summary>
+        /// Only use switches for limits
+        /// </summary>
         SwitchInputsOnly = 0,
-        ///Use both switches and soft limits
+        /// <summary>
+        /// Use both switches and soft limits
+        /// </summary>
         SoftPositionLimits = 1,
         /* SRX extensions */
-        ///Disable switches and disable soft limits
+        /// <summary>
+        /// Disable switches and disable soft limits.  Only valid for methods on <see cref="CANTalon"/> objects.
+        /// </summary>
         SrxDisableSwitchInputs = 2,
     };
 

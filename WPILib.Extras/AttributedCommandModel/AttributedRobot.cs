@@ -9,20 +9,32 @@ using System.Collections.ObjectModel;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
+    /// <summary>
+    /// The AttributedRobot class.  Derive from this class to use the Attributed Command Model
+    /// </summary>
     public class AttributedRobot : IterativeRobot
     {
         private readonly ReflectionContext reflectionContext;
 
         private readonly List<KeyValuePair<Subsystem, string>> subsystems = new List<KeyValuePair<Subsystem, string>>();
 
+        /// <summary>
+        /// The subsystems created when the robot object was initialized.
+        /// </summary>
         public ICollection<Subsystem> Subsystems => new ReadOnlyCollection<Subsystem>(subsystems.Select(pair => pair.Key).ToList());
 
         private readonly List<Button> buttons = new List<Button>();
 
+        /// <summary>
+        /// The Button objects created when the robot was initialized.
+        /// </summary>
         public ICollection<Button> Buttons => buttons;
 
         private readonly IDictionary<MatchPhase, IList<Command>> phaseCommands = new Dictionary<MatchPhase, IList<Command>>();
 
+        /// <summary>
+        /// Commands sorted by the phase that they will start.
+        /// </summary>
         public IReadOnlyDictionary<MatchPhase, IList<Command>> PhaseCommands
         {
             get
@@ -32,16 +44,29 @@ namespace WPILib.Extras.AttributedCommandModel
             }
         }
 
+        /// <summary>
+        /// Creates an <see cref="AttributedRobot"/> with a <see cref="ReflectionContext"/> object to find types through.
+        /// </summary>
+        /// <param name="reflectionContext">The context to find types through.</param>
+        /// <remarks>
+        /// This constructor only needed when using commands from a library that you cannot edit the source code for.  Otherwise use the other constructor.
+        /// </remarks>
         public AttributedRobot(ReflectionContext reflectionContext)
         {
             this.reflectionContext = reflectionContext;
         }
 
+        /// <summary>
+        /// Constructs an <see cref="AttributedRobot"/> that will automatically load <see cref="Subsystem"/>s and <see cref="Command"/>s.
+        /// </summary>
         public AttributedRobot()
             :this(null)
         {
         }
 
+        /// <summary>
+        /// Initializes the <see cref="AttributedRobot"/> and loads and sets up all of the subsystems and commands as they are specified.
+        /// </summary>
         public sealed override void RobotInit()
         {
             var assemblies = GetAssemblies();
@@ -72,6 +97,9 @@ namespace WPILib.Extras.AttributedCommandModel
             RobotInitCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="RobotInit"/>.
+        /// </summary>
         protected virtual void RobotInitCore()
         {
 
@@ -189,75 +217,123 @@ namespace WPILib.Extras.AttributedCommandModel
             }
         }
 
+        /// <summary>
+        /// Starts the commands that were specified to start in autonomous mode.
+        /// </summary>
         public sealed override void AutonomousInit()
         {
             StartPhaseCommands(MatchPhase.Autonomous);
             AutonomousInitCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="AutonomousInit"/>.
+        /// </summary>
         protected virtual void AutonomousInitCore()
         { }
 
+        /// <summary>
+        /// Runs the <see cref="Scheduler"/> one step.
+        /// </summary>
         public sealed override void AutonomousPeriodic()
         {
             Scheduler.Instance.Run();
             AutonomousPeriodicCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="AutonomousPeriodic"/>.
+        /// </summary>
         protected virtual void AutonomousPeriodicCore()
         { }
 
+        /// <summary>
+        /// Starts the commands that were specified to start in teleoperated mode.
+        /// </summary>
         public sealed override void TeleopInit()
         {
             StartPhaseCommands(MatchPhase.Teleoperated);
             TeleopInitCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="TeleopInit"/>.
+        /// </summary>
         protected virtual void TeleopInitCore()
         { }
 
+        /// <summary>
+        /// Runs the <see cref="Scheduler"/> one step.
+        /// </summary>
         public sealed override void TeleopPeriodic()
         {
             Scheduler.Instance.Run();
             TeleopPeriodicCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="TeleopPeriodic"/>.
+        /// </summary>
         protected virtual void TeleopPeriodicCore()
         { }
 
+        /// <summary>
+        /// Starts the commands that were specified to start in disabled mode.
+        /// </summary>
         public sealed override void DisabledInit()
         {
             StartPhaseCommands(MatchPhase.Disabled);
             DisabledInitCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="DisabledInit"/>.
+        /// </summary>
         protected virtual void DisabledInitCore()
         { }
 
+        /// <summary>
+        /// Runs the <see cref="Scheduler"/> one step.
+        /// </summary>
         public sealed override void DisabledPeriodic()
         {
             Scheduler.Instance.Run();
             DisabledPeriodicCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="DisabledPeriodic"/>.
+        /// </summary>
         protected virtual void DisabledPeriodicCore()
         { }
 
+        /// <summary>
+        /// Starts the commands that were specified to start in test mode.
+        /// </summary>
         public sealed override void TestInit()
         {
             StartPhaseCommands(MatchPhase.Test);
             TestInitCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="TestInit"/>.
+        /// </summary>
         protected virtual void TestInitCore()
         { }
 
+        /// <summary>
+        /// Runs the <see cref="Scheduler"/> one step.
+        /// </summary>
         public sealed override void TestPeriodic()
         {
             Scheduler.Instance.Run();
             TestPeriodicCore();
         }
 
+        /// <summary>
+        /// Override this method to add additional code that executes after <see cref="TestPeriodic"/>.
+        /// </summary>
         protected virtual void TestPeriodicCore()
         { }
 

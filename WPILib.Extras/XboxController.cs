@@ -1,4 +1,6 @@
-﻿namespace WPILib.Extras
+﻿using System;
+
+namespace WPILib.Extras
 {
     /// <summary>
     /// Handle input from Xbox 360 or Xbox One controllers connected to the Driver Station.
@@ -29,6 +31,42 @@
         /// Get Y Button
         /// </summary>
         public new bool GetY() => GetRawButton(4);
+
+        /// <summary>
+        /// Get the X axis from one of the joysticks depending on the hand designated.
+        /// </summary>
+        /// <param name="hand">The side of the controller to use.</param>
+        /// <returns>The value of the X axis from this hand.</returns>
+        public override double GetX(Hand hand)
+        {
+            switch (hand)
+            {
+                case Hand.Left:
+                    return GetLeftXAxis();
+                case Hand.Right:
+                    return GetRightXAxis();
+                default:
+                    throw new ArgumentException(nameof(hand));
+            }
+        }
+
+        /// <summary>
+        /// Get the Y axis from one of the joysticks depending on the hand designated.
+        /// </summary>
+        /// <param name="hand">The side of the controller to use.</param>
+        /// <returns>The value of the Y axis from this hand.</returns>
+        public override double GetY(Hand hand)
+        {
+            switch (hand)
+            {
+                case Hand.Left:
+                    return GetLeftYAxis();
+                case Hand.Right:
+                    return GetRightYAxis();
+                default:
+                    throw new ArgumentException(nameof(hand));
+            }
+        }
 
         /// <summary>
         /// Get Left Stick Button 
