@@ -26,6 +26,11 @@ namespace WPILib.Tests
             return this;
         }
 
+        public HashSet<string> GetKeys(EntryFlags types)
+        {
+            throw new NotImplementedException();
+        }
+
         public HashSet<string> GetKeys(int types)
         {
             throw new NotImplementedException();

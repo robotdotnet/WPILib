@@ -38,7 +38,7 @@ namespace WPILib.Buttons
         /// <returns>Whether or not the trigger condition is active.</returns>
         public override bool Get()
         {
-            return SourceTable.IsConnected() && SourceTable.GetBoolean(Field, false);
+            return SourceTable.IsConnected && SourceTable.GetBoolean(Field, false);
         }
     }
 }
