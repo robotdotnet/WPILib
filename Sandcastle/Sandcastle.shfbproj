@@ -14,7 +14,7 @@
     <Name>Sandcastle</Name>
     <!-- SHFB properties -->
     <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
-    <OutputPath>.\Help\</OutputPath>
+    <OutputPath>Help\</OutputPath>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
     <TransformComponentArguments>
@@ -29,6 +29,7 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\WPILib\WPILib.csproj" />
       <DocumentationSource sourceFile="..\WPILib.Extras\WPILib.Extras.csproj" />
+      <DocumentationSource sourceFile="..\HAL-Simulation\HAL-Simulation.csproj" />
     </DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -41,6 +42,7 @@
         <configuration />
       </PlugInConfig>
     </PlugInConfigurations>
+    <ComponentPath>..\packages\EWSoftware.SHFB.NETFramework.4.6\tools\Data\.NETFramework\</ComponentPath>
     <ComponentConfigurations>
       <ComponentConfig id="API Token Resolution" enabled="True">
         <component id="API Token Resolution">{@TokenFiles}
@@ -53,7 +55,7 @@
     Include namespaces (false by default)
     Namespaces comments filename ("Namespaces" if not specified or empty)
     Output folder (current folder if not specified or empty) -->
-          <output includeNamespaces="true" namespacesFile="Namespaces" folder="{@OutputFolder}" />
+          <output includeNamespaces="false" namespacesFile="Namespaces" folder="{@OutputFolder}" />
         </component>
       </ComponentConfig>
     </ComponentConfigurations>
@@ -87,6 +89,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- NOTE: Update the version number in the path (YYYY.M.D.R) to match the package version -->
+    <SHFBROOT Condition=" '$(SHFBROOT)' == '' ">$(MSBuildThisFileDirectory)..\packages\EWSoftware.SHFB.2015.10.10.0\Tools\</SHFBROOT>
+  </PropertyGroup>
   <ItemGroup>
     <Folder Include="Content" />
     <Folder Include="Content\VersionHistory" />
@@ -115,6 +121,10 @@
       <Project>{cadad4a2-d72a-4906-a4f0-2fa2884f3349}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj">
+      <Name>HAL-Simulation</Name>
+      <Project>{471A8C6B-AA80-492A-85A3-3EF67FC70988}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NetworkTables">
@@ -128,11 +138,9 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)' == 'AppVeyor' ">
-    <OutputPath>bin\AppVeyor\</OutputPath>
+    <PostBuildEvent>xcopy Help\HAL-Simulation.xml ..\HAL-Simulation\Output /y
+xcopy Help\HAL-Simulation.xml ..\WPILib\Output /y
+xcopy Help\WPILib.xml ..\WPILib\Output /y
+xcopy Help\WPILib.Extras.xml ..\WPILib.Extras\Output /y</PostBuildEvent><RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 </Project>
