@@ -752,7 +752,12 @@ namespace WPILib
 
         public void SetVoltageCompensationRampRate(double rampRate)
         {
-            throw new NotImplementedException("Waiting on additions to the HAL");
+            SetParam(ParamID.eProfileParamVcompRate, rampRate / 1000);
+        }
+
+        public double GetVoltageCompensationRampRate()
+        {
+            return GetParam(ParamID.eProfileParamVcompRate);
         }
 
         public NeutralMode ConfigNeutralMode
