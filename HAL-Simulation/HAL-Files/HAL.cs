@@ -147,7 +147,6 @@ namespace HAL_Simulator
         /// </summary>
         /// <param name="sem"></param>
         [CalledSimFunction]
-        //Replaced
         public static void HALSetNewDataSem(IntPtr sem)
         {
             HALNewDataSem = sem;
@@ -159,7 +158,6 @@ namespace HAL_Simulator
         /// <param name="code">The Error Code</param>
         /// <returns>IntPtr containing the Error message</returns>
         [CalledSimFunction]
-        //Replaced
         public static IntPtr getHALErrorMessage(int code)
         {
             string retVal = "";
@@ -245,7 +243,6 @@ namespace HAL_Simulator
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
-        //Replaced
         public static ushort getFPGAVersion(ref int status)
         {
             status = 0;

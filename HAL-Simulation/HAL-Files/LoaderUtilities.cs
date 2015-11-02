@@ -11,7 +11,8 @@ namespace HAL_Simulator
         Windows64,
         Linux32,
         Linux64,
-        RoboRIO
+        ArmLinux,
+        RoboRio
     }
 
     internal static class LoaderUtilities
@@ -30,7 +31,7 @@ namespace HAL_Simulator
                 else
                 {
                     //We need to check for the RIO
-                    return File.Exists("/usr/local/frc/bin/frcRunRobot.sh") ? OsType.RoboRIO : OsType.Linux32;
+                    return File.Exists("/usr/local/frc/bin/frcRunRobot.sh") ? OsType.RoboRio : OsType.Linux32;
                 }
             }
             else
@@ -47,12 +48,12 @@ namespace HAL_Simulator
                 case OsType.Windows32:
                     return true;
                 case OsType.Windows64:
-                    return true;
+                    return false;
                 case OsType.Linux32:
                     return true;
                 case OsType.Linux64:
-                    return true;
-                case OsType.RoboRIO:
+                    return false;
+                case OsType.RoboRio:
                     return false;
                 default:
                     return false;
@@ -81,12 +82,13 @@ namespace HAL_Simulator
                     inputName = "HAL_Simulator.libFRC_NetworkCommunication64.so";
                     outputName = "libFRC_NetworkCommunication.so";
                     break;
-                case OsType.RoboRIO:
+                case OsType.RoboRio:
                     return null;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
+            outputName = Path.GetTempPath() + outputName;
             byte[] bytes = null;
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
             {
@@ -94,18 +96,55 @@ namespace HAL_Simulator
                     return null;
                 bytes = new byte[(int) s.Length];
                 s.Read(bytes, 0, (int) s.Length);
+            }
+            bool isFileSame = true;
 
+            //If file exists
+            if (File.Exists(outputName))
+            {
+                //Load existing file into memory
+                byte[] existingFile = File.ReadAllBytes(outputName);
+                //If files are different length they are different,
+                //and we can automatically assume they are different.
+                if (existingFile.Length != bytes.Length)
+                {
+                    isFileSame = false;
+                }
+                else
+                {
+                    //Otherwise directly compare the files
+                    //I first tried hashing, but that took 1.5-2.0 seconds,
+                    //wheras this took 0.3 seconds.
+                    for (int i = 0; i < existingFile.Length; i++)
+                    {
+                        if (bytes[i] != existingFile[i])
+                        {
+                            isFileSame = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                isFileSame = false;
+            }
+
+            //If file is different write the new file
+            if (!isFileSame)
+            {
                 if (File.Exists(outputName))
                     File.Delete(outputName);
                 File.WriteAllBytes(outputName, bytes);
             }
+            //Force a garbage collection, since we just wasted about 12 MB of RAM.
+            GC.Collect();
+
             return outputName;
 
         }
 
-        internal static IntPtr LoadLibrary(string dllLoc, OsType type)
+        internal static IntPtr LoadLibrary(string dllLoc, OsType type, out ILibraryLoader loader)
         {
-            ILibraryLoader loader = null;
             switch (type)
             {
                 case OsType.Windows32:
@@ -114,10 +153,13 @@ namespace HAL_Simulator
                     return loader.LoadLibrary(dllLoc);
                 case OsType.Linux32:
                 case OsType.Linux64:
-                case OsType.RoboRIO:
                     loader = new LinuxLibraryLoader();
                     return loader.LoadLibrary(dllLoc);
+                case OsType.RoboRio:
+                    loader = new RoboRioLibraryLoader();
+                    return loader.LoadLibrary(dllLoc);
                 default:
+                    loader = null;
                     return IntPtr.Zero;
             }
         }

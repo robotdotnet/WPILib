@@ -82,7 +82,7 @@ namespace HAL_RoboRIO
                 try
                 {
                     //Force OS, since we know we are on Linux and the RIO if this is getting called
-                    ILibraryLoader loader = new RoboRIOLibraryLoader();
+                    ILibraryLoader loader = new RoboRioLibraryLoader();
 
                     //Extract our library
                     string loadedPath = ExtractLibrary();

@@ -63,7 +63,7 @@ namespace HAL_Base
         private static extern IntPtr dlerror();
     }
 
-    public class RoboRIOLibraryLoader : ILibraryLoader
+    public class RoboRioLibraryLoader : ILibraryLoader
     {
         IntPtr ILibraryLoader.LoadLibrary(string filename)
         {
