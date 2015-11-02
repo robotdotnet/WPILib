@@ -4,6 +4,8 @@ namespace HAL_Simulator.Data
 {
     public class CanTalonData : NotifyDataBase
     {
+        internal CanTalonData() { }
+
         private double m_eProfileParamSlot0_P = 0.0;
         private double m_eProfileParamSlot0_I = 0.0;
         private double m_eProfileParamSlot0_D = 0.0;

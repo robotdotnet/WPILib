@@ -14,7 +14,7 @@
             TotalEnergy = 0.0;
         }
 
-        public PDPData()
+        internal PDPData()
         {
             for (int i = 0; i < Current.Length; i++)
             {

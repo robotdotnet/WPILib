@@ -5,6 +5,8 @@ namespace HAL_Simulator.Data
 {
     public class CounterData : EncoderData
     {
+        internal CounterData() { }
+
         private Mode mode = 0;
         private int averageSize = 0;
 

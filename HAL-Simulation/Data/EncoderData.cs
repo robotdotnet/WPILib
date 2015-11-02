@@ -16,6 +16,8 @@ namespace HAL_Simulator.Data
 
         public Dictionary<string, dynamic> Config = null;
 
+        internal EncoderData() { }
+
         public override void ResetData()
         {
             m_hasSource = false;

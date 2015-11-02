@@ -4,6 +4,8 @@
     {
         private bool m_initialized = false;
 
+        internal MXPData() { }
+
         public override void ResetData()
         {
             m_initialized = false;

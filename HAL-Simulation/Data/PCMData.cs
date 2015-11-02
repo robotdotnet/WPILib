@@ -1,8 +1,10 @@
-﻿namespace HAL_Simulator.Data
+﻿using System.Collections.Generic;
+
+namespace HAL_Simulator.Data
 {
     public class PCMData : DataBase
     {
-        public SolenoidData[] Solenoids { get; } = new SolenoidData[8];
+        public IReadOnlyList<SolenoidData> Solenoids { get; }
         public CompressorData Compressor { get; } = new CompressorData();
 
 
@@ -15,12 +17,16 @@
             Compressor.ResetData();
         }
 
-        public PCMData()
+        internal PCMData()
         {
-            for (int i = 0; i < Solenoids.Length; i++)
+            List<SolenoidData> data = new List<SolenoidData>();
+
+            for (int i = 0; i < 8; i++)
             {
-                Solenoids[i] = new SolenoidData();
+                data.Add(new SolenoidData());
             }
+            Solenoids = data.AsReadOnly();
+
             Compressor.ResetData();
         }
     }
@@ -29,6 +35,8 @@
     {
         private bool m_initialized = false;
         private bool m_solenoidValue = false;
+
+        internal SolenoidData() { }
 
 
         public override void ResetData()
@@ -69,6 +77,8 @@
         public bool CloseLoopEnabled { get; internal set; } = true;
         public bool PressureSwitch { get; set; } = false;
         public float Current { get; set; } = 0.0f;
+
+        internal CompressorData() { }
 
         public override void ResetData()
         {

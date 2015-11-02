@@ -1,5 +1,15 @@
 ﻿namespace HAL_Simulator.Data
 {
+    public enum ProgramState
+    {
+        None,
+        Starting,
+        Disabled,
+        Autonomous,
+        Teleop,
+        Test
+    }
+
     public class GlobalData : DataBase
     {
         private bool m_programStarted = false;
@@ -8,6 +18,8 @@
 
         private ushort m_pwmLoopTiming = 40;
 
+        internal GlobalData() { }
+
         public override void ResetData()
         {
             m_programStarted = false;
@@ -15,6 +27,20 @@
             m_analogSampleRate = HALAnalog.DefaultSampleRate;
             m_pwmLoopTiming = 40;
             DigitalPWMRate = 0;
+            m_programState = ProgramState.None;
+        }
+
+        private ProgramState m_programState;
+
+        public ProgramState UserProgramState
+        {
+            get { return m_programState; }
+            set
+            {
+                if (m_programState == value) return;
+                m_programState = value;
+                OnPropertyChanged(value);
+            }
         }
 
         public bool ProgramStarted

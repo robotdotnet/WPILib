@@ -11,6 +11,8 @@ namespace HAL_Simulator.Data
         private double m_y = 0;
         private double m_z = 1;
 
+        internal AccelerometerData() { }
+
         public bool HasSource
         {
             get { return m_hasSource; }

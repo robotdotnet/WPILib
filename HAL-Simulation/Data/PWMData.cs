@@ -20,6 +20,8 @@
         private uint m_periodScale = 0;
         private bool m_zeroLatch = false;
 
+        internal PWMData() { }
+
         public override void ResetData()
         {
             m_initialized = false;

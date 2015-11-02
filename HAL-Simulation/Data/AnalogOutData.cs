@@ -5,6 +5,8 @@
         private double m_voltage = 0.0;
         private bool m_initialized = false;
 
+        internal AnalogOutData() { }
+
         public override void ResetData()
         {
             m_voltage = 0.0;

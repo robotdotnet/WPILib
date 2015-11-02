@@ -23,7 +23,7 @@ namespace WPILib.Tests
             return new Solenoid(m_module, 0);
         }
 
-        private SolenoidData[] GetSolenoids()
+        private IReadOnlyList<SolenoidData> GetSolenoids()
         {
             return SimData.GetPCM(m_module).Solenoids;
         }

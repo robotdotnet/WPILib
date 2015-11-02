@@ -296,7 +296,7 @@ namespace HAL_Simulator
         public static int HALSetErrorData(string errors, int errorsLength, int wait_ms)
         {
             //TODO: Logger 
-            halData["error_data"] = errors;
+            ErrorData = errors;
             return 0;
         }
 
@@ -318,10 +318,10 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
         {
-            int data = (int) HalData["alliance_station"];
+            int data = (int) DriverStation.AllianceStation;
             if (data < 6 && data >= 0)
             {
-                allianceStation = (HALAllianceStationID) data;
+                allianceStation = DriverStation.AllianceStation;
             }
             else
             {
@@ -334,7 +334,7 @@ namespace HAL_Simulator
         public static int HALGetJoystickAxes(byte joystickNum, ref HALJoystickAxes axes)
         {
             axes.axes = new HALJoystickAxesArray();
-            var joyData = halData["joysticks"][joystickNum]["axes"];
+            var joyData = DriverStation.Joysticks[joystickNum].Axes;
             for (short i = 0; i < joyData.Length; i++)
             {
                 int tmp = 0;
@@ -352,7 +352,7 @@ namespace HAL_Simulator
         public static int HALGetJoystickPOVs(byte joystickNum, ref HALJoystickPOVs povs)
         {
             povs.povs = new HALJoystickPOVArray();
-            var povData = halData["joysticks"][joystickNum]["povs"];
+            var povData = DriverStation.Joysticks[joystickNum].Povs;
             for (int i = 0; i < povData.Length; i++)
             {
                 povs.povs[i] = (short)povData[i];
@@ -364,7 +364,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons)
         {
-            var b = halData["joysticks"][joystickNum]["buttons"];
+            var b = DriverStation.Joysticks[joystickNum].Buttons;
             uint total = 0;
             for (int i = 1; i < b.Length; i++)
             {
@@ -379,40 +379,40 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
         {
-            var stick = halData["joysticks"][joystickNum];
-            desc.isXbox = (byte)(stick["isXbox"]);
-            desc.type = stick["type"];
-            desc.name = stick["name"];
-            desc.axisCount = stick["axisCount"];
-            desc.buttonCount = stick["buttonCount"];
+            var stick = DriverStation.Joysticks[joystickNum];
+            desc.isXbox = (byte)(stick.IsXbox);
+            desc.type = stick.Type;
+            desc.name = stick.Name;
+            desc.axisCount = (byte)stick.Axes.Length;
+            desc.buttonCount = (byte)(stick.Buttons.Length - 1);
             return 0;
         }
 
         [CalledSimFunction]
         public static int HALGetJoystickIsXbox(byte joystickNum)
         {
-            var stick = halData["joysticks"][joystickNum];
-            return (int)stick["isXbox"];
+            var stick = DriverStation.Joysticks[joystickNum];
+            return stick.IsXbox;
         }
 
         [CalledSimFunction]
         public static int HALGetJoystickType(byte joystickNum)
         {
-            var stick = halData["joysticks"][joystickNum];
-            return (int)stick["type"];
+            var stick = DriverStation.Joysticks[joystickNum];
+            return stick.Type;
         }
 
         [CalledSimFunction]
         public static IntPtr HALGetJoystickName(byte joystickNum)
         {
-            var stick = halData["joysticks"][joystickNum];
-            return Marshal.StringToHGlobalAnsi(stick["name"]);
+            var stick = DriverStation.Joysticks[joystickNum];
+            return Marshal.StringToHGlobalAnsi(stick.Name);
         }
 
         [CalledSimFunction]
         public static int HALGetJoystickAxisType(byte joystickNum, byte axis)
         {
-            var stick = halData["joysticks"][joystickNum];
+            var stick = DriverStation.Joysticks[joystickNum];
             return 0;
         }
 
@@ -420,8 +420,8 @@ namespace HAL_Simulator
         public static int HALSetJoystickOutputs(byte joystickNum, uint outputs, ushort leftRumble,
             ushort rightRumble)
         {
-            halData["joysticks"][joystickNum]["leftRumble"] = leftRumble;
-            halData["joysticks"][joystickNum]["rightRumble"] = rightRumble;
+            DriverStation.Joysticks[joystickNum].LeftRumble = leftRumble;
+            DriverStation.Joysticks[joystickNum].RightRumble = rightRumble;
             //halData[]TODO:Outputs
             return 0;
         }
@@ -437,11 +437,11 @@ namespace HAL_Simulator
         public static int HALGetMatchTime(ref float matchTime)
         {
 
-            var matchStart = halData["time"]["match_start"];
+            var matchStart = 0.0;
             //If Enabled
-            if (halData["control"]["enabled"])
+            if (DriverStation.ControlData.Enabled)
             {
-                if (halData["control"]["autonomous"])
+                if (DriverStation.ControlData.Autonomous)
                 {
                     matchTime = (float)(AutonomousTime - (SimHooks.GetFPGATimestamp() - matchStart));
                 }
@@ -483,32 +483,32 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramStarting()
         {
-            halData["user_program_state"] = "starting";
+            SimData.GlobalData.UserProgramState = ProgramState.Starting;
             SimData.GlobalData.ProgramStarted = true;
         }
 
         [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramDisabled()
         {
-            halData["user_program_state"] = "disabled";
+            SimData.GlobalData.UserProgramState = ProgramState.Disabled;
         }
 
         [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramAutonomous()
         {
-            halData["user_program_state"] = "autonomous";
+            SimData.GlobalData.UserProgramState = ProgramState.Autonomous;
         }
 
         [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramTeleop()
         {
-            halData["user_program_state"] = "teleop";
+            SimData.GlobalData.UserProgramState = ProgramState.Teleop;
         }
 
         [CalledSimFunction]
         public static void HALNetworkCommunicationObserveUserProgramTest()
         {
-            halData["user_program_state"] = "test";
+            SimData.GlobalData.UserProgramState = ProgramState.Test;
         }
 
         [CalledSimFunction]
@@ -538,11 +538,11 @@ namespace HAL_Simulator
                     GetPCM(context).Solenoids[instanceNumber].Initialized = true;
                     break;
             }
-            if (!halData["reports"].ContainsKey(resource))
+            if (!Reports.ContainsKey(resource))
             {
-                halData["reports"].Add(resource, new List<dynamic>());
+                Reports.Add(resource, new List<dynamic>());
             }
-            halData["reports"][resource].Add(instanceNumber);
+            Reports[resource].Add(instanceNumber);
 
             return 0;
         }

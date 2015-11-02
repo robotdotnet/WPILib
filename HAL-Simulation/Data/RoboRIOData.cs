@@ -2,6 +2,8 @@
 {
     public class RoboRioData : DataBase
     {
+        internal RoboRioData() { }
+
         public override void ResetData()
         {
             FPGAButton = false;

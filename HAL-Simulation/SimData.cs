@@ -141,9 +141,15 @@ namespace HAL_Simulator
         private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
 
         public static RoboRioData RoboRioData { get; } = new RoboRioData();
-        private static readonly Dictionary<int, PDPData> s_pdp  = new Dictionary<int, PDPData>();
+        private static readonly Dictionary<int, PDPData> s_pdp = new Dictionary<int, PDPData>();
 
         private static readonly Dictionary<int, CanTalonData> s_canTalon = new Dictionary<int, CanTalonData>();
+
+        public static DriverStationData DriverStation { get; } = new DriverStationData();
+
+        public static NotifyDict<byte, dynamic> Reports { get; } = new NotifyDict<byte, dynamic>();
+
+        public static string ErrorData { get; internal set; } = "";
 
         public static CanTalonData GetCanTalon(int id)
         {
@@ -307,7 +313,7 @@ namespace HAL_Simulator
 
 
 
-        
+        /*
         internal static Dictionary<dynamic, dynamic> halData = new Dictionary<dynamic, dynamic>();
 
         /// <summary>
@@ -343,7 +349,8 @@ namespace HAL_Simulator
             halInDataOut = halInData;
             halDSDataOut = halDSData;
         }
-        
+        */
+
         internal static IntPtr HALNewDataSem = IntPtr.Zero;
 
         /// <summary>
@@ -405,20 +412,22 @@ namespace HAL_Simulator
             {
                 pcmData.ResetData();
             }
+            DriverStation.ResetData();
             GlobalData.ProgramStartTime = SimHooks.GetTime();
 
-            
+            /*
             halData.Clear();
             halInData.Clear();
             halDSData.Clear();
+            */
 
-            
+
             if (resetDS)
             {
                 HALNewDataSem = IntPtr.Zero;
             }
 
-            
+            /*
             halData["time"] = new Dictionary<dynamic, dynamic>
             {
                 {"has_source", new IN(false) },
@@ -492,11 +501,12 @@ namespace HAL_Simulator
 
 
             FilterHalData(halData, halInData);
-            
+            */
+
         }
 
-        
 
+        /*
         private static void FilterHalData(Dictionary<dynamic, dynamic> both, Dictionary<dynamic, dynamic> inData)
         {
             List<dynamic> myKeys = both.Keys.ToList();
@@ -611,5 +621,6 @@ namespace HAL_Simulator
                 }
             }
         }
+        */
     }
 }

@@ -15,6 +15,8 @@
         private int m_accumulatorCenter = 0;
         private int m_accumulatorDeadband = 0;
 
+        internal AnalogInData() { }
+
         public override void ResetData()
         {
             m_hasSource = false;

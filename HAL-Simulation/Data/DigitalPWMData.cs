@@ -6,6 +6,8 @@
         private double m_dutyCycle = 0;
         private uint m_pin = 0;
 
+        internal DigitalPWMData() { }
+
         public override void ResetData()
         {
             m_initialized = false;

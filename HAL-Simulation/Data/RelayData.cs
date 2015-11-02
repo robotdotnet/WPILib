@@ -6,6 +6,8 @@
         private bool m_forward = false;
         private bool m_reverse = false;
 
+        internal RelayData() { }
+
         public override void ResetData()
         {
             m_initialized = false;

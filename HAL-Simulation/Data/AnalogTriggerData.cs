@@ -19,6 +19,8 @@ namespace HAL_Simulator.Data
         private double m_trigUpper = 0;
         private double m_trigLower = 0;
 
+        internal AnalogTriggerData() { }
+
         public override void ResetData()
         {
             m_hasSource = false;

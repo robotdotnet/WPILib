@@ -8,6 +8,8 @@
         private double m_pulseLength = 0;
         private bool m_isInput = true;
 
+        internal DIOData() { }
+
         public override void ResetData()
         {
             m_initialized = false;

@@ -95,17 +95,17 @@ namespace HAL_Simulator
         /// <param name="value">The button value</param>
         public static void SetJoystickButton(int joystickNum, int buttonNum, bool value)
         {
-            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
+            if (joystickNum < 0 || joystickNum >= DriverStation.Joysticks.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
-                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
+                    $"Joysticks must be between 0 and {DriverStation.Joysticks.Count - 1}");
             }
-            if (buttonNum < 1 || buttonNum >= HalDSData["joysticks"][joystickNum]["buttons"].Length)
+            if (buttonNum < 1 || buttonNum >= DriverStation.Joysticks[joystickNum].Buttons.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(buttonNum),
-                    $"Button must be between 1 and {HalDSData["joysticks"][joystickNum]["buttons"].Length - 1}");
+                    $"Button must be between 1 and {DriverStation.Joysticks[joystickNum].Buttons.Length - 1}");
             }
-            HalDSData["joysticks"][joystickNum]["buttons"][buttonNum] = value;
+            DriverStation.Joysticks[joystickNum].Buttons[buttonNum] = value;
         }
 
         /// <summary>
@@ -116,21 +116,21 @@ namespace HAL_Simulator
         /// <param name="value">The joystick value from -1.0 to 1.0</param>
         public static void SetJoystickAxis(int joystickNum, int axisNum, double value)
         {
-            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
+            if (joystickNum < 0 || joystickNum >= DriverStation.Joysticks.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
-                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
+                    $"Joysticks must be between 0 and {DriverStation.Joysticks.Count - 1}");
             }
-            if (axisNum < 0 || axisNum >= HalDSData["joysticks"][joystickNum]["axes"].Length)
+            if (axisNum < 0 || axisNum >= DriverStation.Joysticks[joystickNum].Axes.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(axisNum),
-                    $"Axis must be between 0 and {HalDSData["joysticks"][joystickNum]["axes"].Length - 1}");
+                    $"Axis must be between 0 and {DriverStation.Joysticks[joystickNum].Axes.Length - 1}");
             }
             if (value > 1.0)
                 value = 1.0;
             if (value < -1.0)
                 value = -1.0;
-            HalDSData["joysticks"][joystickNum]["axes"][axisNum] = (float)value;
+            DriverStation.Joysticks[joystickNum].Axes[axisNum] = (float)value;
         }
 
         /// <summary>
@@ -141,31 +141,31 @@ namespace HAL_Simulator
         /// <param name="povValue">The pov value (-1 if not pressed, degrees otherwise)</param>
         public static void SetJoystickPOV(int joystickNum, int povNum, int povValue)
         {
-            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
+            if (joystickNum < 0 || joystickNum >= DriverStation.Joysticks.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
-                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
+                    $"Joysticks must be between 0 and {DriverStation.Joysticks.Count - 1}");
             }
-            if (povNum < 1 || povNum >= HalDSData["joysticks"][joystickNum]["povs"].Length)
+            if (povNum < 1 || povNum >= DriverStation.Joysticks[joystickNum].Povs.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(povNum),
-                    $"POV must be between 0 and {HalDSData["joysticks"][joystickNum]["povs"].Length - 1}");
+                    $"POV must be between 0 and {DriverStation.Joysticks[joystickNum].Povs.Length - 1}");
             }
             if (povValue < -1)
                 povValue = -1;
             if (povValue > 360)
                 povValue = povValue % 360;
-            HalDSData["joysticks"][joystickNum]["povs"][povNum] = (short)povValue;
+            DriverStation.Joysticks[joystickNum].Povs[povNum] = (short)povValue;
         }
 
         public static void SetJoystickName(int joystickNum, string name)
         {
-            if (joystickNum < 0 || joystickNum >= HalDSData["joysticks"].Count)
+            if (joystickNum < 0 || joystickNum >= DriverStation.Joysticks.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
-                    $"Joysticks must be between 0 and {HalDSData["joysticks"].Count - 1}");
+                    $"Joysticks must be between 0 and {DriverStation.Joysticks.Count - 1}");
             }
-            HalDSData["joysticks"][joystickNum]["name"] = name;
+            DriverStation.Joysticks[joystickNum].Name = name;
         }
 
 
@@ -179,19 +179,19 @@ namespace HAL_Simulator
             switch (state)
             {
                 case EnabledState.Disabled:
-                    HalDSData["control"]["enabled"] = false;
-                    HalDSData["control"]["eStop"] = false;
-                    HalDSData["control"]["ds_attached"] = true;
+                    DriverStation.ControlData.Enabled = false;
+                    DriverStation.ControlData.EStop = false;
+                    DriverStation.ControlData.DsAttached = true;
                     break;
                 case EnabledState.Enabled:
-                    HalDSData["control"]["enabled"] = true;
-                    HalDSData["control"]["eStop"] = false;
-                    HalDSData["control"]["ds_attached"] = true;
+                    DriverStation.ControlData.Enabled = true;
+                    DriverStation.ControlData.EStop = false;
+                    DriverStation.ControlData.DsAttached = true;
                     break;
                 case EnabledState.EStopped:
-                    HalDSData["control"]["enabled"] = false;
-                    HalDSData["control"]["eStop"] = true;
-                    HalDSData["control"]["ds_attached"] = true;
+                    DriverStation.ControlData.Enabled = false;
+                    DriverStation.ControlData.EStop = true;
+                    DriverStation.ControlData.DsAttached = true;
                     break;
             }
 
@@ -204,11 +204,11 @@ namespace HAL_Simulator
         public static void SetRobotMode(RobotMode mode)
         {
             RobotMode prevState = RobotMode.Teleop;
-            if (HalData["control"]["autonomous"])
+            if (DriverStation.ControlData.DsAttached)
             {
                 prevState = RobotMode.Autonomous;
             }
-            else if (HalData["control"]["test"])
+            else if (DriverStation.ControlData.Test)
             {
                 prevState = RobotMode.Test;
             }
@@ -217,42 +217,42 @@ namespace HAL_Simulator
                 case RobotMode.Autonomous:
                     if (prevState != RobotMode.Autonomous)
                         SetEnabledState(EnabledState.Disabled);
-                    HalDSData["control"]["autonomous"] = true;
-                    HalDSData["control"]["test"] = false;
+                    DriverStation.ControlData.DsAttached = true;
+                    DriverStation.ControlData.Test = false;
                     break;
                 case RobotMode.Teleop:
                     if (prevState != RobotMode.Teleop)
                         SetEnabledState(EnabledState.Disabled);
-                    HalDSData["control"]["autonomous"] = false;
-                    HalDSData["control"]["test"] = false;
+                    DriverStation.ControlData.DsAttached = false;
+                    DriverStation.ControlData.Test = false;
                     break;
                 case RobotMode.Test:
                     if (prevState != RobotMode.Test)
                         SetEnabledState(EnabledState.Disabled);
-                    HalDSData["control"]["autonomous"] = false;
-                    HalDSData["control"]["test"] = true;
+                    DriverStation.ControlData.DsAttached = false;
+                    DriverStation.ControlData.Test = true;
                     break;
                 default:
                     SetEnabledState(EnabledState.Disabled);
-                    HalDSData["control"]["autonomous"] = false;
-                    HalDSData["control"]["test"] = false;
+                    DriverStation.ControlData.DsAttached = false;
+                    DriverStation.ControlData.Test = false;
                     break;
             }
         }
 
         public static void SetAllianceStation(HALAllianceStationID station)
         {
-            HalDSData["alliance_station"] = station;
+            DriverStation.AllianceStation = station;
         }
 
         public static void SetFMSAttached(bool attached)
         {
-            HalDSData["control"]["fms_attached"] = attached;
+            DriverStation.ControlData.FmsAttached = attached;
         }
 
         public static void SetDSAttached(bool attached)
         {
-            HalDSData["control"]["ds_attached"] = attached;
+            DriverStation.ControlData.DsAttached = attached;
         }
         
     }
