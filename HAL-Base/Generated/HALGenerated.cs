@@ -7,6 +7,11 @@ using System.Runtime.InteropServices;
 
 namespace HAL_Base
 {
+    /// <summary>
+    /// This attributes are placed on strings we want to force be allowed in the impl test.
+    /// </summary>
+    public class HALAllowNonBlittable : Attribute { }
+
     public partial class HAL
     {
         static HAL()
@@ -20,7 +25,8 @@ namespace HAL_Base
         public delegate IntPtr GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
-        public delegate IntPtr GetHALErrorMessageDelegate(int code);
+        [return:HALAllowNonBlittable]
+        public delegate string GetHALErrorMessageDelegate(int code);
         public static GetHALErrorMessageDelegate GetHALErrorMessage;
 
         public delegate ushort GetFPGAVersionDelegate(ref int status);
@@ -36,7 +42,7 @@ namespace HAL_Base
         public delegate bool GetFPGAButtonDelegate(ref int status);
         public static GetFPGAButtonDelegate GetFPGAButton;
 
-        public delegate int HALSetErrorDataDelegate(string errors, int errorsLength, int wait_ms);
+        public delegate int HALSetErrorDataDelegate([HALAllowNonBlittable]string errors, int wait_ms);
         public static HALSetErrorDataDelegate HALSetErrorData;
 
         public delegate HALControlWord HALGetControlWordDelegate();
@@ -63,7 +69,8 @@ namespace HAL_Base
         public delegate int HALGetJoystickTypeDelegate(byte joystickNum);
         public static HALGetJoystickTypeDelegate HALGetJoystickType;
 
-        public delegate IntPtr HALGetJoystickNameDelegate(byte joystickNum);
+        [return:HALAllowNonBlittable]
+        public delegate string HALGetJoystickNameDelegate(byte joystickNum);
         public static HALGetJoystickNameDelegate HALGetJoystickName;
 
         public delegate int HALGetJoystickAxisTypeDelegate(byte joystickNum, byte axis);
@@ -104,7 +111,7 @@ namespace HAL_Base
         public delegate void HALNetworkCommunicationObserveUserProgramTestDelegate();
         public static HALNetworkCommunicationObserveUserProgramTestDelegate HALNetworkCommunicationObserveUserProgramTest;
 
-        public delegate uint HALReportDelegate(byte resource, byte instanceNumber, byte context, string feature = null);
+        public delegate uint HALReportDelegate(byte resource, byte instanceNumber, byte context, [HALAllowNonBlittable]string feature = null);
         public static HALReportDelegate HALReport;
     }
 }

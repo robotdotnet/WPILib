@@ -12,141 +12,6 @@ namespace WPILib.Tests.SpecScaners
     [TestFixture]
     public class TestHALImpl
     {
-        /*
-        public void TestHALRioMapsToAthena()
-        {
-            //NativeProjects.clanger();
-
-            StringBuilder functionList = new StringBuilder();
-
-            functionList.AppendLine("HAL-roboRIO Functions\n");
-
-            List<Function> rioFunctions = new List<Function>();
-            var funcs = NetProjects.GetHalRoboRIOMethods();
-            foreach (var func in funcs)
-            {
-                functionList.AppendLine(func.ClassName);
-                foreach (var syntax in func.Methods)
-                {
-                    //Console.WriteLine(syntax.GetNativeMethod());
-                    
-                    //Function
-                    string ret = syntax.ReturnType.ToString();
-                    string id = syntax.GetNativeMethod();//syntax.Identifier.ToString();
-                    List<string> param = new List<string>();
-
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
-                    bool first = true;
-                    foreach (var parameter in syntax.ParameterList.Parameters)
-                    {
-                        param.Add(parameter.Type.ToString());
-                        if (first)
-                        {
-                            first = false;
-                            builder.Append($"{parameter.Type}");
-                        }
-                        else
-                        {
-                            builder.Append($", {parameter.Type}");
-                        }
-                    }
-                    builder.Append(")");
-                    functionList.AppendLine(builder.ToString());
-
-                    Function f = new Function(ret, id, param.ToArray());
-                    rioFunctions.Add(f);
-                }
-            }
-
-            functionList.AppendLine("\nAthena Functions\n");
-            var baseFunctions = NativeProjects.funcs;
-
-            foreach (var b in baseFunctions)
-            {
-                StringBuilder builder = new StringBuilder();
-                builder.Append($"\t {b.retType} {b.identifier} (");
-
-                bool first = true;
-                foreach (var parameter in b.parameters)
-                {
-                    if (first)
-                    {
-                        first = false;
-                        builder.Append(parameter);
-                    }
-                    else
-                    {
-                        builder.Append(", " + parameter);
-                    }
-                }
-
-                builder.Append(")");
-                functionList.AppendLine(builder.ToString());
-            }
-            /*
-            List<Function> baseFunctions = new List<Function>();
-
-            var funcs2 = NetProjects.GetHalBaseDelegates();
-            foreach (var func in funcs2)
-            {
-                functionList.AppendLine(func.ClassName);
-                foreach (var syntax in func.Methods)
-                {
-
-                    string ret = syntax.ReturnType.ToString();
-                    string id = syntax.Identifier.ToString();
-                    List<string> param = new List<string>();
-
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
-                    bool first = true;
-                    foreach (var parameter in syntax.ParameterList.Parameters)
-                    {
-                        param.Add(parameter.Type.ToString());
-                        if (first)
-                        {
-                            first = false;
-                            builder.Append($"{parameter.Type} {parameter.Identifier}");
-                        }
-                        else
-                        {
-                            builder.Append($", {parameter.Type} {parameter.Identifier}");
-                        }
-                    }
-                    builder.Append(")");
-                    functionList.AppendLine(builder.ToString());
-
-                    Function f = new Function(ret, id.Replace("Delegate", ""), param.ToArray());
-                    baseFunctions.Add(f);
-                }
-            }rioFunctions
-            
-            
-            List<Function> wrong = (from baseFunction
-                                    in baseFunctions
-                                    let found = rioFunctions.Any(baseFunction.Equals)
-                                    where !found
-                                    select baseFunction).ToList();
-            bool pass = false;
-            if (wrong.Count == 0)
-            {
-                pass = true;
-                Console.WriteLine("All functions pass");
-            }
-
-            foreach (var function in wrong)
-            {
-                Console.WriteLine(function.identifier + " Signature does not match");
-            }
-
-            Console.WriteLine("\n\n");
-
-            Console.WriteLine(functionList.ToString());
-
-            Assert.IsTrue(pass);
-        }
-        */
         [Test]
         public void TestHALBaseMapsToHALSim()
         {
@@ -171,172 +36,110 @@ namespace WPILib.Tests.SpecScaners
             }
 
             Assert.IsTrue(fd.Count == 0);
-
-            /*
-            foreach (var VARIABLE in fd)
-            {
-                Console.WriteLine(VARIABLE);
-            }
-
-            ;
-            StringBuilder functionList = new StringBuilder();
-
-            functionList.AppendLine("HAL-Simulator Functions\n");
-
-            List<Function> SimFunctions = new List<Function>();
-            var funcs = NetProjects.GetHALSimMethods();
-            foreach (var func in funcs)
-            {
-                functionList.AppendLine(func.ClassName);
-                foreach (var syntax in func.Methods)
-                {
-                    //Console.WriteLine(syntax.GetNativeMethod());
-                    //Function
-                    string ret = syntax.ReturnType.ToString();
-                    string id = syntax.Identifier.ToString();
-                    List<string> param = new List<string>();
-
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
-                    bool first = true;
-                    foreach (var parameter in syntax.ParameterList.Parameters)
-                    {
-                        param.Add(parameter.Type.ToString());
-                        if (first)
-                        {
-                            first = false;
-                            builder.Append($"{parameter.Type} {parameter.Identifier}");
-                        }
-                        else
-                        {
-                            builder.Append($", {parameter.Type} {parameter.Identifier}");
-                        }
-                    }
-                    builder.Append(")");
-                    functionList.AppendLine(builder.ToString());
-
-                    Function f = new Function(ret, id, param.ToArray());
-                    SimFunctions.Add(f);
-                }
-            }
-
-            functionList.AppendLine("\nBase Functions\n");
-
-            List<Function> baseFunctions = new List<Function>();
-
-            var funcs2 = NetProjects.GetHalBaseDelegates();
-            foreach (var func in funcs2)
-            {
-                functionList.AppendLine(func.ClassName);
-                foreach (var syntax in func.Methods)
-                {
-
-                    string ret = syntax.ReturnType.ToString();
-                    string id = syntax.Identifier.ToString();
-                    List<string> param = new List<string>();
-
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
-                    bool first = true;
-                    foreach (var parameter in syntax.ParameterList.Parameters)
-                    {
-                        param.Add(parameter.Type.ToString());
-                        if (first)
-                        {
-                            first = false;
-                            builder.Append($"{parameter.Type} {parameter.Identifier}");
-                        }
-                        else
-                        {
-                            builder.Append($", {parameter.Type} {parameter.Identifier}");
-                        }
-                    }
-                    builder.Append(")");
-                    functionList.AppendLine(builder.ToString());
-
-                    Function f = new Function(ret, id.Replace("Delegate", ""), param.ToArray());
-                    baseFunctions.Add(f);
-                }
-            }
-            List<Function> wrong = (from baseFunction
-                                    in baseFunctions
-                                    let found = SimFunctions.Any(baseFunction.Equals)
-                                    where !found
-                                    select baseFunction).ToList();
-
-            bool pass = false;
-            if (wrong.Count == 0)
-            {
-                pass = true;
-                Console.WriteLine("All functions pass");
-            }
-
-            foreach (var function in wrong)
-            {
-                Console.WriteLine(function.identifier + " Signature does not match");
-            }
-
-            Console.WriteLine("\n\n");
-
-            Console.WriteLine(functionList.ToString());
-
-            Assert.IsTrue(pass);
-            */
         }
 
-        public void TestHALBaseMapsToHALRIO()
+
+        private bool CheckForBlittable(List<TypeSyntax> types, List<string> allowedTypes, 
+            List<string> nonBlittableFuncs, string nonBlittableLine)
         {
-            StringBuilder functionList = new StringBuilder();
-
-            functionList.AppendLine("HAL-roboRIO Functions\n");
-
-            List<Function> rioFunctions = new List<Function>();
-            var funcs = NetProjects.GetHalRoboRIOMethods();
-            foreach (var func in funcs)
+            bool allBlittable = true;
+            foreach (TypeSyntax t in types)
             {
-                functionList.AppendLine(func.ClassName);
-                foreach (var syntax in func.Methods)
+                bool found = false;
+                foreach (string a in allowedTypes)
                 {
-                    //Console.WriteLine(syntax.GetNativeMethod());
-                    //Function
-                    string ret = syntax.ReturnType.ToString();
-                    string id = syntax.Identifier.ToString();
-                    List<string> param = new List<string>();
-
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
-                    bool first = true;
-                    foreach (var parameter in syntax.ParameterList.Parameters)
+                    if (t.ToString().Contains(a))//Contains is OK, since arrays of blittable types are blittable.
                     {
-                        param.Add(parameter.Type.ToString());
-                        if (first)
-                        {
-                            first = false;
-                            builder.Append($"{parameter.Type} {parameter.Identifier}");
-                        }
-                        else
-                        {
-                            builder.Append($", {parameter.Type} {parameter.Identifier}");
-                        }
+                        found = true;
                     }
-                    builder.Append(")");
-                    functionList.AppendLine(builder.ToString());
-
-                    Function f = new Function(ret, id, param.ToArray());
-                    rioFunctions.Add(f);
+                }
+                if (!found)
+                {
+                    allBlittable = false;
                 }
             }
 
-            functionList.AppendLine("\nBase Functions\n");
+            if (!allBlittable)
+            {
+                nonBlittableFuncs.Add(nonBlittableLine);
+            }
+            return allBlittable;
+        }
 
-            List<Function> baseFunctions = new List<Function>();
+
+        [Test]
+        public void TestHALBlittable()
+        {
+
+            List<string> allowedTypes = new List<string>()
+            {
+                "byte",
+                "sbyte",
+                "short",
+                "ushort",
+                "int",
+                "uint",
+                "long",
+                "ulong",
+                "IntPtr",
+                "UIntPtr",
+                "float",
+                "void",
+                "double",
+            
+                // For now force our enum types to be OK
+                "CTR_Code",
+                "HALAccelerometerRange",
+                "HALAllianceStationID",
+                "AnalogTriggerType",
+                "Mode",
+
+                //Also allow any structs known to be blittable
+                "CANStreamMessage",
+                "HALJoystickButtons",
+                "HALJoystickPOVs",
+                "HALJoystickAxes",
+                "HALControlWord",
+
+                //For now allow bool, since it marshalls easily
+                //This will change if the native windows HAL is not 1 byte bools
+                "bool",
+                
+                //Going to allow the joystick structure, even though it is not blittable.
+                //Still trying to figure out the best way to do it right.
+                "HALJoystickDescriptor"
+            };
+
+            List<string> notBlittableMethods = new List<string>();
+
 
             var funcs2 = NetProjects.GetHalBaseDelegates();
             foreach (var func in funcs2)
             {
-                functionList.AppendLine(func.ClassName);
                 foreach (var syntax in func.Methods)
                 {
+                    List<TypeSyntax> types = new List<TypeSyntax>();
+
+                    if (syntax.AttributeLists.Count != 0)
+                    {
+                        if (syntax.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable)
+                            && syntax.ReturnType.ToString().Contains("string"))
+                        {
+                            //We can ignore it.
+                        }
+                        else
+                        {
+                            types.Add(syntax.ReturnType);
+                        }
+                    }
+                    else
+                    {
+                        types.Add(syntax.ReturnType);
+                    }
+
+                    //types.Add(syntax.ReturnType);
+
+
 
                     string ret = syntax.ReturnType.ToString();
                     string id = syntax.Identifier.ToString();
@@ -347,6 +150,24 @@ namespace WPILib.Tests.SpecScaners
                     bool first = true;
                     foreach (var parameter in syntax.ParameterList.Parameters)
                     {
+                        if (parameter.AttributeLists.Count != 0)
+                        {
+                            if (parameter.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable)
+                                && parameter.Type.ToString().Contains("string"))
+                            {
+                                //We can ignore it.
+                            }
+                            else
+                            {
+                                types.Add(parameter.Type);
+                            }
+                        }
+                        else
+                        {
+                            types.Add(parameter.Type);
+                        }
+
+                        
                         param.Add(parameter.Type.ToString());
                         if (first)
                         {
@@ -359,35 +180,26 @@ namespace WPILib.Tests.SpecScaners
                         }
                     }
                     builder.Append(")");
-                    functionList.AppendLine(builder.ToString());
 
-                    Function f = new Function(ret, id.Replace("Delegate", ""), param.ToArray());
-                    baseFunctions.Add(f);
+                    CheckForBlittable(types, allowedTypes, notBlittableMethods, builder.ToString());
                 }
             }
-            List<Function> wrong = (from baseFunction
-                                    in baseFunctions
-                                    let found = rioFunctions.Any(baseFunction.Equals)
-                                    where !found
-                                    select baseFunction).ToList();
-            bool pass = false;
-            if (wrong.Count == 0)
+
+            foreach (string s in notBlittableMethods)
             {
-                pass = true;
-                Console.WriteLine("All functions pass");
+                Console.WriteLine(s);
             }
 
-            foreach (var function in wrong)
+            if (notBlittableMethods.Count != 0)
             {
-                Console.WriteLine(function.identifier + " Signature does not match");
+                Assert.Fail();
             }
-
-            Console.WriteLine("\n\n");
-
-            Console.WriteLine(functionList.ToString());
-
-            Assert.IsTrue(pass);
+            else
+            {
+                Assert.Pass();
+            }
         }
+
     }
 
     internal struct Function

@@ -481,7 +481,7 @@ namespace WPILib
                     " not available, check if controller is plugged in\n");
                 return "";
             }
-            return HAL.GetJoystickName((byte)stick);
+            return HAL.HALGetJoystickName((byte)stick);
         }
 
         /// <summary>
@@ -702,7 +702,7 @@ namespace WPILib
             HALControlWord controlWord = GetControlWord();
             if (controlWord.GetDSAttached())
             {
-                SetErrorData(errorString, 0);
+                HALSetErrorData(errorString, 0);
             }
         }
 

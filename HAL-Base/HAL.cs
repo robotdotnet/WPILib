@@ -256,37 +256,6 @@ namespace HAL_Base
             s_simThread?.Abort();
         }
 
-        /// <summary>
-        /// Gets the joystick name for a specific joystick num
-        /// </summary>
-        /// <param name="joystickNum">The Joystick index</param>
-        /// <returns>The Joystick Name</returns>
-        public static string GetJoystickName(byte joystickNum)
-        {
-            return Marshal.PtrToStringAnsi(HALGetJoystickName(joystickNum));
-        }
-
-        /// <summary>
-        /// Returns the string for the error message for the give code.
-        /// </summary>
-        /// <param name="code">The Error Code</param>
-        /// <returns>The Error String</returns>
-        public static string GetErrorMessage(int code)
-        {
-            return Marshal.PtrToStringAnsi(GetHALErrorMessage(code));
-        }
-
-        /// <summary>
-        /// Writes Error Data to the driver station.
-        /// </summary>
-        /// <param name="errors"></param>
-        /// <param name="waitMs"></param>
-        /// <returns></returns>
-        public static int SetErrorData(string errors, int waitMs)
-        {
-            return HALSetErrorData(errors, errors.Length, waitMs);
-        }
-
         public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
             string feature = null)
         {

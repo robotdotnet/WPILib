@@ -273,8 +273,8 @@ namespace HAL_Base
         public byte type;
 
         /// char[256]
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string name;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 256)]
+        public byte[] name;
 
         /// byte
         public byte axisCount;

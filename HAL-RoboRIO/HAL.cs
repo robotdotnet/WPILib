@@ -1,7 +1,8 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -129,7 +130,9 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.GetPortWithModule = (HAL_Base.HAL.GetPortWithModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPortWithModule"), typeof(HAL_Base.HAL.GetPortWithModuleDelegate));
 
-            HAL_Base.HAL.GetHALErrorMessage = (HAL_Base.HAL.GetHALErrorMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getHALErrorMessage"), typeof(HAL_Base.HAL.GetHALErrorMessageDelegate));
+            HAL_Base.HAL.GetHALErrorMessage = GetHALErrorMessage;
+
+            NativeGetHALErrorMessage = (NativeGetHALErrorMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getHALErrorMessage"), typeof(NativeGetHALErrorMessageDelegate));
 
             HAL_Base.HAL.GetFPGAVersion = (HAL_Base.HAL.GetFPGAVersionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAVersion"), typeof(HAL_Base.HAL.GetFPGAVersionDelegate));
 
@@ -139,7 +142,9 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.GetFPGAButton = (HAL_Base.HAL.GetFPGAButtonDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAButton"), typeof(HAL_Base.HAL.GetFPGAButtonDelegate));
 
-            HAL_Base.HAL.HALSetErrorData = (HAL_Base.HAL.HALSetErrorDataDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetErrorData"), typeof(HAL_Base.HAL.HALSetErrorDataDelegate));
+            HAL_Base.HAL.HALSetErrorData = HALSetErrorData;
+                
+            NativeHALSetErrorData = (NativeHALSetErrorDataDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetErrorData"), typeof(NativeHALSetErrorDataDelegate));
 
             HAL_Base.HAL.GetControlWord = HALGetControlWord;
 
@@ -159,7 +164,8 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.HALGetJoystickType = (HAL_Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(HAL_Base.HAL.HALGetJoystickTypeDelegate));
 
-            HAL_Base.HAL.HALGetJoystickName = (HAL_Base.HAL.HALGetJoystickNameDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickName"), typeof(HAL_Base.HAL.HALGetJoystickNameDelegate));
+            HAL_Base.HAL.HALGetJoystickName = HALGetJoystickName;
+            NativeHALGetJoystickName = (NativeHALGetJoystickNameDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickName"), typeof(NativeHALGetJoystickNameDelegate));
             //TODO: FIX THIS
             //HAL_Base.HAL.HALGetJoystickAxisType = (HAL_Base.HAL.HALGetJoystickAxisTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxisType"), typeof(HAL_Base.HAL.HALGetJoystickAxisTypeDelegate));
 
@@ -185,8 +191,85 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTest = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTest"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate));
 
-            HAL_Base.HAL.HALReport = (HAL_Base.HAL.HALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALReport"), typeof(HAL_Base.HAL.HALReportDelegate));
+            HAL_Base.HAL.HALReport = HALReport;
+            NativeHALReport = (NativeHALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALReport"), typeof(NativeHALReportDelegate));
 
+        }
+
+        private delegate uint NativeHALReportDelegate(byte resource, byte instanceNumber, byte context, byte[] feature);
+
+        private static NativeHALReportDelegate NativeHALReport;
+
+        public static uint HALReport(byte resource, byte instanceNumber, byte context, string feature)
+        {
+            int len;
+            return NativeHALReport(resource, instanceNumber, context, CreateUTF8String(feature, out len));
+        }
+
+        private delegate int NativeHALSetErrorDataDelegate(byte[] errors, int errorsLength, int waitMs);
+
+        private static NativeHALSetErrorDataDelegate NativeHALSetErrorData;
+
+        public static int HALSetErrorData(string errors, int waitMs)
+        {
+            int len;
+            byte[] errorB = CreateUTF8String(errors, out len);
+            return NativeHALSetErrorData(errorB, len, waitMs); 
+        }
+
+        private delegate IntPtr NativeGetHALErrorMessageDelegate(int code);
+
+        private static NativeGetHALErrorMessageDelegate NativeGetHALErrorMessage;
+
+        /// <summary>
+        /// Gets an Error Message from the HAL
+        /// </summary>
+        /// <param name="code">The Error Code</param>
+        /// <returns>The Error Message</returns>
+        public static string GetHALErrorMessage(int code)
+        {
+            return ReadUTF8String(NativeGetHALErrorMessage(code));
+        }
+
+        private delegate IntPtr NativeHALGetJoystickNameDelegate(byte joystickNum);
+
+        private static NativeHALGetJoystickNameDelegate NativeHALGetJoystickName;
+
+        public static string HALGetJoystickName(byte joystickNum)
+        {
+            return ReadUTF8String(NativeHALGetJoystickName(joystickNum));
+        }
+
+        internal static string ReadUTF8String(IntPtr ptr)
+        {
+            var data = new List<byte>();
+            var off = 0;
+            while (true)
+            {
+                var ch = Marshal.ReadByte(ptr, off++);
+                if (ch == 0)
+                {
+                    break;
+                }
+                data.Add(ch);
+            }
+            return Encoding.UTF8.GetString(data.ToArray());
+        }
+
+        internal static byte[] CreateUTF8String(string str, out int size)
+        {
+            if (str == null)
+            {
+                str = "";
+            }
+
+            var bytes = Encoding.UTF8.GetByteCount(str);
+
+            var buffer = new byte[bytes + 1];
+            size = bytes;
+            Encoding.UTF8.GetBytes(str, 0, str.Length, buffer, 0);
+            buffer[bytes] = 0;
+            return buffer;
         }
 
         private delegate int NativeHALGetControlWordDelegate(ref uint data);

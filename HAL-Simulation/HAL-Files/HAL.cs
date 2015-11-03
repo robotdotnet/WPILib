@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using HAL_Simulator.Data;
+using System.Text;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -156,9 +157,9 @@ namespace HAL_Simulator
         /// Returns a HAL Error Message
         /// </summary>
         /// <param name="code">The Error Code</param>
-        /// <returns>IntPtr containing the Error message</returns>
+        /// <returns>The Error Message</returns>
         [CalledSimFunction]
-        public static IntPtr getHALErrorMessage(int code)
+        public static string getHALErrorMessage(int code)
         {
             string retVal = "";
 
@@ -234,7 +235,7 @@ namespace HAL_Simulator
                 retVal = "Unknown error status";
 
 
-            return Marshal.StringToHGlobalAnsi(retVal);
+            return retVal;
         }
 
         /// <summary>
@@ -289,11 +290,10 @@ namespace HAL_Simulator
         /// Sets the HAL error data
         /// </summary>
         /// <param name="errors"></param>
-        /// <param name="errorsLength"></param>
         /// <param name="wait_ms"></param>
         /// <returns></returns>
         [CalledSimFunction]
-        public static int HALSetErrorData(string errors, int errorsLength, int wait_ms)
+        public static int HALSetErrorData(string errors, int wait_ms)
         {
             //TODO: Logger 
             ErrorData = errors;
@@ -379,13 +379,30 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
         {
+            int len;
             var stick = DriverStation.Joysticks[joystickNum];
             desc.isXbox = (byte)(stick.IsXbox);
             desc.type = stick.Type;
-            desc.name = stick.Name;
+            desc.name = CreateUTF8String(stick.Name, out len);//stick.Name;
             desc.axisCount = (byte)stick.Axes.Length;
             desc.buttonCount = (byte)(stick.Buttons.Length - 1);
             return 0;
+        }
+
+        internal static byte[] CreateUTF8String(string str, out int size)
+        {
+            if (str == null)
+            {
+                str = "";
+            }
+
+            var bytes = Encoding.UTF8.GetByteCount(str);
+
+            var buffer = new byte[bytes + 1];
+            size = bytes;
+            Encoding.UTF8.GetBytes(str, 0, str.Length, buffer, 0);
+            buffer[bytes] = 0;
+            return buffer;
         }
 
         [CalledSimFunction]
@@ -403,10 +420,10 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static IntPtr HALGetJoystickName(byte joystickNum)
+        public static string HALGetJoystickName(byte joystickNum)
         {
             var stick = DriverStation.Joysticks[joystickNum];
-            return Marshal.StringToHGlobalAnsi(stick.Name);
+            return stick.Name;
         }
 
         [CalledSimFunction]

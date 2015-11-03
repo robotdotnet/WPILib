@@ -69,11 +69,11 @@ namespace WPILib
             //TODO: Use Caller attributes
             if (status < 0)
             {
-                throw new UncleanStatusException(status, $" Code : {status}. {GetErrorMessage(status)}");
+                throw new UncleanStatusException(status, $" Code : {status}. {GetHALErrorMessage(status)}");
             }
             else if (status > 0)
             {
-                DriverStation.ReportError(GetErrorMessage(status), true);
+                DriverStation.ReportError(GetHALErrorMessage(status), true);
             }
         }
     }
