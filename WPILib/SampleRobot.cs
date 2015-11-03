@@ -112,7 +112,7 @@ namespace WPILib
         /// Then go back and wait for the robot to be enabled again.</remarks>
         public override void StartCompetition()
         {
-            HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Simple);
+            HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Sample);
             RobotMain();
 
             if (!m_robotMainOverriden)

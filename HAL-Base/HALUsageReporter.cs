@@ -70,7 +70,7 @@ namespace HAL_Base
         kCANPlugin_2CAN = 2,
 
         kFramework_Iterative = 1,
-        kFramework_Simple = 2,
+        kFramework_Sample = 2,
 
         kRobotDrive_ArcadeStandard = 1,
         kRobotDrive_ArcadeButtonSpin = 2,
