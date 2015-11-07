@@ -25,8 +25,8 @@ namespace WPILib.SmartDashboards
 
         private static readonly string OPTIONS = "options";
 
-        private List<string> m_choices = new List<string>();
-        private List<object> m_values = new List<object>();
+        private readonly List<string> m_choices = new List<string>();
+        private readonly List<object> m_values = new List<object>();
         private string m_defaultChoice = null;
         private object m_defaultValue = null;
 
@@ -64,7 +64,7 @@ namespace WPILib.SmartDashboards
             m_choices.Add(name);
             m_values.Add(obj);
 
-            Table?.PutValue(OPTIONS, m_choices);
+            Table?.PutStringArray(OPTIONS, m_choices.ToArray());
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace WPILib.SmartDashboards
             Table = subtable;
             if (Table != null)
             {
-                Table.PutValue(OPTIONS, m_choices);
+                Table.PutStringArray(OPTIONS, m_choices.ToArray());
                 if (m_defaultChoice != null)
                 {
                     Table.PutString(DEFAULT, m_defaultChoice);

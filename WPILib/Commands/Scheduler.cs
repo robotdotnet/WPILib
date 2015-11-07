@@ -8,7 +8,7 @@ using WPILib.Interfaces;
 namespace WPILib.Commands
 {
     /// <summary>
-    /// The <see cref="Scheduler"/> is a singleton which holds the top-level running commands.
+    /// The <see cref="Scheduler"/> is a singleton which holds the top-level running m_commands.
     /// </summary>
     /// <remarks>
     /// It is in charge of both calling the command's <see cref="Command.Run">Run()</see> method
@@ -222,9 +222,6 @@ namespace WPILib.Commands
             m_enabled = true;
         }
 
-        private List<string> commands;
-        private List<double> ids, toCancel;
-
         ///<inheritdoc/>
         public string Name => "Scheduler";
 
@@ -238,24 +235,21 @@ namespace WPILib.Commands
         public void InitTable(ITable subtable)
         {
             Table = subtable;
-            commands = new List<string>();
-            ids = new List<double>();
-            toCancel = new List<double>();
 
-            Table.PutValue("Names", commands.ToArray());
-            Table.PutValue("Ids", ids.ToArray());
-            Table.PutValue("Cancel", toCancel.ToArray());
+            Table.PutStringArray("Names", new string[0]);
+            Table.PutNumberArray("Ids", new double[0]);
+            Table.PutNumberArray("Cancel", new double[0]);
         }
 
         private void UpdateTable()
         {
             if (Table == null) return;
-            toCancel = Table.GetNumberArray("Cancel").ToList();
-            if (toCancel.Count > 0)
+            double[] toCancel = Table.GetNumberArray("Cancel", new double[0]);
+            if (toCancel.Length > 0)
             {
                 for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
                 {
-                    for (int i = 0; i < toCancel.Count; i++)
+                    for (int i = 0; i < toCancel.Length; i++)
                     {
                         if (e.GetData().GetHashCode() == toCancel[i])
                         {
@@ -263,21 +257,30 @@ namespace WPILib.Commands
                         }
                     }
                 }
-                toCancel.Clear();
-                Table.PutValue("Cancel", toCancel.ToArray());
+                Table.PutNumberArray("Cancel", new double[0]);
             }
 
             if (m_runningCommandsChanged)
             {
-                commands.Clear();
-                ids.Clear();
+                int n = 0;
                 for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
                 {
-                    commands.Add(e.GetData().Name);
-                    ids.Add(e.GetData().GetHashCode());
+                    n++;
                 }
-                Table.PutValue("Names", commands.ToArray());
-                Table.PutValue("Ids", ids.ToArray());
+
+                string[] commands = new string[n];
+                double[] ids = new double[n];
+
+                n = 0;
+                for (LinkedListElement e = m_firstCommand; e != null; e = e.GetNext())
+                {
+                    commands[n] = e.GetData().Name;
+                    ids[n] = e.GetNext().GetHashCode();
+                    n++;
+                }
+
+                Table.PutStringArray("Names", commands);
+                Table.PutNumberArray("Ids", ids);
             }
         }
 

@@ -207,7 +207,7 @@ namespace WPILib
         /// <param name="source"></param>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        /// <param name="isNew"></param>
+        /// <param name="flags"></param>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             Set((bool)value);

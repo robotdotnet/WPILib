@@ -84,7 +84,6 @@ namespace HAL_Simulator
                     break;
                 case OsType.RoboRio:
                     return null;
-                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
