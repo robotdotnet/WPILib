@@ -10,7 +10,7 @@ namespace WPILib
     /// <summary>
     /// Class for interfacing with an analog gyro to get robot heading.
     /// </summary>
-    public class Gyro : SensorBase, IPIDSource, ILiveWindowSendable
+    public class AnalogGyro : GyroBase, IPIDSource, ILiveWindowSendable
     {
         private static int kOversampleBits = 10;
         private static int kAverageBits = 0;
@@ -21,10 +21,10 @@ namespace WPILib
         protected AnalogInput m_analog;
         private double m_offset;
         private int m_center;
-        bool m_channelAllocated = false;
-        private PIDSourceType m_pidSource;
+        readonly bool m_channelAllocated = false;
 
-        public void InitGyro()
+        /// <inheritdoc/>
+        public override void InitGyro()
         {
             if (m_analog == null)
             {
@@ -66,16 +66,16 @@ namespace WPILib
             PIDSourceType = PIDSourceType.Displacement;
 
             HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
-            LiveWindow.AddSensor("Gyro", m_analog.Channel, this);
+            LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
 
         }
 
-        public Gyro(int channel) : this(new AnalogInput(channel))
+        public AnalogGyro(int channel) : this(new AnalogInput(channel))
         {
             m_channelAllocated = true;
         }
 
-        public Gyro(AnalogInput channel)
+        public AnalogGyro(AnalogInput channel)
         {
             m_analog = channel;
             if (m_analog == null)
@@ -85,7 +85,8 @@ namespace WPILib
             InitGyro();
         }
 
-        public void Reset() => m_analog?.ResetAccumulator();
+        ///<inheritdoc/>
+        public override void Reset() => m_analog?.ResetAccumulator();
 
         ///<inheritdoc/>
         public override void Dispose()
@@ -98,7 +99,8 @@ namespace WPILib
             //base.Dispose();
         }
 
-        public double GetAngle()
+        ///<inheritdoc/>
+        public override double GetAngle()
         {
             if (m_analog == null)
             {
@@ -122,7 +124,8 @@ namespace WPILib
             }
         }
 
-        public double GetRate()
+        ///<inheritdoc/>
+        public override double GetRate()
         {
             if (m_analog == null)
             {
@@ -148,61 +151,7 @@ namespace WPILib
             }
         }
 
-        public PIDSourceType PIDSourceType
-        {
-            get { return m_pidSource; }
-            set
-            {
-                m_pidSource = value;
-            }
-        }
-
-        public double PidGet()
-        {
-            switch (m_pidSource)
-            {
-                case PIDSourceType.Rate:
-                    return GetRate();
-                case PIDSourceType.Displacement:
-                    return GetAngle();
-                default:
-                    return 0.0;
-            }
-        }
-
-        public void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            PIDSourceType = pidSource;
-        }
-
-        public PIDSourceType GetPIDSourceType()
-        {
-            return PIDSourceType;
-        }
-
         ///<inheritdoc />
-        public void InitTable(ITable subtable)
-        {
-            Table = subtable;
-            UpdateTable();
-        }
-        ///<inheritdoc />
-        public ITable Table { get; private set; }
-
-        ///<inheritdoc />
-        public string SmartDashboardType => "Gyro";
-        ///<inheritdoc />
-        public void UpdateTable()
-        {
-            Table?.PutNumber("Value", GetAngle());
-        }
-        ///<inheritdoc />
-        public void StartLiveWindowMode()
-        {
-        }
-        ///<inheritdoc />
-        public void StopLiveWindowMode()
-        {
-        }
+        public override string SmartDashboardType => "AnalogGyro";
     }
 }

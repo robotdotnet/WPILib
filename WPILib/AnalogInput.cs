@@ -29,7 +29,10 @@ namespace WPILib
         private readonly IntPtr m_port;
         private static readonly int[] s_accumulatorChannels = { 0, 1 };
         private long m_accumulatorOffset;
-        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
+
+
+        ///<inheritdoc/>
+        public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
         /// <summary>
         /// Construct an analog channel
@@ -310,18 +313,6 @@ namespace WPILib
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
         public double PidGet() => GetAverageVoltage();
-
-        ///<inheritdoc/>
-        public void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            m_pidSource = pidSource;
-        }
-
-        ///<inheritdoc/>
-        public PIDSourceType GetPIDSourceType()
-        {
-            return m_pidSource;
-        }
 
         /// <summary>
         /// Initialize a table for this sendable object.

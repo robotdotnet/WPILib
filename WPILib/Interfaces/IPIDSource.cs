@@ -32,8 +32,6 @@
         /// <returns>The result to use in <see cref="PIDController"/></returns>
         double PidGet();
 
-        void SetPIDSourceType(PIDSourceType pidSource);
-
-        PIDSourceType GetPIDSourceType();
+        PIDSourceType PIDSourceType { get; set; }
     }
 }

@@ -70,7 +70,7 @@ namespace WPILib
             {
                 bool originalMode = s_automaticRoundRobinEnabled;
                 SetAutomaticMode(false);
-                m_counter = new Counter {MaxPeriod = 1.0};
+                m_counter = new Counter { MaxPeriod = 1.0 };
                 m_counter.SetSemiPeriodMode(true);
                 m_counter.Reset();
                 Enabled = true;
@@ -255,19 +255,18 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public void SetPIDSourceType(PIDSourceType pidSource)
+        public PIDSourceType PIDSourceType
         {
-            if (pidSource != PIDSourceType.Displacement)
+            get { return m_pidSource; }
+            set
             {
-                throw new ArgumentOutOfRangeException(nameof(pidSource), "Only displacement PID is allowed for ultrasonics.");
+                if (value != PIDSourceType.Displacement)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value),
+                        "Only displacement PID is allowed for ultrasonics.");
+                }
+                m_pidSource = value;
             }
-            m_pidSource = pidSource;
-        }
-
-        /// <inheritdoc/>
-        public PIDSourceType GetPIDSourceType()
-        {
-            return m_pidSource;
         }
 
         /// <summary>
@@ -308,7 +307,7 @@ namespace WPILib
         /// <param name="enabled">true if enabled</param>
         [Obsolete("Use Enabled property instead.")]
         public void SetEnabled(bool enabled) { Enabled = enabled; }
-        
+
         /// <summary>
         /// Gets or Sets whether the ultrasonic is enabled.
         /// </summary>

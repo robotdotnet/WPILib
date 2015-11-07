@@ -82,6 +82,7 @@
     <Compile Include="Exceptions\BoundaryException.cs" />
     <Compile Include="Exceptions\InvalidValueException.cs" />
     <Compile Include="Exceptions\UncleanStatusException.cs" />
+    <Compile Include="GyroBase.cs" />
     <Compile Include="Interfaces\ICANSpeedController.cs" />
     <Compile Include="CANTalon.cs" />
     <Compile Include="CAN\CANExceptionFactory.cs" />
@@ -109,12 +110,13 @@
     <Compile Include="DriverStation.cs" />
     <Compile Include="Encoder.cs" />
     <Compile Include="GearTooth.cs" />
-    <Compile Include="Gyro.cs" />
+    <Compile Include="AnalogGyro.cs" />
     <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\IAccelerometer.cs" />
     <Compile Include="Interfaces\ICounterBase.cs" />
     <Compile Include="GenericHID.cs" />
+    <Compile Include="Interfaces\IGyro.cs" />
     <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="Interfaces\IMotorSafety.cs" />
     <Compile Include="Interfaces\IPIDInterface.cs" />

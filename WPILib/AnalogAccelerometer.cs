@@ -18,7 +18,10 @@ namespace WPILib
         private double m_voltsPerG = 1.0;
         private double m_zeroGVoltage = 2.5;
         private readonly bool m_allocatedChannel;
-        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
+
+
+        ///<inheritdoc/>
+        public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
         private void InitAccelerometer()
         {
@@ -89,18 +92,6 @@ namespace WPILib
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
         public double PidGet() => GetAcceleration();
-
-        ///<inheritdoc/>
-        public void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            m_pidSource = pidSource;
-        }
-
-        ///<inheritdoc/>
-        public PIDSourceType GetPIDSourceType()
-        {
-            return m_pidSource;
-        }
 
         /// <summary>
         /// Initialize a table for this sendable object.

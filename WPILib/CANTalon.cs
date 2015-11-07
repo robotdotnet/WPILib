@@ -16,10 +16,6 @@ namespace WPILib
     public class CANTalon : IMotorSafety, ICANSpeedController, ITableListener, IPIDOutput, IPIDSource
     {
         private readonly MotorSafetyHelper m_safetyHelper;
-        /// <summary>
-        /// The current feedback value being used.
-        /// </summary>
-        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         private const int NativeAdcUnitsPerRotation = 1024;
 
@@ -1210,17 +1206,8 @@ namespace WPILib
             return GetPosition();
         }
 
-        /// <inheritdoc/>
-        public void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            m_pidSource = pidSource;
-        }
-
-        /// <inheritdoc/>
-        public PIDSourceType GetPIDSourceType()
-        {
-            return m_pidSource;
-        }
+        ///<inheritdoc/>
+        public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
         public void Set(double value)
         {

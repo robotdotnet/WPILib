@@ -175,7 +175,7 @@ namespace WPILib
                 }
 
 
-                if (pidInput.GetPIDSourceType() == PIDSourceType.Rate)
+                if (pidInput.PIDSourceType == PIDSourceType.Rate)
                 {
                     if (m_P != 0)
                     {
@@ -408,14 +408,10 @@ namespace WPILib
             }
         }
 
-        internal void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            m_pidInput.SetPIDSourceType(pidSource);
-        }
-
-        internal PIDSourceType GetPIDSourceType()
-        {
-            return m_pidInput.GetPIDSourceType();
+        ///<inheritdoc/>
+        internal PIDSourceType PIDSourceType {
+            get { return m_pidInput.PIDSourceType; }
+            set { m_pidInput.PIDSourceType = value; }
         }
 
         public double GetAvgError()
