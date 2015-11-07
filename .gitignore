@@ -16,6 +16,7 @@ build/
 bld/
 [Bb]in/
 [Oo]bj/
+sbpackages/
 
 _build/
 _static/
@@ -195,5 +196,4 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
-nuget.exe
 buildLocal.bat

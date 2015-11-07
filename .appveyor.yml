@@ -1,0 +1,20 @@
+version: 2015.0.12-{build}
+skip_tags: true
+os: Visual Studio 2015
+configuration: AppVeyor
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+nuget:
+  disable_publish_on_pr: true
+before_build:
+- cmd: nuget restore
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal
+test_script:
+- cmd: nunit-console.exe %APPVEYOR_BUILD_FOLDER%\WPILib.Tests\Output\WPILib.Tests.dll /framework:net-4.0

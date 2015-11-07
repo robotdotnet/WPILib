@@ -42,6 +42,7 @@
         <configuration />
       </PlugInConfig>
     </PlugInConfigurations>
+    <ComponentPath>..\sbpackages\EWSoftware.SHFB.NETFramework.4.6\tools\Data\.NETFramework\</ComponentPath>
     <ComponentConfigurations>
       <ComponentConfig id="API Token Resolution" enabled="True">
         <component id="API Token Resolution">{@TokenFiles}
@@ -87,6 +88,10 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' ">
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- NOTE: Update the version number in the path (YYYY.M.D.R) to match the package version -->
+    <SHFBROOT Condition=" '$(SHFBROOT)' == '' ">$(MSBuildThisFileDirectory)..\sbpackages\EWSoftware.SHFB.2015.10.10.0\Tools\</SHFBROOT>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Content" />
