@@ -30,9 +30,9 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot(new TestReflectionContext()))
             {
-                robot.RobotInit();
-                robot.AutonomousInit();
-                robot.AutonomousPeriodic();
+                robot._RobotInit();
+                robot._AutonomousInit();
+                robot._AutonomousPeriodic();
                 foreach (var command in robot.PhaseCommands[MatchPhase.Autonomous])
                 {
                     Assert.IsTrue(command.IsRunning());
@@ -45,9 +45,9 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot(new TestReflectionContext()))
             {
-                robot.RobotInit();
-                robot.TeleopInit();
-                robot.TeleopPeriodic();
+                robot._RobotInit();
+                robot._TeleopInit();
+                robot._TeleopPeriodic();
                 foreach (var command in robot.PhaseCommands[MatchPhase.Teleoperated])
                 {
                     Assert.IsTrue(command.IsRunning());
@@ -60,9 +60,9 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot(new TestReflectionContext()))
             {
-                robot.RobotInit();
-                robot.DisabledInit();
-                robot.DisabledPeriodic();
+                robot._RobotInit();
+                robot._DisabledInit();
+                robot._DisabledPeriodic();
                 foreach (var command in robot.PhaseCommands[MatchPhase.Disabled])
                 {
                     Assert.IsTrue(command.IsRunning());
@@ -75,9 +75,9 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot(new TestReflectionContext()))
             {
-                robot.RobotInit();
-                robot.TestInit();
-                robot.TestPeriodic();
+                robot._RobotInit();
+                robot._TestInit();
+                robot._TestPeriodic();
                 foreach (var command in robot.PhaseCommands[MatchPhase.Test])
                 {
                     Assert.IsTrue(command.IsRunning());

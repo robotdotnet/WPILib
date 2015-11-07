@@ -47,7 +47,7 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot())
             {
-                robot.RobotInit();
+                robot._RobotInit();
                 Assert.IsTrue(robot.Subsystems.OfType<BSubsystem>().Any());
                 Scheduler.Instance.Run();
                 Assert.IsInstanceOf<MockCommand>(robot.Subsystems.First().GetCurrentCommand());
@@ -59,7 +59,7 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot(new TestReflectionContext()))
             {
-                robot.RobotInit();
+                robot._RobotInit();
                 Assert.IsTrue(robot.Subsystems.OfType<ASubsystem>().Any());
                 Scheduler.Instance.Run();
                 Assert.IsInstanceOf<MockCommand>(robot.Subsystems.OfType<ASubsystem>().First().GetCurrentCommand());
@@ -71,7 +71,7 @@ namespace WPILib.Tests.Commands
         {
             using (AttributedRobot robot = new AttributedRobot())
             {
-                robot.RobotInit();
+                robot._RobotInit();
                 Assert.AreEqual(2, robot.Subsystems.OfType<BSubsystem>().Count());
             }
         }

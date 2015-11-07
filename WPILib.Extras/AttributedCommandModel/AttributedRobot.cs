@@ -6,13 +6,17 @@ using NetworkTables;
 using WPILib.Buttons;
 using WPILib.Commands;
 using System.Collections.ObjectModel;
+using HAL_Base;
+using WPILib.LiveWindows;
+using static HAL_Base.HAL;
+using static System.Console;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
     /// <summary>
     /// The AttributedRobot class.  Derive from this class to use the Attributed Command Model
     /// </summary>
-    public class AttributedRobot : IterativeRobot
+    public class AttributedRobot : RobotBase
     {
         private readonly ReflectionContext m_reflectionContext;
 
@@ -62,12 +66,16 @@ namespace WPILib.Extras.AttributedCommandModel
         public AttributedRobot()
             :this(null)
         {
+            m_autonomousInitialized = false;
+            m_disabledInitialized = false;
+            m_teleopInitialized = false;
+            m_testInitialized = false;
         }
 
         /// <summary>
         /// Initializes the <see cref="AttributedRobot"/> and loads and sets up all of the subsystems and commands as they are specified.
         /// </summary>
-        public sealed override void RobotInit()
+        internal void _RobotInit()
         {
             var assemblies = GetAssemblies();
             var types = assemblies.SelectMany(assembly =>
@@ -94,13 +102,13 @@ namespace WPILib.Extras.AttributedCommandModel
             {
                 GenerateCommands(command);
             }
-            RobotInitCore();
+            RobotInit();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="RobotInit"/>.
+        /// Override this method to add additional code that executes after <see cref="_RobotInit"/>.
         /// </summary>
-        protected virtual void RobotInitCore()
+        public virtual void RobotInit()
         {
 
         }
@@ -220,122 +228,232 @@ namespace WPILib.Extras.AttributedCommandModel
         /// <summary>
         /// Starts the commands that were specified to start in autonomous mode.
         /// </summary>
-        public sealed override void AutonomousInit()
+        internal void _AutonomousInit()
         {
             StartPhaseCommands(MatchPhase.Autonomous);
-            AutonomousInitCore();
+            AutonomousInit();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="AutonomousInit"/>.
+        /// Override this method to add additional code that executes after <see cref="_AutonomousInit"/>.
         /// </summary>
-        protected virtual void AutonomousInitCore()
+        public virtual void AutonomousInit()
         { }
 
         /// <summary>
         /// Runs the <see cref="Scheduler"/> one step.
         /// </summary>
-        public sealed override void AutonomousPeriodic()
+        internal void _AutonomousPeriodic()
         {
             Scheduler.Instance.Run();
-            AutonomousPeriodicCore();
+            AutonomousPeriodic();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="AutonomousPeriodic"/>.
+        /// Override this method to add additional code that executes after <see cref="_AutonomousPeriodic"/>.
         /// </summary>
-        protected virtual void AutonomousPeriodicCore()
+        public virtual void AutonomousPeriodic()
         { }
 
         /// <summary>
         /// Starts the commands that were specified to start in teleoperated mode.
         /// </summary>
-        public sealed override void TeleopInit()
+        internal void _TeleopInit()
         {
             StartPhaseCommands(MatchPhase.Teleoperated);
-            TeleopInitCore();
+            TeleopInit();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="TeleopInit"/>.
+        /// Override this method to add additional code that executes after <see cref="_TeleopInit"/>.
         /// </summary>
-        protected virtual void TeleopInitCore()
+        public virtual void TeleopInit()
         { }
 
         /// <summary>
         /// Runs the <see cref="Scheduler"/> one step.
         /// </summary>
-        public sealed override void TeleopPeriodic()
+        internal void _TeleopPeriodic()
         {
             Scheduler.Instance.Run();
-            TeleopPeriodicCore();
+            TeleopPeriodic();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="TeleopPeriodic"/>.
+        /// Override this method to add additional code that executes after <see cref="_TeleopPeriodic"/>.
         /// </summary>
-        protected virtual void TeleopPeriodicCore()
+        public virtual void TeleopPeriodic()
         { }
 
         /// <summary>
         /// Starts the commands that were specified to start in disabled mode.
         /// </summary>
-        public sealed override void DisabledInit()
+        internal void _DisabledInit()
         {
             StartPhaseCommands(MatchPhase.Disabled);
-            DisabledInitCore();
+            DisabledInit();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="DisabledInit"/>.
+        /// Override this method to add additional code that executes after <see cref="_DisabledInit"/>.
         /// </summary>
-        protected virtual void DisabledInitCore()
+        public virtual void DisabledInit()
         { }
 
         /// <summary>
         /// Runs the <see cref="Scheduler"/> one step.
         /// </summary>
-        public sealed override void DisabledPeriodic()
+        internal void _DisabledPeriodic()
         {
             Scheduler.Instance.Run();
-            DisabledPeriodicCore();
+            DisabledPeriodic();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="DisabledPeriodic"/>.
+        /// Override this method to add additional code that executes after <see cref="_DisabledPeriodic"/>.
         /// </summary>
-        protected virtual void DisabledPeriodicCore()
+        public virtual void DisabledPeriodic()
         { }
 
         /// <summary>
         /// Starts the commands that were specified to start in test mode.
         /// </summary>
-        public sealed override void TestInit()
+        internal void _TestInit()
         {
             StartPhaseCommands(MatchPhase.Test);
-            TestInitCore();
+            TestInit();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="TestInit"/>.
+        /// Override this method to add additional code that executes after <see cref="_TestInit"/>.
         /// </summary>
-        protected virtual void TestInitCore()
+        public virtual void TestInit()
         { }
 
         /// <summary>
         /// Runs the <see cref="Scheduler"/> one step.
         /// </summary>
-        public sealed override void TestPeriodic()
+        internal void _TestPeriodic()
         {
             Scheduler.Instance.Run();
-            TestPeriodicCore();
+            TestPeriodic();
         }
 
         /// <summary>
-        /// Override this method to add additional code that executes after <see cref="TestPeriodic"/>.
+        /// Override this method to add additional code that executes after <see cref="_TestPeriodic"/>.
         /// </summary>
-        protected virtual void TestPeriodicCore()
+        public virtual void TestPeriodic()
         { }
 
+
+
+        private bool m_disabledInitialized;
+        private bool m_autonomousInitialized;
+        private bool m_teleopInitialized;
+        private bool m_testInitialized;
+
+        /// <summary>
+        /// Provide an alternate "main loop" via startCompetition().
+        /// </summary>
+        public override void StartCompetition()
+        {
+            Report(ResourceType.kResourceType_Framework, Instances.kFramework_Iterative);
+
+            _RobotInit();
+
+            HALNetworkCommunicationObserveUserProgramStarting();
+
+            LiveWindow.SetEnabled(false);
+            while (true)
+            {
+                //Console.WriteLine("RobotLoop");
+                // Call the appropriate function depending upon the current robot mode
+                if (IsDisabled)
+                {
+                    // call DisabledInit() if we are now just entering disabled mode from
+                    // either a different mode or from power-on
+                    if (!m_disabledInitialized)
+                    {
+                        LiveWindow.SetEnabled(false);
+                        _DisabledInit();
+                        m_disabledInitialized = true;
+                        // reset the initialization flags for the other modes
+                        m_autonomousInitialized = false;
+                        m_teleopInitialized = false;
+                        m_testInitialized = false;
+                    }
+                    if (NextPeriodReady)
+                    {
+                        HALNetworkCommunicationObserveUserProgramDisabled();
+                        _DisabledPeriodic();
+                    }
+                }
+                else if (IsTest)
+                {
+                    // call TestInit() if we are now just entering test mode from either
+                    // a different mode or from power-on
+                    if (!m_testInitialized)
+                    {
+                        LiveWindow.SetEnabled(true);
+                        _TestInit();
+                        m_testInitialized = true;
+                        m_autonomousInitialized = false;
+                        m_teleopInitialized = false;
+                        m_disabledInitialized = false;
+                    }
+                    if (NextPeriodReady)
+                    {
+                        HALNetworkCommunicationObserveUserProgramTest();
+                        _TestPeriodic();
+                    }
+                }
+                else if (IsAutonomous)
+                {
+                    // call Autonomous_Init() if this is the first time
+                    // we've entered autonomous_mode
+                    if (!m_autonomousInitialized)
+                    {
+                        LiveWindow.SetEnabled(false);
+                        // KBS NOTE: old code reset all PWMs and relays to "safe values"
+                        // whenever entering autonomous mode, before calling
+                        // "Autonomous_Init()"
+                        _AutonomousInit();
+                        m_autonomousInitialized = true;
+                        m_testInitialized = false;
+                        m_teleopInitialized = false;
+                        m_disabledInitialized = false;
+                    }
+                    if (NextPeriodReady)
+                    {
+                        HALNetworkCommunicationObserveUserProgramAutonomous();
+                        _AutonomousPeriodic();
+                    }
+                }
+                else
+                {
+                    // call Teleop_Init() if this is the first time
+                    // we've entered teleop_mode
+                    if (!m_teleopInitialized)
+                    {
+                        LiveWindow.SetEnabled(false);
+                        _TeleopInit();
+                        m_teleopInitialized = true;
+                        m_testInitialized = false;
+                        m_autonomousInitialized = false;
+                        m_disabledInitialized = false;
+                    }
+                    if (NextPeriodReady)
+                    {
+                        //HAL.NetworkCommunicationObserveUserProgramTeleop();
+                        HALNetworkCommunicationObserveUserProgramTeleop();
+                        _TeleopPeriodic();
+                    }
+                }
+                m_ds.WaitForData();
+            }
+            // ReSharper disable once FunctionNeverReturns
+        }
+
+        private bool NextPeriodReady => m_ds.NewControlData;
     }
 }

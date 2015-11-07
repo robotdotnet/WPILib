@@ -35,14 +35,14 @@ namespace WPILib.Tests.Commands
            {
                 DriverStationHelper.SetJoystickButton(0, 1, false);
                 Thread.Sleep(40);
-                robot.RobotInit();
-                robot.TeleopInit();
-                robot.TeleopPeriodic();
+                robot._RobotInit();
+                robot._TeleopInit();
+                robot._TeleopPeriodic();
                 Assert.IsFalse(s_commandStarted, "Command has not started");
                 DriverStationHelper.SetJoystickButton(0, 1, true);
                 Thread.Sleep(40);
-                robot.TeleopPeriodic();
-                robot.TeleopPeriodic();
+                robot._TeleopPeriodic();
+                robot._TeleopPeriodic();
                 Assert.IsTrue(s_commandStarted, "Command has started");
             }
         }
