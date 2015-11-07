@@ -36,6 +36,9 @@ namespace WPILib.Extras
 
         private Thread m_secondaryThread;
 
+        /// <summary>
+        /// Creates a new <see cref="LabViewRobot"/>.
+        /// </summary>
         public LabViewRobot()
         {
             m_autonomousInitialized = false;
@@ -148,6 +151,7 @@ namespace WPILib.Extras
                 }
                 m_ds.WaitForData();
             }
+            // ReSharper disable once FunctionNeverReturns
         }
 
         /// <summary>

@@ -8,6 +8,9 @@ namespace WPILib.Extras.AttributedCommandModel
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true, Inherited = false)]
     public sealed class ImportSubsystemAttribute : Attribute
     {
+        /// <summary>
+        /// Gets the name of the subsystem.
+        /// </summary>
         public string Name { get; }
         /// <summary>
         /// Apply this attribute to a subsystem parameter in a <see cref="WPILib.Commands.Command"/> constructor to disambiguate between multiple-exported subsystems of the same type for the <see cref="AttributedRobot"/> auto-loading.

@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using HAL_Base;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
-using static System.Console;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
