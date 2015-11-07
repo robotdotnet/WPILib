@@ -9,11 +9,11 @@ namespace WPILib.IntegrationTests.Test
 {
     public abstract class AbstractComsSetup
     {
-        private static readonly bool m_initialized = false;
+        private static readonly bool s_initialized;
 
         static AbstractComsSetup()
         {
-            if (!m_initialized)
+            if (!s_initialized)
             {
                 RobotBase.InitializeHardwareConfiguration();
                 HAL.HALNetworkCommunicationObserveUserProgramStarting();
@@ -23,7 +23,7 @@ namespace WPILib.IntegrationTests.Test
 
                 if (RobotBase.IsSimulation)
                 {
-                    m_initialized = true;
+                    s_initialized = true;
 
                     DriverStationHelper.StartDSLoop();
                     DriverStationHelper.SetRobotMode(DriverStationHelper.RobotMode.Teleop);
@@ -31,10 +31,10 @@ namespace WPILib.IntegrationTests.Test
 
                     Thread.Sleep(500);
 
-                    SimJumpers.AttachDIOPins(6, 7);
-                    SimJumpers.AttachDIOPins(8, 9);
+                    SimJumpers.AttachDioPins(6, 7);
+                    SimJumpers.AttachDioPins(8, 9);
                     SimJumpers.AttachRelay(0, 19, 18);
-                    SimJumpers.AttachAIO(2, 0);
+                    SimJumpers.AttachAio(2, 0);
 
                     SimData.Accelerometer.X = 0.0;
                     SimData.Accelerometer.Y = 0.0;
@@ -58,7 +58,7 @@ namespace WPILib.IntegrationTests.Test
 
                 Console.WriteLine();
 
-                m_initialized = true;
+                s_initialized = true;
 
                 Console.WriteLine("Running!");
             }

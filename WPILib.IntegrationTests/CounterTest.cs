@@ -4,55 +4,55 @@ using WPILib.IntegrationTests.Test;
 
 namespace WPILib.IntegrationTests
 {
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1)]
     public class CounterTest : AbstractComsSetup
     {
-        private static FakeCounterFixture counter = null;
+        private static FakeCounterFixture s_counter;
 
-        private int input;
-        private int output;
+        private readonly int m_input;
+        private readonly int m_output;
 
         public CounterTest(int input, int output)
         {
-            this.input = input;
-            this.output = output;
-            counter?.Teardown();
-            counter = new FakeCounterFixture(input, output);
+            m_input = input;
+            m_output = output;
+            s_counter?.Teardown();
+            s_counter = new FakeCounterFixture(input, output);
         }
 
         [TestFixtureTearDown]
         public static void TearDownAfterClass()
         {
-            counter.Teardown();
-            counter = null;
+            s_counter.Teardown();
+            s_counter = null;
         }
 
         [SetUp]
         public void Setup()
         {
-            counter.Setup();
-            counter.Reset();
+            s_counter.Setup();
+            s_counter.Reset();
         }
 
         [Test]
         public void TestDefault()
         {
-            Assert.AreEqual(0, counter.GetCounter().Get(), "Counter did not reset to 0");
+            Assert.AreEqual(0, s_counter.GetCounter().Get(), "Counter did not reset to 0");
         }
 
         [Test, Timeout(5000)]
         public void TestCount()
         {
             int goal = 100;
-            counter.GetFakeCounterSource().SetCount(goal);
-            counter.GetFakeCounterSource().Execute();
+            s_counter.GetFakeCounterSource().SetCount(goal);
+            s_counter.GetFakeCounterSource().Execute();
 
-            int count = counter.GetCounter().Get();
+            int count = s_counter.GetCounter().Get();
 
-            Assert.AreEqual(goal, count, $"Fake Counter, Input: {input}, Output: {output}, did not return {goal} instead got: {count}");
+            Assert.AreEqual(goal, count, $"Fake Counter, Input: {m_input}, Output: {m_output}, did not return {goal} instead got: {count}");
         }
     }
 }

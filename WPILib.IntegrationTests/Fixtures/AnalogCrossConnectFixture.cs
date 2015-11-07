@@ -2,10 +2,10 @@
 {
     public abstract class AnalogCrossConnectFixture : ITestFixture
     {
-        private bool initialized = false;
+        private bool m_initialized;
 
-        private AnalogInput input;
-        private AnalogOutput output;
+        private AnalogInput m_input;
+        private AnalogOutput m_output;
 
         internal abstract AnalogInput GiveAnalogInput();
 
@@ -15,11 +15,11 @@
         {
             lock (this)
             {
-                if (!initialized)
+                if (!m_initialized)
                 {
-                    input = GiveAnalogInput();
-                    output = GiveAnalogOutput();
-                    initialized = true;
+                    m_input = GiveAnalogInput();
+                    m_output = GiveAnalogOutput();
+                    m_initialized = true;
                 }
             }
         }
@@ -28,7 +28,7 @@
         public bool Setup()
         {
             Initialize();
-            output.SetVoltage(0);
+            m_output.SetVoltage(0);
             return true;
         }
 
@@ -40,21 +40,21 @@
 
         public bool Teardown()
         {
-            input.Dispose();
-            output.Dispose();
+            m_input.Dispose();
+            m_output.Dispose();
             return true;
         }
 
         public AnalogOutput GetOutput()
         {
             Initialize();
-            return output;
+            return m_output;
         }
 
         public AnalogInput GetInput()
         {
             Initialize();
-            return input;
+            return m_input;
         }
     }
 }

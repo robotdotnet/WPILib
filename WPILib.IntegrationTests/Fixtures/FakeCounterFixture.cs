@@ -4,35 +4,35 @@ namespace WPILib.IntegrationTests.Fixtures
 {
     public class FakeCounterFixture : ITestFixture
     {
-        private readonly DIOCrossConnectFixture dio;
+        private readonly DioCrossConnectFixture m_dio;
         private bool m_allocated;
-        private readonly FakeCounterSource source;
-        private readonly Counter counter;
+        private readonly FakeCounterSource m_source;
+        private readonly Counter m_counter;
 
-        public FakeCounterFixture(DIOCrossConnectFixture dio)
+        public FakeCounterFixture(DioCrossConnectFixture dio)
         {
-            this.dio = dio;
+            m_dio = dio;
             m_allocated = false;
-            source = new FakeCounterSource(dio.GetOutput());
-            counter = new Counter(dio.GetInput());
+            m_source = new FakeCounterSource(dio.GetOutput());
+            m_counter = new Counter(dio.GetInput());
         }
 
         public FakeCounterFixture(int input, int output)
         {
-            this.dio = new DIOCrossConnectFixture(input, output);
+            m_dio = new DioCrossConnectFixture(input, output);
             m_allocated = true;
-            source = new FakeCounterSource(dio.GetOutput());
-            counter = new Counter(dio.GetInput());
+            m_source = new FakeCounterSource(m_dio.GetOutput());
+            m_counter = new Counter(m_dio.GetInput());
         }
 
         public FakeCounterSource GetFakeCounterSource()
         {
-            return source;
+            return m_source;
         }
 
         public Counter GetCounter()
         {
-            return counter;
+            return m_counter;
         }
 
 
@@ -43,17 +43,17 @@ namespace WPILib.IntegrationTests.Fixtures
 
         public bool Reset()
         {
-            counter.Reset();
+            m_counter.Reset();
             return true;
         }
 
         public bool Teardown()
         {
-            counter.Dispose();
-            source.Dispose();
+            m_counter.Dispose();
+            m_source.Dispose();
             if (m_allocated)
             {
-                dio.Teardown();
+                m_dio.Teardown();
                 m_allocated = false;
             }
             return true;

@@ -16,11 +16,11 @@ namespace WPILib.IntegrationTests.Commands
 
         public class ASubsystem : Subsystem
         {
-            internal Command command;
+            internal Command Command;
             protected override void InitDefaultCommand()
             {
-                if (command != null)
-                    SetDefaultCommand(command);
+                if (Command != null)
+                    SetDefaultCommand(Command);
             }
 
             public void PublicInitDefaultCommand()
@@ -30,7 +30,7 @@ namespace WPILib.IntegrationTests.Commands
 
             public void Init(Command command)
             {
-                this.command = command;
+                Command = command;
             }
         }
 

@@ -40,7 +40,7 @@ namespace WPILib.IntegrationTests.Commands
             AssertCommandState(command1, 1, 1, 1, 0, 0);
             AssertCommandState(command2, 0, 0, 0, 0, 0);
             AssertCommandState(command3, 0, 0, 0, 0, 0);
-            Sleep(1000);// command 1 timeout
+            Sleep(1000);// Command 1 timeout
             Scheduler.Instance.Run();
             AssertCommandState(command1, 1, 1, 1, 0, 1);
             AssertCommandState(command2, 1, 1, 1, 0, 0);
@@ -49,7 +49,7 @@ namespace WPILib.IntegrationTests.Commands
             AssertCommandState(command1, 1, 1, 1, 0, 1);
             AssertCommandState(command2, 1, 2, 2, 0, 0);
             AssertCommandState(command3, 0, 0, 0, 0, 0);
-            Sleep(2000);// command 2 timeout
+            Sleep(2000);// Command 2 timeout
             Scheduler.Instance.Run();
             AssertCommandState(command1, 1, 1, 1, 0, 1);
             AssertCommandState(command2, 1, 2, 2, 0, 1);

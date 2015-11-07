@@ -3,37 +3,37 @@ using NUnit.Framework;
 
 namespace WPILib.IntegrationTests.Fixtures
 {
-    public class DIOCrossConnectFixture : ITestFixture
+    public class DioCrossConnectFixture : ITestFixture
     {
-        private readonly DigitalInput input;
-        private readonly DigitalOutput output;
+        private readonly DigitalInput m_input;
+        private readonly DigitalOutput m_output;
         private bool m_allocated;
 
-        public DIOCrossConnectFixture(DigitalInput input, DigitalOutput output)
+        public DioCrossConnectFixture(DigitalInput input, DigitalOutput output)
         {
             Assert.NotNull(input);
             Assert.NotNull(output);
-            this.input = input;
-            this.output = output;
+            m_input = input;
+            m_output = output;
             m_allocated = false;
         }
 
-        public DIOCrossConnectFixture(int input, int output)
+        public DioCrossConnectFixture(int input, int output)
         {
             Assert.AreNotEqual(input, output);
-            this.input = new DigitalInput(input);
-            this.output = new DigitalOutput(output);
+            m_input = new DigitalInput(input);
+            m_output = new DigitalOutput(output);
             m_allocated = true;
         }
 
         public DigitalInput GetInput()
         {
-            return input;
+            return m_input;
         }
 
         public DigitalOutput GetOutput()
         {
-            return output;
+            return m_output;
         }
 
         public bool Setup()
@@ -45,13 +45,13 @@ namespace WPILib.IntegrationTests.Fixtures
         {
             try
             {
-                input.CancelInterrupts();
+                m_input.CancelInterrupts();
             }
             catch (InvalidOperationException)
             {
 
             }
-            output.Set(false);
+            m_output.Set(false);
             return true;
         }
 
@@ -59,8 +59,8 @@ namespace WPILib.IntegrationTests.Fixtures
         {
             if (m_allocated)
             {
-                input.Dispose();
-                output.Dispose();
+                m_input.Dispose();
+                m_output.Dispose();
                 m_allocated = false;
             }
             return true;

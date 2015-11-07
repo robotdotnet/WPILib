@@ -9,7 +9,8 @@ namespace WPILib.IntegrationTests.MockHardware
         private int m_count;
         private int m_mSec;
         private bool m_forward;
-        private DigitalOutput m_outputA, m_outputB;
+        private readonly DigitalOutput m_outputA;
+        private readonly DigitalOutput m_outputB;
         private readonly bool m_allocatedOutputs;
 
         internal void Run()

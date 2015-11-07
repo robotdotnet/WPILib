@@ -9,108 +9,108 @@ namespace WPILib.IntegrationTests
     [TestFixture]
     public class RelayCrossConnectTest : AbstractComsSetup
     {
-        private static NetworkTable table;
-        private RelayCrossConnectFixture relayFixture;
+        private static NetworkTable s_table;
+        private RelayCrossConnectFixture m_relayFixture;
 
         [TestFixtureSetUp]
         public static void ClassSetup()
         {
             if (RobotBase.IsReal)
             {
-                table = NetworkTable.GetTable("_RELAY_CROSS_CONNECT_TEST_");
+                s_table = NetworkTable.GetTable("_RELAY_CROSS_CONNECT_TEST_");
             }
         }
 
         [SetUp]
         public void Setup()
         {
-            relayFixture = TestBench.GetRelayCrossConnectFixture();
-            relayFixture.Setup();
-            if (table != null)
+            m_relayFixture = TestBench.GetRelayCrossConnectFixture();
+            m_relayFixture.Setup();
+            if (s_table != null)
             {
-                relayFixture.GetRelay().InitTable(table);
+                m_relayFixture.GetRelay().InitTable(s_table);
             }
         }
 
         [TearDown]
         public void TearDown()
         {
-            relayFixture.Reset();
-            relayFixture.Teardown();
+            m_relayFixture.Reset();
+            m_relayFixture.Teardown();
         }
 
         [Test]
         public void TestBothHigh()
         {
-            relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
-            relayFixture.GetRelay().Set(Relay.Value.On);
-            relayFixture.GetRelay().UpdateTable();
-            Assert.IsTrue(relayFixture.GetInputOne().Get(), "Input one was not high when relay set both high.");
-            Assert.IsTrue(relayFixture.GetInputTwo().Get(), "Input two was not high when relay set both high.");
-            if (table != null)
+            m_relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
+            m_relayFixture.GetRelay().Set(Relay.Value.On);
+            m_relayFixture.GetRelay().UpdateTable();
+            Assert.IsTrue(m_relayFixture.GetInputOne().Get(), "Input one was not high when relay set both high.");
+            Assert.IsTrue(m_relayFixture.GetInputTwo().Get(), "Input two was not high when relay set both high.");
+            if (s_table != null)
             {
-                Assert.AreEqual("On", table.GetString("Value"));
+                Assert.AreEqual("On", s_table.GetString("Value"));
             }
         }
 
         [Test]
         public void TestFirstHigh()
         {
-            relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
-            relayFixture.GetRelay().Set(Relay.Value.Forward);
-            relayFixture.GetRelay().UpdateTable();
-            Assert.IsFalse(relayFixture.GetInputOne().Get(), "Input one was not low when relay set Value.Forward.");
-            Assert.IsTrue(relayFixture.GetInputTwo().Get(), "Input two was not high when relay set Value.Forward.");
-            if (table != null)
+            m_relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
+            m_relayFixture.GetRelay().Set(Relay.Value.Forward);
+            m_relayFixture.GetRelay().UpdateTable();
+            Assert.IsFalse(m_relayFixture.GetInputOne().Get(), "Input one was not low when relay set Value.Forward.");
+            Assert.IsTrue(m_relayFixture.GetInputTwo().Get(), "Input two was not high when relay set Value.Forward.");
+            if (s_table != null)
             {
-                Assert.AreEqual("Forward", table.GetString("Value"));
+                Assert.AreEqual("Forward", s_table.GetString("Value"));
             }
         }
 
         [Test]
         public void TestSecondHigh()
         {
-            relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
-            relayFixture.GetRelay().Set(Relay.Value.Reverse);
-            relayFixture.GetRelay().UpdateTable();
-            Assert.IsTrue(relayFixture.GetInputOne().Get(), "Input one was not high when relay set Value.Reverse.");
-            Assert.False(relayFixture.GetInputTwo().Get(), "Input two was not low when relay set Value.Reverse.");
-            if (table != null)
+            m_relayFixture.GetRelay().SetDirection(Relay.Direction.Both);
+            m_relayFixture.GetRelay().Set(Relay.Value.Reverse);
+            m_relayFixture.GetRelay().UpdateTable();
+            Assert.IsTrue(m_relayFixture.GetInputOne().Get(), "Input one was not high when relay set Value.Reverse.");
+            Assert.False(m_relayFixture.GetInputTwo().Get(), "Input two was not low when relay set Value.Reverse.");
+            if (s_table != null)
             {
-                Assert.AreEqual("Reverse", table.GetString("Value"));
+                Assert.AreEqual("Reverse", s_table.GetString("Value"));
             }
         }
 
         [Test]
         public void TestSetValueForwardWithDirectionReverseThrowingException()
         {
-            relayFixture.GetRelay().SetDirection(Relay.Direction.Forward);
+            m_relayFixture.GetRelay().SetDirection(Relay.Direction.Forward);
             Assert.Throws<InvalidValueException>(() =>
             {
-                relayFixture.GetRelay().Set(Relay.Value.Reverse);
+                m_relayFixture.GetRelay().Set(Relay.Value.Reverse);
             });
         }
 
         [Test]
         public void TestSetValueReverseWithDirectionForwardThrowingException()
         {
-            relayFixture.GetRelay().SetDirection(Relay.Direction.Reverse);
+            m_relayFixture.GetRelay().SetDirection(Relay.Direction.Reverse);
             Assert.Throws<InvalidValueException>(() =>
             {
-                relayFixture.GetRelay().Set(Relay.Value.Forward);
+                m_relayFixture.GetRelay().Set(Relay.Value.Forward);
             });
         }
 
         [Test]
         public void TestInitialSettings()
         {
-            Assert.AreEqual(Relay.Value.Off, relayFixture.GetRelay().Get());
+            Assert.AreEqual(Relay.Value.Off, m_relayFixture.GetRelay().Get());
 
-            Assert.IsFalse(relayFixture.GetInputOne().Get());
-            Assert.IsFalse(relayFixture.GetInputTwo().Get());
-            if (table != null)
+            Assert.IsFalse(m_relayFixture.GetInputOne().Get());
+            Assert.IsFalse(m_relayFixture.GetInputTwo().Get());
+            if (s_table != null)
             {
-                Assert.AreEqual("Off", table.GetString("Value"));
+                Assert.AreEqual("Off", s_table.GetString("Value"));
             }
         }
     }

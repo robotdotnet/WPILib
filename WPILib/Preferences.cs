@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using HAL_Base;
 using NetworkTables;
+using NetworkTables.Native.Exceptions;
 using NetworkTables.Tables;
 
 namespace WPILib
@@ -78,6 +79,24 @@ namespace WPILib
             m_table.SetPersistent(key);
         }
 
+        public void PutInt(string key, int value)
+        {
+            m_table.PutNumber(key, value);
+            m_table.SetPersistent(key);
+        }
+
+        public void PutLong(string key, long value)
+        {
+            m_table.PutNumber(key, value);
+            m_table.SetPersistent(key);
+        }
+
+        public void PutFloat(string key, float value)
+        {
+            m_table.PutNumber(key, value);
+            m_table.SetPersistent(key);
+        }
+
         public void PutBoolean(string key, bool value)
         {
             m_table.PutBoolean(key, value);
@@ -107,6 +126,42 @@ namespace WPILib
         public bool GetBoolean(string key, bool backup)
         {
             return m_table.GetBoolean(key, backup);
+        }
+
+        public int GetInt(string key, int backup)
+        {
+            try
+            {
+                return (int)m_table.GetNumber(key);
+            }
+            catch (TableKeyNotDefinedException)
+            {
+                return backup;
+            }
+        }
+
+        public long GetLong(string key, long backup)
+        {
+            try
+            {
+                return (long)m_table.GetNumber(key);
+            }
+            catch (TableKeyNotDefinedException)
+            {
+                return backup;
+            }
+        }
+
+        public float GetFloat(string key, float backup)
+        {
+            try
+            {
+                return (float)m_table.GetNumber(key);
+            }
+            catch (TableKeyNotDefinedException)
+            {
+                return backup;
+            }
         }
     }
 }

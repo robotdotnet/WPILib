@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using HAL_Base;
 using WPILib.LiveWindows;
 using static HAL_Base.HAL;
@@ -22,7 +17,17 @@ namespace WPILib.Extras
         Execute,
     }
 
-    public class LabVIEWRobot : RobotBase
+    /// <summary>
+    /// The <see cref="LabViewRobot"/> base class creates a robot which is structured similarly to
+    /// a robot written in LabVIEW. 
+    /// </summary>
+    /// <remarks>
+    /// The <see cref="Test"/> method runs whenever the robot is in test most, no matter if it is 
+    /// disabled or enabled. It runs in a seperate thread, and is killed when the robot leaves test mode.
+    /// <para>The <see cref="Autonomous"/> method runs whenever the robot is in autonomous mode and enabled.
+    /// It runs in a seperate thread which is automatically killed at the end of autonomous.</para>
+    /// </remarks>
+    public class LabViewRobot : RobotBase
     {
         private bool m_disabledInitialized;
         private bool m_autonomousInitialized;
@@ -31,7 +36,7 @@ namespace WPILib.Extras
 
         private Thread m_secondaryThread;
 
-        public LabVIEWRobot()
+        public LabViewRobot()
         {
             m_autonomousInitialized = false;
             m_disabledInitialized = false;
@@ -154,7 +159,7 @@ namespace WPILib.Extras
         /// </remarks>
         public virtual void Autonomous()
         {
-            WriteLine($"Default {nameof(LabVIEWRobot)}.{nameof(Autonomous)} method... Overload me!");
+            WriteLine($"Default {nameof(LabViewRobot)}.{nameof(Autonomous)} method... Overload me!");
         }
 
         /// <summary>
@@ -164,7 +169,7 @@ namespace WPILib.Extras
         /// <param name="callContext">Init if first call, otherwise Execute</param>
         public virtual void Teleoperated(CallContext callContext)
         {
-            WriteLine($"Default {nameof(LabVIEWRobot)}.{nameof(Teleoperated)} method... Overload me!");
+            WriteLine($"Default {nameof(LabViewRobot)}.{nameof(Teleoperated)} method... Overload me!");
         }
 
         /// <summary>
@@ -174,7 +179,7 @@ namespace WPILib.Extras
         /// <param name="callContext">Init if first call, otherwise Execute</param>
         public virtual void Disabled(CallContext callContext)
         {
-            WriteLine($"Default {nameof(LabVIEWRobot)}.{nameof(Disabled)} method... Overload me!");
+            WriteLine($"Default {nameof(LabViewRobot)}.{nameof(Disabled)} method... Overload me!");
         }
 
         /// <summary>
@@ -189,7 +194,7 @@ namespace WPILib.Extras
         /// </remarks>
         public virtual void Test()
         {
-            WriteLine($"Default {nameof(LabVIEWRobot)}.{nameof(Test)} method... Overload me!");
+            WriteLine($"Default {nameof(LabViewRobot)}.{nameof(Test)} method... Overload me!");
         }
 
 
@@ -203,15 +208,13 @@ namespace WPILib.Extras
 
         private void InitializeTest()
         {
-            m_secondaryThread = new Thread(Test);
-            m_secondaryThread.IsBackground = false;
+            m_secondaryThread = new Thread(Test) {IsBackground = false};
             m_secondaryThread.Start();
         }
 
         private void InitializeAuto()
         {
-            m_secondaryThread = new Thread(Autonomous);
-            m_secondaryThread.IsBackground = false;
+            m_secondaryThread = new Thread(Autonomous) {IsBackground = false};
             m_secondaryThread.Start();
         }
 

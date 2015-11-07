@@ -9,14 +9,14 @@ namespace WPILib.IntegrationTests
 {
     public class TalonMotorFixture : MotorEncoderFixture
     {
-        public override int GetPDPChannel()
+        public override int GetPdpChannel()
         {
-            return TestBench.kTalonPDPChannel;
+            return TestBench.TalonPdpChannel;
         }
 
         protected override ISpeedController GiveSpeedController()
         {
-            return new Talon(TestBench.kTalonChannel);
+            return new Talon(TestBench.TalonChannel);
         }
 
         protected override DigitalInput GiveDigitalInputA()
@@ -32,14 +32,14 @@ namespace WPILib.IntegrationTests
 
     public class VictorMotorFixture : MotorEncoderFixture
     {
-        public override int GetPDPChannel()
+        public override int GetPdpChannel()
         {
-            return TestBench.kVictorPDPChannel;
+            return TestBench.VictorPdpChannel;
         }
 
         protected override ISpeedController GiveSpeedController()
         {
-            return new Victor(TestBench.kVictorChannel);
+            return new Victor(TestBench.VictorChannel);
         }
 
         protected override DigitalInput GiveDigitalInputA()
@@ -55,14 +55,14 @@ namespace WPILib.IntegrationTests
 
     public class JaguarMotorFixture : MotorEncoderFixture
     {
-        public override int GetPDPChannel()
+        public override int GetPdpChannel()
         {
-            return TestBench.kJaguarPDPChannel;
+            return TestBench.JaguarPdpChannel;
         }
 
         protected override ISpeedController GiveSpeedController()
         {
-            return new Jaguar(TestBench.kJaguarChannel);
+            return new Jaguar(TestBench.JaguarChannel);
         }
 
         protected override DigitalInput GiveDigitalInputA()
@@ -79,18 +79,18 @@ namespace WPILib.IntegrationTests
     [TestFixture(0.001d, 0.0005d, 0.0d, typeof(TalonMotorFixture))]
     [TestFixture(0.001d, 0.0005d, 0.0d, typeof(JaguarMotorFixture))]
     [TestFixture(0.001d, 0.0005d, 0.0d, typeof(VictorMotorFixture))]
-    public class PIDTest : AbstractComsSetup
+    public class PidTest : AbstractComsSetup
     {
-        private NetworkTable table;
+        private NetworkTable m_table;
         private const double AbsoluteTolerance = 50;
         private const double OutputRange = 0.3;
 
-        private PIDController controller = null;
-        private static MotorEncoderFixture me = null;
+        private PIDController m_controller;
+        private static MotorEncoderFixture s_me;
 
-        private readonly double k_p, k_i, k_d;
+        private readonly double m_kP, m_kI, m_kD;
 
-        public PIDTest(double p, double i, double d, Type type)
+        public PidTest(double p, double i, double d, Type type)
         {
             if (RobotBase.IsSimulation)
             {
@@ -99,14 +99,14 @@ namespace WPILib.IntegrationTests
 
             MotorEncoderFixture mef = (MotorEncoderFixture)Activator.CreateInstance(type);
 
-            if (me != null && !me.Equals(mef))
+            if (s_me != null && !s_me.Equals(mef))
             {
-                me.Teardown();
+                s_me.Teardown();
             }
-            me = mef;
-            this.k_p = p;
-            this.k_i = i;
-            this.k_d = d;
+            s_me = mef;
+            m_kP = p;
+            m_kI = i;
+            m_kD = d;
         }
 
 
@@ -129,36 +129,36 @@ namespace WPILib.IntegrationTests
             {
                 return;
             }
-            me?.Teardown();
-            me = null;
+            s_me?.Teardown();
+            s_me = null;
         }
 
         [SetUp]
         public void Setup()
         {
-            me.Setup();
-            table = NetworkTable.GetTable("TEST_PID");
-            controller = new PIDController(k_p, k_i, k_d, me.GetEncoder(), me.GetMotor());
-            controller.InitTable(table);
+            s_me.Setup();
+            m_table = NetworkTable.GetTable("TEST_PID");
+            m_controller = new PIDController(m_kP, m_kI, m_kD, s_me.GetEncoder(), s_me.GetMotor());
+            m_controller.InitTable(m_table);
         }
 
         [TearDown]
         public void TearDown()
         {
-            controller.Disable();
-            controller.Dispose();
-            controller = null;
-            me.Reset();
+            m_controller.Disable();
+            m_controller.Dispose();
+            m_controller = null;
+            s_me.Reset();
         }
 
         private void SetupAbsoluteTolerance()
         {
-            controller.SetAbsoluteTolerance(AbsoluteTolerance);
+            m_controller.SetAbsoluteTolerance(AbsoluteTolerance);
         }
 
         private void SetupOutputRange()
         {
-            controller.SetOutputRange(-OutputRange, OutputRange);
+            m_controller.SetOutputRange(-OutputRange, OutputRange);
         }
 
         [Test]
@@ -167,14 +167,14 @@ namespace WPILib.IntegrationTests
             SetupAbsoluteTolerance();
             SetupOutputRange();
             double setpoint = 2500.0;
-            controller.Setpoint = setpoint;
-            Assert.IsFalse(controller.Enabled, "PID did not begin disabled");
-            Assert.AreEqual(setpoint, controller.GetError(), 0, "PID.GetError() did not start at " + setpoint);
-            Assert.AreEqual(k_p, table.GetNumber("p"), 0);
-            Assert.AreEqual(k_i, table.GetNumber("i"), 0);
-            Assert.AreEqual(k_d, table.GetNumber("d"), 0);
-            Assert.AreEqual(setpoint, table.GetNumber("setpoint"), 0);
-            Assert.IsFalse(table.GetBoolean("enabled"));
+            m_controller.Setpoint = setpoint;
+            Assert.IsFalse(m_controller.Enabled, "PID did not begin disabled");
+            Assert.AreEqual(setpoint, m_controller.GetError(), 0, "PID.GetError() did not start at " + setpoint);
+            Assert.AreEqual(m_kP, m_table.GetNumber("p"), 0);
+            Assert.AreEqual(m_kI, m_table.GetNumber("i"), 0);
+            Assert.AreEqual(m_kD, m_table.GetNumber("d"), 0);
+            Assert.AreEqual(setpoint, m_table.GetNumber("setpoint"), 0);
+            Assert.IsFalse(m_table.GetBoolean("enabled"));
         }
 
         [Test]
@@ -183,16 +183,16 @@ namespace WPILib.IntegrationTests
             SetupAbsoluteTolerance();
             SetupOutputRange();
             double setpoint = 2500.0;
-            controller.Setpoint = setpoint;
-            controller.Enable();
+            m_controller.Setpoint = setpoint;
+            m_controller.Enable();
             Timer.Delay(0.5);
-            Assert.IsTrue(table.GetBoolean("enabled"));
-            Assert.IsTrue(controller.Enabled);
-            Assert.AreNotEqual(0.0, me.GetMotor().Get());
-            controller.Reset();
-            Assert.IsFalse(table.GetBoolean("enabled"));
-            Assert.IsFalse(controller.Enabled);
-            Assert.AreEqual(0, me.GetMotor().Get(), 0);
+            Assert.IsTrue(m_table.GetBoolean("enabled"));
+            Assert.IsTrue(m_controller.Enabled);
+            Assert.AreNotEqual(0.0, s_me.GetMotor().Get());
+            m_controller.Reset();
+            Assert.IsFalse(m_table.GetBoolean("enabled"));
+            Assert.IsFalse(m_controller.Enabled);
+            Assert.AreEqual(0, s_me.GetMotor().Get(), 0);
         }
 
         [Test]
@@ -201,10 +201,10 @@ namespace WPILib.IntegrationTests
             SetupAbsoluteTolerance();
             SetupOutputRange();
             double setpoint = 2500.0;
-            controller.Disable();
-            controller.Setpoint = setpoint;
-            controller.Enable();
-            Assert.AreEqual(setpoint, controller.Setpoint, "Did not correctly set setpoint");
+            m_controller.Disable();
+            m_controller.Setpoint = setpoint;
+            m_controller.Enable();
+            Assert.AreEqual(setpoint, m_controller.Setpoint, "Did not correctly set setpoint");
         }
 
         [Test, Timeout(10000)]
@@ -213,19 +213,19 @@ namespace WPILib.IntegrationTests
             SetupAbsoluteTolerance();
             SetupOutputRange();
             double setpoint = 2500.0;
-            Assert.AreEqual(0, controller.Get(), 0, PIDData() + " did not start at 0");
-            controller.Setpoint = setpoint;
-            Assert.AreEqual(setpoint, controller.GetError(), 0, PIDData() + " did not have an error of " + setpoint);
-            controller.Enable();
+            Assert.AreEqual(0, m_controller.Get(), 0, PidData() + " did not start at 0");
+            m_controller.Setpoint = setpoint;
+            Assert.AreEqual(setpoint, m_controller.GetError(), 0, PidData() + " did not have an error of " + setpoint);
+            m_controller.Enable();
             Timer.Delay(0.5);
-            controller.Disable();
-            Assert.IsTrue(controller.OnTarget(), PIDData() + " Was not on Target. Controller Error: " + controller.GetError());
+            m_controller.Disable();
+            Assert.IsTrue(m_controller.OnTarget(), PidData() + " Was not on Target. Controller Error: " + m_controller.GetError());
         }
 
-        private string PIDData()
+        private string PidData()
         {
-            return me.GetType() + " PID {P:" + controller.P + " I:" + controller.I + " D:"
-                + controller.D + "} ";
+            return s_me.GetType() + " PID {P:" + m_controller.P + " I:" + m_controller.I + " D:"
+                + m_controller.D + "} ";
         }
 
         [Test]
@@ -234,7 +234,7 @@ namespace WPILib.IntegrationTests
             SetupOutputRange();
             Assert.Throws<InvalidOperationException>(() =>
             {
-                controller.OnTarget();
+                m_controller.OnTarget();
             });
         }
     }

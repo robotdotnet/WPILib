@@ -7,32 +7,32 @@ namespace WPILib.IntegrationTests
 {
     public class AnalogPotentiometerTest : AbstractComsSetup
     {
-        private AnalogCrossConnectFixture analogIO;
-        private FakePotentiometerSource potSource;
-        private AnalogPotentiometer pot;
+        private AnalogCrossConnectFixture m_analogIo;
+        private FakePotentiometerSource m_potSource;
+        private AnalogPotentiometer m_pot;
 
-        private const double DOUBLE_COMPARISON_DELTA = 2.0;
+        private const double DoubleComparisonDelta = 2.0;
 
         [SetUp]
         public void Setup()
         {
-            analogIO = TestBench.GetAnalogCrossConnectFixture();
-            potSource = new FakePotentiometerSource(analogIO.GetOutput(), 360);
-            pot = new AnalogPotentiometer(analogIO.GetInput(), 360.0, 0);
+            m_analogIo = TestBench.GetAnalogCrossConnectFixture();
+            m_potSource = new FakePotentiometerSource(m_analogIo.GetOutput(), 360);
+            m_pot = new AnalogPotentiometer(m_analogIo.GetInput(), 360.0, 0);
         }
 
         [TearDown]
         public void TearDown()
         {
-            potSource.Reset();
-            pot.Dispose();
-            analogIO.Teardown();
+            m_potSource.Reset();
+            m_pot.Dispose();
+            m_analogIo.Teardown();
         }
 
         [Test]
         public void TestInitialSettings()
         {
-            Assert.AreEqual(0, pot.Get(), DOUBLE_COMPARISON_DELTA);
+            Assert.AreEqual(0, m_pot.Get(), DoubleComparisonDelta);
         }
 
         [Test]
@@ -40,10 +40,10 @@ namespace WPILib.IntegrationTests
         {
             for (double i = 0; i < 360.0; i = i + 1.0)
             {
-                potSource.SetAngle(i);
-                potSource.SetMaxVoltage(ControllerPower.GetVoltage5V());
+                m_potSource.SetAngle(i);
+                m_potSource.SetMaxVoltage(ControllerPower.GetVoltage5V());
                 Timer.Delay(0.02);
-                Assert.AreEqual(i, pot.Get(), DOUBLE_COMPARISON_DELTA);
+                Assert.AreEqual(i, m_pot.Get(), DoubleComparisonDelta);
             }
         }
     }

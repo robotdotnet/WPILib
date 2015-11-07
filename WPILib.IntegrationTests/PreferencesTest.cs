@@ -6,8 +6,8 @@ using WPILib.IntegrationTests.Test;
 
 namespace WPILib.IntegrationTests
 {
-    /*
     [TestFixture]
+    [Ignore("Waiting for a new NetworkTables drop that fixes the shutdown hang issue")]
     public class PreferencesTest : AbstractComsSetup
     {
         private NetworkTable prefTable;
@@ -17,14 +17,17 @@ namespace WPILib.IntegrationTests
         [SetUp]
         public void SetUp()
         {
+            NetworkTable.Shutdown();
+            /*
             //We can't run NT or File based tests on the simulator. Just auto pass them.
             if (RobotBase.IsSimulation)
             {
                 return;
             }
+            */
             try
             {
-                string file = "/home/lvuser/wpilib-preferences.ini";
+                string file = "networktables.ini";
                 if (File.Exists(file))
                 {
                     File.Delete(file);
@@ -32,7 +35,7 @@ namespace WPILib.IntegrationTests
 
                 using (StreamWriter writer = new StreamWriter(file))
                 {
-                    writer.Write("checkedValueInt = 2\ncheckedValueDouble = .2\ncheckedValueFloat = 3.14\ncheckedValueLong = 172\ncheckedValueString =\"hello \nHow are you ?\"\ncheckedValueBoolean = false");
+                    writer.Write("[NetworkTables Storage 3.0]\ndouble \"/Preferences/checkedValueInt\"=2\ndouble \"/Preferences/checkedValueDouble\"=.2\ndouble \"/Preferences/checkedValueFloat\"=3.14\ndouble \"/Preferences/checkedValueLong\"=172\nstring \"/Preferences/checkedValueString\"=\"hello \\nHow are you ?\"\nboolean \"/Preferences/checkedValueBoolean\"=false\n");
                 }
 
             }
@@ -40,6 +43,8 @@ namespace WPILib.IntegrationTests
             {
                 Console.WriteLine(exception);
             }
+
+            NetworkTable.Initialize();
 
             pref = Preferences.Instance;
             prefTable = NetworkTable.GetTable("Preferences");
@@ -88,7 +93,6 @@ namespace WPILib.IntegrationTests
             Assert.AreEqual(pref.GetFloat("checkedValueFloat", 0), 0, 0);
             Assert.IsFalse(pref.GetBoolean("checkedValueBoolean", false));
             AddCheckedValue();
-            pref.Save();
             Assert.AreEqual(check, pref.GetLong("checkedValueLong", 0));
             Assert.AreEqual(pref.GetDouble("checkedValueDouble", 0), 1, 0);
             Assert.AreEqual(pref.GetString("checkedValueString", ""), "checked");
@@ -112,5 +116,4 @@ namespace WPILib.IntegrationTests
             pref.Remove(networkedNumber);
         }
     }
-    */
 }

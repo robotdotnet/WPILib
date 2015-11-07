@@ -4,55 +4,55 @@ using WPILib.IntegrationTests.Test;
 
 namespace WPILib.IntegrationTests
 {
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1)]
-    public class DIOCrossConnectTest : AbstractInterruptTest
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1)]
+    public class DioCrossConnectTest : AbstractInterruptTest
     {
-        private static DIOCrossConnectFixture dio = null;
+        private static DioCrossConnectFixture s_dio;
 
 
-        public DIOCrossConnectTest(int input, int output)
+        public DioCrossConnectTest(int input, int output)
         {
-            dio?.Teardown();
-            dio = new DIOCrossConnectFixture(input, output);
+            s_dio?.Teardown();
+            s_dio = new DioCrossConnectFixture(input, output);
         }
 
         [TestFixtureTearDown]
         public static void TearDownAfterClass()
         {
-            dio.Teardown();
-            dio = null;
+            s_dio.Teardown();
+            s_dio = null;
         }
 
         [TearDown]
         public void TearDown()
         {
-            dio.Reset();
+            s_dio.Reset();
         }
 
         [Test]
         public void TestSetHigh()
         {
-            dio.GetOutput().Set(true);
-            Assert.IsTrue(dio.GetInput().Get(), "DIO Not High after no delay");
+            s_dio.GetOutput().Set(true);
+            Assert.IsTrue(s_dio.GetInput().Get(), "DIO Not High after no delay");
             Timer.Delay(0.02);
-            Assert.IsTrue(dio.GetInput().Get(), "DIO Not High after 0.05s delay");
+            Assert.IsTrue(s_dio.GetInput().Get(), "DIO Not High after 0.05s delay");
         }
 
         [Test]
         public void TestSetLow()
         {
-            dio.GetOutput().Set(false);
-            Assert.IsFalse(dio.GetInput().Get(), "DIO Not Low after no delay");
+            s_dio.GetOutput().Set(false);
+            Assert.IsFalse(s_dio.GetInput().Get(), "DIO Not Low after no delay");
             Timer.Delay(0.02);
-            Assert.IsFalse(dio.GetInput().Get(), "DIO Not Low after 0.05s delay");
+            Assert.IsFalse(s_dio.GetInput().Get(), "DIO Not Low after 0.05s delay");
         }
 
         internal override InterruptableSensorBase GiveInterruptableSensorBase()
         {
-            return dio.GetInput();
+            return s_dio.GetInput();
         }
 
         internal override void FreeInterruptableSensorBase()
@@ -62,12 +62,12 @@ namespace WPILib.IntegrationTests
 
         internal override void SetInterruptHigh()
         {
-            dio.GetOutput().Set(true);
+            s_dio.GetOutput().Set(true);
         }
 
         internal override void SetInterruptLow()
         {
-            dio.GetOutput().Set(false);
+            s_dio.GetOutput().Set(false);
         }
     }
 }

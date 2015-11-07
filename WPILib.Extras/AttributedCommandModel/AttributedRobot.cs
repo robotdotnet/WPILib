@@ -14,23 +14,23 @@ namespace WPILib.Extras.AttributedCommandModel
     /// </summary>
     public class AttributedRobot : IterativeRobot
     {
-        private readonly ReflectionContext reflectionContext;
+        private readonly ReflectionContext m_reflectionContext;
 
-        private readonly List<KeyValuePair<Subsystem, string>> subsystems = new List<KeyValuePair<Subsystem, string>>();
+        private readonly List<KeyValuePair<Subsystem, string>> m_subsystems = new List<KeyValuePair<Subsystem, string>>();
 
         /// <summary>
         /// The subsystems created when the robot object was initialized.
         /// </summary>
-        public ICollection<Subsystem> Subsystems => new ReadOnlyCollection<Subsystem>(subsystems.Select(pair => pair.Key).ToList());
+        public ICollection<Subsystem> Subsystems => new ReadOnlyCollection<Subsystem>(m_subsystems.Select(pair => pair.Key).ToList());
 
-        private readonly List<Button> buttons = new List<Button>();
+        private readonly List<Button> m_buttons = new List<Button>();
 
         /// <summary>
         /// The Button objects created when the robot was initialized.
         /// </summary>
-        public ICollection<Button> Buttons => buttons;
+        public ICollection<Button> Buttons => m_buttons;
 
-        private readonly IDictionary<MatchPhase, IList<Command>> phaseCommands = new Dictionary<MatchPhase, IList<Command>>();
+        private readonly IDictionary<MatchPhase, IList<Command>> m_phaseCommands = new Dictionary<MatchPhase, IList<Command>>();
 
         /// <summary>
         /// Commands sorted by the phase that they will start.
@@ -39,7 +39,7 @@ namespace WPILib.Extras.AttributedCommandModel
         {
             get
             {
-                var dictionary = new ReadOnlyDictionary<MatchPhase, IList<Command>>(phaseCommands);
+                var dictionary = new ReadOnlyDictionary<MatchPhase, IList<Command>>(m_phaseCommands);
                 return dictionary;
             }
         }
@@ -53,7 +53,7 @@ namespace WPILib.Extras.AttributedCommandModel
         /// </remarks>
         public AttributedRobot(ReflectionContext reflectionContext)
         {
-            this.reflectionContext = reflectionContext;
+            m_reflectionContext = reflectionContext;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     try
                     {
                         return assembly.GetExportedTypes()
-                            .Select(type => reflectionContext != null ? reflectionContext.MapType(type.GetTypeInfo())
+                            .Select(type => m_reflectionContext != null ? m_reflectionContext.MapType(type.GetTypeInfo())
                                                                       : type.GetTypeInfo());
                     }
                     catch (NotSupportedException)
@@ -87,7 +87,7 @@ namespace WPILib.Extras.AttributedCommandModel
                 });
             var exportedSubsystems = types.Where(type => type.GetCustomAttributes<ExportSubsystemAttribute>().Any()
                                                                   && typeof(Subsystem).IsAssignableFrom(type));
-            subsystems.AddRange(exportedSubsystems.SelectMany(type => EnumerateGeneratedSubsystems(type)));
+            m_subsystems.AddRange(exportedSubsystems.SelectMany(type => EnumerateGeneratedSubsystems(type)));
             var exportedCommands = types.Where(type => type.GetCustomAttributes<RunCommandAttribute>().Any()
                                                                              && typeof(Command).IsAssignableFrom(type));
             foreach (var command in exportedCommands)
@@ -108,7 +108,7 @@ namespace WPILib.Extras.AttributedCommandModel
         private IEnumerable<Assembly> GetAssemblies()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            return assemblies.Select(assembly => reflectionContext != null ? reflectionContext.MapAssembly(assembly)
+            return assemblies.Select(assembly => m_reflectionContext != null ? m_reflectionContext.MapAssembly(assembly)
                 : assembly);
         }
 
@@ -139,26 +139,26 @@ namespace WPILib.Extras.AttributedCommandModel
         {
             foreach (var attr in commandType.GetCustomAttributes<RunCommandAtPhaseStartAttribute>())
             {
-                if (!phaseCommands.ContainsKey(attr.Phase))
-                    phaseCommands.Add(attr.Phase, new List<Command>());
-                phaseCommands[attr.Phase].Add(CreateCommand(commandType));
+                if (!m_phaseCommands.ContainsKey(attr.Phase))
+                    m_phaseCommands.Add(attr.Phase, new List<Command>());
+                m_phaseCommands[attr.Phase].Add(CreateCommand(commandType));
             }
             foreach (var attr in commandType.GetCustomAttributes<RunCommandOnJoystickAttribute>())
             {
-                var button = buttons.OfType<JoystickButton>().Where(btn => btn.Joystick is Joystick)
+                var button = m_buttons.OfType<JoystickButton>().Where(btn => btn.Joystick is Joystick)
                     .FirstOrDefault(btn => (btn.Joystick as Joystick).Port == attr.ControllerId && btn.ButtonNumber == attr.ButtonId);
                 if (button == null)
                 {
-                    buttons.Add(button = new JoystickButton(new Joystick(attr.ControllerId), attr.ButtonId));
+                    m_buttons.Add(button = new JoystickButton(new Joystick(attr.ControllerId), attr.ButtonId));
                 }
                 AttachCommandToButton(commandType, button, attr.ButtonMethod);
             }
             foreach (var attr in commandType.GetCustomAttributes<RunCommandOnNetworkKeyAttribute>())
             {
-                var button = buttons.OfType<NetworkButton>().FirstOrDefault(btn => btn.SourceTable == NetworkTable.GetTable(attr.TableName) && btn.Field == attr.Key);
+                var button = m_buttons.OfType<NetworkButton>().FirstOrDefault(btn => btn.SourceTable == NetworkTable.GetTable(attr.TableName) && btn.Field == attr.Key);
                 if(button == null)
                 {
-                    buttons.Add(button = new NetworkButton(attr.TableName, attr.Key));
+                    m_buttons.Add(button = new NetworkButton(attr.TableName, attr.Key));
                 }
                 AttachCommandToButton(commandType, button, attr.ButtonMethod);
             }
@@ -201,7 +201,7 @@ namespace WPILib.Extras.AttributedCommandModel
                 {
                     var subsystemType = subsystemParam.ParameterType;
                     var name = subsystemParam.GetCustomAttribute<ImportSubsystemAttribute>()?.Name;
-                    requiredSubsystems.Add(subsystems.First(pair => pair.Key.GetType() == subsystemType).Key);
+                    requiredSubsystems.Add(m_subsystems.First(pair => pair.Key.GetType() == subsystemType).Key);
                 }
                 return (Command)constructor.Invoke(requiredSubsystems.ToArray());
             }

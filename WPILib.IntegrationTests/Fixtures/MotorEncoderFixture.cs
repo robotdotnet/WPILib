@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using WPILib.IntegrationTests.Test;
 using WPILib.Interfaces;
@@ -7,15 +8,15 @@ namespace WPILib.IntegrationTests.Fixtures
 {
     public abstract class MotorEncoderFixture : ITestFixture 
     {
-        private bool initialized = false;
-        private bool tornDown = false;
-        private ISpeedController motor;
-        private Encoder encoder;
-        private readonly Counter[] counters = new Counter[2];
-        protected DigitalInput aSource;
-        protected DigitalInput bSource;
+        private bool m_initialized;
+        private bool m_tornDown;
+        private ISpeedController m_motor;
+        private Encoder m_encoder;
+        private readonly Counter[] m_counters = new Counter[2];
+        protected DigitalInput m_aSource;
+        protected DigitalInput m_bSource;
 
-        public abstract int GetPDPChannel();
+        public abstract int GetPdpChannel();
 
         protected abstract ISpeedController GiveSpeedController();
 
@@ -27,19 +28,19 @@ namespace WPILib.IntegrationTests.Fixtures
         {
             lock (this)
             {
-                if (!initialized)
+                if (!m_initialized)
                 {
-                    initialized = true;
+                    m_initialized = true;
 
-                    aSource = GiveDigitalInputA();
-                    bSource = GiveDigitalInputB();
+                    m_aSource = GiveDigitalInputA();
+                    m_bSource = GiveDigitalInputB();
 
-                    encoder = new Encoder(aSource, bSource);
+                    m_encoder = new Encoder(m_aSource, m_bSource);
 
-                    counters[0] = new Counter(aSource);
-                    counters[1] = new Counter(bSource);
+                    m_counters[0] = new Counter(m_aSource);
+                    m_counters[1] = new Counter(m_bSource);
 
-                    motor = GiveSpeedController();
+                    m_motor = GiveSpeedController();
                 }
             }
         }
@@ -54,106 +55,101 @@ namespace WPILib.IntegrationTests.Fixtures
         public ISpeedController GetMotor()
         {
             Initialize();
-            return motor;
+            return m_motor;
         }
 
         public Encoder GetEncoder()
         {
             Initialize();
-            return encoder;
+            return m_encoder;
         }
 
         public Counter[] GetCounters()
         {
             Initialize();
-            return counters;
+            return m_counters;
         }
 
         public string GetCustomType()
         {
             Initialize();
-            return motor.GetType().Name;
+            return m_motor.GetType().Name;
         }
 
         public bool IsMotorSpeedWithinRange(double value, double accuracy)
         {
             Initialize();
-            return Math.Abs((Math.Abs(motor.Get()) - Math.Abs(value))) < Math.Abs(accuracy);
+            return Math.Abs(Math.Abs(m_motor.Get()) - Math.Abs(value)) < Math.Abs(accuracy);
         }
 
         public bool Reset()
         {
             Initialize();
             bool wasReset = true;
-            motor.Inverted = false;
-            motor.Set(0);
-            Timer.Delay(TestBench.MOTOR_STOP_TIME);
-            encoder.Reset();
-            foreach (var c in counters)
+            m_motor.Inverted = false;
+            m_motor.Set(0);
+            Timer.Delay(TestBench.MotorStopTime);
+            m_encoder.Reset();
+            foreach (var c in m_counters)
             {
                 c.Reset();
             }
-            wasReset = wasReset && motor.Get() == 0;
+            wasReset = wasReset && m_motor.Get() == 0;
 
-            wasReset = wasReset && encoder.Get() == 0;
+            wasReset = wasReset && m_encoder.Get() == 0;
 
-            foreach (var c in counters)
-            {
-                wasReset = wasReset && c.Get() == 0;
-            }
-
-            return wasReset;;
+            return m_counters.Aggregate(wasReset, (current, c) => current && c.Get() == 0);
         }
 
         public bool Teardown()
         {
-            var type = motor != null ? GetCustomType() : "null";
-            if (!tornDown)
+            var type = m_motor != null ? GetCustomType() : "null";
+            if (!m_tornDown)
             {
                 bool wasNull = false;
-                var pwm = motor as PWM;
-                if (pwm != null && motor != null) {
+                var pwm = m_motor as PWM;
+                if (pwm != null && m_motor != null) {
                     pwm.Dispose();
-                    motor = null;
-                } else if (motor == null)
+                    m_motor = null;
+                } else if (m_motor == null)
                     wasNull = true;
-                if (encoder != null)
+                if (m_encoder != null)
                 {
-                    encoder.Dispose();
-                    encoder = null;
+                    m_encoder.Dispose();
+                    m_encoder = null;
                 }
                 else
                     wasNull = true;
-                if (counters[0] != null)
+                if (m_counters[0] != null)
                 {
-                    counters[0].Dispose();
-                    counters[0] = null;
+                    m_counters[0].Dispose();
+                    m_counters[0] = null;
                 }
                 else
                     wasNull = true;
-                if (counters[1] != null)
+                if (m_counters[1] != null)
                 {
-                    counters[1].Dispose();
-                    counters[1] = null;
+                    m_counters[1].Dispose();
+                    m_counters[1] = null;
                 }
                 else
                     wasNull = true;
-                if (aSource != null)
+                if (m_aSource != null)
                 {
-                    aSource.Dispose();
-                    aSource = null;
+                    m_aSource.Dispose();
+                    m_aSource = null;
                 }
                 else
                     wasNull = true;
-                if (bSource != null)
+                if (m_bSource != null)
                 {
-                    bSource.Dispose();
-                    bSource = null;
+                    m_bSource.Dispose();
+                    m_bSource = null;
                 }
                 else
                     wasNull = true;
 
-                tornDown = true;
+                m_tornDown = true;
 
                 if (wasNull)
                 {

@@ -6,23 +6,23 @@ namespace WPILib.IntegrationTests.Fixtures
 {
     class FakeEncoderFixture : ITestFixture
     {
-        private readonly DIOCrossConnectFixture m_dio1;
-        private readonly DIOCrossConnectFixture m_dio2;
+        private readonly DioCrossConnectFixture m_dio1;
+        private readonly DioCrossConnectFixture m_dio2;
         private bool m_allocated;
 
         private readonly FakeEncoderSource m_source;
 
-        private int[] m_sourcePort = new int[2];
+        private readonly int[] m_sourcePort = new int[2];
         private readonly Encoder m_encoder;
-        private int[] m_encoderPort = new int[2];
+        private readonly int[] m_encoderPort = new int[2];
 
 
-        public FakeEncoderFixture(DIOCrossConnectFixture dio1, DIOCrossConnectFixture dio2)
+        public FakeEncoderFixture(DioCrossConnectFixture dio1, DioCrossConnectFixture dio2)
         {
             Assert.NotNull(dio1);
             Assert.NotNull(dio2);
-            this.m_dio1 = dio1;
-            this.m_dio2 = dio2;
+            m_dio1 = dio1;
+            m_dio2 = dio2;
             m_allocated = false;
             m_source = new FakeEncoderSource(dio1.GetOutput(), dio2.GetOutput());
             m_encoder = new Encoder(dio1.GetInput(), dio2.GetInput());
@@ -36,8 +36,8 @@ namespace WPILib.IntegrationTests.Fixtures
             Assert.AreNotEqual(outputB, inputA);
             Assert.AreNotEqual(outputB, inputB);
             Assert.AreNotEqual(inputA, inputB);
-            this.m_dio1 = new DIOCrossConnectFixture(inputA, outputA);
-            this.m_dio2 = new DIOCrossConnectFixture(inputB, outputB);
+            m_dio1 = new DioCrossConnectFixture(inputA, outputA);
+            m_dio2 = new DioCrossConnectFixture(inputB, outputB);
             m_allocated = true;
             m_sourcePort[0] = outputA;
             m_sourcePort[1] = outputB;

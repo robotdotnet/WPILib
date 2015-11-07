@@ -4,74 +4,74 @@ namespace WPILib.IntegrationTests.MockHardware
 {
     public class FakePotentiometerSource : IDisposable
     {
-        private AnalogOutput output;
-        private bool m_init_output;
-        private double potMaxAngle;
-        private double potMaxVoltage = 5.0;
-        private readonly double defaultPotMaxAngle;
+        private AnalogOutput m_output;
+        private bool m_initOutput;
+        private double m_potMaxAngle;
+        private double m_potMaxVoltage = 5.0;
+        private readonly double m_defaultPotMaxAngle;
 
         public FakePotentiometerSource(AnalogOutput output, double defaultPotMaxAngle)
         {
-            this.defaultPotMaxAngle = defaultPotMaxAngle;
-            potMaxAngle = defaultPotMaxAngle;
-            this.output = output;
-            m_init_output = false;
+            m_defaultPotMaxAngle = defaultPotMaxAngle;
+            m_potMaxAngle = defaultPotMaxAngle;
+            m_output = output;
+            m_initOutput = false;
         }
 
         public FakePotentiometerSource(int port, double defaultPotMaxAngle)
             : this(new AnalogOutput(port), defaultPotMaxAngle)
         {
-            m_init_output = true;
+            m_initOutput = true;
         }
 
         public void SetMaxVoltage(double voltage)
         {
-            potMaxVoltage = voltage;
+            m_potMaxVoltage = voltage;
         }
 
         public void SetRange(double range)
         {
-            potMaxAngle = range;
+            m_potMaxAngle = range;
         }
 
         public void Reset()
         {
-            potMaxAngle = defaultPotMaxAngle;
-            output.SetVoltage(0.0);
+            m_potMaxAngle = m_defaultPotMaxAngle;
+            m_output.SetVoltage(0.0);
         }
 
         public void SetAngle(double angle)
         {
-            output.SetVoltage((potMaxVoltage / potMaxAngle) * angle);
+            m_output.SetVoltage(m_potMaxVoltage / m_potMaxAngle * angle);
         }
 
         public void SetVoltage(double voltage)
         {
-            output.SetVoltage(voltage);
+            m_output.SetVoltage(voltage);
         }
 
         public double GetVoltage()
         {
-            return output.GetVoltage();
+            return m_output.GetVoltage();
         }
 
         public double GetAngle()
         {
-            double voltage = output.GetVoltage();
+            double voltage = m_output.GetVoltage();
             if (voltage == 0)
             {
                 return 0;
             }
-            return voltage * (potMaxAngle / potMaxVoltage);
+            return voltage * (m_potMaxAngle / m_potMaxVoltage);
         }
 
         public void Dispose()
         {
-            if (m_init_output)
+            if (m_initOutput)
             {
-                output.Dispose();
-                output = null;
-                m_init_output = false;
+                m_output.Dispose();
+                m_output = null;
+                m_initOutput = false;
             }
         }
     }

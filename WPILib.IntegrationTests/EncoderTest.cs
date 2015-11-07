@@ -5,51 +5,51 @@ using WPILib.Interfaces;
 
 namespace WPILib.IntegrationTests
 {
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, EncodingType.K4X)]
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, EncodingType.K2X)]
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectA2, TestBench.DIOCrossConnectA1, EncodingType.K1X)]
-    [TestFixture(TestBench.DIOCrossConnectB2, TestBench.DIOCrossConnectB1, TestBench.DIOCrossConnectA1, TestBench.DIOCrossConnectA2, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, EncodingType.K4X)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, EncodingType.K2X)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1, EncodingType.K1X)]
+    [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1, TestBench.DioCrossConnectA1, TestBench.DioCrossConnectA2, EncodingType.K1X)]
     public class EncoderTest
     {
-        private static FakeEncoderFixture encoder = null;
+        private static FakeEncoderFixture s_encoder;
 
-        private readonly bool flip = false; //Does this test need to flip the inputs
-        private readonly int inputA;
-        private readonly int inputB;
-        private readonly int outputA;
-        private readonly int outputB;
+        private readonly bool m_flip = false; //Does this test need to flip the inputs
+        private readonly int m_inputA;
+        private readonly int m_inputB;
+        private readonly int m_outputA;
+        private readonly int m_outputB;
 
         public EncoderTest(int inputA, int outputA, int inputB, int outputB, EncodingType type)
         {
-            this.inputA = inputA;
-            this.inputB = inputB;
-            this.outputA = outputA;
-            this.outputB = outputB;
+            m_inputA = inputA;
+            m_inputB = inputB;
+            m_outputA = outputA;
+            m_outputB = outputB;
 
             //If the encoder from a previous test is allocated then we must free its members
-            encoder?.Teardown();
+            s_encoder?.Teardown();
             //this.flip = flip == 0;
-            encoder = new FakeEncoderFixture(inputA, outputA, inputB, outputB, type);
+            s_encoder = new FakeEncoderFixture(inputA, outputA, inputB, outputB, type);
         }
 
         [TestFixtureSetUp]
@@ -65,27 +65,27 @@ namespace WPILib.IntegrationTests
         [TestFixtureTearDown]
         public static void TearDownAfterClass()
         {
-            encoder.Teardown();
-            encoder = null;
+            s_encoder.Teardown();
+            s_encoder = null;
         }
 
         [SetUp]
         public void Setup()
         {
-            encoder.Setup();
+            s_encoder.Setup();
             TestDefaultState();
         }
 
         [TearDown]
         public void TearDown()
         {
-            encoder.Reset();
+            s_encoder.Reset();
         }
         //TODO: Fix
         [Test]
         public void TestDefaultState()
         {
-            int value = encoder.GetEncoder().Get();
+            int value = s_encoder.GetEncoder().Get();
             Assert.AreEqual(0, value, ErrorMessage(0, value));
         }
 
@@ -93,10 +93,10 @@ namespace WPILib.IntegrationTests
         public void TestCountUp()
         {
             int goal = 100;
-            encoder.GetFakeEncoderSource().SetCount(goal);
-            encoder.GetFakeEncoderSource().SetForward(flip);
-            encoder.GetFakeEncoderSource().Execute();
-            int value = encoder.GetEncoder().Get();
+            s_encoder.GetFakeEncoderSource().SetCount(goal);
+            s_encoder.GetFakeEncoderSource().SetForward(m_flip);
+            s_encoder.GetFakeEncoderSource().Execute();
+            int value = s_encoder.GetEncoder().Get();
             Assert.AreEqual(goal, value, ErrorMessage(goal, value));
 
         }
@@ -105,17 +105,17 @@ namespace WPILib.IntegrationTests
         public void TestCountDown()
         {
             int goal = -100;
-            encoder.GetFakeEncoderSource().SetCount(goal);
-            encoder.GetFakeEncoderSource().SetForward(!flip);
-            encoder.GetFakeEncoderSource().Execute();
-            int value = encoder.GetEncoder().Get();
+            s_encoder.GetFakeEncoderSource().SetCount(goal);
+            s_encoder.GetFakeEncoderSource().SetForward(!m_flip);
+            s_encoder.GetFakeEncoderSource().Execute();
+            int value = s_encoder.GetEncoder().Get();
             Assert.AreEqual(goal, value, ErrorMessage(goal, value));
 
         }
 
         private string ErrorMessage(int goal, int trueValue)
         {
-            return "Encoder ({In,Out}): {" + inputA + ", " + outputA + "},{" + inputB + ", " + outputB + "} Returned: " + trueValue + ", Wanted: " + goal;
+            return "Encoder ({In,Out}): {" + m_inputA + ", " + m_outputA + "},{" + m_inputB + ", " + m_outputB + "} Returned: " + trueValue + ", Wanted: " + goal;
 
         }
     }

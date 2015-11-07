@@ -10,14 +10,14 @@ namespace WPILib.IntegrationTests.SmartDashboards
     [TestFixture]
     public class SmartDashboardTest : AbstractComsSetup
     {
-        private static NetworkTable table;
+        private static NetworkTable s_table;
 
         [TestFixtureSetUp]
         public static void SetUpBeforeClass()
         {
             if (RobotBase.IsReal)
             {
-                table = NetworkTable.GetTable("SmartDashboard");
+                s_table = NetworkTable.GetTable("SmartDashboard");
             }
         }
 
@@ -47,7 +47,7 @@ namespace WPILib.IntegrationTests.SmartDashboards
             string value = "thisIsAValue";
             SmartDashboard.PutString(key, value);
             Assert.AreEqual(value, SmartDashboard.GetString(key));
-            Assert.AreEqual(value, table.GetString(key));
+            Assert.AreEqual(value, s_table.GetString(key));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace WPILib.IntegrationTests.SmartDashboards
             int value = 2147483647;
             SmartDashboard.PutNumber(key, value);
             Assert.AreEqual(value, SmartDashboard.GetNumber(key), 0.01);
-            Assert.AreEqual(value, table.GetNumber(key), 0.01);
+            Assert.AreEqual(value, s_table.GetNumber(key), 0.01);
         }
 
         [Test]
@@ -74,10 +74,10 @@ namespace WPILib.IntegrationTests.SmartDashboards
                 return;
             }
             string key = "testPutBoolean";
-            bool value = true;
+            const bool value = true;
             SmartDashboard.PutBoolean(key, value);
             Assert.AreEqual(value, SmartDashboard.GetBoolean(key));
-            Assert.AreEqual(value, table.GetBoolean(key));
+            Assert.AreEqual(value, s_table.GetBoolean(key));
         }
 
         [Test]
@@ -93,11 +93,11 @@ namespace WPILib.IntegrationTests.SmartDashboards
             string valueNew = "newValue";
             SmartDashboard.PutString(key, valueOld);
             Assert.AreEqual(valueOld, SmartDashboard.GetString(key));
-            Assert.AreEqual(valueOld, table.GetString(key));
+            Assert.AreEqual(valueOld, s_table.GetString(key));
 
             SmartDashboard.PutString(key, valueNew);
             Assert.AreEqual(valueNew, SmartDashboard.GetString(key));
-            Assert.AreEqual(valueNew, table.GetString(key));
+            Assert.AreEqual(valueNew, s_table.GetString(key));
         }
 
         [Test]

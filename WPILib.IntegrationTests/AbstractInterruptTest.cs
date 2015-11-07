@@ -7,20 +7,20 @@ namespace WPILib.IntegrationTests
 {
     public abstract class AbstractInterruptTest : AbstractComsSetup
     {
-        private InterruptableSensorBase interrupable = null;
+        private InterruptableSensorBase m_interrupable;
 
         private InterruptableSensorBase GetInterruptable()
         {
-            return interrupable ?? (interrupable = GiveInterruptableSensorBase());
+            return m_interrupable ?? (m_interrupable = GiveInterruptableSensorBase());
         }
 
         [TearDown]
         public void InterruptTeardown()
         {
-            if (interrupable != null)
+            if (m_interrupable != null)
             {
                 FreeInterruptableSensorBase();
-                interrupable = null;
+                m_interrupable = null;
             }
         }
 
@@ -34,40 +34,39 @@ namespace WPILib.IntegrationTests
 
         internal class InterruptCounter
         {
-            private int count = 0;
+            private int m_count;
 
             internal void Increment()
             {
-                Interlocked.Increment(ref count);
+                Interlocked.Increment(ref m_count);
             }
 
             internal int GetCount()
             {
-                return count;
+                return m_count;
             }
         }
 
         internal class TestHandlerFunction
         {
-            internal long interruptFireTime = 0;
+            internal long InterruptFireTime;
 
-            internal int interruptComplete = 0;
+            internal int InterruptComplete;
 
-            private readonly InterruptCounter counter;
+            private readonly InterruptCounter m_counter;
 
             internal TestHandlerFunction(InterruptCounter counter)
             {
-                this.counter = counter;
+                m_counter = counter;
             }
 
-            public void fired(uint u, object o)
+            public void Fired(uint u, object o)
             {
-                Interlocked.Exchange(ref interruptFireTime, Utility.GetFPGATime());
-                counter.Increment();
-                Assert.AreSame(counter, o);
-                Interlocked.Exchange(ref interruptComplete, 1);
+                Interlocked.Exchange(ref InterruptFireTime, Utility.GetFPGATime());
+                m_counter.Increment();
+                Assert.AreSame(m_counter, o);
+                Interlocked.Exchange(ref InterruptComplete, 1);
                 //Console.WriteLine("Fired!!!!");
-                return;
             }
         }
 
@@ -80,7 +79,7 @@ namespace WPILib.IntegrationTests
 
             TestHandlerFunction function = new TestHandlerFunction(counter);
 
-            GetInterruptable().RequestInterrupts(function.fired, counter);
+            GetInterruptable().RequestInterrupts(function.Fired, counter);
             GetInterruptable().EnableInterrupts();
 
             SetInterruptLow();
@@ -90,7 +89,7 @@ namespace WPILib.IntegrationTests
 
             SetInterruptHigh();
 
-            while (function.interruptComplete == 0)
+            while (function.InterruptComplete == 0)
             {
                 Delay(0.005);
             }
@@ -102,8 +101,8 @@ namespace WPILib.IntegrationTests
             long range = 10000;
 
             string error = "The interrupt did not fire within the expected time period (values in milliseconds)";
-            Assert.Greater(function.interruptFireTime, (interruptTriggerTime - range), error);
-            Assert.Less(function.interruptFireTime, (interruptTriggerTime + range), error);
+            Assert.Greater(function.InterruptFireTime, interruptTriggerTime - range, error);
+            Assert.Less(function.InterruptFireTime, interruptTriggerTime + range, error);
 
             error = "The ReadRisingTimestamp() did not return the correct value (values in seconds";
             Assert.Greater(GetInterruptable().ReadRisingTimestanp(), (interruptTriggerTime - range) / 1e6, error);
@@ -117,7 +116,7 @@ namespace WPILib.IntegrationTests
             InterruptCounter counter = new InterruptCounter();
             TestHandlerFunction function = new TestHandlerFunction(counter);
 
-            GetInterruptable().RequestInterrupts(function.fired, counter);
+            GetInterruptable().RequestInterrupts(function.Fired, counter);
             GetInterruptable().EnableInterrupts();
 
             int fireCount = 50;
@@ -125,23 +124,23 @@ namespace WPILib.IntegrationTests
             {
                 SetInterruptLow();
                 SetInterruptHigh();
-                while (function.interruptComplete == 0)
+                while (function.InterruptComplete == 0)
                 {
                     Delay(0.005);
                 }
-                function.interruptComplete = 0;
+                function.InterruptComplete = 0;
             }
             Assert.AreEqual(fireCount, counter.GetCount(), "The interrupt did not fire the expected number of times");
 
         }
 
-        private const int synchronousTimeout = 5;
-        [Test, Timeout((int)(synchronousTimeout * 1e3))]
+        private const int SynchronousTimeout = 5;
+        [Test, Timeout((int)(SynchronousTimeout * 1e3))]
         public void TestSynchronousInterruptsTriggering()
         {
             GetInterruptable().RequestInterrupts();
 
-            double synchronousDelay = synchronousTimeout / 2.0;
+            double synchronousDelay = SynchronousTimeout / 2.0;
 
             long startTimeStamp = Utility.GetFPGATime();
             new Thread(() =>
@@ -151,7 +150,7 @@ namespace WPILib.IntegrationTests
                 SetInterruptLow();
             }).Start();
 
-            GetInterruptable().WaitForInterrupt(synchronousTimeout * 2);
+            GetInterruptable().WaitForInterrupt(SynchronousTimeout * 2);
             long stopTimeStamp = Utility.GetFPGATime();
 
             double interruptRunTime = (stopTimeStamp - startTimeStamp) * 1e-6;
@@ -165,7 +164,7 @@ namespace WPILib.IntegrationTests
             InterruptCounter counter = new InterruptCounter();
             TestHandlerFunction function = new TestHandlerFunction(counter);
 
-            GetInterruptable().RequestInterrupts(function.fired, counter);
+            GetInterruptable().RequestInterrupts(function.Fired, counter);
             GetInterruptable().EnableInterrupts();
 
             int fireCount = 50;
@@ -173,11 +172,11 @@ namespace WPILib.IntegrationTests
             {
                 SetInterruptLow();
                 SetInterruptHigh();
-                while (function.interruptComplete == 0)
+                while (function.InterruptComplete == 0)
                 {
                     Delay(0.005);
                 }
-                function.interruptComplete = 0;
+                function.InterruptComplete = 0;
             }
 
             GetInterruptable().DisableInterrupts();

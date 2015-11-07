@@ -16,7 +16,7 @@ namespace WPILib.IntegrationTests
             Console.WriteLine("Starting Delay");
             long startTime = Utility.GetFPGATime();
 
-            Timer.Delay(TIMER_RUNTIME / 1000000);
+            Timer.Delay(TIMER_RUNTIME / 1000000.0);
 
             long endTime = Utility.GetFPGATime();
             long difference = endTime - startTime;

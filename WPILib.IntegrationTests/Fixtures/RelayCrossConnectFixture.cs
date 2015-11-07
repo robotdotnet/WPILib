@@ -4,12 +4,12 @@ namespace WPILib.IntegrationTests.Fixtures
 {
     public abstract class RelayCrossConnectFixture : ITestFixture
     {
-        private DigitalInput inputOne;
-        private DigitalInput inputTwo;
-        private Relay relay;
+        private DigitalInput m_inputOne;
+        private DigitalInput m_inputTwo;
+        private Relay m_relay;
 
-        private bool initialized = false;
-        private bool freed = false;
+        private bool m_initialized;
+        private bool m_freed;
 
 
 
@@ -23,12 +23,12 @@ namespace WPILib.IntegrationTests.Fixtures
         {
             lock (this)
             {
-                if (!initialized)
+                if (!m_initialized)
                 {
-                    relay = GiveRelay();
-                    inputOne = GiveInputOne();
-                    inputTwo = GiveInputTwo();
-                    initialized = true;
+                    m_relay = GiveRelay();
+                    m_inputOne = GiveInputOne();
+                    m_inputTwo = GiveInputTwo();
+                    m_initialized = true;
                 }
             }
         }
@@ -36,19 +36,19 @@ namespace WPILib.IntegrationTests.Fixtures
         public Relay GetRelay()
         {
             Initialize();
-            return relay;
+            return m_relay;
         }
 
         public DigitalInput GetInputOne()
         {
             Initialize();
-            return inputOne;
+            return m_inputOne;
         }
 
         public DigitalInput GetInputTwo()
         {
             Initialize();
-            return inputTwo;
+            return m_inputTwo;
         }
 
         public bool Setup()
@@ -65,12 +65,12 @@ namespace WPILib.IntegrationTests.Fixtures
 
         public bool Teardown()
         {
-            if (!freed)
+            if (!m_freed)
             {
-                relay.Dispose();
-                inputOne.Dispose();
-                inputTwo.Dispose();
-                freed = true;
+                m_relay.Dispose();
+                m_inputOne.Dispose();
+                m_inputTwo.Dispose();
+                m_freed = true;
             }
             else
             {

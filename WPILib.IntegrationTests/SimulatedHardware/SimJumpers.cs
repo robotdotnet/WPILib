@@ -6,7 +6,7 @@ namespace WPILib.IntegrationTests.SimulatedHardware
     class SimJumpers
     {
         //Does a 2 way attachment for the jumpers
-        public static void AttachDIOPins(int input, int output)
+        public static void AttachDioPins(int input, int output)
         {
             Action<string, dynamic> callback = (key, value) =>
             {
@@ -41,7 +41,7 @@ namespace WPILib.IntegrationTests.SimulatedHardware
             SimData.Relay[relay].Register("Reverse", revCallback);
         }
 
-        public static void AttachAIO(int input, int output)
+        public static void AttachAio(int input, int output)
         {
             Action<string, dynamic> callback = (key, value) =>
             {
