@@ -8,7 +8,7 @@ namespace HAL_Simulator.Data
     {
         private readonly Dictionary<string, Action<string, dynamic>> m_callbacks = new Dictionary<string, Action<string, dynamic>>();
 
-        public void Register(string key, Action<string, dynamic> action)
+        public void Register(string key, Action<string, dynamic> action, bool initialNotify = false)
         {
             if (!m_callbacks.ContainsKey(key))
             {
@@ -17,6 +17,21 @@ namespace HAL_Simulator.Data
             else
             {
                 m_callbacks[key] += action;
+            }
+
+            if (initialNotify)
+            {
+                dynamic val;
+                try
+                {
+                    val = GetType().GetProperty(key).GetValue(this, null);
+
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+                action(key, val);
             }
         }
         protected override void OnPropertyChanged(dynamic value, [CallerMemberName] string propertyName = null)

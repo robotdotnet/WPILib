@@ -79,6 +79,7 @@
     <Compile Include="Mechanisms\LinearEncoderMechanism.cs" />
     <Compile Include="Mechanisms\LinearPotentiometerMechanism.cs" />
     <Compile Include="Mechanisms\ShooterWheelMechanism.cs" />
+    <Compile Include="NotifyDict.cs" />
     <Compile Include="Outputs\DCMotor.cs" />
     <Compile Include="DriverStationHelper.cs" />
     <Compile Include="HAL-Files\HAL.cs" />

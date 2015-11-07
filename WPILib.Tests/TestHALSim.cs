@@ -1,6 +1,12 @@
-﻿namespace WPILib.Tests
+﻿using System;
+using System.Collections.Generic;
+using HAL_Simulator;
+using NUnit.Framework;
+using static HAL_Simulator.DriverStationHelper;
+
+namespace WPILib.Tests
 {
-    /*
+    
     [TestFixture]
     public class TestHALSim : TestBase
     {
@@ -16,6 +22,7 @@
             StartDSLoop();
         }
 
+        [Test]
         public void TestNotifyDictAdditonInitialNotify()
         {
 
@@ -29,7 +36,7 @@
 
             SimData.ResetHALData(false);
 
-            SimData.AnalogIn[0].Register("Voltage", mockDelegate);
+            SimData.AnalogIn[0].Register("Voltage", mockDelegate, true);
 
             Assert.AreEqual(1, count);
             Assert.AreEqual("Voltage", key);
@@ -79,6 +86,7 @@
             Assert.AreEqual(1.25, value);
         }
 
+        /*
         public void TestNotifyDictHalUpdate()
         {
             int count = 0;
@@ -114,7 +122,7 @@
             Assert.AreEqual("voltage", key);
             Assert.AreEqual(1.25, value);
         }
-
+        
         [Test]
         public void TestHalInNotifyDictUpdate()
         {
@@ -140,6 +148,7 @@
             Assert.AreEqual("Voltage", key);
             Assert.AreEqual(1.25, value);
         }
+        */
 
         [Test]
         public void TestNotifyDictRemoveCallback()
@@ -168,7 +177,7 @@
             Assert.AreEqual("Voltage", key);
             Assert.AreEqual(1.25, value);
         }
-
+        /*
         public void TestHALDeepCopy()
         {
             SimData.ResetHALData(false);
@@ -185,7 +194,7 @@
             SimData.ResetHALData(false);
             TestFilteredHAL(HAL.halData);
         }
-
+        */
         public void TestFilteredHAL(Dictionary<dynamic, dynamic> data)
         {
             foreach (var o in data)
@@ -217,6 +226,7 @@
                 }
             }
         }
+        /*
         public void TestHalUpdate()
         {
             Dictionary<dynamic, dynamic> inDict = new Dictionary<dynamic, dynamic>
@@ -234,6 +244,7 @@
 
             Assert.AreEqual(3.14, HAL.halData["power"]["vin_voltage"]);
         }
+        */
     }
-    */
+    
 }

@@ -307,7 +307,12 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static HALControlWord HALGetControlWord()
         {
-            return new HALControlWord(true, false, false, false, false, true);
+            return new HALControlWord(DriverStation.ControlData.Enabled, 
+                DriverStation.ControlData.Autonomous, 
+                DriverStation.ControlData.Test, 
+                DriverStation.ControlData.EStop, 
+                DriverStation.ControlData.FmsAttached, 
+                DriverStation.ControlData.DsAttached);
         }
 
         /// <summary>
@@ -318,7 +323,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetAllianceStation(ref HALAllianceStationID allianceStation)
         {
-            int data = (int) DriverStation.AllianceStation;
+            int data = (int)DriverStation.AllianceStation;
             if (data < 6 && data >= 0)
             {
                 allianceStation = DriverStation.AllianceStation;

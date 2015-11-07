@@ -217,24 +217,24 @@ namespace HAL_Simulator
                 case RobotMode.Autonomous:
                     if (prevState != RobotMode.Autonomous)
                         SetEnabledState(EnabledState.Disabled);
-                    DriverStation.ControlData.DsAttached = true;
+                    DriverStation.ControlData.Autonomous = true;
                     DriverStation.ControlData.Test = false;
                     break;
                 case RobotMode.Teleop:
                     if (prevState != RobotMode.Teleop)
                         SetEnabledState(EnabledState.Disabled);
-                    DriverStation.ControlData.DsAttached = false;
+                    DriverStation.ControlData.Autonomous = false;
                     DriverStation.ControlData.Test = false;
                     break;
                 case RobotMode.Test:
                     if (prevState != RobotMode.Test)
                         SetEnabledState(EnabledState.Disabled);
-                    DriverStation.ControlData.DsAttached = false;
+                    DriverStation.ControlData.Autonomous = false;
                     DriverStation.ControlData.Test = true;
                     break;
                 default:
                     SetEnabledState(EnabledState.Disabled);
-                    DriverStation.ControlData.DsAttached = false;
+                    DriverStation.ControlData.Autonomous = false;
                     DriverStation.ControlData.Test = false;
                     break;
             }

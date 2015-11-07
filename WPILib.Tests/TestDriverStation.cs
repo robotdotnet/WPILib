@@ -1,6 +1,14 @@
-﻿namespace WPILib.Tests
+﻿
+using HAL_Base;
+using HAL_Simulator;
+using HAL_Simulator.Data;
+using NUnit.Framework;
+using HAL = HAL_Base.HAL;
+using static HAL_Simulator.DriverStationHelper;
+
+namespace WPILib.Tests
 {
-    /*
+
     [TestFixture]
     public class TestDriverStation : TestBase
     {
@@ -16,22 +24,22 @@
             StartDSLoop();
         }
 
-        private static Dictionary<dynamic, dynamic> HalData()
+        private static DriverStationData HalData()
         {
-            return SimData.HalData;
+            return SimData.DriverStation;
         }
 
         [Test]
         public void TestControlWordTrue()
         {
-            HalData()["control"]["enabled"] = true;
-            HalData()["control"]["autonomous"] = true;
-            HalData()["control"]["test"] = true;
-            HalData()["control"]["eStop"] = true;
-            HalData()["control"]["ds_attached"] = true;
-            HalData()["control"]["fms_attached"] = true;
+            HalData().ControlData.Enabled = true;
+            HalData().ControlData.Autonomous = true;
+            HalData().ControlData.Test = true;
+            HalData().ControlData.EStop = true;
+            HalData().ControlData.DsAttached = true;
+            HalData().ControlData.FmsAttached = true;
 
-            var ct = HAL.GetControlWord();
+            var ct = HAL_Base.HAL.GetControlWord();
 
             Assert.IsTrue(ct.GetEnabled());
             Assert.IsTrue(ct.GetAutonomous());
@@ -44,14 +52,14 @@
         [Test]
         public void TestControlWordFalse()
         {
-            HalData()["control"]["enabled"] = false;
-            HalData()["control"]["autonomous"] = false;
-            HalData()["control"]["test"] = false;
-            HalData()["control"]["eStop"] = false;
-            HalData()["control"]["ds_attached"] = false;
-            HalData()["control"]["fms_attached"] = false;
+            HalData().ControlData.Enabled = false;
+            HalData().ControlData.Autonomous = false;
+            HalData().ControlData.Test = false;
+            HalData().ControlData.EStop = false;
+            HalData().ControlData.DsAttached = false;
+            HalData().ControlData.FmsAttached = false;
 
-            var ct = HAL.GetControlWord();
+            var ct = HAL_Base.HAL.GetControlWord();
 
             Assert.IsFalse(ct.GetEnabled());
             Assert.IsFalse(ct.GetAutonomous());
@@ -71,7 +79,7 @@
         [Test]
         public void TestEnabled()
         {
-            SetEnabledState(EnabledState.Enabled);
+            SetEnabledState(DriverStationHelper.EnabledState.Enabled);
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.Enabled);
         }
@@ -79,7 +87,7 @@
         [Test]
         public void TestDisabled()
         {
-            SetEnabledState(EnabledState.Disabled);
+            SetEnabledState(DriverStationHelper.EnabledState.Disabled);
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.Disabled);
         }
@@ -87,7 +95,7 @@
         [Test]
         public void TestAutonomous()
         {
-            SetRobotMode(RobotMode.Autonomous);
+            SetRobotMode(DriverStationHelper.RobotMode.Autonomous);
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.Autonomous);
         }
@@ -95,7 +103,7 @@
         [Test]
         public void TestTeleop()
         {
-            SetRobotMode(RobotMode.Teleop);
+            SetRobotMode(DriverStationHelper.RobotMode.Teleop);
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.OperatorControl);
         }
@@ -103,7 +111,7 @@
         [Test]
         public void TestTestMode()
         {
-            SetRobotMode(RobotMode.Test);
+            SetRobotMode(DriverStationHelper.RobotMode.Test);
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.Test);
         }
@@ -186,7 +194,7 @@
         {
             HAL.HALGetAllianceStation = (ref HALAllianceStationID station) =>
             {
-                station = (HALAllianceStationID)9;
+                station = (HALAllianceStationID) 9;
                 return 0;
             };
 
@@ -194,7 +202,7 @@
 
             HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
         }
-        
+
         [Test]
         [TestCase(true)]
         [TestCase(false)]
@@ -228,6 +236,7 @@
 
             HAL.HALGetMatchTime = HAL_Simulator.HAL.HALGetMatchTime;
         }
+
         /*
         [Test]
         [Ignore("Ignoring because it checks for joystick being connected. This needs to be fixed. Passes if we don't check for joystick")]
@@ -240,4 +249,5 @@
         
     }
     */
+    }
 }
