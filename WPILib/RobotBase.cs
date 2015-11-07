@@ -28,10 +28,6 @@ namespace WPILib
         /// </summary>
         protected RobotBase()
         {
-            NetworkTables.Native.CoreMethods.SetLogger((level, file, line, message) =>
-            {
-                Console.Error.WriteLine(message);
-            }, LogLevel.LogInfo);
             NetworkTable.SetNetworkIdentity("Robot");
             NetworkTable.SetServerMode();
             m_ds = DriverStation.Instance;
