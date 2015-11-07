@@ -1,22 +1,23 @@
 ﻿using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests.MotorControllers
 {
     [TestFixture]
-    public class TestVictorSP : TestBase
+    public class TestVictorSp : TestBase
     {
 
         [Test]
-        public void TestVictorSPInitialized()
+        public void TestVictorSpInitialized()
         {
             using (VictorSP t = new VictorSP(2))
                 Assert.AreEqual(SimData.PWM[2].Type, ControllerType.VictorSP);
         }
 
         [Test]
-        public void TestVictorSPStarts0()
+        public void TestVictorSpStarts0()
         {
             using (VictorSP t = new VictorSP(2))
             {
@@ -25,7 +26,7 @@ namespace WPILib.Tests.MotorControllers
         }
 
         [Test]
-        public void TestVictorSPSet()
+        public void TestVictorSpSet()
         {
             using (VictorSP t = new VictorSP(2))
             {

@@ -16,7 +16,7 @@ namespace WPILib.Tests
         [Test]
         public void TestAnalogTriggerInitFree([Range(0, 7)]int pin)
         {
-            int index = 0;
+            int index;
             using (AnalogTrigger trigger = new AnalogTrigger(pin))
             {
                 index = trigger.Index;

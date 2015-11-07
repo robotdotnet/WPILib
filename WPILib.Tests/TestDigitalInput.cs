@@ -4,6 +4,7 @@ using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
 {
@@ -34,7 +35,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var Input = GetDigitalInput(-1);
+                var input = GetDigitalInput(-1);
             });
         }
 
@@ -43,14 +44,14 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var Input = GetDigitalInput(DigitalChannels);
+                var input = GetDigitalInput(DigitalChannels);
             });
         }
 
         [Test]
         public void TestInputCreate()
         {
-            using (DigitalInput Input = GetDigitalInput(0))
+            using (DigitalInput input = GetDigitalInput(0))
             {
                 Assert.IsTrue(GetInputDictionary(0).Initialized);
                 Assert.IsTrue(GetInputDictionary(0).IsInput);
@@ -60,7 +61,7 @@ namespace WPILib.Tests
         [Test]
         public void TestInputDoubleCreate()
         {
-            using (DigitalInput Input = GetDigitalInput(0))
+            using (DigitalInput input = GetDigitalInput(0))
             {
                 Assert.Throws<AllocationException>(() =>
                 {
@@ -72,10 +73,10 @@ namespace WPILib.Tests
         [Test]
         public void TestDigitalInputCreateAll()
         {
-            List<DigitalInput> Inputs = new List<DigitalInput>();
+            List<DigitalInput> inputs = new List<DigitalInput>();
             for (int i = 0; i < DigitalChannels; i++)
             {
-                Inputs.Add(GetDigitalInput(i));
+                inputs.Add(GetDigitalInput(i));
                 Assert.IsTrue(GetInputDictionary(0).Initialized);
                 Assert.IsTrue(GetInputDictionary(0).IsInput);
                 if (i > 9)
@@ -84,23 +85,22 @@ namespace WPILib.Tests
                 }
             }
 
-            foreach (var Input in Inputs)
+            foreach (var input in inputs)
             {
-                Input.Dispose();
+                input.Dispose();
             }
         }
 
         [Test]
         public void TestDigitalInputDispose()
         {
-            DigitalInput Input = GetDigitalInput(0);
+            DigitalInput input = GetDigitalInput(0);
             Assert.IsTrue(GetInputDictionary(0).Initialized);
-            Input.Dispose();
+            input.Dispose();
             Assert.IsFalse(GetInputDictionary(0).Initialized);
-            Input = null;
-            Input = GetDigitalInput(0);
+            input = GetDigitalInput(0);
             Assert.IsTrue(GetInputDictionary(0).Initialized);
-            Input.Dispose();
+            input.Dispose();
         }
 
         [Test]

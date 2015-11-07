@@ -10,7 +10,7 @@ namespace WPILib.Tests
     [TestFixture(53)]
     public class TestPowerDistributionPanel : TestBase
     {
-        private int m_module;
+        private readonly int m_module;
 
         public TestPowerDistributionPanel(int module)
         {

@@ -7,19 +7,19 @@ namespace WPILib.Tests
 {
     class MockNetworkTable : ITable
     {
-        public int ContainsKeyCount = 0;
+        public int ContainsKeyCount;
         public bool ContainsKey(string key)
         {
             ContainsKeyCount++;
             return true;
         }
-        public int ContainsSubTableCount = 0;
+        public int ContainsSubTableCount;
         public bool ContainsSubTable(string key)
         {
             ContainsSubTableCount++;
             return true;
         }
-        public int GetSubTableCount = 0;
+        public int GetSubTableCount;
         public ITable GetSubTable(string key)
         {
             GetSubTableCount++;

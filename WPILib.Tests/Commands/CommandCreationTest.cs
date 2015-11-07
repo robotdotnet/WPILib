@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WPILib.Commands;
 
-namespace WPILib.Tests
+namespace WPILib.Tests.Commands
 {
     [TestFixture]
     public class TestCommand

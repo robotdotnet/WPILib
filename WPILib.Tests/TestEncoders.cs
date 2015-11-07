@@ -3,6 +3,7 @@ using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
 {
@@ -253,7 +254,7 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestEncoderCreate2x()
+        public void TestEncoderCreate2X()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K2X))
             {
@@ -276,7 +277,7 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestEncoderCreate1x()
+        public void TestEncoderCreate1X()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K1X))
             {
@@ -300,7 +301,7 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestEncoderGet4x()
+        public void TestEncoderGet4X()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K4X))
             {
@@ -310,7 +311,7 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestEncoderGet2x()
+        public void TestEncoderGet2X()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K2X))
             {
@@ -321,7 +322,7 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestEncoderGet1x()
+        public void TestEncoderGet1X()
         {
             using (var x = new Encoder(1, 2, false, EncodingType.K1X))
             {

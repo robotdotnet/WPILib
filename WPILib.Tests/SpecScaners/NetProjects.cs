@@ -38,7 +38,7 @@ namespace WPILib.Tests.SpecScaners
         /// <returns></returns>
         public static List<HALMethodClass> GetHALSimMethods()
         {
-            List<HALMethodClass> HALSimMethods = new List<HALMethodClass>();
+            List<HALMethodClass> halSimMethods = new List<HALMethodClass>();
             var dir = "..\\..\\HAL-Simulation\\HAL-Files";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
@@ -60,22 +60,22 @@ namespace WPILib.Tests.SpecScaners
                             .Select(a => a.Parent.Parent)
                             .Cast<MethodDeclarationSyntax>();
                     var methodDeclarationSyntaxs = methods as IList<MethodDeclarationSyntax> ?? methods.ToList();
-                    if (methodDeclarationSyntaxs.Count() != 0)
+                    if (methodDeclarationSyntaxs.Count != 0)
                     {
                         cs.Methods.AddRange(methodDeclarationSyntaxs);
-                        HALSimMethods.Add(cs);
+                        halSimMethods.Add(cs);
                     }
 
                 }
 
 
             }
-            return HALSimMethods;
+            return halSimMethods;
         }
 
-        public static List<HALMethodClass> GetHalRoboRIODllImports()
+        public static List<HALMethodClass> GetHalRoboRioDllImports()
         {
-            List<HALMethodClass> HALRoboRioDllImports = new List<HALMethodClass>();
+            List<HALMethodClass> halRoboRioDllImports = new List<HALMethodClass>();
             var dir = "..\\..\\HAL-RoboRIO";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
@@ -98,19 +98,19 @@ namespace WPILib.Tests.SpecScaners
                             .Cast<MethodDeclarationSyntax>();
                     cs.Methods.AddRange(methods);
                 }
-                HALRoboRioDllImports.Add(cs);
+                halRoboRioDllImports.Add(cs);
             }
 
-            return HALRoboRioDllImports;
+            return halRoboRioDllImports;
         }
 
         /// <summary>
         /// Gets a list of all RoboRIO functions
         /// </summary>
         /// <returns></returns>
-        public static List<HALMethodClass> GetHalRoboRIOMethods()
+        public static List<HALMethodClass> GetHalRoboRioMethods()
         {
-            List<HALMethodClass> HalRoboRIOMethods = new List<HALMethodClass>();
+            List<HALMethodClass> halRoboRioMethods = new List<HALMethodClass>();
             var dir = "..\\..\\HAL-RoboRIO";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
@@ -130,17 +130,17 @@ namespace WPILib.Tests.SpecScaners
                             .Select(a => a).ToList();
 
                     cs.Methods.AddRange(methods);
-                    HalRoboRIOMethods.Add(cs);
+                    halRoboRioMethods.Add(cs);
                 }
                 
             }
 
-            return HalRoboRIOMethods;
+            return halRoboRioMethods;
         }
 
         public static List<HALDelegateClass> GetHalBaseDelegates()
         {
-            List<HALDelegateClass> HalBaseMethods = new List<HALDelegateClass>();
+            List<HALDelegateClass> halBaseMethods = new List<HALDelegateClass>();
             var dir = "..\\..\\HAL-Base\\Generated";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
@@ -160,10 +160,10 @@ namespace WPILib.Tests.SpecScaners
                             .Select(a => a).ToList();
                     cs.Methods.AddRange(methods);
                 }
-                HalBaseMethods.Add(cs);
+                halBaseMethods.Add(cs);
             }
 
-            return HalBaseMethods;
+            return halBaseMethods;
         }
     }
 }

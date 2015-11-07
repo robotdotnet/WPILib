@@ -1,6 +1,7 @@
 ﻿using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests.MotorControllers
 {

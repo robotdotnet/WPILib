@@ -15,32 +15,19 @@ namespace WPILib.Tests.SpecScaners
         [Test]
         public void TestHALBaseMapsToHALSim()
         {
-
-            List<string> fd = new List<string>();
             FieldInfo[] fields = typeof(HAL).GetFields();
 
-            foreach (var fieldInfo in fields)
+            List<string> nullDelegateFields = (from fieldInfo in fields where fieldInfo.FieldType.IsSubclassOf(typeof (MulticastDelegate)) let x = fieldInfo.GetValue(null) where x == null select fieldInfo.Name).ToList();
+            foreach (var nullDelegateField in nullDelegateFields)
             {
-                if ((fieldInfo.FieldType).IsSubclassOf(typeof(MulticastDelegate)))
-                {
-                    var x = fieldInfo.GetValue(null);
-                    if (x == null)
-                    {
-                        fd.Add(fieldInfo.Name);
-                    }
-                }
-            }
-            foreach (var VARIABLE in fd)
-            {
-                Console.WriteLine(VARIABLE);
+                Console.WriteLine(nullDelegateField);
             }
 
-            Assert.IsTrue(fd.Count == 0);
+            Assert.IsTrue(nullDelegateFields.Count == 0);
         }
 
 
-        private bool CheckForBlittable(List<TypeSyntax> types, List<string> allowedTypes, 
-            List<string> nonBlittableFuncs, string nonBlittableLine)
+        private void CheckForBlittable(List<TypeSyntax> types, List<string> allowedTypes, List<string> nonBlittableFuncs, string nonBlittableLine)
         {
             bool allBlittable = true;
             foreach (TypeSyntax t in types)
@@ -63,7 +50,6 @@ namespace WPILib.Tests.SpecScaners
             {
                 nonBlittableFuncs.Add(nonBlittableLine);
             }
-            return allBlittable;
         }
 
 
@@ -113,42 +99,36 @@ namespace WPILib.Tests.SpecScaners
             List<string> notBlittableMethods = new List<string>();
 
 
-            var funcs2 = NetProjects.GetHalBaseDelegates();
-            foreach (var func in funcs2)
+            var halBaseDelegates = NetProjects.GetHalBaseDelegates();
+            foreach (var halDelegate in halBaseDelegates)
             {
-                foreach (var syntax in func.Methods)
+                foreach (var methodSyntax in halDelegate.Methods)
                 {
                     List<TypeSyntax> types = new List<TypeSyntax>();
 
-                    if (syntax.AttributeLists.Count != 0)
+                    if (methodSyntax.AttributeLists.Count != 0)
                     {
-                        if (syntax.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable)
-                            && syntax.ReturnType.ToString().Contains("string"))
+                        if (methodSyntax.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable)
+                            && methodSyntax.ReturnType.ToString().Contains("string"))
                         {
                             //We can ignore it.
                         }
                         else
                         {
-                            types.Add(syntax.ReturnType);
+                            types.Add(methodSyntax.ReturnType);
                         }
                     }
                     else
                     {
-                        types.Add(syntax.ReturnType);
+                        types.Add(methodSyntax.ReturnType);
                     }
 
-                    //types.Add(syntax.ReturnType);
-
-
-
-                    string ret = syntax.ReturnType.ToString();
-                    string id = syntax.Identifier.ToString();
                     List<string> param = new List<string>();
 
                     StringBuilder builder = new StringBuilder();
-                    builder.Append($"\t {syntax.ReturnType} {syntax.Identifier} (");
+                    builder.Append($"\t {methodSyntax.ReturnType} {methodSyntax.Identifier} (");
                     bool first = true;
-                    foreach (var parameter in syntax.ParameterList.Parameters)
+                    foreach (var parameter in methodSyntax.ParameterList.Parameters)
                     {
                         if (parameter.AttributeLists.Count != 0)
                         {
@@ -167,7 +147,7 @@ namespace WPILib.Tests.SpecScaners
                             types.Add(parameter.Type);
                         }
 
-                        
+
                         param.Add(parameter.Type.ToString());
                         if (first)
                         {
@@ -206,30 +186,30 @@ namespace WPILib.Tests.SpecScaners
     {
         public bool Equals(Function other)
         {
-            return string.Equals(retType, other.retType) && string.Equals(identifier.ToLower(), other.identifier.ToLower()) && parameters.SequenceEqual(other.parameters);
+            return string.Equals(m_retType, other.m_retType) && string.Equals(m_identifier.ToLower(), other.m_identifier.ToLower()) && m_parameters.SequenceEqual(other.m_parameters);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                var hashCode = retType?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ (identifier?.GetHashCode() ?? 0);
-                hashCode = (hashCode * 397) ^ (parameters?.GetHashCode() ?? 0);
+                var hashCode = m_retType?.GetHashCode() ?? 0;
+                hashCode = (hashCode * 397) ^ (m_identifier?.GetHashCode() ?? 0);
+                hashCode = (hashCode * 397) ^ (m_parameters?.GetHashCode() ?? 0);
                 return hashCode;
             }
         }
 
         public Function(string ret, string id, string[] p)
         {
-            retType = ret;
-            identifier = id;
-            parameters = p;
+            m_retType = ret;
+            m_identifier = id;
+            m_parameters = p;
         }
 
-        public readonly string retType;
-        public readonly string identifier;
-        public readonly string[] parameters;
+        private readonly string m_retType;
+        private readonly string m_identifier;
+        private readonly string[] m_parameters;
 
         public override bool Equals(object obj)
         {

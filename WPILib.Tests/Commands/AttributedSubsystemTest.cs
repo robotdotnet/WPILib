@@ -34,11 +34,11 @@ namespace WPILib.Tests.Commands
 
         public class AttributedMockCommand : MockCommand
         {
-            private readonly Subsystem subsystem;
+            private readonly Subsystem m_subsystem;
 
             public AttributedMockCommand(Subsystem subsystem)
             {
-                this.subsystem = subsystem;
+                m_subsystem = subsystem;
             }
         }
 

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
 {
@@ -22,11 +22,11 @@ namespace WPILib.Tests
             return SimData.PWM[2];
         }
 
-        [SuppressMessage("Usage", "CS0618", Justification = "Need exact setpoints for unit testing")]
-        private static PWM boundPWM(PWM pwm)
+        private static void BoundPWM(PWM pwm)
         {
+#pragma warning disable 618
             pwm.SetBounds(1500, 1050, 1000, 950, 500);
-            return pwm;
+#pragma warning restore 618
         }
 
         [Test]
@@ -92,7 +92,6 @@ namespace WPILib.Tests
             Assert.IsTrue(PWMData().Initialized);
             pwm.Dispose();
             Assert.IsFalse(PWMData().Initialized);
-            pwm = null;
             pwm = NewPWM();
             Assert.IsTrue(PWMData().Initialized);
             pwm.Dispose();
@@ -142,7 +141,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 pwm.SetPosition(position);
                 Assert.AreEqual(PWMData().RawValue, rawValue);
             }
@@ -155,7 +154,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 pwm.SetPosition(position);
                 Assert.AreEqual(PWMData().RawValue, raw);
             }
@@ -168,7 +167,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 PWMData().RawValue = raw;
                 Assert.AreEqual(pwm.GetPosition(), position);
             }
@@ -181,7 +180,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 PWMData().RawValue = 1600;
                 Assert.AreEqual(pwm.GetPosition(), 1.0);
             }
@@ -198,7 +197,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 pwm.DeadbandElimination = db;
                 pwm.SetSpeed(speed);
                 Assert.AreEqual(expected, PWMData().RawValue);
@@ -212,7 +211,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 pwm.SetSpeed(speed);
                 Assert.AreEqual(expected, PWMData().RawValue);
             }
@@ -230,7 +229,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 pwm.DeadbandElimination = db;
                 PWMData().RawValue = speed;
                 Assert.AreEqual(expected, Math.Round(pwm.GetSpeed(), 2));
@@ -244,7 +243,7 @@ namespace WPILib.Tests
         {
             using (PWM pwm = NewPWM())
             {
-                boundPWM(pwm);
+                BoundPWM(pwm);
                 PWMData().RawValue = speed;
                 Assert.AreEqual(expected, pwm.GetSpeed());
             }

@@ -4,6 +4,7 @@ using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
 {
@@ -87,7 +88,6 @@ namespace WPILib.Tests
             AnalogInput input = GetAnalogInput(0);
             Assert.IsTrue(GetInputData(0).Initialized);
             input.Dispose();
-            input = null;
             SimData.ResetHALData(false);
             input = GetAnalogInput(0);
             Assert.IsTrue(GetInputData(0).Initialized);

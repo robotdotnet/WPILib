@@ -6,13 +6,13 @@ namespace WPILib.Tests
     [TestFixture]
     public class TestResource
     {
-        private Resource testResource;
-        private const int RESOURCE_MAX_SIZE = 5;
+        private Resource m_testResource;
+        private const int ResourceMaxSize = 5;
 
         [SetUp]
         public void Setup()
         {
-            testResource = new Resource(RESOURCE_MAX_SIZE);
+            m_testResource = new Resource(ResourceMaxSize);
         }
 
         [TearDown]
@@ -24,71 +24,71 @@ namespace WPILib.Tests
         [Test]
         public void TestAllocateAboveRange()
         {
-            Assert.Throws<AllocationException>(() => testResource.Allocate(RESOURCE_MAX_SIZE));
+            Assert.Throws<AllocationException>(() => m_testResource.Allocate(ResourceMaxSize));
         }
 
         [Test]
         public void TestAllocateBelowRange()
         {
-            Assert.Throws<AllocationException>(() => testResource.Allocate(-1));
+            Assert.Throws<AllocationException>(() => m_testResource.Allocate(-1));
         }
 
         [Test]
         public void TestAlocateAlreadyAllocatedResource()
         {
-            testResource.Allocate(0);
-            Assert.Throws<AllocationException>(() => testResource.Allocate(0));
+            m_testResource.Allocate(0);
+            Assert.Throws<AllocationException>(() => m_testResource.Allocate(0));
         }
 
         [Test]
         public void TestAllocateValidResource()
         {
-            for (int i = 0; i < RESOURCE_MAX_SIZE; i++)
+            for (int i = 0; i < ResourceMaxSize; i++)
             {
-                testResource.Allocate(i);
+                m_testResource.Allocate(i);
             }
         }
 
         [Test]
         public void TestAllocateFreedResource()
         {
-            for (int i = 0; i < RESOURCE_MAX_SIZE; i++)
+            for (int i = 0; i < ResourceMaxSize; i++)
             {
-                testResource.Allocate(i);
+                m_testResource.Allocate(i);
             }
-            for (int i = 0; i < RESOURCE_MAX_SIZE; i++)
+            for (int i = 0; i < ResourceMaxSize; i++)
             {
-                testResource.Deallocate(i);
+                m_testResource.Deallocate(i);
             }
-            for (int i = 0; i < RESOURCE_MAX_SIZE; i++)
+            for (int i = 0; i < ResourceMaxSize; i++)
             {
-                testResource.Allocate(i);
+                m_testResource.Allocate(i);
             }
         }
 
         [Test]
         public void TestAllocateNextValidResource()
         {
-            testResource.Allocate(3);
-            int allocatedValue = testResource.Allocate();
+            m_testResource.Allocate(3);
+            int allocatedValue = m_testResource.Allocate();
             Assert.AreEqual(0, allocatedValue);
-            allocatedValue = testResource.Allocate();
+            allocatedValue = m_testResource.Allocate();
             Assert.AreEqual(1, allocatedValue);
-            allocatedValue = testResource.Allocate();
+            allocatedValue = m_testResource.Allocate();
             Assert.AreEqual(2, allocatedValue);
             //Three should be skipped since it already allocated.
-            allocatedValue = testResource.Allocate();
+            allocatedValue = m_testResource.Allocate();
             Assert.AreEqual(4, allocatedValue);
         }
 
         [Test]
         public void TestAllocateWithNoRemainingResources()
         {
-            for (int i = 0; i < RESOURCE_MAX_SIZE; i++)
+            for (int i = 0; i < ResourceMaxSize; i++)
             {
-                testResource.Allocate(i);
+                m_testResource.Allocate(i);
             }
-            Assert.Throws<AllocationException>(() => testResource.Allocate());
+            Assert.Throws<AllocationException>(() => m_testResource.Allocate());
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<AllocationException>(() =>
             {
-                testResource.Deallocate(0);
+                m_testResource.Deallocate(0);
             });
         }
     }

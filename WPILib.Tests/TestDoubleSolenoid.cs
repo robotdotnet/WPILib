@@ -4,6 +4,7 @@ using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
 {
@@ -12,7 +13,7 @@ namespace WPILib.Tests
     [TestFixture(59)]
     public class TestDoubleSolenoid : TestBase
     {
-        private int m_module;
+        private readonly int m_module;
 
         public TestDoubleSolenoid(int module)
         {

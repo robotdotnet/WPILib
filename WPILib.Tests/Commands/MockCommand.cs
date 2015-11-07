@@ -4,12 +4,12 @@ namespace WPILib.Tests.Commands
 {
     public class MockCommand : Command
     {
-        private int initializeCount = 0;
-        private int executeCount = 0;
-        private int isFinishedCount = 0;
-        private bool hasFinished = false;
-        private int endCount = 0;
-        private int interruptedCount = 0;
+        private int m_initializeCount;
+        private int m_executeCount;
+        private int m_isFinishedCount;
+        private bool m_hasFinished;
+        private int m_endCount;
+        private int m_interruptedCount;
 
         public MockCommand(string name) : base(name)
         {
@@ -23,34 +23,34 @@ namespace WPILib.Tests.Commands
 
         protected override void Initialize()
         {
-            ++initializeCount;
+            ++m_initializeCount;
         }
 
         protected override void Execute()
         {
-            ++executeCount;
+            ++m_executeCount;
         }
 
         protected override bool IsFinished()
         {
-            ++isFinishedCount;
+            ++m_isFinishedCount;
             return IsHasFinished();
         }
 
         protected override void End()
         {
-            ++endCount;
+            ++m_endCount;
         }
 
         protected override void Interrupted()
         {
-            ++interruptedCount;
+            ++m_interruptedCount;
         }
 
 
         public int GetInitializeCount()
         {
-            return initializeCount;
+            return m_initializeCount;
         }
 
         public bool HasInitialized()
@@ -60,27 +60,27 @@ namespace WPILib.Tests.Commands
 
         public int GetExecuteCount()
         {
-            return executeCount;
+            return m_executeCount;
         }
 
         public int GetIsFinishedCount()
         {
-            return isFinishedCount;
+            return m_isFinishedCount;
         }
 
         public bool IsHasFinished()
         {
-            return hasFinished;
+            return m_hasFinished;
         }
 
         public void SetHasFinished(bool hasFinished)
         {
-            this.hasFinished = hasFinished;
+            m_hasFinished = hasFinished;
         }
 
         public int GetEndCount()
         {
-            return endCount;
+            return m_endCount;
         }
 
         public bool HasEnd()
@@ -90,7 +90,7 @@ namespace WPILib.Tests.Commands
 
         public int GetInterruptedCount()
         {
-            return interruptedCount;
+            return m_interruptedCount;
         }
 
         public bool HasInterrupted()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HAL_Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
+// ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
 {

@@ -33,7 +33,7 @@ namespace WPILib.Tests
         {
             int count = 0;
             object obj = null;
-            Action<object> mockDelegate = (o) =>
+            Action<object> mockDelegate = o =>
             {
                 count++;
                 obj = o;
