@@ -70,6 +70,7 @@
     <NamingMethod>MemberName</NamingMethod>
     <HelpTitle>.NET for First Robotics Competition</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <MissingTags>AutoDocumentCtors, AutoDocumentDispose</MissingTags>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in order for Visual Studio to perform
 			 the build.  The others are optional common platform types that may appear. -->
@@ -141,6 +142,7 @@
     <PostBuildEvent>xcopy Help\HAL-Simulation.xml ..\HAL-Simulation\Output /y
 xcopy Help\HAL-Simulation.xml ..\WPILib\Output /y
 xcopy Help\WPILib.xml ..\WPILib\Output /y
-xcopy Help\WPILib.Extras.xml ..\WPILib.Extras\Output /y</PostBuildEvent><RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+xcopy Help\WPILib.Extras.xml ..\WPILib.Extras\Output /y</PostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 </Project>
