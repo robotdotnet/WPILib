@@ -9,9 +9,8 @@ namespace HAL_Simulator
     /// <remarks>Not everything is wrapped, because we don't care about changes in certain things.
     /// <para/>Note that since the indexer is not marked virtual, if you set a value in the
     /// dictionary manually, the notify callback will not be called unless you first
-    /// box the dictionary as a NotifyDict. The recommended way to update the data however
-    /// is to update the HalInData dictionary, and then call <see cref="SimData.UpdateHalData"/> 
-    /// with that dictionary.</remarks>
+    /// box the dictionary as a NotifyDict.
+    /// </remarks>
     /// <typeparam name="TKey">Please use dynamic</typeparam>
     /// <typeparam name="TValue">Please use dynamic</typeparam>
     public class NotifyDict<TKey, TValue> : Dictionary<TKey, TValue>

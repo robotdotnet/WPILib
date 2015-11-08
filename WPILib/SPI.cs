@@ -30,7 +30,7 @@ namespace WPILib
 
         private static byte s_devices = 0;
 
-        private Port m_port;
+        private readonly Port m_port;
         private int m_bitOrder;
         private int m_clockPolarity;
         private int m_dataOnTrailing;
@@ -160,6 +160,18 @@ namespace WPILib
             return SpiWrite((byte)m_port, sendBuffer, (byte)size);
         }
 
+        /// <summary>
+        /// Reads a word from the receive FIFO.
+        /// </summary>
+        /// <remarks>
+        /// Waits for the current transfer to complete if the FIFO array is empty.
+        /// If the receive FIFO is empty, there is no active transfer, and initiate is false, errors.
+        /// </remarks>
+        /// <param name="initiate">If true, this method pushes "0" into the transmit buffer and 
+        /// initiates a transfer.</param>
+        /// <param name="dataReceived">An array to hold the data received.</param>
+        /// <param name="size">The size of data to receive.</param>
+        /// <returns></returns>
         public int Read(bool initiate, byte[] dataReceived, int size)
         {
             int retVal = 0;
@@ -170,6 +182,13 @@ namespace WPILib
             return retVal;
         }
 
+        /// <summary>
+        /// Perform a simultaneous read/write transaction with the device.
+        /// </summary>
+        /// <param name="dataToSend">The data to be written out to the device.</param>
+        /// <param name="dataReceived">Buffer to receive data from the device.</param>
+        /// <param name="size">The length of the transaction, in bytes.</param>
+        /// <returns></returns>
         public int Transaction(byte[] dataToSend, byte[] dataReceived, int size)
         {
             int retVal = 0;

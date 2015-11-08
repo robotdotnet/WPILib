@@ -21,7 +21,7 @@ namespace WPILib
 
         private const double NativePwdUnitsPerRotation = 4096.0;
 
-        private const double MinutesPer100msUnits = 1.0 / 600.0;
+        private const double MinutesPer100MsUnits = 1.0 / 600.0;
 
         /// <summary>
         /// Feedback type for CAN Talon
@@ -47,12 +47,18 @@ namespace WPILib
             /// <summary>
             /// An encoder that only reports when it hits a falling edge.
             /// </summary>
-            /// <summary>
-            /// An encoder that only reports when it hits a falling edge.
-            /// </summary>
             EncoderFalling = 5,
-            CtreMagEncoder_Relative = 6,
-            CtreMagEncoder_Absolute = 7,
+            /// <summary>
+            /// Relative magnetic encoder.
+            /// </summary>
+            CtreMagEncoderRelative = 6,
+            /// <summary>
+            /// Absolute magnetic encoder
+            /// </summary>
+            CtreMagEncoderAbsolute = 7,
+            /// <summary>
+            /// Encoder is a pulse width sensor.
+            /// </summary>
             PulseWidth = 8
         }
 
@@ -61,28 +67,56 @@ namespace WPILib
         /// </summary>
         public enum StatusFrameRate
         {
+            /// <summary>
+            /// Requests a general status frame
+            /// </summary>
             General = 0,
+            /// <summary>
+            /// Requests a feedback status frame
+            /// </summary>
             Feedback = 1,
+            /// <summary>
+            /// Quad encoder status frame
+            /// </summary>
             QuadEncoder = 2,
+            /// <summary>
+            /// Analog temp vbat status frame.
+            /// </summary>
             AnalogTempVbat = 3,
+            /// <summary>
+            /// Pulse width status frame.
+            /// </summary>
             PulseWidth = 4
         }
 
+        /// <summary>
+        /// The Feedback device status.
+        /// </summary>
         public enum FeedbackDeviceStatus
         {
+            /// <summary>
+            /// Status unknown
+            /// </summary>
             FeedbackStatusUnknown = 0,
+            /// <summary>
+            /// Status present
+            /// </summary>
             FeedbackStatusPresent = 1,
+            /// <summary>
+            /// Status not present
+            /// </summary>
             FeedbackStatusNotPresent = 2
         }
 
 
         private ControlMode m_controlMode;
-        private IntPtr m_impl;
+        private readonly IntPtr m_talonPointer;
         private const double DelayForSolicitedSignals = 0.004;
         private bool m_controlEnabled;
         private int m_profile;
         private double m_setPoint;
 
+        /// <inheritdoc/>
         public bool Inverted { get; set; }
 
         private int m_codesPerRev;
@@ -100,7 +134,7 @@ namespace WPILib
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
             DeviceID = deviceNumber;
-            m_impl = C_TalonSRX_Create(deviceNumber, controlPeriodMs);
+            m_talonPointer = C_TalonSRX_Create(deviceNumber, controlPeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
             m_setPoint = 0;
@@ -113,20 +147,18 @@ namespace WPILib
             HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
-        /// <summary>
-        /// Disposes of the internal resources used to connect to the Talon SRX.
-        /// </summary>
+        /// <inheritdoc/>
         public void Dispose()
         {
-            C_TalonSRX_Destroy(m_impl);
+            C_TalonSRX_Destroy(m_talonPointer);
         }
 
         private double GetParam(ParamID id)
         {
-            C_TalonSRX_RequestParam(m_impl, (int)id);
+            C_TalonSRX_RequestParam(m_talonPointer, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
             var value = 0.0;
-            var status = C_TalonSRX_GetParamResponse(m_impl, (int)id, ref value);
+            var status = C_TalonSRX_GetParamResponse(m_talonPointer, (int)id, ref value);
             if (status != CTR_Code.CTR_OKAY)
                 CheckStatus((int)status);
             return value;
@@ -143,36 +175,35 @@ namespace WPILib
 
         private CTR_Code GetParamInt32(ParamID id, out int value)
         {
-            C_TalonSRX_RequestParam(m_impl, (int)id);
+            C_TalonSRX_RequestParam(m_talonPointer, (int)id);
             Timer.Delay(DelayForSolicitedSignals);
             value = 0;
-            return C_TalonSRX_GetParamResponseInt32(m_impl, (int)id, ref value);
+            return C_TalonSRX_GetParamResponseInt32(m_talonPointer, (int)id, ref value);
         }
 
         private void SetParam(ParamID id, double value)
         {
-            var errorCode = C_TalonSRX_SetParam(m_impl, (int)id, value);
+            var errorCode = C_TalonSRX_SetParam(m_talonPointer, (int)id, value);
             if (errorCode != CTR_Code.CTR_OKAY)
                 CheckStatus((int)errorCode);
         }
 
         /// <summary>
-        /// Deletes the internal resources that connect to the Talon SRX.  Use the <see cref="Dispose"/> method instead.
+        /// Sets whether to reverse the input sensor.
         /// </summary>
-        [Obsolete("Use the Dispose method or a using block instead of Delete")]
-        public void Delete()
-        {
-            Dispose();
-        }
-
+        /// <param name="flip">True to reverse, false to not</param>
         public void ReverseSensor(bool flip)
         {
-            C_TalonSRX_SetRevFeedbackSensor(m_impl, flip ? 1 : 0);
+            C_TalonSRX_SetRevFeedbackSensor(m_talonPointer, flip ? 1 : 0);
         }
 
+        /// <summary>
+        /// Sets whether to reverse the output.
+        /// </summary>
+        /// <param name="flip">True to reverse, false to not.</param>
         public void ReverseOutput(bool flip)
         {
-            C_TalonSRX_SetRevMotDuringCloseLoopEn(m_impl, flip ? 1 : 0);
+            C_TalonSRX_SetRevMotDuringCloseLoopEn(m_talonPointer, flip ? 1 : 0);
         }
 
         /// <summary>
@@ -182,10 +213,14 @@ namespace WPILib
         public int GetEncoderPosition()
         {
             int pos = 0;
-            C_TalonSRX_GetEncPosition(m_impl, ref pos);
+            C_TalonSRX_GetEncPosition(m_talonPointer, ref pos);
             return pos;
         }
 
+        /// <summary>
+        /// Resets the encoder position to a specified point.
+        /// </summary>
+        /// <param name="newPosition">The new position to reset to.</param>
         public void SetEncoderPostition(int newPosition)
         {
             SetParam(ParamID.eEncPosition, newPosition);
@@ -198,35 +233,60 @@ namespace WPILib
         public int GetEncoderVelocity()
         {
             int vel = 0;
-            C_TalonSRX_GetEncVel(m_impl, ref vel);
+            C_TalonSRX_GetEncVel(m_talonPointer, ref vel);
             return vel;
         }
 
+        /// <summary>
+        /// Gets the pulse width postion.
+        /// </summary>
+        /// <returns>The pulse width position</returns>
         public int GetPulseWidthPosition()
         {
             throw new NotImplementedException("Waiting on additions to the HAL");
         }
 
+        /// <summary>
+        /// Resets the pulse width position to a specified point.
+        /// </summary>
+        /// <param name="newPosition">The new position to reset to.</param>
         public void SetPulseWidthPosition(int newPosition)
         {
             SetParam(ParamID.ePwdPosition, newPosition);
         }
 
+        /// <summary>
+        /// Gets the pulse width velocity.
+        /// </summary>
+        /// <returns>The pulse width velocity.</returns>
         public int GetPulseWidthVelocity()
         {
             throw new NotImplementedException("Waiting on additions to the HAL");
         }
-
+        
+        /// <summary>
+        /// Gets the pulse width rise to fall time.
+        /// </summary>
+        /// <returns>The pulse width time in microseconds.</returns>
         public int GetPulseWidthRiseToFallUs()
         {
             throw new NotImplementedException("Waiting on additions to the HAL");
         }
 
+        /// <summary>
+        /// Gets the pulse width rise to rise time.
+        /// </summary>
+        /// <returns>The pulse width time in microseconds.</returns>
         public int GetPulseWidthRiseToRiseUs()
         {
             throw new NotImplementedException("Waiting on additions to the HAL");
         }
 
+        /// <summary>
+        /// Gets whether the sensor is present.
+        /// </summary>
+        /// <param name="feedbackDevice">The sensor to check for.</param>
+        /// <returns>The status of the feedback device.</returns>
         public FeedbackDeviceStatus IsSensorPresent(FeedbackDevice feedbackDevice)
         {
             FeedbackDeviceStatus retVal = FeedbackDeviceStatus.FeedbackStatusUnknown;
@@ -238,75 +298,115 @@ namespace WPILib
                 case FeedbackDevice.EncoderRising:
                 case FeedbackDevice.EncoderFalling:
                     break;
-                case FeedbackDevice.CtreMagEncoder_Relative:
-                case FeedbackDevice.CtreMagEncoder_Absolute:
+                case FeedbackDevice.CtreMagEncoderRelative:
+                case FeedbackDevice.CtreMagEncoderAbsolute:
                 case FeedbackDevice.PulseWidth:
                     long value = 0;
                     throw new NotImplementedException("Waiting for additions to the HAL");
-                    break;
             }
             return retVal;
         }
 
+        /// <summary>
+        /// Gets the number of quadrature index rises
+        /// </summary>
+        /// <returns>The number of rises on the index pin.</returns>
         public int GetNumberOfQuadIdxRises()
         {
             int state = 0;
-            C_TalonSRX_GetEncIndexRiseEvents(m_impl, ref state);
+            C_TalonSRX_GetEncIndexRiseEvents(m_talonPointer, ref state);
             return state;
         }
 
+        /// <summary>
+        /// Gets the state of the quadrature A pin.
+        /// </summary>
+        /// <returns>The state of the A pin</returns>
         public int GetPinStateQuadA()
         {
             int state = 0;
-            C_TalonSRX_GetQuadApin(m_impl, ref state);
+            C_TalonSRX_GetQuadApin(m_talonPointer, ref state);
             return state;
         }
 
+        /// <summary>
+        /// Gets the state of the quadrature B pin.
+        /// </summary>
+        /// <returns>The state of the B pin</returns>
         public int GetPinStateQuadB()
         {
             int state = 0;
-            C_TalonSRX_GetQuadBpin(m_impl, ref state);
+            C_TalonSRX_GetQuadBpin(m_talonPointer, ref state);
             return state;
         }
 
+        /// <summary>
+        /// Gets the state of the quadrature index pin.
+        /// </summary>
+        /// <returns>The state of the index pin</returns>
         public int GetPinStateQuadIdx()
         {
             int state = 0;
-            C_TalonSRX_GetQuadIdxpin(m_impl, ref state);
+            C_TalonSRX_GetQuadIdxpin(m_talonPointer, ref state);
             return state;
         }
 
+        /// <summary>
+        /// Resets the analog position to a new position.
+        /// </summary>
+        /// <param name="newPosition">The new position to reset to.</param>
         public void SetAnalogPosition(int newPosition)
         {
             SetParam(ParamID.eAinPosition, (double)newPosition);
         }
 
+        /// <summary>
+        /// Gets the analog input position, regardless of whether it is in the current feedback device.
+        /// </summary>
+        /// <returns>The 24 bit analog position. The bottom 10 bits are the ADC value, 
+        /// the upper 14 bits track the overflows and underflows.</returns>
         public int GetAnalogInPosition()
         {
             int position = 0;
-            C_TalonSRX_GetAnalogInWithOv(m_impl, ref position);
+            C_TalonSRX_GetAnalogInWithOv(m_talonPointer, ref position);
             return position;
         }
 
+        /// <summary>
+        /// Gets the analog input raw position, regardless of whether it is in the current feedback device.
+        /// </summary>
+        /// <returns>The ADC (0-1023) value on the analog pin.</returns>
         public int GetAnalogInRaw()
         {
             return GetAnalogInPosition() & 0x3FF;
         }
 
+        /// <summary>
+        /// Gets the analog input velocity, regardless of whether it is in the current feedback device.
+        /// </summary>
+        /// <returns>The analog input velocity.</returns>
         public int GetAnalogInVelocity()
         {
             int velocity = 0;
-            C_TalonSRX_GetAnalogInVel(m_impl, ref velocity);
+            C_TalonSRX_GetAnalogInVel(m_talonPointer, ref velocity);
             return velocity;
         }
 
+        /// <summary>
+        /// Gets the current difference between the setpoint and the sensor value.
+        /// </summary>
+        /// <returns>The error in the PID Controller.</returns>
         public int GetClosedLoopError()
         {
             int error = 0;
-            C_TalonSRX_GetCloseLoopErr(m_impl, ref error);
+            C_TalonSRX_GetCloseLoopErr(m_talonPointer, ref error);
             return error;
         }
 
+        /// <summary>
+        /// Sets the max allowable closed loop error.
+        /// </summary>
+        /// <param name="allowableCloseLoopError">The max allowable close looped error for the selected profile.</param>
         public void SetAllowableClosedLoopErr(int allowableCloseLoopError)
         {
             if (m_profile == 0)
@@ -319,112 +419,141 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the value of the forward limit switch.
+        /// </summary>
+        /// <returns>True if the limit switch is closed, otherwise false.</returns>
         public bool IsForwardLimitSwitchClosed()
         {
             int state = 0;
-            C_TalonSRX_GetLimitSwitchClosedFor(m_impl, ref state);
+            C_TalonSRX_GetLimitSwitchClosedFor(m_talonPointer, ref state);
             return state != 0;
         }
 
+        /// <summary>
+        /// Gets the value of the reverse limit switch.
+        /// </summary>
+        /// <returns>True if the limit switch is closed, otherwise false.</returns>
         public bool IsReverseLimitSwitchClosed()
         {
             int state = 0;
-            C_TalonSRX_GetLimitSwitchClosedFor(m_impl, ref state);
+            C_TalonSRX_GetLimitSwitchClosedFor(m_talonPointer, ref state);
             return state != 0;
         }
 
-        public bool IsBreakEnabledDuringNeutral()
+        /// <summary>
+        /// Returns whether the brake is enabled during neutral.
+        /// </summary>
+        /// <returns>True if brake mode, false if coast mode.</returns>
+        public bool IsBrakeEnabledDuringNeutral()
         {
             int state = 0;
-            C_TalonSRX_GetBrakeIsEnabled(m_impl, ref state);
+            C_TalonSRX_GetBrakeIsEnabled(m_talonPointer, ref state);
             return state != 0;
         }
 
-        public void ConfigEncoderCodesPerRev(int codesPerRev)
+        /// <inheritdoc/>
+        public int EncoderCodesPerRev
         {
-            m_codesPerRev = codesPerRev;
-            SetParam(ParamID.eNumberEncoderCPR, m_codesPerRev);
+            set
+            {
+                m_codesPerRev = value;
+                SetParam(ParamID.eNumberEncoderCPR, m_codesPerRev);
+            }
         }
 
-        public void ConfigPotentiometerTurns(int turns)
+        /// <inheritdoc/>
+        public int PotentiometerTurns
         {
-            m_numPotTurns = turns;
-            SetParam(ParamID.eNumberPotTurns, m_numPotTurns);
+            set
+            {
+                m_numPotTurns = value;
+                SetParam(ParamID.eNumberPotTurns, m_numPotTurns);
+            }
         }
 
+        /// <inheritdoc/>
         public double GetTemperature()
         {
             double temp = 0.0;
-            C_TalonSRX_GetTemp(m_impl, ref temp);
+            C_TalonSRX_GetTemp(m_talonPointer, ref temp);
             return temp;
         }
 
+        /// <inheritdoc/>
         public double GetOutputCurrent()
         {
             double current = 0.0;
-            C_TalonSRX_GetCurrent(m_impl, ref current);
+            C_TalonSRX_GetCurrent(m_talonPointer, ref current);
             return current;
         }
 
+        /// <inheritdoc/>
         public double GetOutputVoltage()
         {
             int throttle = 0;
-            C_TalonSRX_GetAppliedThrottle(m_impl, ref throttle);
+            C_TalonSRX_GetAppliedThrottle(m_talonPointer, ref throttle);
             return GetBusVoltage() * (throttle / 1023.0);
         }
 
+        /// <inheritdoc/>
         public double GetBusVoltage()
         {
             double voltage = 0.0;
-            C_TalonSRX_GetBatteryV(m_impl, ref voltage);
+            C_TalonSRX_GetBatteryV(m_talonPointer, ref voltage);
             return voltage;
         }
 
+        /// <inheritdoc/>
         public double GetPosition()
         {
             int pos = 0;
-            C_TalonSRX_GetSensorPosition(m_impl, ref pos);
+            C_TalonSRX_GetSensorPosition(m_talonPointer, ref pos);
             return ScaleNativeUnitsToRotations(m_feedbackDevice, pos);
         }
 
+        /// <summary>
+        /// Sets the position of the encoder or potentiometer
+        /// </summary>
+        /// <param name="pos">The new position of the sensor providing feedback.</param>
         public void SetPosition(double pos)
         {
             int nativePos = ScaleRotationsToNativeUnits(m_feedbackDevice, pos);
             SetParam(ParamID.eSensorPosition, nativePos);
         }
 
+        /// <inheritdoc/>
         public double GetSpeed()
         {
             int vel = 0;
-            C_TalonSRX_GetSensorVelocity(m_impl, ref vel);
+            C_TalonSRX_GetSensorVelocity(m_talonPointer, ref vel);
             return ScaleNativeUnitsToRpm(m_feedbackDevice, vel);
         }
 
-        public bool GetForwardLimitOK()
+        /// <inheritdoc/>
+        public bool GetForwardLimitOk()
         {
             int limSwitch = FaultForwardLimit;
             int softLim = FaultForwardSoftLimit;
             return (softLim == 0 && limSwitch == 0);
         }
 
-        public bool GetReverseLimitOK()
+        /// <inheritdoc/>
+        public bool GetReverseLimitOk()
         {
             int limSwitch = FaultReverseLimit;
             int softLim = FaultReverseSoftLimit;
             return (softLim == 0 && limSwitch == 0);
         }
 
-        /// <summary>
-        /// Gets the faults currently on this Talon SRX.
-        /// </summary>
-        /// <returns>The faults currently triggered.</returns>
+        /// <inheritdoc/>
         public Faults GetFaults()
         {
             Faults retVal = 0;
 
             //Temp
             var val = 0;
-            var status = C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
+            var status = C_TalonSRX_GetFault_OverTemp(m_talonPointer, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -435,7 +564,7 @@ namespace WPILib
 
             //Voltage
             val = 0;
-            status = C_TalonSRX_GetFault_UnderVoltage(m_impl, ref val);
+            status = C_TalonSRX_GetFault_UnderVoltage(m_talonPointer, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -446,7 +575,7 @@ namespace WPILib
 
             //Fwd Limit Switch
             val = 0;
-            status = C_TalonSRX_GetFault_ForLim(m_impl, ref val);
+            status = C_TalonSRX_GetFault_ForLim(m_talonPointer, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -457,7 +586,7 @@ namespace WPILib
 
             //Rev Limit Switch
             val = 0;
-            status = C_TalonSRX_GetFault_RevLim(m_impl, ref val);
+            status = C_TalonSRX_GetFault_RevLim(m_talonPointer, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -468,7 +597,7 @@ namespace WPILib
 
             //Fwd Soft Limit
             val = 0;
-            status = C_TalonSRX_GetFault_ForSoftLim(m_impl, ref val);
+            status = C_TalonSRX_GetFault_ForSoftLim(m_talonPointer, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -479,7 +608,7 @@ namespace WPILib
 
             //Rev Soft Limit
             val = 0;
-            status = C_TalonSRX_GetFault_RevSoftLim(m_impl, ref val);
+            status = C_TalonSRX_GetFault_RevSoftLim(m_talonPointer, ref val);
 
             if (status != CTR_Code.CTR_OKAY)
             {
@@ -496,15 +625,24 @@ namespace WPILib
             m_controlMode = value;
             if (value == ControlMode.Disabled)
                 m_controlEnabled = false;
-            C_TalonSRX_SetModeSelect(m_impl, (int)ControlMode.Disabled);
+            C_TalonSRX_SetModeSelect(m_talonPointer, (int)ControlMode.Disabled);
         }
 
+        /// <summary>
+        /// Gets the control mode.
+        /// </summary>
+        /// <returns>The current control mode</returns>
         [Obsolete("Use MotorControlMode property.")]
         public ControlMode GetControlMode() { return MotorControlMode; }
 
+        /// <summary>
+        /// Sets the control mode.
+        /// </summary>
+        /// <param name="mode">The control mode to set.</param>
         [Obsolete("Use MotorControlMode property.")]
         public void SetControlMode(ControlMode mode) { MotorControlMode = mode; }
 
+        /// <inheritdoc/>
         public ControlMode MotorControlMode
         {
             get { return m_controlMode; }
@@ -515,53 +653,84 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the feedback device.
+        /// </summary>
+        /// <returns>The current feedback device.</returns>
         [Obsolete("Use FeedBackDevice property instead.")]
         public FeedbackDevice GetFeedbackDevice()
         {
             return FeedBackDevice;
         }
 
+        /// <summary>
+        /// Sets the feedback device.
+        /// </summary>
+        /// <param name="device">The feedback device to set.</param>
         [Obsolete("Use FeedBackDevice property instead.")]
         public void SetFeedbackDevice(FeedbackDevice device)
         {
             FeedBackDevice = device;
         }
 
+        /// <summary>
+        /// Gets or sets the feedback device to be used by the talon.
+        /// </summary>
+        /// <remarks>
+        /// TODO: SOLVE THIS
+        /// </remarks>
         public FeedbackDevice FeedBackDevice
         {
             get
             {
                 int device = 0;
-                C_TalonSRX_GetFeedbackDeviceSelect(m_impl, ref device);
+                C_TalonSRX_GetFeedbackDeviceSelect(m_talonPointer, ref device);
                 return (FeedbackDevice)device;
             }
             set
             {
                 m_feedbackDevice = value;
-                C_TalonSRX_SetFeedbackDeviceSelect(m_impl, (int)value);
+                C_TalonSRX_SetFeedbackDeviceSelect(m_talonPointer, (int)value);
             }
         }
 
+        /// <summary>
+        /// Returns if the closed loop mode of the controller is enabled.
+        /// </summary>
+        /// <returns></returns>
         [Obsolete("Use ControlEnabled property instead.")]
         public bool IsControlEnabled()
         {
             return ControlEnabled;
         }
 
+        /// <summary>
+        /// Enables the closed loop controller of the talon.
+        /// </summary>
+        /// <remarks>
+        /// Starts controlling the output based on the feedback.
+        /// </remarks>
         [Obsolete("Set ControlEnabled property to true instead.")]
         public void EnableControl()
         {
             ControlEnabled = true;
         }
 
+        /// <inheritdoc/>
         public void Enable() => ControlEnabled = true;
 
+        /// <summary>
+        /// Disables the closed loop control of the talon.
+        /// </summary>
         [Obsolete("Set ControlEnabled property to false instead.")]
         public void DisableControl()
         {
             ControlEnabled = false;
         }
 
+        /// <summary>
+        /// Gets or Sets whether closed loop control is enabled on the talon.
+        /// </summary>
         public bool ControlEnabled
         {
             get
@@ -573,7 +742,7 @@ namespace WPILib
                 if (m_controlEnabled == value) return;
                 if (m_controlEnabled && !value)
                 {
-                    C_TalonSRX_SetModeSelect(m_impl, (int)ControlMode.Disabled);
+                    C_TalonSRX_SetModeSelect(m_talonPointer, (int)ControlMode.Disabled);
                     m_controlEnabled = false;
                 }
                 else
@@ -591,6 +760,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public double P
         {
             get
@@ -604,6 +774,7 @@ namespace WPILib
             set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_P : ParamID.eProfileParamSlot1_P, value); }
         }
 
+        /// <inheritdoc/>
         public double I
         {
             get
@@ -614,6 +785,7 @@ namespace WPILib
             set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_I : ParamID.eProfileParamSlot1_I, value); }
         }
 
+        /// <inheritdoc/>
         public double D
         {
             get
@@ -624,11 +796,7 @@ namespace WPILib
             set { SetParam(m_profile == 0 ? ParamID.eProfileParamSlot0_D : ParamID.eProfileParamSlot1_D, value); }
         }
 
-        [Obsolete("Use F property instead.")]
-        public double GetF() { return F; }
-        [Obsolete("Use F property instead.")]
-        public void SetF(double f) { F = f; }
-
+        /// <inheritdoc/>
         public double F
         {
             get
@@ -644,6 +812,7 @@ namespace WPILib
         [Obsolete("Use IZone property instead.")]
         public void SetIZone(double iZone) { IZone = iZone; }
 
+        
         public double IZone
         {
             get
@@ -689,6 +858,16 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the PID and extra constants of the controler.
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="i"></param>
+        /// <param name="value"></param>
+        /// <param name="f"></param>
+        /// <param name="izone"></param>
+        /// <param name="closeLoopRampRate"></param>
+        /// <param name="profile"></param>
         public void SetPID(double p, double i, double value, double f, int izone, double closeLoopRampRate, int profile)
         {
             if (profile != 0 && profile != 1)
@@ -702,6 +881,7 @@ namespace WPILib
             CloseLoopRampRate = closeLoopRampRate;
         }
 
+        /// <inheritdoc/>
         public void SetPID(double p, double i, double d)
         {
             SetPID(p, i, d, 0, 0, 0, m_profile);
@@ -710,6 +890,7 @@ namespace WPILib
         [Obsolete("Use Setpoint property instead.")]
         public double GetSetpoint() { return Setpoint; }
 
+        /// <inheritdoc/>
         public double Setpoint
         {
             get
@@ -735,7 +916,7 @@ namespace WPILib
                 if (value != 0 && value != 1)
                     throw new ArgumentOutOfRangeException(nameof(value), "Talon PID profile must be 0 or 1.");
                 m_profile = value;
-                C_TalonSRX_SetProfileSlotSelect(m_impl, m_profile);
+                C_TalonSRX_SetProfileSlotSelect(m_talonPointer, m_profile);
             }
         }
 
@@ -756,6 +937,7 @@ namespace WPILib
             return GetParam(ParamID.eProfileParamVcompRate);
         }
 
+        /// <inheritdoc/>
         public NeutralMode ConfigNeutralMode
         {
             set
@@ -765,15 +947,15 @@ namespace WPILib
                 {
                     default:
                     case NeutralMode.Jumper:
-                        status = C_TalonSRX_SetOverrideBrakeType(m_impl,
+                        status = C_TalonSRX_SetOverrideBrakeType(m_talonPointer,
                             kBrakeOverride_UseDefaultsFromFlash);
                         break;
                     case NeutralMode.Brake:
-                        status = C_TalonSRX_SetOverrideBrakeType(m_impl,
+                        status = C_TalonSRX_SetOverrideBrakeType(m_talonPointer,
                             kBrakeOverride_OverrideBrake);
                         break;
                     case NeutralMode.Coast:
-                        status = C_TalonSRX_SetOverrideBrakeType(m_impl,
+                        status = C_TalonSRX_SetOverrideBrakeType(m_talonPointer,
                             kBrakeOverride_OverrideCoast);
                         break;
                 }
@@ -783,16 +965,7 @@ namespace WPILib
             }
         }
 
-        public int EncoderCodesPerRev
-        {
-            set { }
-        }
-
-        public int PotentiometerTurns
-        {
-            set { }
-        }
-
+        /// <inheritdoc/>
         public void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition)
         {
             LimitMode = LimitMode.SoftPositionLimits;
@@ -800,12 +973,13 @@ namespace WPILib
             ReverseLimit = reverseLimitPosition;
         }
 
+        /// <inheritdoc/>
         public void DisableSoftPositionLimits()
         {
             LimitMode = LimitMode.SwitchInputsOnly;
         }
 
-
+        /// <inheritdoc/>
         public LimitMode LimitMode
         {
             set
@@ -831,26 +1005,34 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public double ForwardLimit
         {
             set { ForwardSoftLimit = (value); }
         }
 
+        /// <inheritdoc/>
         public double ReverseLimit
         {
             set { ReverseSoftLimit = (value); }
         }
 
+        /// <inheritdoc/>
         public double MaxOutputVoltage
         {
-            set { CheckStatus(-9); }
+            set
+            {
+                ConfigPeakOutputVoltage(value, -value);
+            }
         }
 
+        /// <inheritdoc/>
         public float FaultTime
         {
             set { CheckStatus(-9); }
         }
 
+        /// <inheritdoc/>
         public double VoltageRampRate
         {
             get
@@ -860,16 +1042,17 @@ namespace WPILib
             set
             {
                 int rate = (int)(value * 1023.0 / 12.0 / 100.0);
-                C_TalonSRX_SetParam(m_impl, (int)ParamID.eRampThrottle, rate);
+                C_TalonSRX_SetParam(m_talonPointer, (int)ParamID.eRampThrottle, rate);
             }
         }
 
+        /// <inheritdoc/>
         public uint FirmwareVersion
         {
             get
             {
                 int version = 0;
-                C_TalonSRX_GetFirmVers(m_impl, ref version);
+                C_TalonSRX_GetFirmVers(m_talonPointer, ref version);
                 return (uint)version;
             }
         }
@@ -954,13 +1137,13 @@ namespace WPILib
         }
         public void ClearStickyFaults()
         {
-            C_TalonSRX_ClearStickyFaults(m_impl);
+            C_TalonSRX_ClearStickyFaults(m_talonPointer);
         }
 
         public void EnableLimitSwitches(bool forward, bool reverse)
         {
             int mask = 1 << 2 | (forward ? 1 : 0) << 1 | (reverse ? 1 : 0);
-            CTR_Code status = C_TalonSRX_SetOverrideLimitSwitchEn(m_impl, mask);
+            CTR_Code status = C_TalonSRX_SetOverrideLimitSwitchEn(m_talonPointer, mask);
             if (status != CTR_Code.CTR_OKAY)
                 CheckStatus((int)status);
         }
@@ -995,11 +1178,6 @@ namespace WPILib
             }
         }
 
-        public void ConfigMaxOutputVoltage(double voltage)
-        {
-            ConfigPeakOutputVoltage(voltage, -voltage);
-        }
-
         public void ConfigPeakOutputVoltage(double forwardVoltage, double reverseVoltage)
         {
             if (forwardVoltage > 12)
@@ -1032,7 +1210,7 @@ namespace WPILib
         [Obsolete("Use ConfigNeutralMode instead")]
         public void EnableBrakeMode(bool brake)
         {
-            C_TalonSRX_SetOverrideBrakeType(m_impl, brake ? 2 : 1);
+            C_TalonSRX_SetOverrideBrakeType(m_talonPointer, brake ? 2 : 1);
         }
 
         public int FaultOverTemp
@@ -1040,7 +1218,7 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_OverTemp(m_impl, ref val);
+                C_TalonSRX_GetFault_OverTemp(m_talonPointer, ref val);
                 return val;
             }
         }
@@ -1050,7 +1228,7 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_UnderVoltage(m_impl, ref val);
+                C_TalonSRX_GetFault_UnderVoltage(m_talonPointer, ref val);
                 return val;
             }
         }
@@ -1060,7 +1238,7 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_ForLim(m_impl, ref val);
+                C_TalonSRX_GetFault_ForLim(m_talonPointer, ref val);
                 return val;
             }
         }
@@ -1070,7 +1248,7 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_RevLim(m_impl, ref val);
+                C_TalonSRX_GetFault_RevLim(m_talonPointer, ref val);
                 return val;
             }
         }
@@ -1080,7 +1258,7 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_HardwareFailure(m_impl, ref val);
+                C_TalonSRX_GetFault_HardwareFailure(m_talonPointer, ref val);
                 return val;
             }
         }
@@ -1090,7 +1268,7 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_ForSoftLim(m_impl, ref val);
+                C_TalonSRX_GetFault_ForSoftLim(m_talonPointer, ref val);
                 return val;
             }
         }
@@ -1100,91 +1278,114 @@ namespace WPILib
             get
             {
                 int val = 0;
-                C_TalonSRX_GetFault_RevSoftLim(m_impl, ref val);
+                C_TalonSRX_GetFault_RevSoftLim(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        /// <summary>
+        /// Gets the number of over temperature sticky faults.
+        /// </summary>
         public int StickyFaultOverTemp
         {
             get
             {
                 int val = 0;
-                C_TalonSRX_GetStckyFault_OverTemp(m_impl, ref val);
+                C_TalonSRX_GetStckyFault_OverTemp(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        /// <summary>
+        /// Gets the number of under voltage sticky faults.
+        /// </summary>
         public int StickyFaultUnderVoltage
         {
             get
             {
                 int val = 0;
-                C_TalonSRX_GetStckyFault_UnderVoltage(m_impl, ref val);
+                C_TalonSRX_GetStckyFault_UnderVoltage(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        /// <summary>
+        /// Gets the number of forward limit sticky faults.
+        /// </summary>
         public int StickyFaultForwardLimit
         {
             get
             {
                 int val = 0;
-                C_TalonSRX_GetStckyFault_ForLim(m_impl, ref val);
+                C_TalonSRX_GetStckyFault_ForLim(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        /// <summary>
+        /// Gets the number of reverse limit sticky faults.
+        /// </summary>
         public int StickyFaultReverseLimit
         {
             get
             {
                 int val = 0;
-                C_TalonSRX_GetStckyFault_RevLim(m_impl, ref val);
+                C_TalonSRX_GetStckyFault_RevLim(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        /// <summary>
+        /// Gets the number of forward soft limit sticky faults.
+        /// </summary>
         public int StickyFaultForwardSoftLimit
         {
             get
             {
                 int val = 0;
-                C_TalonSRX_GetStckyFault_ForSoftLim(m_impl, ref val);
+                C_TalonSRX_GetStckyFault_ForSoftLim(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        /// <summary>
+        /// Gets the number of reverse soft limit sticky faults.
+        /// </summary>
         public int StickyFaultReverseSoftLimit
         {
             get
             {
                 int val = 0;
-                C_TalonSRX_GetStckyFault_RevSoftLim(m_impl, ref val);
+                C_TalonSRX_GetStckyFault_RevSoftLim(m_talonPointer, ref val);
                 return val;
             }
         }
 
+        ///<inheritdoc/>
         public double Expiration
         {
             set { m_safetyHelper.Expiration = value; }
             get { return m_safetyHelper.Expiration; }
         }
 
+        ///<inheritdoc/>
         public bool Alive => m_safetyHelper.Alive;
 
+        ///<inheritdoc/>
         [Obsolete("Set the ControlEnabled to false.")]
         public void StopMotor()
         {
             ControlEnabled = false;
         }
 
+        ///<inheritdoc/>
         public bool SafetyEnabled
         {
             set { m_safetyHelper.SafetyEnabled = value; }
             get { return m_safetyHelper.SafetyEnabled; }
         }
 
+        ///<inheritdoc/>
         public string Description => $"CAN TalonSRX ID {DeviceID}";
 
         /// <inheritdoc/>
@@ -1209,6 +1410,7 @@ namespace WPILib
         ///<inheritdoc/>
         public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
+        ///<inheritdoc/>
         public void Set(double value)
         {
             m_safetyHelper.Feed();
@@ -1219,38 +1421,39 @@ namespace WPILib
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        C_TalonSRX_SetDemand(m_impl, Inverted ? -((int)(value * 1023)) : ((int)(value * 1023)));
+                        C_TalonSRX_SetDemand(m_talonPointer, Inverted ? -((int)(value * 1023)) : ((int)(value * 1023)));
                         status = CTR_Code.CTR_OKAY;
                         break;
                     case ControlMode.Voltage:
                         int volts = (int)(value * 256);
-                        status = C_TalonSRX_SetDemand(m_impl, Inverted ? -volts : volts);
+                        status = C_TalonSRX_SetDemand(m_talonPointer, Inverted ? -volts : volts);
                         break;
                     case ControlMode.Position:
-                        status = C_TalonSRX_SetDemand(m_impl, ScaleRotationsToNativeUnits(m_feedbackDevice, value));
+                        status = C_TalonSRX_SetDemand(m_talonPointer, ScaleRotationsToNativeUnits(m_feedbackDevice, value));
                         break;
                     case ControlMode.Speed:
-                        status = C_TalonSRX_SetDemand(m_impl,
+                        status = C_TalonSRX_SetDemand(m_talonPointer,
                             ScaleVelocityToNativeUnits(m_feedbackDevice, (Inverted ? -value : value)));
                         break;
                     case ControlMode.Follower:
-                        status = C_TalonSRX_SetDemand(m_impl, (int)value);
+                        status = C_TalonSRX_SetDemand(m_talonPointer, (int)value);
                         break;
                     case ControlMode.Current:
                         double milliamperes = (Inverted ? -value : value) * 1000.0;
-                        status = C_TalonSRX_SetDemand(m_impl, (int)milliamperes);
+                        status = C_TalonSRX_SetDemand(m_talonPointer, (int)milliamperes);
                         break;
                     default:
                         status = CTR_Code.CTR_OKAY;
                         break;
                 }
                 CheckStatus((int)status);
-                status = C_TalonSRX_SetModeSelect(m_impl, (int)MotorControlMode);
+                status = C_TalonSRX_SetModeSelect(m_talonPointer, (int)MotorControlMode);
                 CheckStatus((int)status);
 
             }
         }
 
+        ///<inheritdoc/>
         public double Get()
         {
             double retVal = 0.0;
@@ -1264,30 +1467,31 @@ namespace WPILib
                     retVal = GetOutputCurrent();
                     break;
                 case ControlMode.Speed:
-                    C_TalonSRX_GetSensorVelocity(m_impl, ref value);
+                    C_TalonSRX_GetSensorVelocity(m_talonPointer, ref value);
                     retVal = ScaleNativeUnitsToRpm(m_feedbackDevice, value);
                     break;
                 case ControlMode.Position:
-                    C_TalonSRX_GetSensorPosition(m_impl, ref value);
+                    C_TalonSRX_GetSensorPosition(m_talonPointer, ref value);
                     retVal = ScaleNativeUnitsToRotations(m_feedbackDevice, value);
                     break;
                 case ControlMode.Follower:
                 case ControlMode.PercentVbus:
                 default:
-                    C_TalonSRX_GetAppliedThrottle(m_impl, ref value);
+                    C_TalonSRX_GetAppliedThrottle(m_talonPointer, ref value);
                     retVal = (double)value / 1023.0;
                     break;
             }
             return retVal;
         }
 
+        ///<inheritdoc/>
         [Obsolete("This is only here to make CAN Jaguars happy")]
         public void Set(double value, byte syncGroup)
         {
             Set(value);
         }
 
-        double GetNativeUnitsPerRotationScalar(FeedbackDevice devToLookup)
+        internal double GetNativeUnitsPerRotationScalar(FeedbackDevice devToLookup)
         {
             double retVal = 0;
             bool scalingAvail = false;
@@ -1297,8 +1501,8 @@ namespace WPILib
                     int qeiPulsePerCount = 4;
                     switch (m_feedbackDevice)
                     {
-                        case FeedbackDevice.CtreMagEncoder_Relative:
-                        case FeedbackDevice.CtreMagEncoder_Absolute:
+                        case FeedbackDevice.CtreMagEncoderRelative:
+                        case FeedbackDevice.CtreMagEncoderAbsolute:
                             retVal = NativePwdUnitsPerRotation;
                             scalingAvail = true;
                             break;
@@ -1349,8 +1553,8 @@ namespace WPILib
                         scalingAvail = true;
                     }
                     break;
-                case FeedbackDevice.CtreMagEncoder_Relative:
-                case FeedbackDevice.CtreMagEncoder_Absolute:
+                case FeedbackDevice.CtreMagEncoderRelative:
+                case FeedbackDevice.CtreMagEncoderAbsolute:
                 case FeedbackDevice.PulseWidth:
                     retVal = NativePwdUnitsPerRotation;
                     scalingAvail = true;
@@ -1359,7 +1563,7 @@ namespace WPILib
             return !scalingAvail ? 0 : retVal;
         }
 
-        int ScaleRotationsToNativeUnits(FeedbackDevice devToLookup, double fullRotations)
+        internal int ScaleRotationsToNativeUnits(FeedbackDevice devToLookup, double fullRotations)
         {
             int retVal = (int)fullRotations;
             double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
@@ -1370,18 +1574,18 @@ namespace WPILib
             return retVal;
         }
 
-        int ScaleVelocityToNativeUnits(FeedbackDevice devToLookup, double rpm)
+        internal int ScaleVelocityToNativeUnits(FeedbackDevice devToLookup, double rpm)
         {
             int retVal = (int)rpm;
             double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
             if (scalar > 0)
             {
-                retVal = (int)(rpm * MinutesPer100msUnits * scalar);
+                retVal = (int)(rpm * MinutesPer100MsUnits * scalar);
             }
             return retVal;
         }
 
-        double ScaleNativeUnitsToRotations(FeedbackDevice devToLookup, int nativePos)
+        internal double ScaleNativeUnitsToRotations(FeedbackDevice devToLookup, int nativePos)
         {
             double retVal = (double)nativePos;
             double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
@@ -1392,17 +1596,23 @@ namespace WPILib
             return retVal;
         }
 
-        double ScaleNativeUnitsToRpm(FeedbackDevice devToLookup, long nativeVel)
+        internal double ScaleNativeUnitsToRpm(FeedbackDevice devToLookup, long nativeVel)
         {
             double retVal = (double)nativeVel;
             double scalar = GetNativeUnitsPerRotationScalar(devToLookup);
             if (scalar > 0)
             {
-                retVal = ((double)nativeVel) / (scalar * MinutesPer100msUnits);
+                retVal = ((double)nativeVel) / (scalar * MinutesPer100MsUnits);
             }
             return retVal;
         }
 
+        /// <summary>
+        /// Enables Talon SRX to automatically zero the Sensor Position whenever an edge is detected
+        /// on the index signal.
+        /// </summary>
+        /// <param name="enable">Enable or Disable the feature.</param>
+        /// <param name="risingEdge">True to clear on rising edge, false for walling edge.</param>
         public void EnableZeroSensorPositionOnIndex(bool enable, bool risingEdge)
         {
             if (enable)
@@ -1417,20 +1627,27 @@ namespace WPILib
             }
         }
 
+        ///<inheritdoc/>
         public void Reset()
         {
             Disable();
             ClearIAccum();
         }
 
+        ///<inheritdoc/>
         public bool Enabled => ControlEnabled;
 
+        ///<inheritdoc/>
         public double GetError() => GetClosedLoopError();
 
+        /// <summary>
+        /// Selects the profile slot on the Talon. 
+        /// </summary>
+        /// <param name="slotIdx">The profile to set (0 or 1).</param>
         public void SelectProfileSlot(int slotIdx)
         {
             m_profile = (slotIdx == 0) ? 0 : 1;
-            CTR_Code status = C_TalonSRX_SetProfileSlotSelect(m_impl, m_profile);
+            CTR_Code status = C_TalonSRX_SetProfileSlotSelect(m_talonPointer, m_profile);
             if (status != CTR_Code.CTR_OKAY)
                 CheckStatus((int)status);
         }

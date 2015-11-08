@@ -521,16 +521,12 @@ namespace WPILib.Commands
         /// <returns>
         /// A string that represents the current object.
         /// </returns>
-        /// <filterpriority>2</filterpriority>
         public override string ToString()
         {
             return Name;
         }
 
-        /// <summary>
-        /// Initialize a table for this sendable object.
-        /// </summary>
-        /// <param name="subtable">The table to put the values in.</param>
+        /// <inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table?.RemoveTableListener(this);
@@ -544,23 +540,13 @@ namespace WPILib.Commands
             }
         }
 
-        /// <summary>
-        /// Returns the table that is currently associated with the sendable
-        /// </summary>
+        /// <inheritdoc/>
         public ITable Table { get; private set; }
 
-        /// <summary>
-        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
-        /// </summary>
+        /// <inheritdoc/>
         public string SmartDashboardType => "Command";
 
-        /// <summary>
-        /// This function is called whenever the value is changed on the NetworkTable.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="isNew"></param>
+        /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             if ((bool)value)

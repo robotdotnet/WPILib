@@ -7,8 +7,6 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
-    
-
     /// <summary>
     /// Driver for the serial ports onboard the RoboRIO.
     /// </summary>

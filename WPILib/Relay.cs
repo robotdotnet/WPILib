@@ -35,8 +35,17 @@ namespace WPILib
         /// </summary>
         public enum Direction
         {
+            /// <summary>
+            /// Relay allowed in both directions.
+            /// </summary>
             Both,
+            /// <summary>
+            /// Relay allowed only in forward direction.
+            /// </summary>
             Forward,
+            /// <summary>
+            /// Relay allowed only in reverse direction.
+            /// </summary>
             Reverse,
         }
 
@@ -307,24 +316,27 @@ namespace WPILib
                 Set(Value.Reverse);
             }
         }
-
+        /// <summary>
+        /// Gets the channel of the relay.
+        /// </summary>
         public int Channel => m_channel;
-
+        /// <inheritdoc/>
         public double Expiration {
             get { return m_safetyHelper.Expiration; }
             set { m_safetyHelper.Expiration = value; } }
-
+        /// <inheritdoc/>
         public bool Alive => m_safetyHelper.Alive;
-
+        /// <inheritdoc/>
         public void StopMotor()
         {
             Set(Value.Off);
         }
 
+        /// <inheritdoc/>
         public bool SafetyEnabled {
             get { return m_safetyHelper.SafetyEnabled; }
             set { m_safetyHelper.SafetyEnabled = value; } }
-
+        /// <inheritdoc/>
         public string Description => $"Relay ID {Channel}";
     }
 }

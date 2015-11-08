@@ -14,42 +14,57 @@ namespace WPILib
     /// </summary>
     public class CANJaguar : IMotorSafety, ICANSpeedController, IPIDInterface, ITableListener, ILiveWindowSendable, IDisposable
     {
+        /// <summary>
+        /// The Max Message send size allowed.
+        /// </summary>
+        public const int MaxMessageDataSize = 8;
 
-        // ReSharper disable InconsistentNaming
-        public static readonly int kMaxMessageDataSize = 8;
+        /// <summary>
+        /// The internal control rate (in Hz)
+        /// </summary>
+        public const int ControllerRate = 1000;
 
-
-        public static readonly int kControllerRate = 1000;
-        public static readonly double kApproxBusVoltage = 12.0;
+        /// <summary>
+        /// The approximate bus voltage of the power system.
+        /// </summary>
+        public const double ApproxBusVoltage = 12.0;
 
         private MotorSafetyHelper m_safetyHelper;
         private static readonly Resource s_allocated = new Resource(63);
 
-        private static readonly int kFullMessageIDMask = CAN_MSGID_API_M | CAN_MSGID_MFR_M | CAN_MSGID_DTYPE_M;
-        private const int kSendMessagePeriod = 20;
+        private const int FullMessageIdMask = CAN_MSGID_API_M | CAN_MSGID_MFR_M | CAN_MSGID_DTYPE_M;
+        private const int SendMessagePeriod = 20;
 
         /// <summary>
         /// The source mode for the CAN Jaguar
         /// </summary>
         public enum SourceMode
         {
+            /// <summary>
+            /// Use an encoder as the source.
+            /// </summary>
             Encoder,
+            /// <summary>
+            /// Use a quadrature encoder as the source.
+            /// </summary>
             QuadEncoder,
+            /// <summary>
+            /// Use a potentiometer as the source.
+            /// </summary>
             Potentiometer,
+            /// <summary>
+            /// Use no source.
+            /// </summary>
             None,
         }
-
-        public static readonly int kCurrentFault = 1;
-        public static readonly int kTemeperatureFault = 2;
-        public static readonly int kButVoltageFault = 4;
-        public static readonly int kGateDriverFault = 8;
-
-        public static int kForwardLimit = 1;
-        public static int kReverseLimit = 2;
 
         ///<inheritdoc/>
         public bool Inverted { get; set; }
 
+        /// <summary>
+        /// Creates a new <see cref="CANJaguar"/> with a specific device number.
+        /// </summary>
+        /// <param name="deviceNumber">The CAN Id of the Jaguar.</param>
         public CANJaguar(int deviceNumber)
         {
             s_allocated.Allocate(deviceNumber - 1, "CANJaguar device " + deviceNumber + " is already allocated");
@@ -66,7 +81,7 @@ namespace WPILib
             RequestMessage(CAN_IS_FRAME_REMOTE | CAN_MSGID_API_FIRMVER);
             RequestMessage(LM_API_HWVER);
 
-            for (int i = 0; i < kReceiveStatusAttempts; i++)
+            for (int i = 0; i < ReceiveStatusAttempts; i++)
             {
                 Timer.Delay(0.001);
                 SetupPeriodicStatus();
@@ -77,7 +92,7 @@ namespace WPILib
                     try
                     {
                         GetMessage(CAN_MSGID_API_FIRMVER, CAN_MSGID_FULL_M, data);
-                        m_firmwareVersion = UnpackINT32(data);
+                        m_firmwareVersion = UnpackInt32(data);
                         receivedFirmwareVersion = true;
                     }
                     catch (CANMessageNotFoundException)
@@ -130,44 +145,48 @@ namespace WPILib
 
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             s_allocated.Deallocate(m_deviceNumber - 1);
             m_safetyHelper = null;
             int status = 0;
 
-            int messageID;
+            int messageId;
 
             switch (m_controlMode)
             {
                 case ControlMode.PercentVbus:
-                    messageID = (int)m_controlMode | LM_API_VOLT_T_SET;
+                    messageId = (int)m_controlMode | LM_API_VOLT_T_SET;
                     break;
                 case ControlMode.Speed:
-                    messageID = (int)m_controlMode | LM_API_SPD_T_SET;
+                    messageId = (int)m_controlMode | LM_API_SPD_T_SET;
                     break;
                 case ControlMode.Position:
-                    messageID = (int)m_controlMode | LM_API_POS_T_SET;
+                    messageId = (int)m_controlMode | LM_API_POS_T_SET;
                     break;
                 case ControlMode.Current:
-                    messageID = (int)m_controlMode | LM_API_ICTRL_T_SET;
+                    messageId = (int)m_controlMode | LM_API_ICTRL_T_SET;
                     break;
                 case ControlMode.Voltage:
-                    messageID = (int)m_controlMode | LM_API_VCOMP_T_SET;
+                    messageId = (int)m_controlMode | LM_API_VCOMP_T_SET;
                     break;
                 default:
                     return;
 
             }
 
-            FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, null, 0,
+            FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageId, null, 0,
                 CAN_SEND_PERIOD_STOP_REPEATING, ref status);
         }
 
+        /// <summary>
+        /// Gets the current device number.
+        /// </summary>
         public int DeviceNumber => m_deviceNumber;
 
 
-        byte m_deviceNumber;
+        readonly byte m_deviceNumber;
         double m_value = 0.0f;
 
         // Parameters/configuration
@@ -183,7 +202,7 @@ namespace WPILib
         LimitMode m_limitMode = LimitMode.SwitchInputsOnly;
         double m_forwardLimit = 0.0;
         double m_reverseLimit = 0.0;
-        double m_maxOutputVoltage = kApproxBusVoltage;
+        double m_maxOutputVoltage = ApproxBusVoltage;
         double m_voltageRampRate = 0.0;
         float m_faultTime = 0.0f;
 
@@ -213,40 +232,45 @@ namespace WPILib
         double m_speed = 0.0;
         byte m_limits = 0;
         short m_faults = 0;
-        int m_firmwareVersion = 0;
-        byte m_hardwareVersion = 0;
+        readonly int m_firmwareVersion = 0;
+        readonly byte m_hardwareVersion = 0;
 
         // Which periodic status messages have we received at least once?
         bool m_receivedStatusMessage0 = false;
         bool m_receivedStatusMessage1 = false;
         bool m_receivedStatusMessage2 = false;
 
-        // ReSharper disable once InconsistentNaming
-        private const int kReceiveStatusAttempts = 50;
+        private const int ReceiveStatusAttempts = 50;
 
         bool m_controlEnabled = true;
 
+        /// <inheritdoc/>
         public double Expiration
         {
             set { m_safetyHelper.Expiration = value; }
             get { return m_safetyHelper.Expiration; }
         }
 
+        /// <inheritdoc/>
         public bool Alive => m_safetyHelper.Alive;
 
+        /// <inheritdoc/>
         public void StopMotor()
         {
             DisableControl();
         }
 
+        /// <inheritdoc/>
         public bool SafetyEnabled
         {
             set { m_safetyHelper.SafetyEnabled = value; }
             get { return m_safetyHelper.SafetyEnabled; }
         }
 
+        /// <inheritdoc/>
         public string Description => "CANJaguar ID " + m_deviceNumber;
 
+        /// <inheritdoc/>
         public void PidWrite(double value)
         {
             if (m_controlMode == ControlMode.PercentVbus)
@@ -266,6 +290,16 @@ namespace WPILib
             m_speedRefVerified = false;
         }
 
+        /// <summary>
+        /// Enables the closed loop controller.
+        /// </summary>
+        /// <remarks>
+        /// Start actually controlling the output based on teh feedback. If starting a 
+        /// position controller with an encoder reference, use the encoderInitialPosition
+        /// parameter to initialize the encoder state.
+        /// </remarks>
+        /// <param name="encoderInitialPosition">Encoder position to set if position is an encoder reference. 
+        /// Otherwise ignored.</param>
         public void EnableControl(double encoderInitialPosition)
         {
             switch (m_controlMode)
@@ -296,11 +330,20 @@ namespace WPILib
             m_controlEnabled = true;
         }
 
+        /// <summary>
+        /// Enableds the closed loop controller.
+        /// </summary>
+        /// <remarks>Starts actually controlling the output based on the feedback.
+        /// This is the same as calling <see cref="EnableControl(double)"/> with a 0.0
+        /// parameter.</remarks>
         public void EnableControl()
         {
             EnableControl(0.0);
         }
 
+        /// <summary>
+        /// Disables the closed loop controller.
+        /// </summary>
         public void DisableControl()
         {
             // Disable all control modes.
@@ -320,16 +363,19 @@ namespace WPILib
             m_controlEnabled = false;
         }
 
+        /// <inheritdoc/>
         public void Set(double value)
         {
             Set(value, 0);
         }
 
+        /// <inheritdoc/>
         public double Get()
         {
             return m_value;
         }
 
+        /// <inheritdoc/>
         public double Setpoint
         {
             get
@@ -342,39 +388,41 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public double GetError()
         {
             return Get() - GetPosition();
         }
 
+        /// <inheritdoc/>
         public void Set(double value, byte syncGroup)
         {
             byte[] data = new byte[8];
 
             if (m_controlEnabled)
             {
-                int messageID;
+                int messageId;
                 byte dataSize;
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        messageID = LM_API_VOLT_T_SET;
+                        messageId = LM_API_VOLT_T_SET;
                         dataSize = PackPercentage(data, Inverted ? -value : value);
                         break;
                     case ControlMode.Speed:
-                        messageID = LM_API_SPD_T_SET;
+                        messageId = LM_API_SPD_T_SET;
                         dataSize = PackFXP16_16(data, Inverted ? -value : value);
                         break;
                     case ControlMode.Position:
-                        messageID = LM_API_POS_T_SET;
+                        messageId = LM_API_POS_T_SET;
                         dataSize = PackFXP16_16(data, value);
                         break;
                     case ControlMode.Current:
-                        messageID = LM_API_ICTRL_T_SET;
+                        messageId = LM_API_ICTRL_T_SET;
                         dataSize = PackFXP8_8(data, value);
                         break;
                     case ControlMode.Voltage:
-                        messageID = LM_API_VCOMP_T_SET;
+                        messageId = LM_API_VCOMP_T_SET;
                         dataSize = PackFXP8_8(data, Inverted ? -value : value);
                         break;
                     default:
@@ -387,13 +435,19 @@ namespace WPILib
                     data[dataSize++] = syncGroup;
                 }
 
-                SendMessage(messageID, data, dataSize, kSendMessagePeriod);
+                SendMessage(messageId, data, dataSize, SendMessagePeriod);
                 m_safetyHelper?.Feed();
             }
             m_value = value;
             Verify();
         }
 
+        /// <summary>
+        /// Check all unverified params an make sure they are equal to their local
+        /// cached versions.
+        /// </summary>
+        /// <remarks>If a value isn't available, it gets requested. If a value doesn't match
+        /// up, it gets set again.</remarks>
         protected void Verify()
         {
             byte[] data = new byte[8];
@@ -705,7 +759,7 @@ namespace WPILib
                 {
                     GetMessage(LM_API_CFG_ENC_LINES, CAN_MSGID_FULL_M, data);
 
-                    short codes = UnpackINT16(data);
+                    short codes = UnpackInt16(data);
 
                     if (codes == m_encoderCodesPerRev)
                     {
@@ -730,7 +784,7 @@ namespace WPILib
                 {
                     GetMessage(LM_API_CFG_POT_TURNS, CAN_MSGID_FULL_M, data);
 
-                    short turns = UnpackINT16(data);
+                    short turns = UnpackInt16(data);
 
                     if (turns == m_potentiometerTurns)
                     {
@@ -913,7 +967,7 @@ namespace WPILib
                 {
                     GetMessage(LM_API_CFG_FAULT_TIME, CAN_MSGID_FULL_M, data);
 
-                    int faultTime = UnpackINT16(data);
+                    int faultTime = UnpackInt16(data);
 
                     if ((int)(m_faultTime * 1000.0) == faultTime)
                     {
@@ -947,7 +1001,7 @@ namespace WPILib
             }
         }
 
-        private static void SendMessageHelper(int messageID, byte[] data, int dataSize, int period)
+        private static void SendMessageHelper(int messageId, byte[] data, int dataSize, int period)
         {
             int[] kTrustedMessages = {
                 LM_API_VOLT_T_EN, LM_API_VOLT_T_SET, LM_API_SPD_T_EN, LM_API_SPD_T_SET,
@@ -958,9 +1012,9 @@ namespace WPILib
 
             for (byte i = 0; i < kTrustedMessages.Length; i++)
             {
-                if ((kFullMessageIDMask & messageID) == kTrustedMessages[i])
+                if ((FullMessageIdMask & messageId) == kTrustedMessages[i])
                 {
-                    if (dataSize > kMaxMessageDataSize - 2)
+                    if (dataSize > MaxMessageDataSize - 2)
                     {
                         throw new SystemException("CAN message has too much data.");
                     }
@@ -973,49 +1027,80 @@ namespace WPILib
                         trustedData[j + 2] = data[j];
                     }
 
-                    FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, trustedData, (byte)(dataSize + 2), period, ref status);
+                    FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageId, trustedData, (byte)(dataSize + 2), period, ref status);
                     if (status < 0)
                     {
-                        CANExceptionFactory.CheckStatus(status, messageID);
+                        CANExceptionFactory.CheckStatus(status, messageId);
                     }
 
                     return;
                 }
             }
 
-            FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageID, data, (byte)dataSize, period, ref status);
+            FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageId, data, (byte)dataSize, period, ref status);
 
             if (status < 0)
             {
-                CANExceptionFactory.CheckStatus(status, messageID);
+                CANExceptionFactory.CheckStatus(status, messageId);
             }
 
 
         }
 
-        protected void SendMessage(int messageID, byte[] data, int dataSize, int period)
+        /// <summary>
+        /// Send a message to the Jaguar periodically.
+        /// </summary>
+        /// <param name="messageId">The messageId to be used on the CAN bus (device number is added internally).</param>
+        /// <param name="data">The up to 8 bytes of data to be sent with the message.</param>
+        /// <param name="dataSize">Specify how much of the data in the data buffer to send.</param>
+        /// <param name="period">The period in ms to send the message.</param>
+        protected void SendMessage(int messageId, byte[] data, int dataSize, int period)
         {
-            SendMessageHelper(messageID | m_deviceNumber, data, dataSize, period);
+            SendMessageHelper(messageId | m_deviceNumber, data, dataSize, period);
         }
 
-        protected void SendMessage(int messageID, byte[] data, int dataSize)
+        /// <summary>
+        /// Send a message to the Jaguar non periodically.
+        /// </summary>
+        /// <param name="messageId">The messageId to be used on the CAN bus (device number is added internally).</param>
+        /// <param name="data">The up to 8 bytes of data to be sent with the message.</param>
+        /// <param name="dataSize">Specify how much of the data in the data buffer to send.</param>
+        protected void SendMessage(int messageId, byte[] data, int dataSize)
         {
-            SendMessage(messageID, data, dataSize, CAN_SEND_PERIOD_NO_REPEAT);
+            SendMessage(messageId, data, dataSize, CAN_SEND_PERIOD_NO_REPEAT);
         }
 
-        protected void RequestMessage(int messageID, int period)
+        /// <summary>
+        /// Request a message from the Jaguar periodically, without waiting for it to arrive.
+        /// </summary>
+        /// <param name="messageId">The message to request</param>
+        /// <param name="period">The period to automatically request data at.</param>
+        protected void RequestMessage(int messageId, int period)
         {
-            SendMessageHelper(messageID | m_deviceNumber, null, 0, period);
+            SendMessageHelper(messageId | m_deviceNumber, null, 0, period);
         }
 
-        protected void RequestMessage(int messageID)
+        /// <summary>
+        /// Request a message from the Jaguar once, without waiting for it to arrive.
+        /// </summary>
+        /// <param name="messageId">The message to request.</param>
+        protected void RequestMessage(int messageId)
         {
-            RequestMessage(messageID, CAN_SEND_PERIOD_NO_REPEAT);
+            RequestMessage(messageId, CAN_SEND_PERIOD_NO_REPEAT);
         }
 
-        protected void GetMessage(int messageID, int messageMask, byte[] data)
+        /// <summary>
+        /// Get a previously requested message.
+        /// </summary>
+        /// <remarks>
+        /// Jaguar always generates a message with the same messageId when replying.
+        /// </remarks>
+        /// <param name="messageId">The messageId to read from the CAN bus (device number is added internally).</param>
+        /// <param name="messageMask">The mask of data to receive.</param>
+        /// <param name="data">The up to 8 bytes of data that was received with the message.</param>
+        protected void GetMessage(int messageId, int messageMask, byte[] data)
         {
-            uint messageIdu = (uint)messageID;
+            uint messageIdu = (uint)messageId;
             messageIdu |= m_deviceNumber;
             messageIdu &= CAN_MSGID_FULL_M;
             byte dataSize = 0;
@@ -1026,11 +1111,14 @@ namespace WPILib
 
             if (status < 0)
             {
-                CANExceptionFactory.CheckStatus(status, messageID);
+                CANExceptionFactory.CheckStatus(status, messageId);
             }
 
         }
 
+        /// <summary>
+        /// Enables periodic status updates from the Jaguar.
+        /// </summary>
         protected void SetupPeriodicStatus()
         {
             byte[] data = new byte[8];
@@ -1058,7 +1146,7 @@ namespace WPILib
                 0,
             };
 
-            int dataSize = PackINT16(data, kSendMessagePeriod);
+            int dataSize = PackInt16(data, SendMessagePeriod);
             SendMessage(LM_API_PSTAT_PER_EN_S0, data, dataSize);
             SendMessage(LM_API_PSTAT_PER_EN_S1, data, dataSize);
             SendMessage(LM_API_PSTAT_PER_EN_S2, data, dataSize);
@@ -1069,6 +1157,9 @@ namespace WPILib
             SendMessage(LM_API_PSTAT_CFG_S2, kMessage2Data, dataSize);
         }
 
+        /// <summary>
+        /// Check for new periodic status updates and unpack them into local variables.
+        /// </summary>
         protected void UpdatePeriodicStatus()
         {
             byte[] data = new byte[8];
@@ -1112,6 +1203,10 @@ namespace WPILib
             catch (CANMessageNotFoundException) { }
         }
 
+        /// <summary>
+        /// Update all the motors that have pending sets in the syncGroup.
+        /// </summary>
+        /// <param name="syncGroup">A bitmask of groups to generate synchronous output.</param>
         public static void UpdateSyncGroup(byte syncGroup)
         {
             byte[] data = new byte[8];
@@ -1123,19 +1218,10 @@ namespace WPILib
 
         private static void Swap16(int x, byte[] buffer)
         {
-            var tmpBuffer = BitConverter.GetBytes(x);
-            buffer[0] = tmpBuffer[0];
-            buffer[1] = tmpBuffer[1];
-            return;
         }
 
         private static void Swap32(int x, byte[] buffer)
         {
-            var tmpBuffer = BitConverter.GetBytes(x);
-            buffer[0] = tmpBuffer[0];
-            buffer[1] = tmpBuffer[1];
-            buffer[2] = tmpBuffer[2];
-            buffer[3] = tmpBuffer[3];
         }
 
         private static byte PackPercentage(byte[] buffer, double value)
@@ -1161,15 +1247,13 @@ namespace WPILib
             return 4;
         }
 
-        // ReSharper disable once InconsistentNaming
-        private static byte PackINT16(byte[] buffer, short value)
+        private static byte PackInt16(byte[] buffer, short value)
         {
             Swap16(value, buffer);
             return 2;
         }
 
-        // ReSharper disable once InconsistentNaming
-        private static byte PackINT32(byte[] buffer, int value)
+        private static byte PackInt32(byte[] buffer, int value)
         {
             Swap32(value, buffer);
             return 4;
@@ -1201,48 +1285,56 @@ namespace WPILib
             return Unpack32(buffer, 0) / 65536.0;
         }
 
-        // ReSharper disable once InconsistentNaming
-        private static short UnpackINT16(byte[] buffer)
+        private static short UnpackInt16(byte[] buffer)
         {
             return Unpack16(buffer, 0);
         }
 
-        // ReSharper disable once InconsistentNaming
-        private static int UnpackINT32(byte[] buffer)
+        private static int UnpackInt32(byte[] buffer)
         {
             return Unpack32(buffer, 0);
         }
 
         /* Compare floats for equality as fixed point numbers */
+        /// <summary>
+        /// Compare floats for equality as fixed point numbers
+        /// </summary>
+        /// <param name="a">A to check</param>
+        /// <param name="b">B to check</param>
+        /// <returns>True if they are equal</returns>
         public bool FXP8_EQ(double a, double b)
         {
             return (int)(a * 256.0) == (int)(b * 256.0);
         }
 
         /* Compare floats for equality as fixed point numbers */
+        /// <summary>
+        /// Compare floats for equality as fixed point numbers
+        /// </summary>
+        /// <param name="a">A to check</param>
+        /// <param name="b">B to check</param>
+        /// <returns>True if they are equal</returns>
         public bool FXP16_EQ(double a, double b)
         {
             return (int)(a * 65536.0) == (int)(b * 65536.0);
         }
 
-        [Obsolete]
+        /// <inheritdoc/>
         public void Disable() => DisableControl();
-
+        /// <inheritdoc/>
         public bool Enabled => m_controlEnabled;
-
+        /// <inheritdoc/>
         public void InitTable(ITable subtable)
         {
-            m_table = subtable;
+            Table = subtable;
             UpdateTable();
         }
 
-
-        private ITable m_table = null;
-
-        public ITable Table => m_table;
-
+        /// <inheritdoc/>
+        public ITable Table { get; private set; } = null;
+        /// <inheritdoc/>
         public string SmartDashboardType => "CANSpeedController";
-
+        /// <inheritdoc/>
         public void UpdateTable()
         {
             if (Table != null)
@@ -1265,13 +1357,13 @@ namespace WPILib
                 Table.PutNumber("Value", Get());
             }
         }
-
+        /// <inheritdoc/>
         public void StartLiveWindowMode()
         {
             Set(0.0);
-            m_table.AddTableListener(this, true);
+            Table.AddTableListener(this, true);
         }
-
+        /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             switch (key)
@@ -1308,34 +1400,24 @@ namespace WPILib
                 }
             }
         }
-
+        /// <inheritdoc/>
         public void StopLiveWindowMode()
         {
             Set(0.0);
-            m_table.RemoveTableListener(this);
+            Table.RemoveTableListener(this);
         }
-
+        /// <inheritdoc/>
         public void Reset()
         {
             Set(m_value);
             DisableControl();
         }
-
+        /// <inheritdoc/>
         public void Enable()
         {
             EnableControl();
         }
 
-
-
-        /**
-         * Set the reference source device for position controller mode.
-         *
-         * Choose between using and encoder and using a potentiometer
-         * as the source of position feedback when in position control mode.
-         *
-         * @param reference Specify a position reference.
-         */
         private void SetPositionReference(int reference)
         {
             SendMessage(LM_API_POS_REF, new[] { (byte)reference }, 1);
@@ -1344,12 +1426,7 @@ namespace WPILib
             m_posRefVerified = false;
         }
 
-        /**
-        * Set the P constant for the closed loop modes.
-        *
-        * @param p The proportional gain of the Jaguar's PID controller.
-        */
-
+        /// <inheritdoc/>
         public ControlMode MotorControlMode
         {
             get { return m_controlMode; }
@@ -1359,6 +1436,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public double P
         {
             set
@@ -1398,12 +1476,7 @@ namespace WPILib
             }
         }
 
-        /**
-        * Set the I constant for the closed loop modes.
-        *
-        * @param i The integral gain of the Jaguar's PID controller.
-        */
-
+        /// <inheritdoc/>
         public double I
         {
             set
@@ -1443,12 +1516,7 @@ namespace WPILib
             }
         }
 
-        /**
-        * Set the D constant for the closed loop modes.
-        *
-        * @param d The derivative gain of the Jaguar's PID controller.
-        */
-
+        /// <inheritdoc/>
         public double D
         {
             set
@@ -1491,13 +1559,7 @@ namespace WPILib
         public double F {
             get { return 0.0; } set {} }
 
-        /**
-        * Set the P, I, and D constants for the closed loop modes.
-        *
-        * @param p The proportional gain of the Jaguar's PID controller.
-        * @param i The integral gain of the Jaguar's PID controller.
-        * @param d The differential gain of the Jaguar's PID controller.
-        */
+        /// <inheritdoc/>
         public void SetPID(double p, double i, double d)
         {
             P = p;
@@ -1505,7 +1567,16 @@ namespace WPILib
             D = d;
         }
 
-
+        /// <summary>
+        /// Enable control of the motor voltage with the specified <see cref="SourceMode"/> and number of 
+        /// codes per revolution.
+        /// </summary>
+        /// <remarks>
+        /// After calling this you must call <see cref="EnableControl()"/> or <see cref="EnableControl(double)"/>
+        /// to enable the device.
+        /// </remarks>
+        /// <param name="mode">The <see cref="SourceMode"/> to set the controller to.</param>
+        /// <param name="codesPerRev">The number of codes per revolution on the encoder or potentiometer.</param>
         public void SetPercentMode(SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.PercentVbus);
@@ -1533,6 +1604,18 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Enable controlling the motor current with a PID loop based on the specifed source.
+        /// </summary>
+        /// <remarks>
+        /// After calling this you must call <see cref="EnableControl()"/> or <see cref="EnableControl(double)"/>
+        /// to enable the device.
+        /// </remarks>
+        /// <param name="p">The proportional gain of the Jaguar's PID controller</param>
+        /// <param name="i">The integral gain of the Jaguar's PID controller</param>
+        /// <param name="d">The derivative gain of the Jaguar's PID controller</param>
+        /// <param name="mode">The <see cref="SourceMode"/> to set the controller to.</param>
+        /// <param name="codesPerRev">The number of codes per revolution on the encoder or potentiometer.</param>
         public void SetCurrentMode(double p, double i, double d, SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.Current);
@@ -1564,6 +1647,18 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Enable controlling the motor speed with a PID loop based on the specifed source.
+        /// </summary>
+        /// <remarks>
+        /// After calling this you must call <see cref="EnableControl()"/> or <see cref="EnableControl(double)"/>
+        /// to enable the device.
+        /// </remarks>
+        /// <param name="p">The proportional gain of the Jaguar's PID controller</param>
+        /// <param name="i">The integral gain of the Jaguar's PID controller</param>
+        /// <param name="d">The derivative gain of the Jaguar's PID controller</param>
+        /// <param name="mode">The <see cref="SourceMode"/> to set the controller to.</param>
+        /// <param name="codesPerRev">The number of codes per revolution on the encoder or potentiometer.</param>
         public void SetSpeedMode(double p, double i, double d, SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.Speed);
@@ -1595,6 +1690,15 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Enable controlling the motor voltage with feedback from the specifed mode.
+        /// </summary>
+        /// <remarks>
+        /// After calling this you must call <see cref="EnableControl()"/> or <see cref="EnableControl(double)"/>
+        /// to enable the device.
+        /// </remarks>
+        /// <param name="mode">The <see cref="SourceMode"/> to set the controller to.</param>
+        /// <param name="codesPerRev">The number of codes per revolution on the encoder or potentiometer.</param>
         public void SetVoltageMode(SourceMode mode = SourceMode.None, int codesPerRev = 0)
         {
             ChangeControlMode(ControlMode.Voltage);
@@ -1632,12 +1736,7 @@ namespace WPILib
             m_controlModeVerified = false;
         }
 
-        /**
-        * Get the voltage at the battery input terminals of the Jaguar.
-        *
-        * @return The bus voltage in Volts.
-        */
-
+        /// <inheritdoc/>
         public double GetBusVoltage()
         {
             UpdatePeriodicStatus();
@@ -1645,12 +1744,7 @@ namespace WPILib
             return m_busVoltage;
         }
 
-        /**
-        * Get the voltage being output from the motor terminals of the Jaguar.
-        *
-        * @return The output voltage in Volts.
-        */
-
+        /// <inheritdoc/>
         public double GetOutputVoltage()
         {
             UpdatePeriodicStatus();
@@ -1658,12 +1752,7 @@ namespace WPILib
             return m_outputVoltage;
         }
 
-        /**
-        * Get the current through the motor terminals of the Jaguar.
-        *
-        * @return The output current in Amps.
-        */
-
+        /// <inheritdoc/>
         public double GetOutputCurrent()
         {
             UpdatePeriodicStatus();
@@ -1671,12 +1760,7 @@ namespace WPILib
             return m_outputCurrent;
         }
 
-        /**
-        * Get the internal temperature of the Jaguar.
-        *
-        * @return The temperature of the Jaguar in degrees Celsius.
-        */
-
+        /// <inheritdoc/>
         public double GetTemperature()
         {
             UpdatePeriodicStatus();
@@ -1684,14 +1768,7 @@ namespace WPILib
             return m_temperature;
         }
 
-        /**
-         * Get the position of the encoder or potentiometer.
-         *
-         * @return The position of the motor in rotations based on the configured feedback.
-         * @see CANJaguar#configPotentiometerTurns(int)
-         * @see CANJaguar#configEncoderCodesPerRev(int)
-         */
-
+        /// <inheritdoc/>
         public double GetPosition()
         {
             UpdatePeriodicStatus();
@@ -1699,12 +1776,7 @@ namespace WPILib
             return m_position;
         }
 
-        /**
-        * Get the speed of the encoder.
-        *
-        * @return The speed of the motor in RPM based on the configured feedback.
-        */
-
+        /// <inheritdoc/>
         public double GetSpeed()
         {
             UpdatePeriodicStatus();
@@ -1712,42 +1784,23 @@ namespace WPILib
             return m_speed;
         }
 
-        /**
-         * Get the status of the forward limit switch.
-         *
-         * @return true if the motor is allowed to turn in the forward direction.
-         */
-
-        public bool GetForwardLimitOK()
+        /// <inheritdoc/>
+        public bool GetForwardLimitOk()
         {
             UpdatePeriodicStatus();
 
-            return (m_limits & kForwardLimit) != 0;
+            return (m_limits & (byte)Limits.ForwardLimit) != 0;
         }
 
-        /**
-         * Get the status of the reverse limit switch.
-         *
-         * @return true if the motor is allowed to turn in the reverse direction.
-         */
-
-        public bool GetReverseLimitOK()
+        /// <inheritdoc/>
+        public bool GetReverseLimitOk()
         {
             UpdatePeriodicStatus();
 
-            return (m_limits & kReverseLimit) != 0;
+            return (m_limits & (byte)Limits.ForwardLimit) != 0;
         }
 
-        /**
-         * Get the status of any faults the Jaguar has detected.
-         *
-         * @return A bit-mask of faults defined by the "Faults" constants.
-         * @see #kCurrentFault
-         * @see #kBusVoltageFault
-         * @see #kTemperatureFault
-         * @see #kGateDriverFault
-         */
-
+        /// <inheritdoc/>
         public Faults GetFaults()
         {
             UpdatePeriodicStatus();
@@ -1755,14 +1808,7 @@ namespace WPILib
             return (Faults)m_faults;
         }
 
-        /**
-        * set the maximum voltage change rate.
-        *
-        * When in PercentVbus or Voltage output mode, the rate at which the voltage changes can
-        * be limited to reduce current spikes.  set this to 0.0 to disable rate limiting.
-        *
-        * @param rampRate The maximum rate of voltage change in Percent Voltage mode in V/s.
-        */
+        /// <inheritdoc/>
         public double VoltageRampRate
         {
             set
@@ -1774,11 +1820,11 @@ namespace WPILib
                 switch (m_controlMode)
                 {
                     case ControlMode.PercentVbus:
-                        dataSize = PackPercentage(data, value / (m_maxOutputVoltage * kControllerRate));
+                        dataSize = PackPercentage(data, value / (m_maxOutputVoltage * ControllerRate));
                         message = LM_API_VOLT_SET_RAMP;
                         break;
                     case ControlMode.Voltage:
-                        dataSize = PackFXP8_8(data, value / kControllerRate);
+                        dataSize = PackFXP8_8(data, value / ControllerRate);
                         message = LM_API_VCOMP_COMP_RAMP;
                         break;
                     default:
@@ -1790,32 +1836,19 @@ namespace WPILib
             }
         }
 
-        /**
-        * Get the version of the firmware running on the Jaguar.
-        *
-        * @return The firmware version.  0 if the device did not respond.
-        */
-
+        /// <inheritdoc/>
         public uint FirmwareVersion => (uint)m_firmwareVersion;
 
-        /**
-        * Get the version of the Jaguar hardware.
-        *
-        * @return The hardware version. 1: Jaguar,  2: Black Jaguar
-        */
+        /// <summary>
+        /// Get the version of the Jaguar hardware.
+        /// </summary>
+        /// <returns>1 for the grey jaguar, 2 for the black jaguar.</returns>
         public byte GetHardwareVersion()
         {
             return m_hardwareVersion;
         }
 
-        /**
-        * Configure what the controller does to the H-Bridge when neutral (not driving the output).
-        *
-        * This allows you to override the jumper configuration for brake or coast.
-        *
-        * @param mode Select to use the jumper setting or to override it to coast or brake.
-        */
-
+        /// <inheritdoc/>
         public NeutralMode ConfigNeutralMode
         {
             set
@@ -1831,19 +1864,14 @@ namespace WPILib
             }
         }
 
-        /**
-        * Configure how many codes per revolution are generated by your encoder.
-        *
-        * @param codesPerRev The number of counts per revolution in 1X mode.
-        */
-
+        /// <inheritdoc/>
         public int EncoderCodesPerRev
         {
             set
             {
                 byte[] data = new byte[8];
 
-                int dataSize = PackINT16(data, (short)value);
+                int dataSize = PackInt16(data, (short)value);
                 SendMessage(LM_API_CFG_ENC_LINES, data, dataSize);
 
                 m_encoderCodesPerRev = (short)value;
@@ -1851,22 +1879,14 @@ namespace WPILib
             }
         }
 
-        /**
-        * Configure the number of turns on the potentiometer.
-        *
-        * There is no special support for continuous turn potentiometers.
-        * Only integer numbers of turns are supported.
-        *
-        * @param turns The number of turns of the potentiometer
-        */
-
+        /// <inheritdoc/>
         public int PotentiometerTurns
         {
             set
             {
                 byte[] data = new byte[8];
 
-                int dataSize = PackINT16(data, (short)value);
+                int dataSize = PackInt16(data, (short)value);
                 SendMessage(LM_API_CFG_POT_TURNS, data, dataSize);
 
                 m_potentiometerTurns = (short)value;
@@ -1874,16 +1894,7 @@ namespace WPILib
             }
         }
 
-        /**
-         * Configure Soft Position Limits when in Position Controller mode.<br>
-         *
-         * When controlling position, you can add additional limits on top of the limit switch inputs
-         * that are based on the position feedback.  If the position limit is reached or the
-         * switch is opened, that direction will be disabled.
-         *
-         * @param forwardLimitPosition The position that, if exceeded, will disable the forward direction.
-         * @param reverseLimitPosition The position that, if exceeded, will disable the reverse direction.
-         */
+        /// <inheritdoc/>
         public void ConfigSoftPositionLimits(double forwardLimitPosition, double reverseLimitPosition)
         {
             LimitMode = LimitMode.SoftPositionLimits;
@@ -1891,26 +1902,13 @@ namespace WPILib
             ReverseLimit = reverseLimitPosition;
         }
 
-        /**
-         * Disable Soft Position Limits if previously enabled.<br>
-         *
-         * Soft Position Limits are disabled by default.
-         */
+        /// <inheritdoc/>
         public void DisableSoftPositionLimits()
         {
             LimitMode = LimitMode.SwitchInputsOnly;
         }
 
-        /**
-         * Set the limit mode for position control mode.<br>
-         *
-         * Use {@link #configSoftPositionLimits(double, double)} or {@link #disableSoftPositionLimits()} to set this
-         * automatically.
-         * @param mode The {@link LimitMode} to use to limit the rotation of the device.
-         * @see LimitMode#SwitchInputsOnly
-         * @see LimitMode#SoftPositionLimits
-         */
-
+        /// <inheritdoc/>
         public LimitMode LimitMode
         {
             set
@@ -1921,13 +1919,7 @@ namespace WPILib
             }
         }
 
-        /**
-         * Set the position that, if exceeded, will disable the forward direction.
-         *
-         * Use {@link #configSoftPositionLimits(double, double)} to set this and the {@link LimitMode} automatically.
-         * @param forwardLimitPosition The position that, if exceeded, will disable the forward direction.
-         */
-
+        /// <inheritdoc/>
         public double ForwardLimit
         {
             set
@@ -1943,13 +1935,7 @@ namespace WPILib
             }
         }
 
-        /**
-         * Set the position that, if exceeded, will disable the reverse direction.
-         *
-         * Use {@link #configSoftPositionLimits(double, double)} to set this and the {@link LimitMode} automatically.
-         * @param reverseLimitPosition The position that, if exceeded, will disable the reverse direction.
-         */
-
+        /// <inheritdoc/>
         public double ReverseLimit
         {
             set
@@ -1965,15 +1951,7 @@ namespace WPILib
             }
         }
 
-        /**
-        * Configure the maximum voltage that the Jaguar will ever output.
-        *
-        * This can be used to limit the maximum output voltage in all modes so that
-        * motors which cannot withstand full bus voltage can be used safely.
-        *
-        * @param voltage The maximum voltage output by the Jaguar.
-        */
-
+        /// <inheritdoc/>
         public double MaxOutputVoltage
         {
             set
@@ -1988,15 +1966,7 @@ namespace WPILib
             }
         }
 
-        /**
-        * Configure how long the Jaguar waits in the case of a fault before resuming operation.
-        *
-        * Faults include over temerature, over current, and bus under voltage.
-        * The default is 3.0 seconds, but can be reduced to as low as 0.5 seconds.
-        *
-        * @param faultTime The time to wait before resuming operation, in seconds.
-        */
-
+        /// <inheritdoc/>
         public float FaultTime
         {
             set
@@ -2006,7 +1976,7 @@ namespace WPILib
                 if (value < 0.5f) value = 0.5f;
                 else if (value > 3.0f) value = 3.0f;
 
-                int dataSize = PackINT16(data, (short)(value * 1000.0));
+                int dataSize = PackInt16(data, (short)(value * 1000.0));
                 SendMessage(LM_API_CFG_FAULT_TIME, data, dataSize);
 
                 m_faultTime = value;

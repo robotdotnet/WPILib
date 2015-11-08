@@ -35,58 +35,9 @@ namespace WPILib
                 int status = 0;
                 m_port = InitializeSolenoidPort(GetPortWithModule((byte) m_moduleNumber, 0), ref status);
                 CheckStatus(status);
-                /*
-                m_ports = new IntPtr[SolenoidChannels];
-                for (int i = 0; i < SolenoidChannels; i++)
-                {
-                    IntPtr port = GetPortWithModule((byte)moduleNumber, (byte)i);
-                    //int status = 0;
-                    m_ports[i] = InitializeSolenoidPort(port, ref status);
-                    CheckStatus(status);
-                }
-                */
             }
         }
-        /*
-        /// <summary>
-        /// Set the value of a solenoid.
-        /// </summary>
-        /// <param name="value">The value you want to set on the module</param>
-        /// <param name="mask">The channels you want to be affected</param>
-        protected void Set(int value, int mask)
-        {
-            lock (m_lockObject)
-            {
-                int status = 0;
-                for (int i = 0; i < SolenoidChannels; i++)
-                {
-                    int localMask = 1 << i;
-                    if ((mask & localMask) != 0)
-                    {
-                        SetSolenoid(m_ports[i], ((value & localMask) != 0), ref status);
-                    }
-                }
-                CheckStatus(status);
-            }
-        }
-
-        /// <summary>
-        /// Read all 8 solenoids from the module used by this solenoid as a single byte
-        /// </summary>
-        /// <returns>The current value of all 8 solenoids on this module.</returns>
-        public byte GetAll()
-        {
-            byte value = 0;
-            int status = 0;
-            for (int i = 0; i < SolenoidChannels; i++)
-            {
-                value |= (byte)((GetSolenoid(m_ports[i], ref status) ? 1 : 0) << i);
-            }
-            CheckStatus(status);
-            return value;
-        }
-
-    */
+        
         /// <summary>
         /// Reads complete solenoid blacklist for all 8 solenoids as a single byte.
         /// </summary>

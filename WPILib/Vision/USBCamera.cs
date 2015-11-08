@@ -4,12 +4,17 @@ using System.Threading;
 using NIVision;
 using NIVision.IMAQdx;
 using static NIVision.IMAQdx.PublicMethods;
+// ReSharper disable InconsistentNaming
+#pragma warning disable 1591
+#pragma warning disable 169
 
 namespace WPILib.Vision
 {
     public class USBCamera
     {
+
         public static String kDefaultCameraName = "cam0";
+
 
         private static String ATTR_VIDEO_MODE = "AcquisitionAttributes::VideoMode";
         private static String ATTR_WB_MODE = "CameraAttributes::WhiteBalance::Mode";
@@ -37,7 +42,9 @@ namespace WPILib.Vision
         private int m_width = 320;
         private int m_height = 240;
         private int m_fps = 30;
+
         private String m_whiteBalance = "auto";
+
         private int m_whiteBalanceValue = -1;
         private String m_exposure = "auto";
         private int m_exposureValue = -1;
@@ -217,3 +224,5 @@ namespace WPILib.Vision
         }
     }
 }
+#pragma warning restore 1591
+#pragma warning restore 169

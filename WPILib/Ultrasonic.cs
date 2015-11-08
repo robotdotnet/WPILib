@@ -49,7 +49,7 @@ namespace WPILib
 
         private readonly object m_syncRoot = new object();
 
-        protected PIDSourceType m_pidSource = PIDSourceType.Displacement;
+        private PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         private static void GetUltrasonicChecker(object sender, EventArgs args)
         {
@@ -232,6 +232,7 @@ namespace WPILib
         /// </summary>
         /// <returns>Range in millimeters of the target returned from the ultrasonic sensor. 
         /// Returns 0 if there is no valid value.</returns>
+        // ReSharper disable once InconsistentNaming
         public double GetRangeMM()
         {
             return GetRangeInches() * 25.4;

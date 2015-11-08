@@ -137,60 +137,39 @@ namespace WPILib
             }
         }
 
-        /// <summary>
-        /// Initialize a table for this sendable object.
-        /// </summary>
-        /// <param name="subtable">The table to put the values in.</param>
+        /// <inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             UpdateTable();
         }
 
-        /// <summary>
-        /// Returns the table that is currently associated with the sendable
-        /// </summary>
+        /// <inheritdoc/>
         public ITable Table { get; private set; }
 
-        /// <summary>
-        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
-        /// </summary>
+        /// <inheritdoc/>
         public string SmartDashboardType => "Double Solenoid";
 
-        /// <summary>
-        /// Update the table for this sendable object with the latest
-        /// values.
-        /// </summary>
+        /// <inheritdoc/>
         public void UpdateTable()
         {
             Table?.PutString("Value", (Get() == Value.Forward ? "Forward" : (Get() == Value.Reverse ? "Reverse" : "Off")));
         }
 
-        /// <summary>
-        /// Start having this sendable object automatically respond to
-        /// value changes reflect the value on the table.
-        /// </summary>
+        /// <inheritdoc/>
         public void StartLiveWindowMode()
         {
             Set(Value.Off);
             Table.AddTableListener("Value", this, true);
         }
 
-        /// <summary>
-        /// Stop having this sendable object automatically respond to value changes.
-        /// </summary>
+        /// <inheritdoc/>
         public void StopLiveWindowMode()
         {
             Table.RemoveTableListener(this);
         }
 
-        /// <summary>
-        /// Not called externally. Just needed because its an interface.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="isNew"></param>
+        /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             if (value.ToString().Equals("Reverse"))

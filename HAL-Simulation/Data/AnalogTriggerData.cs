@@ -33,6 +33,17 @@ namespace HAL_Simulator.Data
             m_trigLower = 0;
         }
 
+        public bool HasSource
+        {
+            get { return m_hasSource;}
+            set
+            {
+                if (value == m_hasSource) return;
+                m_hasSource = value;
+                OnPropertyChanged(value);
+            }
+        }
+
         public bool Initialized
         {
             get { return m_initialized; }
