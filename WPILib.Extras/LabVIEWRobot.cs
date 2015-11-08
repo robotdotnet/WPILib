@@ -58,7 +58,7 @@ namespace WPILib.Extras
         {
             Report(ResourceType.kResourceType_Framework, Instances.kFramework_Iterative);
 
-            RobotInit();
+            Begin();
 
             HALNetworkCommunicationObserveUserProgramStarting();
 
@@ -205,9 +205,9 @@ namespace WPILib.Extras
         private bool NextPeriodReady => m_ds.NewControlData;
 
 
-        public virtual void RobotInit()
+        public virtual void Begin()
         {
-            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(RobotInit)} method... Overload me!");
+            WriteLine($"Default {nameof(IterativeRobot)}.{nameof(Begin)} method... Overload me!");
         }
 
         private void InitializeTest()
