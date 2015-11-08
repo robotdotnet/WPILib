@@ -743,7 +743,7 @@ namespace WPILib
                     else
                     {
                         //It's wrong - set it again
-                        ConfigNeutralMode = m_neutralMode;
+                        NeutralMode = m_neutralMode;
                     }
                 }
                 catch (CANMessageNotFoundException)
@@ -1363,6 +1363,7 @@ namespace WPILib
             Set(0.0);
             Table.AddTableListener(this, true);
         }
+
         /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
@@ -1849,7 +1850,7 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public NeutralMode ConfigNeutralMode
+        public NeutralMode NeutralMode
         {
             set
             {

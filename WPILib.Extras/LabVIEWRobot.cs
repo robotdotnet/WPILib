@@ -204,7 +204,7 @@ namespace WPILib.Extras
 
         private bool NextPeriodReady => m_ds.NewControlData;
 
-        ///<inheritdoc/>
+
         public virtual void RobotInit()
         {
             WriteLine($"Default {nameof(IterativeRobot)}.{nameof(RobotInit)} method... Overload me!");

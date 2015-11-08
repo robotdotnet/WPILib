@@ -938,7 +938,7 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public NeutralMode ConfigNeutralMode
+        public NeutralMode NeutralMode
         {
             set
             {

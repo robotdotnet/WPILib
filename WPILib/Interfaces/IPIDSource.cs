@@ -32,6 +32,9 @@
         /// <returns>The result to use in <see cref="PIDController"/></returns>
         double PidGet();
 
+        /// <summary>
+        /// Gets or sets the Source type for this <see cref="IPIDSource"/>.
+        /// </summary>
         PIDSourceType PIDSourceType { get; set; }
     }
 }
