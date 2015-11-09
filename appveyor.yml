@@ -15,6 +15,7 @@ before_build:
 build:
   publish_nuget: true
   publish_nuget_symbols: true
+  include_nuget_references: true
   verbosity: minimal
 test_script:
 - cmd: nunit-console.exe %APPVEYOR_BUILD_FOLDER%\WPILib.Tests\Output\WPILib.Tests.dll /framework:net-4.0
