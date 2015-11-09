@@ -13,9 +13,26 @@ nuget:
 before_build:
 - cmd: nuget restore
 build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  include_nuget_references: true
   verbosity: minimal
+
+after_build:
+- ps: >-
+    
+    If (($env:APPVEYOR_REPO_BRANCH -eq "master") -and (!$env:APPVEYOR_PULL_REQUEST_NUMBER)) {
+
+    ./nuget install EWSoftware.SHFB -Version 2015.10.10.0 -o sbpackages
+
+    ./nuget install EWSoftware.SHFB.NETFramework -Version 4.6 -o sbpackages
+
+     & 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe' Sandcastle\SandcastleLocalBuildsOnly.shfbproj /property:Configuration=Release
+
+    ./nuget pack "$env:APPVEYOR_BUILD_FOLDER\WPILib\WPILib.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects
+
+    ./nuget pack "$env:APPVEYOR_BUILD_FOLDER\WPILib.Extras\WPILib.Extras.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects
+
+    Get-ChildItem .\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+
+    }
+
 test_script:
 - cmd: nunit-console.exe %APPVEYOR_BUILD_FOLDER%\WPILib.Tests\Output\WPILib.Tests.dll /framework:net-4.0
