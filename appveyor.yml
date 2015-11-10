@@ -13,6 +13,7 @@ nuget:
 before_build:
 - cmd: nuget restore
 build:
+  project: robotdotnet-wpilib.sln
   verbosity: minimal
 
 after_build:
