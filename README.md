@@ -6,14 +6,16 @@ This repository contains the source code for a DotNet implentation of the WPILib
 Documentation
 =============
 
-Install and Support documentation can be found at http://robotdotnet-wpilib.readthedocs.org/
+Install and Support documentation can be found [Here.](http://robotdotnet.github.io/Documentation/API/html/97ea22ce-3980-446f-96c5-2d89871a71e8.htm)
 
-API documentation can be found at http://robotdotnet.github.io/Documentation/API/html/R_Project_RobotDotNet.htm
+API documentation can be found [Here.](http://robotdotnet.github.io/Documentation/API/html/R_Project_RobotDotNet.htm)
 
 Installation
 ============
 
-The easist way to use WPILib is to install our extension from the Visual Studio gallery. The extension is called FRC Extension. Just open the VS extension manager, and search for FRC Extension, then install it.
+The easiest way to use WPILib is to install our extension from the Visual Studio gallery. The extension is called FRC Extension. Just open the VS extension manager, and search for FRC Extension, then install it.
+
+More instructions can be found [Here.](http://robotdotnet.github.io/Documentation/API/html/c85aadff-f6d3-48a2-8453-ac3eb71b06c5.htm)
 
 Compiling
 =========
