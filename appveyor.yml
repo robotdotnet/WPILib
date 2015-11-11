@@ -16,7 +16,14 @@ build:
   project: robotdotnet-wpilib.sln
   verbosity: minimal
 
-after_build:
+test_script:
+- .\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe -register:user -target:nunit-console.exe -targetargs:".\WPILib.Tests\Output\WPILib.Tests.dll /noshadow /framework:net-4.0 " -filter:"+[WPILib*]* -[HAL*]* -[WPILib.T*]* -[NIVision*]*" -output:coverage.xml -mergeoutput -returntargetcode
+
+- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+- pip install codecov
+- codecov -f "coverage.xml"
+
+on_success:
 - ps: >-
     
     If (($env:APPVEYOR_REPO_BRANCH -eq "master") -and (!$env:APPVEYOR_PULL_REQUEST_NUMBER)) {
@@ -34,10 +41,3 @@ after_build:
     Get-ChildItem .\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
 
     }
-
-test_script:
-- .\packages\OpenCover.4.6.166\tools\OpenCover.Console.exe -register:user -target:nunit-console.exe -targetargs:".\WPILib.Tests\Output\WPILib.Tests.dll /noshadow /framework:net-4.0 " -filter:"+[WPILib*]* +[HAL*]* -[HAL-RoboRIO*]* -[WPILib.T*]* -[NIVision*]*" -output:coverage.xml -mergeoutput -returntargetcode
-
-- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- pip install codecov
-- codecov -f "coverage.xml"
