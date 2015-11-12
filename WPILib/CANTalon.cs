@@ -127,12 +127,23 @@ namespace WPILib
 
 
         /// <summary>
+        /// The max Id allowed for a CAN Talon
+        /// </summary>
+        public const int MaxTalonId = 62;
+
+
+        /// <summary>
         /// Constructs a CANTalon object.
         /// </summary>
         /// <param name="deviceNumber">The id of the Talon SRX this object will communicate with.</param>
         /// <param name="controlPeriodMs">The update period to the Talon SRX.  Defaults to 10ms.</param>
         public CANTalon(int deviceNumber, int controlPeriodMs = 10)
         {
+            if (deviceNumber < 0 || deviceNumber > MaxTalonId)
+            {
+                throw new ArgumentOutOfRangeException(nameof(deviceNumber), "Talon IDs must be between 0 and 62 inclusive.");
+            }
+
             DeviceID = deviceNumber;
             m_talonPointer = C_TalonSRX_Create(deviceNumber, controlPeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);

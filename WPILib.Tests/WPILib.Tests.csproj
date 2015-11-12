@@ -107,6 +107,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
     <Compile Include="Commands\CommandCreationTest.cs" />
+    <Compile Include="TestCANTalon.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
     <Compile Include="TestDigitalInput.cs" />
