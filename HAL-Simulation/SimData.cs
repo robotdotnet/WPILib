@@ -53,9 +53,8 @@ namespace HAL_Simulator
             }
             else
             {
-                data = new CanTalonData();
-                s_canTalon.Add(id, data);
-                return data;
+                //CAN Talon does not exist yet. Return null.
+                return null;
             }
         }
 
