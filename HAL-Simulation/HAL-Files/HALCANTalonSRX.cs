@@ -296,14 +296,14 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(IntPtr handle, ref int param)
         {
-            param = (int)SimData.GetCanTalon(GetTalonSRX(handle)).LimitSwitchClosedFor;
+            param = SimData.GetCanTalon(GetTalonSRX(handle)).LimitSwitchClosedFor ? 1 : 0;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(IntPtr handle, ref int param)
         {
-            param = (int)SimData.GetCanTalon(GetTalonSRX(handle)).LimitSwitchClosedRev;
+            param = SimData.GetCanTalon(GetTalonSRX(handle)).LimitSwitchClosedRev ? 1 : 0;
             return CTR_Code.CTR_OKAY;
         }
 
@@ -331,7 +331,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_GetBrakeIsEnabled(IntPtr handle, ref int param)
         {
-            param = (int)SimData.GetCanTalon(GetTalonSRX(handle)).BrakeIsEnabled;
+            param = SimData.GetCanTalon(GetTalonSRX(handle)).BrakeIsEnabled ? 1 : 0;
             return CTR_Code.CTR_OKAY;
         }
 

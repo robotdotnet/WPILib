@@ -49,12 +49,12 @@ namespace HAL_Simulator.Data
         private double m_eRampThrottle = 0.0;
         private bool m_eRevFeedbackSensor = false;
         private double m_eLimitSwitchEn = 0.0;
-        private double m_eLimitSwitchClosedFor = 0.0;
-        private double m_eLimitSwitchClosedRev = 0.0;
+        private bool m_eLimitSwitchClosedFor = false;
+        private bool m_eLimitSwitchClosedRev = false;
         private double m_eSensorPosition = 0.0;
         private double m_eSensorVelocity = 0.0;
         private double m_eCurrent = 0.0;
-        private double m_eBrakeIsEnabled = 0.0;
+        private bool m_eBrakeIsEnabled = false;
         private double m_eEncPosition = 0.0;
         private double m_eEncVel = 0.0;
         private double m_eEncIndexRiseEvents = 0.0;
@@ -71,6 +71,11 @@ namespace HAL_Simulator.Data
         private double m_eSettingsChanged = 0.0;
         private double m_eQuadFilterEn = 0.0;
         private double m_ePidIaccum = 0.0;
+        private double m_eAinPosition = 0.0;
+        private double m_eProfileParamSlot0_AllowableClosedLoopErr = 0.0;
+        private double m_eProfileParamSlot1_AllowableClosedLoopErr = 0.0;
+        private double m_eNumberEncoderCPR = 0.0;
+        private double m_eNumberPotTurns = 0.0;
 
         private double m_overrideLimitSwitch = 0.0;
         private double m_overrideBrakeType = 0.0;
@@ -122,12 +127,12 @@ namespace HAL_Simulator.Data
             m_eRampThrottle = 0.0;
             m_eRevFeedbackSensor = false;
             m_eLimitSwitchEn = 0.0;
-            m_eLimitSwitchClosedFor = 0.0;
-            m_eLimitSwitchClosedRev = 0.0;
+            m_eLimitSwitchClosedFor = false;
+            m_eLimitSwitchClosedRev = false;
             m_eSensorPosition = 0.0;
             m_eSensorVelocity = 0.0;
             m_eCurrent = 0.0;
-            m_eBrakeIsEnabled = 0.0;
+            m_eBrakeIsEnabled = false;
             m_eEncPosition = 0.0;
             m_eEncVel = 0.0;
             m_eEncIndexRiseEvents = 0.0;
@@ -144,6 +149,11 @@ namespace HAL_Simulator.Data
             m_eSettingsChanged = 0.0;
             m_eQuadFilterEn = 0.0;
             m_ePidIaccum = 0.0;
+            m_eAinPosition = 0.0;
+            m_eProfileParamSlot0_AllowableClosedLoopErr = 0.0;
+            m_eProfileParamSlot1_AllowableClosedLoopErr = 0.0;
+            m_eNumberEncoderCPR = 0.0;
+            m_eNumberPotTurns = 0.0;
 
             m_overrideLimitSwitch = 0.0;
             m_overrideBrakeType = 0.0;
@@ -244,9 +254,9 @@ namespace HAL_Simulator.Data
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchEn:
                     return LimitSwitchEn;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
-                    return LimitSwitchClosedFor;
+                    return LimitSwitchClosedFor ? 1 : 0;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedRev:
-                    return LimitSwitchClosedRev;
+                    return LimitSwitchClosedRev ? 1 : 0;
                 case HAL_Base.HALCanTalonSRX.ParamID.eSensorPosition:
                     return SensorPosition;
                 case HAL_Base.HALCanTalonSRX.ParamID.eSensorVelocity:
@@ -254,7 +264,7 @@ namespace HAL_Simulator.Data
                 case HAL_Base.HALCanTalonSRX.ParamID.eCurrent:
                     return Current;
                 case HAL_Base.HALCanTalonSRX.ParamID.eBrakeIsEnabled:
-                    return BrakeIsEnabled;
+                    return BrakeIsEnabled ? 1 : 0;
                 case HAL_Base.HALCanTalonSRX.ParamID.eEncPosition:
                     return EncPosition;
                 case HAL_Base.HALCanTalonSRX.ParamID.eEncVel:
@@ -287,6 +297,16 @@ namespace HAL_Simulator.Data
                     return QuadFilterEn;
                 case HAL_Base.HALCanTalonSRX.ParamID.ePidIaccum:
                     return PidIaccum;
+                case HAL_Base.HALCanTalonSRX.ParamID.eAinPosition:
+                    return AinPosition;
+                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_AllowableClosedLoopErr:
+                    return ProfileParamSlot0_AllowableClosedLoopErr;
+                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_AllowableClosedLoopErr:
+                    return ProfileParamSlot1_AllowableClosedLoopErr;
+                case HAL_Base.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
+                    return NumberEncoderCPR;
+                case HAL_Base.HALCanTalonSRX.ParamID.eNumberPotTurns:
+                    return NumberPotTurns;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), id, null);
             }
@@ -427,10 +447,10 @@ namespace HAL_Simulator.Data
                     LimitSwitchEn = value;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
-                    LimitSwitchClosedFor = value;
+                    LimitSwitchClosedFor = value != 0;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedRev:
-                    LimitSwitchClosedRev = value;
+                    LimitSwitchClosedRev = value != 0;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eSensorPosition:
                     SensorPosition = value;
@@ -442,7 +462,7 @@ namespace HAL_Simulator.Data
                     Current = value;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eBrakeIsEnabled:
-                    BrakeIsEnabled = value;
+                    BrakeIsEnabled = value != 0;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eEncPosition:
                     EncPosition = value;
@@ -492,6 +512,19 @@ namespace HAL_Simulator.Data
                 case HAL_Base.HALCanTalonSRX.ParamID.ePidIaccum:
                     PidIaccum = value;
                     break;
+                case HAL_Base.HALCanTalonSRX.ParamID.eAinPosition:
+                    AinPosition = value;
+                    break;
+                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_AllowableClosedLoopErr:
+                    ProfileParamSlot0_AllowableClosedLoopErr = value;
+                    break;
+                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_AllowableClosedLoopErr:
+                    ProfileParamSlot1_AllowableClosedLoopErr = value;
+                    break;
+                case HAL_Base.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
+                    NumberEncoderCPR = value;
+                case HAL_Base.HALCanTalonSRX.ParamID.eNumberPotTurns:
+                    NumberPotTurns = value;
             }
         }
 
@@ -926,7 +959,7 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
-        public double LimitSwitchClosedFor
+        public bool LimitSwitchClosedFor
         {
             get { return m_eLimitSwitchClosedFor; }
             set
@@ -936,7 +969,7 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
-        public double LimitSwitchClosedRev
+        public bool LimitSwitchClosedRev
         {
             get { return m_eLimitSwitchClosedRev; }
             set
@@ -976,7 +1009,7 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
-        public double BrakeIsEnabled
+        public bool BrakeIsEnabled
         {
             get { return m_eBrakeIsEnabled; }
             set
@@ -1146,10 +1179,64 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        public double AinPosition
+        {
+            get { return m_eAinPosition; }
+            set
+            {
+                if (value == m_eAinPosition) return;
+                m_eAinPosition = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public double ProfileParamSlot0_AllowableClosedLoopErr
+        {
+            get { return m_eProfileParamSlot0_AllowableClosedLoopErr; }
+            set
+            {
+                if (value == m_eProfileParamSlot0_AllowableClosedLoopErr) return;
+                m_eProfileParamSlot0_AllowableClosedLoopErr = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public double ProfileParamSlot1_AllowableClosedLoopErr
+        {
+            get { return m_eProfileParamSlot1_AllowableClosedLoopErr; }
+            set
+            {
+                if (value == m_eProfileParamSlot1_AllowableClosedLoopErr) return;
+                m_eProfileParamSlot1_AllowableClosedLoopErr = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public double NumberEncoderCPR
+        {
+            get { return m_eNumberEncoderCPR; }
+            set
+            {
+                if (value == m_eNumberEncoderCPR) return;
+                m_eNumberEncoderCPR = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public double NumberPotTurns
+        {
+            get { return NumberPotTurns; }
+            set
+            {
+                if (value == NumberPotTurns) return;
+                NumberPotTurns = value;
+                OnPropertyChanged(value);
+            }
+        }
 
         public double OverrideLimitSwitch
         {
-            get { return m_overrideLimitSwitch;}
+            get { return m_overrideLimitSwitch; }
             set
             {
                 if (value == m_overrideLimitSwitch) return;
