@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
+using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
@@ -45,7 +46,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var s = new CANTalon(CANTalon.MaxTalonId + 1);
+                var s = new CANTalon(CANTalon.TalonIds);
             });
         }
 
@@ -59,6 +60,83 @@ namespace WPILib.Tests
             }
         }
 
+        [Test]
+        public void TestMultipleAllocation()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                Assert.Throws<AllocationException>(() =>
+                {
+                    CANTalon s = NewTalon();
+                });
+            }
+        }
 
+        [Test]
+        public void TestReverseSensor()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                t.ReverseSensor(true);
+
+                Assert.That(GetTalonData().RevFeedbackSensor);
+
+                t.ReverseSensor(false);
+
+                Assert.That(!GetTalonData().RevFeedbackSensor);
+            }
+        }
+
+        [Test]
+        public void TestReverseOutput()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                t.ReverseOutput(true);
+                Assert.That(GetTalonData().RevMotDuringCloseLoopEn);
+                t.ReverseOutput(false);
+                Assert.That(!GetTalonData().RevMotDuringCloseLoopEn);
+            }
+        }
+
+        [Test]
+        public void TestGetEncoderPosition()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().EncPosition = 600;
+                Assert.That(t.GetEncoderPosition(), Is.EqualTo(600).Within(0.01));
+            }
+        }
+
+        [Test]
+        public void TestGetEncoderVelocity()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().EncVel = 600;
+                Assert.That(t.GetEncoderVelocity(), Is.EqualTo(600).Within(0.01));
+            }
+        }
+
+        [Test]
+        public void TestSetEncoderPosition()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                t.SetEncoderPostition(600);
+                Assert.That(GetTalonData().EncPosition, Is.EqualTo(600).Within(0.01));
+            }
+        }
+
+        [Test]
+        public void TestGetNumberQuadIdxRises()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().EncIndexRiseEvents = 500;
+                Assert.That(t.GetNumberOfQuadIdxRises(), Is.EqualTo(500).Within(0.01));
+            }
+        }
     }
 }

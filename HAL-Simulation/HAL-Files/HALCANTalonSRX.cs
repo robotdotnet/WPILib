@@ -450,7 +450,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(IntPtr handle, int param)
         {
-            SimData.GetCanTalon(GetTalonSRX(handle)).RevMotDuringCloseLoopEn = param;
+            SimData.GetCanTalon(GetTalonSRX(handle)).RevMotDuringCloseLoopEn = param != 0;
             return CTR_Code.CTR_OKAY;
         }
 
@@ -496,7 +496,7 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_SetRevFeedbackSensor(IntPtr handle, int param)
         {
-            SimData.GetCanTalon(GetTalonSRX(handle)).RevFeedbackSensor = param;
+            SimData.GetCanTalon(GetTalonSRX(handle)).RevFeedbackSensor = param != 0;
             return CTR_Code.CTR_OKAY;
         }
     }

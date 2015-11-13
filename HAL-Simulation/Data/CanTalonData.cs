@@ -43,11 +43,11 @@ namespace HAL_Simulator.Data
         private double m_eAppliedThrottle = 0.0;
         private double m_eCloseLoopErr = 0.0;
         private double m_eFeedbackDeviceSelect = 0.0;
-        private double m_eRevMotDuringCloseLoopEn = 0.0;
+        private bool m_eRevMotDuringCloseLoopEn = false;
         private double m_eModeSelect = 0.0;
         private double m_eProfileSlotSelect = 0.0;
         private double m_eRampThrottle = 0.0;
-        private double m_eRevFeedbackSensor = 0.0;
+        private bool m_eRevFeedbackSensor = false;
         private double m_eLimitSwitchEn = 0.0;
         private double m_eLimitSwitchClosedFor = 0.0;
         private double m_eLimitSwitchClosedRev = 0.0;
@@ -116,11 +116,11 @@ namespace HAL_Simulator.Data
             m_eAppliedThrottle = 0.0;
             m_eCloseLoopErr = 0.0;
             m_eFeedbackDeviceSelect = 0.0;
-            m_eRevMotDuringCloseLoopEn = 0.0;
+            m_eRevMotDuringCloseLoopEn = false;
             m_eModeSelect = 0.0;
             m_eProfileSlotSelect = 0.0;
             m_eRampThrottle = 0.0;
-            m_eRevFeedbackSensor = 0.0;
+            m_eRevFeedbackSensor = false;
             m_eLimitSwitchEn = 0.0;
             m_eLimitSwitchClosedFor = 0.0;
             m_eLimitSwitchClosedRev = 0.0;
@@ -232,7 +232,7 @@ namespace HAL_Simulator.Data
                 case HAL_Base.HALCanTalonSRX.ParamID.eFeedbackDeviceSelect:
                     return FeedbackDeviceSelect;
                 case HAL_Base.HALCanTalonSRX.ParamID.eRevMotDuringCloseLoopEn:
-                    return RevMotDuringCloseLoopEn;
+                    return RevMotDuringCloseLoopEn ? 1 : 0;
                 case HAL_Base.HALCanTalonSRX.ParamID.eModeSelect:
                     return ModeSelect;
                 case HAL_Base.HALCanTalonSRX.ParamID.eProfileSlotSelect:
@@ -240,7 +240,7 @@ namespace HAL_Simulator.Data
                 case HAL_Base.HALCanTalonSRX.ParamID.eRampThrottle:
                     return RampThrottle;
                 case HAL_Base.HALCanTalonSRX.ParamID.eRevFeedbackSensor:
-                    return RevFeedbackSensor;
+                    return RevFeedbackSensor ? 1 : 0;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchEn:
                     return LimitSwitchEn;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
@@ -409,7 +409,7 @@ namespace HAL_Simulator.Data
                     FeedbackDeviceSelect = value;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eRevMotDuringCloseLoopEn:
-                    RevMotDuringCloseLoopEn = value;
+                    RevMotDuringCloseLoopEn = value != 0;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eModeSelect:
                     ModeSelect = value;
@@ -421,7 +421,7 @@ namespace HAL_Simulator.Data
                     RampThrottle = value;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eRevFeedbackSensor:
-                    RevFeedbackSensor = value;
+                    RevFeedbackSensor = value != 0;
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchEn:
                     LimitSwitchEn = value;
@@ -866,7 +866,7 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
-        public double RevMotDuringCloseLoopEn
+        public bool RevMotDuringCloseLoopEn
         {
             get { return m_eRevMotDuringCloseLoopEn; }
             set
@@ -906,7 +906,7 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
-        public double RevFeedbackSensor
+        public bool RevFeedbackSensor
         {
             get { return m_eRevFeedbackSensor; }
             set
