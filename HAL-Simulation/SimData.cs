@@ -72,6 +72,7 @@ namespace HAL_Simulator
                 //Create a new Can Talon data and return true.
                 data = new CanTalonData();
                 s_canTalon.Add(id, data);
+                OnTalonSRXAddedOrRemoved?.Invoke(id, new TalonSRXEventArgs(true));
                 return true;
             }
         }
@@ -79,6 +80,7 @@ namespace HAL_Simulator
         public static void RemoveCanTalon(int id)
         {
             s_canTalon.Remove(id);
+            OnTalonSRXAddedOrRemoved?.Invoke(id, new TalonSRXEventArgs(false));
         }
 
         public static PCMData GetPCM(int id)
@@ -94,6 +96,7 @@ namespace HAL_Simulator
             {
                 data = new PCMData();
                 s_pcm.Add(id, data);
+                OnPCMAdded?.Invoke(data, null);
                 return data;
             }
         }
@@ -112,6 +115,7 @@ namespace HAL_Simulator
                 //Create a new PCM data and return true.
                 data = new PCMData();
                 s_pcm.Add(id, data);
+                OnPCMAdded?.Invoke(data, null);
                 return true;
             }
         }
@@ -129,6 +133,7 @@ namespace HAL_Simulator
             {
                 data = new PDPData();
                 s_pdp.Add(id, data);
+                OnPDPAdded?.Invoke(data, null);
                 return data;
             }
         }
@@ -147,9 +152,14 @@ namespace HAL_Simulator
                 //Create a new PCM data and return true.
                 data = new PDPData();
                 s_pdp.Add(id, data);
+                OnPDPAdded?.Invoke(data, null);
                 return true;
             }
         }
+
+        public static event EventHandler<TalonSRXEventArgs> OnTalonSRXAddedOrRemoved;
+        public static event EventHandler OnPCMAdded;
+        public static event EventHandler OnPDPAdded;
 
         static SimData()
         {
