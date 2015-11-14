@@ -523,8 +523,10 @@ namespace HAL_Simulator.Data
                     break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
                     NumberEncoderCPR = value;
+                    break;
                 case HAL_Base.HALCanTalonSRX.ParamID.eNumberPotTurns:
                     NumberPotTurns = value;
+                    break;
             }
         }
 
