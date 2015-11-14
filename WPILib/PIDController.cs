@@ -545,6 +545,7 @@ namespace WPILib
         ///<inheritdoc/>
         public string SmartDashboardType => "PIDController";
 
+        ///<inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             if (key == ("p") || key == ("i") || key == ("d") || key == ("f"))

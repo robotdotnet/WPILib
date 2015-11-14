@@ -142,7 +142,7 @@ namespace WPILib.Commands
         ///<inheritdoc/>
         public string Name { get; }
         ///<inheritdoc/>
-        public void InitTable(ITable subtable)
+        public virtual void InitTable(ITable subtable)
         {
             Table = subtable;
             if (Table != null)
@@ -171,6 +171,6 @@ namespace WPILib.Commands
         ///<inheritdoc/>
         public ITable Table { get; private set; }
         ///<inheritdoc/>
-        public string SmartDashboardType => "Subsystem";
+        public virtual string SmartDashboardType => "Subsystem";
     }
 }

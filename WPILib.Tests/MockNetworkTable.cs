@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NetworkTables;
+using NetworkTables.Native;
 using NetworkTables.Tables;
 
 namespace WPILib.Tests
@@ -24,6 +25,11 @@ namespace WPILib.Tests
         {
             GetSubTableCount++;
             return this;
+        }
+
+        public HashSet<string> GetKeys(NtType types)
+        {
+            throw new NotImplementedException();
         }
 
         public HashSet<string> GetKeys(EntryFlags types)

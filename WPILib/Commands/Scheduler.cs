@@ -226,12 +226,6 @@ namespace WPILib.Commands
         public string Name => "Scheduler";
 
         ///<inheritdoc/>
-        public new string GetType()
-        {
-            return "Scheduler";
-        }
-
-        ///<inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;

@@ -201,13 +201,7 @@ namespace WPILib
         /// </summary>
         public void StopLiveWindowMode() => Table.RemoveTableListener(this);
 
-        /// <summary>
-        /// This is called by the network tables whenever the value is updated.
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="key"></param>
-        /// <param name="value"></param>
-        /// <param name="flags"></param>
+        /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
         {
             Set((bool)value);

@@ -7,6 +7,7 @@ using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
@@ -354,9 +355,247 @@ namespace WPILib.Tests
 
         //TODO:Test Get Position
         //TODO:Test Set Position
+        //TODO:Test Get and Set Position
+        //TODO:TestGetSpeed
+
+        [Test]
+        public void TestGetForwardLimitSwitchOk()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_ForSoftLim = 0;
+
+                Assert.That(t.GetForwardLimitOk());
+
+                GetTalonData().Fault_ForLim = 1;
+                GetTalonData().Fault_ForSoftLim = 0;
+
+                Assert.That(!t.GetForwardLimitOk());
+
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_ForSoftLim = 1;
+
+                Assert.That(!t.GetForwardLimitOk());
+
+                GetTalonData().Fault_ForLim = 1;
+                GetTalonData().Fault_ForSoftLim = 1;
+
+                Assert.That(!t.GetForwardLimitOk());
+            }
+        }
+
+        [Test]
+        public void TestGetReverseLimitOk()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Assert.That(t.GetReverseLimitOk());
+
+                GetTalonData().Fault_RevLim = 1;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Assert.That(!t.GetReverseLimitOk());
+
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_RevSoftLim = 1;
+
+                Assert.That(!t.GetReverseLimitOk());
+
+                GetTalonData().Fault_RevLim = 1;
+                GetTalonData().Fault_RevSoftLim = 1;
+
+                Assert.That(!t.GetReverseLimitOk());
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsAll()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 1;
+                GetTalonData().Fault_UnderVoltage = 1;
+                GetTalonData().Fault_ForLim = 1;
+                GetTalonData().Fault_RevLim = 1;
+                GetTalonData().Fault_ForSoftLim = 1;
+                GetTalonData().Fault_RevSoftLim = 1;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsNone()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 0;
+                GetTalonData().Fault_UnderVoltage = 0;
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_ForSoftLim = 0;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(!faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(!faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(!faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(!faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
 
 
+        [Test]
+        public void TestGetFaultsOverTemp()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 1;
+                GetTalonData().Fault_UnderVoltage = 0;
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_ForSoftLim = 0;
+                GetTalonData().Fault_RevSoftLim = 0;
 
+                Faults faults = t.GetFaults();
+
+                Assert.That(faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(!faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(!faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(!faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsUnderVoltage()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 0;
+                GetTalonData().Fault_UnderVoltage = 1;
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_ForSoftLim = 0;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(!faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(!faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(!faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsForLimit()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 0;
+                GetTalonData().Fault_UnderVoltage = 0;
+                GetTalonData().Fault_ForLim = 1;
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_ForSoftLim = 0;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(!faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(!faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(!faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsRevLimit()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 0;
+                GetTalonData().Fault_UnderVoltage = 0;
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_RevLim = 1;
+                GetTalonData().Fault_ForSoftLim = 0;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(!faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(!faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(!faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(!faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsForSoftLimit()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 0;
+                GetTalonData().Fault_UnderVoltage = 0;
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_ForSoftLim = 1;
+                GetTalonData().Fault_RevSoftLim = 0;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(!faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(!faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(!faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(!faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
+
+        [Test]
+        public void TestGetFaultsRevSoftLimit()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                GetTalonData().Fault_OverTemp = 0;
+                GetTalonData().Fault_UnderVoltage = 0;
+                GetTalonData().Fault_ForLim = 0;
+                GetTalonData().Fault_RevLim = 0;
+                GetTalonData().Fault_ForSoftLim = 0;
+                GetTalonData().Fault_RevSoftLim = 1;
+
+                Faults faults = t.GetFaults();
+
+                Assert.That(!faults.HasFlag(Faults.TemperatureFault));
+                Assert.That(!faults.HasFlag(Faults.BusVoltageFault));
+                Assert.That(!faults.HasFlag(Faults.FwdLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.RevLimitSwitch));
+                Assert.That(!faults.HasFlag(Faults.FwdSoftLimit));
+                Assert.That(faults.HasFlag(Faults.RevSoftLimit));
+            }
+        }
     }
 }
 

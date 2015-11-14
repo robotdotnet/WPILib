@@ -221,6 +221,7 @@ namespace WPILib.Interfaces
         /// </summary>
         /// <returns>Any faults returned by the controller.</returns>
         Faults GetFaults();
+
         /// <summary>
         /// Sets the maximum voltage change rate in Volts/s.
         /// </summary>

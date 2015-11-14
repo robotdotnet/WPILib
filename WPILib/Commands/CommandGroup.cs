@@ -215,7 +215,7 @@ namespace WPILib.Commands
         }
 
         /// <inheritdoc/>
-        internal override void _Initialize() => m_currentCommandIndex = -1;
+        protected internal override void _Initialize() => m_currentCommandIndex = -1;
 
         /// <inheritdoc/>
         internal override void _Execute()
@@ -294,7 +294,7 @@ namespace WPILib.Commands
         }
 
         /// <inheritdoc/>
-        internal override void _End()
+        protected internal override void _End()
         {
             if (m_currentCommandIndex != -1 && m_currentCommandIndex < m_commands.Count)
             {
@@ -313,7 +313,7 @@ namespace WPILib.Commands
         }
 
         /// <inheritdoc/>
-        internal override void _Interrupted()
+        protected internal override void _Interrupted()
         {
             _End();
         }

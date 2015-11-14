@@ -32,12 +32,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>Output\WPILib.Extras.XML</DocumentationFile>
+    <DocumentationFile>Output\WPILib.Extras.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppVeyor|AnyCPU'">
     <OutputPath>Output\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>Output\WPILib.Extras.XML</DocumentationFile>
+    <DocumentationFile>Output\WPILib.Extras.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,8 +50,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\WPILib\Output\HAL-Base.dll</HintPath>
     </Reference>
-    <Reference Include="NetworkTables, Version=2015.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.2015.1.1\lib\net45\NetworkTables.dll</HintPath>
+    <Reference Include="NetworkTables, Version=2015.2.0.74, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.2015.2.0.74\lib\net45\NetworkTables.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

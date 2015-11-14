@@ -112,9 +112,9 @@ namespace WPILib.Commands
         }
 
         ///<inheritdoc/>
-        public new string SmartDashboardType => "PIDSubsystem";
+        public override string SmartDashboardType => "PIDSubsystem";
         ///<inheritdoc/>
-        public new void InitTable(ITable table)
+        public override void InitTable(ITable table)
         {
             PIDController.InitTable(table);
             base.InitTable(table);

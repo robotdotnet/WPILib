@@ -372,18 +372,6 @@ namespace WPILib
             }
         }
 
-        /// <inheritdoc/>
-        public void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            PIDSourceType = pidSource;
-        }
-
-        /// <inheritdoc/>
-        public PIDSourceType GetPIDSourceType()
-        {
-            return PIDSourceType;
-        }
-
         ///<inheritdoc />
         public void InitTable(ITable subtable)
         {

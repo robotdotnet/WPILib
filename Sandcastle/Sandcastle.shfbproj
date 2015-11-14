@@ -28,9 +28,9 @@
     </TransformComponentArguments>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\WPILib\WPILib.csproj" />
-      <DocumentationSource sourceFile="..\WPILib.Extras\WPILib.Extras.csproj" />
-      <DocumentationSource sourceFile="..\HAL-Simulation\HAL-Simulation.csproj" />
-    </DocumentationSources>
+<DocumentationSource sourceFile="..\WPILib.Extras\WPILib.Extras.csproj" />
+<DocumentationSource sourceFile="..\HAL-Simulation\HAL-Simulation.csproj" />
+<DocumentationSource sourceFile="..\WPILib\Output\NetworkTables.xml" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
@@ -121,11 +121,6 @@
       <Project>{471A8C6B-AA80-492A-85A3-3EF67FC70988}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="NetworkTables">
-      <HintPath>..\WPILib\Output\NetworkTables.dll</HintPath>
-    </Reference>
-  </ItemGroup>
   <!-- Import the SHFB build targets -->
   <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
   <!-- The pre-build and post-build event properties must appear *after* the targets file import in order to be
@@ -136,6 +131,7 @@
     <PostBuildEvent>xcopy Help\HAL-Simulation.xml ..\HAL-Simulation\Output /y
 xcopy Help\HAL-Simulation.xml ..\WPILib\Output /y
 xcopy Help\WPILib.xml ..\WPILib\Output /y
-xcopy Help\WPILib.Extras.xml ..\WPILib.Extras\Output /y</PostBuildEvent><RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+xcopy Help\WPILib.Extras.xml ..\WPILib.Extras\Output /y</PostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 </Project>

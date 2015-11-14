@@ -31,12 +31,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <DocumentationFile>Output\HAL-Simulation.XML</DocumentationFile>
+    <DocumentationFile>Output\HAL-Simulation.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppVeyor|AnyCPU'">
     <OutputPath>Output\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>Output\HAL-Simulation.XML</DocumentationFile>
+    <DocumentationFile>Output\HAL-Simulation.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>

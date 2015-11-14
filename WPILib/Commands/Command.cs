@@ -240,7 +240,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="Initialize()"/>
         /// </summary>
-        internal virtual void _Initialize()
+        protected internal virtual void _Initialize()
         {
 
         }
@@ -280,7 +280,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="End"/>.
         /// </summary>
-        internal virtual void _End()
+        protected internal virtual void _End()
         {
 
         }
@@ -298,7 +298,7 @@ namespace WPILib.Commands
         /// <summary>
         /// A shadow method called before <see cref="Interrupted"/>.
         /// </summary>
-        internal virtual void _Interrupted()
+        protected internal virtual void _Interrupted()
         {
 
         }
@@ -527,7 +527,7 @@ namespace WPILib.Commands
         }
 
         /// <inheritdoc/>
-        public void InitTable(ITable subtable)
+        public virtual void InitTable(ITable subtable)
         {
             Table?.RemoveTableListener(this);
             Table = subtable;
@@ -544,7 +544,7 @@ namespace WPILib.Commands
         public ITable Table { get; private set; }
 
         /// <inheritdoc/>
-        public string SmartDashboardType => "Command";
+        public virtual string SmartDashboardType => "Command";
 
         /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)

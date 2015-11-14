@@ -43,7 +43,7 @@ namespace WPILib
             }
         }
 
-        private NetworkTable m_table;
+        private readonly NetworkTable m_table;
 
         /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)

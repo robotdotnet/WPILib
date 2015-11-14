@@ -1048,7 +1048,14 @@ namespace WPILib
             set { CheckStatus(-9); }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Gets or sets the maximum voltage change rate in Volts/s.
+        /// </summary>
+        /// <remarks>
+        /// When in <see cref="ControlMode.PercentVbus"/> or <see cref="ControlMode.Voltage"/> output mode,
+        /// the rate at which the voltage changes can be limited to reduce current spike. Set this to 0.0
+        /// to disable rate limiting.
+        /// </remarks>
         public double VoltageRampRate
         {
             get

@@ -68,17 +68,17 @@ namespace WPILib.Commands
         protected PIDController PIDController => m_controller;
 
         ///<inheritdoc/>
-        protected new virtual void _Initialize()
+        protected internal override void _Initialize()
         {
             m_controller.Enable();
         }
         ///<inheritdoc/>
-        protected new virtual void _End()
+        protected internal override void _End()
         {
             m_controller.Disable();
         }
         ///<inheritdoc/>
-        protected new virtual void _Interrupted()
+        protected internal override void _Interrupted()
         {
             _End();
         }
@@ -111,11 +111,12 @@ namespace WPILib.Commands
         protected abstract double ReturnPIDInput();
 
         protected abstract void UsePIDOutput(double output);
-        ///<inheritdoc/>
-        public new string SmartDashboardType => "PIDCommand";
 
         ///<inheritdoc/>
-        public new void InitTable(ITable table)
+        public override string SmartDashboardType => "PIDCommand";
+
+        ///<inheritdoc/>
+        public override void InitTable(ITable table)
         {
             m_controller.InitTable(table);
             base.InitTable(table);
