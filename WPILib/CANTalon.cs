@@ -453,7 +453,7 @@ namespace WPILib
         public bool IsReverseLimitSwitchClosed()
         {
             int state = 0;
-            C_TalonSRX_GetLimitSwitchClosedFor(m_talonPointer, ref state);
+            C_TalonSRX_GetLimitSwitchClosedRev(m_talonPointer, ref state);
             return state != 0;
         }
 

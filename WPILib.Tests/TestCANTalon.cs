@@ -348,7 +348,7 @@ namespace WPILib.Tests
             using (CANTalon t = NewTalon())
             {
                 GetTalonData().BatteryV = 12.0;
-                Assert.That(t.GetOutputCurrent(), Is.EqualTo(12.0).Within(0.01));
+                Assert.That(t.GetBusVoltage(), Is.EqualTo(12.0).Within(0.01));
             }
         }
 

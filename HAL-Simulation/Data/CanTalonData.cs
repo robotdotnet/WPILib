@@ -1227,11 +1227,11 @@ namespace HAL_Simulator.Data
 
         public double NumberPotTurns
         {
-            get { return NumberPotTurns; }
+            get { return m_eNumberPotTurns; }
             set
             {
-                if (value == NumberPotTurns) return;
-                NumberPotTurns = value;
+                if (value == m_eNumberPotTurns) return;
+                m_eNumberPotTurns = value;
                 OnPropertyChanged(value);
             }
         }
