@@ -151,7 +151,7 @@ namespace WPILib
             try
             {
                 Monitor.Enter(m_mutex);
-                Monitor.Wait(timeout);
+                Monitor.Wait(m_mutex, timeout);
             }
             finally 
             {
