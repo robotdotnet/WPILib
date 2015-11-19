@@ -23,11 +23,6 @@ namespace WPILib
             m_testInitialized = false;
         }
 
-        ///<inheritdoc/>
-        protected override void Prestart()
-        {
-        }
-
         /// <summary>
         /// Provide an alternate "main loop" via startCompetition().
         /// </summary>
@@ -37,6 +32,7 @@ namespace WPILib
 
             RobotInit();
 
+            // Tell the DS that the robot is ready to be enabled.
             HALNetworkCommunicationObserveUserProgramStarting();
 
             LiveWindow.SetEnabled(false);
@@ -120,7 +116,6 @@ namespace WPILib
                     }
                     if (NextPeriodReady)
                     {
-                        //HAL.NetworkCommunicationObserveUserProgramTeleop();
                         HALNetworkCommunicationObserveUserProgramTeleop();
                         TeleopPeriodic();
                     }
@@ -132,7 +127,17 @@ namespace WPILib
 
         private bool NextPeriodReady => m_ds.NewControlData;
 
-
+        /// <summary>
+        /// Robot-wide initialization code should go here.
+        /// </summary>
+        /// <remarks>
+        /// Users should override this method for default Robot-wide initialiation which will be called
+        /// when the robot is first powered on. It will be called exactly one time.
+        /// <para></para>
+        /// Warning: The Driver Station "Robot Code" light and FMS "Robot Ready" indicators will be off until
+        /// <see cref="RobotInit"/> exits. Code in <see cref="RobotInit"/> that waits for enable will cause
+        /// the robot to never indicate that the code is ready, causing the robot to be bypassed in a match.
+        /// </remarks>
         public virtual void RobotInit()
         {
             WriteLine($"Default {nameof(IterativeRobot)}.{nameof(RobotInit)} method... Overload me!");

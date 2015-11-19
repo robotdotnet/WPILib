@@ -70,14 +70,6 @@ namespace WPILib
         public abstract void StartCompetition();
 
         /// <summary>
-        /// This function is called right before <see cref="StartCompetition"/>
-        /// </summary>
-        protected virtual void Prestart()
-        {
-            HALNetworkCommunicationObserveUserProgramStarting();
-        }
-
-        /// <summary>
         /// Common initialization for all robot programs.
         /// </summary>
         public static void InitializeHardwareConfiguration()
@@ -139,7 +131,6 @@ namespace WPILib
                     //Otherwise just initialize the type we were passed.
                     s_robot = (RobotBase) (Activator.CreateInstance(robotType));
                 }
-                s_robot.Prestart();
             }
             catch (Exception ex)
             {

@@ -2,6 +2,7 @@
 using System.Threading;
 using HAL_Base;
 using WPILib.LiveWindows;
+using static HAL_Base.HAL;
 
 namespace WPILib
 {
@@ -31,12 +32,16 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Robot-wide initialization should go here.
+        /// Robot-wide initialization code should go here.
         /// </summary>
-        /// <remarks>Users thous override this method for default
-        /// Robot-wide initialization which will be called when the robot
-        /// is first powered on.
-        /// <para/>Called exactly 1 time when the competition starts.</remarks>
+        /// <remarks>
+        /// Users should override this method for default Robot-wide initialiation which will be called
+        /// when the robot is first powered on. It will be called exactly one time.
+        /// <para></para>
+        /// Warning: The Driver Station "Robot Code" light and FMS "Robot Ready" indicators will be off until
+        /// <see cref="RobotInit"/> exits. Code in <see cref="RobotInit"/> that waits for enable will cause
+        /// the robot to never indicate that the code is ready, causing the robot to be bypassed in a match.
+        /// </remarks>
         protected virtual void RobotInit()
         {
             Console.WriteLine("Default Init Running");
@@ -113,12 +118,17 @@ namespace WPILib
         public override void StartCompetition()
         {
             HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Sample);
+
+            RobotInit();
+
+            // Tell the DS that the robot is ready to be enabled.
+            HALNetworkCommunicationObserveUserProgramStarting();
+
             RobotMain();
 
             if (!m_robotMainOverriden)
             {
                 LiveWindow.SetEnabled(false);
-                RobotInit();
                 while (true)
                 {
                     if (IsDisabled)

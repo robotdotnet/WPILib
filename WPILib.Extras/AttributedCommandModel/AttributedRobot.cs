@@ -107,6 +107,15 @@ namespace WPILib.Extras.AttributedCommandModel
         /// <summary>
         /// Override this method to add additional code that executes after <see cref="_RobotInit"/>.
         /// </summary>
+        /// <remarks>
+        /// Robot-wide initialization code should go here.
+        /// Users should override this method for default Robot-wide initialiation which will be called
+        /// when the robot is first powered on. It will be called exactly one time.
+        /// <para></para>
+        /// Warning: The Driver Station "Robot Code" light and FMS "Robot Ready" indicators will be off until
+        /// <see cref="RobotInit"/> exits. Code in <see cref="RobotInit"/> that waits for enable will cause
+        /// the robot to never indicate that the code is ready, causing the robot to be bypassed in a match.
+        /// </remarks>
         public virtual void RobotInit()
         {
 
