@@ -56,17 +56,6 @@ namespace HAL_Base
         }
 
         public static HALTypes HALType = HALTypes.None;
-        /*
-        //These are used to get us a copy of the dictionary from the simulator.
-        //This is so we can debug it, because we cannot look at private members
-        //of a reflected assembly.
-        public delegate void GetData(out Dictionary<dynamic, dynamic> a, out Dictionary<dynamic, dynamic> b,
-            out Dictionary<dynamic, dynamic> c);
-
-        public static Dictionary<dynamic, dynamic> halData;
-        public static Dictionary<dynamic, dynamic> halInData;
-        public static Dictionary<dynamic, dynamic> halDSData;
-        */
 
 
         /// <summary>
@@ -142,19 +131,9 @@ namespace HAL_Base
                 int status = 0;
                 HALDigital.InitializeDigitalPort(GetPort(0), ref status);
 
-                //If we are simulator, grab a local copy of the dictionary so we can debug its values.
+                //If we are simulator, start the simulator
                 if (HALType == HALTypes.Simulation)
                 {
-                    string className = "SimData";
-                    var types = HALAssembly.GetTypes();
-                    var q = from t in types where t.IsClass && t.Name == className select t;
-                    Type type = HALAssembly.GetType(q.ToList()[0].FullName);
-
-                    //GetData data = (GetData)Delegate.CreateDelegate(typeof(GetData), type.GetMethod("GetData"));
-
-                    //data(out halData, out halInData, out halDSData);
-
-                    //Attempt to start a simulator if one exists.
                     StartSimulator();
                 }
             }
@@ -162,11 +141,37 @@ namespace HAL_Base
 
         private static void StartSimulator()
         {
+            //Check to see if we selected an alternate directory.
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+
+            string loadDirectory = Directory.GetCurrentDirectory();
+
+            //Check for alternate directory
+            if (commandLineArgs.Length > 1)
+            {
+                foreach (var arg in commandLineArgs)
+                {
+                    if (arg.Contains("--simdir"))
+                    {
+                        //Use this as the simulator directory.
+                        int firstColonIndex = arg.IndexOf(':');
+                        if (firstColonIndex == -1) break;
+                        string path = arg.Substring(firstColonIndex + 1);
+                        if (Directory.Exists(path))
+                        {
+                            loadDirectory = path;
+                            break;
+                        }
+                    }
+                }
+            }
+
+
             //Get a list of all dll files
             string[] dllFileNames = null;
-            if (Directory.Exists(Directory.GetCurrentDirectory()))
+            if (Directory.Exists(loadDirectory))
             {
-                dllFileNames = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.dll");
+                dllFileNames = Directory.GetFiles(loadDirectory, "*.dll");
             }
 
             //If files not found, just return

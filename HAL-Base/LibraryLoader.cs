@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace HAL_Base
@@ -9,6 +10,7 @@ namespace HAL_Base
         IntPtr GetProcAddress(IntPtr dllHandle, string name);
     }
 
+    [ExcludeFromCodeCoverage]
     public class WindowsLibraryLoader : ILibraryLoader
     {
         IntPtr ILibraryLoader.LoadLibrary(string filename)
@@ -27,18 +29,26 @@ namespace HAL_Base
             return addr;
         }
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32")]
         private static extern IntPtr LoadLibrary(string fileName);
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetProcAddress(IntPtr handle, string procedureName);
     }
 
+    [ExcludeFromCodeCoverage]
     public class LinuxLibraryLoader : ILibraryLoader
     {
         IntPtr ILibraryLoader.LoadLibrary(string filename)
         {
-            return dlopen(filename, 2);
+            IntPtr dl = dlopen(filename, 2);
+            if (dl != IntPtr.Zero) return dl;
+            IntPtr err = dlerror();
+            if (err != IntPtr.Zero)
+            {
+                throw new DllNotFoundException($"Library Could not be opened: {Marshal.PtrToStringAnsi(err)}");
+            }
+            return dl;
         }
 
         IntPtr ILibraryLoader.GetProcAddress(IntPtr dllHandle, string name)
@@ -63,11 +73,19 @@ namespace HAL_Base
         private static extern IntPtr dlerror();
     }
 
+    [ExcludeFromCodeCoverage]
     public class RoboRioLibraryLoader : ILibraryLoader
     {
         IntPtr ILibraryLoader.LoadLibrary(string filename)
         {
-            return dlopen(filename, 2);
+            IntPtr dl = dlopen(filename, 2);
+            if (dl != IntPtr.Zero) return dl;
+            IntPtr err = dlerror();
+            if (err != IntPtr.Zero)
+            {
+                throw new DllNotFoundException($"Library Could not be opened: {Marshal.PtrToStringAnsi(err)}");
+            }
+            return dl;
         }
 
         IntPtr ILibraryLoader.GetProcAddress(IntPtr dllHandle, string name)
