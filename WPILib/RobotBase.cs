@@ -80,6 +80,15 @@ namespace WPILib
             HLUsageReporting.Implementation = new HardwareHLUsageReporting();
         }
 
+        /// <summary>
+        /// Sets the simulator type directly to be used. Note this must be called before <see cref="Main"/>.
+        /// </summary>
+        /// <param name="simType">The type of simulator to be used (must inherit from <see cref="ISimulator"/>.</param>
+        public static void SetSimulator(Type simType)
+        {
+            HALSimulatorSelector.SimulatorType = simType;
+        }
+
         private static RobotBase s_robot;
         /// <summary>
         /// Starting point for robot applications. You can provide either an assembly, or a type. 

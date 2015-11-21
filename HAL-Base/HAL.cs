@@ -8,6 +8,11 @@ using System.Threading;
 
 namespace HAL_Base
 {
+    internal static class HALSimulatorSelector
+    {
+        public static Type SimulatorType { get; set; }
+    }
+
     public partial class HAL
     {
         /// <summary>
@@ -134,9 +139,31 @@ namespace HAL_Base
                 //If we are simulator, start the simulator
                 if (HALType == HALTypes.Simulation)
                 {
-                    StartSimulator();
+                    Type simType = HALSimulatorSelector.SimulatorType;
+                    if (simType != null)
+                    {
+                        if (simType.GetInterfaces().Contains(typeof (ISimulator)))
+                        {
+                            StartSimulator(simType);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Simulator type given did not inherit from ISimulator. Loading from plugins directory");
+                            StartSimulator();
+                        }
+                    }
+                    else
+                    {
+                        StartSimulator();
+                    }
                 }
             }
+        }
+
+        private static void StartSimulator(Type type)
+        {
+            ISimulator sim = (ISimulator) Activator.CreateInstance(type);
+            StartSimulator(sim);
         }
 
         private static void StartSimulator()
@@ -204,7 +231,17 @@ namespace HAL_Base
                 return;
 
             //Create an instance of all found ISimulators
-            var simulators = simulatorTypes.Select(type => (ISimulator)Activator.CreateInstance(type)).ToList();
+            List<ISimulator> simulators;
+            try
+            {
+                simulators = simulatorTypes.Select(type => (ISimulator)Activator.CreateInstance(type)).ToList();
+            }
+            catch (MissingMethodException)
+            {
+                Console.WriteLine("Could not properly open one of the ISimulators. Make sure they all have parameterless constructors.");
+                return;
+            }
+
 
             //If only 1 was found, start it.
             if (simulatorTypes.Count == 1)
