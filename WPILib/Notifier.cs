@@ -55,8 +55,8 @@ namespace WPILib
                 {
                     int status = 0;
                     ProcessCallback = ProcessQueue;
-                    s_notifier = InitializeNotifier(ProcessQueue, ref status);
-                    CheckStatus(status);
+                    s_notifier = InitializeNotifier(ProcessQueue, IntPtr.Zero, ref status);
+					CheckStatus(status)
                 }
                 s_refCount++;
             }
@@ -85,7 +85,7 @@ namespace WPILib
                 {
                     int status = 0;
                     ProcessCallback = ProcessQueue;
-                    s_notifier = InitializeNotifier(ProcessCallback, ref status);
+                    s_notifier = InitializeNotifier(ProcessCallback, IntPtr.Zero, ref status);
                 }
                 s_refCount++;
             }

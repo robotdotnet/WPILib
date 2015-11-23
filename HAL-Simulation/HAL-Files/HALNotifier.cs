@@ -23,10 +23,14 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, ref int status)
+        public static IntPtr initializeNotifier(Action<uint, IntPtr> ProcessQueue, IntPtr param, ref int status)
         {
             status = 0;
-            Notifier notifier = new Notifier {Callback = ProcessQueue};
+            Notifier notifier = new Notifier
+            {
+                Callback = ProcessQueue,
+                Parameter = param
+            };
             Notifiers.Add(notifier);
             return (IntPtr)Notifiers.IndexOf(notifier);
         }
@@ -36,12 +40,12 @@ namespace HAL_Simulator
         {
             status = 0;
             Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
-            if (notifier.alarm != null && notifier.alarm.IsAlive)
+            if (notifier.Alarm != null && notifier.Alarm.IsAlive)
             {
-                notifier.alarm.Abort();
+                notifier.Alarm.Abort();
             }
-            notifier.alarm?.Join();
-            notifier.alarm = null;
+            notifier.Alarm?.Join();
+            notifier.Alarm = null;
             notifier.Callback = null;
             Notifiers.Remove(notifier);
         }
@@ -52,12 +56,12 @@ namespace HAL_Simulator
         {
             status = 0;
             Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
-            if (notifier.alarm != null && notifier.alarm.IsAlive)
+            if (notifier.Alarm != null && notifier.Alarm.IsAlive)
             {
-                notifier.alarm.Abort();
+                notifier.Alarm.Abort();
             }
-            notifier.alarm?.Join();
-            notifier.alarm = new Thread(() =>
+            notifier.Alarm?.Join();
+            notifier.Alarm = new Thread(() =>
             {
                 while (triggerTime > SimHooks.GetFPGATime())
                 {
@@ -66,7 +70,7 @@ namespace HAL_Simulator
                     Console.WriteLine("Callback Null");
                 notifier.Callback?.Invoke(0, IntPtr.Zero);
             });
-            notifier.alarm.Start();
+            notifier.Alarm.Start();
         }
     }
 }
