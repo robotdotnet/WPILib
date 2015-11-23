@@ -15,15 +15,29 @@ namespace WPILib.Tests.SpecScaners
         [Test]
         public void TestHALBaseMapsToHALSim()
         {
-            FieldInfo[] fields = typeof(HAL).GetFields();
+            // Load assembly with HAL Base
+            Assembly HalBaseAssembly = typeof(HAL_Base.HAL).Assembly;
 
-            List<string> nullDelegateFields = (from fieldInfo in fields where fieldInfo.FieldType.IsSubclassOf(typeof (MulticastDelegate)) let x = fieldInfo.GetValue(null) where x == null select fieldInfo.Name).ToList();
-            foreach (var nullDelegateField in nullDelegateFields)
+            List<string> nullTypes = new List<string>();
+
+            foreach(Type type in HalBaseAssembly.GetTypes())
             {
-                Console.WriteLine(nullDelegateField);
+                if (!type.Name.ToLower().Contains("hal")) continue;
+
+                FieldInfo[] fields = type.GetFields();
+
+                List<string> nullDelegateFields = (from fieldInfo in fields where fieldInfo.FieldType.IsSubclassOf(typeof(MulticastDelegate)) let x = fieldInfo.GetValue(null) where x == null select fieldInfo.Name).ToList();
+                foreach (var nullDelegateField in nullDelegateFields)
+                {
+                    nullTypes.Add(type.Name + ": " + nullDelegateField);
+                }
             }
 
-            Assert.IsTrue(nullDelegateFields.Count == 0);
+            foreach(var s in nullTypes)
+            {
+                Console.WriteLine(s);
+            }
+            Assert.That(nullTypes.Count == 0);            
         }
 
 
