@@ -68,7 +68,7 @@ namespace HAL_Simulator
                 }
                 if (notifier.Callback == null)
                     Console.WriteLine("Callback Null");
-                notifier.Callback?.Invoke(0, IntPtr.Zero);
+                notifier.Callback?.Invoke((uint)SimHooks.GetFPGATime(), IntPtr.Zero);
             });
             notifier.Alarm.Start();
         }

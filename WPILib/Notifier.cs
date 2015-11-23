@@ -267,15 +267,16 @@ namespace WPILib
         /// </summary>
         /// <param name="mask"></param>
         /// <param name="param"></param>
-        static private void ProcessQueue(uint mask, IntPtr param)
+        static private void ProcessQueue(uint currentTimeInt, IntPtr param)
         {
             Notifier current;
             while (true)
             {
                 lock (s_queueMutex)
                 {
-                    double currentTime = GetFPGATimestamp();
-                    if (s_timerQueue.Count == 0)
+                    double currentTime = currentTimeInt * 1.0e-6;
+                    current = s_timerQueueHead;
+                    if (current == null || current.m_expirationTime > currentTime)
                     {
                         break;
                     }
