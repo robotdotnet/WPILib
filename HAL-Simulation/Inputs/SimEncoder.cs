@@ -15,7 +15,6 @@ namespace HAL_Simulator.Inputs
 
     public class SimEncoder : IServoFeedback
     {
-        //public  NotifyDict<dynamic, dynamic> Dictionary { get; private set; } = null;
         internal EncoderData EncoderData { get; private set; } = null;
 
         public bool IsEncoder { get; private set; } = true;

@@ -77,6 +77,8 @@
     <Compile Include="HAL-Files\LoaderUtilities.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />
     <Compile Include="Mechanisms\AngularEncoderMechanism.cs" />
+    <Compile Include="Mechanisms\DrivetrainMechanism.cs" />
+    <Compile Include="Mechanisms\DriveWheelMechanism.cs" />
     <Compile Include="Mechanisms\LinearEncoderMechanism.cs" />
     <Compile Include="Mechanisms\LinearPotentiometerMechanism.cs" />
     <Compile Include="Mechanisms\ShooterWheelMechanism.cs" />
@@ -111,7 +113,7 @@
     <Compile Include="Outputs\SimPWMController.cs" />
     <Compile Include="Outputs\SimRelay.cs" />
     <Compile Include="Mechanisms\AngularPotentiometerMechanism.cs" />
-    <Compile Include="Mechanisms\AbstractFeedbackMechanism.cs" />
+    <Compile Include="Mechanisms\FeedbackMechanismBase.cs" />
     <Compile Include="SimHooks.cs" />
     <Compile Include="HAL-Files\PortConverters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -3,7 +3,7 @@ using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
 {
-    public class AngularPotentiometerMechanism : AbstractFeedbackMechanism
+    public class AngularPotentiometerMechanism : FeedbackMechanismBase
     {
         public AngularPotentiometerMechanism(ISimSpeedController input, SimAnalogInput output, DCMotor model, 
             double startPercentage, double potentiometerRadians, bool invertInput)

@@ -4,7 +4,7 @@ using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
 {
-    public class LinearEncoderMechanism : AbstractFeedbackMechanism
+    public class LinearEncoderMechanism : FeedbackMechanismBase
     {
         private double m_offset;
         public LinearEncoderMechanism(ISimSpeedController input, SimEncoder output, double encoderCPR, DCMotor model,

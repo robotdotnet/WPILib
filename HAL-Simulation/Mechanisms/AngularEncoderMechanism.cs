@@ -7,7 +7,7 @@ namespace HAL_Simulator.Mechanisms
     /// <summary>
     /// This class is used to create a simulated arm that is driven by an encoder.
     /// </summary>
-    public class AngularEncoderMechanism : AbstractFeedbackMechanism
+    public class AngularEncoderMechanism : FeedbackMechanismBase
     {
         /// <summary>
         /// Gets the current radians of the system offset by the homing location

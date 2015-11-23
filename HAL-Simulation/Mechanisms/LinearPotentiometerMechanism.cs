@@ -4,7 +4,7 @@ using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
 {
-    public class LinearPotentiometerMechanism : AbstractFeedbackMechanism
+    public class LinearPotentiometerMechanism : FeedbackMechanismBase
     {
         //String travel and Spool Radius in meters
         public LinearPotentiometerMechanism(ISimSpeedController input, SimAnalogInput output, DCMotor model,

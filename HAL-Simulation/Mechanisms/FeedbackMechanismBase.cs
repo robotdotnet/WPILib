@@ -3,7 +3,7 @@ using HAL_Simulator.Outputs;
 
 namespace HAL_Simulator.Mechanisms
 {
-    public abstract class AbstractFeedbackMechanism
+    public abstract class FeedbackMechanismBase
     {
         protected ISimSpeedController m_input;
         protected IServoFeedback m_output;
@@ -16,6 +16,8 @@ namespace HAL_Simulator.Mechanisms
         public double CurrentMeters { get; protected set; }
 
         public double CurrentRadians { get; protected set; } //current radians
+
+        public double CurrentRadiansPerSecond { get; protected set; } // Current Radians Per Second
 
         public double RadiansPerMeter { get; protected set; } = 1.0; ///Set to 1.0 so it doesnt divide by 0
 
@@ -61,8 +63,12 @@ namespace HAL_Simulator.Mechanisms
                 CurrentRadians = m_minRadians;
             }
             CurrentMeters = CurrentRadians / RadiansPerMeter;
+            CurrentRadiansPerSecond = radiansPerSecondAtPWMValue;
+
+            if (m_output == null) return;
 
             double outputValue = CurrentRadians;
+
             m_output.SetPosition(outputValue * m_scaler);
 
             double output;
