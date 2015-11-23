@@ -256,6 +256,39 @@ namespace HAL_Base
         public delegate void SpiSetSemaphoreDelegate(byte port, IntPtr semaphore);
         public static SpiSetSemaphoreDelegate SpiSetSemaphore;
 
+
+        public delegate void SpiInitAccumulatorDelegate(byte port, uint period, uint cmd, byte xferSize,
+            uint validMask, uint validValue, byte dataShift, byte dataSize, [MarshalAs(UnmanagedType.I1)]bool isSigned,
+            [MarshalAs(UnmanagedType.I1)]bool bigEndian, ref int status);
+        public static SpiInitAccumulatorDelegate SpiInitAccumulator;
+
+        public delegate void SpiFreeAccumulatorDelegate(byte port, ref int status);
+        public static SpiFreeAccumulatorDelegate SpiFreeAccumulator;
+
+        public delegate void SpiResetAccumulatorDelegate(byte port, ref int status);
+        public static SpiResetAccumulatorDelegate SpiResetAccumulator;
+
+        public delegate void SpiSetAccumulatorCenterDelegate(byte port, int center, ref int status);
+        public static SpiSetAccumulatorCenterDelegate SpiSetAccumulatorCenter;
+
+        public delegate void SpiSetAccumulatorDeadbandDelegate(byte port, int deadband, ref int status);
+        public static SpiSetAccumulatorDeadbandDelegate SpiSetAccumulatorDeadband;
+
+        public delegate int SpiGetAccumulatorLastValueDelegate(byte port, ref int status);
+        public static SpiGetAccumulatorLastValueDelegate SpiGetAccumulatorLastValue;
+
+        public delegate long SpiGetAccumulatorValueDelegate(byte port, ref int status);
+        public static SpiGetAccumulatorValueDelegate SpiGetAccumulatorValue;
+
+        public delegate uint SpiGetAccumulatorCountDelegate(byte port, ref int status);
+        public static SpiGetAccumulatorCountDelegate SpiGetAccumulatorCount;
+
+        public delegate double SpiGetAccumulatorAverageDelegate(byte port, ref int status);
+        public static SpiGetAccumulatorAverageDelegate SpiGetAccumulatorAverage;
+
+        public delegate void SpiGetAccumulatorOutputDelegate(byte port, ref long value, ref uint count, ref int status);
+        public static SpiGetAccumulatorOutputDelegate SpiGetAccumulatorOutput;
+
         public delegate void I2CInitializeDelegate(byte port, ref int status);
         public static I2CInitializeDelegate I2CInitialize;
 

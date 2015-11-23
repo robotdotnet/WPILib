@@ -199,5 +199,135 @@ namespace WPILib
             Array.Copy(receivedBuffer, dataReceived, Math.Min(receivedBuffer.Length, dataReceived.Length));
             return retVal;
         }
+
+        /// <summary>
+        /// Initialize the accumulator.
+        /// </summary>
+        /// <param name="period">Time between reads.</param>
+        /// <param name="cmd">SPI command to send to request data</param>
+        /// <param name="xferSize">SPI transfer size, in bytes</param>
+        /// <param name="validMask">Mask to apply to received data for validity checking.</param>
+        /// <param name="validValue">After validMask is applied, required matching value for
+        /// validity checking.</param>
+        /// <param name="dataShift">Bit shift to apply to received data to get actual data value</param>
+        /// <param name="dataSize">Size (int bits) of data field</param>
+        /// <param name="isSigned">Is data field signed?</param>
+        /// <param name="bigEndian">Is device big endian?</param>
+        public void InitAccumulator(double period, uint cmd, int xferSize, uint validMask, uint validValue,
+            int dataShift, int dataSize, bool isSigned, bool bigEndian)
+        {
+            int status = 0;
+            SpiInitAccumulator((byte)m_port, (uint)(period * 1.0e6), cmd, (byte)xferSize, validMask,
+                validValue, (byte)dataShift, (byte)dataSize, isSigned, bigEndian, ref status);
+            CheckStatus(status);
+        }
+
+        /// <summary>
+        /// Frees the accumulator.
+        /// </summary>
+        public void FreeAccumulator()
+        {
+            int status = 0;
+            SpiFreeAccumulator((byte)m_port, ref status);
+            CheckStatus(status);
+        }
+
+        /// <summary>
+        /// Resets the accumulator to zero.
+        /// </summary>
+        public void ResetAccumulator()
+        {
+            int status = 0;
+            SpiResetAccumulator((byte)m_port, ref status);
+            CheckStatus(status);
+        }
+
+        /// <summary>
+        /// Sets the center value of the accumulator.
+        /// </summary>
+        /// <remarks>
+        /// The center value is subtracted from each value before it is added to the 
+        /// accumulator. This is used for the center value of devices like gyros and
+        /// accelerometers to make integration work and to take the device offset
+        /// into account when integrating.
+        /// </remarks>
+        /// <param name="center">The center value to set.</param>
+        public void SetAccumulatorCenter(int center)
+        {
+            int status = 0;
+            SpiSetAccumulatorCenter((byte)m_port, center, ref status);
+            CheckStatus(status);
+        }
+
+        /// <summary>
+        /// Sets the accumulator's deadband.
+        /// </summary>
+        /// <param name="deadband">The deadband to set.</param>
+        public void SetAccumulatorDeadband(int deadband)
+        {
+            int status = 0;
+            SpiSetAccumulatorDeadband((byte)m_port, deadband, ref status);
+            CheckStatus(status);
+        }
+
+        /// <summary>
+        /// Read the last value read by the accumulator engine.
+        /// </summary>
+        /// <returns>The last value from the accumulator</returns>
+        public int GetAccumulatorLastValue()
+        {
+            int status = 0;
+            int retVal = SpiGetAccumulatorLastValue((byte)m_port, ref status);
+            CheckStatus(status);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Read the accumulated value.
+        /// </summary>
+        /// <returns>The 64-bit value accumulated since the last Reset().</returns>
+        public long GetAccumulatorValue()
+        {
+            int status = 0;
+            long retVal = SpiGetAccumulatorValue((byte)m_port, ref status);
+            CheckStatus(status);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Read the number of accumulated values.
+        /// </summary>
+        /// <returns>The number of times samples from the channel were accumulated.</returns>
+        public uint GetAccumulatorCount()
+        {
+            int status = 0;
+            uint retVal = SpiGetAccumulatorCount((byte)m_port, ref status);
+            CheckStatus(status);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Read the average of the accumulated value.
+        /// </summary>
+        /// <returns>The accumulated average value (value / count)</returns>
+        public double GetAccumulatorAverage()
+        {
+            int status = 0;
+            double retVal = SpiGetAccumulatorAverage((byte)m_port, ref status);
+            CheckStatus(status);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Read the accumulated value and the number of accumulated values atomically
+        /// </summary>
+        /// <param name="value">The 64 bit accumulated output</param>
+        /// <param name="count">The number of accumulation cycles</param>
+        public void GetAccumulatorOutput(ref long value, ref uint count)
+        {
+            int status = 0;
+            SpiGetAccumulatorOutput((byte)m_port, ref value, ref count, ref status);
+            CheckStatus(status);
+        }
     }
 }

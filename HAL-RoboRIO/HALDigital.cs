@@ -161,6 +161,22 @@ namespace HAL_RoboRIO
 
             HAL_Base.HALDigital.SpiSetHandle = (HAL_Base.HALDigital.SpiSetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetHandleDelegate));
 
+
+
+            HAL_Base.HALDigital.SpiInitAccumulator = (HAL_Base.HALDigital.SpiInitAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiInitAccumulatorDelegate));
+            HAL_Base.HALDigital.SpiFreeAccumulator = (HAL_Base.HALDigital.SpiFreeAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiFreeAccumulatorDelegate));
+            HAL_Base.HALDigital.SpiResetAccumulator = (HAL_Base.HALDigital.SpiResetAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiResetAccumulatorDelegate));
+            HAL_Base.HALDigital.SpiSetAccumulatorCenter = (HAL_Base.HALDigital.SpiSetAccumulatorCenterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetAccumulatorCenterDelegate));
+            HAL_Base.HALDigital.SpiSetAccumulatorDeadband = (HAL_Base.HALDigital.SpiSetAccumulatorDeadbandDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetAccumulatorDeadbandDelegate));
+            HAL_Base.HALDigital.SpiGetAccumulatorLastValue = (HAL_Base.HALDigital.SpiGetAccumulatorLastValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorLastValueDelegate));
+            HAL_Base.HALDigital.SpiGetAccumulatorValue = (HAL_Base.HALDigital.SpiGetAccumulatorValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorValueDelegate));
+
+            HAL_Base.HALDigital.SpiGetAccumulatorCount = (HAL_Base.HALDigital.SpiGetAccumulatorCountDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorCountDelegate));
+            HAL_Base.HALDigital.SpiGetAccumulatorAverage = (HAL_Base.HALDigital.SpiGetAccumulatorAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorAverageDelegate));
+            HAL_Base.HALDigital.SpiGetAccumulatorOutput = (HAL_Base.HALDigital.SpiGetAccumulatorOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorOutputDelegate));
+
+
+
             HAL_Base.HALDigital.I2CInitialize = (HAL_Base.HALDigital.I2CInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CInitialize"), typeof(HAL_Base.HALDigital.I2CInitializeDelegate));
 
             HAL_Base.HALDigital.I2CTransaction = (HAL_Base.HALDigital.I2CTransactionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CTransaction"), typeof(HAL_Base.HALDigital.I2CTransactionDelegate));
