@@ -122,8 +122,7 @@ namespace WPILib.Tests.SpecScaners
 
                     if (methodSyntax.AttributeLists.Count != 0)
                     {
-                        if (methodSyntax.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable)
-                            && methodSyntax.ReturnType.ToString().Contains("string"))
+                        if (methodSyntax.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable))
                         {
                             //We can ignore it.
                         }
@@ -146,8 +145,7 @@ namespace WPILib.Tests.SpecScaners
                     {
                         if (parameter.AttributeLists.Count != 0)
                         {
-                            if (parameter.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable)
-                                && parameter.Type.ToString().Contains("string"))
+                            if (parameter.AttributeLists[0].Attributes[0].Name.ToString() == nameof(HALAllowNonBlittable))
                             {
                                 //We can ignore it.
                             }
