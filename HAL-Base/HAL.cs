@@ -96,19 +96,20 @@ namespace HAL_Base
                         break;
                 }
 
-                //Load our HAL assembly
-                HALAssembly = Assembly.LoadFrom(asm);
-
+                try
                 {
-                    //Find our initialize function
-                    string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-                    var types = HALAssembly.GetTypes();
-                    var q = from t in types where t.IsClass && t.Name == className select t;
-                    Type type = HALAssembly.GetType(q.ToList()[0].FullName);
-                    //Initialize our delegates. The InitializeImpl code need to assign all delegates.
+                    HALAssembly = Assembly.LoadFrom(asm);
+                }
+                catch (FileNotFoundException)
+                {
+                    string assemblyFile = (new System.Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath;
+                    assemblyFile = Path.GetDirectoryName(assemblyFile);
+                    assemblyFile += Path.DirectorySeparatorChar + asm;
+
                     try
                     {
-                        type.GetMethod("InitializeImpl").Invoke(null, null);
+                        //Load our HAL assembly
+                        HALAssembly = Assembly.LoadFrom(assemblyFile);
                     }
                     catch (Exception e)
                     {
@@ -117,10 +118,27 @@ namespace HAL_Base
                         Console.WriteLine(e.StackTrace);
                         Environment.Exit(1);
                     }
+                    
                 }
 
 
-
+                //Find our initialize function
+                string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
+                var types = HALAssembly.GetTypes();
+                var q = from t in types where t.IsClass && t.Name == className select t;
+                Type type = HALAssembly.GetType(q.ToList()[0].FullName);
+                //Initialize our delegates. The InitializeImpl code need to assign all delegates.
+                try
+                {
+                    type.GetMethod("InitializeImpl").Invoke(null, null);
+                }
+                catch (Exception e)
+                {
+                    //If our loading ever causes an exception, print it, print the stack trace, and kill the program.
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                    Environment.Exit(1);
+                }
 
                 var rv = HALInitialize(mode, null);
                 if (rv != 1)
@@ -137,7 +155,7 @@ namespace HAL_Base
             }
         }
 
-        
+
 
         public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
             string feature = null)
