@@ -187,6 +187,21 @@ namespace WPILib.Tests
             throw new NotImplementedException();
         }
 
+        public bool PutRaw(string key, byte[] value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] GetRaw(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public byte[] GetRaw(string key, byte[] defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddTableListenerEx(ITableListener listener, NotifyFlags flags)
         {
             throw new NotImplementedException();
