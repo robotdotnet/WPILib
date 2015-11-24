@@ -118,39 +118,11 @@ namespace HAL_Simulator
 
         private static void StartSimulator(string loadDirectory)
         {
-            /*
-            //Check to see if we selected an alternate directory.
-            string[] commandLineArgs = Environment.GetCommandLineArgs();
-
-            string loadDirectory = Directory.GetCurrentDirectory();
-
-            //Check for alternate directory
-            if (commandLineArgs.Length > 1)
-            {
-                foreach (var arg in commandLineArgs)
-                {
-                    if (arg.Contains("--simdir"))
-                    {
-                        //Use this as the simulator directory.
-                        int firstColonIndex = arg.IndexOf(':');
-                        if (firstColonIndex == -1) break;
-                        string path = arg.Substring(firstColonIndex + 1);
-                        if (Directory.Exists(path))
-                        {
-                            loadDirectory = path;
-                            break;
-                        }
-                    }
-                }
-            }
-            */
-
-
-            //Get a list of all dll files
+            //Get a list of all files
             string[] dllFileNames = null;
             if (Directory.Exists(loadDirectory))
             {
-                dllFileNames = Directory.GetFiles(loadDirectory, "*.dll");
+                dllFileNames = Directory.GetFiles(loadDirectory);
             }
 
             //If files not found, just return
@@ -159,7 +131,33 @@ namespace HAL_Simulator
 
             //Load all assemblies in folder
             var assemblies = new List<Assembly>(dllFileNames.Length);
-            assemblies.AddRange(dllFileNames.Where(name => new FileInfo(name).Extension == ".dll").Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
+
+            foreach (var s in dllFileNames)
+            {
+                //Only do anything if its a DLL or EXE.
+                string ext = Path.GetExtension(s).ToLower();
+                if (ext.Contains("dll") || ext.Contains("exe"))
+                {
+                    try
+                    {
+                        //Try to load it
+                        var asmbly = AssemblyName.GetAssemblyName(s);
+                        var asm = Assembly.Load(asmbly);
+                        if (asm != null)
+                        {
+                            assemblies.Add(asm);
+                        }
+                    }
+                    catch(Exception)
+                    {
+                        //If loading fails, its probably native. Just skip it.
+                        continue;
+                    }
+
+                }
+            }
+
+            //assemblies.AddRange(dllFileNames.Where(name => new FileInfo(name).Extension == ".dll").Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
 
             //Find all types inheriting from ISimulator
             Type simulatorType = typeof(ISimulator);
