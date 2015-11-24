@@ -8,11 +8,6 @@ using System.Threading;
 
 namespace HAL_Base
 {
-    internal static class HALSimulatorSelector
-    {
-        public static Type SimulatorType { get; set; }
-    }
-
     public partial class HAL
     {
         /// <summary>
@@ -66,8 +61,9 @@ namespace HAL_Base
         /// <summary>
         /// HAL Initialization. Must be called before any other HAL functions.
         /// </summary>
+        /// <param name="simulator">The explicit simulator to start at the proper time.</param>
         /// <param name="mode">Initialization Mode</param>
-        public static void Initialize(int mode = 0)
+        public static void Initialize(ISimulator simulator = null, int mode = 0)
         {
             //Lock this function, so that if accidentally called from multiple threads it doesn't
             //get m_initialized at the wrong value.
@@ -123,7 +119,10 @@ namespace HAL_Base
                     }
                 }
 
-                var rv = HALInitialize(mode);
+
+
+
+                var rv = HALInitialize(mode, null);
                 if (rv != 1)
                 {
                     throw new Exception($"HAL Initialize Failed with return code {rv}");
@@ -135,168 +134,10 @@ namespace HAL_Base
                 //When the HAL fixes it.
                 int status = 0;
                 HALDigital.InitializeDigitalPort(GetPort(0), ref status);
-
-                //If we are simulator, start the simulator
-                if (HALType == HALTypes.Simulation)
-                {
-                    Type simType = HALSimulatorSelector.SimulatorType;
-                    if (simType != null)
-                    {
-                        if (simType.GetInterfaces().Contains(typeof (ISimulator)))
-                        {
-                            StartSimulator(simType);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Simulator type given did not inherit from ISimulator. Loading from plugins directory");
-                            StartSimulator();
-                        }
-                    }
-                    else
-                    {
-                        StartSimulator();
-                    }
-                }
             }
         }
 
-        private static void StartSimulator(Type type)
-        {
-            ISimulator sim = (ISimulator) Activator.CreateInstance(type);
-            StartSimulator(sim);
-        }
-
-        private static void StartSimulator()
-        {
-            //Check to see if we selected an alternate directory.
-            string[] commandLineArgs = Environment.GetCommandLineArgs();
-
-            string loadDirectory = Directory.GetCurrentDirectory();
-
-            //Check for alternate directory
-            if (commandLineArgs.Length > 1)
-            {
-                foreach (var arg in commandLineArgs)
-                {
-                    if (arg.Contains("--simdir"))
-                    {
-                        //Use this as the simulator directory.
-                        int firstColonIndex = arg.IndexOf(':');
-                        if (firstColonIndex == -1) break;
-                        string path = arg.Substring(firstColonIndex + 1);
-                        if (Directory.Exists(path))
-                        {
-                            loadDirectory = path;
-                            break;
-                        }
-                    }
-                }
-            }
-
-
-            //Get a list of all dll files
-            string[] dllFileNames = null;
-            if (Directory.Exists(loadDirectory))
-            {
-                dllFileNames = Directory.GetFiles(loadDirectory, "*.dll");
-            }
-
-            //If files not found, just return
-            if (dllFileNames == null)
-                return;
-
-            //Load all assemblies in folder
-            var assemblies = new List<Assembly>(dllFileNames.Length);
-            assemblies.AddRange(dllFileNames.Where(name => new FileInfo(name).Extension == ".dll").Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
-
-            //Find all types inheriting from ISimulator
-            Type simulatorType = typeof(ISimulator);
-            ICollection<Type> simulatorTypes = new List<Type>();
-            foreach (var type in from assembly in assemblies where assembly != null select assembly.GetTypes() into types from type in types select type)
-            {
-                if (type.IsInterface || type.IsAbstract)
-                {
-                }
-                else
-                {
-                    if (type.GetInterface(simulatorType.FullName) != null)
-                    {
-                        simulatorTypes.Add(type);
-                    }
-                }
-            }
-
-            //If none were found, just return
-            if (simulatorTypes.Count == 0)
-                return;
-
-            //Create an instance of all found ISimulators
-            List<ISimulator> simulators;
-            try
-            {
-                simulators = simulatorTypes.Select(type => (ISimulator)Activator.CreateInstance(type)).ToList();
-            }
-            catch (MissingMethodException)
-            {
-                Console.WriteLine("Could not properly open one of the ISimulators. Make sure they all have parameterless constructors.");
-                return;
-            }
-
-
-            //If only 1 was found, start it.
-            if (simulatorTypes.Count == 1)
-            {
-                StartSimulator(simulators[0]);
-                return;
-            }
-
-            //Otherwise list all simulators, and select one.
-            int input = 0;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("Please select a simulator:\n");
-                for (int i = 0; i < simulators.Count; i++)
-                {
-                    Console.WriteLine($"{i}. {simulators[i].Name}");
-                }
-                Console.WriteLine($"{simulators.Count}. Skip simulator");
-                try
-                {
-                    input = Convert.ToInt32(Console.ReadLine());
-                }
-                catch (FormatException)
-                {
-                    input = -1;
-                }
-                if (input == simulators.Count)
-                {
-                    return;
-                }
-            } while ((input < 0) || (input >= simulators.Count));
-
-            StartSimulator(simulators[input]);
-        }
-
-        private static void StartSimulator(ISimulator simulator)
-        {
-            Console.WriteLine($"Starting Simulator: {simulator.Name}");
-            simulator.Initialize();
-            if (s_simThread != null)
-            {
-                s_simThread.Abort();
-                s_simThread.Join();
-            }
-            s_simThread = new Thread(simulator.Start);
-            s_simThread.Start();
-        }
-
-        private static Thread s_simThread;
-
-        public static void KillSimulator()
-        {
-            s_simThread?.Abort();
-        }
+        
 
         public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
             string feature = null)

@@ -74,19 +74,9 @@ namespace WPILib
         /// </summary>
         public static void InitializeHardwareConfiguration()
         {
-            Initialize();
             RobotState.Implementation = DriverStation.Instance;
             Timer.Implementation = new HardwareTimer();
             HLUsageReporting.Implementation = new HardwareHLUsageReporting();
-        }
-
-        /// <summary>
-        /// Sets the simulator type directly to be used. Note this must be called before <see cref="Main"/>.
-        /// </summary>
-        /// <param name="simType">The type of simulator to be used (must inherit from <see cref="ISimulator"/>.</param>
-        public static void SetSimulator(Type simType)
-        {
-            HALSimulatorSelector.SimulatorType = simType;
         }
 
         private static RobotBase s_robot;
@@ -96,10 +86,12 @@ namespace WPILib
         /// </summary>
         /// <param name="robotAssembly">The assembly the main robot class is located in.</param>
         /// <param name="robotType">The main robot class type</param>
-        public static void Main(Assembly robotAssembly, Type robotType = null)
+        /// <param name="simulator">The simulator to start.</param>
+        public static void Main(Assembly robotAssembly, Type robotType = null, ISimulator simulator = null)
         {
             try
             {
+                Initialize(simulator);
                 InitializeHardwareConfiguration();
             }
             catch (Exception e)

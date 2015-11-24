@@ -179,7 +179,9 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.HALGetBrownedOut = (HAL_Base.HAL.HALGetBrownedOutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetBrownedOut"), typeof(HAL_Base.HAL.HALGetBrownedOutDelegate));
 
-            HAL_Base.HAL.HALInitialize = (HAL_Base.HAL.HALInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALInitialize"), typeof(HAL_Base.HAL.HALInitializeDelegate));
+            HAL_Base.HAL.HALInitialize = HALInitialize;
+
+            NativeHALInitialize = (NativeHALInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALInitialize"), typeof(NativeHALInitializeDelegate));
 
             HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStarting = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramStarting"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate));
 
@@ -195,6 +197,17 @@ namespace HAL_RoboRIO
             NativeHALReport = (NativeHALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALReport"), typeof(NativeHALReportDelegate));
 
         }
+
+        private delegate int NativeHALInitializeDelegate(int mode);
+
+        private static NativeHALInitializeDelegate NativeHALInitialize;
+
+        public static int HALInitialize(int mode, ISimulator simulator)
+        {
+            return NativeHALInitialize(mode);
+        }
+
+
 
         private delegate uint NativeHALReportDelegate(byte resource, byte instanceNumber, byte context, byte[] feature);
 

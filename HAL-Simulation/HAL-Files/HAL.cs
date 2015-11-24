@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using HAL_Base;
 using HAL_Simulator.Data;
 using System.Text;
+using System.Threading;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.HALErrorConstants;
 
@@ -111,6 +115,141 @@ namespace HAL_Simulator
             HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTest = HALNetworkCommunicationObserveUserProgramTest;
             HAL_Base.HAL.HALReport = HALReport;
         }
+
+        private static void StartSimulator(string loadDirectory)
+        {
+            /*
+            //Check to see if we selected an alternate directory.
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+
+            string loadDirectory = Directory.GetCurrentDirectory();
+
+            //Check for alternate directory
+            if (commandLineArgs.Length > 1)
+            {
+                foreach (var arg in commandLineArgs)
+                {
+                    if (arg.Contains("--simdir"))
+                    {
+                        //Use this as the simulator directory.
+                        int firstColonIndex = arg.IndexOf(':');
+                        if (firstColonIndex == -1) break;
+                        string path = arg.Substring(firstColonIndex + 1);
+                        if (Directory.Exists(path))
+                        {
+                            loadDirectory = path;
+                            break;
+                        }
+                    }
+                }
+            }
+            */
+
+
+            //Get a list of all dll files
+            string[] dllFileNames = null;
+            if (Directory.Exists(loadDirectory))
+            {
+                dllFileNames = Directory.GetFiles(loadDirectory, "*.dll");
+            }
+
+            //If files not found, just return
+            if (dllFileNames == null)
+                return;
+
+            //Load all assemblies in folder
+            var assemblies = new List<Assembly>(dllFileNames.Length);
+            assemblies.AddRange(dllFileNames.Where(name => new FileInfo(name).Extension == ".dll").Select(AssemblyName.GetAssemblyName).Select(Assembly.Load));
+
+            //Find all types inheriting from ISimulator
+            Type simulatorType = typeof(ISimulator);
+            ICollection<Type> simulatorTypes = new List<Type>();
+            foreach (var type in from assembly in assemblies where assembly != null select assembly.GetTypes() into types from type in types select type)
+            {
+                if (type.IsInterface || type.IsAbstract)
+                {
+                }
+                else
+                {
+                    if (type.GetInterface(simulatorType.FullName) != null)
+                    {
+                        simulatorTypes.Add(type);
+                    }
+                }
+            }
+
+            //If none were found, just return
+            if (simulatorTypes.Count == 0)
+                return;
+
+            //Create an instance of all found ISimulators
+            List<ISimulator> simulators;
+            try
+            {
+                simulators = simulatorTypes.Select(type => (ISimulator)Activator.CreateInstance(type)).ToList();
+            }
+            catch (MissingMethodException)
+            {
+                Console.WriteLine("Could not properly open one of the ISimulators. Make sure they all have parameterless constructors.");
+                return;
+            }
+
+
+            //If only 1 was found, start it.
+            if (simulatorTypes.Count == 1)
+            {
+                StartSimulator(simulators[0]);
+                return;
+            }
+
+            //Otherwise list all simulators, and select one.
+            int input = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Please select a simulator:\n");
+                for (int i = 0; i < simulators.Count; i++)
+                {
+                    Console.WriteLine($"{i}. {simulators[i].Name}");
+                }
+                Console.WriteLine($"{simulators.Count}. Skip simulator");
+                try
+                {
+                    input = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    input = -1;
+                }
+                if (input == simulators.Count)
+                {
+                    return;
+                }
+            } while ((input < 0) || (input >= simulators.Count));
+
+            StartSimulator(simulators[input]);
+        }
+
+        private static void StartSimulator(ISimulator simulator)
+        {
+            Console.WriteLine($"Starting Simulator: {simulator.Name}");
+            simulator.Initialize();
+            if (s_simThread != null)
+            {
+                s_simThread.Abort();
+                s_simThread.Join();
+            }
+            s_simThread = new Thread(simulator.Start);
+            s_simThread.Start();
+        }
+
+        private static Thread s_simThread;
+
+        public static void KillSimulator()
+        {
+            s_simThread?.Abort();
+        }
+
 
         /// <summary>
         /// Gets a RoboRIO Port.
@@ -307,11 +446,11 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static HALControlWord HALGetControlWord()
         {
-            return new HALControlWord(DriverStation.ControlData.Enabled, 
-                DriverStation.ControlData.Autonomous, 
-                DriverStation.ControlData.Test, 
-                DriverStation.ControlData.EStop, 
-                DriverStation.ControlData.FmsAttached, 
+            return new HALControlWord(DriverStation.ControlData.Enabled,
+                DriverStation.ControlData.Autonomous,
+                DriverStation.ControlData.Test,
+                DriverStation.ControlData.EStop,
+                DriverStation.ControlData.FmsAttached,
                 DriverStation.ControlData.DsAttached);
         }
 
@@ -494,12 +633,47 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static int HALInitialize(int mode)
+        public static int HALInitialize(int mode, ISimulator simulator)
         {
             ResetHALData(true);
 
+            //If we are passed a simulator, just use it.
+            if (simulator != null)
+            {
+                StartSimulator(simulator);
+                return 1;
+            }
+            else
+            {
 
-            return 1;
+                //Check to see if we selected an alternate directory.
+                string[] commandLineArgs = Environment.GetCommandLineArgs();
+
+                string loadDirectory = Directory.GetCurrentDirectory();
+
+                //Check for alternate directory
+                if (commandLineArgs.Length > 1)
+                {
+                    foreach (var arg in commandLineArgs)
+                    {
+                        if (arg.Contains("--simdir"))
+                        {
+                            //Use this as the simulator directory.
+                            int firstColonIndex = arg.IndexOf(':');
+                            if (firstColonIndex == -1) break;
+                            string path = arg.Substring(firstColonIndex + 1);
+                            if (Directory.Exists(path))
+                            {
+                                loadDirectory = path;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                StartSimulator(loadDirectory);
+                return 1;
+            }
         }
 
         [CalledSimFunction]
