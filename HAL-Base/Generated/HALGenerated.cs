@@ -69,10 +69,6 @@ namespace HAL_Base
         public delegate int HALGetJoystickTypeDelegate(byte joystickNum);
         public static HALGetJoystickTypeDelegate HALGetJoystickType;
 
-        [return:HALAllowNonBlittable]
-        public delegate string HALGetJoystickNameDelegate(byte joystickNum);
-        public static HALGetJoystickNameDelegate HALGetJoystickName;
-
         public delegate int HALGetJoystickAxisTypeDelegate(byte joystickNum, byte axis);
         public static HALGetJoystickAxisTypeDelegate HALGetJoystickAxisType;
 

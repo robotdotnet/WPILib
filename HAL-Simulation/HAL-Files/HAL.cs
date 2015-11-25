@@ -100,7 +100,6 @@ namespace HAL_Simulator
             HAL_Base.HAL.HALGetJoystickDescriptor = HALGetJoystickDescriptor;
             HAL_Base.HAL.HALGetJoystickIsXbox = HALGetJoystickIsXbox;
             HAL_Base.HAL.HALGetJoystickType = HALGetJoystickType;
-            HAL_Base.HAL.HALGetJoystickName = HALGetJoystickName;
             HAL_Base.HAL.HALGetJoystickAxisType = HALGetJoystickAxisType;
             HAL_Base.HAL.HALSetJoystickOutputs = HALSetJoystickOutputs;
             HAL_Base.HAL.HALGetMatchTime = HALGetMatchTime;
@@ -521,30 +520,31 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
         {
-            int len;
             var stick = DriverStation.Joysticks[joystickNum];
             desc.isXbox = (byte)(stick.IsXbox);
             desc.type = stick.Type;
-            desc.name = CreateUTF8String(stick.Name, out len);//stick.Name;
+            CreateUTF8String(stick.Name, ref desc.name);//stick.Name;
             desc.axisCount = (byte)stick.Axes.Length;
             desc.buttonCount = (byte)(stick.Buttons.Length - 1);
             return 0;
         }
 
-        internal static byte[] CreateUTF8String(string str, out int size)
+        internal static void CreateUTF8String(string str, ref HALJoystickNameArray array)
         {
             if (str == null)
             {
                 str = "";
             }
-
             var bytes = Encoding.UTF8.GetByteCount(str);
 
             var buffer = new byte[bytes + 1];
-            size = bytes;
             Encoding.UTF8.GetBytes(str, 0, str.Length, buffer, 0);
             buffer[bytes] = 0;
-            return buffer;
+            int i = 0;
+            for (; i < buffer.Length; i++)
+            {
+                array[i] = buffer[i];
+            }
         }
 
         [CalledSimFunction]
@@ -559,13 +559,6 @@ namespace HAL_Simulator
         {
             var stick = DriverStation.Joysticks[joystickNum];
             return stick.Type;
-        }
-
-        [CalledSimFunction]
-        public static string HALGetJoystickName(byte joystickNum)
-        {
-            var stick = DriverStation.Joysticks[joystickNum];
-            return stick.Name;
         }
 
         [CalledSimFunction]

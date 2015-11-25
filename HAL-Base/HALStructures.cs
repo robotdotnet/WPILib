@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Text;
 
 //These are all of the structures used by HAL-RoboRIO and HAL-Simulation. 
 //Changes to these will always require a rebuild of the local HALs, which we want to avoid doing.
@@ -288,7 +290,7 @@ namespace HAL_Base
         public byte povCount;
     }
 
-    
+
 
 
     [StructLayout(LayoutKind.Sequential)]
@@ -395,6 +397,23 @@ namespace HAL_Base
     [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickNameArray
     {
+        public override string ToString()
+        {
+            var data = new List<byte>();
+            var off = 0;
+            while (true)
+            {
+                var ch = this[off++];
+                //var ch = Marshal.ReadByte(ptr, off++);
+                if (ch == 0)
+                {
+                    break;
+                }
+                data.Add(ch);
+            }
+            return Encoding.UTF8.GetString(data.ToArray());
+        }
+
         public byte byte0;
         public byte byte1;
         public byte byte2;

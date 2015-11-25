@@ -163,9 +163,6 @@ namespace HAL_RoboRIO
             HAL_Base.HAL.HALGetJoystickIsXbox = (HAL_Base.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(HAL_Base.HAL.HALGetJoystickIsXboxDelegate));
 
             HAL_Base.HAL.HALGetJoystickType = (HAL_Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(HAL_Base.HAL.HALGetJoystickTypeDelegate));
-
-            HAL_Base.HAL.HALGetJoystickName = HALGetJoystickName;
-            NativeHALGetJoystickName = (NativeHALGetJoystickNameDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickName"), typeof(NativeHALGetJoystickNameDelegate));
             //TODO: FIX THIS
             //HAL_Base.HAL.HALGetJoystickAxisType = (HAL_Base.HAL.HALGetJoystickAxisTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxisType"), typeof(HAL_Base.HAL.HALGetJoystickAxisTypeDelegate));
 
@@ -242,15 +239,6 @@ namespace HAL_RoboRIO
         public static string GetHALErrorMessage(int code)
         {
             return ReadUTF8String(NativeGetHALErrorMessage(code));
-        }
-
-        private delegate IntPtr NativeHALGetJoystickNameDelegate(byte joystickNum);
-
-        private static NativeHALGetJoystickNameDelegate NativeHALGetJoystickName;
-
-        public static string HALGetJoystickName(byte joystickNum)
-        {
-            return ReadUTF8String(NativeHALGetJoystickName(joystickNum));
         }
 
         internal static string ReadUTF8String(IntPtr ptr)

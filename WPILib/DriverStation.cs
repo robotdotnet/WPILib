@@ -481,7 +481,9 @@ namespace WPILib
                     " not available, check if controller is plugged in\n");
                 return "";
             }
-            return HAL.HALGetJoystickName((byte)stick);
+            HALJoystickDescriptor desc = new HALJoystickDescriptor();
+            HAL.HALGetJoystickDescriptor((byte) stick, ref desc);
+            return desc.name.ToString();
         }
 
         /// <summary>
