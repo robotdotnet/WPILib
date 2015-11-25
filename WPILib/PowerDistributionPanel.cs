@@ -24,55 +24,55 @@ namespace WPILib
         public double GetVoltage()
         {
             int status = 0;
-            double value = GetPDPVoltage(ref status, (byte)m_module);
+            double value = GetPDPVoltage((byte)m_module, ref status);
             return value;
         }
 
         public double GetTemperature()
         {
             int status = 0;
-            double value = GetPDPTemperature(ref status, (byte)m_module);
+            double value = GetPDPTemperature((byte)m_module, ref status);
             return value;
         }
 
         public double GetCurrent(int channel)
         {
             int status = 0;
-            double value = GetPDPChannelCurrent((byte)channel, ref status, (byte)m_module);
+            double value = GetPDPChannelCurrent((byte)channel, (byte)m_module, ref status);
             return value;
         }
 
         public double GetTotalCurrent()
         {
             int status = 0;
-            double value = GetPDPTotalCurrent(ref status, (byte)m_module);
+            double value = GetPDPTotalCurrent((byte)m_module, ref status);
             return value;
         }
 
         public double GetTotalPower()
         {
             int status = 0;
-            double value = GetPDPTotalPower(ref status, (byte)m_module);
+            double value = GetPDPTotalPower((byte)m_module, ref status);
             return value;
         }
 
         public double GetTotalEnergy()
         {
             int status = 0;
-            double value = GetPDPTotalEnergy(ref status, (byte)m_module);
+            double value = GetPDPTotalEnergy((byte)m_module, ref status);
             return value;
         }
 
         public void ResetTotalEnergy()
         {
             int status = 0;
-            ResetPDPTotalEnergy(ref status, (byte)m_module);
+            ResetPDPTotalEnergy((byte)m_module, ref status);
         }
 
         public void ClearStickyFaults()
         {
             int status = 0;
-            ClearPDPStickyFaults(ref status, (byte)m_module);
+            ClearPDPStickyFaults((byte)m_module, ref status);
         }
 
         ///<inheritdoc />

@@ -14,28 +14,28 @@ namespace HAL_Base
         public delegate void InitializePDPDelegate(int module);
         public static InitializePDPDelegate InitializePDP;
 
-        public delegate double GetPDPTemperatureDelegate(ref int status, byte module);
+        public delegate double GetPDPTemperatureDelegate(byte module, ref int status);
         public static GetPDPTemperatureDelegate GetPDPTemperature;
 
-        public delegate double GetPDPVoltageDelegate(ref int status, byte module);
+        public delegate double GetPDPVoltageDelegate(byte module, ref int status);
         public static GetPDPVoltageDelegate GetPDPVoltage;
 
-        public delegate double GetPDPChannelCurrentDelegate(byte channel, ref int status, byte module);
+        public delegate double GetPDPChannelCurrentDelegate(byte channel, byte module, ref int status);
         public static GetPDPChannelCurrentDelegate GetPDPChannelCurrent;
 
-        public delegate double GetPDPTotalCurrentDelegate(ref int status, byte module);
+        public delegate double GetPDPTotalCurrentDelegate(byte module, ref int status);
         public static GetPDPTotalCurrentDelegate GetPDPTotalCurrent;
 
-        public delegate double GetPDPTotalPowerDelegate(ref int status, byte module);
+        public delegate double GetPDPTotalPowerDelegate(byte module, ref int status);
         public static GetPDPTotalPowerDelegate GetPDPTotalPower;
 
-        public delegate double GetPDPTotalEnergyDelegate(ref int status, byte module);
+        public delegate double GetPDPTotalEnergyDelegate(byte module, ref int status);
         public static GetPDPTotalEnergyDelegate GetPDPTotalEnergy;
 
-        public delegate void ResetPDPTotalEnergyDelegate(ref int status, byte module);
+        public delegate void ResetPDPTotalEnergyDelegate(byte module, ref int status);
         public static ResetPDPTotalEnergyDelegate ResetPDPTotalEnergy;
 
-        public delegate void ClearPDPStickyFaultsDelegate(ref int status, byte module);
+        public delegate void ClearPDPStickyFaultsDelegate(byte module, ref int status);
         public static ClearPDPStickyFaultsDelegate ClearPDPStickyFaults;
     }
 }

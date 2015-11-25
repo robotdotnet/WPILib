@@ -35,28 +35,28 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static double getPDPTemperature(ref int status, byte module)
+        public static double getPDPTemperature(byte module, ref int status)
         {
             status = 0;
             return GetPDP(module).Temperature;
         }
 
         [CalledSimFunction]
-        public static double getPDPVoltage(ref int status, byte module)
+        public static double getPDPVoltage(byte module, ref int status)
         {
             status = 0;
             return GetPDP(module).Voltage;
         }
 
         [CalledSimFunction]
-        public static double getPDPChannelCurrent(byte channel, ref int status, byte module)
+        public static double getPDPChannelCurrent(byte channel, byte module, ref int status)
         {
             status = 0;
             return GetPDP(module).Current[channel];
         }
 
         [CalledSimFunction]
-        public static double getPDPTotalCurrent(ref int status, byte module)
+        public static double getPDPTotalCurrent(byte module, ref int status)
         {
             status = 0;
             PDPData data = GetPDP(module);
@@ -64,21 +64,21 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static double getPDPTotalPower(ref int status, byte module)
+        public static double getPDPTotalPower(byte module, ref int status)
         {
             status = 0;
-            return getPDPTotalCurrent(ref status, module) * getPDPVoltage(ref status, module);
+            return getPDPTotalCurrent(module, ref status) * getPDPVoltage(module, ref status);
         }
 
         [CalledSimFunction]
-        public static double getPDPTotalEnergy(ref int status, byte module)
+        public static double getPDPTotalEnergy(byte module, ref int status)
         {
             status = 0;
             return GetPDP(module).TotalEnergy;
         }
 
         [CalledSimFunction]
-        public static void resetPDPTotalEnergy(ref int status, byte module)
+        public static void resetPDPTotalEnergy(byte module, ref int status)
         {
             status = 0;
             GetPDP(module).TotalEnergy = 0;
@@ -86,7 +86,7 @@ namespace HAL_Simulator
 
 
         [CalledSimFunction]
-        public static void clearPDPStickyFaults(ref int status, byte module)
+        public static void clearPDPStickyFaults(byte module, ref int status)
         {
             status = 0;
         }
