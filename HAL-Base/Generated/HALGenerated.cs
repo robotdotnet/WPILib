@@ -89,7 +89,7 @@ namespace HAL_Base
         public delegate bool HALGetBrownedOutDelegate(ref int status);
         public static HALGetBrownedOutDelegate HALGetBrownedOut;
 
-        public delegate int HALInitializeDelegate(int mode, [HALAllowNonBlittable]ISimulator simulator);
+        public delegate int HALInitializeDelegate(int mode);
         public static HALInitializeDelegate HALInitialize;
 
         public delegate void HALNetworkCommunicationObserveUserProgramStartingDelegate();

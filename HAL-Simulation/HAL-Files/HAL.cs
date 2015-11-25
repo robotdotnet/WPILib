@@ -147,7 +147,7 @@ namespace HAL_Simulator
                             assemblies.Add(asm);
                         }
                     }
-                    catch(Exception)
+                    catch (Exception)
                     {
                         //If loading fails, its probably native. Just skip it.
                         continue;
@@ -624,47 +624,38 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
-        public static int HALInitialize(int mode, ISimulator simulator)
+        public static int HALInitialize(int mode)
         {
             ResetHALData(true);
 
-            //If we are passed a simulator, just use it.
-            if (simulator != null)
+            //Check to see if we selected an alternate directory.
+            string[] commandLineArgs = Environment.GetCommandLineArgs();
+
+            string loadDirectory = Directory.GetCurrentDirectory();
+
+            //Check for alternate directory
+            if (commandLineArgs.Length > 1)
             {
-                StartSimulator(simulator);
-                return 1;
-            }
-            else
-            {
-
-                //Check to see if we selected an alternate directory.
-                string[] commandLineArgs = Environment.GetCommandLineArgs();
-
-                string loadDirectory = Directory.GetCurrentDirectory();
-
-                //Check for alternate directory
-                if (commandLineArgs.Length > 1)
+                foreach (var arg in commandLineArgs)
                 {
-                    foreach (var arg in commandLineArgs)
+                    if (arg.Contains("--simdir"))
                     {
-                        if (arg.Contains("--simdir"))
+                        //Use this as the simulator directory.
+                        int firstColonIndex = arg.IndexOf(':');
+                        if (firstColonIndex == -1) break;
+                        string path = arg.Substring(firstColonIndex + 1);
+                        if (Directory.Exists(path))
                         {
-                            //Use this as the simulator directory.
-                            int firstColonIndex = arg.IndexOf(':');
-                            if (firstColonIndex == -1) break;
-                            string path = arg.Substring(firstColonIndex + 1);
-                            if (Directory.Exists(path))
-                            {
-                                loadDirectory = path;
-                                break;
-                            }
+                            loadDirectory = path;
+                            break;
                         }
                     }
                 }
-
-                StartSimulator(loadDirectory);
-                return 1;
             }
+
+            StartSimulator(loadDirectory);
+            return 1;
+
         }
 
         [CalledSimFunction]

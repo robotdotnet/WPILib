@@ -63,7 +63,7 @@ namespace HAL_Base
         /// </summary>
         /// <param name="simulator">The explicit simulator to start at the proper time.</param>
         /// <param name="mode">Initialization Mode</param>
-        public static void Initialize(ISimulator simulator = null, int mode = 0)
+        public static void Initialize(int mode = 0)
         {
             //Lock this function, so that if accidentally called from multiple threads it doesn't
             //get m_initialized at the wrong value.
@@ -140,7 +140,7 @@ namespace HAL_Base
                     Environment.Exit(1);
                 }
 
-                var rv = HALInitialize(mode, null);
+                var rv = HALInitialize(mode);
                 if (rv != 1)
                 {
                     throw new Exception($"HAL Initialize Failed with return code {rv}");

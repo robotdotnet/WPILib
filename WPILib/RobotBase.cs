@@ -86,12 +86,11 @@ namespace WPILib
         /// </summary>
         /// <param name="robotAssembly">The assembly the main robot class is located in.</param>
         /// <param name="robotType">The main robot class type</param>
-        /// <param name="simulator">The simulator to start.</param>
-        public static void Main(Assembly robotAssembly, Type robotType = null, ISimulator simulator = null)
+        public static void Main(Assembly robotAssembly, Type robotType = null)
         {
             try
             {
-                Initialize(simulator);
+                HAL.Initialize();
                 InitializeHardwareConfiguration();
             }
             catch (Exception e)
