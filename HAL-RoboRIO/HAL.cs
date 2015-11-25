@@ -16,8 +16,8 @@ namespace HAL_RoboRIO
         {
             string inputName = "";
             string outputName = "";
-            inputName = "HAL_RoboRIO.libHALAthena_shared.so";
-            outputName = "libHALAthena_shared.so";
+            inputName = "HAL_RoboRIO.Native.libHALAthena.so";
+            outputName = "libHALAthena.so";
             outputName = Path.GetTempPath() + outputName;
             byte[] bytes = null;
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
