@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Text;
 using HAL_Base;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -66,6 +68,59 @@ namespace WPILib.Tests.SpecScaners
             }
         }
 
+        private static bool IsBlittable(Type type)
+        {
+            if (type.IsArray)
+            {
+                var elements = type.GetElementType();
+                return elements.IsValueType && IsBlittable(elements);
+            }
+            try
+            {
+                object obj = FormatterServices.GetUninitializedObject(type);
+                GCHandle.Alloc(obj, GCHandleType.Pinned).Free();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        [Test]
+        public void TestHALJoystickAxes()
+        {
+            Assert.That(Marshal.SizeOf(typeof(HALJoystickAxes)), Is.EqualTo(26));
+            Assert.That(IsBlittable(typeof(HALJoystickAxes)));
+        }
+
+        [Test]
+        public void TestHALJoystickPOVs()
+        {
+            Assert.That(Marshal.SizeOf(typeof(HALJoystickPOVs)), Is.EqualTo(26));
+            Assert.That(IsBlittable(typeof(HALJoystickPOVs)));
+        }
+
+        [Test]
+        public void TestHALJoystickButtons()
+        {
+            Assert.That(Marshal.SizeOf(typeof(HALJoystickButtons)), Is.EqualTo(8));
+            Assert.That(IsBlittable(typeof(HALJoystickButtons)));
+        }
+
+        [Test]
+        public void TestHALJoystickDescriptor()
+        {
+            Assert.That(Marshal.SizeOf(typeof(HALJoystickDescriptor)), Is.EqualTo(273));
+            Assert.That(IsBlittable(typeof(HALJoystickDescriptor)));
+        }
+
+        [Test]
+        public void TestCANStreamMessage()
+        {
+            Assert.That(Marshal.SizeOf(typeof(CANStreamMessage)), Is.EqualTo(20));
+            Assert.That(IsBlittable(typeof(CANStreamMessage)));
+        }
 
         [Test]
         public void TestHALBlittable()
