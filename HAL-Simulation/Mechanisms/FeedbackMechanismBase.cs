@@ -43,6 +43,11 @@ namespace HAL_Simulator.Mechanisms
             return pwmValue;
         }
 
+
+        /// <summary>
+        /// Updates the mechanism with the specified delta time
+        /// </summary>
+        /// <param name="seconds">The delta time in seconds.</param>
         public virtual void Update(double seconds)
         {
             double pwmValue = m_invert ? -m_input.Get() : m_input.Get();

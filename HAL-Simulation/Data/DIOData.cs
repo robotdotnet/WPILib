@@ -1,5 +1,9 @@
 ﻿namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// DIO Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.NotifyDataBase" />
     public class DIOData : NotifyDataBase
     {
         private bool m_initialized = false;
@@ -10,6 +14,7 @@
 
         internal DIOData() { }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_initialized = false;
@@ -21,6 +26,12 @@
             base.ResetData();
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has source.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
+        /// </value>
         public bool HasSource
         {
             get { return m_hasSource; }
@@ -32,6 +43,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="DIOData"/> is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized
         {
             get { return m_initialized; }
@@ -43,6 +60,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this <see cref="DIOData"/> is value.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if value; otherwise, <c>false</c>.
+        /// </value>
         public bool Value
         {
             get { return m_value; }
@@ -54,6 +77,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the length of the pulse.
+        /// </summary>
+        /// <value>
+        /// The length of the pulse.
+        /// </value>
         public double PulseLength
         {
             get { return m_pulseLength; }
@@ -65,6 +94,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is input.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if this instance is input; otherwise, <c>false</c>.
+        /// </value>
         public bool IsInput
         {
             get { return m_isInput; }

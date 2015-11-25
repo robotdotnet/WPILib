@@ -3,13 +3,29 @@ using HAL_Base;
 
 namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// The analog trigger type.
+    /// </summary>
     public enum TrigerType
     {
+        /// <summary>
+        /// filtered
+        /// </summary>
         Filtered,
+        /// <summary>
+        /// averaged
+        /// </summary>
         Averaged,
+        /// <summary>
+        /// unassigned
+        /// </summary>
         Unassigned
     }
 
+    /// <summary>
+    /// Analog Trigger Sim Data.
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.DataBase" />
     public class AnalogTriggerData : DataBase
     {
         private bool m_hasSource = false;
@@ -21,6 +37,7 @@ namespace HAL_Simulator.Data
 
         internal AnalogTriggerData() { }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_hasSource = false;
@@ -33,6 +50,12 @@ namespace HAL_Simulator.Data
             m_trigLower = 0;
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has source.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
+        /// </value>
         public bool HasSource
         {
             get { return m_hasSource;}
@@ -44,6 +67,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="AnalogTriggerData"/> is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized
         {
             get { return m_initialized; }
@@ -55,10 +84,28 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the analog pin.
+        /// </summary>
+        /// <value>
+        /// The analog pin.
+        /// </value>
         public int AnalogPin { get; internal set; } = -1;
 
+        /// <summary>
+        /// Gets the trigger pointer.
+        /// </summary>
+        /// <value>
+        /// The trigger pointer.
+        /// </value>
         public long TriggerPointer { get; internal set; } = -1;
 
+        /// <summary>
+        /// Gets the type of the trig.
+        /// </summary>
+        /// <value>
+        /// The type of the trig.
+        /// </value>
         public TrigerType TrigType
         {
             get { return m_trigType; }
@@ -70,6 +117,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [trig state].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [trig state]; otherwise, <c>false</c>.
+        /// </value>
         public bool TrigState
         {
             get { return m_trigState; }
@@ -81,6 +134,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the trig upper.
+        /// </summary>
+        /// <value>
+        /// The trig upper.
+        /// </value>
         public double TrigUpper
         {
             get { return m_trigUpper; }
@@ -92,6 +151,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the trig lower.
+        /// </summary>
+        /// <value>
+        /// The trig lower.
+        /// </value>
         public double TrigLower
         {
             get { return m_trigLower; }
@@ -103,6 +168,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the trigger value.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="status">The status.</param>
+        /// <returns></returns>
         public bool GetTriggerValue(AnalogTriggerType type, ref int status)
         {
             return HALAnalog.getAnalogTriggerOutput((IntPtr) TriggerPointer, type, ref status);

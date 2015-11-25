@@ -1,5 +1,9 @@
 ﻿namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// Digital PWM Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.DataBase" />
     public class DigitalPWMData : DataBase
     {
         private bool m_initialized = false;
@@ -8,6 +12,7 @@
 
         internal DigitalPWMData() { }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_initialized = false;
@@ -15,6 +20,12 @@
             m_pin = 0;
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="DigitalPWMData"/> is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized
         {
             get { return m_initialized; }
@@ -24,6 +35,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the duty cycle.
+        /// </summary>
+        /// <value>
+        /// The duty cycle.
+        /// </value>
         public double DutyCycle
         {
             get { return m_dutyCycle; }
@@ -33,6 +50,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the pin.
+        /// </summary>
+        /// <value>
+        /// The pin.
+        /// </value>
         public uint Pin
         {
             get { return m_pin; }

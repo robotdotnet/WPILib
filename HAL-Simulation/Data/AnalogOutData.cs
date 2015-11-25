@@ -1,5 +1,9 @@
 ﻿namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// Analog Output Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.NotifyDataBase" />
     public class AnalogOutData : NotifyDataBase
     {
         private double m_voltage = 0.0;
@@ -7,6 +11,7 @@
 
         internal AnalogOutData() { }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_voltage = 0.0;
@@ -14,6 +19,12 @@
             base.ResetData();
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="AnalogOutData"/> is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized
         {
             get { return m_initialized; }
@@ -25,6 +36,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the voltage.
+        /// </summary>
+        /// <value>
+        /// The voltage.
+        /// </value>
         public double Voltage
         {
             get { return m_voltage; }

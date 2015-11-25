@@ -8,13 +8,19 @@ namespace HAL_Simulator.Mechanisms
 {
     public class TankDriveTrainMechanism
     {
-        private DriveWheelMechanism m_leftDrive;
-        private DriveWheelMechanism m_rightDrive;
-        private double m_mass;
+        private readonly DriveWheelMechanism m_leftDrive;
+        private readonly DriveWheelMechanism m_rightDrive;
+        private readonly double m_mass;
 
-        private double[] WorldPos = {0.0, 0.0, 0.0};
-        private double[] BotVel = {0.0, 0.0, 0.0};
+        private readonly double[] WorldPos = {0.0, 0.0, 0.0};
+        private readonly double[] BotVel = {0.0, 0.0, 0.0};
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TankDriveTrainMechanism"/> class.
+        /// </summary>
+        /// <param name="leftDrive">The left drive.</param>
+        /// <param name="rightDrive">The right drive.</param>
+        /// <param name="massKg">The mass kg.</param>
         public TankDriveTrainMechanism(DriveWheelMechanism leftDrive, DriveWheelMechanism rightDrive, double massKg)
         {
             m_leftDrive = leftDrive;
@@ -22,6 +28,10 @@ namespace HAL_Simulator.Mechanisms
             m_mass = massKg;
         }
 
+        /// <summary>
+        /// Updates the mechanism with the specified delta time
+        /// </summary>
+        /// <param name="seconds">The delta sime in seconds.</param>
         public void Update(double seconds)
         {
             double[] driveAcceleration = {0.0, 0.0, 0.0};

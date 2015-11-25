@@ -7,8 +7,13 @@ using HAL_Base;
 
 namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// Driver Station Sim Control Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.DataBase" />
     public class DSControlData : DataBase
     {
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_hasSource = false;
@@ -30,6 +35,12 @@ namespace HAL_Simulator.Data
         private bool m_fmsAttached = false;
         private bool m_dsAttached = true;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has source.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
+        /// </value>
         public bool HasSource
         {
             get { return m_hasSource; }
@@ -41,6 +52,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="DSControlData"/> is enabled.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// </value>
         public bool Enabled
         {
             get { return m_enabled; }
@@ -52,6 +69,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="DSControlData"/> is autonomous.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if autonomous; otherwise, <c>false</c>.
+        /// </value>
         public bool Autonomous
         {
             get { return m_autonomous; }
@@ -63,6 +86,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="DSControlData"/> is test.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if test; otherwise, <c>false</c>.
+        /// </value>
         public bool Test
         {
             get { return m_test; }
@@ -74,6 +103,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [e stop].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [e stop]; otherwise, <c>false</c>.
+        /// </value>
         public bool EStop
         {
             get { return m_eStop; }
@@ -85,6 +120,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [FMS attached].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [FMS attached]; otherwise, <c>false</c>.
+        /// </value>
         public bool FmsAttached
         {
             get { return m_fmsAttached; }
@@ -96,6 +137,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [ds attached].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [ds attached]; otherwise, <c>false</c>.
+        /// </value>
         public bool DsAttached
         {
             get { return m_dsAttached; }
@@ -108,8 +155,13 @@ namespace HAL_Simulator.Data
         }
     }
 
+    /// <summary>
+    /// Joystick Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.NotifyDataBase" />
     public class JoystickData : NotifyDataBase
     {
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_hasSource = false;
@@ -149,6 +201,12 @@ namespace HAL_Simulator.Data
         private byte m_type = 0;
         private string m_name = "Joystick";
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has source.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
+        /// </value>
         public bool HasSource
         {
             get { return m_hasSource; }
@@ -160,6 +218,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the buttons.
+        /// </summary>
+        /// <value>
+        /// The buttons.
+        /// </value>
         public bool[] Buttons
         {
             get { return m_buttons; }
@@ -170,6 +234,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets the axes.
+        /// </summary>
+        /// <value>
+        /// The axes.
+        /// </value>
         public double[] Axes
         {
             get { return m_axes; }
@@ -180,6 +250,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets the left rumble.
+        /// </summary>
+        /// <value>
+        /// The left rumble.
+        /// </value>
         public ushort LeftRumble
         {
             get { return m_leftRumble; }
@@ -191,6 +267,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the right rumble.
+        /// </summary>
+        /// <value>
+        /// The right rumble.
+        /// </value>
         public ushort RightRumble
         {
             get { return m_rightRumble; }
@@ -201,6 +283,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets the is xbox.
+        /// </summary>
+        /// <value>
+        /// The is xbox.
+        /// </value>
         public int IsXbox
         {
             get { return m_isXbox; }
@@ -212,6 +300,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         public byte Type
         {
             get { return m_type; }
@@ -223,6 +317,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the povs.
+        /// </summary>
+        /// <value>
+        /// The povs.
+        /// </value>
         public int[] Povs
         {
             get { return m_povs; }
@@ -234,6 +334,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>
+        /// The name.
+        /// </value>
         public string Name
         {
             get { return m_name; }
@@ -246,8 +352,13 @@ namespace HAL_Simulator.Data
         }
     }
 
+    /// <summary>
+    /// Driver Station Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.DataBase" />
     public class DriverStationData : DataBase
     {
+        /// <inheritdoc/>
         public override void ResetData()
         {
             foreach (var joystickData in Joysticks)
@@ -269,12 +380,30 @@ namespace HAL_Simulator.Data
 
             Joysticks = data.AsReadOnly();
         }
- 
 
-        public IReadOnlyList<JoystickData> Joysticks { get; } 
+
+        /// <summary>
+        /// Gets the joysticks.
+        /// </summary>
+        /// <value>
+        /// The joysticks.
+        /// </value>
+        public IReadOnlyList<JoystickData> Joysticks { get; }
+        /// <summary>
+        /// Gets the control data.
+        /// </summary>
+        /// <value>
+        /// The control data.
+        /// </value>
         public DSControlData ControlData { get; } = new DSControlData();
         private HALAllianceStationID m_allianceStation = 0;
 
+        /// <summary>
+        /// Gets or sets the alliance station.
+        /// </summary>
+        /// <value>
+        /// The alliance station.
+        /// </value>
         public HALAllianceStationID AllianceStation
         {
             get { return m_allianceStation; }

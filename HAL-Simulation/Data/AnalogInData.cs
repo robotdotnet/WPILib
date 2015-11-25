@@ -1,5 +1,9 @@
 ﻿namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// Analog Input Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.NotifyDataBase" />
     public class AnalogInData : NotifyDataBase
     {
         private bool m_hasSource = false;
@@ -17,6 +21,7 @@
 
         internal AnalogInData() { }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_hasSource = false;
@@ -34,6 +39,12 @@
             base.ResetData();
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has source.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
+        /// </value>
         public bool HasSource
         {
             get { return m_hasSource; }
@@ -45,6 +56,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this input is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized
         {
             get { return m_initialized; }
@@ -56,6 +73,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the average bits.
+        /// </summary>
+        /// <value>
+        /// The average bits.
+        /// </value>
         public uint AverageBits
         {
             get { return m_averageBits; }
@@ -67,6 +90,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the oversample bits.
+        /// </summary>
+        /// <value>
+        /// The oversample bits.
+        /// </value>
         public uint OversampleBits
         {
             get { return m_oversampleBits; }
@@ -78,6 +107,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the voltage.
+        /// </summary>
+        /// <value>
+        /// The voltage.
+        /// </value>
         public double Voltage
         {
             get { return m_voltage; }
@@ -89,6 +124,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the LSB weight.
+        /// </summary>
+        /// <value>
+        /// The LSB weight.
+        /// </value>
         public long LSBWeight
         {
             get { return m_lsbWeight; }
@@ -100,6 +141,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the offset.
+        /// </summary>
+        /// <value>
+        /// The offset.
+        /// </value>
         public int Offset
         {
             get { return m_offset; }
@@ -111,6 +158,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [accumulator initialized].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [accumulator initialized]; otherwise, <c>false</c>.
+        /// </value>
         public bool AccumulatorInitialized
         {
             get { return m_accumulatorInitialized; }
@@ -122,6 +175,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the accumulator center.
+        /// </summary>
+        /// <value>
+        /// The accumulator center.
+        /// </value>
         public int AccumulatorCenter
         {
             get { return m_accumulatorCenter; }
@@ -133,6 +192,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the accumulator value.
+        /// </summary>
+        /// <value>
+        /// The accumulator value.
+        /// </value>
         public long AccumulatorValue
         {
             get { return m_accumulatorValue; }
@@ -144,6 +209,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets or sets the accumulator count.
+        /// </summary>
+        /// <value>
+        /// The accumulator count.
+        /// </value>
         public uint AccumulatorCount
         {
             get { return m_accumulatorCount; }
@@ -155,6 +226,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the accumulator deadband.
+        /// </summary>
+        /// <value>
+        /// The accumulator deadband.
+        /// </value>
         public int AccumulatorDeadband
         {
             get { return m_accumulatorDeadband; }

@@ -1,16 +1,44 @@
 ﻿namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// The type of PWM Controller
+    /// </summary>
     public enum ControllerType
     {
+        /// <summary>
+        /// none
+        /// </summary>
         None,
+        /// <summary>
+        /// jaguar
+        /// </summary>
         Jaguar,
+        /// <summary>
+        /// talon
+        /// </summary>
         Talon,
+        /// <summary>
+        /// talon SRX
+        /// </summary>
         TalonSRX,
+        /// <summary>
+        /// victor
+        /// </summary>
         Victor,
+        /// <summary>
+        /// victor sp
+        /// </summary>
         VictorSP,
+        /// <summary>
+        /// servo
+        /// </summary>
         Servo
     }
 
+    /// <summary>
+    /// PWM Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.NotifyDataBase" />
     public class PWMData : NotifyDataBase
     {
         private bool m_initialized = false;
@@ -22,6 +50,7 @@
 
         internal PWMData() { }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_initialized = false;
@@ -34,6 +63,12 @@
             base.ResetData();
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="PWMData"/> is initialized.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if initialized; otherwise, <c>false</c>.
+        /// </value>
         public bool Initialized
         {
             get { return m_initialized; }
@@ -45,6 +80,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the type.
+        /// </summary>
+        /// <value>
+        /// The type.
+        /// </value>
         public ControllerType Type
         {
             get { return m_type; }
@@ -56,6 +97,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the raw value.
+        /// </summary>
+        /// <value>
+        /// The raw value.
+        /// </value>
         public uint RawValue
         {
             get { return m_rawValue; }
@@ -67,6 +114,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether [zero latch].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [zero latch]; otherwise, <c>false</c>.
+        /// </value>
         public bool ZeroLatch
         {
             get { return m_zeroLatch; }
@@ -78,6 +131,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the period scale.
+        /// </summary>
+        /// <value>
+        /// The period scale.
+        /// </value>
         public uint PeriodScale
         {
             get { return m_periodScale; }
@@ -89,6 +148,12 @@
             }
         }
 
+        /// <summary>
+        /// Gets the value.
+        /// </summary>
+        /// <value>
+        /// The value.
+        /// </value>
         public double Value
         {
             get { return m_value; }

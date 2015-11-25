@@ -2,6 +2,10 @@
 
 namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// Accelerometer Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.DataBase" />
     public class AccelerometerData : DataBase
     {
         private bool m_hasSource = false;
@@ -13,6 +17,12 @@ namespace HAL_Simulator.Data
 
         internal AccelerometerData() { }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance has source.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
+        /// </value>
         public bool HasSource
         {
             get { return m_hasSource; }
@@ -24,6 +34,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="AccelerometerData"/> is active.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if active; otherwise, <c>false</c>.
+        /// </value>
         public bool Active
         {
             get { return m_active; }
@@ -35,6 +51,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets the range.
+        /// </summary>
+        /// <value>
+        /// The range.
+        /// </value>
         public HALAccelerometerRange Range
         {
             get { return m_range; }
@@ -46,6 +68,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the X Axis on the accelerometer
+        /// </summary>
+        /// <value>
+        /// The x.
+        /// </value>
         public double X
         {
             get { return m_x; }
@@ -57,6 +85,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the y axis on the accelerometer.
+        /// </summary>
+        /// <value>
+        /// The y.
+        /// </value>
         public double Y
         {
             get { return m_y; }
@@ -68,6 +102,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the z axis on the accelerometer.
+        /// </summary>
+        /// <value>
+        /// The z.
+        /// </value>
         public double Z
         {
             get { return m_z; }
@@ -79,6 +119,7 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_hasSource = false;

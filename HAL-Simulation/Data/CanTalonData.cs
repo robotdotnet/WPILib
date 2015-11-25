@@ -2,6 +2,10 @@
 
 namespace HAL_Simulator.Data
 {
+    /// <summary>
+    /// Talon SRX CAN Sim Data
+    /// </summary>
+    /// <seealso cref="HAL_Simulator.Data.NotifyDataBase" />
     public class CanTalonData : NotifyDataBase
     {
         internal CanTalonData() { }
@@ -82,6 +86,7 @@ namespace HAL_Simulator.Data
 
         private double m_demand = 0.0;
 
+        /// <inheritdoc/>
         public override void ResetData()
         {
             m_eProfileParamSlot0_P = 0.0;
@@ -161,9 +166,7 @@ namespace HAL_Simulator.Data
             m_demand = 0.0;
         }
 
-
-
-        public double GetParam(HAL_Base.HALCanTalonSRX.ParamID id)
+        internal double GetParam(HAL_Base.HALCanTalonSRX.ParamID id)
         {
             switch (id)
             {
@@ -313,7 +316,7 @@ namespace HAL_Simulator.Data
         }
 
 
-        public void SetParam(HAL_Base.HALCanTalonSRX.ParamID id, double value)
+        internal void SetParam(HAL_Base.HALCanTalonSRX.ParamID id, double value)
         {
             switch (id)
             {
@@ -531,6 +534,12 @@ namespace HAL_Simulator.Data
         }
 
 
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ p.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ p.
+        /// </value>
         public double ProfileParamSlot0_P
         {
             get { return m_eProfileParamSlot0_P; }
@@ -541,6 +550,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ i.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ i.
+        /// </value>
         public double ProfileParamSlot0_I
         {
             get { return m_eProfileParamSlot0_I; }
@@ -551,6 +566,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ d.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ d.
+        /// </value>
         public double ProfileParamSlot0_D
         {
             get { return m_eProfileParamSlot0_D; }
@@ -561,6 +582,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ f.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ f.
+        /// </value>
         public double ProfileParamSlot0_F
         {
             get { return m_eProfileParamSlot0_F; }
@@ -571,6 +598,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ i zone.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ i zone.
+        /// </value>
         public double ProfileParamSlot0_IZone
         {
             get { return m_eProfileParamSlot0_IZone; }
@@ -581,6 +614,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ close loop ramp rate.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ close loop ramp rate.
+        /// </value>
         public double ProfileParamSlot0_CloseLoopRampRate
         {
             get { return m_eProfileParamSlot0_CloseLoopRampRate; }
@@ -591,6 +630,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ p.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ p.
+        /// </value>
         public double ProfileParamSlot1_P
         {
             get { return m_eProfileParamSlot1_P; }
@@ -601,6 +646,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ i.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ i.
+        /// </value>
         public double ProfileParamSlot1_I
         {
             get { return m_eProfileParamSlot1_I; }
@@ -611,6 +662,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ d.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ d.
+        /// </value>
         public double ProfileParamSlot1_D
         {
             get { return m_eProfileParamSlot1_D; }
@@ -621,6 +678,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ f.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ f.
+        /// </value>
         public double ProfileParamSlot1_F
         {
             get { return m_eProfileParamSlot1_F; }
@@ -631,6 +694,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ i zone.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ i zone.
+        /// </value>
         public double ProfileParamSlot1_IZone
         {
             get { return m_eProfileParamSlot1_IZone; }
@@ -641,6 +710,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ close loop ramp rate.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ close loop ramp rate.
+        /// </value>
         public double ProfileParamSlot1_CloseLoopRampRate
         {
             get { return m_eProfileParamSlot1_CloseLoopRampRate; }
@@ -651,6 +726,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter soft limit for threshold.
+        /// </summary>
+        /// <value>
+        /// The profile parameter soft limit for threshold.
+        /// </value>
         public double ProfileParamSoftLimitForThreshold
         {
             get { return m_eProfileParamSoftLimitForThreshold; }
@@ -661,6 +742,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter soft limit rev threshold.
+        /// </summary>
+        /// <value>
+        /// The profile parameter soft limit rev threshold.
+        /// </value>
         public double ProfileParamSoftLimitRevThreshold
         {
             get { return m_eProfileParamSoftLimitRevThreshold; }
@@ -671,6 +758,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter soft limit for enable.
+        /// </summary>
+        /// <value>
+        /// The profile parameter soft limit for enable.
+        /// </value>
         public double ProfileParamSoftLimitForEnable
         {
             get { return m_eProfileParamSoftLimitForEnable; }
@@ -681,6 +774,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile parameter soft limit rev enable.
+        /// </summary>
+        /// <value>
+        /// The profile parameter soft limit rev enable.
+        /// </value>
         public double ProfileParamSoftLimitRevEnable
         {
             get { return m_eProfileParamSoftLimitRevEnable; }
@@ -691,6 +790,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the on boot_ brake mode.
+        /// </summary>
+        /// <value>
+        /// The on boot_ brake mode.
+        /// </value>
         public double OnBoot_BrakeMode
         {
             get { return m_eOnBoot_BrakeMode; }
@@ -701,6 +806,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the on boot_ limit switch_ forward_ normally closed.
+        /// </summary>
+        /// <value>
+        /// The on boot_ limit switch_ forward_ normally closed.
+        /// </value>
         public double OnBoot_LimitSwitch_Forward_NormallyClosed
         {
             get { return m_eOnBoot_LimitSwitch_Forward_NormallyClosed; }
@@ -711,6 +822,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the on boot_ limit switch_ reverse_ normally closed.
+        /// </summary>
+        /// <value>
+        /// The on boot_ limit switch_ reverse_ normally closed.
+        /// </value>
         public double OnBoot_LimitSwitch_Reverse_NormallyClosed
         {
             get { return m_eOnBoot_LimitSwitch_Reverse_NormallyClosed; }
@@ -721,6 +838,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the on boot_ limit switch_ forward_ disable.
+        /// </summary>
+        /// <value>
+        /// The on boot_ limit switch_ forward_ disable.
+        /// </value>
         public double OnBoot_LimitSwitch_Forward_Disable
         {
             get { return m_eOnBoot_LimitSwitch_Forward_Disable; }
@@ -731,6 +854,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the on boot_ limit switch_ reverse_ disable.
+        /// </summary>
+        /// <value>
+        /// The on boot_ limit switch_ reverse_ disable.
+        /// </value>
         public double OnBoot_LimitSwitch_Reverse_Disable
         {
             get { return m_eOnBoot_LimitSwitch_Reverse_Disable; }
@@ -741,6 +870,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ over temporary.
+        /// </summary>
+        /// <value>
+        /// The fault_ over temporary.
+        /// </value>
         public double Fault_OverTemp
         {
             get { return m_eFault_OverTemp; }
@@ -751,6 +886,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ under voltage.
+        /// </summary>
+        /// <value>
+        /// The fault_ under voltage.
+        /// </value>
         public double Fault_UnderVoltage
         {
             get { return m_eFault_UnderVoltage; }
@@ -761,6 +902,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ for lim.
+        /// </summary>
+        /// <value>
+        /// The fault_ for lim.
+        /// </value>
         public double Fault_ForLim
         {
             get { return m_eFault_ForLim; }
@@ -771,6 +918,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ rev lim.
+        /// </summary>
+        /// <value>
+        /// The fault_ rev lim.
+        /// </value>
         public double Fault_RevLim
         {
             get { return m_eFault_RevLim; }
@@ -781,6 +934,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ hardware failure.
+        /// </summary>
+        /// <value>
+        /// The fault_ hardware failure.
+        /// </value>
         public double Fault_HardwareFailure
         {
             get { return m_eFault_HardwareFailure; }
@@ -791,6 +950,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ for soft lim.
+        /// </summary>
+        /// <value>
+        /// The fault_ for soft lim.
+        /// </value>
         public double Fault_ForSoftLim
         {
             get { return m_eFault_ForSoftLim; }
@@ -801,6 +966,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the fault_ rev soft lim.
+        /// </summary>
+        /// <value>
+        /// The fault_ rev soft lim.
+        /// </value>
         public double Fault_RevSoftLim
         {
             get { return m_eFault_RevSoftLim; }
@@ -811,6 +982,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the stcky fault_ over temporary.
+        /// </summary>
+        /// <value>
+        /// The stcky fault_ over temporary.
+        /// </value>
         public double StckyFault_OverTemp
         {
             get { return m_eStckyFault_OverTemp; }
@@ -821,6 +998,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the stcky fault_ under voltage.
+        /// </summary>
+        /// <value>
+        /// The stcky fault_ under voltage.
+        /// </value>
         public double StckyFault_UnderVoltage
         {
             get { return m_eStckyFault_UnderVoltage; }
@@ -831,6 +1014,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the stcky fault_ for lim.
+        /// </summary>
+        /// <value>
+        /// The stcky fault_ for lim.
+        /// </value>
         public double StckyFault_ForLim
         {
             get { return m_eStckyFault_ForLim; }
@@ -841,6 +1030,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the stcky fault_ rev lim.
+        /// </summary>
+        /// <value>
+        /// The stcky fault_ rev lim.
+        /// </value>
         public double StckyFault_RevLim
         {
             get { return m_eStckyFault_RevLim; }
@@ -851,6 +1046,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the stcky fault_ for soft lim.
+        /// </summary>
+        /// <value>
+        /// The stcky fault_ for soft lim.
+        /// </value>
         public double StckyFault_ForSoftLim
         {
             get { return m_eStckyFault_ForSoftLim; }
@@ -861,6 +1062,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the stcky fault_ rev soft lim.
+        /// </summary>
+        /// <value>
+        /// The stcky fault_ rev soft lim.
+        /// </value>
         public double StckyFault_RevSoftLim
         {
             get { return m_eStckyFault_RevSoftLim; }
@@ -871,6 +1078,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the applied throttle.
+        /// </summary>
+        /// <value>
+        /// The applied throttle.
+        /// </value>
         public double AppliedThrottle
         {
             get { return m_eAppliedThrottle; }
@@ -881,6 +1094,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the close loop error.
+        /// </summary>
+        /// <value>
+        /// The close loop error.
+        /// </value>
         public double CloseLoopErr
         {
             get { return m_eCloseLoopErr; }
@@ -891,6 +1110,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the feedback device select.
+        /// </summary>
+        /// <value>
+        /// The feedback device select.
+        /// </value>
         public double FeedbackDeviceSelect
         {
             get { return m_eFeedbackDeviceSelect; }
@@ -901,6 +1126,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether [rev mot during close loop en].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [rev mot during close loop en]; otherwise, <c>false</c>.
+        /// </value>
         public bool RevMotDuringCloseLoopEn
         {
             get { return m_eRevMotDuringCloseLoopEn; }
@@ -911,6 +1142,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the mode select.
+        /// </summary>
+        /// <value>
+        /// The mode select.
+        /// </value>
         public double ModeSelect
         {
             get { return m_eModeSelect; }
@@ -921,6 +1158,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the profile slot select.
+        /// </summary>
+        /// <value>
+        /// The profile slot select.
+        /// </value>
         public double ProfileSlotSelect
         {
             get { return m_eProfileSlotSelect; }
@@ -931,6 +1174,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the ramp throttle.
+        /// </summary>
+        /// <value>
+        /// The ramp throttle.
+        /// </value>
         public double RampThrottle
         {
             get { return m_eRampThrottle; }
@@ -941,6 +1190,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether [rev feedback sensor].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [rev feedback sensor]; otherwise, <c>false</c>.
+        /// </value>
         public bool RevFeedbackSensor
         {
             get { return m_eRevFeedbackSensor; }
@@ -951,6 +1206,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the limit switch en.
+        /// </summary>
+        /// <value>
+        /// The limit switch en.
+        /// </value>
         public double LimitSwitchEn
         {
             get { return m_eLimitSwitchEn; }
@@ -961,6 +1222,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether [limit switch closed for].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [limit switch closed for]; otherwise, <c>false</c>.
+        /// </value>
         public bool LimitSwitchClosedFor
         {
             get { return m_eLimitSwitchClosedFor; }
@@ -971,6 +1238,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether [limit switch closed rev].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [limit switch closed rev]; otherwise, <c>false</c>.
+        /// </value>
         public bool LimitSwitchClosedRev
         {
             get { return m_eLimitSwitchClosedRev; }
@@ -981,6 +1254,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the sensor position.
+        /// </summary>
+        /// <value>
+        /// The sensor position.
+        /// </value>
         public double SensorPosition
         {
             get { return m_eSensorPosition; }
@@ -991,6 +1270,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the sensor velocity.
+        /// </summary>
+        /// <value>
+        /// The sensor velocity.
+        /// </value>
         public double SensorVelocity
         {
             get { return m_eSensorVelocity; }
@@ -1001,6 +1286,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the current.
+        /// </summary>
+        /// <value>
+        /// The current.
+        /// </value>
         public double Current
         {
             get { return m_eCurrent; }
@@ -1011,6 +1302,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets a value indicating whether [brake is enabled].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [brake is enabled]; otherwise, <c>false</c>.
+        /// </value>
         public bool BrakeIsEnabled
         {
             get { return m_eBrakeIsEnabled; }
@@ -1021,6 +1318,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the enc position.
+        /// </summary>
+        /// <value>
+        /// The enc position.
+        /// </value>
         public double EncPosition
         {
             get { return m_eEncPosition; }
@@ -1031,6 +1334,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the enc vel.
+        /// </summary>
+        /// <value>
+        /// The enc vel.
+        /// </value>
         public double EncVel
         {
             get { return m_eEncVel; }
@@ -1041,6 +1350,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the enc index rise events.
+        /// </summary>
+        /// <value>
+        /// The enc index rise events.
+        /// </value>
         public double EncIndexRiseEvents
         {
             get { return m_eEncIndexRiseEvents; }
@@ -1051,6 +1366,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the quad apin.
+        /// </summary>
+        /// <value>
+        /// The quad apin.
+        /// </value>
         public double QuadApin
         {
             get { return m_eQuadApin; }
@@ -1061,6 +1382,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the quad bpin.
+        /// </summary>
+        /// <value>
+        /// The quad bpin.
+        /// </value>
         public double QuadBpin
         {
             get { return m_eQuadBpin; }
@@ -1071,6 +1398,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the quad idxpin.
+        /// </summary>
+        /// <value>
+        /// The quad idxpin.
+        /// </value>
         public double QuadIdxpin
         {
             get { return m_eQuadIdxpin; }
@@ -1081,6 +1414,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the analog in with ov.
+        /// </summary>
+        /// <value>
+        /// The analog in with ov.
+        /// </value>
         public double AnalogInWithOv
         {
             get { return m_eAnalogInWithOv; }
@@ -1091,6 +1430,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the analog in vel.
+        /// </summary>
+        /// <value>
+        /// The analog in vel.
+        /// </value>
         public double AnalogInVel
         {
             get { return m_eAnalogInVel; }
@@ -1101,6 +1446,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the temperature.
+        /// </summary>
+        /// <value>
+        /// The temporary.
+        /// </value>
         public double Temp
         {
             get { return m_eTemp; }
@@ -1111,6 +1462,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the battery v.
+        /// </summary>
+        /// <value>
+        /// The battery v.
+        /// </value>
         public double BatteryV
         {
             get { return m_eBatteryV; }
@@ -1121,6 +1478,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the reset count.
+        /// </summary>
+        /// <value>
+        /// The reset count.
+        /// </value>
         public double ResetCount
         {
             get { return m_eResetCount; }
@@ -1131,6 +1494,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the reset flags.
+        /// </summary>
+        /// <value>
+        /// The reset flags.
+        /// </value>
         public double ResetFlags
         {
             get { return m_eResetFlags; }
@@ -1141,6 +1510,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the firm vers.
+        /// </summary>
+        /// <value>
+        /// The firm vers.
+        /// </value>
         public double FirmVers
         {
             get { return m_eFirmVers; }
@@ -1151,6 +1526,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the settings changed.
+        /// </summary>
+        /// <value>
+        /// The settings changed.
+        /// </value>
         public double SettingsChanged
         {
             get { return m_eSettingsChanged; }
@@ -1161,6 +1542,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the quad filter en.
+        /// </summary>
+        /// <value>
+        /// The quad filter en.
+        /// </value>
         public double QuadFilterEn
         {
             get { return m_eQuadFilterEn; }
@@ -1171,6 +1558,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the pid iaccum.
+        /// </summary>
+        /// <value>
+        /// The pid iaccum.
+        /// </value>
         public double PidIaccum
         {
             get { return m_ePidIaccum; }
@@ -1181,6 +1574,12 @@ namespace HAL_Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+        /// <summary>
+        /// Gets or sets the ain position.
+        /// </summary>
+        /// <value>
+        /// The ain position.
+        /// </value>
         public double AinPosition
         {
             get { return m_eAinPosition; }
@@ -1192,6 +1591,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the profile parameter slot0_ allowable closed loop error.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot0_ allowable closed loop error.
+        /// </value>
         public double ProfileParamSlot0_AllowableClosedLoopErr
         {
             get { return m_eProfileParamSlot0_AllowableClosedLoopErr; }
@@ -1203,6 +1608,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the profile parameter slot1_ allowable closed loop error.
+        /// </summary>
+        /// <value>
+        /// The profile parameter slot1_ allowable closed loop error.
+        /// </value>
         public double ProfileParamSlot1_AllowableClosedLoopErr
         {
             get { return m_eProfileParamSlot1_AllowableClosedLoopErr; }
@@ -1214,6 +1625,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the number encoder CPR.
+        /// </summary>
+        /// <value>
+        /// The number encoder CPR.
+        /// </value>
         public double NumberEncoderCPR
         {
             get { return m_eNumberEncoderCPR; }
@@ -1225,6 +1642,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the number pot turns.
+        /// </summary>
+        /// <value>
+        /// The number pot turns.
+        /// </value>
         public double NumberPotTurns
         {
             get { return m_eNumberPotTurns; }
@@ -1236,6 +1659,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the override limit switch.
+        /// </summary>
+        /// <value>
+        /// The override limit switch.
+        /// </value>
         public double OverrideLimitSwitch
         {
             get { return m_overrideLimitSwitch; }
@@ -1247,6 +1676,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the type of the override brake.
+        /// </summary>
+        /// <value>
+        /// The type of the override brake.
+        /// </value>
         public double OverrideBrakeType
         {
             get { return m_overrideBrakeType; }
@@ -1258,6 +1693,12 @@ namespace HAL_Simulator.Data
             }
         }
 
+        /// <summary>
+        /// Gets or sets the demand.
+        /// </summary>
+        /// <value>
+        /// The demand.
+        /// </value>
         public double Demand
         {
             get { return m_demand; }
