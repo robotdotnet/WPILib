@@ -18,7 +18,6 @@ namespace HAL_Simulator
             HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_openStreamSession = FRC_NetworkCommunication_CANSessionMux_openStreamSession;
             HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_closeStreamSession = FRC_NetworkCommunication_CANSessionMux_closeStreamSession;
             HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSession = FRC_NetworkCommunication_CANSessionMux_readStreamSession;
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_getCANStatus = FRC_NetworkCommunication_CANSessionMux_getCANStatus;
         }
 
         [CalledSimFunction]
@@ -54,11 +53,5 @@ namespace HAL_Simulator
         {
             throw new NotImplementedException();
         }
-
-        [CalledSimFunction]
-        public static void FRC_NetworkCommunication_CANSessionMux_getCANStatus(ref float perfectButUtilization,
-            ref uint busOffCount, ref uint txFullCount, ref uint recieveErrorCount, ref uint transmitErrorCount,
-            ref int status)
-        { throw new NotImplementedException(); }
     }
 }

@@ -37,13 +37,5 @@ namespace HAL_Base
 
         public static FRC_NetworkCommunication_CANSessionMux_readStreamSessionDelegate
             FRC_NetworkCommunication_CANSessionMux_readStreamSession;
-
-        public delegate void FRC_NetworkCommunication_CANSessionMux_getCANStatusDelegate(ref float perfectButUtilization,
-            ref uint busOffCount, ref uint txFullCount, ref uint recieveErrorCount, ref uint transmitErrorCount,
-            ref int status);
-
-        public static FRC_NetworkCommunication_CANSessionMux_getCANStatusDelegate
-            FRC_NetworkCommunication_CANSessionMux_getCANStatus;
-
     }
 }

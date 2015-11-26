@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -15,25 +16,53 @@ namespace WPILib.Tests.SpecScaners
     public class TestHALImpl
     {
         [Test]
+        public void TestHALRoboRioMapsToNativeAssemblySymbols()
+        {
+            var halRoboRioSymbols = NetProjects.GetHALRoboRioNativeSymbols();
+
+
+            // Start the child process.
+            Process p = new Process();
+            p.StartInfo.UseShellExecute = false;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.FileName = "..\\..\\HAL-RoboRIO\\Native\\frcnm.exe";
+            p.StartInfo.Arguments = "..\\..\\HAL-RoboRIO\\Native\\libHALAthena.so";
+            p.Start();
+            string output = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+
+            bool found = true;
+
+
+            string[] nativeSymbols = output.Split('\r');
+
+            foreach (var halSymbol in halRoboRioSymbols)
+            {
+                bool foundSymbol = nativeSymbols.Any(nativeSymbol => nativeSymbol.EndsWith(halSymbol));
+                if (!foundSymbol)
+                {
+                    found = false;
+                    Console.WriteLine(halSymbol);
+                }
+            }
+
+            Assert.That(found);
+        }
+
+
+        [Test]
         public void TestHALBaseMapsToHALSim()
         {
             // Load assembly with HAL Base
-            Assembly HalBaseAssembly = typeof(HAL_Base.HAL).Assembly;
+            Assembly halBaseAssembly = typeof(HAL_Base.HAL).Assembly;
 
-            List<string> nullTypes = new List<string>();
-
-            foreach(Type type in HalBaseAssembly.GetTypes())
-            {
-                if (!type.Name.ToLower().Contains("hal")) continue;
-
-                FieldInfo[] fields = type.GetFields();
-
-                List<string> nullDelegateFields = (from fieldInfo in fields where fieldInfo.FieldType.IsSubclassOf(typeof(MulticastDelegate)) let x = fieldInfo.GetValue(null) where x == null select fieldInfo.Name).ToList();
-                foreach (var nullDelegateField in nullDelegateFields)
-                {
-                    nullTypes.Add(type.Name + ": " + nullDelegateField);
-                }
-            }
+            List<string> nullTypes = (from type in halBaseAssembly.GetTypes()
+                                      where type.Name.ToLower().Contains("hal")
+                                      let fields = type.GetFields()
+                                      let nullDelegateFields = (from fieldInfo in fields
+                                                                where fieldInfo.FieldType.IsSubclassOf(typeof (MulticastDelegate))
+                                                                let x = fieldInfo.GetValue(null) where x == null select fieldInfo.Name).ToList()
+                                      from nullDelegateField in nullDelegateFields select type.Name + ": " + nullDelegateField).ToList();
 
             foreach(var s in nullTypes)
             {

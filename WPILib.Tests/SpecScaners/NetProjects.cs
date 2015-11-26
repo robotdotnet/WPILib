@@ -32,6 +32,42 @@ namespace WPILib.Tests.SpecScaners
     /// </summary>
     public static class NetProjects
     {
+        public static List<string> GetHALRoboRioNativeSymbols()
+        {
+            List<string> nativeFunctions = new List<string>();
+
+            var dir = "..\\..\\HAL-RoboRIO";
+            foreach (var file in Directory.GetFiles(dir, "*.cs"))
+            {
+                if (!file.ToLower().Contains("hal")) continue;
+                using (StreamReader reader = new StreamReader(file))
+                {
+                    bool foundInitialize = false;
+                    string line;
+                    while (!foundInitialize)
+                    {
+                        line = reader.ReadLine();
+                        if (line == null) break;
+                        if (line.ToLower().Contains("static void initialize")) foundInitialize = true;
+                    }
+                    if (!foundInitialize) continue;
+
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        if (line.TrimStart(' ').StartsWith("//")) continue;
+                        if (line.ToLower().Contains("marshal.getdelegateforfunctionpointer"))
+                        {
+                            int startParam = line.IndexOf('"');
+                            int endParam = line.IndexOf('"', startParam + 1);
+                            nativeFunctions.Add(line.Substring(startParam + 1, endParam - startParam - 1));
+                        }
+                    }
+                }
+            }
+            return nativeFunctions;
+        }
+
+
         /// <summary>
         /// Gets a List of all the Functions with the Attribute <see cref="CalledSimFunction"/>
         /// </summary>
@@ -132,7 +168,7 @@ namespace WPILib.Tests.SpecScaners
                     cs.Methods.AddRange(methods);
                     halRoboRioMethods.Add(cs);
                 }
-                
+
             }
 
             return halRoboRioMethods;

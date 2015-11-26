@@ -232,9 +232,6 @@ namespace HAL_Base
         public delegate void SpiSetSpeedDelegate(byte port, uint speed);
         public static SpiSetSpeedDelegate SpiSetSpeed;
 
-        public delegate void SpiSetBitsPerWordDelegate(byte port, byte bpw);
-        public static SpiSetBitsPerWordDelegate SpiSetBitsPerWord;
-
         public delegate void SpiSetOptsDelegate(byte port, int msb_first, int sample_on_trailing, int clk_idle_high);
         public static SpiSetOptsDelegate SpiSetOpts;
 

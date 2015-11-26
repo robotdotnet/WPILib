@@ -20,8 +20,6 @@ namespace HAL_RoboRIO
 
             HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSession = (HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSessionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "FRC_NetworkCommunication_CANSessionMux_readStreamSession"), typeof(HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSessionDelegate));
 
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_getCANStatus = (HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_getCANStatusDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "FRC_NetworkCommunication_CANSessionMux_getCANStatus"), typeof(HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_getCANStatusDelegate));
-
         }
     }
 }

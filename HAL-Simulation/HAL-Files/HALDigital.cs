@@ -95,7 +95,6 @@ namespace HAL_Simulator
             HAL_Base.HALDigital.SpiRead = spiRead;
             HAL_Base.HALDigital.SpiClose = spiClose;
             HAL_Base.HALDigital.SpiSetSpeed = spiSetSpeed;
-            HAL_Base.HALDigital.SpiSetBitsPerWord = spiSetBitsPerWord;
             HAL_Base.HALDigital.SpiSetOpts = spiSetOpts;
             HAL_Base.HALDigital.SpiSetChipSelectActiveHigh = spiSetChipSelectActiveHigh;
             HAL_Base.HALDigital.SpiSetChipSelectActiveLow = spiSetChipSelectActiveLow;
