@@ -47,39 +47,45 @@ namespace WPILib
         private readonly bool m_allocatedChannels;
         private Counter m_counter = null;
 
-        private readonly object m_syncRoot = new object();
+        private static readonly object s_syncRoot = new object();
 
         private PIDSourceType m_pidSource = PIDSourceType.Displacement;
 
         private static void GetUltrasonicChecker(object sender, EventArgs args)
         {
-            while (s_automaticRoundRobinEnabled)
+            lock (s_syncRoot)
             {
-                foreach (var sensor in s_currentSensors)
+                while (s_automaticRoundRobinEnabled)
                 {
-                    if (sensor.Enabled)
-                        sensor.m_pingChannel.Pulse(PingTime);
+                    foreach (var sensor in s_currentSensors)
+                    {
+                        if (sensor.Enabled)
+                            sensor.m_pingChannel.Pulse(PingTime);
+                    }
+                    Timer.Delay(.1);
                 }
-                Timer.Delay(.1);
             }
         }
 
         private void Initialize()
         {
-            lock (m_syncRoot)
+
+            bool originalMode = s_automaticRoundRobinEnabled;
+            SetAutomaticMode(false);
+            lock (s_syncRoot)
             {
-                bool originalMode = s_automaticRoundRobinEnabled;
-                SetAutomaticMode(false);
-                m_counter = new Counter { MaxPeriod = 1.0 };
-                m_counter.SetSemiPeriodMode(true);
-                m_counter.Reset();
-                Enabled = true;
                 s_currentSensors.Add(this);
-                SetAutomaticMode(originalMode);
-                ++s_instances;
-                HAL.Report(ResourceType.kResourceType_Ultrasonic, s_instances);
-                LiveWindow.AddSensor("Ultrasonic", m_echoChannel.Channel, this);
             }
+            m_counter = new Counter { MaxPeriod = 1.0 };
+            m_counter.SetSemiPeriodMode(true);
+            m_counter.Reset();
+            Enabled = true;
+
+            SetAutomaticMode(originalMode);
+            ++s_instances;
+            HAL.Report(ResourceType.kResourceType_Ultrasonic, s_instances);
+            LiveWindow.AddSensor("Ultrasonic", m_echoChannel.Channel, this);
+
         }
 
         /// <summary>
@@ -136,23 +142,27 @@ namespace WPILib
         public override void Dispose()
         {
             base.Dispose();
-            lock (m_syncRoot)
+            bool previousAutoMode = s_automaticRoundRobinEnabled;
+            SetAutomaticMode(false);
+            lock (s_syncRoot)
             {
-                bool previousAutoMode = s_automaticRoundRobinEnabled;
-                SetAutomaticMode(false);
-                if (m_allocatedChannels)
-                {
-                    m_pingChannel?.Dispose();
-                    m_echoChannel?.Dispose();
-                }
-                m_counter?.Dispose();
-                m_pingChannel = null;
-                m_echoChannel = null;
-                m_counter = null;
                 s_currentSensors.Remove(this);
-                if (!s_currentSensors.Any()) return;
-                SetAutomaticMode(previousAutoMode);
             }
+            if (m_allocatedChannels)
+            {
+                m_pingChannel?.Dispose();
+                m_echoChannel?.Dispose();
+            }
+            m_counter?.Dispose();
+            m_pingChannel = null;
+            m_echoChannel = null;
+            m_counter = null;
+            lock (s_syncRoot)
+            {
+                if (!s_currentSensors.Any()) return;
+            }
+            SetAutomaticMode(previousAutoMode);
+
         }
 
         /// <summary>
