@@ -17,6 +17,9 @@ namespace HAL_Base
         public delegate IntPtr InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeDigitalPortDelegate InitializeDigitalPort;
 
+        public delegate void FreeDigitalPortDelegate(IntPtr digital_port_pointer);
+        public static FreeDigitalPortDelegate FreeDigitalPort;
+
         [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool CheckPWMChannelDelegate(IntPtr digital_port_pointer);
         public static CheckPWMChannelDelegate CheckPWMChannel;

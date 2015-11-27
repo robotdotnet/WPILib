@@ -17,6 +17,12 @@ namespace HAL_Base
         public delegate IntPtr InitializeAnalogOutputPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeAnalogOutputPortDelegate InitializeAnalogOutputPort;
 
+        public delegate void FreeAnalogOutputPortDelegate(IntPtr analog_port_pointer);
+        public static FreeAnalogOutputPortDelegate FreeAnalogOutputPort;
+
+        public delegate void FreeAnalogInputPortDelegate(IntPtr analog_port_pointer);
+        public static FreeAnalogInputPortDelegate FreeAnalogInputPort;
+
         public delegate void SetAnalogOutputDelegate(IntPtr analog_port_pointer, double voltage, ref int status);
         public static SetAnalogOutputDelegate SetAnalogOutput;
 

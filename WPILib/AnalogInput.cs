@@ -26,7 +26,7 @@ namespace WPILib
     {
         //private static int AccumulatorSlot = 1;
         private static readonly Resource s_channels = new Resource(AnalogInputChannels);
-        private readonly IntPtr m_port;
+        private IntPtr m_port;
         private static readonly int[] s_accumulatorChannels = { 0, 1 };
         private long m_accumulatorOffset;
 
@@ -59,6 +59,8 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
+            FreeAnalogInputPort(m_port);
+            m_port = IntPtr.Zero;
             s_channels.Deallocate(Channel);
             Channel = 0;
             m_accumulatorOffset = 0;

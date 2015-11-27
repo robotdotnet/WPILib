@@ -12,7 +12,7 @@ namespace WPILib
     /// </summary>
     public abstract class SolenoidBase : SensorBase
     {
-        private readonly IntPtr m_port;
+        private IntPtr m_port;
         /// <summary>
         /// The module number for the solenoid.
         /// </summary>
@@ -37,7 +37,14 @@ namespace WPILib
                 CheckStatus(status);
             }
         }
-        
+
+        public override void Dispose()
+        {
+            FreeSolenoidPort(m_port);
+            m_port = IntPtr.Zero;
+            base.Dispose();
+        }
+
         /// <summary>
         /// Reads complete solenoid blacklist for all 8 solenoids as a single byte.
         /// </summary>

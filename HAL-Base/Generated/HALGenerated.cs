@@ -25,6 +25,9 @@ namespace HAL_Base
         public delegate IntPtr GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
+        public delegate void FreePortDelegate(IntPtr port_pointer);
+        public static FreePortDelegate FreePort;
+
         [return:HALAllowNonBlittable]
         public delegate string GetHALErrorMessageDelegate(int code);
         public static GetHALErrorMessageDelegate GetHALErrorMessage;

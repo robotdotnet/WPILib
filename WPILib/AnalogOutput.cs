@@ -46,6 +46,8 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
+            HALAnalog.FreeAnalogOutputPort(m_port);
+            m_port = IntPtr.Zero;
             s_channels.Deallocate(m_channel);
             m_channel = 0;
         }

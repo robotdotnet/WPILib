@@ -80,6 +80,11 @@ namespace WPILib
             {
                 s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
                 s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                FreeSolenoidPort(m_forwardSolenoid);
+                m_forwardSolenoid = IntPtr.Zero;
+                FreeSolenoidPort(m_reverseSolenoid);
+                m_reverseSolenoid = IntPtr.Zero;
+                base.Dispose();
             }
         }
 
