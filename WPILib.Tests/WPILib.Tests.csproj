@@ -98,7 +98,6 @@
     <Compile Include="Commands\MockCommand.cs" />
     <Compile Include="MockNetworkTable.cs" />
     <Compile Include="MotorControllers\TestPWMMotorControllers.cs" />
-    <Compile Include="SpecScaners\NativeProjects.cs" />
     <Compile Include="SpecScaners\NetProjects.cs" />
     <Compile Include="SpecScaners\TestHALImpl.cs" />
     <Compile Include="TestAnalogInput.cs" />

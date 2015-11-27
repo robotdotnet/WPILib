@@ -72,7 +72,7 @@ namespace WPILib.Tests.SpecScaners
             Assert.That(nullTypes.Count == 0);            
         }
 
-
+        //Checks all our types for blittable
         private void CheckForBlittable(List<TypeSyntax> types, List<string> allowedTypes, List<string> nonBlittableFuncs, string nonBlittableLine)
         {
             bool allBlittable = true;
@@ -100,13 +100,17 @@ namespace WPILib.Tests.SpecScaners
 
         private static bool IsBlittable(Type type)
         {
+            // If is array
             if (type.IsArray)
             {
+                //Check that the elements are value type, and that the element itself is blittable.
                 var elements = type.GetElementType();
                 return elements.IsValueType && IsBlittable(elements);
             }
             try
             {
+                //Otherwise try and pin the type. If it pins, it is blittable.
+                //If exception is thrown, it is not blittable, and do not allow.
                 object obj = FormatterServices.GetUninitializedObject(type);
                 GCHandle.Alloc(obj, GCHandleType.Pinned).Free();
                 return true;
@@ -158,6 +162,7 @@ namespace WPILib.Tests.SpecScaners
 
             List<string> allowedTypes = new List<string>()
             {
+                // Allowed types with arrays are also allowed
                 "byte",
                 "sbyte",
                 "short",
@@ -185,14 +190,11 @@ namespace WPILib.Tests.SpecScaners
                 "HALJoystickPOVs",
                 "HALJoystickAxes",
                 "HALControlWord",
+                "HALJoystickDescriptor",
 
                 //For now allow bool, since it marshalls easily
                 //This will change if the native windows HAL is not 1 byte bools
                 "bool",
-                
-                //Going to allow the joystick structure, even though it is not blittable.
-                //Still trying to figure out the best way to do it right.
-                "HALJoystickDescriptor"
             };
 
             List<string> notBlittableMethods = new List<string>();
