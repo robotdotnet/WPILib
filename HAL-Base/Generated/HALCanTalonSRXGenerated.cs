@@ -177,5 +177,20 @@ namespace HAL_Base
 
         public delegate CTR_Code C_TalonSRX_SetRevFeedbackSensorDelegate(IntPtr handle, int param);
         public static C_TalonSRX_SetRevFeedbackSensorDelegate C_TalonSRX_SetRevFeedbackSensor;
+
+        public delegate CTR_Code C_TalonSRX_GetPulseWidthPositionDelegate(IntPtr handle, ref int param);
+        public static C_TalonSRX_GetPulseWidthPositionDelegate C_TalonSRX_GetPulseWidthPosition;
+
+        public delegate CTR_Code C_TalonSRX_GetPulseWidthVelocityDelegate(IntPtr handle, ref int param);
+        public static C_TalonSRX_GetPulseWidthVelocityDelegate C_TalonSRX_GetPulseWidthVelocity;
+
+        public delegate CTR_Code C_TalonSRX_GetPulseWidthRiseToFallUsDelegate(IntPtr handle, ref int param);
+        public static C_TalonSRX_GetPulseWidthRiseToFallUsDelegate C_TalonSRX_GetPulseWidthRiseToFallUs;
+
+        public delegate CTR_Code C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate(IntPtr handle, ref int param);
+        public static C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate C_TalonSRX_GetPulseWidthRiseToRiseUs;
+
+        public delegate CTR_Code C_TalonSRX_IsPulseWidthSensorPresentDelegate(IntPtr handle, ref int param);
+        public static C_TalonSRX_IsPulseWidthSensorPresentDelegate C_TalonSRX_IsPulseWidthSensorPresent;
     }
 }

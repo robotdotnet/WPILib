@@ -71,6 +71,36 @@ namespace HAL_Simulator
             HAL_Base.HALCanTalonSRX.C_TalonSRX_SetProfileSlotSelect = c_TalonSRX_SetProfileSlotSelect;
             HAL_Base.HALCanTalonSRX.C_TalonSRX_SetRampThrottle = c_TalonSRX_SetRampThrottle;
             HAL_Base.HALCanTalonSRX.C_TalonSRX_SetRevFeedbackSensor = c_TalonSRX_SetRevFeedbackSensor;
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPosition = CTalonSRXGetPulseWidthPosition;
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocity = CTalonSRXGetPulseWidthVelocity;
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUs = CTalonSRXGetPulseRiseToFallUs;
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUs = CTalonSRXGetPulseRiseToRiseUs;
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresent = CTalonSRXIsPulseWidthSensorPresent;
+        }
+
+        private static CTR_Code CTalonSRXIsPulseWidthSensorPresent(IntPtr handle, ref int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static CTR_Code CTalonSRXGetPulseRiseToRiseUs(IntPtr handle, ref int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static CTR_Code CTalonSRXGetPulseRiseToFallUs(IntPtr handle, ref int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static CTR_Code CTalonSRXGetPulseWidthVelocity(IntPtr handle, ref int i)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static CTR_Code CTalonSRXGetPulseWidthPosition(IntPtr handle, ref int i)
+        {
+            throw new NotImplementedException();
         }
 
 

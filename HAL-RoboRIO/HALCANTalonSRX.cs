@@ -122,6 +122,16 @@ namespace HAL_RoboRIO
 
             HAL_Base.HALCanTalonSRX.C_TalonSRX_SetRevFeedbackSensor = (HAL_Base.HALCanTalonSRX.C_TalonSRX_SetRevFeedbackSensorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_SetRevFeedbackSensor"), typeof(HAL_Base.HALCanTalonSRX.C_TalonSRX_SetRevFeedbackSensorDelegate));
 
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPosition = (HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPositionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthPosition"), typeof(HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPositionDelegate));
+
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocity = (HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocityDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthVelocityr"), typeof(HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocityDelegate));
+
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUs = (HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseRiseToFallUs"), typeof(HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUsDelegate));
+
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUs = (HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseRiseToRiseUs"), typeof(HAL_Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate));
+
+            HAL_Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresent = (HAL_Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_IsPulseWidthSensorPresent"), typeof(HAL_Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresentDelegate));
+
         }
     }
 }

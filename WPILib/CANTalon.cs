@@ -259,7 +259,9 @@ namespace WPILib
         /// <returns>The pulse width position</returns>
         public int GetPulseWidthPosition()
         {
-            throw new NotImplementedException("Waiting on additions to the HAL");
+            int val = 0;
+            C_TalonSRX_GetPulseWidthPosition(m_talonPointer, ref val);
+            return val;
         }
 
         /// <summary>
@@ -277,7 +279,9 @@ namespace WPILib
         /// <returns>The pulse width velocity.</returns>
         public int GetPulseWidthVelocity()
         {
-            throw new NotImplementedException("Waiting on additions to the HAL");
+            int val = 0;
+            C_TalonSRX_GetPulseWidthVelocity(m_talonPointer, ref val);
+            return val;
         }
         
         /// <summary>
@@ -286,7 +290,9 @@ namespace WPILib
         /// <returns>The pulse width time in microseconds.</returns>
         public int GetPulseWidthRiseToFallUs()
         {
-            throw new NotImplementedException("Waiting on additions to the HAL");
+            int val = 0;
+            C_TalonSRX_GetPulseWidthRiseToFallUs(m_talonPointer, ref val);
+            return val;
         }
 
         /// <summary>
@@ -295,7 +301,9 @@ namespace WPILib
         /// <returns>The pulse width time in microseconds.</returns>
         public int GetPulseWidthRiseToRiseUs()
         {
-            throw new NotImplementedException("Waiting on additions to the HAL");
+            int val = 0;
+            C_TalonSRX_GetPulseWidthRiseToRiseUs(m_talonPointer, ref val);
+            return val;
         }
 
         /// <summary>
@@ -317,8 +325,18 @@ namespace WPILib
                 case FeedbackDevice.CtreMagEncoderRelative:
                 case FeedbackDevice.CtreMagEncoderAbsolute:
                 case FeedbackDevice.PulseWidth:
-                    long value = 0;
-                    throw new NotImplementedException("Waiting for additions to the HAL");
+                    int value = 0;
+                    CTR_Code status = C_TalonSRX_IsPulseWidthSensorPresent(m_talonPointer, ref value);
+                    CheckStatus((int)status);
+                    if (value == 0)
+                    {
+                        retVal = FeedbackDeviceStatus.FeedbackStatusNotPresent;
+                    }
+                    else
+                    {
+                        retVal = FeedbackDeviceStatus.FeedbackStatusPresent;
+                    }
+                    break;
             }
             return retVal;
         }
