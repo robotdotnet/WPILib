@@ -15,9 +15,18 @@
     }
     */
 
+    /// <summary>
+    /// The PID source type for this PID source.
+    /// </summary>
     public enum PIDSourceType
     {
+        /// <summary>
+        /// Use displacement as the source.
+        /// </summary>
         Displacement = 0,
+        /// <summary>
+        /// Use rate as the source
+        /// </summary>
         Rate = 1,
     }
 
