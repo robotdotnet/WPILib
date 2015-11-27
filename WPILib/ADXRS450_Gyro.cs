@@ -61,14 +61,14 @@ namespace WPILib
             m_spi.InitAccumulator(SamplePeriod, 0x20000000, 4, 0x0c000000, 0x04000000,
                 10, 16, true, true);
 
-            InitGyro();
+            Calibrate();
 
             //UsageReporting.report(tResourceType.kResourceType_ADXRS450, port.getValue()); 	
             LiveWindow.AddSensor("ADXRS450_Gyro", port.ToString(), this);
         }
 
         /// <inheritdoc/>
-        public override void InitGyro()
+        public override void Calibrate()
         {
             if (m_spi == null) return;
 

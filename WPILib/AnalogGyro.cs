@@ -24,25 +24,8 @@ namespace WPILib
         readonly bool m_channelAllocated = false;
 
         /// <inheritdoc/>
-        public override void InitGyro()
+        public override void Calibrate()
         {
-            if (m_analog == null)
-            {
-                Console.WriteLine("Null m_analog");
-                throw new NullReferenceException("m_analog");
-            }
-            if (!m_analog.IsAccumulatorChannel)
-            {
-                throw new InvalidValueException("channel must be an accumulator channel");
-            }
-            Sensitivity = kDefaultVoltsPerDegreePerSecond;
-            m_analog.AverageBits = kAverageBits;
-            m_analog.OversampleBits = kOversampleBits;
-            double sampleRate = kSamplesPerSecond
-                    * (1 << (kAverageBits + kOversampleBits));
-            AnalogInput.GlobalSampleRate = sampleRate;
-            Timer.Delay(1.0);
-
             m_analog.InitAccumulator();
             m_analog.ResetAccumulator();
 
@@ -60,14 +43,6 @@ namespace WPILib
 
             m_analog.AccumulatorCenter = m_center;
             m_analog.ResetAccumulator();
-
-            Deadband = 0.0;
-
-            PIDSourceType = PIDSourceType.Displacement;
-
-            HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
-            LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
-
         }
 
         public AnalogGyro(int channel) : this(new AnalogInput(channel))
@@ -82,7 +57,25 @@ namespace WPILib
             {
                 throw new NullReferenceException("AnalogInput supplied to Gyro constructor is null");
             }
-            InitGyro();
+            Sensitivity = kDefaultVoltsPerDegreePerSecond;
+            m_analog.AverageBits = kAverageBits;
+            m_analog.OversampleBits = kOversampleBits;
+            double sampleRate = kSamplesPerSecond
+                    * (1 << (kAverageBits + kOversampleBits));
+            AnalogInput.GlobalSampleRate = sampleRate;
+            Timer.Delay(0.1);
+
+            Deadband = 0.0;
+
+            PIDSourceType = PIDSourceType.Displacement;
+
+
+            HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
+            LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
+
+            Calibrate();
+
+
         }
 
         ///<inheritdoc/>

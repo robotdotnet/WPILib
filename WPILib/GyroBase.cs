@@ -24,7 +24,7 @@ namespace WPILib
         public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
         /// <inheritdoc/>
-        public abstract void InitGyro();
+        public abstract void Calibrate();
 
         /// <inheritdoc/>
         public abstract void Reset();

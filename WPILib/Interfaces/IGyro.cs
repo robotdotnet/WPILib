@@ -18,7 +18,7 @@ namespace WPILib.Interfaces
         /// in progress, this is typically done when the robot is first turned on while
         /// it's sitting at rest before the competition starts.
         /// </remarks>
-        void InitGyro();
+        void Calibrate();
 
         /// <summary>
         /// Reset the gyro.
