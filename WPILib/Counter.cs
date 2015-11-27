@@ -21,8 +21,8 @@ namespace WPILib
     /// them to be zeroes before use.</para></remarks>
     public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
-        private DigitalSource m_upSource;
-        private DigitalSource m_downSource;
+        internal DigitalSource m_upSource;
+        internal DigitalSource m_downSource;
         private bool m_allocatedUpSource;
         private bool m_allocatedDownSource;
         private IntPtr m_counter;
