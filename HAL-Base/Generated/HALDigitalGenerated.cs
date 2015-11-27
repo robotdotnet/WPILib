@@ -250,13 +250,6 @@ namespace HAL_Base
         public delegate void SpiSetHandleDelegate(byte port, int handle);
         public static SpiSetHandleDelegate SpiSetHandle;
 
-        public delegate IntPtr SpiGetSemaphoreDelegate(byte port);
-        public static SpiGetSemaphoreDelegate SpiGetSemaphore;
-
-        public delegate void SpiSetSemaphoreDelegate(byte port, IntPtr semaphore);
-        public static SpiSetSemaphoreDelegate SpiSetSemaphore;
-
-
         public delegate void SpiInitAccumulatorDelegate(byte port, uint period, uint cmd, byte xferSize,
             uint validMask, uint validValue, byte dataShift, byte dataSize, [MarshalAs(UnmanagedType.I1)]bool isSigned,
             [MarshalAs(UnmanagedType.I1)]bool bigEndian, ref int status);
