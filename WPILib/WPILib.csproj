@@ -58,6 +58,7 @@
     <Compile Include="ADXL345.cs" />
     <Compile Include="ADXL345_I2C.cs" />
     <Compile Include="ADXL345_SPI.cs" />
+    <Compile Include="ADXL362.cs" />
     <Compile Include="AnalogAccelerometer.cs" />
     <Compile Include="AnalogInput.cs" />
     <Compile Include="AnalogOutput.cs" />
