@@ -54,6 +54,10 @@ namespace HAL_Simulator
             HAL_Base.HALDigital.Pulse = pulse;
             HAL_Base.HALDigital.IsPulsing = isPulsing;
             HAL_Base.HALDigital.IsAnyPulsing = isAnyPulsing;
+            HAL_Base.HALDigital.SetFilterPeriod = setFilterPeriod;
+            HAL_Base.HALDigital.GetFilterPeriod = getFilterPeriod;
+            HAL_Base.HALDigital.SetFilterSelect = setFilterSelect;
+            HAL_Base.HALDigital.GetFilterSelect = getFilterSelect;
             HAL_Base.HALDigital.InitializeCounter = initializeCounter;
             HAL_Base.HALDigital.FreeCounter = freeCounter;
             HAL_Base.HALDigital.SetCounterAverageSize = setCounterAverageSize;
@@ -416,6 +420,30 @@ namespace HAL_Simulator
         }
 
         [CalledSimFunction]
+        private static void setFilterPeriod(int filterIndex, uint value, ref int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
+        private static uint getFilterPeriod(int filterIndex, ref int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
+        private static void setFilterSelect(IntPtr digitalPortPointer, int filterIndex, ref int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
+        private static int getFilterSelect(IntPtr digitalPortPointer, ref int status)
+        {
+            throw new NotImplementedException();
+        }
+
+        [CalledSimFunction]
         public static IntPtr initializeCounter(Mode mode, ref uint index, ref int status)
         {
             status = 0;
@@ -559,7 +587,7 @@ namespace HAL_Simulator
                 }
             };
 
-            counter.UpCallback= upCallback;
+            counter.UpCallback = upCallback;
             AnalogIn[analogIn].Register("Voltage", upCallback);
         }
 
@@ -631,7 +659,7 @@ namespace HAL_Simulator
                 {
                     DIO[(int)counter.UpSourceChannel].Cancel("Value", counter.UpCallback);
                 }
-                
+
                 counter.UpCallback = null;
             }
 
@@ -639,8 +667,8 @@ namespace HAL_Simulator
             counter.UpFallingEdge = false;
             counter.UpSourceChannel = 0;
             counter.UpSourceTrigger = false;
-			
-			
+
+
         }
 
         [CalledSimFunction]
@@ -817,7 +845,7 @@ namespace HAL_Simulator
                 {
                     DIO[(int)counter.DownSourceChannel].Cancel("Value", counter.DownCallback);
                 }
-                
+
                 counter.DownCallback = null;
             }
 
@@ -825,8 +853,8 @@ namespace HAL_Simulator
             counter.DownFallingEdge = false;
             counter.DownSourceChannel = 0;
             counter.DownSourceTrigger = false;
-			
-			
+
+
         }
 
         [CalledSimFunction]
