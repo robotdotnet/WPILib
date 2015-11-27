@@ -21,6 +21,8 @@ namespace HAL_RoboRIO
 
             HAL_Base.HALSolenoid.GetSolenoid = (HAL_Base.HALSolenoid.GetSolenoidDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getSolenoid"), typeof(HAL_Base.HALSolenoid.GetSolenoidDelegate));
 
+            HAL_Base.HALSolenoid.GetAllSolenoids = (HAL_Base.HALSolenoid.GetAllSolenoidsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAllSolenoids"), typeof(HAL_Base.HALSolenoid.GetAllSolenoidsDelegate));
+
             HAL_Base.HALSolenoid.SetSolenoid = (HAL_Base.HALSolenoid.SetSolenoidDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setSolenoid"), typeof(HAL_Base.HALSolenoid.SetSolenoidDelegate));
 
             HAL_Base.HALSolenoid.GetPCMSolenoidBlackList = (HAL_Base.HALSolenoid.GetPCMSolenoidBlackListDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidBlackList"), typeof(HAL_Base.HALSolenoid.GetPCMSolenoidBlackListDelegate));

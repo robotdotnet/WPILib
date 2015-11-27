@@ -21,6 +21,7 @@ namespace HAL_Simulator
             HAL_Base.HALSolenoid.FreeSolenoidPort = freeSolenoidPort;
             HAL_Base.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
             HAL_Base.HALSolenoid.GetSolenoid = getSolenoid;
+            HAL_Base.HALSolenoid.GetAllSolenoids = getAllSolenoids;
             HAL_Base.HALSolenoid.SetSolenoid = setSolenoid;
             HAL_Base.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
             HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
@@ -61,6 +62,20 @@ namespace HAL_Simulator
             status = 0;
             var p = GetSolenoidPort(solenoid_port_pointer);
             return GetPCM(p.port.module).Solenoids[p.port.pin].Value;
+        }
+
+        [CalledSimFunction]
+        public static byte getAllSolenoids(IntPtr solenoid_port_pointer, ref int status)
+        {
+            status = 0;
+            var port = GetSolenoidPort(solenoid_port_pointer);
+            var solenoids = GetPCM(port.port.module).Solenoids;
+            byte total = 0;
+            for (int i = 0; i < solenoids.Count; i++)
+            {
+                total = (byte) (total + ((solenoids[i].Value ? 1 : 0) << i));
+            }
+            return total;
         }
 
 

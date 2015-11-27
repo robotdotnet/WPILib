@@ -128,6 +128,44 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestSolenoidGetAll()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                GetSolenoids()[0].Value = true;
+                GetSolenoids()[1].Value = true;
+                GetSolenoids()[2].Value = false;
+                GetSolenoids()[3].Value = false;
+                GetSolenoids()[4].Value = false;
+                GetSolenoids()[5].Value = true;
+                GetSolenoids()[6].Value = false;
+                GetSolenoids()[7].Value = false;
+
+                byte allSolenoids = s.GetAll();
+
+                bool solenoid0 = ((0x1 << 0) & allSolenoids) != 0;
+                bool solenoid1 = ((0x1 << 1) & allSolenoids) != 0;
+                bool solenoid2 = ((0x1 << 2) & allSolenoids) != 0;
+                bool solenoid3 = ((0x1 << 3) & allSolenoids) != 0;
+                bool solenoid4 = ((0x1 << 4) & allSolenoids) != 0;
+                bool solenoid5 = ((0x1 << 5) & allSolenoids) != 0;
+                bool solenoid6 = ((0x1 << 6) & allSolenoids) != 0;
+                bool solenoid7 = ((0x1 << 7) & allSolenoids) != 0;
+
+                Assert.That(solenoid0);
+                Assert.That(solenoid1);
+                Assert.That(!solenoid2);
+                Assert.That(!solenoid3);
+                Assert.That(!solenoid4);
+                Assert.That(solenoid5);
+                Assert.That(!solenoid6);
+                Assert.That(!solenoid7);
+
+
+            }
+        }
+
+        [Test]
         public void TestBlackList()
         {
             using (Solenoid s = NewSolenoid())
