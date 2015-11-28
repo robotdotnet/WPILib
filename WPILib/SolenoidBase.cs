@@ -46,6 +46,18 @@ namespace WPILib
         }
 
         /// <summary>
+        /// Read all 8 solenoids from the module used byt this solenoid as a single byte
+        /// </summary>
+        /// <returns>The current value of all 8 solenoids on thsis module.</returns>
+        public byte GetAll()
+        {
+            int status = 0;
+            byte retVal = HALSolenoid.GetAllSolenoids(m_port, ref status);
+            CheckStatus(status);
+            return retVal;
+        }
+        
+        /// <summary>
         /// Reads complete solenoid blacklist for all 8 solenoids as a single byte.
         /// </summary>
         /// <remarks>If a solenoid is shorted, it is added to the blacklist and

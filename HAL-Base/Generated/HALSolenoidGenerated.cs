@@ -26,6 +26,9 @@ namespace HAL_Base
         public delegate bool GetSolenoidDelegate(IntPtr solenoid_port_pointer, ref int status);
         public static GetSolenoidDelegate GetSolenoid;
 
+        public delegate byte GetAllSolenoidsDelegate(IntPtr solenoid_port_pointer, ref int status);
+        public static GetAllSolenoidsDelegate GetAllSolenoids;
+
         public delegate void SetSolenoidDelegate(IntPtr solenoid_port_pointer, [MarshalAs(UnmanagedType.I1)]bool value, ref int status);
         public static SetSolenoidDelegate SetSolenoid;
 
