@@ -49,7 +49,7 @@ namespace WPILib.Extras.NavX
             m_spi.Dispose();
         }
 
-        public byte[] Read(DeviceRegisters deviceRegister, byte readSize)
+        public byte[] Read(byte readSize, DeviceRegisters deviceRegister)
         {
             byte crc;
             byte[] toWrite = CalculateCrc(new[] {(byte)deviceRegister, readSize}, out crc);
