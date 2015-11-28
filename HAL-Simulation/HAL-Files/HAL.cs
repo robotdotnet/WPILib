@@ -86,6 +86,7 @@ namespace HAL_Simulator
         {
             HAL_Base.HAL.GetPort = getPort;
             HAL_Base.HAL.GetPortWithModule = getPortWithModule;
+            HAL_Base.HAL.FreePort = freePort;
             HAL_Base.HAL.GetHALErrorMessage = getHALErrorMessage;
             HAL_Base.HAL.GetFPGAVersion = getFPGAVersion;
             HAL_Base.HAL.GetFPGARevision = getFPGARevision;
@@ -276,6 +277,13 @@ namespace HAL_Simulator
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(port));
             Marshal.StructureToPtr(port, ptr, true);
             return ptr;
+        }
+
+        [CalledSimFunction]
+        public static void freePort(IntPtr port_pointer)
+        {
+            if (port_pointer == IntPtr.Zero) return;
+            Marshal.FreeHGlobal(port_pointer);
         }
 
 

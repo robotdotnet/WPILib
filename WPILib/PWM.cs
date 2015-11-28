@@ -118,6 +118,7 @@ namespace WPILib
         /// <remarks>Free the resource associated with the PWM channel and set the value to 0.</remarks>
         public override void Dispose()
         {
+            if (m_port == IntPtr.Zero) return;
             int status = 0;
             SetPWM(m_port, 0, ref status);
             CheckStatus(status);
@@ -125,6 +126,8 @@ namespace WPILib
             CheckStatus(status);
             FreeDIO(m_port, ref status);
             CheckStatus(status);
+            FreeDigitalPort(m_port);
+            m_port = IntPtr.Zero;
         }
 
         /// <summary>

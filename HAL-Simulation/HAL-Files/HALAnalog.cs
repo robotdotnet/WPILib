@@ -31,6 +31,8 @@ namespace HAL_Simulator
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALAnalog.InitializeAnalogOutputPort = initializeAnalogOutputPort;
+            HAL_Base.HALAnalog.FreeAnalogOutputPort = freeAnalogOutputPort;
+            HAL_Base.HALAnalog.FreeAnalogInputPort = freeAnalogInputPort;
             HAL_Base.HALAnalog.SetAnalogOutput = setAnalogOutput;
             HAL_Base.HALAnalog.GetAnalogOutput = getAnalogOutput;
             HAL_Base.HALAnalog.CheckAnalogOutputChannel = checkAnalogOutputChannel;
@@ -84,6 +86,20 @@ namespace HAL_Simulator
             Marshal.StructureToPtr(p, ptr, true);
 
             return ptr;
+        }
+
+        [CalledSimFunction]
+        public static void freeAnalogOutputPort(IntPtr analog_port_pointer)
+        {
+            if (analog_port_pointer == IntPtr.Zero) return;
+            Marshal.FreeHGlobal(analog_port_pointer);
+        }
+
+        [CalledSimFunction]
+        public static void freeAnalogInputPort(IntPtr analog_port_pointer)
+        {
+            if (analog_port_pointer == IntPtr.Zero) return;
+            Marshal.FreeHGlobal(analog_port_pointer);
         }
 
         [CalledSimFunction]
@@ -344,8 +360,12 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
         {
+            if (analog_trigger_pointer == IntPtr.Zero) return;
             status = 0;
-            SimData.AnalogTrigger[GetAnalogTrigger(analog_trigger_pointer).index].Initialized = false;
+            var trig = GetAnalogTrigger(analog_trigger_pointer);
+            SimData.AnalogTrigger[trig.index].Initialized = false;
+            freeAnalogInputPort(trig.analogPortPointer);
+            Marshal.FreeHGlobal(analog_trigger_pointer);
         }
 
         private static double getaAnalogValueToVoltage(IntPtr analog_port_pointer, int value, ref int status)

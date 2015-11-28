@@ -130,6 +130,8 @@ namespace HAL_RoboRIO
 
             HAL_Base.HAL.GetPortWithModule = (HAL_Base.HAL.GetPortWithModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPortWithModule"), typeof(HAL_Base.HAL.GetPortWithModuleDelegate));
 
+            HAL_Base.HAL.FreePort = (HAL_Base.HAL.FreePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePort"), typeof(HAL_Base.HAL.FreePortDelegate));
+
             HAL_Base.HAL.GetHALErrorMessage = GetHALErrorMessage;
 
             NativeGetHALErrorMessage = (NativeGetHALErrorMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getHALErrorMessage"), typeof(NativeGetHALErrorMessageDelegate));

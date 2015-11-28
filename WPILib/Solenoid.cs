@@ -72,6 +72,9 @@ namespace WPILib
             lock (m_lockObject)
             {
                 s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_channel);
+                FreeSolenoidPort(m_solenoidPort);
+                m_solenoidPort = IntPtr.Zero;
+                base.Dispose();
             }
         }
 

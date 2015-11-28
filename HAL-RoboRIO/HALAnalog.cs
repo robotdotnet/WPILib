@@ -14,6 +14,12 @@ namespace HAL_RoboRIO
         {
             HAL_Base.HALAnalog.InitializeAnalogOutputPort = (HAL_Base.HALAnalog.InitializeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogOutputPort"), typeof(HAL_Base.HALAnalog.InitializeAnalogOutputPortDelegate));
 
+            HAL_Base.HALAnalog.FreeAnalogOutputPort = (HAL_Base.HALAnalog.FreeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeAnalogOutputPort"), typeof
+                (HAL_Base.HALAnalog.FreeAnalogOutputPortDelegate));
+
+            HAL_Base.HALAnalog.FreeAnalogInputPort = (HAL_Base.HALAnalog.FreeAnalogInputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeAnalogInputPort"), typeof
+                (HAL_Base.HALAnalog.FreeAnalogInputPortDelegate));
+
             HAL_Base.HALAnalog.SetAnalogOutput = (HAL_Base.HALAnalog.SetAnalogOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogOutput"), typeof(HAL_Base.HALAnalog.SetAnalogOutputDelegate));
 
             HAL_Base.HALAnalog.GetAnalogOutput = (HAL_Base.HALAnalog.GetAnalogOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOutput"), typeof(HAL_Base.HALAnalog.GetAnalogOutputDelegate));

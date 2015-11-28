@@ -28,6 +28,7 @@ namespace HAL_Simulator
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALDigital.InitializeDigitalPort = initializeDigitalPort;
+            HAL_Base.HALDigital.FreeDigitalPort = freeDigitalPort;
             HAL_Base.HALDigital.CheckPWMChannel = checkPWMChannel;
             HAL_Base.HALDigital.CheckRelayChannel = checkRelayChannel;
             HAL_Base.HALDigital.SetPWM = setPWM;
@@ -118,6 +119,13 @@ namespace HAL_Simulator
             Marshal.StructureToPtr(p, ptr, true);
 
             return ptr;
+        }
+
+        [CalledSimFunction]
+        public static void freeDigitalPort(IntPtr digital_port_pointer)
+        {
+            if (digital_port_pointer == IntPtr.Zero) return;
+            Marshal.FreeHGlobal(digital_port_pointer);
         }
 
         private static int RemapMXPChannel(int pin)

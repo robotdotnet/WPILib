@@ -14,6 +14,9 @@ namespace HAL_RoboRIO
         {
             HAL_Base.HALDigital.InitializeDigitalPort = (HAL_Base.HALDigital.InitializeDigitalPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeDigitalPort"), typeof(HAL_Base.HALDigital.InitializeDigitalPortDelegate));
 
+            HAL_Base.HALDigital.FreeDigitalPort = (HAL_Base.HALDigital.FreeDigitalPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeDigitalPort"), typeof
+                (HAL_Base.HALDigital.FreeDigitalPortDelegate));
+
             HAL_Base.HALDigital.CheckPWMChannel = (HAL_Base.HALDigital.CheckPWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkPWMChannel"), typeof(HAL_Base.HALDigital.CheckPWMChannelDelegate));
 
             HAL_Base.HALDigital.CheckRelayChannel = (HAL_Base.HALDigital.CheckRelayChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkRelayChannel"), typeof(HAL_Base.HALDigital.CheckRelayChannelDelegate));

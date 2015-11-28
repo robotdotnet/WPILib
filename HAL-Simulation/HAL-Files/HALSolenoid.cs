@@ -18,6 +18,7 @@ namespace HAL_Simulator
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             HAL_Base.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
+            HAL_Base.HALSolenoid.FreeSolenoidPort = freeSolenoidPort;
             HAL_Base.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
             HAL_Base.HALSolenoid.GetSolenoid = getSolenoid;
             HAL_Base.HALSolenoid.SetSolenoid = setSolenoid;
@@ -39,6 +40,13 @@ namespace HAL_Simulator
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
             return ptr;
+        }
+
+        [CalledSimFunction]
+        public static void freeSolenoidPort(IntPtr solenoid_port_pointer)
+        {
+            if (solenoid_port_pointer == IntPtr.Zero) return;
+            Marshal.FreeHGlobal(solenoid_port_pointer);
         }
 
         [CalledSimFunction]

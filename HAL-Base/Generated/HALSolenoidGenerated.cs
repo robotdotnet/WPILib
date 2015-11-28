@@ -17,6 +17,9 @@ namespace HAL_Base
         public delegate IntPtr InitializeSolenoidPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeSolenoidPortDelegate InitializeSolenoidPort;
 
+        public delegate void FreeSolenoidPortDelegate(IntPtr solenoid_port_pointer);
+        public static FreeSolenoidPortDelegate FreeSolenoidPort;
+
         public delegate bool CheckSolenoidModuleDelegate(byte module);
         public static CheckSolenoidModuleDelegate CheckSolenoidModule;
 
