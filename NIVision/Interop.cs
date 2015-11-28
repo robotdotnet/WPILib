@@ -5,7 +5,7 @@ namespace NIVision
 {
     public class Interop
     {
-        private const string libraryPath = "libcl.dll";
+        private const string libraryPath = "libnivision.so";
 
         [DllImport(libraryPath, EntryPoint = "imaqAnd", CallingConvention = CallingConvention.Cdecl)]
         public static extern int imaqAnd(IntPtr dest, IntPtr sourceA, IntPtr sourceB);

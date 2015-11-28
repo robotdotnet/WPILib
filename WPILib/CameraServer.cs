@@ -36,7 +36,6 @@ namespace WPILib
         private USBCamera m_camera;
         private CameraData m_imageData;
         private LinkedList<IntPtr> m_imageDataPool;
-        //private Deque<ByteBuffer> m_imageDataPool;
 
         private class CameraData
         {
@@ -52,6 +51,11 @@ namespace WPILib
 
         private CameraServer()
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
+
             m_quality = 50;
             m_camera = null;
             m_imageData = null;
@@ -81,6 +85,10 @@ namespace WPILib
 
         private void SetImageData(RawData data, int start)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             try
             {
                 Monitor.Enter(m_lockObject);
@@ -103,6 +111,10 @@ namespace WPILib
 
         public void SetImage(Image image)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             RawData data = ImaqFlatten(image, FlattenType.IMAQ_FLATTEN_IMAGE, CompressionType.IMAQ_COMPRESSION_JPEG,
                 10 * m_quality);
             //Raw data here is a byte[]
@@ -136,11 +148,19 @@ namespace WPILib
 
         public void StartAutomaticCapture()
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             StartAutomaticCapture(USBCamera.kDefaultCameraName);
         }
 
         public void StartAutomaticCapture(string cameraName)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             try
             {
                 USBCamera camera = new USBCamera(cameraName);
@@ -156,6 +176,10 @@ namespace WPILib
 
         public void StartAutomaticCapture(USBCamera camera)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             lock (m_lockObject)
             {
                 if (m_autoCaptureStarted) return;
@@ -172,6 +196,10 @@ namespace WPILib
 
         protected void Capture()
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             Image frame = ImaqCreateImage(ImageType.IMAQ_IMAGE_RGB, 0);
 
             while (true)
@@ -218,6 +246,10 @@ namespace WPILib
 
         public bool IsAutoCaptureStarted()
         {
+            if (RobotBase.IsSimulation)
+            {
+                return true;
+            }
             lock (m_lockObject)
             {
                 return m_autoCaptureStarted;
@@ -226,6 +258,10 @@ namespace WPILib
 
         public void SetSize(int size)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             lock (m_lockObject)
             {
                 if (m_camera == null) return;
@@ -246,6 +282,10 @@ namespace WPILib
 
         public void SetQuality(int quality)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             lock (m_lockObject)
             {
                 m_quality = quality > 100 ? 100 : quality < 0 ? 0 : quality;
@@ -254,6 +294,10 @@ namespace WPILib
 
         protected void Serve()
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Unspecified);
 
             socket.ExclusiveAddressUse = false;

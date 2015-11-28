@@ -5,7 +5,7 @@ namespace NIVision.IMAQdx
 {
     internal class Interop
     {
-        private const string libraryPath = "libclan.dll";
+        private const string libraryPath = "libniimaqdx.so";
         
         //[DllImport(libraryPath, EntryPoint = "IMAQdxSnap", CallingConvention = CallingConvention.Cdecl)]
         //public static extern IMAQdxError IMAQdxSnap(IMAQdxSession @id, out Image @image);
