@@ -55,10 +55,20 @@
     <Compile Include="IMAQdx\Interop.cs" />
     <Compile Include="IMAQdx\PublicMethods.cs" />
     <Compile Include="Interop.cs" />
+    <Compile Include="NativeCameraServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PublicMethods.cs" />
     <Compile Include="Structs.cs" />
     <Compile Include="Unions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="libcameraserver.so" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+      <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
+      <Name>HAL-Base</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -16,7 +16,7 @@ namespace NIVision.IMAQdx
             return buffer;
         }
 
-        private static byte[] CreateUTF8String(this string str)
+        internal static byte[] CreateUTF8String(this string str)
         {
             var bytes = Encoding.UTF8.GetByteCount(str);
 

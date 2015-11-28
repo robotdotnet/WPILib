@@ -14,6 +14,45 @@ namespace WPILib
 {
     public class CameraServer
     {
+        private static CameraServer s_server;
+
+        public static CameraServer Instance => s_server ?? (s_server = new CameraServer());
+
+        private CameraServer()
+        {
+
+        }
+        public void StartAutomaticCapture()
+        {
+            StartAutomaticCapture(USBCamera.kDefaultCameraName);
+        }
+
+        public void StartAutomaticCapture(string cameraName)
+        {
+            NativeCameraServer.StartImageCapture(cameraName);
+        }
+
+        public bool IsAutoCaptureStarted()
+        {
+            return NativeCameraServer.IsAutoCaptureStarted();
+        }
+
+        private const int kSize640x480 = 0;
+        private const int kSize320x240 = 1;
+        private const int kSize160x120 = 2;
+
+        public void SetSize(int size)
+        {
+            NativeCameraServer.SetSize((uint)size);
+        }
+
+        public void SetQuality(int quality)
+        {
+            NativeCameraServer.SetQuality((uint) (quality > 100 ? 100 : quality < 0 ? 0 : quality));
+        }
+
+
+        /*
         private const int Port = 1180;
         private static readonly byte[] MagicNumber = { 0x01, 0x00, 0x00, 0x00 };
         private const int kSize640x480 = 0;
@@ -22,11 +61,11 @@ namespace WPILib
         private const int kHardwareCompression = -1;
         private const string kDefaultCameraName = "cam1";
         private const int kMaxImageSize = 200000;
-        private static CameraServer server;
+        private static CameraServer s_server;
 
         public static CameraServer Instance
         {
-            get { return server ?? (server = new CameraServer()); }
+            get { return s_server ?? (s_server = new CameraServer()); }
         }
 
         private Thread serverThread;
@@ -404,6 +443,6 @@ namespace WPILib
                     continue;
                 }
             }
-        }
+        }*/
     }
 }
