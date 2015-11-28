@@ -69,6 +69,12 @@
     <Compile Include="AttributedCommandModel\RunCommandOnJoystickAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnNetworkKeyAttribute.cs" />
     <Compile Include="LabVIEWRobot.cs" />
+    <Compile Include="NavX\CapabilityFlags.cs" />
+    <Compile Include="NavX\DeviceRegisters.cs" />
+    <Compile Include="NavX\I2cIO.cs" />
+    <Compile Include="NavX\IIo.cs" />
+    <Compile Include="NavX\NavXMxp.cs" />
+    <Compile Include="NavX\SpiIO.cs" />
     <Compile Include="XboxController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -85,6 +91,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
