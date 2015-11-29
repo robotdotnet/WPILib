@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
 using NetworkTables;
+using NetworkTables.Native;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
 
 namespace WPILib.IntegrationTests
 {
     [TestFixture]
-    [Ignore("Waiting for a new NetworkTables drop that fixes the shutdown hang issue")]
     public class PreferencesTest : AbstractComsSetup
     {
         private NetworkTable prefTable;
