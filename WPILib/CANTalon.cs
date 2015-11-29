@@ -1443,7 +1443,7 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public double PidGet()
+        public virtual double PidGet()
         {
             return GetPosition();
         }
@@ -1452,7 +1452,7 @@ namespace WPILib
         public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
         ///<inheritdoc/>
-        public void Set(double value)
+        public virtual void Set(double value)
         {
             m_safetyHelper.Feed();
             if (m_controlEnabled)
@@ -1495,7 +1495,7 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public double Get()
+        public virtual double Get()
         {
             double retVal = 0.0;
             int value = 0;

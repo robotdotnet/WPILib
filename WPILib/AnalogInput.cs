@@ -74,7 +74,7 @@ namespace WPILib
         /// <para/> A/D converter codes.Use GetVoltage() to get the analog value in
         /// <para/> calibrated units.</remarks>
         /// <returns>A straight sample from this channel in 12 bit form.</returns>
-        public int GetValue()
+        public virtual int GetValue()
         {
             int status = 0;
             int value = GetAnalogValue(m_port, ref status);
@@ -92,7 +92,7 @@ namespace WPILib
         /// <para/> AverageBits) samples have been acquired from this channel.Use
         /// <para/> getAverageVoltage() to get the analog value in calibrated units.</remarks>
         /// <returns> A sample from the oversample and average engine for this channel.</returns>
-        public int GetAverageValue()
+        public virtual int GetAverageValue()
         {
             int status = 0;
             int value = GetAnalogAverageValue(m_port, ref status);
@@ -104,7 +104,7 @@ namespace WPILib
         /// Get a scaled sample straight from this channel.
         /// </summary>
         /// <returns>The voltage on the Analog Input</returns>
-        public double GetVoltage()
+        public virtual double GetVoltage()
         {
             int status = 0;
             double value = GetAnalogVoltage(m_port, ref status);
@@ -117,7 +117,7 @@ namespace WPILib
         /// for this channel.
         /// </summary>
         /// <returns>A scaled sample from the output of the oversample and average engine for this channel.</returns>
-        public double GetAverageVoltage()
+        public virtual double GetAverageVoltage()
         {
             int status = 0;
             double value = GetAnalogAverageVoltage(m_port, ref status);

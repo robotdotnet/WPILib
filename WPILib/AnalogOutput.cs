@@ -56,7 +56,7 @@ namespace WPILib
         /// Set the voltage being output.
         /// </summary>
         /// <param name="voltage">The voltage to output</param>
-        public void SetVoltage(double voltage)
+        public virtual void SetVoltage(double voltage)
         {
             int status = 0;
             HALAnalog.SetAnalogOutput(m_port, voltage, ref status);
@@ -67,7 +67,7 @@ namespace WPILib
         /// Get the voltage being output
         /// </summary>
         /// <returns>The voltage being output</returns>
-        public double GetVoltage()
+        public virtual double GetVoltage()
         {
             int status = 0;
 

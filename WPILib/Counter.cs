@@ -251,7 +251,7 @@ namespace WPILib
             CheckStatus(status);
         }
 
-        public int Get()
+        public virtual int Get()
         {
             int status = 0;
             int value = GetCounter(m_counter, ref status);
@@ -259,9 +259,9 @@ namespace WPILib
             return value;
         }
 
-        public double GetDistance() => Get() * m_distancePerPulse;
+        public virtual double GetDistance() => Get() * m_distancePerPulse;
 
-        public void Reset()
+        public virtual void Reset()
         {
             int status = 0;
             ResetCounter(m_counter, ref status);
@@ -288,7 +288,7 @@ namespace WPILib
             }
         }
 
-        public bool GetStopped()
+        public virtual bool GetStopped()
         {
             int status = 0;
             bool value = GetCounterStopped(m_counter, ref status);
@@ -311,7 +311,7 @@ namespace WPILib
             CheckStatus(status);
         }
 
-        public double GetPeriod()
+        public virtual double GetPeriod()
         {
             int status = 0;
             double value = GetCounterPeriod(m_counter, ref status);
@@ -319,7 +319,7 @@ namespace WPILib
             return value;
         }
 
-        public double GetRate() => m_distancePerPulse / GetPeriod();
+        public virtual double GetRate() => m_distancePerPulse / GetPeriod();
 
         public int SamplesToAverage
         {

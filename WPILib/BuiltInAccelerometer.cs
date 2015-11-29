@@ -41,14 +41,14 @@ namespace WPILib
             }
         }
 
-        public double GetX() => HALAccelerometer.GetAccelerometerX();
+        public virtual double GetX() => HALAccelerometer.GetAccelerometerX();
 
-        public double GetY() => HALAccelerometer.GetAccelerometerY();
+        public virtual double GetY() => HALAccelerometer.GetAccelerometerY();
 
-        public double GetZ() => HALAccelerometer.GetAccelerometerZ();
+        public virtual double GetZ() => HALAccelerometer.GetAccelerometerZ();
 
         /// <inheritdoc/>
-        public AllAxes GetAllAxes()
+        public virtual AllAxes GetAllAxes()
         {
             return new AllAxes(GetX(), GetY(), GetZ());   
         }

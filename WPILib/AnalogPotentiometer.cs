@@ -71,7 +71,7 @@ namespace WPILib
         /// Get the current reading of the potentiometer
         /// </summary>
         /// <returns>The current position of the potentiometer</returns>
-        public double Get()
+        public virtual double Get()
         {
             return (m_analogInput.GetVoltage() / ControllerPower.GetVoltage5V()) * m_fullRange + m_offset;
         }
@@ -80,7 +80,7 @@ namespace WPILib
         /// Get the result to use in PIDController
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
-        public double PidGet() => Get();
+        public virtual double PidGet() => Get();
 
         ///<inheritdoc/>
         public PIDSourceType PIDSourceType {

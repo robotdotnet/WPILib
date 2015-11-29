@@ -69,7 +69,7 @@ namespace WPILib
         /// Returns the acceleration in Gs.
         /// </summary>
         /// <returns>The acceleration in Gs.</returns>
-        public double GetAcceleration() => (m_analogChannel.GetAverageVoltage() - m_zeroGVoltage)/m_voltsPerG;
+        public virtual double GetAcceleration() => (m_analogChannel.GetAverageVoltage() - m_zeroGVoltage)/m_voltsPerG;
 
         /// <summary>
         /// Sets the accelerometer sensitivity.
@@ -91,7 +91,7 @@ namespace WPILib
         /// Get the result to use in PIDController
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
-        public double PidGet() => GetAcceleration();
+        public virtual double PidGet() => GetAcceleration();
 
         /// <summary>
         /// Initialize a table for this sendable object.

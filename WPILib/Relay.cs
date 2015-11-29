@@ -131,7 +131,7 @@ namespace WPILib
         /// Sets the relay output.
         /// </summary>
         /// <param name="value">The value to set.</param>
-        public void Set(Value value)
+        public virtual void Set(Value value)
         {
             int status = 0;
             switch (value)
@@ -196,7 +196,7 @@ namespace WPILib
         /// Gets the latest relay value sent.
         /// </summary>
         /// <returns>The latest relay value.</returns>
-        public Value Get()
+        public virtual Value Get()
         {
             int status = 0;
 

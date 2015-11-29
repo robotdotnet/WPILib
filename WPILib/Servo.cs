@@ -45,7 +45,7 @@ namespace WPILib
         /// Sets the absolute value of the servo.
         /// </summary>
         /// <param name="value">The absolute setpoint between 0.0 and 1.0</param>
-        public void Set(double value)
+        public virtual void Set(double value)
         {
             SetPosition(value);
         }
@@ -54,7 +54,7 @@ namespace WPILib
         /// Gets the latest absolute value of the servo.
         /// </summary>
         /// <returns>The latest absolute setpoint between 0.0 and 1.0</returns>
-        public double Get()
+        public virtual double Get()
         {
             return GetPosition();
         }
@@ -63,7 +63,7 @@ namespace WPILib
         /// Sets the servo angle.
         /// </summary>
         /// <param name="degrees">The angle in degrees between 0 and 180</param>
-        public void SetAngle(double degrees)
+        public virtual void SetAngle(double degrees)
         {
             if (degrees < MinServoAngle)
                 degrees = MinServoAngle;
@@ -76,7 +76,7 @@ namespace WPILib
         /// Gets the latest servo angle.
         /// </summary>
         /// <returns>The latest angle in degrees between 0 and 180</returns>
-        public double GetAngle()
+        public virtual double GetAngle()
         {
             return GetPosition()*ServoAngleRange + MinServoAngle;
         }

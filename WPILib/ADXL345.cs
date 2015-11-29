@@ -102,7 +102,7 @@ namespace WPILib
         public double GetZ() => GetAcceleration(Axes.Z);
 
         /// <inheritdoc/>
-        public AllAxes GetAllAxes() => GetAccelerations();
+        public virtual AllAxes GetAllAxes() => GetAccelerations();
 
         /// <summary>
         /// Get the acceleration of one axis in Gs.

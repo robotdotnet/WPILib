@@ -118,16 +118,16 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public double GetX() => GetAcceleration(Axes.X);
+        public virtual double GetX() => GetAcceleration(Axes.X);
 
         /// <inheritdoc/>
-        public double GetY() => GetAcceleration(Axes.Y);
+        public virtual double GetY() => GetAcceleration(Axes.Y);
 
         /// <inheritdoc/>
-        public double GetZ() => GetAcceleration(Axes.Z);
+        public virtual double GetZ() => GetAcceleration(Axes.Z);
 
         /// <inheritdoc/>
-        public AllAxes GetAllAxes() => GetAccelerations();
+        public virtual AllAxes GetAllAxes() => GetAccelerations();
 
         /// <summary>
         /// Get the acceleration of one axis in Gs.

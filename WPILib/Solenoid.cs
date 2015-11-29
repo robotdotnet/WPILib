@@ -82,7 +82,7 @@ namespace WPILib
         /// Set the value of a solenoid
         /// </summary>
         /// <param name="on">Turn the solenoid output off or on.</param>
-        public void Set(bool on)
+        public virtual void Set(bool on)
         {
             int status = 0;
             SetSolenoid(m_solenoidPort, on, ref status);
@@ -93,7 +93,7 @@ namespace WPILib
         /// Read the current value of the solenoid.
         /// </summary>
         /// <returns>The current value of the solenoid.</returns>
-        public bool Get()
+        public virtual bool Get()
         {
             int status = 0;
             bool value = GetSolenoid(m_solenoidPort, ref status);

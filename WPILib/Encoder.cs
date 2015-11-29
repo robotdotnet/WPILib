@@ -220,7 +220,7 @@ namespace WPILib
             }
         }
 
-        public int GetRaw()
+        public virtual int GetRaw()
         {
             int value;
             if (m_counter != null)
@@ -236,9 +236,9 @@ namespace WPILib
             return value;
         }
 
-        public int Get() => (int)(GetRaw() * DecodingScaleFactor);
+        public virtual int Get() => (int)(GetRaw() * DecodingScaleFactor);
 
-        public void Reset()
+        public virtual void Reset()
         {
             if (m_counter != null)
                 m_counter.Reset();
@@ -250,7 +250,7 @@ namespace WPILib
             }
         }
 
-        public double GetPeriod()
+        public virtual double GetPeriod()
         {
             double measuredPeriod;
             if (m_counter != null)
@@ -266,7 +266,7 @@ namespace WPILib
             return measuredPeriod;
         }
 
-        public double MaxPeriod
+        public virtual double MaxPeriod
         {
             set
             {
@@ -283,7 +283,7 @@ namespace WPILib
             }
         }
 
-        public bool GetStopped()
+        public virtual bool GetStopped()
         {
             if (m_counter != null)
             {
@@ -298,7 +298,7 @@ namespace WPILib
             }
         }
 
-        public bool GetDirection()
+        public virtual bool GetDirection()
         {
             if (m_counter != null)
             {
@@ -331,9 +331,9 @@ namespace WPILib
             }
         }
 
-        public double GetDistance() => GetRaw() * DecodingScaleFactor * DistancePerPulse;
+        public virtual double GetDistance() => GetRaw() * DecodingScaleFactor * DistancePerPulse;
 
-        public double GetRate() => DistancePerPulse / GetPeriod();
+        public virtual double GetRate() => DistancePerPulse / GetPeriod();
 
         public double MinRate
         {
@@ -410,7 +410,7 @@ namespace WPILib
             }
         }
 
-        public double PidGet()
+        public virtual double PidGet()
         {
             switch (m_pidSource)
             {

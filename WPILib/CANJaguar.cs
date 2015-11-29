@@ -370,7 +370,7 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public double Get()
+        public virtual double Get()
         {
             return m_value;
         }
@@ -395,7 +395,7 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public void Set(double value, byte syncGroup)
+        public virtual void Set(double value, byte syncGroup)
         {
             byte[] data = new byte[8];
 
