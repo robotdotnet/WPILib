@@ -127,7 +127,7 @@ namespace WPILib.Tests
             {
                 using (Counter ctr = new Counter(at))
                 {
-                    TestInit(0, 1, 0, true, false, false, false, true);
+                    TestInit(0, 2, 0, true, false, false, false, true);
                 }
             }
         }

@@ -470,6 +470,17 @@ namespace HAL_Simulator
             var counter = Counter[idx];
             counter.UpSourceTrigger = analogTrigger;
 
+            if (!analogTrigger)
+            {
+                counter.UpSourceChannel = pin;
+            }
+            else
+            {
+                pin = pin - 1;
+                uint trigIndex = (pin >> 2);
+                counter.UpSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
+            }
+
             if (counter.Mode == Mode.ExternalDirection)
             {
                 setCounterUpSourceEdge(counter_pointer, true, false, ref status);
@@ -478,14 +489,11 @@ namespace HAL_Simulator
             {
                 if (!analogTrigger)
                 {
-                    counter.UpSourceChannel = pin;
                     SetCounterUpAsTwoPulseDigital(counter, (int)pin);
                 }
                 else
                 {
-                    pin = pin - 1;
                     uint trigIndex = (pin >> 2);
-                    counter.UpSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
                     SetCounterUpAsTwoPulseAnalog(counter, (int)trigIndex);
                 }
                 setCounterUpSourceEdge(counter_pointer, true, false, ref status);
@@ -653,6 +661,17 @@ namespace HAL_Simulator
 
             var counter = Counter[idx];
 
+            if (!analogTrigger)
+            {
+                counter.DownSourceChannel = pin;
+            }
+            else
+            {
+                pin = pin - 1;
+                uint trigIndex = (pin >> 2);
+                counter.DownSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
+            }
+
             if (counter.Mode == Mode.ExternalDirection)
             {
             }
@@ -660,14 +679,11 @@ namespace HAL_Simulator
             {
                 if (!analogTrigger)
                 {
-                    counter.DownSourceChannel = pin;
                     SetCounterDownAsTwoPulseDigital(counter, (int)pin);
                 }
                 else
                 {
-                    pin = pin - 1;
                     uint trigIndex = (pin >> 2);
-                    counter.UpSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
                     SetCounterDownAsTwoPulseAnalog(counter, (int)trigIndex);
                 }
             }
