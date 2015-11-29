@@ -15,8 +15,6 @@ namespace WPILib
     public class AnalogAccelerometer : SensorBase, IPIDSource, ILiveWindowSendable
     {
         private AnalogInput m_analogChannel;
-        private double m_voltsPerG = 1.0;
-        private double m_zeroGVoltage = 2.5;
         private readonly bool m_allocatedChannel;
 
 
@@ -69,23 +67,17 @@ namespace WPILib
         /// Returns the acceleration in Gs.
         /// </summary>
         /// <returns>The acceleration in Gs.</returns>
-        public virtual double GetAcceleration() => (m_analogChannel.GetAverageVoltage() - m_zeroGVoltage)/m_voltsPerG;
+        public virtual double GetAcceleration() => (m_analogChannel.GetAverageVoltage() - Zero)/Sensitivity;
 
         /// <summary>
         /// Sets the accelerometer sensitivity.
         /// </summary>
-        public double Sensitivity
-        {
-            set { m_voltsPerG = value; }
-        }
+        public double Sensitivity { get; set; } = 1.0;
 
         /// <summary>
         /// Sets the voltage that corresponds to 0G.
         /// </summary>
-        public double Zero
-        {
-            set { m_zeroGVoltage = value; }
-        }
+        public double Zero { get; set; } = 2.5;
 
         /// <summary>
         /// Get the result to use in PIDController

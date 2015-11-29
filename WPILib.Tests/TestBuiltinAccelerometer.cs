@@ -22,6 +22,12 @@ namespace WPILib.Tests
             return s_instance ?? new BuiltInAccelerometer(AccelerometerRange.k2G);
         }
 
+        [TestFixtureSetUp]
+        public static void Setup()
+        {
+            GetAcc();
+        }
+
         [Test]
         [TestCase(AccelerometerRange.k2G)]
         [TestCase(AccelerometerRange.k4G)]
@@ -69,6 +75,22 @@ namespace WPILib.Tests
             const double testVal = 3.14;
             GetData().Z = testVal;
             Assert.AreEqual(GetAcc().GetZ(), testVal);
+        }
+
+        [Test]
+        public void TestGetAll()
+        {
+            const double x = 5.85;
+            const double y = 6.82;
+            const double z = 1.923;
+            GetData().X = x;
+            GetData().Y = y;
+            GetData().Z = z;
+
+            var all = GetAcc().GetAllAxes();
+            Assert.That(all.XAxis, Is.EqualTo(x).Within(0.01));
+            Assert.That(all.YAxis, Is.EqualTo(y).Within(0.01));
+            Assert.That(all.ZAxis, Is.EqualTo(z).Within(0.01));
         }
 
         [Test]

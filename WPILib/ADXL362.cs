@@ -44,10 +44,6 @@ namespace WPILib
         private SPI m_spi;
         private double m_gsPerLSB = 0.001;
 
-        public ADXL362(AccelerometerRange range) : this(SPI.Port.OnboardCS1, range)
-        {
-        }
-
         public ADXL362(SPI.Port port, AccelerometerRange range)
         {
             m_spi = new SPI(port);

@@ -15,7 +15,7 @@ namespace WPILib.Tests
     [TestFixture(SPI.Port.OnboardCS1)]
     [TestFixture(SPI.Port.OnboardCS2)]
     [TestFixture(SPI.Port.OnboardCS3)]
-    public class TestADXL362
+    public class TestADXL362 : TestBase
     {
         private int m_port;
         private static ADXL362 m_accel;
@@ -88,6 +88,22 @@ namespace WPILib.Tests
             const double testVal = 3.14;
             GetData().Z = testVal;
             Assert.AreEqual(m_accel.GetZ(), testVal);
+        }
+
+        [Test]
+        public void TestGetAll()
+        {
+            const double x = 5.85;
+            const double y = 6.82;
+            const double z = 1.923;
+            GetData().X = x;
+            GetData().Y = y;
+            GetData().Z = z;
+
+            var all = m_accel.GetAllAxes();
+            Assert.That(all.XAxis, Is.EqualTo(x).Within(0.01));
+            Assert.That(all.YAxis, Is.EqualTo(y).Within(0.01));
+            Assert.That(all.ZAxis, Is.EqualTo(z).Within(0.01));
         }
 
         [Test]

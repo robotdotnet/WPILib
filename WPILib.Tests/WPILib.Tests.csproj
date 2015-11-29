@@ -102,6 +102,7 @@
     <Compile Include="MotorControllers\TestPWMMotorControllers.cs" />
     <Compile Include="SpecScaners\NetProjects.cs" />
     <Compile Include="SpecScaners\TestHALImpl.cs" />
+    <Compile Include="TestAnalogAccelerometer.cs" />
     <Compile Include="TestAnalogInput.cs" />
     <Compile Include="TestAnalogOutput.cs" />
     <Compile Include="TestAnalogTrigger.cs" />

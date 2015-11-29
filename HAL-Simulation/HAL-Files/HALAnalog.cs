@@ -93,6 +93,7 @@ namespace HAL_Simulator
         public static void freeAnalogOutputPort(IntPtr analog_port_pointer)
         {
             if (analog_port_pointer == IntPtr.Zero) return;
+            AnalogOut[GetAnalogPort(analog_port_pointer).port.pin].Initialized = false;
             Marshal.FreeHGlobal(analog_port_pointer);
         }
 
@@ -100,6 +101,7 @@ namespace HAL_Simulator
         public static void freeAnalogInputPort(IntPtr analog_port_pointer)
         {
             if (analog_port_pointer == IntPtr.Zero) return;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].Initialized = false;
             Marshal.FreeHGlobal(analog_port_pointer);
         }
 

@@ -88,6 +88,7 @@ namespace WPILib.Tests
             AnalogInput input = GetAnalogInput(0);
             Assert.IsTrue(GetInputData(0).Initialized);
             input.Dispose();
+            Assert.IsFalse(GetInputData(0).Initialized);
             SimData.ResetHALData(false);
             input = GetAnalogInput(0);
             Assert.IsTrue(GetInputData(0).Initialized);

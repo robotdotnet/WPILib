@@ -87,6 +87,7 @@ namespace WPILib.Tests
             AnalogOutput input = GetAnalogOutput(0);
             Assert.IsTrue(GetOutputData(0).Initialized);
             input.Dispose();
+            Assert.IsFalse(GetOutputData(0).Initialized);
             input = GetAnalogOutput(0);
             Assert.IsTrue(GetOutputData(0).Initialized);
             input.Dispose();
