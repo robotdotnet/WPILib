@@ -1,11 +1,138 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using HAL_Simulator;
 using WPILib.IntegrationTests.Test;
 using WPILib.Interfaces;
 
 namespace WPILib.IntegrationTests.Fixtures
 {
+    public class TalonMotorFixture : MotorEncoderFixture
+    {
+        private Action<string, dynamic> currentCallback = null;
+        private double freeCurrent = 2;
+
+        public TalonMotorFixture() : base()
+        {
+            currentCallback = (s, o) =>
+            {
+                double current = freeCurrent * o;
+                SimData.GetPDP(0).Current[TestBench.TalonPdpChannel] = current;
+            };
+            SimData.PWM[TestBench.TalonChannel].Register("Value", currentCallback);
+        }
+
+        public override bool Teardown()
+        {
+            SimData.PWM[TestBench.TalonChannel].Cancel("Value", currentCallback);
+            return base.Teardown();
+        }
+
+        public override int GetPdpChannel()
+        {
+            return TestBench.TalonPdpChannel;
+        }
+
+        protected override ISpeedController GiveSpeedController()
+        {
+            return new Talon(TestBench.TalonChannel);
+        }
+
+        protected override DigitalInput GiveDigitalInputA()
+        {
+            return new DigitalInput(0);
+        }
+
+        protected override DigitalInput GiveDigitalInputB()
+        {
+            return new DigitalInput(1);
+        }
+    }
+
+    public class VictorMotorFixture : MotorEncoderFixture
+    {
+        private Action<string, dynamic> currentCallback = null;
+        private double freeCurrent = 2;
+
+        public VictorMotorFixture() : base()
+        {
+            currentCallback = (s, o) =>
+            {
+                double current = freeCurrent * o;
+                SimData.GetPDP(0).Current[TestBench.VictorPdpChannel] = current;
+            };
+            SimData.PWM[TestBench.VictorChannel].Register("Value", currentCallback);
+        }
+
+        public override bool Teardown()
+        {
+            SimData.PWM[TestBench.VictorChannel].Cancel("Value", currentCallback);
+            return base.Teardown();
+        }
+
+        public override int GetPdpChannel()
+        {
+            return TestBench.VictorPdpChannel;
+        }
+
+        protected override ISpeedController GiveSpeedController()
+        {
+            return new Victor(TestBench.VictorChannel);
+        }
+
+        protected override DigitalInput GiveDigitalInputA()
+        {
+            return new DigitalInput(2);
+        }
+
+        protected override DigitalInput GiveDigitalInputB()
+        {
+            return new DigitalInput(3);
+        }
+    }
+
+    public class JaguarMotorFixture : MotorEncoderFixture
+    {
+        private Action<string, dynamic> currentCallback = null;
+        private double freeCurrent = 2;
+
+        public JaguarMotorFixture() : base()
+        {
+            currentCallback = (s, o) =>
+            {
+                double current = freeCurrent * o;
+                SimData.GetPDP(0).Current[TestBench.JaguarPdpChannel] = current;
+            };
+            SimData.PWM[TestBench.JaguarChannel].Register("Value", currentCallback);
+        }
+
+        public override bool Teardown()
+        {
+            SimData.PWM[TestBench.JaguarChannel].Cancel("Value", currentCallback);
+            return base.Teardown();
+        }
+
+        public override int GetPdpChannel()
+        {
+            return TestBench.JaguarPdpChannel;
+        }
+
+        protected override ISpeedController GiveSpeedController()
+        {
+            return new Jaguar(TestBench.JaguarChannel);
+        }
+
+        protected override DigitalInput GiveDigitalInputA()
+        {
+            return new DigitalInput(4);
+        }
+
+        protected override DigitalInput GiveDigitalInputB()
+        {
+            return new DigitalInput(5);
+        }
+    }
+
     public abstract class MotorEncoderFixture : ITestFixture 
     {
         private bool m_initialized;
@@ -101,7 +228,7 @@ namespace WPILib.IntegrationTests.Fixtures
             return m_counters.Aggregate(wasReset, (current, c) => current && c.Get() == 0);
         }
 
-        public bool Teardown()
+        public virtual bool Teardown()
         {
             var type = m_motor != null ? GetCustomType() : "null";
             if (!m_tornDown)

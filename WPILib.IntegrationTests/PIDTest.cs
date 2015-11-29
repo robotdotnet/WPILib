@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL_Simulator;
 using NetworkTables;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Fixtures;
@@ -7,75 +8,6 @@ using WPILib.Interfaces;
 
 namespace WPILib.IntegrationTests
 {
-    public class TalonMotorFixture : MotorEncoderFixture
-    {
-        public override int GetPdpChannel()
-        {
-            return TestBench.TalonPdpChannel;
-        }
-
-        protected override ISpeedController GiveSpeedController()
-        {
-            return new Talon(TestBench.TalonChannel);
-        }
-
-        protected override DigitalInput GiveDigitalInputA()
-        {
-            return new DigitalInput(0);
-        }
-
-        protected override DigitalInput GiveDigitalInputB()
-        {
-            return new DigitalInput(1);
-        }
-    }
-
-    public class VictorMotorFixture : MotorEncoderFixture
-    {
-        public override int GetPdpChannel()
-        {
-            return TestBench.VictorPdpChannel;
-        }
-
-        protected override ISpeedController GiveSpeedController()
-        {
-            return new Victor(TestBench.VictorChannel);
-        }
-
-        protected override DigitalInput GiveDigitalInputA()
-        {
-            return new DigitalInput(2);
-        }
-
-        protected override DigitalInput GiveDigitalInputB()
-        {
-            return new DigitalInput(3);
-        }
-    }
-
-    public class JaguarMotorFixture : MotorEncoderFixture
-    {
-        public override int GetPdpChannel()
-        {
-            return TestBench.JaguarPdpChannel;
-        }
-
-        protected override ISpeedController GiveSpeedController()
-        {
-            return new Jaguar(TestBench.JaguarChannel);
-        }
-
-        protected override DigitalInput GiveDigitalInputA()
-        {
-            return new DigitalInput(4);
-        }
-
-        protected override DigitalInput GiveDigitalInputB()
-        {
-            return new DigitalInput(5);
-        }
-    }
-
     [TestFixture(0.001d, 0.0005d, 0.0d, typeof(TalonMotorFixture))]
     [TestFixture(0.001d, 0.0005d, 0.0d, typeof(JaguarMotorFixture))]
     [TestFixture(0.001d, 0.0005d, 0.0d, typeof(VictorMotorFixture))]

@@ -91,6 +91,9 @@
     <Compile Include="MockHardware\FakeCounterSource.cs" />
     <Compile Include="MockHardware\FakeEncoderSource.cs" />
     <Compile Include="MockHardware\FakePotentiometerSource.cs" />
+    <Compile Include="MotorInvertingTest.cs" />
+    <Compile Include="PCMTest.cs" />
+    <Compile Include="PDPTest.cs" />
     <Compile Include="PIDTest.cs" />
     <Compile Include="PreferencesTest.cs" />
     <Compile Include="RelayCrossConnectTest.cs" />
