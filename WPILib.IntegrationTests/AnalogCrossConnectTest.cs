@@ -68,7 +68,7 @@ namespace WPILib.IntegrationTests
             Timer.Delay(DelayTime);
 
             Assert.IsTrue(trigger.InWindow, "Analog Trigger is not in the window (2V, 3V)");
-            Assert.IsFalse(trigger.TriggerState, "Analog trigger is on");
+            //Not checking for state, because state will be whichever state it was in last.
 
             trigger.Dispose();
         }

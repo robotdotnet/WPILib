@@ -468,7 +468,6 @@ namespace HAL_Simulator
             status = 0;
 
             var counter = Counter[idx];
-            counter.UpSourceChannel = pin;
             counter.UpSourceTrigger = analogTrigger;
 
             if (counter.Mode == Mode.ExternalDirection)
@@ -479,24 +478,26 @@ namespace HAL_Simulator
             {
                 if (!analogTrigger)
                 {
-                    SetCounterUpAsTwoPulseDigital(counter, (int) pin);
+                    counter.UpSourceChannel = pin;
+                    SetCounterUpAsTwoPulseDigital(counter, (int)pin);
                 }
                 else
                 {
-                    SetCounterUpAsTwoPulseAnalog(counter, (int) pin);
+                    pin = pin - 1;
+                    uint trigIndex = (pin >> 2);
+                    counter.UpSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
+                    SetCounterUpAsTwoPulseAnalog(counter, (int)trigIndex);
                 }
                 setCounterUpSourceEdge(counter_pointer, true, false, ref status);
             }
         }
 
-        private static void SetCounterUpAsTwoPulseAnalog(CounterData counter, int pin)
+        private static void SetCounterUpAsTwoPulseAnalog(CounterData counter, int trigIndex)
         {
             if (!counter.UpSourceTrigger)
             {
                 throw new InvalidOperationException("Analog should only be called for IsAnalog triggers");
             }
-            pin = pin - 1;
-            int trigIndex = (pin >> 2);
             int analogIn = SimData.AnalogTrigger[trigIndex].AnalogPin;//halData["analog_trigger"][trigIndex]["pin"];
 
             if (analogIn == -1)
@@ -647,7 +648,7 @@ namespace HAL_Simulator
                 return;
             }
 
-            Counter[idx].DownSourceChannel = pin;
+            
             Counter[idx].DownSourceTrigger = analogTrigger;
 
             var counter = Counter[idx];
@@ -659,11 +660,15 @@ namespace HAL_Simulator
             {
                 if (!analogTrigger)
                 {
+                    counter.DownSourceChannel = pin;
                     SetCounterDownAsTwoPulseDigital(counter, (int)pin);
                 }
                 else
                 {
-                    SetCounterDownAsTwoPulseAnalog(counter, (int)pin);
+                    pin = pin - 1;
+                    uint trigIndex = (pin >> 2);
+                    counter.UpSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
+                    SetCounterDownAsTwoPulseAnalog(counter, (int)trigIndex);
                 }
             }
         }
@@ -706,14 +711,12 @@ namespace HAL_Simulator
             DIO[(int)pin].Register("Value", downCallback);
         }
 
-        private static void SetCounterDownAsTwoPulseAnalog(CounterData counter, int pin)
+        private static void SetCounterDownAsTwoPulseAnalog(CounterData counter, int trigIndex)
         {
             if (!counter.DownSourceTrigger)
             {
                 throw new InvalidOperationException("Analog should only be called for Analog triggers");
             }
-            pin = pin - 1;
-            int trigIndex = (pin >> 2);
             int analogIn = SimData.AnalogTrigger[trigIndex].AnalogPin;
 
             if (analogIn == -1)
