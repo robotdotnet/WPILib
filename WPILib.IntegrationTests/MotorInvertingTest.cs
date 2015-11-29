@@ -20,6 +20,10 @@ namespace WPILib.IntegrationTests
 
         public MotorInvertingTest(Type type)
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             MotorEncoderFixture mef = (MotorEncoderFixture)Activator.CreateInstance(type);
 
             if (fixture != null && !fixture.Equals(mef))
@@ -49,6 +53,10 @@ namespace WPILib.IntegrationTests
         [TestFixtureTearDown]
         public static void FixtureTearDown()
         {
+            if (RobotBase.IsSimulation)
+            {
+                return;
+            }
             fixture.GetMotor().Inverted = false;
             fixture.Teardown();
         }
