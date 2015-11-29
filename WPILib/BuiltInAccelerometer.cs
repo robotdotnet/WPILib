@@ -47,6 +47,12 @@ namespace WPILib
 
         public double GetZ() => HALAccelerometer.GetAccelerometerZ();
 
+        /// <inheritdoc/>
+        public AllAxes GetAllAxes()
+        {
+            return new AllAxes(GetX(), GetY(), GetZ());   
+        }
+
         ///<inheritdoc />
         public void InitTable(ITable subtable)
         {

@@ -17,21 +17,6 @@ namespace WPILib
     /// </remarks>
     public class ADXL362 : SensorBase, IAccelerometer, ILiveWindowSendable
     {
-        public struct AllAxes
-        {
-            public double XAxis { get; private set; }
-            public double YAxis { get; private set; }
-            public double ZAxis { get; private set; }
-
-            public AllAxes(double x, double y, double z)
-            {
-                XAxis = x;
-                YAxis = y;
-                ZAxis = z;
-            }
-        }
-        
-
         private const byte RegWrite = 0x0A;
         private const byte RegRead = 0x0B;
 
@@ -140,6 +125,9 @@ namespace WPILib
 
         /// <inheritdoc/>
         public double GetZ() => GetAcceleration(Axes.Z);
+
+        /// <inheritdoc/>
+        public AllAxes GetAllAxes() => GetAccelerations();
 
         /// <summary>
         /// Get the acceleration of one axis in Gs.

@@ -48,16 +48,6 @@ namespace WPILib
         }
 
         /// <summary>
-        /// A struct containing all the axes the accelerometer contains.
-        /// </summary>
-        public struct AllAxes
-        {
-            public double XAxis;
-            public double YAxis;
-            public double ZAxis;
-        }
-
-        /// <summary>
         /// Writes the range to the specified interface.
         /// </summary>
         /// <param name="value">The Range to write.</param>
@@ -110,6 +100,9 @@ namespace WPILib
         /// </summary>
         /// <returns>The acceleration along the z axis in g-forces</returns>
         public double GetZ() => GetAcceleration(Axes.Z);
+
+        /// <inheritdoc/>
+        public AllAxes GetAllAxes() => GetAccelerations();
 
         /// <summary>
         /// Get the acceleration of one axis in Gs.

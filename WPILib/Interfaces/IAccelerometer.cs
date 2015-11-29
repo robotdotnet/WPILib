@@ -2,6 +2,38 @@
 namespace WPILib.Interfaces
 {
     /// <summary>
+    /// A struct containing all axes of an accelerometer.
+    /// </summary>
+    public struct AllAxes
+    {
+        /// <summary>
+        /// The X Axis
+        /// </summary>
+        public double XAxis { get; }
+        /// <summary>
+        /// The Y Axis
+        /// </summary>
+        public double YAxis { get; }
+        /// <summary>
+        /// The Z Axis
+        /// </summary>
+        public double ZAxis { get; }
+
+        /// <summary>
+        /// Creates a new <see cref="AllAxes"/> struct.
+        /// </summary>
+        /// <param name="x">The x value.</param>
+        /// <param name="y">The y value.</param>
+        /// <param name="z">The z value.</param>
+        public AllAxes(double x, double y, double z)
+        {
+            XAxis = x;
+            YAxis = y;
+            ZAxis = z;
+        }
+    }
+
+    /// <summary>
     /// Ranges allowed for Accelerometers
     /// </summary>
     public enum AccelerometerRange
@@ -55,5 +87,11 @@ namespace WPILib.Interfaces
         /// </summary>
         /// <returns>The acceleration along the z axis in g-forces</returns>
         double GetZ();
+
+        /// <summary>
+        /// Common interface for getting all acceleration axes
+        /// </summary>
+        /// <returns>A struct containing all axes</returns>
+        AllAxes GetAllAxes();
     }
 }

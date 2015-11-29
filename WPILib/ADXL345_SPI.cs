@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL_Base;
+using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
@@ -66,17 +67,17 @@ namespace WPILib
         /// <returns>An object containing the acceleration measured on each side of the ADXL345 in Gs.</returns>
         public override AllAxes GetAccelerations()
         {
-            AllAxes data = new AllAxes();
             byte[] dataBuffer = new byte[7];
             if (m_spi != null)
             {
                 dataBuffer[0] = (byte)(AddressRead | AddressMultiByte | DataRegister);
                 m_spi.Transaction(dataBuffer, dataBuffer, 7);
-                data.XAxis = BitConverter.ToInt16(dataBuffer, 1) * GsPerLSB;
-                data.YAxis = BitConverter.ToInt16(dataBuffer, 3) * GsPerLSB;
-                data.ZAxis = BitConverter.ToInt16(dataBuffer, 5) * GsPerLSB;
+                double XAxis = BitConverter.ToInt16(dataBuffer, 1) * GsPerLSB;
+                double YAxis = BitConverter.ToInt16(dataBuffer, 3) * GsPerLSB;
+                double ZAxis = BitConverter.ToInt16(dataBuffer, 5) * GsPerLSB;
+                return new AllAxes(XAxis, YAxis, ZAxis);
             }
-            return data;
+            return new AllAxes();
         }
     }
 }
