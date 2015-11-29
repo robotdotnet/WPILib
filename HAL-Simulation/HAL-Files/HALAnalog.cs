@@ -81,6 +81,7 @@ namespace HAL_Simulator
                 port = GetHalPort(port_pointer)
             };
             AnalogOut[p.port.pin].Initialized = true;
+            AnalogOut[p.port.pin].Voltage = 0.0;
 
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
