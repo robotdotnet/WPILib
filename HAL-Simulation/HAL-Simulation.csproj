@@ -73,6 +73,7 @@
     <Compile Include="Data\PWMData.cs" />
     <Compile Include="Data\RelayData.cs" />
     <Compile Include="Data\RoboRIOData.cs" />
+    <Compile Include="Data\SPIAccelerometerData.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="HAL-Files\LoaderUtilities.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />

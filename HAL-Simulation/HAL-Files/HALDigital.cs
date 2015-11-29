@@ -559,7 +559,7 @@ namespace HAL_Simulator
                 }
             };
 
-            counter.UpCallback= upCallback;
+            counter.UpCallback = upCallback;
             AnalogIn[analogIn].Register("Voltage", upCallback);
         }
 
@@ -631,7 +631,7 @@ namespace HAL_Simulator
                 {
                     DIO[(int)counter.UpSourceChannel].Cancel("Value", counter.UpCallback);
                 }
-                
+
                 counter.UpCallback = null;
             }
 
@@ -639,8 +639,8 @@ namespace HAL_Simulator
             counter.UpFallingEdge = false;
             counter.UpSourceChannel = 0;
             counter.UpSourceTrigger = false;
-			
-			
+
+
         }
 
         [CalledSimFunction]
@@ -656,7 +656,7 @@ namespace HAL_Simulator
                 return;
             }
 
-            
+
             Counter[idx].DownSourceTrigger = analogTrigger;
 
             var counter = Counter[idx];
@@ -817,7 +817,7 @@ namespace HAL_Simulator
                 {
                     DIO[(int)counter.DownSourceChannel].Cancel("Value", counter.DownCallback);
                 }
-                
+
                 counter.DownCallback = null;
             }
 
@@ -825,8 +825,8 @@ namespace HAL_Simulator
             counter.DownFallingEdge = false;
             counter.DownSourceChannel = 0;
             counter.DownSourceTrigger = false;
-			
-			
+
+
         }
 
         [CalledSimFunction]
@@ -1076,76 +1076,240 @@ namespace HAL_Simulator
         [CalledSimFunction]
         public static void spiInitialize(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            SimData.SPIAccelerometer[port].Active = true;
         }
 
         [CalledSimFunction]
         public static int spiTransaction(byte port, byte[] dataToSend, byte[] dataReceived, byte size)
         {
-            throw new NotImplementedException();
+            double GsPerLBS = 0.00390625;
+            //We are either an ADXL345 requesting individual axis, or ADXL362 initializing
+            if (size == 3)
+            {
+                if (dataToSend[0] == 0x0B)
+                {
+                    //We are an ADXL 362 initializing
+                    dataReceived[2] = 0xF2;
+                }
+                else
+                {
+                    //We are an ADXL345 requesting axis
+                    int axis = dataToSend[0] - (0x80 | 0x40 | 0x32);
+                    byte[] b;
+                    switch (axis)
+                    {
+                        case 1:
+                            b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
+                            dataReceived[1] = b[0];
+                            dataReceived[2] = b[1];
+                            break;
+                        case 1 << 1:
+                            b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
+                            dataReceived[1] = b[0];
+                            dataReceived[2] = b[1];
+                            break;
+                        case 1 << 2:
+                            b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                            dataReceived[1] = b[0];
+                            dataReceived[2] = b[1];
+                            break;
+                    }
+                }
+            }
+            else if (size == 4)
+            {
+                //Read range to get msb
+                switch (SimData.SPIAccelerometer[port].Range)
+                {
+                    case 0:
+                        GsPerLBS = 0.001;
+                        break;
+                    case 1:
+                        GsPerLBS = 0.002;
+                        break;
+                    case 2:
+                    case 3:
+                        GsPerLBS = 0.004;
+                        break;
+                }
+                byte[] b;
+                //We are an ADXL362 requesting an axis
+                switch (dataToSend[1] - 0x0e)
+                {
+                    case 0:
+                        b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
+                        dataReceived[2] = b[0];
+                        dataReceived[3] = b[1];
+                        break;
+                    case 2:
+                        b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
+                        dataReceived[2] = b[0];
+                        dataReceived[3] = b[1];
+                        break;
+                    case 4:
+                        b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                        dataReceived[2] = b[0];
+                        dataReceived[3] = b[1];
+                        break;
+                }
+            }
+            else if (size == 7)
+            {
+                //ADXL345 Get All Axis
+                byte[] x = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
+                byte[] y = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
+                byte[] z = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                dataReceived[1] = x[0];
+                dataReceived[2] = x[1];
+                dataReceived[3] = y[0];
+                dataReceived[4] = y[1];
+                dataReceived[5] = z[0];
+                dataReceived[6] = z[1];
+            }
+            else if (size == 8)
+            {
+                //Read range to get msb
+                switch (SimData.SPIAccelerometer[port].Range)
+                {
+                    case 0:
+                        GsPerLBS = 0.001;
+                        break;
+                    case 1:
+                        GsPerLBS = 0.002;
+                        break;
+                    case 2:
+                    case 3:
+                        GsPerLBS = 0.004;
+                        break;
+                }
+                //ADXL362 Get All Axis
+                byte[] x = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
+                byte[] y = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
+                byte[] z = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                dataReceived[2] = x[0];
+                dataReceived[3] = x[1];
+                dataReceived[4] = y[0];
+                dataReceived[5] = y[1];
+                dataReceived[6] = z[0];
+                dataReceived[7] = z[1];
+            }
+            return 0;
         }
 
         [CalledSimFunction]
         public static int spiWrite(byte port, byte[] dataToSend, byte sendSize)
         {
-            throw new NotImplementedException();
+            //We are An ADXL362 
+            if (sendSize == 3)
+            {
+                if (dataToSend[1] == 0x2D)
+                {
+                    //Setting power control register, ignore
+                    return 0;
+                }
+                else if (dataToSend[1] == 0x2C)
+                {
+                    //We are setting range
+                    switch (dataToSend[2])
+                    {
+                        case ((byte)(0x03 | (((int)0 & 0x03) << 6))):
+                            SimData.SPIAccelerometer[port].Range = 0;
+                            break;
+                        case ((byte)(0x03 | (((int)1 & 0x03) << 6))):
+                            SimData.SPIAccelerometer[port].Range = 1;
+                            break;
+                        case ((byte)(0x03 | (((int)2 & 0x03) << 6))):
+                            SimData.SPIAccelerometer[port].Range = 2;
+                            break;
+                        case ((byte)(0x03 | (((int)3 & 0x03) << 6))):
+                            SimData.SPIAccelerometer[port].Range = 3;
+                            break;
+                    }
+                }
+            }
+            //We are an ADXL345
+            else if (sendSize == 2)
+            {
+                if (dataToSend[0] == 0x31)
+                {
+                    //We are writing range
+                    switch (dataToSend[1])
+                    {
+                        case (0x08 | 0):
+                            SimData.SPIAccelerometer[port].Range = 0;
+                            break;
+                        case (0x08 | 1):
+                            SimData.SPIAccelerometer[port].Range = 1;
+                            break;
+                        case (0x08 | 2):
+                            SimData.SPIAccelerometer[port].Range = 2;
+                            break;
+                        case (0x08 | 3):
+                            SimData.SPIAccelerometer[port].Range = 3;
+                            break;
+                    }
+                }
+            }
+            return 0;
         }
+
 
         [CalledSimFunction]
         public static int spiRead(byte port, byte[] buffer, byte count)
         {
-            throw new NotImplementedException();
+            //Returning for now since nothing uses it
+            return 0;
         }
 
         [CalledSimFunction]
         public static void spiClose(byte port)
         {
-            throw new NotImplementedException();
+            SimData.SPIAccelerometer[port].Active = false;
         }
 
         [CalledSimFunction]
         public static void spiSetSpeed(byte port, uint speed)
         {
-            throw new NotImplementedException();
+            //We don't care
+            return;
         }
-
-        [CalledSimFunction]
-        public static void spiSetBitsPerWord(byte port, byte bpw)
-        {
-            throw new NotImplementedException();
-        }
-
 
         [CalledSimFunction]
         public static void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high)
         {
-            throw new NotImplementedException();
+            //We don't care
+            return;
         }
 
 
         [CalledSimFunction]
         public static void spiSetChipSelectActiveHigh(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            //We don't care
+            return;
         }
 
 
         [CalledSimFunction]
         public static void spiSetChipSelectActiveLow(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            //We don't care
+            return;
         }
 
         [CalledSimFunction]
         public static int spiGetHandle(byte port)
         {
-            throw new NotImplementedException();
+            //We don't care
+            return 0;
         }
 
         [CalledSimFunction]
         public static void spiSetHandle(byte port, int handle)
         {
-            throw new NotImplementedException();
+            //We don't care
+            return;
         }
 
         [CalledSimFunction]

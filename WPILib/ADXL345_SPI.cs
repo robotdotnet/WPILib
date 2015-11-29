@@ -38,6 +38,12 @@ namespace WPILib
             LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
 
+        public override void Dispose()
+        {
+            m_spi.Dispose();
+            base.Dispose();
+        }
+
         /// <summary>
         /// Writes the range to the specified interface.
         /// </summary>

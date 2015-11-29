@@ -84,6 +84,8 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="TestADXL345SPI.cs" />
+    <Compile Include="TestADXL362.cs" />
     <Compile Include="Commands\AbstractCommandTest.cs" />
     <Compile Include="Commands\JoystickButtonAttributeCommandTest.cs" />
     <Compile Include="Commands\PhaseAttributedCommandTest.cs" />

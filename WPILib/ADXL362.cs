@@ -42,7 +42,7 @@ namespace WPILib
         }
 
         private SPI m_spi;
-        private double m_gsPerLSB;
+        private double m_gsPerLSB = 0.001;
 
         public ADXL362(AccelerometerRange range) : this(SPI.Port.OnboardCS1, range)
         {
@@ -81,6 +81,12 @@ namespace WPILib
             m_spi.Write(commands, 3);
 
             LiveWindow.AddSensor("ADXL362", port.ToString(), this);
+        }
+
+        public override void Dispose()
+        {
+            m_spi.Dispose();
+            base.Dispose();
         }
 
         private AccelerometerRange m_range;
@@ -144,7 +150,7 @@ namespace WPILib
             command[1] = (byte)(DataRegister + (byte) axis);
             m_spi.Transaction(command, buffer, 4);
 
-            int rawAccel = buffer[3] << 8 | buffer[2];
+            short rawAccel = BitConverter.ToInt16(buffer, 2);
             return rawAccel * m_gsPerLSB;
         }
 
@@ -165,7 +171,8 @@ namespace WPILib
 
             for (int i = 0; i < 3; i++)
             {
-                rawData[i] = dataBuffer[i * 2 + 3] << 8 | dataBuffer[i * 2 + 2];
+                short rawAccel = BitConverter.ToInt16(dataBuffer, i * 2 +2);
+                rawData[i] = rawAccel;
             }
 
             return new AllAxes(rawData[0] * m_gsPerLSB, rawData[1] * m_gsPerLSB, rawData[2] * m_gsPerLSB);

@@ -99,6 +99,8 @@ namespace HAL_Simulator
         /// </value>
         public static List<EncoderData> Encoder { get; } = new List<EncoderData>();
 
+        public static List<SPIAccelerometerData> SPIAccelerometer { get; } = new List<SPIAccelerometerData>(); 
+
         private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
 
         /// <summary>
@@ -345,6 +347,11 @@ namespace HAL_Simulator
                 Encoder.Add(new EncoderData());
             }
 
+            for (int i = 0; i < 5; i++)
+            {
+                SPIAccelerometer.Add(new SPIAccelerometerData());
+            }
+
             InitializePDP(0);
         }
 
@@ -408,6 +415,11 @@ namespace HAL_Simulator
             foreach (var pcmData in s_pcm.Values)
             {
                 pcmData.ResetData();
+            }
+
+            foreach (var spiAccelerometerData in SPIAccelerometer)
+            {
+                spiAccelerometerData.ResetData();
             }
             DriverStation.ResetData();
             GlobalData.ProgramStartTime = SimHooks.GetTime();
