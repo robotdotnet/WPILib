@@ -314,7 +314,7 @@ namespace WPILib
         /// Get the result to use in PIDController
         /// </summary>
         /// <returns>The result to use in PIDController</returns>
-        public double PidGet() => GetAverageVoltage();
+        public virtual double PidGet() => GetAverageVoltage();
 
         /// <summary>
         /// Initialize a table for this sendable object.

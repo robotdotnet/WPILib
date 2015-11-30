@@ -43,7 +43,7 @@ namespace WPILib
         /// Set the value of the digital output.
         /// </summary>
         /// <param name="value">True if on, false if off.</param>
-        public void Set(bool value)
+        public virtual void Set(bool value)
         {
             int status = 0;
             SetDIO(m_port, (short)(value ? 1 : 0), ref status);

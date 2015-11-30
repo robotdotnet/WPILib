@@ -26,7 +26,7 @@ namespace WPILib
         /// Get the value from the Digital Input Channel
         /// </summary>
         /// <returns>The status of the digital input</returns>
-        public bool Get()
+        public virtual bool Get()
         {
             int status = 0;
             bool value = HALDigital.GetDIO(m_port, ref status);
