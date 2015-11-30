@@ -422,7 +422,7 @@ namespace HAL_Simulator
                 spiAccelerometerData.ResetData();
             }
             DriverStation.ResetData();
-            GlobalData.ProgramStartTime = SimHooks.GetTime();
+            SimHooks.RestartTiming();
 
             if (resetDS)
             {

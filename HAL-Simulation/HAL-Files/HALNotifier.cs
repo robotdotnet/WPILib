@@ -29,9 +29,6 @@ namespace HAL_Simulator
             Notifier notifier = new Notifier {Callback = ProcessQueue};
             Notifiers.Add(notifier);
             return (IntPtr)Notifiers.IndexOf(notifier);
-            //IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(int));
-            //Marshal.StructureToPtr(notifier, ptr, true);
-            //return ptr;
         }
 
         [CalledSimFunction]

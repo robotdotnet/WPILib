@@ -9,6 +9,13 @@ namespace HAL_Simulator
     /// </summary>
     public static class SimHooks
     {
+        private static Stopwatch s_timer = new Stopwatch();
+
+        internal static void RestartTiming()
+        {
+            s_timer.Restart();
+        }
+
         /// <summary>
         /// Gets the FPGA time.
         /// </summary>
@@ -17,7 +24,8 @@ namespace HAL_Simulator
         /// <returns>The FPGA time on a 10 nanosecond scale.</returns>
         public static long GetFPGATime()
         {
-            return (long)((DateTime.UtcNow.Ticks - SimData.GlobalData.ProgramStartTime) / 10.0);
+            var seconds = (double)s_timer.ElapsedTicks / Stopwatch.Frequency;
+            return (long)(seconds * 1000000);
         }
 
         /// <summary>
@@ -26,7 +34,7 @@ namespace HAL_Simulator
         /// <returns>The FPGA time in seconds</returns>
         public static double GetFPGATimestamp()
         {
-            return GetFPGATime()/ 1000000.0;
+            return (double)s_timer.ElapsedTicks / Stopwatch.Frequency;
         }
 
         /// <summary>

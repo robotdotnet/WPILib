@@ -20,7 +20,6 @@
     public class GlobalData : DataBase
     {
         private bool m_programStarted = false;
-        private long m_programStart = SimHooks.GetTime();
         private double m_analogSampleRate = HALAnalog.DefaultSampleRate;
 
         private ushort m_pwmLoopTiming = 40;
@@ -31,7 +30,6 @@
         public override void ResetData()
         {
             m_programStarted = false;
-            m_programStart = SimHooks.GetTime();
             m_analogSampleRate = HALAnalog.DefaultSampleRate;
             m_pwmLoopTiming = 40;
             DigitalPWMRate = 0;
@@ -70,23 +68,6 @@
             {
                 if (value == m_programStarted) return;
                 m_programStarted = value;
-                OnPropertyChanged(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the program start time.
-        /// </summary>
-        /// <value>
-        /// The program start time.
-        /// </value>
-        public long ProgramStartTime
-        {
-            get { return m_programStart; }
-            set
-            {
-                if (value == m_programStart) return;
-                m_programStart = value;
                 OnPropertyChanged(value);
             }
         }
