@@ -101,6 +101,8 @@ namespace HAL_Simulator
 
         public static List<SPIAccelerometerData> SPIAccelerometer { get; } = new List<SPIAccelerometerData>(); 
 
+        public static List<SPIAccumulatorData> SPIAccumulator { get; } = new List<SPIAccumulatorData>(); 
+
         private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
 
         /// <summary>
@@ -350,6 +352,11 @@ namespace HAL_Simulator
             for (int i = 0; i < 5; i++)
             {
                 SPIAccelerometer.Add(new SPIAccelerometerData());
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                SPIAccumulator.Add(new SPIAccumulatorData());
             }
 
             InitializePDP(0);

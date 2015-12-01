@@ -3,6 +3,6 @@
     public interface IServoFeedback
     {
         void SetPosition(double value);
-        void SetPeriod(double period);
+        void SetRate(double rate);
     }
 }

@@ -74,9 +74,12 @@
     <Compile Include="Data\RelayData.cs" />
     <Compile Include="Data\RoboRIOData.cs" />
     <Compile Include="Data\SPIAccelerometerData.cs" />
+    <Compile Include="Data\SPIAccumulatorData.cs" />
     <Compile Include="Extensions\NumericExtensions.cs" />
     <Compile Include="HAL-Files\LoaderUtilities.cs" />
     <Compile Include="Inputs\IServoFeedback.cs" />
+    <Compile Include="Inputs\SimAnalogGyro.cs" />
+    <Compile Include="Inputs\SimSPIGyro.cs" />
     <Compile Include="Mechanisms\AngularEncoderMechanism.cs" />
     <Compile Include="Mechanisms\DrivetrainMechanism.cs" />
     <Compile Include="Mechanisms\DriveWheelMechanism.cs" />

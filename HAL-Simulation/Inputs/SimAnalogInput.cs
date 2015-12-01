@@ -22,7 +22,7 @@ namespace HAL_Simulator.Inputs
             AnalogInData.Voltage = value;
         }
 
-        public void SetPeriod(double value)
+        public void SetRate(double rate)
         {
         }
 

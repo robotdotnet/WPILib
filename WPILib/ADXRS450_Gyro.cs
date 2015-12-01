@@ -40,6 +40,13 @@ namespace WPILib
         public ADXRS450_Gyro(SPI.Port port)
         {
             m_spi = new SPI(port);
+            if (RobotBase.IsSimulation)
+            {
+                m_spi.InitAccumulator(SamplePeriod, 0x20000000, 4, 0x0c000000, 0x04000000,
+                10, 16, true, true);
+                m_spi.ResetAccumulator();
+                return;
+            }
             m_spi.SetClockRate(3000000);
             m_spi.SetMSBFirst();
             m_spi.SetSampleDataOnRising();
@@ -52,8 +59,7 @@ namespace WPILib
 
                 m_spi.Dispose();
                 m_spi = null;
-                DriverStation.ReportError("could not find ADXRS450 gyro on SPI port " + port.ToString(), false
-          );
+                DriverStation.ReportError("could not find ADXRS450 gyro on SPI port " + port.ToString(), false);
                 return;
             }
 
@@ -81,6 +87,13 @@ namespace WPILib
 
             m_spi.SetAccumulatorCenter((int)m_spi.GetAccumulatorAverage());
             m_spi.ResetAccumulator();
+        }
+
+        public override void Dispose()
+        {
+            m_spi.FreeAccumulator();
+            m_spi?.Dispose();
+            base.Dispose();
         }
 
         private bool CalcParity(uint v)
@@ -130,12 +143,22 @@ namespace WPILib
         /// <inheritdoc/>
         public override double GetAngle()
         {
+            if (RobotBase.IsSimulation)
+            {
+                //Use our simulator hack.
+                return BitConverter.Int64BitsToDouble(m_spi.GetAccumulatorValue());
+            }
             return (m_spi.GetAccumulatorValue() * DegreePerSecondPerLSB * SamplePeriod);
         }
 
         /// <inheritdoc/>
         public override double GetRate()
         {
+            if (RobotBase.IsSimulation)
+            {
+                //Use our simulator hack
+                return BitConverter.ToSingle(BitConverter.GetBytes(m_spi.GetAccumulatorCount()), 0);
+            }
             return m_spi.GetAccumulatorLastValue() * DegreePerSecondPerLSB;
         }
 

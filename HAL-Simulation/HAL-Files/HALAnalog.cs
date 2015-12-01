@@ -102,6 +102,7 @@ namespace HAL_Simulator
         {
             if (analog_port_pointer == IntPtr.Zero) return;
             AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].Initialized = false;
+            AnalogIn[GetAnalogPort(analog_port_pointer).port.pin].AccumulatorInitialized = false;
             Marshal.FreeHGlobal(analog_port_pointer);
         }
 
@@ -283,7 +284,7 @@ namespace HAL_Simulator
             status = 0;
             int pin = GetAnalogPort(analog_port_pointer).port.pin;
             AnalogIn[pin].AccumulatorCenter = 0;
-            AnalogIn[pin].AccumulatorCount = 1;
+            AnalogIn[pin].AccumulatorCount = 0;
             AnalogIn[pin].AccumulatorValue = 0;
         }
 

@@ -260,10 +260,10 @@ namespace WPILib
         /// <summary>
         /// Read the number of accumulated values
         /// </summary>
-        public long GetAccumulatorCount()
+        public uint GetAccumulatorCount()
         {
             int status = 0;
-            long value = HALAnalog.GetAccumulatorCount(m_port, ref status);
+            uint value = HALAnalog.GetAccumulatorCount(m_port, ref status);
             CheckStatus(status);
             return value;
         }

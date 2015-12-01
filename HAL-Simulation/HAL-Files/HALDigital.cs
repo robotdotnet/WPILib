@@ -1368,52 +1368,65 @@ namespace HAL_Simulator
             uint validMask, uint validValue, byte dataShift, byte dataSize, bool isSigned,
             bool bigEndian, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            SimData.SPIAccumulator[port].Initialized = true;
         }
 
         public static void spiFreeAccumulator(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            SimData.SPIAccumulator[port].Initialized = false;
         }
 
         public static void spiResetAccumulator(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            SimData.SPIAccumulator[port].AccumulatorCount = 0;
+            SimData.SPIAccumulator[port].AccumulatorValue = 0;
         }
 
         public static void spiSetAccumulatorCenter(byte port, int center, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            //Ignore for now
         }
 
         public static void spiSetAccumulatorDeadband(byte port, int deadband, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            //Ignore for now
         }
 
         public static int spiGetAccumulatorLastValue(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            //Ignore for now
+            return 0;
         }
 
         public static long spiGetAccumulatorValue(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            return SimData.SPIAccumulator[port].AccumulatorValue;
         }
 
         public static uint spiGetAccumulatorCount(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            return SimData.SPIAccumulator[port].AccumulatorCount;
         }
 
         public static double spiGetAccumulatorAverage(byte port, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            return 0;
         }
 
         public static void spiGetAccumulatorOutput(byte port, ref long value, ref uint count, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            value = SimData.SPIAccumulator[port].AccumulatorValue;
+            count = SimData.SPIAccumulator[port].AccumulatorCount;
         }
     }
 }
