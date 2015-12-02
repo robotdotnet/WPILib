@@ -46,10 +46,6 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HAL-Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\WPILib\Output\HAL-Base.dll</HintPath>
-    </Reference>
     <Reference Include="NetworkTables, Version=2016.0.0.124, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.NetworkTables.2016.0.0.124\lib\net45\NetworkTables.dll</HintPath>
       <Private>True</Private>
@@ -77,6 +73,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HAL-Base\HAL.csproj">
+      <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
+      <Name>HAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WPILib\WPILib.csproj">
       <Project>{cadad4a2-d72a-4906-a4f0-2fa2884f3349}</Project>
       <Name>WPILib</Name>

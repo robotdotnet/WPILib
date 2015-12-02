@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using HAL_Simulator;
 using WPILib.LiveWindows;
-using HAL = HAL_Base.HAL;
+using HAL = HAL.HAL;
 
 namespace WPILib.Tests
 {
@@ -14,9 +14,9 @@ namespace WPILib.Tests
             if (!initialized)
             {
                 RobotBase.InitializeHardwareConfiguration();
-                HAL.HALNetworkCommunicationObserveUserProgramStarting();
+                global::HAL.HAL.HALNetworkCommunicationObserveUserProgramStarting();
 
-                LiveWindow.SetEnabled(false);
+                LiveWindow.LiveWindow.SetEnabled(false);
 
                 DriverStationHelper.StartDSLoop();
 

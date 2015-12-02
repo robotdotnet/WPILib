@@ -6,9 +6,9 @@ using NetworkTables;
 using WPILib.Buttons;
 using WPILib.Commands;
 using System.Collections.ObjectModel;
-using HAL_Base;
+using HAL;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
@@ -371,7 +371,7 @@ namespace WPILib.Extras.AttributedCommandModel
 
             HALNetworkCommunicationObserveUserProgramStarting();
 
-            LiveWindow.SetEnabled(false);
+            LiveWindow.LiveWindow.SetEnabled(false);
             while (true)
             {
                 //Console.WriteLine("RobotLoop");
@@ -382,7 +382,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     // either a different mode or from power-on
                     if (!m_disabledInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         _DisabledInit();
                         m_disabledInitialized = true;
                         // reset the initialization flags for the other modes
@@ -402,7 +402,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     // a different mode or from power-on
                     if (!m_testInitialized)
                     {
-                        LiveWindow.SetEnabled(true);
+                        LiveWindow.LiveWindow.SetEnabled(true);
                         _TestInit();
                         m_testInitialized = true;
                         m_autonomousInitialized = false;
@@ -421,7 +421,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     // we've entered autonomous_mode
                     if (!m_autonomousInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         // KBS NOTE: old code reset all PWMs and relays to "safe values"
                         // whenever entering autonomous mode, before calling
                         // "Autonomous_Init()"
@@ -443,7 +443,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     // we've entered teleop_mode
                     if (!m_teleopInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         _TeleopInit();
                         m_teleopInitialized = true;
                         m_testInitialized = false;

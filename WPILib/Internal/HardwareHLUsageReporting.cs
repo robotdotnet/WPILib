@@ -1,4 +1,4 @@
-﻿using HAL_Base;
+﻿using HAL;
 
 namespace WPILib.Internal
 {
@@ -13,7 +13,7 @@ namespace WPILib.Internal
         /// </summary>
         public void ReportScheduler()
         {
-            HAL.Report(ResourceType.kResourceType_Command, Instances.kCommand_Scheduler);
+            HAL.HAL.Report(ResourceType.kResourceType_Command, Instances.kCommand_Scheduler);
         }
         /// <summary>
         /// Report PID Controller
@@ -21,14 +21,14 @@ namespace WPILib.Internal
         /// <param name="num">The PID Controller Index</param>
         public void ReportPIDController(int num)
         {
-            HAL.Report(ResourceType.kResourceType_PIDController, (byte)num);
+            HAL.HAL.Report(ResourceType.kResourceType_PIDController, (byte)num);
         }
         /// <summary>
         /// Report Smart Dashboard.
         /// </summary>
         public void ReportSmartDashboard()
         {
-            HAL.Report(ResourceType.kResourceType_SmartDashboard, (byte)0);
+            HAL.HAL.Report(ResourceType.kResourceType_SmartDashboard, (byte)0);
         }
     }
 }

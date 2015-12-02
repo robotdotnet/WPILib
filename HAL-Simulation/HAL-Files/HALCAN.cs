@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -13,11 +13,11 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage = FRC_NetworkCommunication_CANSessionMux_sendMessage;
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage = FRC_NetworkCommunication_CANSessionMux_receiveMessage;
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_openStreamSession = FRC_NetworkCommunication_CANSessionMux_openStreamSession;
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_closeStreamSession = FRC_NetworkCommunication_CANSessionMux_closeStreamSession;
-            HAL_Base.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSession = FRC_NetworkCommunication_CANSessionMux_readStreamSession;
+            global::HAL.HALCAN.FRC_NetworkCommunication_CANSessionMux_sendMessage = FRC_NetworkCommunication_CANSessionMux_sendMessage;
+            global::HAL.HALCAN.FRC_NetworkCommunication_CANSessionMux_receiveMessage = FRC_NetworkCommunication_CANSessionMux_receiveMessage;
+            global::HAL.HALCAN.FRC_NetworkCommunication_CANSessionMux_openStreamSession = FRC_NetworkCommunication_CANSessionMux_openStreamSession;
+            global::HAL.HALCAN.FRC_NetworkCommunication_CANSessionMux_closeStreamSession = FRC_NetworkCommunication_CANSessionMux_closeStreamSession;
+            global::HAL.HALCAN.FRC_NetworkCommunication_CANSessionMux_readStreamSession = FRC_NetworkCommunication_CANSessionMux_readStreamSession;
         }
 
         [CalledSimFunction]

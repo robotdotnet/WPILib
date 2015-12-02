@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using HAL_Base;
+using HAL;
 
 namespace HAL_RoboRIO
 {
@@ -12,85 +12,85 @@ namespace HAL_RoboRIO
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALAnalog.InitializeAnalogOutputPort = (HAL_Base.HALAnalog.InitializeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogOutputPort"), typeof(HAL_Base.HALAnalog.InitializeAnalogOutputPortDelegate));
+            global::HAL.HALAnalog.InitializeAnalogOutputPort = (global::HAL.HALAnalog.InitializeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogOutputPort"), typeof(global::HAL.HALAnalog.InitializeAnalogOutputPortDelegate));
 
-            HAL_Base.HALAnalog.FreeAnalogOutputPort = (HAL_Base.HALAnalog.FreeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeAnalogOutputPort"), typeof
-                (HAL_Base.HALAnalog.FreeAnalogOutputPortDelegate));
+            global::HAL.HALAnalog.FreeAnalogOutputPort = (global::HAL.HALAnalog.FreeAnalogOutputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeAnalogOutputPort"), typeof
+                (global::HAL.HALAnalog.FreeAnalogOutputPortDelegate));
 
-            HAL_Base.HALAnalog.FreeAnalogInputPort = (HAL_Base.HALAnalog.FreeAnalogInputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeAnalogInputPort"), typeof
-                (HAL_Base.HALAnalog.FreeAnalogInputPortDelegate));
+            global::HAL.HALAnalog.FreeAnalogInputPort = (global::HAL.HALAnalog.FreeAnalogInputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeAnalogInputPort"), typeof
+                (global::HAL.HALAnalog.FreeAnalogInputPortDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogOutput = (HAL_Base.HALAnalog.SetAnalogOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogOutput"), typeof(HAL_Base.HALAnalog.SetAnalogOutputDelegate));
+            global::HAL.HALAnalog.SetAnalogOutput = (global::HAL.HALAnalog.SetAnalogOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogOutput"), typeof(global::HAL.HALAnalog.SetAnalogOutputDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogOutput = (HAL_Base.HALAnalog.GetAnalogOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOutput"), typeof(HAL_Base.HALAnalog.GetAnalogOutputDelegate));
+            global::HAL.HALAnalog.GetAnalogOutput = (global::HAL.HALAnalog.GetAnalogOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOutput"), typeof(global::HAL.HALAnalog.GetAnalogOutputDelegate));
 
-            HAL_Base.HALAnalog.CheckAnalogOutputChannel = (HAL_Base.HALAnalog.CheckAnalogOutputChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkAnalogOutputChannel"), typeof(HAL_Base.HALAnalog.CheckAnalogOutputChannelDelegate));
+            global::HAL.HALAnalog.CheckAnalogOutputChannel = (global::HAL.HALAnalog.CheckAnalogOutputChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkAnalogOutputChannel"), typeof(global::HAL.HALAnalog.CheckAnalogOutputChannelDelegate));
 
-            HAL_Base.HALAnalog.InitializeAnalogInputPort = (HAL_Base.HALAnalog.InitializeAnalogInputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogInputPort"), typeof(HAL_Base.HALAnalog.InitializeAnalogInputPortDelegate));
+            global::HAL.HALAnalog.InitializeAnalogInputPort = (global::HAL.HALAnalog.InitializeAnalogInputPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogInputPort"), typeof(global::HAL.HALAnalog.InitializeAnalogInputPortDelegate));
 
-            HAL_Base.HALAnalog.CheckAnalogModule = (HAL_Base.HALAnalog.CheckAnalogModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkAnalogModule"), typeof(HAL_Base.HALAnalog.CheckAnalogModuleDelegate));
+            global::HAL.HALAnalog.CheckAnalogModule = (global::HAL.HALAnalog.CheckAnalogModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkAnalogModule"), typeof(global::HAL.HALAnalog.CheckAnalogModuleDelegate));
 
-            HAL_Base.HALAnalog.CheckAnalogInputChannel = (HAL_Base.HALAnalog.CheckAnalogInputChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkAnalogInputChannel"), typeof(HAL_Base.HALAnalog.CheckAnalogInputChannelDelegate));
+            global::HAL.HALAnalog.CheckAnalogInputChannel = (global::HAL.HALAnalog.CheckAnalogInputChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkAnalogInputChannel"), typeof(global::HAL.HALAnalog.CheckAnalogInputChannelDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogSampleRate = (HAL_Base.HALAnalog.SetAnalogSampleRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogSampleRate"), typeof(HAL_Base.HALAnalog.SetAnalogSampleRateDelegate));
+            global::HAL.HALAnalog.SetAnalogSampleRate = (global::HAL.HALAnalog.SetAnalogSampleRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogSampleRate"), typeof(global::HAL.HALAnalog.SetAnalogSampleRateDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogSampleRate = (HAL_Base.HALAnalog.GetAnalogSampleRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogSampleRate"), typeof(HAL_Base.HALAnalog.GetAnalogSampleRateDelegate));
+            global::HAL.HALAnalog.GetAnalogSampleRate = (global::HAL.HALAnalog.GetAnalogSampleRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogSampleRate"), typeof(global::HAL.HALAnalog.GetAnalogSampleRateDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogAverageBits = (HAL_Base.HALAnalog.SetAnalogAverageBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogAverageBits"), typeof(HAL_Base.HALAnalog.SetAnalogAverageBitsDelegate));
+            global::HAL.HALAnalog.SetAnalogAverageBits = (global::HAL.HALAnalog.SetAnalogAverageBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogAverageBits"), typeof(global::HAL.HALAnalog.SetAnalogAverageBitsDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogAverageBits = (HAL_Base.HALAnalog.GetAnalogAverageBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogAverageBits"), typeof(HAL_Base.HALAnalog.GetAnalogAverageBitsDelegate));
+            global::HAL.HALAnalog.GetAnalogAverageBits = (global::HAL.HALAnalog.GetAnalogAverageBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogAverageBits"), typeof(global::HAL.HALAnalog.GetAnalogAverageBitsDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogOversampleBits = (HAL_Base.HALAnalog.SetAnalogOversampleBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogOversampleBits"), typeof(HAL_Base.HALAnalog.SetAnalogOversampleBitsDelegate));
+            global::HAL.HALAnalog.SetAnalogOversampleBits = (global::HAL.HALAnalog.SetAnalogOversampleBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogOversampleBits"), typeof(global::HAL.HALAnalog.SetAnalogOversampleBitsDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogOversampleBits = (HAL_Base.HALAnalog.GetAnalogOversampleBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOversampleBits"), typeof(HAL_Base.HALAnalog.GetAnalogOversampleBitsDelegate));
+            global::HAL.HALAnalog.GetAnalogOversampleBits = (global::HAL.HALAnalog.GetAnalogOversampleBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOversampleBits"), typeof(global::HAL.HALAnalog.GetAnalogOversampleBitsDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogValue = (HAL_Base.HALAnalog.GetAnalogValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogValue"), typeof(HAL_Base.HALAnalog.GetAnalogValueDelegate));
+            global::HAL.HALAnalog.GetAnalogValue = (global::HAL.HALAnalog.GetAnalogValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogValue"), typeof(global::HAL.HALAnalog.GetAnalogValueDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogAverageValue = (HAL_Base.HALAnalog.GetAnalogAverageValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogAverageValue"), typeof(HAL_Base.HALAnalog.GetAnalogAverageValueDelegate));
+            global::HAL.HALAnalog.GetAnalogAverageValue = (global::HAL.HALAnalog.GetAnalogAverageValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogAverageValue"), typeof(global::HAL.HALAnalog.GetAnalogAverageValueDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogVoltsToValue = (HAL_Base.HALAnalog.GetAnalogVoltsToValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogVoltsToValue"), typeof(HAL_Base.HALAnalog.GetAnalogVoltsToValueDelegate));
+            global::HAL.HALAnalog.GetAnalogVoltsToValue = (global::HAL.HALAnalog.GetAnalogVoltsToValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogVoltsToValue"), typeof(global::HAL.HALAnalog.GetAnalogVoltsToValueDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogVoltage = (HAL_Base.HALAnalog.GetAnalogVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogVoltage"), typeof(HAL_Base.HALAnalog.GetAnalogVoltageDelegate));
+            global::HAL.HALAnalog.GetAnalogVoltage = (global::HAL.HALAnalog.GetAnalogVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogVoltage"), typeof(global::HAL.HALAnalog.GetAnalogVoltageDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogAverageVoltage = (HAL_Base.HALAnalog.GetAnalogAverageVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogAverageVoltage"), typeof(HAL_Base.HALAnalog.GetAnalogAverageVoltageDelegate));
+            global::HAL.HALAnalog.GetAnalogAverageVoltage = (global::HAL.HALAnalog.GetAnalogAverageVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogAverageVoltage"), typeof(global::HAL.HALAnalog.GetAnalogAverageVoltageDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogLSBWeight = (HAL_Base.HALAnalog.GetAnalogLSBWeightDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogLSBWeight"), typeof(HAL_Base.HALAnalog.GetAnalogLSBWeightDelegate));
+            global::HAL.HALAnalog.GetAnalogLSBWeight = (global::HAL.HALAnalog.GetAnalogLSBWeightDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogLSBWeight"), typeof(global::HAL.HALAnalog.GetAnalogLSBWeightDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogOffset = (HAL_Base.HALAnalog.GetAnalogOffsetDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOffset"), typeof(HAL_Base.HALAnalog.GetAnalogOffsetDelegate));
+            global::HAL.HALAnalog.GetAnalogOffset = (global::HAL.HALAnalog.GetAnalogOffsetDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogOffset"), typeof(global::HAL.HALAnalog.GetAnalogOffsetDelegate));
 
-            HAL_Base.HALAnalog.IsAccumulatorChannel = (HAL_Base.HALAnalog.IsAccumulatorChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isAccumulatorChannel"), typeof(HAL_Base.HALAnalog.IsAccumulatorChannelDelegate));
+            global::HAL.HALAnalog.IsAccumulatorChannel = (global::HAL.HALAnalog.IsAccumulatorChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isAccumulatorChannel"), typeof(global::HAL.HALAnalog.IsAccumulatorChannelDelegate));
 
-            HAL_Base.HALAnalog.InitAccumulator = (HAL_Base.HALAnalog.InitAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initAccumulator"), typeof(HAL_Base.HALAnalog.InitAccumulatorDelegate));
+            global::HAL.HALAnalog.InitAccumulator = (global::HAL.HALAnalog.InitAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initAccumulator"), typeof(global::HAL.HALAnalog.InitAccumulatorDelegate));
 
-            HAL_Base.HALAnalog.ResetAccumulator = (HAL_Base.HALAnalog.ResetAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetAccumulator"), typeof(HAL_Base.HALAnalog.ResetAccumulatorDelegate));
+            global::HAL.HALAnalog.ResetAccumulator = (global::HAL.HALAnalog.ResetAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetAccumulator"), typeof(global::HAL.HALAnalog.ResetAccumulatorDelegate));
 
-            HAL_Base.HALAnalog.SetAccumulatorCenter = (HAL_Base.HALAnalog.SetAccumulatorCenterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAccumulatorCenter"), typeof(HAL_Base.HALAnalog.SetAccumulatorCenterDelegate));
+            global::HAL.HALAnalog.SetAccumulatorCenter = (global::HAL.HALAnalog.SetAccumulatorCenterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAccumulatorCenter"), typeof(global::HAL.HALAnalog.SetAccumulatorCenterDelegate));
 
-            HAL_Base.HALAnalog.SetAccumulatorDeadband = (HAL_Base.HALAnalog.SetAccumulatorDeadbandDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAccumulatorDeadband"), typeof(HAL_Base.HALAnalog.SetAccumulatorDeadbandDelegate));
+            global::HAL.HALAnalog.SetAccumulatorDeadband = (global::HAL.HALAnalog.SetAccumulatorDeadbandDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAccumulatorDeadband"), typeof(global::HAL.HALAnalog.SetAccumulatorDeadbandDelegate));
 
-            HAL_Base.HALAnalog.GetAccumulatorValue = (HAL_Base.HALAnalog.GetAccumulatorValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccumulatorValue"), typeof(HAL_Base.HALAnalog.GetAccumulatorValueDelegate));
+            global::HAL.HALAnalog.GetAccumulatorValue = (global::HAL.HALAnalog.GetAccumulatorValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccumulatorValue"), typeof(global::HAL.HALAnalog.GetAccumulatorValueDelegate));
 
-            HAL_Base.HALAnalog.GetAccumulatorCount = (HAL_Base.HALAnalog.GetAccumulatorCountDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccumulatorCount"), typeof(HAL_Base.HALAnalog.GetAccumulatorCountDelegate));
+            global::HAL.HALAnalog.GetAccumulatorCount = (global::HAL.HALAnalog.GetAccumulatorCountDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccumulatorCount"), typeof(global::HAL.HALAnalog.GetAccumulatorCountDelegate));
 
-            HAL_Base.HALAnalog.GetAccumulatorOutput = (HAL_Base.HALAnalog.GetAccumulatorOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccumulatorOutput"), typeof(HAL_Base.HALAnalog.GetAccumulatorOutputDelegate));
+            global::HAL.HALAnalog.GetAccumulatorOutput = (global::HAL.HALAnalog.GetAccumulatorOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccumulatorOutput"), typeof(global::HAL.HALAnalog.GetAccumulatorOutputDelegate));
 
-            HAL_Base.HALAnalog.InitializeAnalogTrigger = (HAL_Base.HALAnalog.InitializeAnalogTriggerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogTrigger"), typeof(HAL_Base.HALAnalog.InitializeAnalogTriggerDelegate));
+            global::HAL.HALAnalog.InitializeAnalogTrigger = (global::HAL.HALAnalog.InitializeAnalogTriggerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeAnalogTrigger"), typeof(global::HAL.HALAnalog.InitializeAnalogTriggerDelegate));
 
-            HAL_Base.HALAnalog.CleanAnalogTrigger = (HAL_Base.HALAnalog.CleanAnalogTriggerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanAnalogTrigger"), typeof(HAL_Base.HALAnalog.CleanAnalogTriggerDelegate));
+            global::HAL.HALAnalog.CleanAnalogTrigger = (global::HAL.HALAnalog.CleanAnalogTriggerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanAnalogTrigger"), typeof(global::HAL.HALAnalog.CleanAnalogTriggerDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogTriggerLimitsRaw = (HAL_Base.HALAnalog.SetAnalogTriggerLimitsRawDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerLimitsRaw"), typeof(HAL_Base.HALAnalog.SetAnalogTriggerLimitsRawDelegate));
+            global::HAL.HALAnalog.SetAnalogTriggerLimitsRaw = (global::HAL.HALAnalog.SetAnalogTriggerLimitsRawDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerLimitsRaw"), typeof(global::HAL.HALAnalog.SetAnalogTriggerLimitsRawDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogTriggerLimitsVoltage = (HAL_Base.HALAnalog.SetAnalogTriggerLimitsVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerLimitsVoltage"), typeof(HAL_Base.HALAnalog.SetAnalogTriggerLimitsVoltageDelegate));
+            global::HAL.HALAnalog.SetAnalogTriggerLimitsVoltage = (global::HAL.HALAnalog.SetAnalogTriggerLimitsVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerLimitsVoltage"), typeof(global::HAL.HALAnalog.SetAnalogTriggerLimitsVoltageDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogTriggerAveraged = (HAL_Base.HALAnalog.SetAnalogTriggerAveragedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerAveraged"), typeof(HAL_Base.HALAnalog.SetAnalogTriggerAveragedDelegate));
+            global::HAL.HALAnalog.SetAnalogTriggerAveraged = (global::HAL.HALAnalog.SetAnalogTriggerAveragedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerAveraged"), typeof(global::HAL.HALAnalog.SetAnalogTriggerAveragedDelegate));
 
-            HAL_Base.HALAnalog.SetAnalogTriggerFiltered = (HAL_Base.HALAnalog.SetAnalogTriggerFilteredDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerFiltered"), typeof(HAL_Base.HALAnalog.SetAnalogTriggerFilteredDelegate));
+            global::HAL.HALAnalog.SetAnalogTriggerFiltered = (global::HAL.HALAnalog.SetAnalogTriggerFilteredDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAnalogTriggerFiltered"), typeof(global::HAL.HALAnalog.SetAnalogTriggerFilteredDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogTriggerInWindow = (HAL_Base.HALAnalog.GetAnalogTriggerInWindowDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogTriggerInWindow"), typeof(HAL_Base.HALAnalog.GetAnalogTriggerInWindowDelegate));
+            global::HAL.HALAnalog.GetAnalogTriggerInWindow = (global::HAL.HALAnalog.GetAnalogTriggerInWindowDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogTriggerInWindow"), typeof(global::HAL.HALAnalog.GetAnalogTriggerInWindowDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogTriggerTriggerState = (HAL_Base.HALAnalog.GetAnalogTriggerTriggerStateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogTriggerTriggerState"), typeof(HAL_Base.HALAnalog.GetAnalogTriggerTriggerStateDelegate));
+            global::HAL.HALAnalog.GetAnalogTriggerTriggerState = (global::HAL.HALAnalog.GetAnalogTriggerTriggerStateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogTriggerTriggerState"), typeof(global::HAL.HALAnalog.GetAnalogTriggerTriggerStateDelegate));
 
-            HAL_Base.HALAnalog.GetAnalogTriggerOutput = (HAL_Base.HALAnalog.GetAnalogTriggerOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogTriggerOutput"), typeof(HAL_Base.HALAnalog.GetAnalogTriggerOutputDelegate));
+            global::HAL.HALAnalog.GetAnalogTriggerOutput = (global::HAL.HALAnalog.GetAnalogTriggerOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAnalogTriggerOutput"), typeof(global::HAL.HALAnalog.GetAnalogTriggerOutputDelegate));
 
         }
     }

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BFCE384E-CA2A-4604-AF76-777DA91DAFEE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HAL</RootNamespace>
+    <AssemblyName>HAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Output\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppVeyor|AnyCPU'">
+    <OutputPath>Output\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="LibraryLoader.cs" />
+    <Compile Include="Generated\HALAccelerometerGenerated.cs" />
+    <Compile Include="Generated\HALAnalogGenerated.cs" />
+    <Compile Include="Generated\HALCANGenerated.cs" />
+    <Compile Include="Generated\HALCanTalonSRXGenerated.cs" />
+    <Compile Include="Generated\HALCompressorGenerated.cs" />
+    <Compile Include="Generated\HALDigitalGenerated.cs" />
+    <Compile Include="Generated\HALGenerated.cs" />
+    <Compile Include="Generated\HALInterruptsGenerated.cs" />
+    <Compile Include="Generated\HALNotifierGenerated.cs" />
+    <Compile Include="Generated\HALPDPGenerated.cs" />
+    <Compile Include="Generated\HALPowerGenerated.cs" />
+    <Compile Include="Generated\HALSemaphoreGenerated.cs" />
+    <Compile Include="Generated\HALSerialPortGenerated.cs" />
+    <Compile Include="Generated\HALSolenoidGenerated.cs" />
+    <Compile Include="Generated\HALUtilitiesGenerated.cs" />
+    <Compile Include="HAL.cs" />
+    <Compile Include="HALAccelerometer.cs" />
+    <Compile Include="HALAnalog.cs" />
+    <Compile Include="HALCAN.cs" />
+    <Compile Include="HALCanTalonSRX.cs" />
+    <Compile Include="HALCompressor.cs" />
+    <Compile Include="HALDigital.cs" />
+    <Compile Include="HALErrors.cs" />
+    <Compile Include="HALInterrupts.cs" />
+    <Compile Include="HALNotifier.cs" />
+    <Compile Include="HALPDP.cs" />
+    <Compile Include="HALPower.cs" />
+    <Compile Include="HALSemaphore.cs" />
+    <Compile Include="HALSerialPort.cs" />
+    <Compile Include="HALSolenoid.cs" />
+    <Compile Include="HALStructures.cs" />
+    <Compile Include="HALUsageReporter.cs" />
+    <Compile Include="HALUtilities.cs" />
+    <Compile Include="ISimulator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using HAL_Base;
+using HAL;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 
@@ -17,16 +17,16 @@ namespace HAL_Simulator
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
-            HAL_Base.HALSolenoid.FreeSolenoidPort = freeSolenoidPort;
-            HAL_Base.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
-            HAL_Base.HALSolenoid.GetSolenoid = getSolenoid;
-            HAL_Base.HALSolenoid.GetAllSolenoids = getAllSolenoids;
-            HAL_Base.HALSolenoid.SetSolenoid = setSolenoid;
-            HAL_Base.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
-            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
-            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageFault = getPCMSolenoidVoltageFault;
-            HAL_Base.HALSolenoid.ClearAllPCMStickyFaults_sol = clearAllPCMStickyFaults_sol;
+            global::HAL.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
+            global::HAL.HALSolenoid.FreeSolenoidPort = freeSolenoidPort;
+            global::HAL.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
+            global::HAL.HALSolenoid.GetSolenoid = getSolenoid;
+            global::HAL.HALSolenoid.GetAllSolenoids = getAllSolenoids;
+            global::HAL.HALSolenoid.SetSolenoid = setSolenoid;
+            global::HAL.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
+            global::HAL.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
+            global::HAL.HALSolenoid.GetPCMSolenoidVoltageFault = getPCMSolenoidVoltageFault;
+            global::HAL.HALSolenoid.ClearAllPCMStickyFaults_sol = clearAllPCMStickyFaults_sol;
         }
 
         [CalledSimFunction]

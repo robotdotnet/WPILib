@@ -105,9 +105,9 @@
     <Compile Include="TimerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+    <ProjectReference Include="..\HAL-Base\HAL.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
-      <Name>HAL-Base</Name>
+      <Name>HAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj">
       <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>

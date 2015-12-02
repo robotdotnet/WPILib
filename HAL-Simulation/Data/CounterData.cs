@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 
 namespace HAL_Simulator.Data
 {

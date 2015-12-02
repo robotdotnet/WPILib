@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using HAL_Base;
+using HAL;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
-using static HAL_Base.HALAnalog;
+using static HAL.HAL;
+using static HAL.HALAnalog;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -50,7 +50,7 @@ namespace WPILib
             int status = 0;
             m_port = InitializeAnalogInputPort(portPointer, ref status);
             CheckStatus(status);
-            LiveWindow.AddSensor("AnalogInput", channel, this);
+            LiveWindow.LiveWindow.AddSensor("AnalogInput", channel, this);
             Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
 

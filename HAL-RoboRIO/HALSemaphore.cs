@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using HAL_Base;
+using HAL;
 
 namespace HAL_RoboRIO
 {
@@ -12,23 +12,23 @@ namespace HAL_RoboRIO
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALSemaphore.InitializeMutexNormal = (HAL_Base.HALSemaphore.InitializeMutexNormalDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeMutexNormal"), typeof(HAL_Base.HALSemaphore.InitializeMutexNormalDelegate));
+            global::HAL.HALSemaphore.InitializeMutexNormal = (global::HAL.HALSemaphore.InitializeMutexNormalDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeMutexNormal"), typeof(global::HAL.HALSemaphore.InitializeMutexNormalDelegate));
 
-            HAL_Base.HALSemaphore.DeleteMutex = (HAL_Base.HALSemaphore.DeleteMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "deleteMutex"), typeof(HAL_Base.HALSemaphore.DeleteMutexDelegate));
+            global::HAL.HALSemaphore.DeleteMutex = (global::HAL.HALSemaphore.DeleteMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "deleteMutex"), typeof(global::HAL.HALSemaphore.DeleteMutexDelegate));
 
-            HAL_Base.HALSemaphore.TakeMutex = (HAL_Base.HALSemaphore.TakeMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "takeMutex"), typeof(HAL_Base.HALSemaphore.TakeMutexDelegate));
+            global::HAL.HALSemaphore.TakeMutex = (global::HAL.HALSemaphore.TakeMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "takeMutex"), typeof(global::HAL.HALSemaphore.TakeMutexDelegate));
 
-            HAL_Base.HALSemaphore.TryTakeMutex = (HAL_Base.HALSemaphore.TryTakeMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "tryTakeMutex"), typeof(HAL_Base.HALSemaphore.TryTakeMutexDelegate));
+            global::HAL.HALSemaphore.TryTakeMutex = (global::HAL.HALSemaphore.TryTakeMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "tryTakeMutex"), typeof(global::HAL.HALSemaphore.TryTakeMutexDelegate));
 
-            HAL_Base.HALSemaphore.GiveMutex = (HAL_Base.HALSemaphore.GiveMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "giveMutex"), typeof(HAL_Base.HALSemaphore.GiveMutexDelegate));
+            global::HAL.HALSemaphore.GiveMutex = (global::HAL.HALSemaphore.GiveMutexDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "giveMutex"), typeof(global::HAL.HALSemaphore.GiveMutexDelegate));
 
-            HAL_Base.HALSemaphore.InitializeMultiWait = (HAL_Base.HALSemaphore.InitializeMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeMultiWait"), typeof(HAL_Base.HALSemaphore.InitializeMultiWaitDelegate));
+            global::HAL.HALSemaphore.InitializeMultiWait = (global::HAL.HALSemaphore.InitializeMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeMultiWait"), typeof(global::HAL.HALSemaphore.InitializeMultiWaitDelegate));
 
-            HAL_Base.HALSemaphore.DeleteMultiWait = (HAL_Base.HALSemaphore.DeleteMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "deleteMultiWait"), typeof(HAL_Base.HALSemaphore.DeleteMultiWaitDelegate));
+            global::HAL.HALSemaphore.DeleteMultiWait = (global::HAL.HALSemaphore.DeleteMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "deleteMultiWait"), typeof(global::HAL.HALSemaphore.DeleteMultiWaitDelegate));
 
-            HAL_Base.HALSemaphore.TakeMultiWait = (HAL_Base.HALSemaphore.TakeMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "takeMultiWait"), typeof(HAL_Base.HALSemaphore.TakeMultiWaitDelegate));
+            global::HAL.HALSemaphore.TakeMultiWait = (global::HAL.HALSemaphore.TakeMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "takeMultiWait"), typeof(global::HAL.HALSemaphore.TakeMultiWaitDelegate));
 
-            HAL_Base.HALSemaphore.GiveMultiWait = (HAL_Base.HALSemaphore.GiveMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "giveMultiWait"), typeof(HAL_Base.HALSemaphore.GiveMultiWaitDelegate));
+            global::HAL.HALSemaphore.GiveMultiWait = (global::HAL.HALSemaphore.GiveMultiWaitDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "giveMultiWait"), typeof(global::HAL.HALSemaphore.GiveMultiWaitDelegate));
 
         }
     }

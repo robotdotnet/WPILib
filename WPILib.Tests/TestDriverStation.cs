@@ -1,9 +1,8 @@
-﻿
-using HAL_Base;
+﻿using HAL;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
-using HAL = HAL_Base.HAL;
+using HAL = HAL.HAL;
 using static HAL_Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
@@ -39,7 +38,7 @@ namespace WPILib.Tests
             HalData().ControlData.DsAttached = true;
             HalData().ControlData.FmsAttached = true;
 
-            var ct = HAL_Base.HAL.GetControlWord();
+            var ct = global::HAL.HAL.GetControlWord();
 
             Assert.IsTrue(ct.GetEnabled());
             Assert.IsTrue(ct.GetAutonomous());
@@ -59,7 +58,7 @@ namespace WPILib.Tests
             HalData().ControlData.DsAttached = false;
             HalData().ControlData.FmsAttached = false;
 
-            var ct = HAL_Base.HAL.GetControlWord();
+            var ct = global::HAL.HAL.GetControlWord();
 
             Assert.IsFalse(ct.GetEnabled());
             Assert.IsFalse(ct.GetAutonomous());
@@ -119,14 +118,14 @@ namespace WPILib.Tests
         [Test]
         public void TestSysActive()
         {
-            HAL.HALGetSystemActive = (ref int status) =>
+            global::HAL.HAL.HALGetSystemActive = (ref int status) =>
             {
                 status = 0;
                 return false;
             };
             Assert.IsFalse(DriverStation.Instance.SysActive);
 
-            HAL.HALGetSystemActive = HAL_Simulator.HAL.HALGetSystemActive;
+            global::HAL.HAL.HALGetSystemActive = HAL_Simulator.HAL.HALGetSystemActive;
 
             Assert.IsTrue(DriverStation.Instance.SysActive);
 
@@ -135,14 +134,14 @@ namespace WPILib.Tests
         [Test]
         public void TestBrownedOut()
         {
-            HAL.HALGetBrownedOut = (ref int status) =>
+            global::HAL.HAL.HALGetBrownedOut = (ref int status) =>
             {
                 status = 0;
                 return true;
             };
             Assert.IsTrue(DriverStation.Instance.BrownedOut);
 
-            HAL.HALGetBrownedOut = HAL_Simulator.HAL.HALGetBrownedOut;
+            global::HAL.HAL.HALGetBrownedOut = HAL_Simulator.HAL.HALGetBrownedOut;
 
             Assert.IsFalse(DriverStation.Instance.BrownedOut);
 
@@ -178,7 +177,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetAllianceDefault()
         {
-            HAL.HALGetAllianceStation = (ref HALAllianceStationID station) =>
+            global::HAL.HAL.HALGetAllianceStation = (ref HALAllianceStationID station) =>
             {
                 station = (HALAllianceStationID) 9;
                 return 0;
@@ -186,13 +185,13 @@ namespace WPILib.Tests
 
             Assert.AreEqual(DriverStation.Alliance.Invalid, DriverStation.Instance.GetAlliance());
 
-            HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
+            global::HAL.HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
         }
 
         [Test]
         public void TestGetLocationDefault()
         {
-            HAL.HALGetAllianceStation = (ref HALAllianceStationID station) =>
+            global::HAL.HAL.HALGetAllianceStation = (ref HALAllianceStationID station) =>
             {
                 station = (HALAllianceStationID) 9;
                 return 0;
@@ -200,7 +199,7 @@ namespace WPILib.Tests
 
             Assert.AreEqual(0, DriverStation.Instance.GetLocation());
 
-            HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
+            global::HAL.HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
         }
 
         [Test]
@@ -226,7 +225,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetMatchTime()
         {
-            HAL.HALGetMatchTime = (ref float time) =>
+            global::HAL.HAL.HALGetMatchTime = (ref float time) =>
             {
                 time = 5.85f;
                 return 0;
@@ -234,7 +233,7 @@ namespace WPILib.Tests
 
             Assert.AreEqual(5.85, DriverStation.Instance.GetMatchTime(), 0.00001);
 
-            HAL.HALGetMatchTime = HAL_Simulator.HAL.HALGetMatchTime;
+            global::HAL.HAL.HALGetMatchTime = HAL_Simulator.HAL.HALGetMatchTime;
         }
 
         /*

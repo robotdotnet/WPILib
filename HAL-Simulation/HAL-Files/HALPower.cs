@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using static HAL_Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
@@ -14,20 +14,20 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALPower.GetVinVoltage = getVinVoltage;
-            HAL_Base.HALPower.GetVinCurrent = getVinCurrent;
-            HAL_Base.HALPower.GetUserVoltage6V = getUserVoltage6V;
-            HAL_Base.HALPower.GetUserCurrent6V = getUserCurrent6V;
-            HAL_Base.HALPower.GetUserActive6V = getUserActive6V;
-            HAL_Base.HALPower.GetUserCurrentFaults6V = getUserCurrentFaults6V;
-            HAL_Base.HALPower.GetUserVoltage5V = getUserVoltage5V;
-            HAL_Base.HALPower.GetUserCurrent5V = getUserCurrent5V;
-            HAL_Base.HALPower.GetUserActive5V = getUserActive5V;
-            HAL_Base.HALPower.GetUserCurrentFaults5V = getUserCurrentFaults5V;
-            HAL_Base.HALPower.GetUserVoltage3V3 = getUserVoltage3V3;
-            HAL_Base.HALPower.GetUserCurrent3V3 = getUserCurrent3V3;
-            HAL_Base.HALPower.GetUserActive3V3 = getUserActive3V3;
-            HAL_Base.HALPower.GetUserCurrentFaults3V3 = getUserCurrentFaults3V3;
+            global::HAL.HALPower.GetVinVoltage = getVinVoltage;
+            global::HAL.HALPower.GetVinCurrent = getVinCurrent;
+            global::HAL.HALPower.GetUserVoltage6V = getUserVoltage6V;
+            global::HAL.HALPower.GetUserCurrent6V = getUserCurrent6V;
+            global::HAL.HALPower.GetUserActive6V = getUserActive6V;
+            global::HAL.HALPower.GetUserCurrentFaults6V = getUserCurrentFaults6V;
+            global::HAL.HALPower.GetUserVoltage5V = getUserVoltage5V;
+            global::HAL.HALPower.GetUserCurrent5V = getUserCurrent5V;
+            global::HAL.HALPower.GetUserActive5V = getUserActive5V;
+            global::HAL.HALPower.GetUserCurrentFaults5V = getUserCurrentFaults5V;
+            global::HAL.HALPower.GetUserVoltage3V3 = getUserVoltage3V3;
+            global::HAL.HALPower.GetUserCurrent3V3 = getUserCurrent3V3;
+            global::HAL.HALPower.GetUserActive3V3 = getUserActive3V3;
+            global::HAL.HALPower.GetUserCurrentFaults3V3 = getUserCurrentFaults3V3;
         }
 
 

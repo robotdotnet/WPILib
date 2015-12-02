@@ -1,4 +1,4 @@
-﻿using HAL_Base;
+﻿using HAL;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.IntegrationTests.Fixtures;

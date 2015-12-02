@@ -1,6 +1,6 @@
-﻿using HAL_Base;
+﻿using HAL;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 using static System.Console;
 
 namespace WPILib
@@ -35,7 +35,7 @@ namespace WPILib
             // Tell the DS that the robot is ready to be enabled.
             HALNetworkCommunicationObserveUserProgramStarting();
 
-            LiveWindow.SetEnabled(false);
+            LiveWindow.LiveWindow.SetEnabled(false);
             while (true)
             {
                 //Console.WriteLine("RobotLoop");
@@ -46,7 +46,7 @@ namespace WPILib
                     // either a different mode or from power-on
                     if (!m_disabledInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         DisabledInit();
                         m_disabledInitialized = true;
                         // reset the initialization flags for the other modes
@@ -66,7 +66,7 @@ namespace WPILib
                     // a different mode or from power-on
                     if (!m_testInitialized)
                     {
-                        LiveWindow.SetEnabled(true);
+                        LiveWindow.LiveWindow.SetEnabled(true);
                         TestInit();
                         m_testInitialized = true;
                         m_autonomousInitialized = false;
@@ -85,7 +85,7 @@ namespace WPILib
                     // we've entered autonomous_mode
                     if (!m_autonomousInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         // KBS NOTE: old code reset all PWMs and relays to "safe values"
                         // whenever entering autonomous mode, before calling
                         // "Autonomous_Init()"
@@ -107,7 +107,7 @@ namespace WPILib
                     // we've entered teleop_mode
                     if (!m_teleopInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         TeleopInit();
                         m_teleopInitialized = true;
                         m_testInitialized = false;

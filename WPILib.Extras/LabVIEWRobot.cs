@@ -1,7 +1,7 @@
 ﻿using System.Threading;
-using HAL_Base;
+using HAL;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 using static System.Console;
 
 namespace WPILib.Extras
@@ -57,7 +57,7 @@ namespace WPILib.Extras
             // Tell the DS that the robot is ready to be enabled.
             HALNetworkCommunicationObserveUserProgramStarting();
 
-            LiveWindow.SetEnabled(false);
+            LiveWindow.LiveWindow.SetEnabled(false);
 
             while (true)
             {
@@ -67,7 +67,7 @@ namespace WPILib.Extras
                     // a different mode or from power-on
                     if (!m_testInitialized)
                     {
-                        LiveWindow.SetEnabled(true);
+                        LiveWindow.LiveWindow.SetEnabled(true);
                         CheckThread();
                         InitializeTest();
                         m_testInitialized = true;
@@ -86,7 +86,7 @@ namespace WPILib.Extras
                     // either a different mode or from power-on
                     if (!m_disabledInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         CheckThread();
                         Disabled(CallContext.Init);
                         m_disabledInitialized = true;
@@ -107,7 +107,7 @@ namespace WPILib.Extras
                     // we've entered autonomous_mode
                     if (!m_autonomousInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         // KBS NOTE: old code reset all PWMs and relays to "safe values"
                         // whenever entering autonomous mode, before calling
                         // "Autonomous_Init()"
@@ -129,7 +129,7 @@ namespace WPILib.Extras
                     // we've entered teleop_mode
                     if (!m_teleopInitialized)
                     {
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                         CheckThread();
                         Teleoperated(CallContext.Init);
                         m_teleopInitialized = true;

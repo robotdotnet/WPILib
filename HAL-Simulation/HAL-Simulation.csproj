@@ -126,9 +126,9 @@
     <Compile Include="TalonSRXEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+    <ProjectReference Include="..\HAL-Base\HAL.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
-      <Name>HAL-Base</Name>
+      <Name>HAL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

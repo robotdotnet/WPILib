@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
-using HAL_Base;
+using HAL;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 
 namespace WPILib
 {
@@ -117,7 +117,7 @@ namespace WPILib
         /// Then go back and wait for the robot to be enabled again.</remarks>
         public override void StartCompetition()
         {
-            HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Sample);
+            HAL.HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Sample);
 
             RobotInit();
 
@@ -128,7 +128,7 @@ namespace WPILib
 
             if (!m_robotMainOverriden)
             {
-                LiveWindow.SetEnabled(false);
+                LiveWindow.LiveWindow.SetEnabled(false);
                 while (true)
                 {
                     if (IsDisabled)
@@ -153,13 +153,13 @@ namespace WPILib
                     }
                     else if (IsTest)
                     {
-                        LiveWindow.SetEnabled(true);
+                        LiveWindow.LiveWindow.SetEnabled(true);
                         m_ds.InTest(true);
                         Test();
                         m_ds.InTest(false);
                         while (IsTest && IsEnabled)
                             Thread.Sleep(1);
-                        LiveWindow.SetEnabled(false);
+                        LiveWindow.LiveWindow.SetEnabled(false);
                     }
                     else
                     {

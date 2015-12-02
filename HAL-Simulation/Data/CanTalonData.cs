@@ -166,149 +166,149 @@ namespace HAL_Simulator.Data
             m_demand = 0.0;
         }
 
-        internal double GetParam(HAL_Base.HALCanTalonSRX.ParamID id)
+        internal double GetParam(global::HAL.HALCanTalonSRX.ParamID id)
         {
             switch (id)
             {
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_P:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_P:
                     return ProfileParamSlot0_P;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_I:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_I:
                     return ProfileParamSlot0_I;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_D:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_D:
                     return ProfileParamSlot0_D;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_F:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_F:
                     return ProfileParamSlot0_F;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone:
                     return ProfileParamSlot0_IZone;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate:
                     return ProfileParamSlot0_CloseLoopRampRate;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_P:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_P:
                     return ProfileParamSlot1_P;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_I:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_I:
                     return ProfileParamSlot1_I;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_D:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_D:
                     return ProfileParamSlot1_D;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_F:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_F:
                     return ProfileParamSlot1_F;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone:
                     return ProfileParamSlot1_IZone;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate:
                     return ProfileParamSlot1_CloseLoopRampRate;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold:
                     return ProfileParamSoftLimitForThreshold;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold:
                     return ProfileParamSoftLimitRevThreshold;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable:
                     return ProfileParamSoftLimitForEnable;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable:
                     return ProfileParamSoftLimitRevEnable;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_BrakeMode:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_BrakeMode:
                     return OnBoot_BrakeMode;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed:
                     return OnBoot_LimitSwitch_Forward_NormallyClosed;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed:
                     return OnBoot_LimitSwitch_Reverse_NormallyClosed;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_Disable:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_Disable:
                     return OnBoot_LimitSwitch_Forward_Disable;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_Disable:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_Disable:
                     return OnBoot_LimitSwitch_Reverse_Disable;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_OverTemp:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_OverTemp:
                     return Fault_OverTemp;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_UnderVoltage:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_UnderVoltage:
                     return Fault_UnderVoltage;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_ForLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_ForLim:
                     return Fault_ForLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_RevLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_RevLim:
                     return Fault_RevLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_HardwareFailure:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_HardwareFailure:
                     return Fault_HardwareFailure;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_ForSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_ForSoftLim:
                     return Fault_ForSoftLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_RevSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_RevSoftLim:
                     return Fault_RevSoftLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_OverTemp:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_OverTemp:
                     return StckyFault_OverTemp;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_UnderVoltage:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_UnderVoltage:
                     return StckyFault_UnderVoltage;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_ForLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_ForLim:
                     return StckyFault_ForLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_RevLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_RevLim:
                     return StckyFault_RevLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_ForSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_ForSoftLim:
                     return StckyFault_ForSoftLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_RevSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_RevSoftLim:
                     return StckyFault_RevSoftLim;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAppliedThrottle:
+                case global::HAL.HALCanTalonSRX.ParamID.eAppliedThrottle:
                     return AppliedThrottle;
-                case HAL_Base.HALCanTalonSRX.ParamID.eCloseLoopErr:
+                case global::HAL.HALCanTalonSRX.ParamID.eCloseLoopErr:
                     return CloseLoopErr;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFeedbackDeviceSelect:
+                case global::HAL.HALCanTalonSRX.ParamID.eFeedbackDeviceSelect:
                     return FeedbackDeviceSelect;
-                case HAL_Base.HALCanTalonSRX.ParamID.eRevMotDuringCloseLoopEn:
+                case global::HAL.HALCanTalonSRX.ParamID.eRevMotDuringCloseLoopEn:
                     return RevMotDuringCloseLoopEn ? 1 : 0;
-                case HAL_Base.HALCanTalonSRX.ParamID.eModeSelect:
+                case global::HAL.HALCanTalonSRX.ParamID.eModeSelect:
                     return ModeSelect;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileSlotSelect:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileSlotSelect:
                     return ProfileSlotSelect;
-                case HAL_Base.HALCanTalonSRX.ParamID.eRampThrottle:
+                case global::HAL.HALCanTalonSRX.ParamID.eRampThrottle:
                     return RampThrottle;
-                case HAL_Base.HALCanTalonSRX.ParamID.eRevFeedbackSensor:
+                case global::HAL.HALCanTalonSRX.ParamID.eRevFeedbackSensor:
                     return RevFeedbackSensor ? 1 : 0;
-                case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchEn:
+                case global::HAL.HALCanTalonSRX.ParamID.eLimitSwitchEn:
                     return LimitSwitchEn;
-                case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
+                case global::HAL.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
                     return LimitSwitchClosedFor ? 1 : 0;
-                case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedRev:
+                case global::HAL.HALCanTalonSRX.ParamID.eLimitSwitchClosedRev:
                     return LimitSwitchClosedRev ? 1 : 0;
-                case HAL_Base.HALCanTalonSRX.ParamID.eSensorPosition:
+                case global::HAL.HALCanTalonSRX.ParamID.eSensorPosition:
                     return SensorPosition;
-                case HAL_Base.HALCanTalonSRX.ParamID.eSensorVelocity:
+                case global::HAL.HALCanTalonSRX.ParamID.eSensorVelocity:
                     return SensorVelocity;
-                case HAL_Base.HALCanTalonSRX.ParamID.eCurrent:
+                case global::HAL.HALCanTalonSRX.ParamID.eCurrent:
                     return Current;
-                case HAL_Base.HALCanTalonSRX.ParamID.eBrakeIsEnabled:
+                case global::HAL.HALCanTalonSRX.ParamID.eBrakeIsEnabled:
                     return BrakeIsEnabled ? 1 : 0;
-                case HAL_Base.HALCanTalonSRX.ParamID.eEncPosition:
+                case global::HAL.HALCanTalonSRX.ParamID.eEncPosition:
                     return EncPosition;
-                case HAL_Base.HALCanTalonSRX.ParamID.eEncVel:
+                case global::HAL.HALCanTalonSRX.ParamID.eEncVel:
                     return EncVel;
-                case HAL_Base.HALCanTalonSRX.ParamID.eEncIndexRiseEvents:
+                case global::HAL.HALCanTalonSRX.ParamID.eEncIndexRiseEvents:
                     return EncIndexRiseEvents;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadApin:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadApin:
                     return QuadApin;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadBpin:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadBpin:
                     return QuadBpin;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadIdxpin:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadIdxpin:
                     return QuadIdxpin;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAnalogInWithOv:
+                case global::HAL.HALCanTalonSRX.ParamID.eAnalogInWithOv:
                     return AnalogInWithOv;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAnalogInVel:
+                case global::HAL.HALCanTalonSRX.ParamID.eAnalogInVel:
                     return AnalogInVel;
-                case HAL_Base.HALCanTalonSRX.ParamID.eTemp:
+                case global::HAL.HALCanTalonSRX.ParamID.eTemp:
                     return Temp;
-                case HAL_Base.HALCanTalonSRX.ParamID.eBatteryV:
+                case global::HAL.HALCanTalonSRX.ParamID.eBatteryV:
                     return BatteryV;
-                case HAL_Base.HALCanTalonSRX.ParamID.eResetCount:
+                case global::HAL.HALCanTalonSRX.ParamID.eResetCount:
                     return ResetCount;
-                case HAL_Base.HALCanTalonSRX.ParamID.eResetFlags:
+                case global::HAL.HALCanTalonSRX.ParamID.eResetFlags:
                     return ResetFlags;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFirmVers:
+                case global::HAL.HALCanTalonSRX.ParamID.eFirmVers:
                     return FirmVers;
-                case HAL_Base.HALCanTalonSRX.ParamID.eSettingsChanged:
+                case global::HAL.HALCanTalonSRX.ParamID.eSettingsChanged:
                     return SettingsChanged;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadFilterEn:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadFilterEn:
                     return QuadFilterEn;
-                case HAL_Base.HALCanTalonSRX.ParamID.ePidIaccum:
+                case global::HAL.HALCanTalonSRX.ParamID.ePidIaccum:
                     return PidIaccum;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAinPosition:
+                case global::HAL.HALCanTalonSRX.ParamID.eAinPosition:
                     return AinPosition;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_AllowableClosedLoopErr:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_AllowableClosedLoopErr:
                     return ProfileParamSlot0_AllowableClosedLoopErr;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_AllowableClosedLoopErr:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_AllowableClosedLoopErr:
                     return ProfileParamSlot1_AllowableClosedLoopErr;
-                case HAL_Base.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
+                case global::HAL.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
                     return NumberEncoderCPR;
-                case HAL_Base.HALCanTalonSRX.ParamID.eNumberPotTurns:
+                case global::HAL.HALCanTalonSRX.ParamID.eNumberPotTurns:
                     return NumberPotTurns;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(id), id, null);
@@ -316,218 +316,218 @@ namespace HAL_Simulator.Data
         }
 
 
-        internal void SetParam(HAL_Base.HALCanTalonSRX.ParamID id, double value)
+        internal void SetParam(global::HAL.HALCanTalonSRX.ParamID id, double value)
         {
             switch (id)
             {
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_P:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_P:
                     ProfileParamSlot0_P = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_I:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_I:
                     ProfileParamSlot0_I = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_D:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_D:
                     ProfileParamSlot0_D = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_F:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_F:
                     ProfileParamSlot0_F = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone:
                     ProfileParamSlot0_IZone = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate:
                     ProfileParamSlot0_CloseLoopRampRate = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_P:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_P:
                     ProfileParamSlot1_P = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_I:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_I:
                     ProfileParamSlot1_I = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_D:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_D:
                     ProfileParamSlot1_D = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_F:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_F:
                     ProfileParamSlot1_F = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone:
                     ProfileParamSlot1_IZone = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate:
                     ProfileParamSlot1_CloseLoopRampRate = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold:
                     ProfileParamSoftLimitForThreshold = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevThreshold:
                     ProfileParamSoftLimitRevThreshold = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForEnable:
                     ProfileParamSoftLimitForEnable = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSoftLimitRevEnable:
                     ProfileParamSoftLimitRevEnable = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_BrakeMode:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_BrakeMode:
                     OnBoot_BrakeMode = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed:
                     OnBoot_LimitSwitch_Forward_NormallyClosed = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed:
                     OnBoot_LimitSwitch_Reverse_NormallyClosed = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_Disable:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Forward_Disable:
                     OnBoot_LimitSwitch_Forward_Disable = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_Disable:
+                case global::HAL.HALCanTalonSRX.ParamID.eOnBoot_LimitSwitch_Reverse_Disable:
                     OnBoot_LimitSwitch_Reverse_Disable = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_OverTemp:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_OverTemp:
                     Fault_OverTemp = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_UnderVoltage:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_UnderVoltage:
                     Fault_UnderVoltage = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_ForLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_ForLim:
                     Fault_ForLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_RevLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_RevLim:
                     Fault_RevLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_HardwareFailure:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_HardwareFailure:
                     Fault_HardwareFailure = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_ForSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_ForSoftLim:
                     Fault_ForSoftLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFault_RevSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eFault_RevSoftLim:
                     Fault_RevSoftLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_OverTemp:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_OverTemp:
                     StckyFault_OverTemp = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_UnderVoltage:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_UnderVoltage:
                     StckyFault_UnderVoltage = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_ForLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_ForLim:
                     StckyFault_ForLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_RevLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_RevLim:
                     StckyFault_RevLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_ForSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_ForSoftLim:
                     StckyFault_ForSoftLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eStckyFault_RevSoftLim:
+                case global::HAL.HALCanTalonSRX.ParamID.eStckyFault_RevSoftLim:
                     StckyFault_RevSoftLim = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAppliedThrottle:
+                case global::HAL.HALCanTalonSRX.ParamID.eAppliedThrottle:
                     AppliedThrottle = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eCloseLoopErr:
+                case global::HAL.HALCanTalonSRX.ParamID.eCloseLoopErr:
                     CloseLoopErr = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFeedbackDeviceSelect:
+                case global::HAL.HALCanTalonSRX.ParamID.eFeedbackDeviceSelect:
                     FeedbackDeviceSelect = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eRevMotDuringCloseLoopEn:
+                case global::HAL.HALCanTalonSRX.ParamID.eRevMotDuringCloseLoopEn:
                     RevMotDuringCloseLoopEn = value != 0;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eModeSelect:
+                case global::HAL.HALCanTalonSRX.ParamID.eModeSelect:
                     ModeSelect = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileSlotSelect:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileSlotSelect:
                     ProfileSlotSelect = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eRampThrottle:
+                case global::HAL.HALCanTalonSRX.ParamID.eRampThrottle:
                     RampThrottle = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eRevFeedbackSensor:
+                case global::HAL.HALCanTalonSRX.ParamID.eRevFeedbackSensor:
                     RevFeedbackSensor = value != 0;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchEn:
+                case global::HAL.HALCanTalonSRX.ParamID.eLimitSwitchEn:
                     LimitSwitchEn = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
+                case global::HAL.HALCanTalonSRX.ParamID.eLimitSwitchClosedFor:
                     LimitSwitchClosedFor = value != 0;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eLimitSwitchClosedRev:
+                case global::HAL.HALCanTalonSRX.ParamID.eLimitSwitchClosedRev:
                     LimitSwitchClosedRev = value != 0;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eSensorPosition:
+                case global::HAL.HALCanTalonSRX.ParamID.eSensorPosition:
                     SensorPosition = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eSensorVelocity:
+                case global::HAL.HALCanTalonSRX.ParamID.eSensorVelocity:
                     SensorVelocity = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eCurrent:
+                case global::HAL.HALCanTalonSRX.ParamID.eCurrent:
                     Current = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eBrakeIsEnabled:
+                case global::HAL.HALCanTalonSRX.ParamID.eBrakeIsEnabled:
                     BrakeIsEnabled = value != 0;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eEncPosition:
+                case global::HAL.HALCanTalonSRX.ParamID.eEncPosition:
                     EncPosition = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eEncVel:
+                case global::HAL.HALCanTalonSRX.ParamID.eEncVel:
                     EncVel = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eEncIndexRiseEvents:
+                case global::HAL.HALCanTalonSRX.ParamID.eEncIndexRiseEvents:
                     EncIndexRiseEvents = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadApin:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadApin:
                     QuadApin = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadBpin:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadBpin:
                     QuadBpin = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadIdxpin:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadIdxpin:
                     QuadIdxpin = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAnalogInWithOv:
+                case global::HAL.HALCanTalonSRX.ParamID.eAnalogInWithOv:
                     AnalogInWithOv = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAnalogInVel:
+                case global::HAL.HALCanTalonSRX.ParamID.eAnalogInVel:
                     AnalogInVel = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eTemp:
+                case global::HAL.HALCanTalonSRX.ParamID.eTemp:
                     Temp = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eBatteryV:
+                case global::HAL.HALCanTalonSRX.ParamID.eBatteryV:
                     BatteryV = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eResetCount:
+                case global::HAL.HALCanTalonSRX.ParamID.eResetCount:
                     ResetCount = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eResetFlags:
+                case global::HAL.HALCanTalonSRX.ParamID.eResetFlags:
                     ResetFlags = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eFirmVers:
+                case global::HAL.HALCanTalonSRX.ParamID.eFirmVers:
                     FirmVers = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eSettingsChanged:
+                case global::HAL.HALCanTalonSRX.ParamID.eSettingsChanged:
                     SettingsChanged = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eQuadFilterEn:
+                case global::HAL.HALCanTalonSRX.ParamID.eQuadFilterEn:
                     QuadFilterEn = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.ePidIaccum:
+                case global::HAL.HALCanTalonSRX.ParamID.ePidIaccum:
                     PidIaccum = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eAinPosition:
+                case global::HAL.HALCanTalonSRX.ParamID.eAinPosition:
                     AinPosition = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_AllowableClosedLoopErr:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot0_AllowableClosedLoopErr:
                     ProfileParamSlot0_AllowableClosedLoopErr = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_AllowableClosedLoopErr:
+                case global::HAL.HALCanTalonSRX.ParamID.eProfileParamSlot1_AllowableClosedLoopErr:
                     ProfileParamSlot1_AllowableClosedLoopErr = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
+                case global::HAL.HALCanTalonSRX.ParamID.eNumberEncoderCPR:
                     NumberEncoderCPR = value;
                     break;
-                case HAL_Base.HALCanTalonSRX.ParamID.eNumberPotTurns:
+                case global::HAL.HALCanTalonSRX.ParamID.eNumberPotTurns:
                     NumberPotTurns = value;
                     break;
             }

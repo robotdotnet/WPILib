@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using static HAL_Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
@@ -14,11 +14,11 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALAccelerometer.SetAccelerometerActive = setAccelerometerActive;
-            HAL_Base.HALAccelerometer.SetAccelerometerRange = setAccelerometerRange;
-            HAL_Base.HALAccelerometer.GetAccelerometerX = getAccelerometerX;
-            HAL_Base.HALAccelerometer.GetAccelerometerY = getAccelerometerY;
-            HAL_Base.HALAccelerometer.GetAccelerometerZ = getAccelerometerZ;
+            global::HAL.HALAccelerometer.SetAccelerometerActive = setAccelerometerActive;
+            global::HAL.HALAccelerometer.SetAccelerometerRange = setAccelerometerRange;
+            global::HAL.HALAccelerometer.GetAccelerometerX = getAccelerometerX;
+            global::HAL.HALAccelerometer.GetAccelerometerY = getAccelerometerY;
+            global::HAL.HALAccelerometer.GetAccelerometerZ = getAccelerometerZ;
         }
 
         /// Return Type: void

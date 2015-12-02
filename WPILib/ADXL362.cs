@@ -76,7 +76,7 @@ namespace WPILib
             commands[2] = PowerCtlRegister | PowerCtl_UltraLowNoise;
             m_spi.Write(commands, 3);
 
-            LiveWindow.AddSensor("ADXL362", port.ToString(), this);
+            LiveWindow.LiveWindow.AddSensor("ADXL362", port.ToString(), this);
         }
 
         public override void Dispose()

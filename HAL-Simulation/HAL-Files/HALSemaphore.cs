@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
-using HAL_Base;
+using HAL;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -15,15 +15,15 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALSemaphore.InitializeMutexNormal = initializeMutexNormal;
-            HAL_Base.HALSemaphore.DeleteMutex = deleteMutex;
-            HAL_Base.HALSemaphore.TakeMutex = takeMutex;
-            HAL_Base.HALSemaphore.TryTakeMutex = tryTakeMutex;
-            HAL_Base.HALSemaphore.GiveMutex = giveMutex;
-            HAL_Base.HALSemaphore.InitializeMultiWait = initializeMultiWait;
-            HAL_Base.HALSemaphore.DeleteMultiWait = deleteMultiWait;
-            HAL_Base.HALSemaphore.TakeMultiWait = takeMultiWait;
-            HAL_Base.HALSemaphore.GiveMultiWait = giveMultiWait;
+            global::HAL.HALSemaphore.InitializeMutexNormal = initializeMutexNormal;
+            global::HAL.HALSemaphore.DeleteMutex = deleteMutex;
+            global::HAL.HALSemaphore.TakeMutex = takeMutex;
+            global::HAL.HALSemaphore.TryTakeMutex = tryTakeMutex;
+            global::HAL.HALSemaphore.GiveMutex = giveMutex;
+            global::HAL.HALSemaphore.InitializeMultiWait = initializeMultiWait;
+            global::HAL.HALSemaphore.DeleteMultiWait = deleteMultiWait;
+            global::HAL.HALSemaphore.TakeMultiWait = takeMultiWait;
+            global::HAL.HALSemaphore.GiveMultiWait = giveMultiWait;
         }
 
 

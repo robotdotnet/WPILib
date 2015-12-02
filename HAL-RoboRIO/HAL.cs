@@ -6,7 +6,7 @@ using System.Text;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using HAL_Base;
+using HAL;
 
 namespace HAL_RoboRIO
 {
@@ -126,71 +126,71 @@ namespace HAL_RoboRIO
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HAL.GetPort = (HAL_Base.HAL.GetPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPort"), typeof(HAL_Base.HAL.GetPortDelegate));
+            global::HAL.HAL.GetPort = (global::HAL.HAL.GetPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPort"), typeof(global::HAL.HAL.GetPortDelegate));
 
-            HAL_Base.HAL.GetPortWithModule = (HAL_Base.HAL.GetPortWithModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPortWithModule"), typeof(HAL_Base.HAL.GetPortWithModuleDelegate));
+            global::HAL.HAL.GetPortWithModule = (global::HAL.HAL.GetPortWithModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPortWithModule"), typeof(global::HAL.HAL.GetPortWithModuleDelegate));
 
-            HAL_Base.HAL.FreePort = (HAL_Base.HAL.FreePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePort"), typeof(HAL_Base.HAL.FreePortDelegate));
+            global::HAL.HAL.FreePort = (global::HAL.HAL.FreePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePort"), typeof(global::HAL.HAL.FreePortDelegate));
 
-            HAL_Base.HAL.GetHALErrorMessage = GetHALErrorMessage;
+            global::HAL.HAL.GetHALErrorMessage = GetHALErrorMessage;
 
             NativeGetHALErrorMessage = (NativeGetHALErrorMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getHALErrorMessage"), typeof(NativeGetHALErrorMessageDelegate));
 
-            HAL_Base.HAL.GetFPGAVersion = (HAL_Base.HAL.GetFPGAVersionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAVersion"), typeof(HAL_Base.HAL.GetFPGAVersionDelegate));
+            global::HAL.HAL.GetFPGAVersion = (global::HAL.HAL.GetFPGAVersionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAVersion"), typeof(global::HAL.HAL.GetFPGAVersionDelegate));
 
-            HAL_Base.HAL.GetFPGARevision = (HAL_Base.HAL.GetFPGARevisionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGARevision"), typeof(HAL_Base.HAL.GetFPGARevisionDelegate));
+            global::HAL.HAL.GetFPGARevision = (global::HAL.HAL.GetFPGARevisionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGARevision"), typeof(global::HAL.HAL.GetFPGARevisionDelegate));
 
-            HAL_Base.HAL.GetFPGATime = (HAL_Base.HAL.GetFPGATimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGATime"), typeof(HAL_Base.HAL.GetFPGATimeDelegate));
+            global::HAL.HAL.GetFPGATime = (global::HAL.HAL.GetFPGATimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGATime"), typeof(global::HAL.HAL.GetFPGATimeDelegate));
 
-            HAL_Base.HAL.GetFPGAButton = (HAL_Base.HAL.GetFPGAButtonDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAButton"), typeof(HAL_Base.HAL.GetFPGAButtonDelegate));
+            global::HAL.HAL.GetFPGAButton = (global::HAL.HAL.GetFPGAButtonDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAButton"), typeof(global::HAL.HAL.GetFPGAButtonDelegate));
 
-            HAL_Base.HAL.HALSetErrorData = HALSetErrorData;
+            global::HAL.HAL.HALSetErrorData = HALSetErrorData;
                 
             NativeHALSetErrorData = (NativeHALSetErrorDataDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetErrorData"), typeof(NativeHALSetErrorDataDelegate));
 
-            HAL_Base.HAL.GetControlWord = HALGetControlWord;
+            global::HAL.HAL.GetControlWord = HALGetControlWord;
 
             NativeHALGetControlWord = (NativeHALGetControlWordDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetControlWord"), typeof(NativeHALGetControlWordDelegate));
 
-            HAL_Base.HAL.HALGetAllianceStation = (HAL_Base.HAL.HALGetAllianceStationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetAllianceStation"), typeof(HAL_Base.HAL.HALGetAllianceStationDelegate));
+            global::HAL.HAL.HALGetAllianceStation = (global::HAL.HAL.HALGetAllianceStationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetAllianceStation"), typeof(global::HAL.HAL.HALGetAllianceStationDelegate));
 
-            HAL_Base.HAL.HALGetJoystickAxes = (HAL_Base.HAL.HALGetJoystickAxesDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxes"), typeof(HAL_Base.HAL.HALGetJoystickAxesDelegate));
+            global::HAL.HAL.HALGetJoystickAxes = (global::HAL.HAL.HALGetJoystickAxesDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxes"), typeof(global::HAL.HAL.HALGetJoystickAxesDelegate));
 
-            HAL_Base.HAL.HALGetJoystickPOVs = (HAL_Base.HAL.HALGetJoystickPOVsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickPOVs"), typeof(HAL_Base.HAL.HALGetJoystickPOVsDelegate));
+            global::HAL.HAL.HALGetJoystickPOVs = (global::HAL.HAL.HALGetJoystickPOVsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickPOVs"), typeof(global::HAL.HAL.HALGetJoystickPOVsDelegate));
 
-            HAL_Base.HAL.HALGetJoystickButtons = (HAL_Base.HAL.HALGetJoystickButtonsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickButtons"), typeof(HAL_Base.HAL.HALGetJoystickButtonsDelegate));
+            global::HAL.HAL.HALGetJoystickButtons = (global::HAL.HAL.HALGetJoystickButtonsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickButtons"), typeof(global::HAL.HAL.HALGetJoystickButtonsDelegate));
 
-            HAL_Base.HAL.HALGetJoystickDescriptor = (HAL_Base.HAL.HALGetJoystickDescriptorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickDescriptor"), typeof(HAL_Base.HAL.HALGetJoystickDescriptorDelegate));
+            global::HAL.HAL.HALGetJoystickDescriptor = (global::HAL.HAL.HALGetJoystickDescriptorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickDescriptor"), typeof(global::HAL.HAL.HALGetJoystickDescriptorDelegate));
 
-            HAL_Base.HAL.HALGetJoystickIsXbox = (HAL_Base.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(HAL_Base.HAL.HALGetJoystickIsXboxDelegate));
+            global::HAL.HAL.HALGetJoystickIsXbox = (global::HAL.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(global::HAL.HAL.HALGetJoystickIsXboxDelegate));
 
-            HAL_Base.HAL.HALGetJoystickType = (HAL_Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(HAL_Base.HAL.HALGetJoystickTypeDelegate));
+            global::HAL.HAL.HALGetJoystickType = (global::HAL.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(global::HAL.HAL.HALGetJoystickTypeDelegate));
 
-            HAL_Base.HAL.HALGetJoystickAxisType = (HAL_Base.HAL.HALGetJoystickAxisTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxisType"), typeof(HAL_Base.HAL.HALGetJoystickAxisTypeDelegate));
+            global::HAL.HAL.HALGetJoystickAxisType = (global::HAL.HAL.HALGetJoystickAxisTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxisType"), typeof(global::HAL.HAL.HALGetJoystickAxisTypeDelegate));
 
-            HAL_Base.HAL.HALSetJoystickOutputs = (HAL_Base.HAL.HALSetJoystickOutputsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetJoystickOutputs"), typeof(HAL_Base.HAL.HALSetJoystickOutputsDelegate));
+            global::HAL.HAL.HALSetJoystickOutputs = (global::HAL.HAL.HALSetJoystickOutputsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetJoystickOutputs"), typeof(global::HAL.HAL.HALSetJoystickOutputsDelegate));
 
-            HAL_Base.HAL.HALGetMatchTime = (HAL_Base.HAL.HALGetMatchTimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetMatchTime"), typeof(HAL_Base.HAL.HALGetMatchTimeDelegate));
+            global::HAL.HAL.HALGetMatchTime = (global::HAL.HAL.HALGetMatchTimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetMatchTime"), typeof(global::HAL.HAL.HALGetMatchTimeDelegate));
 
-            HAL_Base.HAL.HALSetNewDataSem = (HAL_Base.HAL.HALSetNewDataSemDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetNewDataSem"), typeof(HAL_Base.HAL.HALSetNewDataSemDelegate));
+            global::HAL.HAL.HALSetNewDataSem = (global::HAL.HAL.HALSetNewDataSemDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetNewDataSem"), typeof(global::HAL.HAL.HALSetNewDataSemDelegate));
 
-            HAL_Base.HAL.HALGetSystemActive = (HAL_Base.HAL.HALGetSystemActiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetSystemActive"), typeof(HAL_Base.HAL.HALGetSystemActiveDelegate));
+            global::HAL.HAL.HALGetSystemActive = (global::HAL.HAL.HALGetSystemActiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetSystemActive"), typeof(global::HAL.HAL.HALGetSystemActiveDelegate));
 
-            HAL_Base.HAL.HALGetBrownedOut = (HAL_Base.HAL.HALGetBrownedOutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetBrownedOut"), typeof(HAL_Base.HAL.HALGetBrownedOutDelegate));
+            global::HAL.HAL.HALGetBrownedOut = (global::HAL.HAL.HALGetBrownedOutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetBrownedOut"), typeof(global::HAL.HAL.HALGetBrownedOutDelegate));
 
-            HAL_Base.HAL.HALInitialize = (HAL_Base.HAL.HALInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALInitialize"), typeof(HAL_Base.HAL.HALInitializeDelegate));
+            global::HAL.HAL.HALInitialize = (global::HAL.HAL.HALInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALInitialize"), typeof(global::HAL.HAL.HALInitializeDelegate));
 
-            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStarting = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramStarting"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate));
+            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramStarting = (global::HAL.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramStarting"), typeof(global::HAL.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate));
 
-            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramDisabled = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramDisabledDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramDisabled"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramDisabledDelegate));
+            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramDisabled = (global::HAL.HAL.HALNetworkCommunicationObserveUserProgramDisabledDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramDisabled"), typeof(global::HAL.HAL.HALNetworkCommunicationObserveUserProgramDisabledDelegate));
 
-            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomousDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramAutonomous"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomousDelegate));
+            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = (global::HAL.HAL.HALNetworkCommunicationObserveUserProgramAutonomousDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramAutonomous"), typeof(global::HAL.HAL.HALNetworkCommunicationObserveUserProgramAutonomousDelegate));
 
-            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTeleop = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTeleopDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTeleop"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTeleopDelegate));
+            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTeleop = (global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTeleopDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTeleop"), typeof(global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTeleopDelegate));
 
-            HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTest = (HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTest"), typeof(HAL_Base.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate));
+            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTest = (global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTest"), typeof(global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate));
 
-            HAL_Base.HAL.HALReport = HALReport;
+            global::HAL.HAL.HALReport = HALReport;
             NativeHALReport = (NativeHALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALReport"), typeof(NativeHALReportDelegate));
 
         }

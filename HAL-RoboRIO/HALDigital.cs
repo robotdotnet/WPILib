@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using HAL_Base;
+using HAL;
 
 namespace HAL_RoboRIO
 {
@@ -12,188 +12,188 @@ namespace HAL_RoboRIO
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALDigital.InitializeDigitalPort = (HAL_Base.HALDigital.InitializeDigitalPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeDigitalPort"), typeof(HAL_Base.HALDigital.InitializeDigitalPortDelegate));
+            global::HAL.HALDigital.InitializeDigitalPort = (global::HAL.HALDigital.InitializeDigitalPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeDigitalPort"), typeof(global::HAL.HALDigital.InitializeDigitalPortDelegate));
 
-            HAL_Base.HALDigital.FreeDigitalPort = (HAL_Base.HALDigital.FreeDigitalPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeDigitalPort"), typeof
-                (HAL_Base.HALDigital.FreeDigitalPortDelegate));
+            global::HAL.HALDigital.FreeDigitalPort = (global::HAL.HALDigital.FreeDigitalPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeDigitalPort"), typeof
+                (global::HAL.HALDigital.FreeDigitalPortDelegate));
 
-            HAL_Base.HALDigital.CheckPWMChannel = (HAL_Base.HALDigital.CheckPWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkPWMChannel"), typeof(HAL_Base.HALDigital.CheckPWMChannelDelegate));
+            global::HAL.HALDigital.CheckPWMChannel = (global::HAL.HALDigital.CheckPWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkPWMChannel"), typeof(global::HAL.HALDigital.CheckPWMChannelDelegate));
 
-            HAL_Base.HALDigital.CheckRelayChannel = (HAL_Base.HALDigital.CheckRelayChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkRelayChannel"), typeof(HAL_Base.HALDigital.CheckRelayChannelDelegate));
+            global::HAL.HALDigital.CheckRelayChannel = (global::HAL.HALDigital.CheckRelayChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkRelayChannel"), typeof(global::HAL.HALDigital.CheckRelayChannelDelegate));
 
-            HAL_Base.HALDigital.SetPWM = (HAL_Base.HALDigital.SetPWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWM"), typeof(HAL_Base.HALDigital.SetPWMDelegate));
+            global::HAL.HALDigital.SetPWM = (global::HAL.HALDigital.SetPWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWM"), typeof(global::HAL.HALDigital.SetPWMDelegate));
 
-            HAL_Base.HALDigital.AllocatePWMChannel = (HAL_Base.HALDigital.AllocatePWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "allocatePWMChannel"), typeof(HAL_Base.HALDigital.AllocatePWMChannelDelegate));
+            global::HAL.HALDigital.AllocatePWMChannel = (global::HAL.HALDigital.AllocatePWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "allocatePWMChannel"), typeof(global::HAL.HALDigital.AllocatePWMChannelDelegate));
 
-            HAL_Base.HALDigital.FreePWMChannel = (HAL_Base.HALDigital.FreePWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePWMChannel"), typeof(HAL_Base.HALDigital.FreePWMChannelDelegate));
+            global::HAL.HALDigital.FreePWMChannel = (global::HAL.HALDigital.FreePWMChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePWMChannel"), typeof(global::HAL.HALDigital.FreePWMChannelDelegate));
 
-            HAL_Base.HALDigital.GetPWM = (HAL_Base.HALDigital.GetPWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPWM"), typeof(HAL_Base.HALDigital.GetPWMDelegate));
+            global::HAL.HALDigital.GetPWM = (global::HAL.HALDigital.GetPWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPWM"), typeof(global::HAL.HALDigital.GetPWMDelegate));
 
-            HAL_Base.HALDigital.LatchPWMZero = (HAL_Base.HALDigital.LatchPWMZeroDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "latchPWMZero"), typeof(HAL_Base.HALDigital.LatchPWMZeroDelegate));
+            global::HAL.HALDigital.LatchPWMZero = (global::HAL.HALDigital.LatchPWMZeroDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "latchPWMZero"), typeof(global::HAL.HALDigital.LatchPWMZeroDelegate));
 
-            HAL_Base.HALDigital.SetPWMPeriodScale = (HAL_Base.HALDigital.SetPWMPeriodScaleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMPeriodScale"), typeof(HAL_Base.HALDigital.SetPWMPeriodScaleDelegate));
+            global::HAL.HALDigital.SetPWMPeriodScale = (global::HAL.HALDigital.SetPWMPeriodScaleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMPeriodScale"), typeof(global::HAL.HALDigital.SetPWMPeriodScaleDelegate));
 
-            HAL_Base.HALDigital.AllocatePWM = (HAL_Base.HALDigital.AllocatePWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "allocatePWM"), typeof(HAL_Base.HALDigital.AllocatePWMDelegate));
+            global::HAL.HALDigital.AllocatePWM = (global::HAL.HALDigital.AllocatePWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "allocatePWM"), typeof(global::HAL.HALDigital.AllocatePWMDelegate));
 
-            HAL_Base.HALDigital.FreePWM = (HAL_Base.HALDigital.FreePWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePWM"), typeof(HAL_Base.HALDigital.FreePWMDelegate));
+            global::HAL.HALDigital.FreePWM = (global::HAL.HALDigital.FreePWMDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePWM"), typeof(global::HAL.HALDigital.FreePWMDelegate));
 
-            HAL_Base.HALDigital.SetPWMRate = (HAL_Base.HALDigital.SetPWMRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMRate"), typeof(HAL_Base.HALDigital.SetPWMRateDelegate));
+            global::HAL.HALDigital.SetPWMRate = (global::HAL.HALDigital.SetPWMRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMRate"), typeof(global::HAL.HALDigital.SetPWMRateDelegate));
 
-            HAL_Base.HALDigital.SetPWMDutyCycle = (HAL_Base.HALDigital.SetPWMDutyCycleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMDutyCycle"), typeof(HAL_Base.HALDigital.SetPWMDutyCycleDelegate));
+            global::HAL.HALDigital.SetPWMDutyCycle = (global::HAL.HALDigital.SetPWMDutyCycleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMDutyCycle"), typeof(global::HAL.HALDigital.SetPWMDutyCycleDelegate));
 
-            HAL_Base.HALDigital.SetPWMOutputChannel = (HAL_Base.HALDigital.SetPWMOutputChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMOutputChannel"), typeof(HAL_Base.HALDigital.SetPWMOutputChannelDelegate));
+            global::HAL.HALDigital.SetPWMOutputChannel = (global::HAL.HALDigital.SetPWMOutputChannelDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setPWMOutputChannel"), typeof(global::HAL.HALDigital.SetPWMOutputChannelDelegate));
 
-            HAL_Base.HALDigital.SetRelayForward = (HAL_Base.HALDigital.SetRelayForwardDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setRelayForward"), typeof(HAL_Base.HALDigital.SetRelayForwardDelegate));
+            global::HAL.HALDigital.SetRelayForward = (global::HAL.HALDigital.SetRelayForwardDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setRelayForward"), typeof(global::HAL.HALDigital.SetRelayForwardDelegate));
 
-            HAL_Base.HALDigital.SetRelayReverse = (HAL_Base.HALDigital.SetRelayReverseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setRelayReverse"), typeof(HAL_Base.HALDigital.SetRelayReverseDelegate));
+            global::HAL.HALDigital.SetRelayReverse = (global::HAL.HALDigital.SetRelayReverseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setRelayReverse"), typeof(global::HAL.HALDigital.SetRelayReverseDelegate));
 
-            HAL_Base.HALDigital.GetRelayForward = (HAL_Base.HALDigital.GetRelayForwardDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getRelayForward"), typeof(HAL_Base.HALDigital.GetRelayForwardDelegate));
+            global::HAL.HALDigital.GetRelayForward = (global::HAL.HALDigital.GetRelayForwardDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getRelayForward"), typeof(global::HAL.HALDigital.GetRelayForwardDelegate));
 
-            HAL_Base.HALDigital.GetRelayReverse = (HAL_Base.HALDigital.GetRelayReverseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getRelayReverse"), typeof(HAL_Base.HALDigital.GetRelayReverseDelegate));
+            global::HAL.HALDigital.GetRelayReverse = (global::HAL.HALDigital.GetRelayReverseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getRelayReverse"), typeof(global::HAL.HALDigital.GetRelayReverseDelegate));
 
-            HAL_Base.HALDigital.AllocateDIO = (HAL_Base.HALDigital.AllocateDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "allocateDIO"), typeof(HAL_Base.HALDigital.AllocateDIODelegate));
+            global::HAL.HALDigital.AllocateDIO = (global::HAL.HALDigital.AllocateDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "allocateDIO"), typeof(global::HAL.HALDigital.AllocateDIODelegate));
 
-            HAL_Base.HALDigital.FreeDIO = (HAL_Base.HALDigital.FreeDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeDIO"), typeof(HAL_Base.HALDigital.FreeDIODelegate));
+            global::HAL.HALDigital.FreeDIO = (global::HAL.HALDigital.FreeDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeDIO"), typeof(global::HAL.HALDigital.FreeDIODelegate));
 
-            HAL_Base.HALDigital.SetDIO = (HAL_Base.HALDigital.SetDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setDIO"), typeof(HAL_Base.HALDigital.SetDIODelegate));
+            global::HAL.HALDigital.SetDIO = (global::HAL.HALDigital.SetDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setDIO"), typeof(global::HAL.HALDigital.SetDIODelegate));
 
-            HAL_Base.HALDigital.GetDIO = (HAL_Base.HALDigital.GetDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getDIO"), typeof(HAL_Base.HALDigital.GetDIODelegate));
+            global::HAL.HALDigital.GetDIO = (global::HAL.HALDigital.GetDIODelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getDIO"), typeof(global::HAL.HALDigital.GetDIODelegate));
 
-            HAL_Base.HALDigital.GetDIODirection = (HAL_Base.HALDigital.GetDIODirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getDIODirection"), typeof(HAL_Base.HALDigital.GetDIODirectionDelegate));
+            global::HAL.HALDigital.GetDIODirection = (global::HAL.HALDigital.GetDIODirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getDIODirection"), typeof(global::HAL.HALDigital.GetDIODirectionDelegate));
 
-            HAL_Base.HALDigital.Pulse = (HAL_Base.HALDigital.PulseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "pulse"), typeof(HAL_Base.HALDigital.PulseDelegate));
+            global::HAL.HALDigital.Pulse = (global::HAL.HALDigital.PulseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "pulse"), typeof(global::HAL.HALDigital.PulseDelegate));
 
-            HAL_Base.HALDigital.IsPulsing = (HAL_Base.HALDigital.IsPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isPulsing"), typeof(HAL_Base.HALDigital.IsPulsingDelegate));
+            global::HAL.HALDigital.IsPulsing = (global::HAL.HALDigital.IsPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isPulsing"), typeof(global::HAL.HALDigital.IsPulsingDelegate));
 
-            HAL_Base.HALDigital.IsAnyPulsing = (HAL_Base.HALDigital.IsAnyPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isAnyPulsing"), typeof(HAL_Base.HALDigital.IsAnyPulsingDelegate));
+            global::HAL.HALDigital.IsAnyPulsing = (global::HAL.HALDigital.IsAnyPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isAnyPulsing"), typeof(global::HAL.HALDigital.IsAnyPulsingDelegate));
 
-            HAL_Base.HALDigital.SetFilterSelect = (HAL_Base.HALDigital.SetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterSelect"), typeof(HAL_Base.HALDigital.SetFilterSelectDelegate));
+            global::HAL.HALDigital.SetFilterSelect = (global::HAL.HALDigital.SetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterSelect"), typeof(global::HAL.HALDigital.SetFilterSelectDelegate));
 
-            HAL_Base.HALDigital.GetFilterSelect = (HAL_Base.HALDigital.GetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterSelect"), typeof(HAL_Base.HALDigital.GetFilterSelectDelegate));
+            global::HAL.HALDigital.GetFilterSelect = (global::HAL.HALDigital.GetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterSelect"), typeof(global::HAL.HALDigital.GetFilterSelectDelegate));
 
-            HAL_Base.HALDigital.SetFilterPeriod = (HAL_Base.HALDigital.SetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterPeriod"), typeof(HAL_Base.HALDigital.SetFilterPeriodDelegate));
+            global::HAL.HALDigital.SetFilterPeriod = (global::HAL.HALDigital.SetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterPeriod"), typeof(global::HAL.HALDigital.SetFilterPeriodDelegate));
 
-            HAL_Base.HALDigital.GetFilterPeriod = (HAL_Base.HALDigital.GetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterPeriod"), typeof(HAL_Base.HALDigital.GetFilterPeriodDelegate));
+            global::HAL.HALDigital.GetFilterPeriod = (global::HAL.HALDigital.GetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterPeriod"), typeof(global::HAL.HALDigital.GetFilterPeriodDelegate));
 
-            HAL_Base.HALDigital.InitializeCounter = (HAL_Base.HALDigital.InitializeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCounter"), typeof(HAL_Base.HALDigital.InitializeCounterDelegate));
+            global::HAL.HALDigital.InitializeCounter = (global::HAL.HALDigital.InitializeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCounter"), typeof(global::HAL.HALDigital.InitializeCounterDelegate));
 
-            HAL_Base.HALDigital.FreeCounter = (HAL_Base.HALDigital.FreeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeCounter"), typeof(HAL_Base.HALDigital.FreeCounterDelegate));
+            global::HAL.HALDigital.FreeCounter = (global::HAL.HALDigital.FreeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeCounter"), typeof(global::HAL.HALDigital.FreeCounterDelegate));
 
-            HAL_Base.HALDigital.SetCounterAverageSize = (HAL_Base.HALDigital.SetCounterAverageSizeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterAverageSize"), typeof(HAL_Base.HALDigital.SetCounterAverageSizeDelegate));
+            global::HAL.HALDigital.SetCounterAverageSize = (global::HAL.HALDigital.SetCounterAverageSizeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterAverageSize"), typeof(global::HAL.HALDigital.SetCounterAverageSizeDelegate));
 
-            HAL_Base.HALDigital.SetCounterUpSource = (HAL_Base.HALDigital.SetCounterUpSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpSource"), typeof(HAL_Base.HALDigital.SetCounterUpSourceDelegate));
+            global::HAL.HALDigital.SetCounterUpSource = (global::HAL.HALDigital.SetCounterUpSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpSource"), typeof(global::HAL.HALDigital.SetCounterUpSourceDelegate));
 
-            HAL_Base.HALDigital.SetCounterUpSourceEdge = (HAL_Base.HALDigital.SetCounterUpSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpSourceEdge"), typeof(HAL_Base.HALDigital.SetCounterUpSourceEdgeDelegate));
+            global::HAL.HALDigital.SetCounterUpSourceEdge = (global::HAL.HALDigital.SetCounterUpSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpSourceEdge"), typeof(global::HAL.HALDigital.SetCounterUpSourceEdgeDelegate));
 
-            HAL_Base.HALDigital.ClearCounterUpSource = (HAL_Base.HALDigital.ClearCounterUpSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearCounterUpSource"), typeof(HAL_Base.HALDigital.ClearCounterUpSourceDelegate));
+            global::HAL.HALDigital.ClearCounterUpSource = (global::HAL.HALDigital.ClearCounterUpSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearCounterUpSource"), typeof(global::HAL.HALDigital.ClearCounterUpSourceDelegate));
 
-            HAL_Base.HALDigital.SetCounterDownSource = (HAL_Base.HALDigital.SetCounterDownSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterDownSource"), typeof(HAL_Base.HALDigital.SetCounterDownSourceDelegate));
+            global::HAL.HALDigital.SetCounterDownSource = (global::HAL.HALDigital.SetCounterDownSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterDownSource"), typeof(global::HAL.HALDigital.SetCounterDownSourceDelegate));
 
-            HAL_Base.HALDigital.SetCounterDownSourceEdge = (HAL_Base.HALDigital.SetCounterDownSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterDownSourceEdge"), typeof(HAL_Base.HALDigital.SetCounterDownSourceEdgeDelegate));
+            global::HAL.HALDigital.SetCounterDownSourceEdge = (global::HAL.HALDigital.SetCounterDownSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterDownSourceEdge"), typeof(global::HAL.HALDigital.SetCounterDownSourceEdgeDelegate));
 
-            HAL_Base.HALDigital.ClearCounterDownSource = (HAL_Base.HALDigital.ClearCounterDownSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearCounterDownSource"), typeof(HAL_Base.HALDigital.ClearCounterDownSourceDelegate));
+            global::HAL.HALDigital.ClearCounterDownSource = (global::HAL.HALDigital.ClearCounterDownSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearCounterDownSource"), typeof(global::HAL.HALDigital.ClearCounterDownSourceDelegate));
 
-            HAL_Base.HALDigital.SetCounterUpDownMode = (HAL_Base.HALDigital.SetCounterUpDownModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpDownMode"), typeof(HAL_Base.HALDigital.SetCounterUpDownModeDelegate));
+            global::HAL.HALDigital.SetCounterUpDownMode = (global::HAL.HALDigital.SetCounterUpDownModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpDownMode"), typeof(global::HAL.HALDigital.SetCounterUpDownModeDelegate));
 
-            HAL_Base.HALDigital.SetCounterExternalDirectionMode = (HAL_Base.HALDigital.SetCounterExternalDirectionModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterExternalDirectionMode"), typeof(HAL_Base.HALDigital.SetCounterExternalDirectionModeDelegate));
+            global::HAL.HALDigital.SetCounterExternalDirectionMode = (global::HAL.HALDigital.SetCounterExternalDirectionModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterExternalDirectionMode"), typeof(global::HAL.HALDigital.SetCounterExternalDirectionModeDelegate));
 
-            HAL_Base.HALDigital.SetCounterSemiPeriodMode = (HAL_Base.HALDigital.SetCounterSemiPeriodModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterSemiPeriodMode"), typeof(HAL_Base.HALDigital.SetCounterSemiPeriodModeDelegate));
+            global::HAL.HALDigital.SetCounterSemiPeriodMode = (global::HAL.HALDigital.SetCounterSemiPeriodModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterSemiPeriodMode"), typeof(global::HAL.HALDigital.SetCounterSemiPeriodModeDelegate));
 
-            HAL_Base.HALDigital.SetCounterPulseLengthMode = (HAL_Base.HALDigital.SetCounterPulseLengthModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterPulseLengthMode"), typeof(HAL_Base.HALDigital.SetCounterPulseLengthModeDelegate));
+            global::HAL.HALDigital.SetCounterPulseLengthMode = (global::HAL.HALDigital.SetCounterPulseLengthModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterPulseLengthMode"), typeof(global::HAL.HALDigital.SetCounterPulseLengthModeDelegate));
 
-            HAL_Base.HALDigital.GetCounterSamplesToAverage = (HAL_Base.HALDigital.GetCounterSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterSamplesToAverage"), typeof(HAL_Base.HALDigital.GetCounterSamplesToAverageDelegate));
+            global::HAL.HALDigital.GetCounterSamplesToAverage = (global::HAL.HALDigital.GetCounterSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterSamplesToAverage"), typeof(global::HAL.HALDigital.GetCounterSamplesToAverageDelegate));
 
-            HAL_Base.HALDigital.SetCounterSamplesToAverage = (HAL_Base.HALDigital.SetCounterSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterSamplesToAverage"), typeof(HAL_Base.HALDigital.SetCounterSamplesToAverageDelegate));
+            global::HAL.HALDigital.SetCounterSamplesToAverage = (global::HAL.HALDigital.SetCounterSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterSamplesToAverage"), typeof(global::HAL.HALDigital.SetCounterSamplesToAverageDelegate));
 
-            HAL_Base.HALDigital.ResetCounter = (HAL_Base.HALDigital.ResetCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetCounter"), typeof(HAL_Base.HALDigital.ResetCounterDelegate));
+            global::HAL.HALDigital.ResetCounter = (global::HAL.HALDigital.ResetCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetCounter"), typeof(global::HAL.HALDigital.ResetCounterDelegate));
 
-            HAL_Base.HALDigital.GetCounter = (HAL_Base.HALDigital.GetCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounter"), typeof(HAL_Base.HALDigital.GetCounterDelegate));
+            global::HAL.HALDigital.GetCounter = (global::HAL.HALDigital.GetCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounter"), typeof(global::HAL.HALDigital.GetCounterDelegate));
 
-            HAL_Base.HALDigital.GetCounterPeriod = (HAL_Base.HALDigital.GetCounterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterPeriod"), typeof(HAL_Base.HALDigital.GetCounterPeriodDelegate));
+            global::HAL.HALDigital.GetCounterPeriod = (global::HAL.HALDigital.GetCounterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterPeriod"), typeof(global::HAL.HALDigital.GetCounterPeriodDelegate));
 
-            HAL_Base.HALDigital.SetCounterMaxPeriod = (HAL_Base.HALDigital.SetCounterMaxPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterMaxPeriod"), typeof(HAL_Base.HALDigital.SetCounterMaxPeriodDelegate));
+            global::HAL.HALDigital.SetCounterMaxPeriod = (global::HAL.HALDigital.SetCounterMaxPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterMaxPeriod"), typeof(global::HAL.HALDigital.SetCounterMaxPeriodDelegate));
 
-            HAL_Base.HALDigital.SetCounterUpdateWhenEmpty = (HAL_Base.HALDigital.SetCounterUpdateWhenEmptyDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpdateWhenEmpty"), typeof(HAL_Base.HALDigital.SetCounterUpdateWhenEmptyDelegate));
+            global::HAL.HALDigital.SetCounterUpdateWhenEmpty = (global::HAL.HALDigital.SetCounterUpdateWhenEmptyDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterUpdateWhenEmpty"), typeof(global::HAL.HALDigital.SetCounterUpdateWhenEmptyDelegate));
 
-            HAL_Base.HALDigital.GetCounterStopped = (HAL_Base.HALDigital.GetCounterStoppedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterStopped"), typeof(HAL_Base.HALDigital.GetCounterStoppedDelegate));
+            global::HAL.HALDigital.GetCounterStopped = (global::HAL.HALDigital.GetCounterStoppedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterStopped"), typeof(global::HAL.HALDigital.GetCounterStoppedDelegate));
 
-            HAL_Base.HALDigital.GetCounterDirection = (HAL_Base.HALDigital.GetCounterDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterDirection"), typeof(HAL_Base.HALDigital.GetCounterDirectionDelegate));
+            global::HAL.HALDigital.GetCounterDirection = (global::HAL.HALDigital.GetCounterDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCounterDirection"), typeof(global::HAL.HALDigital.GetCounterDirectionDelegate));
 
-            HAL_Base.HALDigital.SetCounterReverseDirection = (HAL_Base.HALDigital.SetCounterReverseDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterReverseDirection"), typeof(HAL_Base.HALDigital.SetCounterReverseDirectionDelegate));
+            global::HAL.HALDigital.SetCounterReverseDirection = (global::HAL.HALDigital.SetCounterReverseDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setCounterReverseDirection"), typeof(global::HAL.HALDigital.SetCounterReverseDirectionDelegate));
 
-            HAL_Base.HALDigital.InitializeEncoder = (HAL_Base.HALDigital.InitializeEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeEncoder"), typeof(HAL_Base.HALDigital.InitializeEncoderDelegate));
+            global::HAL.HALDigital.InitializeEncoder = (global::HAL.HALDigital.InitializeEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeEncoder"), typeof(global::HAL.HALDigital.InitializeEncoderDelegate));
 
-            HAL_Base.HALDigital.ResetEncoder = (HAL_Base.HALDigital.ResetEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetEncoder"), typeof(HAL_Base.HALDigital.ResetEncoderDelegate));
+            global::HAL.HALDigital.ResetEncoder = (global::HAL.HALDigital.ResetEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetEncoder"), typeof(global::HAL.HALDigital.ResetEncoderDelegate));
 
-            HAL_Base.HALDigital.FreeEncoder = (HAL_Base.HALDigital.FreeEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeEncoder"), typeof(HAL_Base.HALDigital.FreeEncoderDelegate));
+            global::HAL.HALDigital.FreeEncoder = (global::HAL.HALDigital.FreeEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeEncoder"), typeof(global::HAL.HALDigital.FreeEncoderDelegate));
 
-            HAL_Base.HALDigital.GetEncoder = (HAL_Base.HALDigital.GetEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoder"), typeof(HAL_Base.HALDigital.GetEncoderDelegate));
+            global::HAL.HALDigital.GetEncoder = (global::HAL.HALDigital.GetEncoderDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoder"), typeof(global::HAL.HALDigital.GetEncoderDelegate));
 
-            HAL_Base.HALDigital.GetEncoderPeriod = (HAL_Base.HALDigital.GetEncoderPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderPeriod"), typeof(HAL_Base.HALDigital.GetEncoderPeriodDelegate));
+            global::HAL.HALDigital.GetEncoderPeriod = (global::HAL.HALDigital.GetEncoderPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderPeriod"), typeof(global::HAL.HALDigital.GetEncoderPeriodDelegate));
 
-            HAL_Base.HALDigital.SetEncoderMaxPeriod = (HAL_Base.HALDigital.SetEncoderMaxPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderMaxPeriod"), typeof(HAL_Base.HALDigital.SetEncoderMaxPeriodDelegate));
+            global::HAL.HALDigital.SetEncoderMaxPeriod = (global::HAL.HALDigital.SetEncoderMaxPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderMaxPeriod"), typeof(global::HAL.HALDigital.SetEncoderMaxPeriodDelegate));
 
-            HAL_Base.HALDigital.GetEncoderStopped = (HAL_Base.HALDigital.GetEncoderStoppedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderStopped"), typeof(HAL_Base.HALDigital.GetEncoderStoppedDelegate));
+            global::HAL.HALDigital.GetEncoderStopped = (global::HAL.HALDigital.GetEncoderStoppedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderStopped"), typeof(global::HAL.HALDigital.GetEncoderStoppedDelegate));
 
-            HAL_Base.HALDigital.GetEncoderDirection = (HAL_Base.HALDigital.GetEncoderDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderDirection"), typeof(HAL_Base.HALDigital.GetEncoderDirectionDelegate));
+            global::HAL.HALDigital.GetEncoderDirection = (global::HAL.HALDigital.GetEncoderDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderDirection"), typeof(global::HAL.HALDigital.GetEncoderDirectionDelegate));
 
-            HAL_Base.HALDigital.SetEncoderReverseDirection = (HAL_Base.HALDigital.SetEncoderReverseDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderReverseDirection"), typeof(HAL_Base.HALDigital.SetEncoderReverseDirectionDelegate));
+            global::HAL.HALDigital.SetEncoderReverseDirection = (global::HAL.HALDigital.SetEncoderReverseDirectionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderReverseDirection"), typeof(global::HAL.HALDigital.SetEncoderReverseDirectionDelegate));
 
-            HAL_Base.HALDigital.SetEncoderSamplesToAverage = (HAL_Base.HALDigital.SetEncoderSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderSamplesToAverage"), typeof(HAL_Base.HALDigital.SetEncoderSamplesToAverageDelegate));
+            global::HAL.HALDigital.SetEncoderSamplesToAverage = (global::HAL.HALDigital.SetEncoderSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderSamplesToAverage"), typeof(global::HAL.HALDigital.SetEncoderSamplesToAverageDelegate));
 
-            HAL_Base.HALDigital.GetEncoderSamplesToAverage = (HAL_Base.HALDigital.GetEncoderSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderSamplesToAverage"), typeof(HAL_Base.HALDigital.GetEncoderSamplesToAverageDelegate));
+            global::HAL.HALDigital.GetEncoderSamplesToAverage = (global::HAL.HALDigital.GetEncoderSamplesToAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getEncoderSamplesToAverage"), typeof(global::HAL.HALDigital.GetEncoderSamplesToAverageDelegate));
 
-            HAL_Base.HALDigital.SetEncoderIndexSource = (HAL_Base.HALDigital.SetEncoderIndexSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderIndexSource"), typeof(HAL_Base.HALDigital.SetEncoderIndexSourceDelegate));
+            global::HAL.HALDigital.SetEncoderIndexSource = (global::HAL.HALDigital.SetEncoderIndexSourceDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setEncoderIndexSource"), typeof(global::HAL.HALDigital.SetEncoderIndexSourceDelegate));
 
-            HAL_Base.HALDigital.GetLoopTiming = (HAL_Base.HALDigital.GetLoopTimingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getLoopTiming"), typeof(HAL_Base.HALDigital.GetLoopTimingDelegate));
+            global::HAL.HALDigital.GetLoopTiming = (global::HAL.HALDigital.GetLoopTimingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getLoopTiming"), typeof(global::HAL.HALDigital.GetLoopTimingDelegate));
 
-            HAL_Base.HALDigital.SpiInitialize = (HAL_Base.HALDigital.SpiInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiInitialize"), typeof(HAL_Base.HALDigital.SpiInitializeDelegate));
+            global::HAL.HALDigital.SpiInitialize = (global::HAL.HALDigital.SpiInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiInitialize"), typeof(global::HAL.HALDigital.SpiInitializeDelegate));
 
-            HAL_Base.HALDigital.SpiTransaction = (HAL_Base.HALDigital.SpiTransactionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiTransaction"), typeof(HAL_Base.HALDigital.SpiTransactionDelegate));
+            global::HAL.HALDigital.SpiTransaction = (global::HAL.HALDigital.SpiTransactionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiTransaction"), typeof(global::HAL.HALDigital.SpiTransactionDelegate));
 
-            HAL_Base.HALDigital.SpiWrite = (HAL_Base.HALDigital.SpiWriteDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiWrite"), typeof(HAL_Base.HALDigital.SpiWriteDelegate));
+            global::HAL.HALDigital.SpiWrite = (global::HAL.HALDigital.SpiWriteDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiWrite"), typeof(global::HAL.HALDigital.SpiWriteDelegate));
 
-            HAL_Base.HALDigital.SpiRead = (HAL_Base.HALDigital.SpiReadDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiRead"), typeof(HAL_Base.HALDigital.SpiReadDelegate));
+            global::HAL.HALDigital.SpiRead = (global::HAL.HALDigital.SpiReadDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiRead"), typeof(global::HAL.HALDigital.SpiReadDelegate));
 
-            HAL_Base.HALDigital.SpiClose = (HAL_Base.HALDigital.SpiCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiClose"), typeof(HAL_Base.HALDigital.SpiCloseDelegate));
+            global::HAL.HALDigital.SpiClose = (global::HAL.HALDigital.SpiCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiClose"), typeof(global::HAL.HALDigital.SpiCloseDelegate));
 
-            HAL_Base.HALDigital.SpiSetSpeed = (HAL_Base.HALDigital.SpiSetSpeedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetSpeed"), typeof(HAL_Base.HALDigital.SpiSetSpeedDelegate));
+            global::HAL.HALDigital.SpiSetSpeed = (global::HAL.HALDigital.SpiSetSpeedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetSpeed"), typeof(global::HAL.HALDigital.SpiSetSpeedDelegate));
 
-            HAL_Base.HALDigital.SpiSetOpts = (HAL_Base.HALDigital.SpiSetOptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetOpts"), typeof(HAL_Base.HALDigital.SpiSetOptsDelegate));
+            global::HAL.HALDigital.SpiSetOpts = (global::HAL.HALDigital.SpiSetOptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetOpts"), typeof(global::HAL.HALDigital.SpiSetOptsDelegate));
 
-            HAL_Base.HALDigital.SpiSetChipSelectActiveHigh = (HAL_Base.HALDigital.SpiSetChipSelectActiveHighDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetChipSelectActiveHigh"), typeof(HAL_Base.HALDigital.SpiSetChipSelectActiveHighDelegate));
+            global::HAL.HALDigital.SpiSetChipSelectActiveHigh = (global::HAL.HALDigital.SpiSetChipSelectActiveHighDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetChipSelectActiveHigh"), typeof(global::HAL.HALDigital.SpiSetChipSelectActiveHighDelegate));
 
-            HAL_Base.HALDigital.SpiSetChipSelectActiveLow = (HAL_Base.HALDigital.SpiSetChipSelectActiveLowDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetChipSelectActiveLow"), typeof(HAL_Base.HALDigital.SpiSetChipSelectActiveLowDelegate));
+            global::HAL.HALDigital.SpiSetChipSelectActiveLow = (global::HAL.HALDigital.SpiSetChipSelectActiveLowDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetChipSelectActiveLow"), typeof(global::HAL.HALDigital.SpiSetChipSelectActiveLowDelegate));
 
-            HAL_Base.HALDigital.SpiGetHandle = (HAL_Base.HALDigital.SpiGetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiGetHandle"), typeof(HAL_Base.HALDigital.SpiGetHandleDelegate));
+            global::HAL.HALDigital.SpiGetHandle = (global::HAL.HALDigital.SpiGetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiGetHandle"), typeof(global::HAL.HALDigital.SpiGetHandleDelegate));
 
-            HAL_Base.HALDigital.SpiSetHandle = (HAL_Base.HALDigital.SpiSetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetHandleDelegate));
+            global::HAL.HALDigital.SpiSetHandle = (global::HAL.HALDigital.SpiSetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiSetHandleDelegate));
 
 
 
-            HAL_Base.HALDigital.SpiInitAccumulator = (HAL_Base.HALDigital.SpiInitAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiInitAccumulatorDelegate));
-            HAL_Base.HALDigital.SpiFreeAccumulator = (HAL_Base.HALDigital.SpiFreeAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiFreeAccumulatorDelegate));
-            HAL_Base.HALDigital.SpiResetAccumulator = (HAL_Base.HALDigital.SpiResetAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiResetAccumulatorDelegate));
-            HAL_Base.HALDigital.SpiSetAccumulatorCenter = (HAL_Base.HALDigital.SpiSetAccumulatorCenterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetAccumulatorCenterDelegate));
-            HAL_Base.HALDigital.SpiSetAccumulatorDeadband = (HAL_Base.HALDigital.SpiSetAccumulatorDeadbandDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiSetAccumulatorDeadbandDelegate));
-            HAL_Base.HALDigital.SpiGetAccumulatorLastValue = (HAL_Base.HALDigital.SpiGetAccumulatorLastValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorLastValueDelegate));
-            HAL_Base.HALDigital.SpiGetAccumulatorValue = (HAL_Base.HALDigital.SpiGetAccumulatorValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorValueDelegate));
+            global::HAL.HALDigital.SpiInitAccumulator = (global::HAL.HALDigital.SpiInitAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiInitAccumulatorDelegate));
+            global::HAL.HALDigital.SpiFreeAccumulator = (global::HAL.HALDigital.SpiFreeAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiFreeAccumulatorDelegate));
+            global::HAL.HALDigital.SpiResetAccumulator = (global::HAL.HALDigital.SpiResetAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiResetAccumulatorDelegate));
+            global::HAL.HALDigital.SpiSetAccumulatorCenter = (global::HAL.HALDigital.SpiSetAccumulatorCenterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiSetAccumulatorCenterDelegate));
+            global::HAL.HALDigital.SpiSetAccumulatorDeadband = (global::HAL.HALDigital.SpiSetAccumulatorDeadbandDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiSetAccumulatorDeadbandDelegate));
+            global::HAL.HALDigital.SpiGetAccumulatorLastValue = (global::HAL.HALDigital.SpiGetAccumulatorLastValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiGetAccumulatorLastValueDelegate));
+            global::HAL.HALDigital.SpiGetAccumulatorValue = (global::HAL.HALDigital.SpiGetAccumulatorValueDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiGetAccumulatorValueDelegate));
 
-            HAL_Base.HALDigital.SpiGetAccumulatorCount = (HAL_Base.HALDigital.SpiGetAccumulatorCountDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorCountDelegate));
-            HAL_Base.HALDigital.SpiGetAccumulatorAverage = (HAL_Base.HALDigital.SpiGetAccumulatorAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorAverageDelegate));
-            HAL_Base.HALDigital.SpiGetAccumulatorOutput = (HAL_Base.HALDigital.SpiGetAccumulatorOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(HAL_Base.HALDigital.SpiGetAccumulatorOutputDelegate));
+            global::HAL.HALDigital.SpiGetAccumulatorCount = (global::HAL.HALDigital.SpiGetAccumulatorCountDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiGetAccumulatorCountDelegate));
+            global::HAL.HALDigital.SpiGetAccumulatorAverage = (global::HAL.HALDigital.SpiGetAccumulatorAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiGetAccumulatorAverageDelegate));
+            global::HAL.HALDigital.SpiGetAccumulatorOutput = (global::HAL.HALDigital.SpiGetAccumulatorOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(global::HAL.HALDigital.SpiGetAccumulatorOutputDelegate));
 
 
 
-            HAL_Base.HALDigital.I2CInitialize = (HAL_Base.HALDigital.I2CInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CInitialize"), typeof(HAL_Base.HALDigital.I2CInitializeDelegate));
+            global::HAL.HALDigital.I2CInitialize = (global::HAL.HALDigital.I2CInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CInitialize"), typeof(global::HAL.HALDigital.I2CInitializeDelegate));
 
-            HAL_Base.HALDigital.I2CTransaction = (HAL_Base.HALDigital.I2CTransactionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CTransaction"), typeof(HAL_Base.HALDigital.I2CTransactionDelegate));
+            global::HAL.HALDigital.I2CTransaction = (global::HAL.HALDigital.I2CTransactionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CTransaction"), typeof(global::HAL.HALDigital.I2CTransactionDelegate));
 
-            HAL_Base.HALDigital.I2CWrite = (HAL_Base.HALDigital.I2CWriteDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CWrite"), typeof(HAL_Base.HALDigital.I2CWriteDelegate));
+            global::HAL.HALDigital.I2CWrite = (global::HAL.HALDigital.I2CWriteDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CWrite"), typeof(global::HAL.HALDigital.I2CWriteDelegate));
 
-            HAL_Base.HALDigital.I2CRead = (HAL_Base.HALDigital.I2CReadDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CRead"), typeof(HAL_Base.HALDigital.I2CReadDelegate));
+            global::HAL.HALDigital.I2CRead = (global::HAL.HALDigital.I2CReadDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CRead"), typeof(global::HAL.HALDigital.I2CReadDelegate));
 
-            HAL_Base.HALDigital.I2CClose = (HAL_Base.HALDigital.I2CCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CClose"), typeof(HAL_Base.HALDigital.I2CCloseDelegate));
+            global::HAL.HALDigital.I2CClose = (global::HAL.HALDigital.I2CCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CClose"), typeof(global::HAL.HALDigital.I2CCloseDelegate));
 
         }
     }

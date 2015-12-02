@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
@@ -63,21 +63,21 @@ namespace WPILib
             if (m_direction == Direction.Both || m_direction == Direction.Forward)
             {
                 s_relayChannels.Allocate(m_channel * 2, "Relay channel " + m_channel + " is already allocated");
-                HAL.Report(ResourceType.kResourceType_Relay, (byte)m_channel);
+                HAL.HAL.Report(ResourceType.kResourceType_Relay, (byte)m_channel);
             }
             if (m_direction == Direction.Both || m_direction == Direction.Reverse)
             {
                 s_relayChannels.Allocate(m_channel * 2 + 1, "Relay channel " + m_channel + " is already allocated");
-                HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
+                HAL.HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
             }
             int status = 0;
-            m_port = HALDigital.InitializeDigitalPort(HAL.GetPort((byte)m_channel), ref status);
+            m_port = HALDigital.InitializeDigitalPort(HAL.HAL.GetPort((byte)m_channel), ref status);
             CheckStatus(status);
 
             m_safetyHelper = new MotorSafetyHelper(this);
             m_safetyHelper.SafetyEnabled = false;
 
-            LiveWindow.AddActuator("Relay", m_channel, this);
+            LiveWindow.LiveWindow.AddActuator("Relay", m_channel, this);
         }
 
         /// <summary>

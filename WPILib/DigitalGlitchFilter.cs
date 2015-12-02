@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HAL_Base.HALDigital;
+using static HAL.HALDigital;
 using static WPILib.Utility;
 
 namespace WPILib

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using HAL_Base;
+using HAL;
 
 namespace HAL_Simulator
 {

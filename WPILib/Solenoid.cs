@@ -1,10 +1,10 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
-using static HAL_Base.HALSolenoid;
+using static HAL.HAL;
+using static HAL.HALSolenoid;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -40,7 +40,7 @@ namespace WPILib
                 IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
                 m_solenoidPort = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
-                LiveWindow.AddActuator("Solenoid", m_moduleNumber, m_channel, this);
+                LiveWindow.LiveWindow.AddActuator("Solenoid", m_moduleNumber, m_channel, this);
                 Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
             }
         }

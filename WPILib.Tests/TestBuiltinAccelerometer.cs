@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL;
 using HAL_Simulator;
 using HAL_Simulator.Data;
 using NUnit.Framework;
@@ -35,7 +36,7 @@ namespace WPILib.Tests
         public void TestSetRange(AccelerometerRange range)
         {
             GetAcc().AccelerometerRange = range;
-            Assert.AreEqual(GetData().Range, (HAL_Base.HALAccelerometerRange)range);
+            Assert.AreEqual(GetData().Range, (HALAccelerometerRange)range);
 
             GetData().Active = false;
         }

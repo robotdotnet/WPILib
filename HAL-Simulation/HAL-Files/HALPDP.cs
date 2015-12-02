@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using HAL_Base;
+using HAL;
 using HAL_Simulator.Data;
 using static HAL_Simulator.SimData;
 
@@ -16,15 +16,15 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALPDP.InitializePDP = initializePDP;
-            HAL_Base.HALPDP.GetPDPTemperature = getPDPTemperature;
-            HAL_Base.HALPDP.GetPDPVoltage = getPDPVoltage;
-            HAL_Base.HALPDP.GetPDPChannelCurrent = getPDPChannelCurrent;
-            HAL_Base.HALPDP.GetPDPTotalCurrent = getPDPTotalCurrent;
-            HAL_Base.HALPDP.GetPDPTotalPower = getPDPTotalPower;
-            HAL_Base.HALPDP.GetPDPTotalEnergy = getPDPTotalEnergy;
-            HAL_Base.HALPDP.ResetPDPTotalEnergy = resetPDPTotalEnergy;
-            HAL_Base.HALPDP.ClearPDPStickyFaults = clearPDPStickyFaults;
+            global::HAL.HALPDP.InitializePDP = initializePDP;
+            global::HAL.HALPDP.GetPDPTemperature = getPDPTemperature;
+            global::HAL.HALPDP.GetPDPVoltage = getPDPVoltage;
+            global::HAL.HALPDP.GetPDPChannelCurrent = getPDPChannelCurrent;
+            global::HAL.HALPDP.GetPDPTotalCurrent = getPDPTotalCurrent;
+            global::HAL.HALPDP.GetPDPTotalPower = getPDPTotalPower;
+            global::HAL.HALPDP.GetPDPTotalEnergy = getPDPTotalEnergy;
+            global::HAL.HALPDP.ResetPDPTotalEnergy = resetPDPTotalEnergy;
+            global::HAL.HALPDP.ClearPDPStickyFaults = clearPDPStickyFaults;
         }
 
 

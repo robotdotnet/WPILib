@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using HAL_Base;
+using HAL;
 using static HAL_Simulator.SimData;
 using static HAL_Simulator.PortConverters;
 
@@ -16,20 +16,20 @@ namespace HAL_Simulator
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALCompressor.InitializeCompressor = initializeCompressor;
-            HAL_Base.HALCompressor.CheckCompressorModule = checkCompressorModule;
-            HAL_Base.HALCompressor.GetCompressor = getCompressor;
-            HAL_Base.HALCompressor.SetClosedLoopControl = setClosedLoopControl;
-            HAL_Base.HALCompressor.GetClosedLoopControl = getClosedLoopControl;
-            HAL_Base.HALCompressor.GetPressureSwitch = getPressureSwitch;
-            HAL_Base.HALCompressor.GetCompressorCurrent = getCompressorCurrent;
-            HAL_Base.HALCompressor.GetCompressorCurrentTooHighFault = getCompressorCurrentTooHighFault;
-            HAL_Base.HALCompressor.GetCompressorCurrentTooHighStickyFault = getCompressorCurrentTooHighStickyFault;
-            HAL_Base.HALCompressor.GetCompressorShortedStickyFault = getCompressorShortedStickyFault;
-            HAL_Base.HALCompressor.GetCompressorShortedFault = getCompressorShortedFault;
-            HAL_Base.HALCompressor.GetCompressorNotConnectedStickyFault = getCompressorNotConnectedStickyFault;
-            HAL_Base.HALCompressor.GetCompressorNotConnectedFault = getCompressorNotConnectedFault;
-            HAL_Base.HALCompressor.ClearAllPCMStickyFaults = clearAllPCMStickyFaults;
+            global::HAL.HALCompressor.InitializeCompressor = initializeCompressor;
+            global::HAL.HALCompressor.CheckCompressorModule = checkCompressorModule;
+            global::HAL.HALCompressor.GetCompressor = getCompressor;
+            global::HAL.HALCompressor.SetClosedLoopControl = setClosedLoopControl;
+            global::HAL.HALCompressor.GetClosedLoopControl = getClosedLoopControl;
+            global::HAL.HALCompressor.GetPressureSwitch = getPressureSwitch;
+            global::HAL.HALCompressor.GetCompressorCurrent = getCompressorCurrent;
+            global::HAL.HALCompressor.GetCompressorCurrentTooHighFault = getCompressorCurrentTooHighFault;
+            global::HAL.HALCompressor.GetCompressorCurrentTooHighStickyFault = getCompressorCurrentTooHighStickyFault;
+            global::HAL.HALCompressor.GetCompressorShortedStickyFault = getCompressorShortedStickyFault;
+            global::HAL.HALCompressor.GetCompressorShortedFault = getCompressorShortedFault;
+            global::HAL.HALCompressor.GetCompressorNotConnectedStickyFault = getCompressorNotConnectedStickyFault;
+            global::HAL.HALCompressor.GetCompressorNotConnectedFault = getCompressorNotConnectedFault;
+            global::HAL.HALCompressor.ClearAllPCMStickyFaults = clearAllPCMStickyFaults;
         }
 
         [CalledSimFunction]

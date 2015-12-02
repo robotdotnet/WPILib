@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
-using HAL_Base;
+using HAL;
 
 namespace HAL_RoboRIO
 {
@@ -12,26 +12,26 @@ namespace HAL_RoboRIO
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            HAL_Base.HALSolenoid.InitializeSolenoidPort = (HAL_Base.HALSolenoid.InitializeSolenoidPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeSolenoidPort"), typeof(HAL_Base.HALSolenoid.InitializeSolenoidPortDelegate));
+            global::HAL.HALSolenoid.InitializeSolenoidPort = (global::HAL.HALSolenoid.InitializeSolenoidPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeSolenoidPort"), typeof(global::HAL.HALSolenoid.InitializeSolenoidPortDelegate));
 
-            HAL_Base.HALSolenoid.FreeSolenoidPort = (HAL_Base.HALSolenoid.FreeSolenoidPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeSolenoidPort"), typeof(HAL_Base.HALSolenoid.FreeSolenoidPortDelegate));
+            global::HAL.HALSolenoid.FreeSolenoidPort = (global::HAL.HALSolenoid.FreeSolenoidPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeSolenoidPort"), typeof(global::HAL.HALSolenoid.FreeSolenoidPortDelegate));
 
 
-            HAL_Base.HALSolenoid.CheckSolenoidModule = (HAL_Base.HALSolenoid.CheckSolenoidModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkSolenoidModule"), typeof(HAL_Base.HALSolenoid.CheckSolenoidModuleDelegate));
+            global::HAL.HALSolenoid.CheckSolenoidModule = (global::HAL.HALSolenoid.CheckSolenoidModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkSolenoidModule"), typeof(global::HAL.HALSolenoid.CheckSolenoidModuleDelegate));
 
-            HAL_Base.HALSolenoid.GetSolenoid = (HAL_Base.HALSolenoid.GetSolenoidDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getSolenoid"), typeof(HAL_Base.HALSolenoid.GetSolenoidDelegate));
+            global::HAL.HALSolenoid.GetSolenoid = (global::HAL.HALSolenoid.GetSolenoidDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getSolenoid"), typeof(global::HAL.HALSolenoid.GetSolenoidDelegate));
 
-            HAL_Base.HALSolenoid.GetAllSolenoids = (HAL_Base.HALSolenoid.GetAllSolenoidsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAllSolenoids"), typeof(HAL_Base.HALSolenoid.GetAllSolenoidsDelegate));
+            global::HAL.HALSolenoid.GetAllSolenoids = (global::HAL.HALSolenoid.GetAllSolenoidsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAllSolenoids"), typeof(global::HAL.HALSolenoid.GetAllSolenoidsDelegate));
 
-            HAL_Base.HALSolenoid.SetSolenoid = (HAL_Base.HALSolenoid.SetSolenoidDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setSolenoid"), typeof(HAL_Base.HALSolenoid.SetSolenoidDelegate));
+            global::HAL.HALSolenoid.SetSolenoid = (global::HAL.HALSolenoid.SetSolenoidDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setSolenoid"), typeof(global::HAL.HALSolenoid.SetSolenoidDelegate));
 
-            HAL_Base.HALSolenoid.GetPCMSolenoidBlackList = (HAL_Base.HALSolenoid.GetPCMSolenoidBlackListDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidBlackList"), typeof(HAL_Base.HALSolenoid.GetPCMSolenoidBlackListDelegate));
+            global::HAL.HALSolenoid.GetPCMSolenoidBlackList = (global::HAL.HALSolenoid.GetPCMSolenoidBlackListDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidBlackList"), typeof(global::HAL.HALSolenoid.GetPCMSolenoidBlackListDelegate));
 
-            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFault = (HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidVoltageStickyFault"), typeof(HAL_Base.HALSolenoid.GetPCMSolenoidVoltageStickyFaultDelegate));
+            global::HAL.HALSolenoid.GetPCMSolenoidVoltageStickyFault = (global::HAL.HALSolenoid.GetPCMSolenoidVoltageStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidVoltageStickyFault"), typeof(global::HAL.HALSolenoid.GetPCMSolenoidVoltageStickyFaultDelegate));
 
-            HAL_Base.HALSolenoid.GetPCMSolenoidVoltageFault = (HAL_Base.HALSolenoid.GetPCMSolenoidVoltageFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidVoltageFault"), typeof(HAL_Base.HALSolenoid.GetPCMSolenoidVoltageFaultDelegate));
+            global::HAL.HALSolenoid.GetPCMSolenoidVoltageFault = (global::HAL.HALSolenoid.GetPCMSolenoidVoltageFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPCMSolenoidVoltageFault"), typeof(global::HAL.HALSolenoid.GetPCMSolenoidVoltageFaultDelegate));
 
-            HAL_Base.HALSolenoid.ClearAllPCMStickyFaults_sol = (HAL_Base.HALSolenoid.ClearAllPCMStickyFaults_solDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearAllPCMStickyFaults_sol"), typeof(HAL_Base.HALSolenoid.ClearAllPCMStickyFaults_solDelegate));
+            global::HAL.HALSolenoid.ClearAllPCMStickyFaults_sol = (global::HAL.HALSolenoid.ClearAllPCMStickyFaults_solDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearAllPCMStickyFaults_sol"), typeof(global::HAL.HALSolenoid.ClearAllPCMStickyFaults_solDelegate));
 
         }
     }
