@@ -230,12 +230,12 @@ namespace HAL.SimulatorHAL
         private static void StartSimulator(ISimulator simulator)
         {
             Console.WriteLine($"Starting Simulator: {simulator.Name}");
-            simulator.Initialize();
             if (s_simThread != null)
             {
                 s_simThread.Abort();
                 s_simThread.Join();
             }
+            simulator.Initialize();
             s_simThread = new Thread(simulator.Start);
             s_simThread.Start();
         }
