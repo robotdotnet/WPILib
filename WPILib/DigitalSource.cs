@@ -22,7 +22,7 @@ namespace WPILib
         /// <summary>
         /// The Port this source is attached to.
         /// </summary>
-        protected IntPtr m_port;
+        protected internal IntPtr m_port;
         /// <summary>
         /// The channel this source is connected to
         /// </summary>

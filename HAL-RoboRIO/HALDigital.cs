@@ -67,6 +67,14 @@ namespace HAL_RoboRIO
 
             HAL_Base.HALDigital.IsAnyPulsing = (HAL_Base.HALDigital.IsAnyPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isAnyPulsing"), typeof(HAL_Base.HALDigital.IsAnyPulsingDelegate));
 
+            HAL_Base.HALDigital.SetFilterSelect = (HAL_Base.HALDigital.SetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterSelect"), typeof(HAL_Base.HALDigital.SetFilterSelectDelegate));
+
+            HAL_Base.HALDigital.GetFilterSelect = (HAL_Base.HALDigital.GetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterSelect"), typeof(HAL_Base.HALDigital.GetFilterSelectDelegate));
+
+            HAL_Base.HALDigital.SetFilterPeriod = (HAL_Base.HALDigital.SetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterPeriod"), typeof(HAL_Base.HALDigital.SetFilterPeriodDelegate));
+
+            HAL_Base.HALDigital.GetFilterPeriod = (HAL_Base.HALDigital.GetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterPeriod"), typeof(HAL_Base.HALDigital.GetFilterPeriodDelegate));
+
             HAL_Base.HALDigital.InitializeCounter = (HAL_Base.HALDigital.InitializeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCounter"), typeof(HAL_Base.HALDigital.InitializeCounterDelegate));
 
             HAL_Base.HALDigital.FreeCounter = (HAL_Base.HALDigital.FreeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeCounter"), typeof(HAL_Base.HALDigital.FreeCounterDelegate));

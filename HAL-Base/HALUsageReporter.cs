@@ -56,6 +56,7 @@ namespace HAL_Base
         kResourceType_VictorSP,
         kResourceType_TalonSRX,
         kResourceType_CANTalonSRX,
+        kResourceType_DigitalGlitchFilter
     };
 
     public enum Instances

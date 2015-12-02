@@ -105,6 +105,18 @@ namespace HAL_Base
         public delegate bool IsAnyPulsingDelegate(ref int status);
         public static IsAnyPulsingDelegate IsAnyPulsing;
 
+        public delegate void SetFilterSelectDelegate(IntPtr digital_port_pointer, int filter_index, ref int status);
+        public static SetFilterSelectDelegate SetFilterSelect;
+
+        public delegate int GetFilterSelectDelegate(IntPtr digital_port_pointer, ref int status);
+        public static GetFilterSelectDelegate GetFilterSelect;
+
+        public delegate void SetFilterPeriodDelegate(int filter_index, uint value, ref int status);
+        public static SetFilterPeriodDelegate SetFilterPeriod;
+
+        public delegate uint GetFilterPeriodDelegate(int filter_index, ref int status);
+        public static GetFilterPeriodDelegate GetFilterPeriod;
+
         public delegate IntPtr InitializeCounterDelegate(Mode mode, ref uint index, ref int status);
         public static InitializeCounterDelegate InitializeCounter;
 

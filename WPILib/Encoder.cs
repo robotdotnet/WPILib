@@ -26,8 +26,8 @@ namespace WPILib
             ResetOnRisingEdge,
         }
 
-        protected DigitalSource m_aSource;
-        protected DigitalSource m_bSource;
+        protected internal DigitalSource m_aSource;
+        protected internal DigitalSource m_bSource;
         protected DigitalSource m_indexSource = null;
 
         private IntPtr m_encoder;
