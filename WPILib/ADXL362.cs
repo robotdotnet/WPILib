@@ -101,7 +101,7 @@ namespace WPILib
             {
                 if (m_gsPerLSB == 0.0) return;
                 byte[] commands = new byte[3];
-
+                m_range = value;
                 switch (value)
                 {
                     case AccelerometerRange.k2G:

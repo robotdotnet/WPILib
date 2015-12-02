@@ -55,7 +55,7 @@ namespace WPILib
         /// <summary>
         /// Assigns the <see cref="DigitalSource"/> to this glitch filter
         /// </summary>
-        /// <param name="source">The <see cref="DigitalSource"/> to add.</param>
+        /// <param name="input">The <see cref="DigitalSource"/> to add.</param>
         public void Add(DigitalSource input)
         {
             SetFilter(input, m_channelIndex + 1);

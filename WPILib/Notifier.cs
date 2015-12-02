@@ -266,7 +266,7 @@ namespace WPILib
         /// Called by the timer to process the queue and see
         /// if there are any handlers to call.
         /// </summary>
-        /// <param name="mask"></param>
+        /// <param name="currentTimeInt">The current time from the FPGA, in 10 us ticks</param>
         /// <param name="param"></param>
         private static void ProcessQueue(uint currentTimeInt, IntPtr param)
         {

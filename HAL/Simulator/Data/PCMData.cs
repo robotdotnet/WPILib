@@ -23,11 +23,7 @@ namespace HAL.Simulator.Data
         /// </value>
         public CompressorData Compressor { get; } = new CompressorData();
 
-        /// <summary>
-        /// Called when any property is changed.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <param name="propertyName">Name of the property.</param>
+        /// <inheritdoc/>
         public override void ResetData()
         {
             foreach (SolenoidData t in Solenoids)
