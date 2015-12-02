@@ -61,6 +61,7 @@ namespace HAL_Base
         /// <summary>
         /// HAL Initialization. Must be called before any other HAL functions.
         /// </summary>
+        /// <param name="simulator">The explicit simulator to start at the proper time.</param>
         /// <param name="mode">Initialization Mode</param>
         public static void Initialize(int mode = 0)
         {
@@ -97,20 +98,18 @@ namespace HAL_Base
 
                 try
                 {
-                    //Force load from current directory first. Note will fail if directory has spaces. Need to find a way to work around this
+                    HALAssembly = Assembly.LoadFrom(asm);
+                }
+                catch (FileNotFoundException)
+                {
                     string assemblyFile = (new System.Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath;
                     assemblyFile = Path.GetDirectoryName(assemblyFile);
                     assemblyFile += Path.DirectorySeparatorChar + asm;
 
-                    HALAssembly = Assembly.LoadFrom(assemblyFile);
-                }
-                catch (FileNotFoundException)
-                {
-                    // If that fails load it directly
                     try
                     {
                         //Load our HAL assembly
-                        HALAssembly = Assembly.LoadFrom(asm);
+                        HALAssembly = Assembly.LoadFrom(assemblyFile);
                     }
                     catch (Exception e)
                     {
