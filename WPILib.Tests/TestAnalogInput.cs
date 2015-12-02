@@ -73,7 +73,7 @@ namespace WPILib.Tests
             for (int i = 0; i < AnalogInputChannels; i++)
             {
                 inputs.Add(GetAnalogInput(i));
-                Assert.IsTrue(GetInputData(0).Initialized);
+                Assert.IsTrue(GetInputData(i).Initialized);
             }
 
             foreach (var input in inputs)

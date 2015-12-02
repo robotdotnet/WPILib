@@ -36,9 +36,18 @@ namespace HAL_Simulator.Inputs
             CounterData.Count = (int)(value * (k2x ? 2 : 1));
         }
 
-        public void SetPeriod(double period)
+        public void SetRate(double rate)
         {
-            CounterData.Period = period;
+            double output;
+            if (rate == 0)
+            {
+                output = double.NaN;
+            }
+            else
+            {
+                output = 1 / rate;
+            }
+            CounterData.Period = output;
         }
     }
 }

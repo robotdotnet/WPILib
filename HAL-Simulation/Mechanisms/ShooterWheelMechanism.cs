@@ -142,12 +142,7 @@ namespace HAL_Simulator.Mechanisms
             else if (CurrentRadiansPerSecond < m_minimumVelocity)
                 CurrentRadiansPerSecond = m_minimumVelocity;
 
-            double output;
-            if (CurrentRadiansPerSecond == 0)
-                output = double.NaN;
-            else
-                output = 1 / CurrentRadiansPerSecond;
-            m_output.SetPeriod(output);
+            m_output.SetRate(CurrentRadiansPerSecond);
         }
     }
 }

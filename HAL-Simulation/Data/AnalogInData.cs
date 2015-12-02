@@ -14,8 +14,8 @@
         private long m_lsbWeight = HALAnalog.DefaultLSBWeight;
         private int m_offset = HALAnalog.DefaultOffset;
         private bool m_accumulatorInitialized = false;
-        private long m_accumulatorValue = 1;
-        private uint m_accumulatorCount = 1;
+        private long m_accumulatorValue = 0;
+        private uint m_accumulatorCount = 0;
         private int m_accumulatorCenter = 0;
         private int m_accumulatorDeadband = 0;
 
@@ -32,8 +32,8 @@
             m_lsbWeight = HALAnalog.DefaultLSBWeight;
             m_offset = HALAnalog.DefaultOffset;
             m_accumulatorInitialized = false;
-            m_accumulatorValue = 1;
-            m_accumulatorCount = 1;
+            m_accumulatorValue = 0;
+            m_accumulatorCount = 0;
             m_accumulatorCenter = 0;
             m_accumulatorDeadband = 0;
             base.ResetData();

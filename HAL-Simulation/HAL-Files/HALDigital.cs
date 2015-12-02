@@ -105,8 +105,16 @@ namespace HAL_Simulator
             HAL_Base.HALDigital.SpiSetChipSelectActiveLow = spiSetChipSelectActiveLow;
             HAL_Base.HALDigital.SpiGetHandle = spiGetHandle;
             HAL_Base.HALDigital.SpiSetHandle = spiSetHandle;
-            HAL_Base.HALDigital.SpiGetSemaphore = spiGetSemaphore;
-            HAL_Base.HALDigital.SpiSetSemaphore = spiSetSemaphore;
+            HAL_Base.HALDigital.SpiInitAccumulator = spiInitAccumulator;
+            HAL_Base.HALDigital.SpiFreeAccumulator = spiFreeAccumulator;
+            HAL_Base.HALDigital.SpiResetAccumulator = spiResetAccumulator;
+            HAL_Base.HALDigital.SpiSetAccumulatorCenter = spiSetAccumulatorCenter;
+            HAL_Base.HALDigital.SpiSetAccumulatorDeadband = spiSetAccumulatorDeadband;
+            HAL_Base.HALDigital.SpiGetAccumulatorLastValue = spiGetAccumulatorLastValue;
+            HAL_Base.HALDigital.SpiGetAccumulatorCount = spiGetAccumulatorCount;
+            HAL_Base.HALDigital.SpiGetAccumulatorValue = spiGetAccumulatorValue;
+            HAL_Base.HALDigital.SpiGetAccumulatorAverage = spiGetAccumulatorAverage;
+            HAL_Base.HALDigital.SpiGetAccumulatorOutput = spiGetAccumulatorOutput;
             HAL_Base.HALDigital.I2CInitialize = i2CInitialize;
             HAL_Base.HALDigital.I2CTransaction = i2CTransaction;
             HAL_Base.HALDigital.I2CWrite = i2CWrite;
@@ -1382,6 +1390,71 @@ namespace HAL_Simulator
         public static void i2CClose(byte port)
         {
             throw new NotImplementedException();
+        }
+
+        public static void spiInitAccumulator(byte port, uint period, uint cmd, byte xferSize,
+            uint validMask, uint validValue, byte dataShift, byte dataSize, bool isSigned,
+            bool bigEndian, ref int status)
+        {
+            status = 0;
+            SimData.SPIAccumulator[port].Initialized = true;
+        }
+
+        public static void spiFreeAccumulator(byte port, ref int status)
+        {
+            status = 0;
+            SimData.SPIAccumulator[port].Initialized = false;
+        }
+
+        public static void spiResetAccumulator(byte port, ref int status)
+        {
+            status = 0;
+            SimData.SPIAccumulator[port].AccumulatorCount = 0;
+            SimData.SPIAccumulator[port].AccumulatorValue = 0;
+        }
+
+        public static void spiSetAccumulatorCenter(byte port, int center, ref int status)
+        {
+            status = 0;
+            //Ignore for now
+        }
+
+        public static void spiSetAccumulatorDeadband(byte port, int deadband, ref int status)
+        {
+            status = 0;
+            //Ignore for now
+        }
+
+        public static int spiGetAccumulatorLastValue(byte port, ref int status)
+        {
+            status = 0;
+            //Ignore for now
+            return 0;
+        }
+
+        public static long spiGetAccumulatorValue(byte port, ref int status)
+        {
+            status = 0;
+            return SimData.SPIAccumulator[port].AccumulatorValue;
+        }
+
+        public static uint spiGetAccumulatorCount(byte port, ref int status)
+        {
+            status = 0;
+            return SimData.SPIAccumulator[port].AccumulatorCount;
+        }
+
+        public static double spiGetAccumulatorAverage(byte port, ref int status)
+        {
+            status = 0;
+            return 0;
+        }
+
+        public static void spiGetAccumulatorOutput(byte port, ref long value, ref uint count, ref int status)
+        {
+            status = 0;
+            value = SimData.SPIAccumulator[port].AccumulatorValue;
+            count = SimData.SPIAccumulator[port].AccumulatorCount;
         }
     }
 }

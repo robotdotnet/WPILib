@@ -55,8 +55,8 @@ namespace WPILib
                 {
                     int status = 0;
                     ProcessCallback = ProcessQueue;
-                    s_notifier = InitializeNotifier(ProcessQueue, ref status);
-                    CheckStatus(status);
+                    s_notifier = InitializeNotifier(ProcessQueue, IntPtr.Zero, ref status);
+				    CheckStatus(status);
                 }
                 s_refCount++;
             }
@@ -85,7 +85,8 @@ namespace WPILib
                 {
                     int status = 0;
                     ProcessCallback = ProcessQueue;
-                    s_notifier = InitializeNotifier(ProcessCallback, ref status);
+                    s_notifier = InitializeNotifier(ProcessCallback, IntPtr.Zero, ref status);
+				    CheckStatus(status);
                 }
                 s_refCount++;
             }
@@ -267,14 +268,14 @@ namespace WPILib
         /// </summary>
         /// <param name="mask"></param>
         /// <param name="param"></param>
-        static private void ProcessQueue(uint mask, IntPtr param)
+        private static void ProcessQueue(uint currentTimeInt, IntPtr param)
         {
             Notifier current;
             while (true)
             {
                 lock (s_queueMutex)
                 {
-                    double currentTime = GetFPGATimestamp();
+                    double currentTime = currentTimeInt * 1.0e-6;
                     if (s_timerQueue.Count == 0)
                     {
                         break;

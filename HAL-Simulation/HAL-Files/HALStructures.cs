@@ -109,7 +109,8 @@ namespace HAL_Simulator
     internal struct Notifier
     {
         public Action<uint, IntPtr> Callback;
-        public Thread alarm;
+        public IntPtr Parameter;
+        public Thread Alarm;
     }
 
     //Solenoid

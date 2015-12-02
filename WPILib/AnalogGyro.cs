@@ -1,7 +1,5 @@
 ﻿using System;
 using HAL_Base;
-using NetworkTables.Tables;
-using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 
@@ -24,27 +22,16 @@ namespace WPILib
         readonly bool m_channelAllocated = false;
 
         /// <inheritdoc/>
-        public override void InitGyro()
+        public override void Calibrate()
         {
-            if (m_analog == null)
-            {
-                Console.WriteLine("Null m_analog");
-                throw new NullReferenceException("m_analog");
-            }
-            if (!m_analog.IsAccumulatorChannel)
-            {
-                throw new InvalidValueException("channel must be an accumulator channel");
-            }
-            Sensitivity = kDefaultVoltsPerDegreePerSecond;
-            m_analog.AverageBits = kAverageBits;
-            m_analog.OversampleBits = kOversampleBits;
-            double sampleRate = kSamplesPerSecond
-                    * (1 << (kAverageBits + kOversampleBits));
-            AnalogInput.GlobalSampleRate = sampleRate;
-            Timer.Delay(1.0);
-
             m_analog.InitAccumulator();
             m_analog.ResetAccumulator();
+
+            if (RobotBase.IsSimulation)
+            {
+                //In simulation, we do not have to do anything here.
+                return;
+            }
 
             Timer.Delay(kCalibrationSampleTime);
 
@@ -60,29 +47,56 @@ namespace WPILib
 
             m_analog.AccumulatorCenter = m_center;
             m_analog.ResetAccumulator();
-
-            Deadband = 0.0;
-
-            PIDSourceType = PIDSourceType.Displacement;
-
-            HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
-            LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
-
         }
 
-        public AnalogGyro(int channel) : this(new AnalogInput(channel))
+        public AnalogGyro(int channel)
         {
+            AnalogInput aIn = new AnalogInput(channel);
+            try
+            {
+                CreateGyro(aIn);
+            }
+            catch 
+            {
+                aIn.Dispose();
+                throw;
+            }
             m_channelAllocated = true;
         }
 
         public AnalogGyro(AnalogInput channel)
         {
+            CreateGyro(channel);
+        }
+
+        private void CreateGyro(AnalogInput channel)
+        {
             m_analog = channel;
             if (m_analog == null)
             {
-                throw new NullReferenceException("AnalogInput supplied to Gyro constructor is null");
+                throw new ArgumentNullException(nameof(channel), "AnalogInput supplied to Gyro constructor is null");
             }
-            InitGyro();
+            if (!m_analog.IsAccumulatorChannel)
+            {
+                throw new ArgumentOutOfRangeException(nameof(channel), "Channel must be an accumulator channel");
+            }
+            Sensitivity = kDefaultVoltsPerDegreePerSecond;
+            m_analog.AverageBits = kAverageBits;
+            m_analog.OversampleBits = kOversampleBits;
+            double sampleRate = kSamplesPerSecond
+                    * (1 << (kAverageBits + kOversampleBits));
+            AnalogInput.GlobalSampleRate = sampleRate;
+            Timer.Delay(0.1);
+
+            Deadband = 0.0;
+
+            PIDSourceType = PIDSourceType.Displacement;
+
+
+            HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
+            LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
+
+            Calibrate();
         }
 
         ///<inheritdoc/>
@@ -96,7 +110,7 @@ namespace WPILib
                 m_analog.Dispose();
             }
             m_analog = null;
-            //base.Dispose();
+            base.Dispose();
         }
 
         ///<inheritdoc/>
@@ -108,6 +122,11 @@ namespace WPILib
             }
             else
             {
+                if (RobotBase.IsSimulation)
+                {
+                    //Use our simulator hack.
+                    return BitConverter.Int64BitsToDouble(m_analog.GetAccumulatorValue());
+                }
                 long rawValue = 0;
                 uint count = 0;
                 m_analog.GetAccumulatorOutput(ref rawValue, ref count);
@@ -133,6 +152,11 @@ namespace WPILib
             }
             else
             {
+                if (RobotBase.IsSimulation)
+                {
+                    //Use our simulator hack
+                    return BitConverter.ToSingle(BitConverter.GetBytes(m_analog.GetAccumulatorCount()), 0);
+                }
                 return (m_analog.GetAverageValue() - (m_center + m_offset))
                        * 1e-9
                        * m_analog.LSBWeight

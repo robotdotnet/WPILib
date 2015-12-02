@@ -94,9 +94,18 @@ namespace HAL_Simulator.Inputs
             }
         }
 
-        public void SetPeriod(double period)
+        public void SetRate(double rate)
         {
-            EncoderData.Period = period;
+            double output;
+            if (rate == 0)
+            {
+                output = double.NaN;
+            }
+            else
+            {
+                output = 1 / rate;
+            }
+            EncoderData.Period = output;
         }
     }
 }
