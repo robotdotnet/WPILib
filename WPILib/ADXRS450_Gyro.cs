@@ -70,7 +70,7 @@ namespace WPILib
             Calibrate();
 
             //UsageReporting.report(tResourceType.kResourceType_ADXRS450, port.getValue()); 	
-            LiveWindow.AddSensor("ADXRS450_Gyro", port.ToString(), this);
+            LiveWindow.LiveWindow.AddSensor("ADXRS450_Gyro", port.ToString(), this);
         }
 
         /// <inheritdoc/>

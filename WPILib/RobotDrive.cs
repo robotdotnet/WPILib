@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Base;
+using HAL;
 using WPILib.Interfaces;
 
 namespace WPILib
@@ -191,7 +191,7 @@ namespace WPILib
 
             if (!s_arcadeRatioCurveReported)
             {
-                HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeRatioCurve, (byte)NumMotors);
+                HAL.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeRatioCurve, (byte)NumMotors);
                 s_arcadeRatioCurveReported = true;
             }
             if (curve < 0)
@@ -272,7 +272,7 @@ namespace WPILib
         {
             if (!s_tankReported)
             {
-                HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_Tank, (byte)NumMotors);
+                HAL.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_Tank, (byte)NumMotors);
                 s_tankReported = true;
             }
 
@@ -350,7 +350,7 @@ namespace WPILib
         {
             if (!s_arcadeStandardReported)
             {
-                HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeStandard, (byte)NumMotors);
+                HAL.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeStandard, (byte)NumMotors);
                 s_arcadeStandardReported = true;
             }
 
@@ -427,7 +427,7 @@ namespace WPILib
         {
             if (!s_mecanumCartesianReported)
             {
-                HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_MecanumCartesian, (byte)NumMotors);
+                HAL.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_MecanumCartesian, (byte)NumMotors);
                 s_mecanumCartesianReported = true;
             }
             double xIn = x;
@@ -472,7 +472,7 @@ namespace WPILib
         {
             if (!s_mecanumPolarReported)
             {
-                HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_MecanumPolar, (byte)NumMotors);
+                HAL.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_MecanumPolar, (byte)NumMotors);
                 s_mecanumPolarReported = true;
             }
             // Normalized for full power along the Cartesian axes.

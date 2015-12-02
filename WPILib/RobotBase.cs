@@ -2,10 +2,10 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using HAL_Base;
+using HAL;
 using NetworkTables;
 using WPILib.Internal;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 
 namespace WPILib
 {
@@ -90,7 +90,7 @@ namespace WPILib
         {
             try
             {
-                HAL.Initialize();
+                HAL.HAL.Initialize();
                 InitializeHardwareConfiguration();
             }
             catch (Exception e)

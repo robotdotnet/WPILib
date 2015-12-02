@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
@@ -23,8 +23,8 @@ namespace WPILib
 
         private void InitAccelerometer()
         {
-            HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)m_analogChannel.Channel);
-            LiveWindow.AddSensor("Accelerometer", m_analogChannel.Channel, this);
+            HAL.HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)m_analogChannel.Channel);
+            LiveWindow.LiveWindow.AddSensor("Accelerometer", m_analogChannel.Channel, this);
         }
 
         /// <summary>

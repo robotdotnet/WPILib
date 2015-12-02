@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
@@ -34,8 +34,8 @@ namespace WPILib
             commands[1] = (byte)PowerCtl.Measure;
             m_spi.Write(commands, 2);
             AccelerometerRange = range;
-            HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_SPI);
-            LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
+            HAL.HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_SPI);
+            LiveWindow.LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
 
         public override void Dispose()

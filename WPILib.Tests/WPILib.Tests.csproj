@@ -133,17 +133,9 @@
     <Compile Include="TestUtility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+    <ProjectReference Include="..\HAL\HAL.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
-      <Name>HAL-Base</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj">
-      <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>
-      <Name>HAL-RoboRIO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj">
-      <Project>{471a8c6b-aa80-492a-85a3-3ef67fc70988}</Project>
-      <Name>HAL-Simulation</Name>
+      <Name>HAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\WPILib.Extras\WPILib.Extras.csproj">
       <Project>{c2e50521-7046-463e-86c9-cf567f8e62bd}</Project>

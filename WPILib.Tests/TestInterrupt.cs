@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using HAL_Simulator;
+using HAL.Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
 

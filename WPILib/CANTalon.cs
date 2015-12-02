@@ -1,11 +1,11 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
-using static HAL_Base.HALCanTalonSRX;
-using static HAL_Base.HALCanTalonSRX.Constants;
+using static HAL.HALCanTalonSRX;
+using static HAL.HALCanTalonSRX.Constants;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -158,8 +158,8 @@ namespace WPILib
             m_numPotTurns = 0;
             m_feedbackDevice = FeedbackDevice.QuadEncoder;
             ApplyControlMode(ControlMode.PercentVbus);
-            LiveWindow.AddActuator("CANTalonSRX", deviceNumber, this);
-            HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
+            LiveWindow.LiveWindow.AddActuator("CANTalonSRX", deviceNumber, this);
+            HAL.HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
         /// <inheritdoc/>

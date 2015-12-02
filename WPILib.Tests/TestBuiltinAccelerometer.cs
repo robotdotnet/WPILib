@@ -1,6 +1,7 @@
 ﻿using System;
-using HAL_Simulator;
-using HAL_Simulator.Data;
+using HAL;
+using HAL.Simulator;
+using HAL.Simulator.Data;
 using NUnit.Framework;
 using WPILib.Interfaces;
 // ReSharper disable UnusedVariable
@@ -35,7 +36,7 @@ namespace WPILib.Tests
         public void TestSetRange(AccelerometerRange range)
         {
             GetAcc().AccelerometerRange = range;
-            Assert.AreEqual(GetData().Range, (HAL_Base.HALAccelerometerRange)range);
+            Assert.AreEqual(GetData().Range, (HALAccelerometerRange)range);
 
             GetData().Active = false;
         }

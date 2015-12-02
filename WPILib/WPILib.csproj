@@ -132,14 +132,14 @@
     <Compile Include="Interfaces\IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />
     <Compile Include="PWMSpeedController.cs" />
-    <Compile Include="SmartDashboards\SendableChooser.cs" />
+    <Compile Include="SmartDashboard\SendableChooser.cs" />
     <Compile Include="Interfaces\ISpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
-    <Compile Include="LiveWindows\LiveWindow.cs" />
-    <Compile Include="LiveWindows\ILiveWindowSendable.cs" />
+    <Compile Include="LiveWindow\LiveWindow.cs" />
+    <Compile Include="LiveWindow\ILiveWindowSendable.cs" />
     <Compile Include="MotorSafetyHelper.cs" />
     <Compile Include="Interfaces\INamedSendable.cs" />
     <Compile Include="Notifier.cs" />
@@ -156,7 +156,7 @@
     <Compile Include="Interfaces\ISendable.cs" />
     <Compile Include="SerialPort.cs" />
     <Compile Include="Servo.cs" />
-    <Compile Include="SmartDashboards\SmartDashboard.cs" />
+    <Compile Include="SmartDashboard\SmartDashboard.cs" />
     <Compile Include="Solenoid.cs" />
     <Compile Include="SolenoidBase.cs" />
     <Compile Include="SPI.cs" />
@@ -175,18 +175,10 @@
     <Compile Include="Vision\USBCamera.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+    <ProjectReference Include="..\HAL\HAL.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
-      <Name>HAL-Base</Name>
+      <Name>HAL</Name>
       <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj">
-      <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>
-      <Name>HAL-RoboRIO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj">
-      <Project>{471a8c6b-aa80-492a-85a3-3ef67fc70988}</Project>
-      <Name>HAL-Simulation</Name>
     </ProjectReference>
     <ProjectReference Include="..\NIVision\NIVision.csproj">
       <Project>{d461ad43-b66d-4c66-925d-9759bf1e4654}</Project>

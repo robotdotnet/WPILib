@@ -1,6 +1,5 @@
 ﻿using System;
-using HAL_Base;
-using static HAL_Base.HALDigital;
+using static HAL.HALDigital;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -41,7 +40,7 @@ namespace WPILib
 
             s_channels.Allocate(channel, "Digital input " + channel + " is already allocated");
 
-            IntPtr portPointer = HAL.GetPort((byte)channel);
+            IntPtr portPointer = HAL.HAL.GetPort((byte)channel);
             int status = 0;
             m_port = InitializeDigitalPort(portPointer, ref status);
             AllocateDIO(m_port, input, ref status);

@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
@@ -12,8 +12,8 @@ namespace WPILib
         public BuiltInAccelerometer(AccelerometerRange range)
         {
             AccelerometerRange = range;
-            HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
-            LiveWindow.AddSensor("BuiltInAccel", 0, this);
+            HAL.HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
+            LiveWindow.LiveWindow.AddSensor("BuiltInAccel", 0, this);
         }
 
         public AccelerometerRange AccelerometerRange
@@ -25,13 +25,13 @@ namespace WPILib
                 switch (value)
                 {
                     case AccelerometerRange.k2G:
-                        HALAccelerometer.SetAccelerometerRange(HAL_Base.HALAccelerometerRange.Range_2G);
+                        HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_2G);
                         break;
                     case AccelerometerRange.k4G:
-                        HALAccelerometer.SetAccelerometerRange(HAL_Base.HALAccelerometerRange.Range_4G);
+                        HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_4G);
                         break;
                     case AccelerometerRange.k8G:
-                        HALAccelerometer.SetAccelerometerRange(HAL_Base.HALAccelerometerRange.Range_8G);
+                        HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_8G);
                         break;
                     case AccelerometerRange.k16G:
                         throw new ArgumentOutOfRangeException(nameof(value), "16G range not supported (use k2G, k4G, or k8G)");

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using HAL_Simulator;
+using HAL.Simulator;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;

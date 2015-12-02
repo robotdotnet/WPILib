@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindows;
@@ -32,13 +32,13 @@ namespace WPILib
 
             s_channels.Allocate(channel, "Analog output channel " + m_channel +" is already allocated");
 
-            IntPtr portPointer = HAL.GetPort((byte) channel);
+            IntPtr portPointer = HAL.HAL.GetPort((byte) channel);
 
             int status = 0;
             m_port = HALAnalog.InitializeAnalogOutputPort(portPointer, ref status);
             CheckStatus(status);
-            LiveWindow.AddSensor("AnalogOutput", channel, this);
-            HAL.Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
+            LiveWindow.LiveWindow.AddSensor("AnalogOutput", channel, this);
+            HAL.HAL.Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
         }
 
         /// <summary>

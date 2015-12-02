@@ -1,4 +1,4 @@
-﻿using HAL_Base;
+﻿using HAL;
 using WPILib.LiveWindows;
 
 namespace WPILib
@@ -29,8 +29,8 @@ namespace WPILib
             SetRaw(CenterPwm);
             SetZeroLatch();
 
-            LiveWindow.AddActuator(nameof(TalonSRX), Channel, this);
-            HAL.Report(ResourceType.kResourceType_TalonSRX, (byte)Channel);
+            LiveWindow.LiveWindow.AddActuator(nameof(TalonSRX), Channel, this);
+            HAL.HAL.Report(ResourceType.kResourceType_TalonSRX, (byte)Channel);
         }
 
         /// <summary>

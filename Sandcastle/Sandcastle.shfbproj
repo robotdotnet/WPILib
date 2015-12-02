@@ -29,7 +29,7 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\WPILib\WPILib.csproj" />
 <DocumentationSource sourceFile="..\WPILib.Extras\WPILib.Extras.csproj" />
-<DocumentationSource sourceFile="..\HAL-Simulation\HAL-Simulation.csproj" />
+<DocumentationSource sourceFile="..\HAL\HAL.csproj" />
 <DocumentationSource sourceFile="..\WPILib\Output\NetworkTables.xml" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
@@ -116,9 +116,9 @@
       <Project>{cadad4a2-d72a-4906-a4f0-2fa2884f3349}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj">
-      <Name>HAL-Simulation</Name>
-      <Project>{471A8C6B-AA80-492A-85A3-3EF67FC70988}</Project>
+    <ProjectReference Include="..\HAL\HAL.csproj">
+      <Name>HAL</Name>
+      <Project>{CADAD4A2-D72A-4906-A4F0-2FA2884F3349}</Project>
     </ProjectReference>
   </ItemGroup>
   <!-- Import the SHFB build targets -->
@@ -128,7 +128,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>xcopy Help\HAL-Simulation.xml ..\HAL-Simulation\Output /y
+    <PostBuildEvent>xcopy Help\HAL.xml ..\HAL\Output /y
 xcopy Help\HAL-Simulation.xml ..\WPILib\Output /y
 xcopy Help\WPILib.xml ..\WPILib\Output /y
 xcopy Help\WPILib.Extras.xml ..\WPILib.Extras\Output /y</PostBuildEvent>

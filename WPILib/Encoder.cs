@@ -1,11 +1,11 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
-using static HAL_Base.HALDigital;
+using static HAL.HAL;
+using static HAL.HALDigital;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -72,7 +72,7 @@ namespace WPILib
 
             m_pidSource = PIDSourceType.Displacement;
 
-            LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
+            LiveWindow.LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
             Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
         }
 

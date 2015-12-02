@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using HAL_Base;
+using HAL;
 using NetworkTables;
 using NetworkTables.Native.Exceptions;
 using NetworkTables.Tables;
@@ -55,7 +55,7 @@ namespace WPILib
         {
             m_table = NetworkTable.GetTable(TableName);
             m_table.AddTableListenerEx(this, NotifyFlags.NotifyNew | NotifyFlags.NotifyImmediate);
-            HAL.Report(ResourceType.kResourceType_Preferences, (byte)0);
+            HAL.HAL.Report(ResourceType.kResourceType_Preferences, (byte)0);
         }
 
         /// <summary>

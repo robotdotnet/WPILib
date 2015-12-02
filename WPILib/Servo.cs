@@ -1,8 +1,8 @@
-﻿using HAL_Base;
+﻿using HAL;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 
 namespace WPILib
 {
@@ -29,7 +29,7 @@ namespace WPILib
             PeriodMultiplier = PeriodMultiplier.K4X;
 
             Report(ResourceType.kResourceType_Servo, (byte)Channel);
-            LiveWindow.AddActuator("Servo", Channel, this);
+            LiveWindow.LiveWindow.AddActuator("Servo", Channel, this);
         }
 
         /// <summary>

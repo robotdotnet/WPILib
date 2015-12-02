@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using HAL_Simulator;
-using HAL_Simulator.Data;
+using HAL.Simulator;
+using HAL.Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 

@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Threading;
+using HAL.Simulator;
 using WPILib.Extras.AttributedCommandModel;
-using HAL_Simulator;
 
 // ReSharper disable EmptyConstructor
 

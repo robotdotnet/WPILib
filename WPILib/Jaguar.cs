@@ -1,4 +1,4 @@
-﻿using HAL_Base;
+﻿using HAL;
 using WPILib.LiveWindows;
 
 namespace WPILib
@@ -28,8 +28,8 @@ namespace WPILib
             SetRaw(CenterPwm);
             SetZeroLatch();
 
-            HAL.Report(ResourceType.kResourceType_Jaguar, (byte)Channel);
-            LiveWindow.AddActuator("Jaguar", Channel, this);
+            HAL.HAL.Report(ResourceType.kResourceType_Jaguar, (byte)Channel);
+            LiveWindow.LiveWindow.AddActuator("Jaguar", Channel, this);
         }
 
         /// <summary>

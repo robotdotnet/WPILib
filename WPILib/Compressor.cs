@@ -1,8 +1,8 @@
 ﻿using System;
-using HAL_Base;
+using HAL;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL_Base.HALCompressor;
+using static HAL.HALCompressor;
 using static WPILib.Utility;
 
 namespace WPILib

@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
-using HAL_Base;
 using WPILib.Exceptions;
-using static HAL_Base.HAL;
+using static HAL.HAL;
 
 namespace WPILib
 {
@@ -16,7 +15,7 @@ namespace WPILib
         public static int GetFPGAVersion()
         {
             int status = 0;
-            int value = HAL.GetFPGAVersion(ref status);
+            int value = HAL.HAL.GetFPGAVersion(ref status);
             return value;
         }
 
@@ -28,7 +27,7 @@ namespace WPILib
         public static long GetFPGARevision()
         {
             int status = 0;
-            uint value = HAL.GetFPGARevision(ref status);
+            uint value = HAL.HAL.GetFPGARevision(ref status);
             return value;
         }
 
@@ -38,7 +37,7 @@ namespace WPILib
         public static long GetFPGATime()
         {
             int status = 0;
-            long value = HAL.GetFPGATime(ref status);
+            long value = HAL.HAL.GetFPGATime(ref status);
             return value;
         }
 
