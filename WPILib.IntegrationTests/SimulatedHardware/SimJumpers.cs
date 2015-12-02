@@ -1,5 +1,5 @@
 ﻿using System;
-using HAL_Simulator;
+using HAL.Simulator;
 
 namespace WPILib.IntegrationTests.SimulatedHardware
 {

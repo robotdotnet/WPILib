@@ -1,6 +1,6 @@
-﻿using HAL_Simulator;
-using HAL_Simulator.Data;
-using HAL_Simulator.Inputs;
+﻿using HAL.Simulator;
+using HAL.Simulator.Data;
+using HAL.Simulator.Inputs;
 using NUnit.Framework;
 
 namespace WPILib.Tests

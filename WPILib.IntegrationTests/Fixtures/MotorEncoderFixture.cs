@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using HAL_Simulator;
+using HAL.Simulator;
 using WPILib.IntegrationTests.Test;
 using WPILib.Interfaces;
 

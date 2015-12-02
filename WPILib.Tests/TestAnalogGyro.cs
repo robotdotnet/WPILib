@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HAL_Simulator;
-using HAL_Simulator.Data;
-using HAL_Simulator.Inputs;
+using HAL.Simulator;
+using HAL.Simulator.Data;
+using HAL.Simulator.Inputs;
 using NUnit.Framework;
 using WPILib.Exceptions;
 

@@ -1,4 +1,4 @@
-﻿using HAL_Simulator;
+﻿using HAL.Simulator;
 using NUnit.Framework;
 
 namespace WPILib.Tests

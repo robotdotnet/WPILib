@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL_Simulator;
 using NetworkTables;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Fixtures;

@@ -1,9 +1,8 @@
 ﻿using HAL;
-using HAL_Simulator;
-using HAL_Simulator.Data;
+using HAL.Simulator;
+using HAL.Simulator.Data;
 using NUnit.Framework;
-using HAL = HAL.HAL;
-using static HAL_Simulator.DriverStationHelper;
+using static HAL.Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
 {
@@ -125,7 +124,7 @@ namespace WPILib.Tests
             };
             Assert.IsFalse(DriverStation.Instance.SysActive);
 
-            global::HAL.HAL.HALGetSystemActive = HAL_Simulator.HAL.HALGetSystemActive;
+            global::HAL.HAL.HALGetSystemActive = HAL.SimulatorHAL.HAL.HALGetSystemActive;
 
             Assert.IsTrue(DriverStation.Instance.SysActive);
 
@@ -141,7 +140,7 @@ namespace WPILib.Tests
             };
             Assert.IsTrue(DriverStation.Instance.BrownedOut);
 
-            global::HAL.HAL.HALGetBrownedOut = HAL_Simulator.HAL.HALGetBrownedOut;
+            global::HAL.HAL.HALGetBrownedOut = HAL.SimulatorHAL.HAL.HALGetBrownedOut;
 
             Assert.IsFalse(DriverStation.Instance.BrownedOut);
 
@@ -185,7 +184,7 @@ namespace WPILib.Tests
 
             Assert.AreEqual(DriverStation.Alliance.Invalid, DriverStation.Instance.GetAlliance());
 
-            global::HAL.HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
+            global::HAL.HAL.HALGetAllianceStation = HAL.SimulatorHAL.HAL.HALGetAllianceStation;
         }
 
         [Test]
@@ -199,7 +198,7 @@ namespace WPILib.Tests
 
             Assert.AreEqual(0, DriverStation.Instance.GetLocation());
 
-            global::HAL.HAL.HALGetAllianceStation = HAL_Simulator.HAL.HALGetAllianceStation;
+            global::HAL.HAL.HALGetAllianceStation = HAL.SimulatorHAL.HAL.HALGetAllianceStation;
         }
 
         [Test]
@@ -233,7 +232,7 @@ namespace WPILib.Tests
 
             Assert.AreEqual(5.85, DriverStation.Instance.GetMatchTime(), 0.00001);
 
-            global::HAL.HAL.HALGetMatchTime = HAL_Simulator.HAL.HALGetMatchTime;
+            global::HAL.HAL.HALGetMatchTime = HAL.SimulatorHAL.HAL.HALGetMatchTime;
         }
 
         /*

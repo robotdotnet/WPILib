@@ -29,16 +29,6 @@ namespace HAL
             public const int MaxJoystickPOVs = 12;
         }
 
-
-        //These strings are the location of the HAL DLLs used for reflection.
-        //Since these are provided by the NuGet package, they will usually be
-        //located in the executable directory
-        private const string HALSim = "HAL-Simulation.dll";
-        private const string HALRIO = "/home/lvuser/mono/HAL-RoboRIO.dll";
-
-        //This contains the HAL Assembly, if we need to reference it for values later.
-        internal static Assembly HALAssembly;
-
         //We use this so we can call initialize multiple times, without it crashing with itself
         private static bool s_initialized = false;
         //Makes it so if we call initialize from different threads, its safe.
@@ -58,7 +48,6 @@ namespace HAL
         /// <summary>
         /// HAL Initialization. Must be called before any other HAL functions.
         /// </summary>
-        /// <param name="simulator">The explicit simulator to start at the proper time.</param>
         /// <param name="mode">Initialization Mode</param>
         public static void Initialize(int mode = 0)
         {
@@ -79,55 +68,21 @@ namespace HAL
                     HALType = HALTypes.RoboRIO;
                 }
 
-                string asm;
-                switch (HALType)
-                {
-                    case (HALTypes.Simulation):
-                        asm = HALSim;
-                        break;
-                    case HALTypes.None:
-                    case HALTypes.RoboRIO:
-                    case HALTypes.Other:
-                    default:
-                        asm = HALRIO;
-                        break;
-                }
-
                 try
                 {
-                    HALAssembly = Assembly.LoadFrom(asm);
-                }
-                catch (FileNotFoundException)
-                {
-                    string assemblyFile = (new System.Uri(Assembly.GetExecutingAssembly().CodeBase)).AbsolutePath;
-                    assemblyFile = Path.GetDirectoryName(assemblyFile);
-                    assemblyFile += Path.DirectorySeparatorChar + asm;
-
-                    try
+                    switch (HALType)
                     {
-                        //Load our HAL assembly
-                        HALAssembly = Assembly.LoadFrom(assemblyFile);
+                        case HALTypes.RoboRIO:
+                            AthenaHAL.HAL.InitializeImpl();
+                            break;
+                        case HALTypes.Simulation:
+                        case HALTypes.Other:
+                        case HALTypes.None:
+                            SimulatorHAL.HAL.InitializeImpl();
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
-                    catch (Exception e)
-                    {
-                        //If our loading ever causes an exception, print it, print the stack trace, and kill the program.
-                        Console.WriteLine(e.Message);
-                        Console.WriteLine(e.StackTrace);
-                        Environment.Exit(1);
-                    }
-                    
-                }
-
-
-                //Find our initialize function
-                string className = MethodBase.GetCurrentMethod().DeclaringType.Name;
-                var types = HALAssembly.GetTypes();
-                var q = from t in types where t.IsClass && t.Name == className select t;
-                Type type = HALAssembly.GetType(q.ToList()[0].FullName);
-                //Initialize our delegates. The InitializeImpl code need to assign all delegates.
-                try
-                {
-                    type.GetMethod("InitializeImpl").Invoke(null, null);
                 }
                 catch (Exception e)
                 {
@@ -153,30 +108,24 @@ namespace HAL
         }
 
 
-
-        public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0,
-            string feature = null)
+        public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport((byte)resource, (byte)instanceNumber, context, feature);
+            return HAL.HALReport((byte) resource, (byte) instanceNumber, context, feature);
         }
 
-        public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0,
-            string feature = null)
+        public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport((byte)resource, instanceNumber, context, feature);
+            return HAL.HALReport((byte) resource, instanceNumber, context, feature);
         }
 
-        public static uint Report(byte resource, Instances instanceNumber, byte context = 0,
-            string feature = null)
+        public static uint Report(byte resource, Instances instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport(resource, (byte)instanceNumber, context, feature);
+            return HAL.HALReport(resource, (byte) instanceNumber, context, feature);
         }
 
-        public static uint Report(byte resource, byte instanceNumber, byte context = 0,
-            string feature = null)
+        public static uint Report(byte resource, byte instanceNumber, byte context = 0, string feature = null)
         {
             return HAL.HALReport(resource, instanceNumber, context, feature);
         }
-
     }
 }

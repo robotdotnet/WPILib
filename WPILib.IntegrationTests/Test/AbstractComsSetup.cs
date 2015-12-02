@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using HAL_Simulator;
+using HAL.Simulator;
 using WPILib.IntegrationTests.SimulatedHardware;
 using WPILib.LiveWindows;
 

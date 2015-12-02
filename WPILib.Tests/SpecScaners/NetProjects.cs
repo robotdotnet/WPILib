@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using HAL_Simulator;
+using HAL.SimulatorHAL;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -22,7 +22,7 @@ namespace WPILib.Tests.SpecScaners
         {
             List<string> nativeFunctions = new List<string>();
 
-            var dir = "..\\..\\HAL-RoboRIO";
+            var dir = "..\\..\\HAL\\AthenaHAL";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 if (!file.ToLower().Contains("hal")) continue;
@@ -53,53 +53,11 @@ namespace WPILib.Tests.SpecScaners
             return nativeFunctions;
         }
 
-
-        /// <summary>
-        /// Gets a List of all the Functions with the Attribute <see cref="CalledSimFunction"/>
-        /// </summary>
-        /// <returns></returns>
-        public static List<HALMethodClass> GetHALSimMethods()
-        {
-            List<HALMethodClass> halSimMethods = new List<HALMethodClass>();
-            var dir = "..\\..\\HAL-Simulation\\HAL-Files";
-            foreach (var file in Directory.GetFiles(dir, "*.cs"))
-            {
-                HALMethodClass cs = new HALMethodClass
-                {
-                    ClassName = "",
-                    Methods = new List<MethodDeclarationSyntax>()
-                };
-
-                using (var stream = File.OpenRead(file))
-                {
-                    var tree = CSharpSyntaxTree.ParseText(SourceText.From(stream), path: file);
-                    cs.ClassName = Path.GetFileName(file);
-                    var methods =
-                        tree.GetRoot()
-                            .DescendantNodes()
-                            .OfType<AttributeSyntax>()
-                            .Where(a => a.Name.ToString() == nameof(CalledSimFunction))
-                            .Select(a => a.Parent.Parent)
-                            .Cast<MethodDeclarationSyntax>();
-                    var methodDeclarationSyntaxs = methods as IList<MethodDeclarationSyntax> ?? methods.ToList();
-                    if (methodDeclarationSyntaxs.Count != 0)
-                    {
-                        cs.Methods.AddRange(methodDeclarationSyntaxs);
-                        halSimMethods.Add(cs);
-                    }
-
-                }
-
-
-            }
-            return halSimMethods;
-        }
-
         // Gets a list of all of our delegates used by the HAL
         public static List<HALDelegateClass> GetHalBaseDelegates()
         {
             List<HALDelegateClass> halBaseMethods = new List<HALDelegateClass>();
-            var dir = "..\\..\\HAL-Base\\Generated";
+            var dir = "..\\..\\HAL\\Delegates";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 HALDelegateClass cs = new HALDelegateClass

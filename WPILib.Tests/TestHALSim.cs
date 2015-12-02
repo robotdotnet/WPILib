@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL_Simulator;
+using HAL.Simulator;
 using NUnit.Framework;
-using static HAL_Simulator.DriverStationHelper;
+using static HAL.Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
 {

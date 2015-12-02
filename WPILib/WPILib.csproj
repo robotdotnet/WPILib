@@ -180,14 +180,6 @@
       <Name>HAL</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\HAL-RoboRIO\HAL-RoboRIO.csproj">
-      <Project>{d41e4184-c699-4f9c-9895-1915638af9d7}</Project>
-      <Name>HAL-RoboRIO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HAL-Simulation\HAL-Simulation.csproj">
-      <Project>{471a8c6b-aa80-492a-85a3-3ef67fc70988}</Project>
-      <Name>HAL-Simulation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NIVision\NIVision.csproj">
       <Project>{d461ad43-b66d-4c66-925d-9759bf1e4654}</Project>
       <Name>NIVision</Name>

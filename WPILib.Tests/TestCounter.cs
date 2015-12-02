@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using HAL;
-using HAL_Simulator;
-using HAL_Simulator.Data;
+using HAL.Simulator;
+using HAL.Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;

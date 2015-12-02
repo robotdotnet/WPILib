@@ -1,5 +1,5 @@
 ﻿using System.Threading;
-using HAL_Simulator;
+using HAL.Simulator;
 using WPILib.LiveWindows;
 using HAL = HAL.HAL;
 
