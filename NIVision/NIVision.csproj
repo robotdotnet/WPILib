@@ -65,7 +65,7 @@
     <EmbeddedResource Include="libcameraserver.so" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HAL-Base\HAL-Base.csproj">
+    <ProjectReference Include="..\HAL\HAL.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL-Base</Name>
     </ProjectReference>

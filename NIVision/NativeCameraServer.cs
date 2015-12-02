@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using HAL_Base;
+using HAL.Base;
 
 namespace NIVision
 {
@@ -81,7 +81,7 @@ namespace NIVision
         {
             if (!libraryLoaded)
             {
-                if (HAL.HALType == HAL.HALTypes.RoboRIO)
+                if (HAL.Base.HAL.HALType == HAL.Base.HAL.HALTypes.RoboRIO)
                 {
                     try
                     {
