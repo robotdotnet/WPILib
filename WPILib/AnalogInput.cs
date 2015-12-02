@@ -5,7 +5,7 @@ using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 using static HAL.Base.HAL;
 using static HAL.Base.HALAnalog;
 using static WPILib.Utility;

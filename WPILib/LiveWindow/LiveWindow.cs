@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Commands;
-using WPILib.LiveWindows;
 
 namespace WPILib.LiveWindow
 {

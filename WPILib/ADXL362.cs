@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 
 namespace WPILib
 {
@@ -79,6 +79,7 @@ namespace WPILib
             LiveWindow.LiveWindow.AddSensor("ADXL362", port.ToString(), this);
         }
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             m_spi.Dispose();
@@ -86,7 +87,13 @@ namespace WPILib
         }
 
         private AccelerometerRange m_range;
-        /// <inheritdoc/>
+
+        /// <summary>
+        /// Common interface for setting the measuring range of an accelerometer
+        /// </summary>
+        /// <value>The maximum acceleration, positive or negative, that the 
+        /// accelerometer will measure. Not all accelerometers support all ranges
+        /// </value>
         public AccelerometerRange AccelerometerRange
         {
             get { return m_range; }

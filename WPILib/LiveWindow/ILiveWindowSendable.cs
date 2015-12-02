@@ -1,6 +1,6 @@
 ﻿using WPILib.Interfaces;
 
-namespace WPILib.LiveWindows
+namespace WPILib.LiveWindow
 {
     /// <summary>
     /// Live Window Sendable is a special type of object sendable to the live window.

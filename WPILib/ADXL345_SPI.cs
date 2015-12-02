@@ -2,7 +2,6 @@
 using HAL;
 using HAL.Base;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 
 namespace WPILib

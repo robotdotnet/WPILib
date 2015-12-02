@@ -1,5 +1,5 @@
 ﻿using NetworkTables.Tables;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 using static HAL.Base.HALPDP;
 
 namespace WPILib

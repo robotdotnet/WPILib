@@ -67,7 +67,8 @@ namespace WPILib.Interfaces
         /// Common interface for setting the measuring range of an accelerometer
         /// </summary>
         /// <value>The maximum acceleration, positive or negative, that the 
-        ///   accelerometer will measure. Not all accelerometers support all ranges</value>
+        /// accelerometer will measure. Not all accelerometers support all ranges
+        /// </value>
         AccelerometerRange AccelerometerRange { set; }
 
         /// <summary>

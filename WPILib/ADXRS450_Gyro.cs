@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 
 namespace WPILib
 {

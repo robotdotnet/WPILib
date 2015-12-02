@@ -1,7 +1,7 @@
 ﻿using HAL;
 using HAL.Base;
 using NetworkTables.Tables;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 using static WPILib.Utility;
 using HALDigital = HAL.Base.HALDigital;
 

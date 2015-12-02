@@ -8,7 +8,6 @@ using WPILib.Commands;
 using System.Collections.ObjectModel;
 using HAL;
 using HAL.Base;
-using WPILib.LiveWindows;
 using static HAL.Base.HAL;
 
 namespace WPILib.Extras.AttributedCommandModel

@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using NetworkTables.Tables;
 using WPILib.Commands;
 using WPILib.Interfaces;
-using WPILib.SmartDashboard;
 
-namespace WPILib.SmartDashboards
+namespace WPILib.SmartDashboard
 {
     /// <summary>
     /// The <see cref="SendableChooser"/> class is a useful tool for presenting a 

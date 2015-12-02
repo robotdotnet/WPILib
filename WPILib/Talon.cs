@@ -1,6 +1,5 @@
 ﻿using HAL;
 using HAL.Base;
-using WPILib.LiveWindows;
 
 namespace WPILib
 {

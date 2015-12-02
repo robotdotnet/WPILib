@@ -1,6 +1,6 @@
 ﻿using NetworkTables.Tables;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 
 namespace WPILib
 {

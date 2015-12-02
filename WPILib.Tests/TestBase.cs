@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using HAL.Simulator;
-using WPILib.LiveWindows;
 using HAL = HAL.Base.HAL;
 
 namespace WPILib.Tests

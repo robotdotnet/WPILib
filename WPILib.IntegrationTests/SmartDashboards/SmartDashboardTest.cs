@@ -3,7 +3,6 @@ using NetworkTables;
 using NetworkTables.Native.Exceptions;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
-using WPILib.SmartDashboards;
 
 namespace WPILib.IntegrationTests.SmartDashboards
 {

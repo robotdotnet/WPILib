@@ -3,7 +3,7 @@ using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.CAN;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 using static HAL.Base.HALCAN;
 using static HAL.Base.HALCAN.Constants;
 

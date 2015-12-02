@@ -4,7 +4,6 @@ using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
-using WPILib.LiveWindows;
 using static HAL.Base.HALCanTalonSRX;
 using static HAL.Base.HALCanTalonSRX.Constants;
 using static WPILib.Utility;

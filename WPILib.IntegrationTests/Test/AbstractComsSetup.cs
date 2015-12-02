@@ -2,7 +2,6 @@
 using System.Threading;
 using HAL.Simulator;
 using WPILib.IntegrationTests.SimulatedHardware;
-using WPILib.LiveWindows;
 
 namespace WPILib.IntegrationTests.Test
 {

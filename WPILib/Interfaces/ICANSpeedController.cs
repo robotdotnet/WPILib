@@ -1,5 +1,5 @@
 ﻿using System;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 
 namespace WPILib.Interfaces
 {

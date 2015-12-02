@@ -1,7 +1,7 @@
 ﻿using System;
 using HAL;
 using NetworkTables.Tables;
-using WPILib.LiveWindows;
+using WPILib.LiveWindow;
 using static HAL.Base.HALCompressor;
 using static WPILib.Utility;
 using HALCompressor = HAL.Base.HALCompressor;
