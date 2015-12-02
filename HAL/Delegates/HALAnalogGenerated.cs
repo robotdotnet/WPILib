@@ -3,16 +3,17 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL;
+using HAL.Base;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALAnalog
     {
         static HALAnalog()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeAnalogOutputPortDelegate(IntPtr port_pointer, ref int status);

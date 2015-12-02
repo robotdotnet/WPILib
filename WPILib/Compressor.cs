@@ -2,8 +2,9 @@
 using HAL;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL.HALCompressor;
+using static HAL.Base.HALCompressor;
 using static WPILib.Utility;
+using HALCompressor = HAL.Base.HALCompressor;
 
 namespace WPILib
 {

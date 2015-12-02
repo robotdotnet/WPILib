@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using HAL;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
@@ -83,7 +84,7 @@ namespace WPILib
 
             SetAutomaticMode(originalMode);
             ++s_instances;
-            HAL.HAL.Report(ResourceType.kResourceType_Ultrasonic, s_instances);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Ultrasonic, s_instances);
             LiveWindow.LiveWindow.AddSensor("Ultrasonic", m_echoChannel.Channel, this);
 
         }

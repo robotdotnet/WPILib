@@ -3,10 +3,11 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL;
+using HAL.Base;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     /// <summary>
     /// This attributes are placed on strings we want to force be allowed in the impl test.
@@ -17,7 +18,7 @@ namespace HAL
     {
         static HAL()
         {
-            global::HAL.HAL.Initialize();
+            Initialize();
         }
 
         public delegate IntPtr GetPortDelegate(byte pin);

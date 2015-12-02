@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,23 +12,23 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALPDP.InitializePDP = (global::HAL.HALPDP.InitializePDPDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializePDP"), typeof(global::HAL.HALPDP.InitializePDPDelegate));
+            Base.HALPDP.InitializePDP = (Base.HALPDP.InitializePDPDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializePDP"), typeof(Base.HALPDP.InitializePDPDelegate));
 
-            global::HAL.HALPDP.GetPDPTemperature = (global::HAL.HALPDP.GetPDPTemperatureDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTemperature"), typeof(global::HAL.HALPDP.GetPDPTemperatureDelegate));
+            Base.HALPDP.GetPDPTemperature = (Base.HALPDP.GetPDPTemperatureDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTemperature"), typeof(Base.HALPDP.GetPDPTemperatureDelegate));
 
-            global::HAL.HALPDP.GetPDPVoltage = (global::HAL.HALPDP.GetPDPVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPVoltage"), typeof(global::HAL.HALPDP.GetPDPVoltageDelegate));
+            Base.HALPDP.GetPDPVoltage = (Base.HALPDP.GetPDPVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPVoltage"), typeof(Base.HALPDP.GetPDPVoltageDelegate));
 
-            global::HAL.HALPDP.GetPDPChannelCurrent = (global::HAL.HALPDP.GetPDPChannelCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPChannelCurrent"), typeof(global::HAL.HALPDP.GetPDPChannelCurrentDelegate));
+            Base.HALPDP.GetPDPChannelCurrent = (Base.HALPDP.GetPDPChannelCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPChannelCurrent"), typeof(Base.HALPDP.GetPDPChannelCurrentDelegate));
 
-            global::HAL.HALPDP.GetPDPTotalCurrent = (global::HAL.HALPDP.GetPDPTotalCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTotalCurrent"), typeof(global::HAL.HALPDP.GetPDPTotalCurrentDelegate));
+            Base.HALPDP.GetPDPTotalCurrent = (Base.HALPDP.GetPDPTotalCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTotalCurrent"), typeof(Base.HALPDP.GetPDPTotalCurrentDelegate));
 
-            global::HAL.HALPDP.GetPDPTotalPower = (global::HAL.HALPDP.GetPDPTotalPowerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTotalPower"), typeof(global::HAL.HALPDP.GetPDPTotalPowerDelegate));
+            Base.HALPDP.GetPDPTotalPower = (Base.HALPDP.GetPDPTotalPowerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTotalPower"), typeof(Base.HALPDP.GetPDPTotalPowerDelegate));
 
-            global::HAL.HALPDP.GetPDPTotalEnergy = (global::HAL.HALPDP.GetPDPTotalEnergyDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTotalEnergy"), typeof(global::HAL.HALPDP.GetPDPTotalEnergyDelegate));
+            Base.HALPDP.GetPDPTotalEnergy = (Base.HALPDP.GetPDPTotalEnergyDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPDPTotalEnergy"), typeof(Base.HALPDP.GetPDPTotalEnergyDelegate));
 
-            global::HAL.HALPDP.ResetPDPTotalEnergy = (global::HAL.HALPDP.ResetPDPTotalEnergyDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetPDPTotalEnergy"), typeof(global::HAL.HALPDP.ResetPDPTotalEnergyDelegate));
+            Base.HALPDP.ResetPDPTotalEnergy = (Base.HALPDP.ResetPDPTotalEnergyDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "resetPDPTotalEnergy"), typeof(Base.HALPDP.ResetPDPTotalEnergyDelegate));
 
-            global::HAL.HALPDP.ClearPDPStickyFaults = (global::HAL.HALPDP.ClearPDPStickyFaultsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearPDPStickyFaults"), typeof(global::HAL.HALPDP.ClearPDPStickyFaultsDelegate));
+            Base.HALPDP.ClearPDPStickyFaults = (Base.HALPDP.ClearPDPStickyFaultsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearPDPStickyFaults"), typeof(Base.HALPDP.ClearPDPStickyFaultsDelegate));
 
         }
     }

@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,33 +12,33 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALPower.GetVinVoltage = (global::HAL.HALPower.GetVinVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getVinVoltage"), typeof(global::HAL.HALPower.GetVinVoltageDelegate));
+            Base.HALPower.GetVinVoltage = (Base.HALPower.GetVinVoltageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getVinVoltage"), typeof(Base.HALPower.GetVinVoltageDelegate));
 
-            global::HAL.HALPower.GetVinCurrent = (global::HAL.HALPower.GetVinCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getVinCurrent"), typeof(global::HAL.HALPower.GetVinCurrentDelegate));
+            Base.HALPower.GetVinCurrent = (Base.HALPower.GetVinCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getVinCurrent"), typeof(Base.HALPower.GetVinCurrentDelegate));
 
-            global::HAL.HALPower.GetUserVoltage6V = (global::HAL.HALPower.GetUserVoltage6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserVoltage6V"), typeof(global::HAL.HALPower.GetUserVoltage6VDelegate));
+            Base.HALPower.GetUserVoltage6V = (Base.HALPower.GetUserVoltage6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserVoltage6V"), typeof(Base.HALPower.GetUserVoltage6VDelegate));
 
-            global::HAL.HALPower.GetUserCurrent6V = (global::HAL.HALPower.GetUserCurrent6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrent6V"), typeof(global::HAL.HALPower.GetUserCurrent6VDelegate));
+            Base.HALPower.GetUserCurrent6V = (Base.HALPower.GetUserCurrent6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrent6V"), typeof(Base.HALPower.GetUserCurrent6VDelegate));
 
-            global::HAL.HALPower.GetUserActive6V = (global::HAL.HALPower.GetUserActive6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserActive6V"), typeof(global::HAL.HALPower.GetUserActive6VDelegate));
+            Base.HALPower.GetUserActive6V = (Base.HALPower.GetUserActive6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserActive6V"), typeof(Base.HALPower.GetUserActive6VDelegate));
 
-            global::HAL.HALPower.GetUserCurrentFaults6V = (global::HAL.HALPower.GetUserCurrentFaults6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrentFaults6V"), typeof(global::HAL.HALPower.GetUserCurrentFaults6VDelegate));
+            Base.HALPower.GetUserCurrentFaults6V = (Base.HALPower.GetUserCurrentFaults6VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrentFaults6V"), typeof(Base.HALPower.GetUserCurrentFaults6VDelegate));
 
-            global::HAL.HALPower.GetUserVoltage5V = (global::HAL.HALPower.GetUserVoltage5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserVoltage5V"), typeof(global::HAL.HALPower.GetUserVoltage5VDelegate));
+            Base.HALPower.GetUserVoltage5V = (Base.HALPower.GetUserVoltage5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserVoltage5V"), typeof(Base.HALPower.GetUserVoltage5VDelegate));
 
-            global::HAL.HALPower.GetUserCurrent5V = (global::HAL.HALPower.GetUserCurrent5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrent5V"), typeof(global::HAL.HALPower.GetUserCurrent5VDelegate));
+            Base.HALPower.GetUserCurrent5V = (Base.HALPower.GetUserCurrent5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrent5V"), typeof(Base.HALPower.GetUserCurrent5VDelegate));
 
-            global::HAL.HALPower.GetUserActive5V = (global::HAL.HALPower.GetUserActive5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserActive5V"), typeof(global::HAL.HALPower.GetUserActive5VDelegate));
+            Base.HALPower.GetUserActive5V = (Base.HALPower.GetUserActive5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserActive5V"), typeof(Base.HALPower.GetUserActive5VDelegate));
 
-            global::HAL.HALPower.GetUserCurrentFaults5V = (global::HAL.HALPower.GetUserCurrentFaults5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrentFaults5V"), typeof(global::HAL.HALPower.GetUserCurrentFaults5VDelegate));
+            Base.HALPower.GetUserCurrentFaults5V = (Base.HALPower.GetUserCurrentFaults5VDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrentFaults5V"), typeof(Base.HALPower.GetUserCurrentFaults5VDelegate));
 
-            global::HAL.HALPower.GetUserVoltage3V3 = (global::HAL.HALPower.GetUserVoltage3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserVoltage3V3"), typeof(global::HAL.HALPower.GetUserVoltage3V3Delegate));
+            Base.HALPower.GetUserVoltage3V3 = (Base.HALPower.GetUserVoltage3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserVoltage3V3"), typeof(Base.HALPower.GetUserVoltage3V3Delegate));
 
-            global::HAL.HALPower.GetUserCurrent3V3 = (global::HAL.HALPower.GetUserCurrent3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrent3V3"), typeof(global::HAL.HALPower.GetUserCurrent3V3Delegate));
+            Base.HALPower.GetUserCurrent3V3 = (Base.HALPower.GetUserCurrent3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrent3V3"), typeof(Base.HALPower.GetUserCurrent3V3Delegate));
 
-            global::HAL.HALPower.GetUserActive3V3 = (global::HAL.HALPower.GetUserActive3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserActive3V3"), typeof(global::HAL.HALPower.GetUserActive3V3Delegate));
+            Base.HALPower.GetUserActive3V3 = (Base.HALPower.GetUserActive3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserActive3V3"), typeof(Base.HALPower.GetUserActive3V3Delegate));
 
-            global::HAL.HALPower.GetUserCurrentFaults3V3 = (global::HAL.HALPower.GetUserCurrentFaults3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrentFaults3V3"), typeof(global::HAL.HALPower.GetUserCurrentFaults3V3Delegate));
+            Base.HALPower.GetUserCurrentFaults3V3 = (Base.HALPower.GetUserCurrentFaults3V3Delegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getUserCurrentFaults3V3"), typeof(Base.HALPower.GetUserCurrentFaults3V3Delegate));
 
         }
     }

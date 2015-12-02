@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HAL
     {
@@ -92,7 +90,7 @@ namespace HAL
                     Environment.Exit(1);
                 }
 
-                var rv = HAL.HALInitialize(mode);
+                var rv = HALInitialize(mode);
                 if (rv != 1)
                 {
                     throw new Exception($"HAL Initialize Failed with return code {rv}");
@@ -103,29 +101,29 @@ namespace HAL
                 //And it is leaked on normal use as well. So this is a workaround, and we hope to fix it
                 //When the HAL fixes it.
                 int status = 0;
-                HALDigital.InitializeDigitalPort(HAL.GetPort(0), ref status);
+                HALDigital.InitializeDigitalPort(GetPort(0), ref status);
             }
         }
 
 
         public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport((byte) resource, (byte) instanceNumber, context, feature);
+            return HALReport((byte) resource, (byte) instanceNumber, context, feature);
         }
 
         public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport((byte) resource, instanceNumber, context, feature);
+            return HALReport((byte) resource, instanceNumber, context, feature);
         }
 
         public static uint Report(byte resource, Instances instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport(resource, (byte) instanceNumber, context, feature);
+            return HALReport(resource, (byte) instanceNumber, context, feature);
         }
 
         public static uint Report(byte resource, byte instanceNumber, byte context = 0, string feature = null)
         {
-            return HAL.HALReport(resource, instanceNumber, context, feature);
+            return HALReport(resource, instanceNumber, context, feature);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HAL;
+using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using NUnit.Framework;

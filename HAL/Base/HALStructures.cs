@@ -6,7 +6,7 @@ using System.Text;
 //These are all of the structures used by HAL-RoboRIO and HAL-Simulation. 
 //Changes to these will always require a rebuild of the local HALs, which we want to avoid doing.
 //So please do not change these without explicit reasoning.
-namespace HAL
+namespace HAL.Base
 {
 
     #region HAL

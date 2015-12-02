@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Threading;
+using HAL.Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming

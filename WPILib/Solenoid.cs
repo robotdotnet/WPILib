@@ -1,10 +1,11 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL.HAL;
-using static HAL.HALSolenoid;
+using static HAL.Base.HAL;
+using static HAL.Base.HALSolenoid;
 using static WPILib.Utility;
 
 namespace WPILib

@@ -1,4 +1,5 @@
 ﻿using HAL;
+using HAL.Base;
 using WPILib.LiveWindows;
 
 namespace WPILib
@@ -31,7 +32,7 @@ namespace WPILib
             SetZeroLatch();
 
             LiveWindow.LiveWindow.AddActuator(nameof(Talon), Channel, this);
-            HAL.HAL.Report(ResourceType.kResourceType_Talon, (byte)Channel);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Talon, (byte)Channel);
         }
 
         /// <summary>

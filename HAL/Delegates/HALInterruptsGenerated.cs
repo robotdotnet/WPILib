@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALInterrupts
     {
         static HALInterrupts()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeInterruptsDelegate(uint interruptIndex, [MarshalAs(UnmanagedType.I1)]bool watcher, ref int status);

@@ -15,7 +15,7 @@ namespace WPILib.IntegrationTests.Test
             if (!s_initialized)
             {
                 RobotBase.InitializeHardwareConfiguration();
-                HAL.HAL.HALNetworkCommunicationObserveUserProgramStarting();
+                HAL.Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
 
                 LiveWindow.LiveWindow.SetEnabled(false);
                 Console.WriteLine("Started coms");

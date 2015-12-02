@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALCompressor
     {
         static HALCompressor()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeCompressorDelegate(byte module);

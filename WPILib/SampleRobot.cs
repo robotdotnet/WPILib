@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
 using HAL;
+using HAL.Base;
 using WPILib.LiveWindows;
-using static HAL.HAL;
+using static HAL.Base.HAL;
 
 namespace WPILib
 {
@@ -117,7 +118,7 @@ namespace WPILib
         /// Then go back and wait for the robot to be enabled again.</remarks>
         public override void StartCompetition()
         {
-            HAL.HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Sample);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Framework, Instances.kFramework_Sample);
 
             RobotInit();
 

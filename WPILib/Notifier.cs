@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Collections.Generic;
 using static WPILib.Timer;
-using static HAL.HALSemaphore;
-using static HAL.HALNotifier;
+using static HAL.Base.HALSemaphore;
+using static HAL.Base.HALNotifier;
 using static WPILib.Utility;
 
 namespace WPILib

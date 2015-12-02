@@ -1,6 +1,8 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using static WPILib.Utility;
+using HALAnalog = HAL.Base.HALAnalog;
 
 namespace WPILib
 {
@@ -27,7 +29,7 @@ namespace WPILib
             m_trigger = trigger;
             m_outputType = outputType;
             
-            HAL.HAL.Report(ResourceType.kResourceType_AnalogTriggerOutput, (byte) trigger.Index, (byte) outputType);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_AnalogTriggerOutput, (byte) trigger.Index, (byte) outputType);
         }
 
         /// <summary>

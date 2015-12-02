@@ -1,7 +1,8 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using WPILib.Exceptions;
-using static HAL.HALAnalog;
+using static HAL.Base.HALAnalog;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -24,14 +25,14 @@ namespace WPILib
         /// <param name="channel">The port to use for the analog trigger.</param>
         protected void InitTrigger(int channel)
         {
-            IntPtr portPointer = HAL.HAL.GetPort((byte)channel);
+            IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);
             int status = 0;
             uint index = 0;
 
             Port = InitializeAnalogTrigger(portPointer, ref index, ref status);
             Index = (int)index;
             CheckStatus(status);
-            HAL.HAL.Report(ResourceType.kResourceType_AnalogTrigger, (byte)channel);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_AnalogTrigger, (byte)channel);
         }
 
         /// <summary>

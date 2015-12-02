@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,33 +12,33 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALCompressor.InitializeCompressor = (global::HAL.HALCompressor.InitializeCompressorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCompressor"), typeof(global::HAL.HALCompressor.InitializeCompressorDelegate));
+            Base.HALCompressor.InitializeCompressor = (Base.HALCompressor.InitializeCompressorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCompressor"), typeof(Base.HALCompressor.InitializeCompressorDelegate));
 
-            global::HAL.HALCompressor.CheckCompressorModule = (global::HAL.HALCompressor.CheckCompressorModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkCompressorModule"), typeof(global::HAL.HALCompressor.CheckCompressorModuleDelegate));
+            Base.HALCompressor.CheckCompressorModule = (Base.HALCompressor.CheckCompressorModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "checkCompressorModule"), typeof(Base.HALCompressor.CheckCompressorModuleDelegate));
 
-            global::HAL.HALCompressor.GetCompressor = (global::HAL.HALCompressor.GetCompressorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressor"), typeof(global::HAL.HALCompressor.GetCompressorDelegate));
+            Base.HALCompressor.GetCompressor = (Base.HALCompressor.GetCompressorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressor"), typeof(Base.HALCompressor.GetCompressorDelegate));
 
-            global::HAL.HALCompressor.SetClosedLoopControl = (global::HAL.HALCompressor.SetClosedLoopControlDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setClosedLoopControl"), typeof(global::HAL.HALCompressor.SetClosedLoopControlDelegate));
+            Base.HALCompressor.SetClosedLoopControl = (Base.HALCompressor.SetClosedLoopControlDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setClosedLoopControl"), typeof(Base.HALCompressor.SetClosedLoopControlDelegate));
 
-            global::HAL.HALCompressor.GetClosedLoopControl = (global::HAL.HALCompressor.GetClosedLoopControlDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getClosedLoopControl"), typeof(global::HAL.HALCompressor.GetClosedLoopControlDelegate));
+            Base.HALCompressor.GetClosedLoopControl = (Base.HALCompressor.GetClosedLoopControlDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getClosedLoopControl"), typeof(Base.HALCompressor.GetClosedLoopControlDelegate));
 
-            global::HAL.HALCompressor.GetPressureSwitch = (global::HAL.HALCompressor.GetPressureSwitchDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPressureSwitch"), typeof(global::HAL.HALCompressor.GetPressureSwitchDelegate));
+            Base.HALCompressor.GetPressureSwitch = (Base.HALCompressor.GetPressureSwitchDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPressureSwitch"), typeof(Base.HALCompressor.GetPressureSwitchDelegate));
 
-            global::HAL.HALCompressor.GetCompressorCurrent = (global::HAL.HALCompressor.GetCompressorCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorCurrent"), typeof(global::HAL.HALCompressor.GetCompressorCurrentDelegate));
+            Base.HALCompressor.GetCompressorCurrent = (Base.HALCompressor.GetCompressorCurrentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorCurrent"), typeof(Base.HALCompressor.GetCompressorCurrentDelegate));
 
-            global::HAL.HALCompressor.GetCompressorCurrentTooHighFault = (global::HAL.HALCompressor.GetCompressorCurrentTooHighFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorCurrentTooHighFault"), typeof(global::HAL.HALCompressor.GetCompressorCurrentTooHighFaultDelegate));
+            Base.HALCompressor.GetCompressorCurrentTooHighFault = (Base.HALCompressor.GetCompressorCurrentTooHighFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorCurrentTooHighFault"), typeof(Base.HALCompressor.GetCompressorCurrentTooHighFaultDelegate));
 
-            global::HAL.HALCompressor.GetCompressorCurrentTooHighStickyFault = (global::HAL.HALCompressor.GetCompressorCurrentTooHighStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorCurrentTooHighStickyFault"), typeof(global::HAL.HALCompressor.GetCompressorCurrentTooHighStickyFaultDelegate));
+            Base.HALCompressor.GetCompressorCurrentTooHighStickyFault = (Base.HALCompressor.GetCompressorCurrentTooHighStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorCurrentTooHighStickyFault"), typeof(Base.HALCompressor.GetCompressorCurrentTooHighStickyFaultDelegate));
 
-            global::HAL.HALCompressor.GetCompressorShortedStickyFault = (global::HAL.HALCompressor.GetCompressorShortedStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorShortedStickyFault"), typeof(global::HAL.HALCompressor.GetCompressorShortedStickyFaultDelegate));
+            Base.HALCompressor.GetCompressorShortedStickyFault = (Base.HALCompressor.GetCompressorShortedStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorShortedStickyFault"), typeof(Base.HALCompressor.GetCompressorShortedStickyFaultDelegate));
 
-            global::HAL.HALCompressor.GetCompressorShortedFault = (global::HAL.HALCompressor.GetCompressorShortedFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorShortedFault"), typeof(global::HAL.HALCompressor.GetCompressorShortedFaultDelegate));
+            Base.HALCompressor.GetCompressorShortedFault = (Base.HALCompressor.GetCompressorShortedFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorShortedFault"), typeof(Base.HALCompressor.GetCompressorShortedFaultDelegate));
 
-            global::HAL.HALCompressor.GetCompressorNotConnectedStickyFault = (global::HAL.HALCompressor.GetCompressorNotConnectedStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorNotConnectedStickyFault"), typeof(global::HAL.HALCompressor.GetCompressorNotConnectedStickyFaultDelegate));
+            Base.HALCompressor.GetCompressorNotConnectedStickyFault = (Base.HALCompressor.GetCompressorNotConnectedStickyFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorNotConnectedStickyFault"), typeof(Base.HALCompressor.GetCompressorNotConnectedStickyFaultDelegate));
 
-            global::HAL.HALCompressor.GetCompressorNotConnectedFault = (global::HAL.HALCompressor.GetCompressorNotConnectedFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorNotConnectedFault"), typeof(global::HAL.HALCompressor.GetCompressorNotConnectedFaultDelegate));
+            Base.HALCompressor.GetCompressorNotConnectedFault = (Base.HALCompressor.GetCompressorNotConnectedFaultDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getCompressorNotConnectedFault"), typeof(Base.HALCompressor.GetCompressorNotConnectedFaultDelegate));
 
-            global::HAL.HALCompressor.ClearAllPCMStickyFaults = (global::HAL.HALCompressor.ClearAllPCMStickyFaultsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearAllPCMStickyFaults"), typeof(global::HAL.HALCompressor.ClearAllPCMStickyFaultsDelegate));
+            Base.HALCompressor.ClearAllPCMStickyFaults = (Base.HALCompressor.ClearAllPCMStickyFaultsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "clearAllPCMStickyFaults"), typeof(Base.HALCompressor.ClearAllPCMStickyFaultsDelegate));
 
         }
     }

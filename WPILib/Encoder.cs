@@ -1,11 +1,12 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
-using static HAL.HAL;
-using static HAL.HALDigital;
+using static HAL.Base.HAL;
+using static HAL.Base.HALDigital;
 using static WPILib.Utility;
 
 namespace WPILib

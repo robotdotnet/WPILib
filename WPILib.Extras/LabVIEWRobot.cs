@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using HAL;
+using HAL.Base;
 using WPILib.LiveWindows;
-using static HAL.HAL;
+using static HAL.Base.HAL;
 using static System.Console;
 
 namespace WPILib.Extras

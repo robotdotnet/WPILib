@@ -1,9 +1,10 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using WPILib.Exceptions;
 using static WPILib.Utility;
-using static HAL.HAL;
-using static HAL.HALDigital;
+using static HAL.Base.HAL;
+using static HAL.Base.HALDigital;
 
 namespace WPILib
 {

@@ -2,16 +2,17 @@
 
 using System;
 using HAL;
+using HAL.Base;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALCanTalonSRX
     {
         static HALCanTalonSRX()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr C_TalonSRX_CreateDelegate(int deviceNumber, int controlPeriodMs);

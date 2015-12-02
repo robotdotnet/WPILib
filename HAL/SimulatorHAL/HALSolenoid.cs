@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using HAL.Base;
 using static HAL.Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
@@ -15,16 +16,16 @@ namespace HAL.SimulatorHAL
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
-            global::HAL.HALSolenoid.FreeSolenoidPort = freeSolenoidPort;
-            global::HAL.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
-            global::HAL.HALSolenoid.GetSolenoid = getSolenoid;
-            global::HAL.HALSolenoid.GetAllSolenoids = getAllSolenoids;
-            global::HAL.HALSolenoid.SetSolenoid = setSolenoid;
-            global::HAL.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
-            global::HAL.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
-            global::HAL.HALSolenoid.GetPCMSolenoidVoltageFault = getPCMSolenoidVoltageFault;
-            global::HAL.HALSolenoid.ClearAllPCMStickyFaults_sol = clearAllPCMStickyFaults_sol;
+            Base.HALSolenoid.InitializeSolenoidPort = initializeSolenoidPort;
+            Base.HALSolenoid.FreeSolenoidPort = freeSolenoidPort;
+            Base.HALSolenoid.CheckSolenoidModule = checkSolenoidModule;
+            Base.HALSolenoid.GetSolenoid = getSolenoid;
+            Base.HALSolenoid.GetAllSolenoids = getAllSolenoids;
+            Base.HALSolenoid.SetSolenoid = setSolenoid;
+            Base.HALSolenoid.GetPCMSolenoidBlackList = getPCMSolenoidBlackList;
+            Base.HALSolenoid.GetPCMSolenoidVoltageStickyFault = getPCMSolenoidVoltageStickyFault;
+            Base.HALSolenoid.GetPCMSolenoidVoltageFault = getPCMSolenoidVoltageFault;
+            Base.HALSolenoid.ClearAllPCMStickyFaults_sol = clearAllPCMStickyFaults_sol;
         }
 
         [CalledSimFunction]

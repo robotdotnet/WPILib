@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,11 +12,11 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALNotifier.InitializeNotifier = (global::HAL.HALNotifier.InitializeNotifierDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeNotifier"), typeof(global::HAL.HALNotifier.InitializeNotifierDelegate));
+            Base.HALNotifier.InitializeNotifier = (Base.HALNotifier.InitializeNotifierDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeNotifier"), typeof(Base.HALNotifier.InitializeNotifierDelegate));
 
-            global::HAL.HALNotifier.CleanNotifier = (global::HAL.HALNotifier.CleanNotifierDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanNotifier"), typeof(global::HAL.HALNotifier.CleanNotifierDelegate));
+            Base.HALNotifier.CleanNotifier = (Base.HALNotifier.CleanNotifierDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanNotifier"), typeof(Base.HALNotifier.CleanNotifierDelegate));
 
-            global::HAL.HALNotifier.UpdateNotifierAlarm = (global::HAL.HALNotifier.UpdateNotifierAlarmDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "updateNotifierAlarm"), typeof(global::HAL.HALNotifier.UpdateNotifierAlarmDelegate));
+            Base.HALNotifier.UpdateNotifierAlarm = (Base.HALNotifier.UpdateNotifierAlarmDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "updateNotifierAlarm"), typeof(Base.HALNotifier.UpdateNotifierAlarmDelegate));
 
         }
     }

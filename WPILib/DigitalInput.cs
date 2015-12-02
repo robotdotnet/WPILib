@@ -1,7 +1,9 @@
 ﻿using HAL;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
 using static WPILib.Utility;
+using HALDigital = HAL.Base.HALDigital;
 
 namespace WPILib
 {
@@ -18,7 +20,7 @@ namespace WPILib
         {
             InitDigitalPort(channel, true);
 
-            HAL.HAL.Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
             LiveWindow.LiveWindow.AddSensor("DigitalInput", channel, this);
         }
 

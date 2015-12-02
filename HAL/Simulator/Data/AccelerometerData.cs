@@ -1,4 +1,6 @@
-﻿namespace HAL.Simulator.Data
+﻿using HAL.Base;
+
+namespace HAL.Simulator.Data
 {
     /// <summary>
     /// Accelerometer Sim Data

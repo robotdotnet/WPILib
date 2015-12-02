@@ -1,10 +1,11 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL.HAL;
-using static HAL.HALSolenoid;
+using static HAL.Base.HAL;
+using static HAL.Base.HALSolenoid;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -54,8 +55,8 @@ namespace WPILib
                 m_reverseSolenoid = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
 
-                HAL.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
-                HAL.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
+                HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
+                HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
                 LiveWindow.LiveWindow.AddActuator("DoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
             }
         }

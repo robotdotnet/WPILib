@@ -1,4 +1,4 @@
-﻿using static  HAL.HALPower;
+﻿using static  HAL.Base.HALPower;
 using static WPILib.Utility;
 
 namespace WPILib

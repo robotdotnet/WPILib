@@ -2,13 +2,13 @@
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALSerialPort
     {
         static HALSerialPort()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate void SerialInitializePortDelegate(byte port, ref int status);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using static HAL.Simulator.SimData;
@@ -29,16 +30,16 @@ namespace HAL.SimulatorHAL
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALInterrupts.InitializeInterrupts = initializeInterrupts;
-            global::HAL.HALInterrupts.CleanInterrupts = cleanInterrupts;
-            global::HAL.HALInterrupts.WaitForInterrupt = waitForInterrupt;
-            global::HAL.HALInterrupts.EnableInterrupts = enableInterrupts;
-            global::HAL.HALInterrupts.DisableInterrupts = disableInterrupts;
-            global::HAL.HALInterrupts.ReadRisingTimestamp = readRisingTimestamp;
-            global::HAL.HALInterrupts.ReadFallingTimestamp = readFallingTimestamp;
-            global::HAL.HALInterrupts.RequestInterrupts = requestInterrupts;
-            global::HAL.HALInterrupts.AttachInterruptHandler = attachInterruptHandler;
-            global::HAL.HALInterrupts.SetInterruptUpSourceEdge = setInterruptUpSourceEdge;
+            Base.HALInterrupts.InitializeInterrupts = initializeInterrupts;
+            Base.HALInterrupts.CleanInterrupts = cleanInterrupts;
+            Base.HALInterrupts.WaitForInterrupt = waitForInterrupt;
+            Base.HALInterrupts.EnableInterrupts = enableInterrupts;
+            Base.HALInterrupts.DisableInterrupts = disableInterrupts;
+            Base.HALInterrupts.ReadRisingTimestamp = readRisingTimestamp;
+            Base.HALInterrupts.ReadFallingTimestamp = readFallingTimestamp;
+            Base.HALInterrupts.RequestInterrupts = requestInterrupts;
+            Base.HALInterrupts.AttachInterruptHandler = attachInterruptHandler;
+            Base.HALInterrupts.SetInterruptUpSourceEdge = setInterruptUpSourceEdge;
         }
 
         //Gets an interrupt from an IntPtr

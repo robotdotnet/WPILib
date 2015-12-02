@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using static HAL.Simulator.SimData;
@@ -82,36 +83,36 @@ namespace HAL.SimulatorHAL
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HAL.GetPort = getPort;
-            global::HAL.HAL.GetPortWithModule = getPortWithModule;
-            global::HAL.HAL.FreePort = freePort;
-            global::HAL.HAL.GetHALErrorMessage = getHALErrorMessage;
-            global::HAL.HAL.GetFPGAVersion = getFPGAVersion;
-            global::HAL.HAL.GetFPGARevision = getFPGARevision;
-            global::HAL.HAL.GetFPGATime = getFPGATime;
-            global::HAL.HAL.GetFPGAButton = getFPGAButton;
-            global::HAL.HAL.HALSetErrorData = HALSetErrorData;
-            global::HAL.HAL.GetControlWord = HALGetControlWord;
-            global::HAL.HAL.HALGetAllianceStation = HALGetAllianceStation;
-            global::HAL.HAL.HALGetJoystickAxes = HALGetJoystickAxes;
-            global::HAL.HAL.HALGetJoystickPOVs = HALGetJoystickPOVs;
-            global::HAL.HAL.HALGetJoystickButtons = HALGetJoystickButtons;
-            global::HAL.HAL.HALGetJoystickDescriptor = HALGetJoystickDescriptor;
-            global::HAL.HAL.HALGetJoystickIsXbox = HALGetJoystickIsXbox;
-            global::HAL.HAL.HALGetJoystickType = HALGetJoystickType;
-            global::HAL.HAL.HALGetJoystickAxisType = HALGetJoystickAxisType;
-            global::HAL.HAL.HALSetJoystickOutputs = HALSetJoystickOutputs;
-            global::HAL.HAL.HALGetMatchTime = HALGetMatchTime;
-            global::HAL.HAL.HALSetNewDataSem = HALSetNewDataSem;
-            global::HAL.HAL.HALGetSystemActive = HALGetSystemActive;
-            global::HAL.HAL.HALGetBrownedOut = HALGetBrownedOut;
-            global::HAL.HAL.HALInitialize = HALInitialize;
-            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramStarting = HALNetworkCommunicationObserveUserProgramStarting;
-            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramDisabled = HALNetworkCommunicationObserveUserProgramDisabled;
-            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = HALNetworkCommunicationObserveUserProgramAutonomous;
-            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTeleop = HALNetworkCommunicationObserveUserProgramTeleop;
-            global::HAL.HAL.HALNetworkCommunicationObserveUserProgramTest = HALNetworkCommunicationObserveUserProgramTest;
-            global::HAL.HAL.HALReport = HALReport;
+            Base.HAL.GetPort = getPort;
+            Base.HAL.GetPortWithModule = getPortWithModule;
+            Base.HAL.FreePort = freePort;
+            Base.HAL.GetHALErrorMessage = getHALErrorMessage;
+            Base.HAL.GetFPGAVersion = getFPGAVersion;
+            Base.HAL.GetFPGARevision = getFPGARevision;
+            Base.HAL.GetFPGATime = getFPGATime;
+            Base.HAL.GetFPGAButton = getFPGAButton;
+            Base.HAL.HALSetErrorData = HALSetErrorData;
+            Base.HAL.GetControlWord = HALGetControlWord;
+            Base.HAL.HALGetAllianceStation = HALGetAllianceStation;
+            Base.HAL.HALGetJoystickAxes = HALGetJoystickAxes;
+            Base.HAL.HALGetJoystickPOVs = HALGetJoystickPOVs;
+            Base.HAL.HALGetJoystickButtons = HALGetJoystickButtons;
+            Base.HAL.HALGetJoystickDescriptor = HALGetJoystickDescriptor;
+            Base.HAL.HALGetJoystickIsXbox = HALGetJoystickIsXbox;
+            Base.HAL.HALGetJoystickType = HALGetJoystickType;
+            Base.HAL.HALGetJoystickAxisType = HALGetJoystickAxisType;
+            Base.HAL.HALSetJoystickOutputs = HALSetJoystickOutputs;
+            Base.HAL.HALGetMatchTime = HALGetMatchTime;
+            Base.HAL.HALSetNewDataSem = HALSetNewDataSem;
+            Base.HAL.HALGetSystemActive = HALGetSystemActive;
+            Base.HAL.HALGetBrownedOut = HALGetBrownedOut;
+            Base.HAL.HALInitialize = HALInitialize;
+            Base.HAL.HALNetworkCommunicationObserveUserProgramStarting = HALNetworkCommunicationObserveUserProgramStarting;
+            Base.HAL.HALNetworkCommunicationObserveUserProgramDisabled = HALNetworkCommunicationObserveUserProgramDisabled;
+            Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = HALNetworkCommunicationObserveUserProgramAutonomous;
+            Base.HAL.HALNetworkCommunicationObserveUserProgramTeleop = HALNetworkCommunicationObserveUserProgramTeleop;
+            Base.HAL.HALNetworkCommunicationObserveUserProgramTest = HALNetworkCommunicationObserveUserProgramTest;
+            Base.HAL.HALReport = HALReport;
         }
 
         private static void StartSimulator(string loadDirectory)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using HAL.Base;
 using HAL.Simulator;
 
 // ReSharper disable RedundantAssignment
@@ -17,9 +18,9 @@ namespace HAL.SimulatorHAL
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALNotifier.InitializeNotifier = initializeNotifier;
-            global::HAL.HALNotifier.CleanNotifier = cleanNotifier;
-            global::HAL.HALNotifier.UpdateNotifierAlarm = updateNotifierAlarm;
+            Base.HALNotifier.InitializeNotifier = initializeNotifier;
+            Base.HALNotifier.CleanNotifier = cleanNotifier;
+            Base.HALNotifier.UpdateNotifierAlarm = updateNotifierAlarm;
         }
 
         [CalledSimFunction]

@@ -1,14 +1,15 @@
 ﻿// ReSharper disable CheckNamespace
 
 using HAL;
+using HAL.Base;
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALCAN
     {
         static HALCAN()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate void FRC_NetworkCommunication_CANSessionMux_sendMessageDelegate(uint messageID, byte[] data,

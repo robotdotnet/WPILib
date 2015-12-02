@@ -4,13 +4,13 @@ using System;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALNotifier
     {
         static HALNotifier()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeNotifierDelegate(Action<uint, IntPtr> ProcessQueue, IntPtr param, ref int status);

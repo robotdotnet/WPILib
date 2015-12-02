@@ -2,6 +2,7 @@
 
 using System;
 using HAL;
+using HAL.Base;
 
 namespace WPILib
 {
@@ -74,7 +75,7 @@ namespace WPILib
             m_buttons[(int)ButtonType.Trigger] = s_defaultTriggerButton;
             m_buttons[(int)ButtonType.Top] = s_defaultTopButton;
 
-            HAL.HAL.Report(ResourceType.kResourceType_Joystick, (byte)port);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Joystick, (byte)port);
         }
 
         protected Joystick(int port, int numAxisTypes, int numButtonTypes)
@@ -217,19 +218,19 @@ namespace WPILib
                 m_leftRumble = (ushort)(value * 65535);
             else
                 m_rightRumble = (ushort)(value * 65535);
-            HAL.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL.Base.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutput(int outputNumber, bool value)
         {
             m_outputs = (m_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            HAL.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL.Base.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutputs(int value)
         {
             m_outputs = value;
-            HAL.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL.Base.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public bool Equals(Joystick other)

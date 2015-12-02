@@ -3,16 +3,17 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL;
+using HAL.Base;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALDigital
     {
         static HALDigital()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
 using HAL;
+using HAL.Base;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 
@@ -55,7 +56,7 @@ namespace WPILib.Tests.SpecScaners
         public void TestHALBaseMapsToHALSim()
         {
             // Load assembly with HAL Base
-            Assembly halBaseAssembly = typeof(HAL.HAL).Assembly;
+            Assembly halBaseAssembly = typeof(HAL.Base.HAL).Assembly;
 
             List<string> nullTypes = (from type in halBaseAssembly.GetTypes()
                                       where type.Name.ToLower().Contains("hal")

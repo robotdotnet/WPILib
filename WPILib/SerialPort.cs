@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Text;
 using HAL;
-using static HAL.HALSerialPort;
-using static HAL.HAL;
+using HAL.Base;
+using static HAL.Base.HALSerialPort;
+using static HAL.Base.HAL;
 using static WPILib.Utility;
 
 namespace WPILib

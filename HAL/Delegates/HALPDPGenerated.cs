@@ -2,13 +2,13 @@
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALPDP
     {
         static HALPDP()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate void InitializePDPDelegate(int module);

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Linq;
 using HAL;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
-using static HAL.HAL;
-using static HAL.HALAnalog;
+using static HAL.Base.HAL;
+using static HAL.Base.HALAnalog;
 using static WPILib.Utility;
+using HALAnalog = HAL.Base.HALAnalog;
 
 namespace WPILib
 {

@@ -20,7 +20,7 @@
     public class GlobalData : DataBase
     {
         private bool m_programStarted = false;
-        private double m_analogSampleRate = HALAnalog.DefaultSampleRate;
+        private double m_analogSampleRate = Base.HALAnalog.DefaultSampleRate;
 
         private ushort m_pwmLoopTiming = 40;
 
@@ -30,7 +30,7 @@
         public override void ResetData()
         {
             m_programStarted = false;
-            m_analogSampleRate = HALAnalog.DefaultSampleRate;
+            m_analogSampleRate = Base.HALAnalog.DefaultSampleRate;
             m_pwmLoopTiming = 40;
             DigitalPWMRate = 0;
             m_programState = ProgramState.None;

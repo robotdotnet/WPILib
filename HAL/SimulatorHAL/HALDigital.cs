@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using static HAL.Simulator.SimData;
@@ -23,99 +24,99 @@ namespace HAL.SimulatorHAL
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALDigital.InitializeDigitalPort = initializeDigitalPort;
-            global::HAL.HALDigital.FreeDigitalPort = freeDigitalPort;
-            global::HAL.HALDigital.CheckPWMChannel = checkPWMChannel;
-            global::HAL.HALDigital.CheckRelayChannel = checkRelayChannel;
-            global::HAL.HALDigital.SetPWM = setPWM;
-            global::HAL.HALDigital.AllocatePWMChannel = allocatePWMChannel;
-            global::HAL.HALDigital.FreePWMChannel = freePWMChannel;
-            global::HAL.HALDigital.GetPWM = getPWM;
-            global::HAL.HALDigital.LatchPWMZero = latchPWMZero;
-            global::HAL.HALDigital.SetPWMPeriodScale = setPWMPeriodScale;
-            global::HAL.HALDigital.AllocatePWM = allocatePWM;
-            global::HAL.HALDigital.FreePWM = freePWM;
-            global::HAL.HALDigital.SetPWMRate = setPWMRate;
-            global::HAL.HALDigital.SetPWMDutyCycle = setPWMDutyCycle;
-            global::HAL.HALDigital.SetPWMOutputChannel = setPWMOutputChannel;
-            global::HAL.HALDigital.SetRelayForward = setRelayForward;
-            global::HAL.HALDigital.SetRelayReverse = setRelayReverse;
-            global::HAL.HALDigital.GetRelayForward = getRelayForward;
-            global::HAL.HALDigital.GetRelayReverse = getRelayReverse;
-            global::HAL.HALDigital.AllocateDIO = allocateDIO;
-            global::HAL.HALDigital.FreeDIO = freeDIO;
-            global::HAL.HALDigital.SetDIO = setDIO;
-            global::HAL.HALDigital.GetDIO = getDIO;
-            global::HAL.HALDigital.GetDIODirection = getDIODirection;
-            global::HAL.HALDigital.Pulse = pulse;
-            global::HAL.HALDigital.IsPulsing = isPulsing;
-            global::HAL.HALDigital.IsAnyPulsing = isAnyPulsing;
-            global::HAL.HALDigital.SetFilterPeriod = setFilterPeriod;
-            global::HAL.HALDigital.GetFilterPeriod = getFilterPeriod;
-            global::HAL.HALDigital.SetFilterSelect = setFilterSelect;
-            global::HAL.HALDigital.GetFilterSelect = getFilterSelect;
-            global::HAL.HALDigital.InitializeCounter = initializeCounter;
-            global::HAL.HALDigital.FreeCounter = freeCounter;
-            global::HAL.HALDigital.SetCounterAverageSize = setCounterAverageSize;
-            global::HAL.HALDigital.SetCounterUpSource = setCounterUpSource;
-            global::HAL.HALDigital.SetCounterUpSourceEdge = setCounterUpSourceEdge;
-            global::HAL.HALDigital.ClearCounterUpSource = clearCounterUpSource;
-            global::HAL.HALDigital.SetCounterDownSource = setCounterDownSource;
-            global::HAL.HALDigital.SetCounterDownSourceEdge = setCounterDownSourceEdge;
-            global::HAL.HALDigital.ClearCounterDownSource = clearCounterDownSource;
-            global::HAL.HALDigital.SetCounterUpDownMode = setCounterUpDownMode;
-            global::HAL.HALDigital.SetCounterExternalDirectionMode = setCounterExternalDirectionMode;
-            global::HAL.HALDigital.SetCounterSemiPeriodMode = setCounterSemiPeriodMode;
-            global::HAL.HALDigital.SetCounterPulseLengthMode = setCounterPulseLengthMode;
-            global::HAL.HALDigital.GetCounterSamplesToAverage = getCounterSamplesToAverage;
-            global::HAL.HALDigital.SetCounterSamplesToAverage = setCounterSamplesToAverage;
-            global::HAL.HALDigital.ResetCounter = resetCounter;
-            global::HAL.HALDigital.GetCounter = getCounter;
-            global::HAL.HALDigital.GetCounterPeriod = getCounterPeriod;
-            global::HAL.HALDigital.SetCounterMaxPeriod = setCounterMaxPeriod;
-            global::HAL.HALDigital.SetCounterUpdateWhenEmpty = setCounterUpdateWhenEmpty;
-            global::HAL.HALDigital.GetCounterStopped = getCounterStopped;
-            global::HAL.HALDigital.GetCounterDirection = getCounterDirection;
-            global::HAL.HALDigital.SetCounterReverseDirection = setCounterReverseDirection;
-            global::HAL.HALDigital.InitializeEncoder = initializeEncoder;
-            global::HAL.HALDigital.ResetEncoder = resetEncoder;
-            global::HAL.HALDigital.FreeEncoder = freeEncoder;
-            global::HAL.HALDigital.GetEncoder = getEncoder;
-            global::HAL.HALDigital.GetEncoderPeriod = getEncoderPeriod;
-            global::HAL.HALDigital.SetEncoderMaxPeriod = setEncoderMaxPeriod;
-            global::HAL.HALDigital.GetEncoderStopped = getEncoderStopped;
-            global::HAL.HALDigital.GetEncoderDirection = getEncoderDirection;
-            global::HAL.HALDigital.SetEncoderReverseDirection = setEncoderReverseDirection;
-            global::HAL.HALDigital.SetEncoderSamplesToAverage = setEncoderSamplesToAverage;
-            global::HAL.HALDigital.GetEncoderSamplesToAverage = getEncoderSamplesToAverage;
-            global::HAL.HALDigital.SetEncoderIndexSource = setEncoderIndexSource;
-            global::HAL.HALDigital.GetLoopTiming = getLoopTiming;
-            global::HAL.HALDigital.SpiInitialize = spiInitialize;
-            global::HAL.HALDigital.SpiTransaction = spiTransaction;
-            global::HAL.HALDigital.SpiWrite = spiWrite;
-            global::HAL.HALDigital.SpiRead = spiRead;
-            global::HAL.HALDigital.SpiClose = spiClose;
-            global::HAL.HALDigital.SpiSetSpeed = spiSetSpeed;
-            global::HAL.HALDigital.SpiSetOpts = spiSetOpts;
-            global::HAL.HALDigital.SpiSetChipSelectActiveHigh = spiSetChipSelectActiveHigh;
-            global::HAL.HALDigital.SpiSetChipSelectActiveLow = spiSetChipSelectActiveLow;
-            global::HAL.HALDigital.SpiGetHandle = spiGetHandle;
-            global::HAL.HALDigital.SpiSetHandle = spiSetHandle;
-            global::HAL.HALDigital.SpiInitAccumulator = spiInitAccumulator;
-            global::HAL.HALDigital.SpiFreeAccumulator = spiFreeAccumulator;
-            global::HAL.HALDigital.SpiResetAccumulator = spiResetAccumulator;
-            global::HAL.HALDigital.SpiSetAccumulatorCenter = spiSetAccumulatorCenter;
-            global::HAL.HALDigital.SpiSetAccumulatorDeadband = spiSetAccumulatorDeadband;
-            global::HAL.HALDigital.SpiGetAccumulatorLastValue = spiGetAccumulatorLastValue;
-            global::HAL.HALDigital.SpiGetAccumulatorCount = spiGetAccumulatorCount;
-            global::HAL.HALDigital.SpiGetAccumulatorValue = spiGetAccumulatorValue;
-            global::HAL.HALDigital.SpiGetAccumulatorAverage = spiGetAccumulatorAverage;
-            global::HAL.HALDigital.SpiGetAccumulatorOutput = spiGetAccumulatorOutput;
-            global::HAL.HALDigital.I2CInitialize = i2CInitialize;
-            global::HAL.HALDigital.I2CTransaction = i2CTransaction;
-            global::HAL.HALDigital.I2CWrite = i2CWrite;
-            global::HAL.HALDigital.I2CRead = i2CRead;
-            global::HAL.HALDigital.I2CClose = i2CClose;
+            Base.HALDigital.InitializeDigitalPort = initializeDigitalPort;
+            Base.HALDigital.FreeDigitalPort = freeDigitalPort;
+            Base.HALDigital.CheckPWMChannel = checkPWMChannel;
+            Base.HALDigital.CheckRelayChannel = checkRelayChannel;
+            Base.HALDigital.SetPWM = setPWM;
+            Base.HALDigital.AllocatePWMChannel = allocatePWMChannel;
+            Base.HALDigital.FreePWMChannel = freePWMChannel;
+            Base.HALDigital.GetPWM = getPWM;
+            Base.HALDigital.LatchPWMZero = latchPWMZero;
+            Base.HALDigital.SetPWMPeriodScale = setPWMPeriodScale;
+            Base.HALDigital.AllocatePWM = allocatePWM;
+            Base.HALDigital.FreePWM = freePWM;
+            Base.HALDigital.SetPWMRate = setPWMRate;
+            Base.HALDigital.SetPWMDutyCycle = setPWMDutyCycle;
+            Base.HALDigital.SetPWMOutputChannel = setPWMOutputChannel;
+            Base.HALDigital.SetRelayForward = setRelayForward;
+            Base.HALDigital.SetRelayReverse = setRelayReverse;
+            Base.HALDigital.GetRelayForward = getRelayForward;
+            Base.HALDigital.GetRelayReverse = getRelayReverse;
+            Base.HALDigital.AllocateDIO = allocateDIO;
+            Base.HALDigital.FreeDIO = freeDIO;
+            Base.HALDigital.SetDIO = setDIO;
+            Base.HALDigital.GetDIO = getDIO;
+            Base.HALDigital.GetDIODirection = getDIODirection;
+            Base.HALDigital.Pulse = pulse;
+            Base.HALDigital.IsPulsing = isPulsing;
+            Base.HALDigital.IsAnyPulsing = isAnyPulsing;
+            Base.HALDigital.SetFilterPeriod = setFilterPeriod;
+            Base.HALDigital.GetFilterPeriod = getFilterPeriod;
+            Base.HALDigital.SetFilterSelect = setFilterSelect;
+            Base.HALDigital.GetFilterSelect = getFilterSelect;
+            Base.HALDigital.InitializeCounter = initializeCounter;
+            Base.HALDigital.FreeCounter = freeCounter;
+            Base.HALDigital.SetCounterAverageSize = setCounterAverageSize;
+            Base.HALDigital.SetCounterUpSource = setCounterUpSource;
+            Base.HALDigital.SetCounterUpSourceEdge = setCounterUpSourceEdge;
+            Base.HALDigital.ClearCounterUpSource = clearCounterUpSource;
+            Base.HALDigital.SetCounterDownSource = setCounterDownSource;
+            Base.HALDigital.SetCounterDownSourceEdge = setCounterDownSourceEdge;
+            Base.HALDigital.ClearCounterDownSource = clearCounterDownSource;
+            Base.HALDigital.SetCounterUpDownMode = setCounterUpDownMode;
+            Base.HALDigital.SetCounterExternalDirectionMode = setCounterExternalDirectionMode;
+            Base.HALDigital.SetCounterSemiPeriodMode = setCounterSemiPeriodMode;
+            Base.HALDigital.SetCounterPulseLengthMode = setCounterPulseLengthMode;
+            Base.HALDigital.GetCounterSamplesToAverage = getCounterSamplesToAverage;
+            Base.HALDigital.SetCounterSamplesToAverage = setCounterSamplesToAverage;
+            Base.HALDigital.ResetCounter = resetCounter;
+            Base.HALDigital.GetCounter = getCounter;
+            Base.HALDigital.GetCounterPeriod = getCounterPeriod;
+            Base.HALDigital.SetCounterMaxPeriod = setCounterMaxPeriod;
+            Base.HALDigital.SetCounterUpdateWhenEmpty = setCounterUpdateWhenEmpty;
+            Base.HALDigital.GetCounterStopped = getCounterStopped;
+            Base.HALDigital.GetCounterDirection = getCounterDirection;
+            Base.HALDigital.SetCounterReverseDirection = setCounterReverseDirection;
+            Base.HALDigital.InitializeEncoder = initializeEncoder;
+            Base.HALDigital.ResetEncoder = resetEncoder;
+            Base.HALDigital.FreeEncoder = freeEncoder;
+            Base.HALDigital.GetEncoder = getEncoder;
+            Base.HALDigital.GetEncoderPeriod = getEncoderPeriod;
+            Base.HALDigital.SetEncoderMaxPeriod = setEncoderMaxPeriod;
+            Base.HALDigital.GetEncoderStopped = getEncoderStopped;
+            Base.HALDigital.GetEncoderDirection = getEncoderDirection;
+            Base.HALDigital.SetEncoderReverseDirection = setEncoderReverseDirection;
+            Base.HALDigital.SetEncoderSamplesToAverage = setEncoderSamplesToAverage;
+            Base.HALDigital.GetEncoderSamplesToAverage = getEncoderSamplesToAverage;
+            Base.HALDigital.SetEncoderIndexSource = setEncoderIndexSource;
+            Base.HALDigital.GetLoopTiming = getLoopTiming;
+            Base.HALDigital.SpiInitialize = spiInitialize;
+            Base.HALDigital.SpiTransaction = spiTransaction;
+            Base.HALDigital.SpiWrite = spiWrite;
+            Base.HALDigital.SpiRead = spiRead;
+            Base.HALDigital.SpiClose = spiClose;
+            Base.HALDigital.SpiSetSpeed = spiSetSpeed;
+            Base.HALDigital.SpiSetOpts = spiSetOpts;
+            Base.HALDigital.SpiSetChipSelectActiveHigh = spiSetChipSelectActiveHigh;
+            Base.HALDigital.SpiSetChipSelectActiveLow = spiSetChipSelectActiveLow;
+            Base.HALDigital.SpiGetHandle = spiGetHandle;
+            Base.HALDigital.SpiSetHandle = spiSetHandle;
+            Base.HALDigital.SpiInitAccumulator = spiInitAccumulator;
+            Base.HALDigital.SpiFreeAccumulator = spiFreeAccumulator;
+            Base.HALDigital.SpiResetAccumulator = spiResetAccumulator;
+            Base.HALDigital.SpiSetAccumulatorCenter = spiSetAccumulatorCenter;
+            Base.HALDigital.SpiSetAccumulatorDeadband = spiSetAccumulatorDeadband;
+            Base.HALDigital.SpiGetAccumulatorLastValue = spiGetAccumulatorLastValue;
+            Base.HALDigital.SpiGetAccumulatorCount = spiGetAccumulatorCount;
+            Base.HALDigital.SpiGetAccumulatorValue = spiGetAccumulatorValue;
+            Base.HALDigital.SpiGetAccumulatorAverage = spiGetAccumulatorAverage;
+            Base.HALDigital.SpiGetAccumulatorOutput = spiGetAccumulatorOutput;
+            Base.HALDigital.I2CInitialize = i2CInitialize;
+            Base.HALDigital.I2CTransaction = i2CTransaction;
+            Base.HALDigital.I2CWrite = i2CWrite;
+            Base.HALDigital.I2CRead = i2CRead;
+            Base.HALDigital.I2CClose = i2CClose;
         }
 
         [CalledSimFunction]
@@ -1109,7 +1110,7 @@ namespace HAL.SimulatorHAL
         public static void spiInitialize(byte port, ref int status)
         {
             status = 0;
-            SimData.SPIAccelerometer[port].Active = true;
+            SPIAccelerometer[port].Active = true;
         }
 
         [CalledSimFunction]
@@ -1132,17 +1133,17 @@ namespace HAL.SimulatorHAL
                     switch (axis)
                     {
                         case 1:
-                            b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
+                            b = BitConverter.GetBytes((short)(SPIAccelerometer[port].X / GsPerLBS));
                             dataReceived[1] = b[0];
                             dataReceived[2] = b[1];
                             break;
                         case 1 << 1:
-                            b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
+                            b = BitConverter.GetBytes((short)(SPIAccelerometer[port].Y / GsPerLBS));
                             dataReceived[1] = b[0];
                             dataReceived[2] = b[1];
                             break;
                         case 1 << 2:
-                            b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                            b = BitConverter.GetBytes((short)(SPIAccelerometer[port].Z / GsPerLBS));
                             dataReceived[1] = b[0];
                             dataReceived[2] = b[1];
                             break;
@@ -1152,7 +1153,7 @@ namespace HAL.SimulatorHAL
             else if (size == 4)
             {
                 //Read range to get msb
-                switch (SimData.SPIAccelerometer[port].Range)
+                switch (SPIAccelerometer[port].Range)
                 {
                     case 0:
                         GsPerLBS = 0.001;
@@ -1170,17 +1171,17 @@ namespace HAL.SimulatorHAL
                 switch (dataToSend[1] - 0x0e)
                 {
                     case 0:
-                        b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
+                        b = BitConverter.GetBytes((short)(SPIAccelerometer[port].X / GsPerLBS));
                         dataReceived[2] = b[0];
                         dataReceived[3] = b[1];
                         break;
                     case 2:
-                        b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
+                        b = BitConverter.GetBytes((short)(SPIAccelerometer[port].Y / GsPerLBS));
                         dataReceived[2] = b[0];
                         dataReceived[3] = b[1];
                         break;
                     case 4:
-                        b = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                        b = BitConverter.GetBytes((short)(SPIAccelerometer[port].Z / GsPerLBS));
                         dataReceived[2] = b[0];
                         dataReceived[3] = b[1];
                         break;
@@ -1189,9 +1190,9 @@ namespace HAL.SimulatorHAL
             else if (size == 7)
             {
                 //ADXL345 Get All Axis
-                byte[] x = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
-                byte[] y = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
-                byte[] z = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                byte[] x = BitConverter.GetBytes((short)(SPIAccelerometer[port].X / GsPerLBS));
+                byte[] y = BitConverter.GetBytes((short)(SPIAccelerometer[port].Y / GsPerLBS));
+                byte[] z = BitConverter.GetBytes((short)(SPIAccelerometer[port].Z / GsPerLBS));
                 dataReceived[1] = x[0];
                 dataReceived[2] = x[1];
                 dataReceived[3] = y[0];
@@ -1202,7 +1203,7 @@ namespace HAL.SimulatorHAL
             else if (size == 8)
             {
                 //Read range to get msb
-                switch (SimData.SPIAccelerometer[port].Range)
+                switch (SPIAccelerometer[port].Range)
                 {
                     case 0:
                         GsPerLBS = 0.001;
@@ -1216,9 +1217,9 @@ namespace HAL.SimulatorHAL
                         break;
                 }
                 //ADXL362 Get All Axis
-                byte[] x = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].X / GsPerLBS));
-                byte[] y = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Y / GsPerLBS));
-                byte[] z = BitConverter.GetBytes((short)(SimData.SPIAccelerometer[port].Z / GsPerLBS));
+                byte[] x = BitConverter.GetBytes((short)(SPIAccelerometer[port].X / GsPerLBS));
+                byte[] y = BitConverter.GetBytes((short)(SPIAccelerometer[port].Y / GsPerLBS));
+                byte[] z = BitConverter.GetBytes((short)(SPIAccelerometer[port].Z / GsPerLBS));
                 dataReceived[2] = x[0];
                 dataReceived[3] = x[1];
                 dataReceived[4] = y[0];
@@ -1246,16 +1247,16 @@ namespace HAL.SimulatorHAL
                     switch (dataToSend[2])
                     {
                         case ((byte)(0x03 | (((int)0 & 0x03) << 6))):
-                            SimData.SPIAccelerometer[port].Range = 0;
+                            SPIAccelerometer[port].Range = 0;
                             break;
                         case ((byte)(0x03 | (((int)1 & 0x03) << 6))):
-                            SimData.SPIAccelerometer[port].Range = 1;
+                            SPIAccelerometer[port].Range = 1;
                             break;
                         case ((byte)(0x03 | (((int)2 & 0x03) << 6))):
-                            SimData.SPIAccelerometer[port].Range = 2;
+                            SPIAccelerometer[port].Range = 2;
                             break;
                         case ((byte)(0x03 | (((int)3 & 0x03) << 6))):
-                            SimData.SPIAccelerometer[port].Range = 3;
+                            SPIAccelerometer[port].Range = 3;
                             break;
                     }
                 }
@@ -1269,16 +1270,16 @@ namespace HAL.SimulatorHAL
                     switch (dataToSend[1])
                     {
                         case (0x08 | 0):
-                            SimData.SPIAccelerometer[port].Range = 0;
+                            SPIAccelerometer[port].Range = 0;
                             break;
                         case (0x08 | 1):
-                            SimData.SPIAccelerometer[port].Range = 1;
+                            SPIAccelerometer[port].Range = 1;
                             break;
                         case (0x08 | 2):
-                            SimData.SPIAccelerometer[port].Range = 2;
+                            SPIAccelerometer[port].Range = 2;
                             break;
                         case (0x08 | 3):
-                            SimData.SPIAccelerometer[port].Range = 3;
+                            SPIAccelerometer[port].Range = 3;
                             break;
                     }
                 }
@@ -1297,7 +1298,7 @@ namespace HAL.SimulatorHAL
         [CalledSimFunction]
         public static void spiClose(byte port)
         {
-            SimData.SPIAccelerometer[port].Active = false;
+            SPIAccelerometer[port].Active = false;
         }
 
         [CalledSimFunction]
@@ -1393,20 +1394,20 @@ namespace HAL.SimulatorHAL
             bool bigEndian, ref int status)
         {
             status = 0;
-            SimData.SPIAccumulator[port].Initialized = true;
+            SPIAccumulator[port].Initialized = true;
         }
 
         public static void spiFreeAccumulator(byte port, ref int status)
         {
             status = 0;
-            SimData.SPIAccumulator[port].Initialized = false;
+            SPIAccumulator[port].Initialized = false;
         }
 
         public static void spiResetAccumulator(byte port, ref int status)
         {
             status = 0;
-            SimData.SPIAccumulator[port].AccumulatorCount = 0;
-            SimData.SPIAccumulator[port].AccumulatorValue = 0;
+            SPIAccumulator[port].AccumulatorCount = 0;
+            SPIAccumulator[port].AccumulatorValue = 0;
         }
 
         public static void spiSetAccumulatorCenter(byte port, int center, ref int status)
@@ -1431,13 +1432,13 @@ namespace HAL.SimulatorHAL
         public static long spiGetAccumulatorValue(byte port, ref int status)
         {
             status = 0;
-            return SimData.SPIAccumulator[port].AccumulatorValue;
+            return SPIAccumulator[port].AccumulatorValue;
         }
 
         public static uint spiGetAccumulatorCount(byte port, ref int status)
         {
             status = 0;
-            return SimData.SPIAccumulator[port].AccumulatorCount;
+            return SPIAccumulator[port].AccumulatorCount;
         }
 
         public static double spiGetAccumulatorAverage(byte port, ref int status)
@@ -1449,8 +1450,8 @@ namespace HAL.SimulatorHAL
         public static void spiGetAccumulatorOutput(byte port, ref long value, ref uint count, ref int status)
         {
             status = 0;
-            value = SimData.SPIAccumulator[port].AccumulatorValue;
-            count = SimData.SPIAccumulator[port].AccumulatorCount;
+            value = SPIAccumulator[port].AccumulatorValue;
+            count = SPIAccumulator[port].AccumulatorCount;
         }
     }
 }

@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,25 +12,25 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALInterrupts.InitializeInterrupts = (global::HAL.HALInterrupts.InitializeInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeInterrupts"), typeof(global::HAL.HALInterrupts.InitializeInterruptsDelegate));
+            Base.HALInterrupts.InitializeInterrupts = (Base.HALInterrupts.InitializeInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeInterrupts"), typeof(Base.HALInterrupts.InitializeInterruptsDelegate));
 
-            global::HAL.HALInterrupts.CleanInterrupts = (global::HAL.HALInterrupts.CleanInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanInterrupts"), typeof(global::HAL.HALInterrupts.CleanInterruptsDelegate));
+            Base.HALInterrupts.CleanInterrupts = (Base.HALInterrupts.CleanInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanInterrupts"), typeof(Base.HALInterrupts.CleanInterruptsDelegate));
 
-            global::HAL.HALInterrupts.WaitForInterrupt = (global::HAL.HALInterrupts.WaitForInterruptDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "waitForInterrupt"), typeof(global::HAL.HALInterrupts.WaitForInterruptDelegate));
+            Base.HALInterrupts.WaitForInterrupt = (Base.HALInterrupts.WaitForInterruptDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "waitForInterrupt"), typeof(Base.HALInterrupts.WaitForInterruptDelegate));
 
-            global::HAL.HALInterrupts.EnableInterrupts = (global::HAL.HALInterrupts.EnableInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "enableInterrupts"), typeof(global::HAL.HALInterrupts.EnableInterruptsDelegate));
+            Base.HALInterrupts.EnableInterrupts = (Base.HALInterrupts.EnableInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "enableInterrupts"), typeof(Base.HALInterrupts.EnableInterruptsDelegate));
 
-            global::HAL.HALInterrupts.DisableInterrupts = (global::HAL.HALInterrupts.DisableInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "disableInterrupts"), typeof(global::HAL.HALInterrupts.DisableInterruptsDelegate));
+            Base.HALInterrupts.DisableInterrupts = (Base.HALInterrupts.DisableInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "disableInterrupts"), typeof(Base.HALInterrupts.DisableInterruptsDelegate));
 
-            global::HAL.HALInterrupts.ReadRisingTimestamp = (global::HAL.HALInterrupts.ReadRisingTimestampDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "readRisingTimestamp"), typeof(global::HAL.HALInterrupts.ReadRisingTimestampDelegate));
+            Base.HALInterrupts.ReadRisingTimestamp = (Base.HALInterrupts.ReadRisingTimestampDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "readRisingTimestamp"), typeof(Base.HALInterrupts.ReadRisingTimestampDelegate));
 
-            global::HAL.HALInterrupts.ReadFallingTimestamp = (global::HAL.HALInterrupts.ReadFallingTimestampDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "readFallingTimestamp"), typeof(global::HAL.HALInterrupts.ReadFallingTimestampDelegate));
+            Base.HALInterrupts.ReadFallingTimestamp = (Base.HALInterrupts.ReadFallingTimestampDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "readFallingTimestamp"), typeof(Base.HALInterrupts.ReadFallingTimestampDelegate));
 
-            global::HAL.HALInterrupts.RequestInterrupts = (global::HAL.HALInterrupts.RequestInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "requestInterrupts"), typeof(global::HAL.HALInterrupts.RequestInterruptsDelegate));
+            Base.HALInterrupts.RequestInterrupts = (Base.HALInterrupts.RequestInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "requestInterrupts"), typeof(Base.HALInterrupts.RequestInterruptsDelegate));
 
-            global::HAL.HALInterrupts.AttachInterruptHandler = (global::HAL.HALInterrupts.AttachInterruptHandlerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "attachInterruptHandler"), typeof(global::HAL.HALInterrupts.AttachInterruptHandlerDelegate));
+            Base.HALInterrupts.AttachInterruptHandler = (Base.HALInterrupts.AttachInterruptHandlerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "attachInterruptHandler"), typeof(Base.HALInterrupts.AttachInterruptHandlerDelegate));
 
-            global::HAL.HALInterrupts.SetInterruptUpSourceEdge = (global::HAL.HALInterrupts.SetInterruptUpSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setInterruptUpSourceEdge"), typeof(global::HAL.HALInterrupts.SetInterruptUpSourceEdgeDelegate));
+            Base.HALInterrupts.SetInterruptUpSourceEdge = (Base.HALInterrupts.SetInterruptUpSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setInterruptUpSourceEdge"), typeof(Base.HALInterrupts.SetInterruptUpSourceEdgeDelegate));
 
         }
     }

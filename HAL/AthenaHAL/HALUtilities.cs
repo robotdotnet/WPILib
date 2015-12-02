@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,11 +12,11 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALUtilities.DelayTicks = (global::HAL.HALUtilities.DelayTicksDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delayTicks"), typeof(global::HAL.HALUtilities.DelayTicksDelegate));
+            Base.HALUtilities.DelayTicks = (Base.HALUtilities.DelayTicksDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delayTicks"), typeof(Base.HALUtilities.DelayTicksDelegate));
 
-            global::HAL.HALUtilities.DelayMillis = (global::HAL.HALUtilities.DelayMillisDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delayMillis"), typeof(global::HAL.HALUtilities.DelayMillisDelegate));
+            Base.HALUtilities.DelayMillis = (Base.HALUtilities.DelayMillisDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delayMillis"), typeof(Base.HALUtilities.DelayMillisDelegate));
 
-            global::HAL.HALUtilities.DelaySeconds = (global::HAL.HALUtilities.DelaySecondsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delaySeconds"), typeof(global::HAL.HALUtilities.DelaySecondsDelegate));
+            Base.HALUtilities.DelaySeconds = (Base.HALUtilities.DelaySecondsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "delaySeconds"), typeof(Base.HALUtilities.DelaySecondsDelegate));
 
         }
     }

@@ -4,8 +4,8 @@ using NetworkTables.Tables;
 using WPILib.CAN;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
-using static HAL.HALCAN;
-using static HAL.HALCAN.Constants;
+using static HAL.Base.HALCAN;
+using static HAL.Base.HALCAN.Constants;
 
 namespace WPILib
 {

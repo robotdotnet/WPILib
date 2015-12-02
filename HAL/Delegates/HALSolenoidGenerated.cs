@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALSolenoid
     {
         static HALSolenoid()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeSolenoidPortDelegate(IntPtr port_pointer, ref int status);

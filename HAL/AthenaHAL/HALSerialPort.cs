@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using HAL.Base;
 
 namespace HAL.Athena
 {
@@ -11,41 +12,41 @@ namespace HAL.Athena
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALSerialPort.SerialInitializePort = (global::HAL.HALSerialPort.SerialInitializePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialInitializePort"), typeof(global::HAL.HALSerialPort.SerialInitializePortDelegate));
+            Base.HALSerialPort.SerialInitializePort = (Base.HALSerialPort.SerialInitializePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialInitializePort"), typeof(Base.HALSerialPort.SerialInitializePortDelegate));
 
-            global::HAL.HALSerialPort.SerialSetBaudRate = (global::HAL.HALSerialPort.SerialSetBaudRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetBaudRate"), typeof(global::HAL.HALSerialPort.SerialSetBaudRateDelegate));
+            Base.HALSerialPort.SerialSetBaudRate = (Base.HALSerialPort.SerialSetBaudRateDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetBaudRate"), typeof(Base.HALSerialPort.SerialSetBaudRateDelegate));
 
-            global::HAL.HALSerialPort.SerialSetDataBits = (global::HAL.HALSerialPort.SerialSetDataBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetDataBits"), typeof(global::HAL.HALSerialPort.SerialSetDataBitsDelegate));
+            Base.HALSerialPort.SerialSetDataBits = (Base.HALSerialPort.SerialSetDataBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetDataBits"), typeof(Base.HALSerialPort.SerialSetDataBitsDelegate));
 
-            global::HAL.HALSerialPort.SerialSetParity = (global::HAL.HALSerialPort.SerialSetParityDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetParity"), typeof(global::HAL.HALSerialPort.SerialSetParityDelegate));
+            Base.HALSerialPort.SerialSetParity = (Base.HALSerialPort.SerialSetParityDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetParity"), typeof(Base.HALSerialPort.SerialSetParityDelegate));
 
-            global::HAL.HALSerialPort.SerialSetStopBits = (global::HAL.HALSerialPort.SerialSetStopBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetStopBits"), typeof(global::HAL.HALSerialPort.SerialSetStopBitsDelegate));
+            Base.HALSerialPort.SerialSetStopBits = (Base.HALSerialPort.SerialSetStopBitsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetStopBits"), typeof(Base.HALSerialPort.SerialSetStopBitsDelegate));
 
-            global::HAL.HALSerialPort.SerialSetWriteMode = (global::HAL.HALSerialPort.SerialSetWriteModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetWriteMode"), typeof(global::HAL.HALSerialPort.SerialSetWriteModeDelegate));
+            Base.HALSerialPort.SerialSetWriteMode = (Base.HALSerialPort.SerialSetWriteModeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetWriteMode"), typeof(Base.HALSerialPort.SerialSetWriteModeDelegate));
 
-            global::HAL.HALSerialPort.SerialSetFlowControl = (global::HAL.HALSerialPort.SerialSetFlowControlDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetFlowControl"), typeof(global::HAL.HALSerialPort.SerialSetFlowControlDelegate));
+            Base.HALSerialPort.SerialSetFlowControl = (Base.HALSerialPort.SerialSetFlowControlDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetFlowControl"), typeof(Base.HALSerialPort.SerialSetFlowControlDelegate));
 
-            global::HAL.HALSerialPort.SerialSetTimeout = (global::HAL.HALSerialPort.SerialSetTimeoutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetTimeout"), typeof(global::HAL.HALSerialPort.SerialSetTimeoutDelegate));
+            Base.HALSerialPort.SerialSetTimeout = (Base.HALSerialPort.SerialSetTimeoutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetTimeout"), typeof(Base.HALSerialPort.SerialSetTimeoutDelegate));
 
-            global::HAL.HALSerialPort.SerialEnableTermination = (global::HAL.HALSerialPort.SerialEnableTerminationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialEnableTermination"), typeof(global::HAL.HALSerialPort.SerialEnableTerminationDelegate));
+            Base.HALSerialPort.SerialEnableTermination = (Base.HALSerialPort.SerialEnableTerminationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialEnableTermination"), typeof(Base.HALSerialPort.SerialEnableTerminationDelegate));
 
-            global::HAL.HALSerialPort.SerialDisableTermination = (global::HAL.HALSerialPort.SerialDisableTerminationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialDisableTermination"), typeof(global::HAL.HALSerialPort.SerialDisableTerminationDelegate));
+            Base.HALSerialPort.SerialDisableTermination = (Base.HALSerialPort.SerialDisableTerminationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialDisableTermination"), typeof(Base.HALSerialPort.SerialDisableTerminationDelegate));
 
-            global::HAL.HALSerialPort.SerialSetReadBufferSize = (global::HAL.HALSerialPort.SerialSetReadBufferSizeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetReadBufferSize"), typeof(global::HAL.HALSerialPort.SerialSetReadBufferSizeDelegate));
+            Base.HALSerialPort.SerialSetReadBufferSize = (Base.HALSerialPort.SerialSetReadBufferSizeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetReadBufferSize"), typeof(Base.HALSerialPort.SerialSetReadBufferSizeDelegate));
 
-            global::HAL.HALSerialPort.SerialSetWriteBufferSize = (global::HAL.HALSerialPort.SerialSetWriteBufferSizeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetWriteBufferSize"), typeof(global::HAL.HALSerialPort.SerialSetWriteBufferSizeDelegate));
+            Base.HALSerialPort.SerialSetWriteBufferSize = (Base.HALSerialPort.SerialSetWriteBufferSizeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialSetWriteBufferSize"), typeof(Base.HALSerialPort.SerialSetWriteBufferSizeDelegate));
 
-            global::HAL.HALSerialPort.SerialGetBytesReceived = (global::HAL.HALSerialPort.SerialGetBytesReceivedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialGetBytesReceived"), typeof(global::HAL.HALSerialPort.SerialGetBytesReceivedDelegate));
+            Base.HALSerialPort.SerialGetBytesReceived = (Base.HALSerialPort.SerialGetBytesReceivedDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialGetBytesReceived"), typeof(Base.HALSerialPort.SerialGetBytesReceivedDelegate));
 
-            global::HAL.HALSerialPort.SerialRead = (global::HAL.HALSerialPort.SerialReadDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialRead"), typeof(global::HAL.HALSerialPort.SerialReadDelegate));
+            Base.HALSerialPort.SerialRead = (Base.HALSerialPort.SerialReadDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialRead"), typeof(Base.HALSerialPort.SerialReadDelegate));
 
-            global::HAL.HALSerialPort.SerialWrite = (global::HAL.HALSerialPort.SerialWriteDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialWrite"), typeof(global::HAL.HALSerialPort.SerialWriteDelegate));
+            Base.HALSerialPort.SerialWrite = (Base.HALSerialPort.SerialWriteDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialWrite"), typeof(Base.HALSerialPort.SerialWriteDelegate));
 
-            global::HAL.HALSerialPort.SerialFlush = (global::HAL.HALSerialPort.SerialFlushDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialFlush"), typeof(global::HAL.HALSerialPort.SerialFlushDelegate));
+            Base.HALSerialPort.SerialFlush = (Base.HALSerialPort.SerialFlushDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialFlush"), typeof(Base.HALSerialPort.SerialFlushDelegate));
 
-            global::HAL.HALSerialPort.SerialClear = (global::HAL.HALSerialPort.SerialClearDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialClear"), typeof(global::HAL.HALSerialPort.SerialClearDelegate));
+            Base.HALSerialPort.SerialClear = (Base.HALSerialPort.SerialClearDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialClear"), typeof(Base.HALSerialPort.SerialClearDelegate));
 
-            global::HAL.HALSerialPort.SerialClose = (global::HAL.HALSerialPort.SerialCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialClose"), typeof(global::HAL.HALSerialPort.SerialCloseDelegate));
+            Base.HALSerialPort.SerialClose = (Base.HALSerialPort.SerialCloseDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "serialClose"), typeof(Base.HALSerialPort.SerialCloseDelegate));
 
         }
     }

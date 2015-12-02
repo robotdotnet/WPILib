@@ -1,8 +1,9 @@
 ﻿using HAL;
+using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL.HAL;
+using static HAL.Base.HAL;
 
 namespace WPILib
 {

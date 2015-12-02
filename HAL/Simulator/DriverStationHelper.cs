@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using HAL.Base;
 
 namespace HAL.Simulator
 {

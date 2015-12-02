@@ -1,10 +1,12 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindows;
-using static HAL.HALDigital;
+using static HAL.Base.HALDigital;
 using static WPILib.Utility;
+using HALDigital = HAL.Base.HALDigital;
 
 namespace WPILib
 {
@@ -23,7 +25,7 @@ namespace WPILib
         {
             InitDigitalPort(channel, false);
 
-            HAL.HAL.Report(ResourceType.kResourceType_DigitalOutput, (byte)channel);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_DigitalOutput, (byte)channel);
         }
 
         /// <summary>

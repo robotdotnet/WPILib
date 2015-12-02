@@ -1,8 +1,9 @@
 ﻿using System;
 using HAL;
 using static WPILib.Utility;
-using static HAL.HAL;
-using static HAL.HALSolenoid;
+using static HAL.Base.HAL;
+using static HAL.Base.HALSolenoid;
+using HALSolenoid = HAL.Base.HALSolenoid;
 
 namespace WPILib
 {

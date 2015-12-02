@@ -1,6 +1,6 @@
-﻿namespace HAL
+﻿namespace HAL.Base
 {
-    public partial class HALDigital
+    public partial class HALCompressor
     {
         public class Constants
         {

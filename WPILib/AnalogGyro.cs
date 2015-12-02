@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 
@@ -93,7 +94,7 @@ namespace WPILib
             PIDSourceType = PIDSourceType.Displacement;
 
 
-            HAL.HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
             LiveWindow.LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
 
             Calibrate();

@@ -2,13 +2,13 @@
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALUtilities
     {
         static HALUtilities()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate void DelayTicksDelegate(int ticks);

@@ -1,9 +1,11 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
+using HALAccelerometer = HAL.Base.HALAccelerometer;
 
 namespace WPILib
 {
@@ -12,7 +14,7 @@ namespace WPILib
         public BuiltInAccelerometer(AccelerometerRange range)
         {
             AccelerometerRange = range;
-            HAL.HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
             LiveWindow.LiveWindow.AddSensor("BuiltInAccel", 0, this);
         }
 

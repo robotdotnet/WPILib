@@ -1,6 +1,7 @@
 ﻿using System;
 using HAL;
 using WPILib.Exceptions;
+using HALInterrupts = HAL.Base.HALInterrupts;
 
 namespace WPILib
 {

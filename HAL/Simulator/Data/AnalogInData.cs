@@ -8,11 +8,11 @@
     {
         private bool m_hasSource = false;
         private bool m_initialized = false;
-        private uint m_averageBits = HALAnalog.DefaultAverageBits;
-        private uint m_oversampleBits = HALAnalog.DefaultOversampleBits;
+        private uint m_averageBits = Base.HALAnalog.DefaultAverageBits;
+        private uint m_oversampleBits = Base.HALAnalog.DefaultOversampleBits;
         private double m_voltage = 0.0;
-        private long m_lsbWeight = HALAnalog.DefaultLSBWeight;
-        private int m_offset = HALAnalog.DefaultOffset;
+        private long m_lsbWeight = Base.HALAnalog.DefaultLSBWeight;
+        private int m_offset = Base.HALAnalog.DefaultOffset;
         private bool m_accumulatorInitialized = false;
         private long m_accumulatorValue = 0;
         private uint m_accumulatorCount = 0;
@@ -26,11 +26,11 @@
         {
             m_hasSource = false;
             m_initialized = false;
-            m_averageBits = HALAnalog.DefaultAverageBits;
-            m_oversampleBits = HALAnalog.DefaultOversampleBits;
+            m_averageBits = Base.HALAnalog.DefaultAverageBits;
+            m_oversampleBits = Base.HALAnalog.DefaultOversampleBits;
             m_voltage = 0.0;
-            m_lsbWeight = HALAnalog.DefaultLSBWeight;
-            m_offset = HALAnalog.DefaultOffset;
+            m_lsbWeight = Base.HALAnalog.DefaultLSBWeight;
+            m_offset = Base.HALAnalog.DefaultOffset;
             m_accumulatorInitialized = false;
             m_accumulatorValue = 0;
             m_accumulatorCount = 0;

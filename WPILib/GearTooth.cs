@@ -1,4 +1,5 @@
 ﻿using HAL;
+using HAL.Base;
 using WPILib.LiveWindows;
 
 namespace WPILib
@@ -49,11 +50,11 @@ namespace WPILib
             DirectionSensing = directionSensitive;
             if (directionSensitive)
             {
-                HAL.HAL.Report(ResourceType.kResourceType_GearTooth, (byte) channel, 0, "D");
+                HAL.Base.HAL.Report(ResourceType.kResourceType_GearTooth, (byte) channel, 0, "D");
             }
             else
             {
-                HAL.HAL.Report(ResourceType.kResourceType_GearTooth, (byte)channel);
+                HAL.Base.HAL.Report(ResourceType.kResourceType_GearTooth, (byte)channel);
             }
             LiveWindow.LiveWindow.AddSensor("GearTooth", channel, this);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL.Base;
 using HAL.Simulator;
 
 // ReSharper disable RedundantAssignment
@@ -13,9 +14,9 @@ namespace HAL.SimulatorHAL
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALUtilities.DelayTicks = delayTicks;
-            global::HAL.HALUtilities.DelayMillis = delayMillis;
-            global::HAL.HALUtilities.DelaySeconds = delaySeconds;
+            Base.HALUtilities.DelayTicks = delayTicks;
+            Base.HALUtilities.DelayMillis = delayMillis;
+            Base.HALUtilities.DelaySeconds = delaySeconds;
         }
 
         /// Return Type: void

@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
-namespace HAL
+namespace HAL.Base
 {
     public interface ILibraryLoader
     {

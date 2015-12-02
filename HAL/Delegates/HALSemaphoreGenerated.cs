@@ -5,13 +5,13 @@ using System.Runtime.InteropServices;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALSemaphore
     {
         static HALSemaphore()
         {
-            global::HAL.HAL.Initialize();
+            HAL.Initialize();
         }
 
         public delegate IntPtr InitializeMutexNormalDelegate();

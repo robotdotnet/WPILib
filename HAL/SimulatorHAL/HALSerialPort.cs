@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using HAL.Base;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -13,24 +14,24 @@ namespace HAL.SimulatorHAL
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            global::HAL.HALSerialPort.SerialInitializePort = serialInitializePort;
-            global::HAL.HALSerialPort.SerialSetBaudRate = serialSetBaudRate;
-            global::HAL.HALSerialPort.SerialSetDataBits = serialSetDataBits;
-            global::HAL.HALSerialPort.SerialSetParity = serialSetParity;
-            global::HAL.HALSerialPort.SerialSetStopBits = serialSetStopBits;
-            global::HAL.HALSerialPort.SerialSetWriteMode = serialSetWriteMode;
-            global::HAL.HALSerialPort.SerialSetFlowControl = serialSetFlowControl;
-            global::HAL.HALSerialPort.SerialSetTimeout = serialSetTimeout;
-            global::HAL.HALSerialPort.SerialEnableTermination = serialEnableTermination;
-            global::HAL.HALSerialPort.SerialDisableTermination = serialDisableTermination;
-            global::HAL.HALSerialPort.SerialSetReadBufferSize = serialSetReadBufferSize;
-            global::HAL.HALSerialPort.SerialSetWriteBufferSize = serialSetWriteBufferSize;
-            global::HAL.HALSerialPort.SerialGetBytesReceived = serialGetBytesReceived;
-            global::HAL.HALSerialPort.SerialRead = serialRead;
-            global::HAL.HALSerialPort.SerialWrite = serialWrite;
-            global::HAL.HALSerialPort.SerialFlush = serialFlush;
-            global::HAL.HALSerialPort.SerialClear = serialClear;
-            global::HAL.HALSerialPort.SerialClose = serialClose;
+            Base.HALSerialPort.SerialInitializePort = serialInitializePort;
+            Base.HALSerialPort.SerialSetBaudRate = serialSetBaudRate;
+            Base.HALSerialPort.SerialSetDataBits = serialSetDataBits;
+            Base.HALSerialPort.SerialSetParity = serialSetParity;
+            Base.HALSerialPort.SerialSetStopBits = serialSetStopBits;
+            Base.HALSerialPort.SerialSetWriteMode = serialSetWriteMode;
+            Base.HALSerialPort.SerialSetFlowControl = serialSetFlowControl;
+            Base.HALSerialPort.SerialSetTimeout = serialSetTimeout;
+            Base.HALSerialPort.SerialEnableTermination = serialEnableTermination;
+            Base.HALSerialPort.SerialDisableTermination = serialDisableTermination;
+            Base.HALSerialPort.SerialSetReadBufferSize = serialSetReadBufferSize;
+            Base.HALSerialPort.SerialSetWriteBufferSize = serialSetWriteBufferSize;
+            Base.HALSerialPort.SerialGetBytesReceived = serialGetBytesReceived;
+            Base.HALSerialPort.SerialRead = serialRead;
+            Base.HALSerialPort.SerialWrite = serialWrite;
+            Base.HALSerialPort.SerialFlush = serialFlush;
+            Base.HALSerialPort.SerialClear = serialClear;
+            Base.HALSerialPort.SerialClose = serialClose;
         }
 
         /// Return Type: void

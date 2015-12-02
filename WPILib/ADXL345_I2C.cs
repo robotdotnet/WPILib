@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL;
+using HAL.Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindows;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
@@ -27,7 +28,7 @@ namespace WPILib
             m_i2C = new I2C(port, Address);
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
             AccelerometerRange = range;
-            HAL.HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
             LiveWindow.LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
         }
 
@@ -44,7 +45,7 @@ namespace WPILib
             m_i2C = new I2C(port, address);
             m_i2C.Write(PowerCtlRegister, (int)PowerCtl.Measure);
             AccelerometerRange = range;
-            HAL.HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_ADXL345, Instances.kADXL345_I2C);
             LiveWindow.LiveWindow.AddSensor("ADXL345_I2C", (byte)port, this);
         }
 

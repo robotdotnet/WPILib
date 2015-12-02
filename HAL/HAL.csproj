@@ -47,7 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>Output\HAL.xml</DocumentationFile>
-	<WarningLevel>4</WarningLevel>
+    <WarningLevel>4</WarningLevel>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -74,7 +74,7 @@
     <Compile Include="AthenaHAL\HALSerialPort.cs" />
     <Compile Include="AthenaHAL\HALSolenoid.cs" />
     <Compile Include="AthenaHAL\HALUtilities.cs" />
-    <Compile Include="LibraryLoader.cs" />
+    <Compile Include="Base\LibraryLoader.cs" />
     <Compile Include="Delegates\HALAccelerometerGenerated.cs" />
     <Compile Include="Delegates\HALAnalogGenerated.cs" />
     <Compile Include="Delegates\HALCANGenerated.cs" />
@@ -90,25 +90,25 @@
     <Compile Include="Delegates\HALSerialPortGenerated.cs" />
     <Compile Include="Delegates\HALSolenoidGenerated.cs" />
     <Compile Include="Delegates\HALUtilitiesGenerated.cs" />
-    <Compile Include="HAL.cs" />
-    <Compile Include="HALAccelerometer.cs" />
-    <Compile Include="HALAnalog.cs" />
-    <Compile Include="HALCAN.cs" />
-    <Compile Include="HALCanTalonSRX.cs" />
-    <Compile Include="HALCompressor.cs" />
-    <Compile Include="HALDigital.cs" />
-    <Compile Include="HALErrors.cs" />
-    <Compile Include="HALInterrupts.cs" />
-    <Compile Include="HALNotifier.cs" />
-    <Compile Include="HALPDP.cs" />
-    <Compile Include="HALPower.cs" />
-    <Compile Include="HALSemaphore.cs" />
-    <Compile Include="HALSerialPort.cs" />
-    <Compile Include="HALSolenoid.cs" />
-    <Compile Include="HALStructures.cs" />
-    <Compile Include="HALUsageReporter.cs" />
-    <Compile Include="HALUtilities.cs" />
-    <Compile Include="ISimulator.cs" />
+    <Compile Include="Base\HAL.cs" />
+    <Compile Include="Base\HALAccelerometer.cs" />
+    <Compile Include="Base\HALAnalog.cs" />
+    <Compile Include="Base\HALCAN.cs" />
+    <Compile Include="Base\HALCanTalonSRX.cs" />
+    <Compile Include="Base\HALCompressor.cs" />
+    <Compile Include="Base\HALDigital.cs" />
+    <Compile Include="Base\HALErrors.cs" />
+    <Compile Include="Base\HALInterrupts.cs" />
+    <Compile Include="Base\HALNotifier.cs" />
+    <Compile Include="Base\HALPDP.cs" />
+    <Compile Include="Base\HALPower.cs" />
+    <Compile Include="Base\HALSemaphore.cs" />
+    <Compile Include="Base\HALSerialPort.cs" />
+    <Compile Include="Base\HALSolenoid.cs" />
+    <Compile Include="Base\HALStructures.cs" />
+    <Compile Include="Base\HALUsageReporter.cs" />
+    <Compile Include="Base\HALUtilities.cs" />
+    <Compile Include="Simulator\ISimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulatorHAL\HAL.cs" />
     <Compile Include="SimulatorHAL\HALAccelerometer.cs" />

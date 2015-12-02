@@ -4,11 +4,13 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using HAL;
+using HAL.Base;
 using static WPILib.Timer;
-using static HAL.HAL;
-using static HAL.HALSemaphore;
-using static HAL.HAL.DriverStationConstants;
+using static HAL.Base.HAL;
+using static HAL.Base.HALSemaphore;
+using static HAL.Base.HAL.DriverStationConstants;
 using static WPILib.Utility;
+using HALPower = HAL.Base.HALPower;
 
 namespace WPILib
 {
@@ -482,7 +484,7 @@ namespace WPILib
                 return "";
             }
             HALJoystickDescriptor desc = new HALJoystickDescriptor();
-            HAL.HAL.HALGetJoystickDescriptor((byte) stick, ref desc);
+            HAL.Base.HAL.HALGetJoystickDescriptor((byte) stick, ref desc);
             return desc.name.ToString();
         }
 

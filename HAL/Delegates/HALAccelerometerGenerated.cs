@@ -1,11 +1,10 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System.Runtime.InteropServices;
-using HAL;
 
 // ReSharper disable CheckNamespace
 
-namespace HAL
+namespace HAL.Base
 {
     public partial class HALAccelerometer
     {

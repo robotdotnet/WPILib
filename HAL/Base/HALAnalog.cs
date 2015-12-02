@@ -1,4 +1,4 @@
-﻿namespace HAL
+﻿namespace HAL.Base
 {
     public partial class HALAnalog
     {
