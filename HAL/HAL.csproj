@@ -47,6 +47,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>Output\HAL.xml</DocumentationFile>
+	<WarningLevel>4</WarningLevel>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
