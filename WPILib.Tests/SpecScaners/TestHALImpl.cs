@@ -27,8 +27,8 @@ namespace WPILib.Tests.SpecScaners
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "..\\..\\HAL-RoboRIO\\Native\\frcnm.exe";
-            p.StartInfo.Arguments = "..\\..\\HAL-RoboRIO\\Native\\libHALAthena.so";
+            p.StartInfo.FileName = "..\\..\\HAL\\AthenaHAL\\Native\\frcnm.exe";
+            p.StartInfo.Arguments = "..\\..\\HAL\\AthenaHAL\\Native\\libHALAthena.so";
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();

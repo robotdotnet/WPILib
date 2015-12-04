@@ -66,7 +66,7 @@ namespace HAL.Athena
             Base.HALDigital.IsPulsing = (Base.HALDigital.IsPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isPulsing"), typeof(Base.HALDigital.IsPulsingDelegate));
 
             Base.HALDigital.IsAnyPulsing = (Base.HALDigital.IsAnyPulsingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "isAnyPulsing"), typeof(Base.HALDigital.IsAnyPulsingDelegate));
-
+            /*
             Base.HALDigital.SetFilterSelect = (Base.HALDigital.SetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterSelect"), typeof(Base.HALDigital.SetFilterSelectDelegate));
 
             Base.HALDigital.GetFilterSelect = (Base.HALDigital.GetFilterSelectDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterSelect"), typeof(Base.HALDigital.GetFilterSelectDelegate));
@@ -74,7 +74,7 @@ namespace HAL.Athena
             Base.HALDigital.SetFilterPeriod = (Base.HALDigital.SetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setFilterPeriod"), typeof(Base.HALDigital.SetFilterPeriodDelegate));
 
             Base.HALDigital.GetFilterPeriod = (Base.HALDigital.GetFilterPeriodDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFilterPeriod"), typeof(Base.HALDigital.GetFilterPeriodDelegate));
-
+            */
             Base.HALDigital.InitializeCounter = (Base.HALDigital.InitializeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeCounter"), typeof(Base.HALDigital.InitializeCounterDelegate));
 
             Base.HALDigital.FreeCounter = (Base.HALDigital.FreeCounterDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freeCounter"), typeof(Base.HALDigital.FreeCounterDelegate));
@@ -170,7 +170,7 @@ namespace HAL.Athena
             Base.HALDigital.SpiSetHandle = (Base.HALDigital.SpiSetHandleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiSetHandleDelegate));
 
 
-
+            /*
             Base.HALDigital.SpiInitAccumulator = (Base.HALDigital.SpiInitAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiInitAccumulatorDelegate));
             Base.HALDigital.SpiFreeAccumulator = (Base.HALDigital.SpiFreeAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiFreeAccumulatorDelegate));
             Base.HALDigital.SpiResetAccumulator = (Base.HALDigital.SpiResetAccumulatorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiResetAccumulatorDelegate));
@@ -182,7 +182,7 @@ namespace HAL.Athena
             Base.HALDigital.SpiGetAccumulatorCount = (Base.HALDigital.SpiGetAccumulatorCountDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiGetAccumulatorCountDelegate));
             Base.HALDigital.SpiGetAccumulatorAverage = (Base.HALDigital.SpiGetAccumulatorAverageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiGetAccumulatorAverageDelegate));
             Base.HALDigital.SpiGetAccumulatorOutput = (Base.HALDigital.SpiGetAccumulatorOutputDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "spiSetHandle"), typeof(Base.HALDigital.SpiGetAccumulatorOutputDelegate));
-
+            */
 
 
             Base.HALDigital.I2CInitialize = (Base.HALDigital.I2CInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "i2CInitialize"), typeof(Base.HALDigital.I2CInitializeDelegate));

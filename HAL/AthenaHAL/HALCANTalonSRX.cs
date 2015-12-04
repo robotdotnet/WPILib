@@ -124,11 +124,11 @@ namespace HAL.Athena
 
             Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPosition = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPositionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthPosition"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthPositionDelegate));
 
-            Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocity = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocityDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthVelocityr"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocityDelegate));
+            Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocity = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocityDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthVelocity"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthVelocityDelegate));
 
-            Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUs = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseRiseToFallUs"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUsDelegate));
+            Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUs = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthRiseToFallUs"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUsDelegate));
 
-            Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUs = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseRiseToRiseUs"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate));
+            Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUs = (Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_GetPulseWidthRiseToRiseUs"), typeof(Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUsDelegate));
 
             Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresent = (Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresentDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "c_TalonSRX_IsPulseWidthSensorPresent"), typeof(Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresentDelegate));
 

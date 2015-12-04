@@ -6,7 +6,7 @@ using HAL.Simulator.Data;
 
 namespace HAL.SimulatorHAL
 {
-    public class PWMHelpers
+    internal class PWMHelpers
     {
         public static double ReverseJaguarPWM(double value)
         {

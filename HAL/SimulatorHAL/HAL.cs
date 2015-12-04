@@ -21,7 +21,7 @@ namespace HAL.SimulatorHAL
     /// This attribute is added to any Sim functions that are called from base.
     /// It helps make sure that our delegates will work.
     /// </summary>
-    public class CalledSimFunction : Attribute { }
+    internal class CalledSimFunction : Attribute { }
 
     /// <summary>
     /// This class is used by HAL-Base, and is used to emulate the HAL. 
