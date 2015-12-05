@@ -38,7 +38,7 @@ namespace WPILib
         public double GetCurrent(int channel)
         {
             int status = 0;
-            double value = GetPDPChannelCurrent((byte)channel, (byte)m_module, ref status);
+            double value = GetPDPChannelCurrent((byte)m_module, (byte)channel, ref status);
             return value;
         }
 
