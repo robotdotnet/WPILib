@@ -22,16 +22,16 @@ namespace WPILib.Extras.NavX
 
         public byte[] Read(byte readSize, DeviceRegisters deviceRegister)
         {
-            m_i2c.LVWrite((byte)deviceRegister, new byte[] { readSize });
+            m_i2c.LvWrite((byte)deviceRegister, new byte[] { readSize });
             byte[] buffer = new byte[readSize];
-            m_i2c.LVRead(new byte[0], readSize, ref buffer);
+            m_i2c.LvRead(new byte[0], readSize, ref buffer);
             return buffer;
         }
 
         public void Write(DeviceRegisters deviceRegister, byte[] message)
         {
             byte reg = (byte)((byte)deviceRegister | 0x80);
-            m_i2c.LVWrite(reg, message);
+            m_i2c.LvWrite(reg, message);
         }
     }
 }

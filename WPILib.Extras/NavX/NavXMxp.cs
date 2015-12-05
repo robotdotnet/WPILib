@@ -141,7 +141,7 @@ namespace WPILib.Extras.NavX
         {
             return (ushort)(low << 8 | high);
         }
-
+        /*
         private byte[] ReadCached(byte readSize, DeviceRegisters register, out bool valid)
         {
             var currentStamp = Utility.GetFPGATime();
@@ -172,17 +172,26 @@ namespace WPILib.Extras.NavX
             Array.Copy(read, (int)register, retVal, 0, readSize);
             return retVal;
         }
-
+        */
         private byte[] Read(byte readSize, DeviceRegisters register, out bool valid)
         {
             byte[] retVal = m_io.Read(readSize, register);
-            valid = retVal.Length > 0;
+            valid = retVal?.Length > 0;
+            if (!valid)
+            {
+                retVal = new byte[readSize];
+            }
             return retVal;
         }
 
         public NavXBoardInfo GetBoardInfo(out bool valid)
         {
-            byte[] read = ReadCached(2, DeviceRegisters.CAPATABILITY_FLAGS_L, out valid);
+            byte[] read = Read(2, DeviceRegisters.CAPATABILITY_FLAGS_L, out valid);
+
+            if (!valid)
+            {
+                read = new byte[2];
+            }
 
             byte read0 = read[0];
 
@@ -201,7 +210,7 @@ namespace WPILib.Extras.NavX
                 boardYawAxis = (byte)(mask / 16);
             }
 
-            byte[] whoamiRet = ReadCached(4, DeviceRegisters.WHOAMI, out valid);
+            byte[] whoamiRet = Read(4, DeviceRegisters.WHOAMI, out valid);
 
             if (whoamiRet == null)
             {
@@ -227,13 +236,18 @@ namespace WPILib.Extras.NavX
         public NavXStatus GetStatus(out bool valid)
         {
             bool UpdateRateReadValid;
-            byte[] read = ReadCached(8, DeviceRegisters.UPDATE_RATE_HZ, out UpdateRateReadValid);
+            byte[] read = Read(8, DeviceRegisters.UPDATE_RATE_HZ, out UpdateRateReadValid);
             bool SensorReadValid;
-            byte[] sensorStatusRead = ReadCached(2, DeviceRegisters.SENSOR_STATUS, out SensorReadValid);
+            byte[] sensorStatusRead = Read(2, DeviceRegisters.SENSOR_STATUS, out SensorReadValid);
 
 
 
             valid = UpdateRateReadValid && SensorReadValid;
+            if (!valid)
+            {
+                read = new byte[8];
+                sensorStatusRead = new byte[2];
+            }
 
             int calStatus = read[5] & (byte)SelfTestStatus.COMPLETE;
             int self = read[6] & (byte)CalStatus.IMU_CAL_STATE_MASK;
@@ -272,13 +286,13 @@ namespace WPILib.Extras.NavX
         public double GetFusedHeading()
         {
             bool valid;
-            byte[] read = ReadCached(2, DeviceRegisters.FUSED_HEADING, out valid);
+            byte[] read = Read(2, DeviceRegisters.FUSED_HEADING, out valid);
             return Combine(read[0], read[1])/ 100.0;
         }
 
         public YPRH GetYPRH(out bool valid)
         {
-            byte[] read = ReadCached(8, DeviceRegisters.YAW, out valid);
+            byte[] read = Read(8, DeviceRegisters.YAW, out valid);
             int yaw = (short)Combine(read[0], read[1]);
             int pitch = (short)Combine(read[2], read[3]);
             int roll = (short)Combine(read[4], read[5]);

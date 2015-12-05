@@ -19,12 +19,12 @@ namespace WPILib.Extras.NavX
 
         public byte CalculateCrc(byte[] message)
         {
-            byte i = 0, j = 0;
-            byte crc = 0;
-            for (i = 0; i < message.Length; ++i)
+            byte i, j, crc = 0;
+
+            for (i = 0; i < message.Length; i++)
             {
                 crc ^= message[i];
-                for (j = 0; j < 8; ++j)
+                for (j = 0; j < 8; j++)
                 {
                     if ((crc & 1) != 0)
                     {
@@ -41,7 +41,11 @@ namespace WPILib.Extras.NavX
         public SpiIO(SPI.Port port)
         {
             m_spi = new SPI(port);
-            m_spi.SetClockRate(2000000);
+            m_spi.SetClockRate(500000);
+            m_spi.SetMSBFirst();
+            m_spi.SetSampleDataOnFalling();
+            m_spi.SetClockActiveLow();
+            m_spi.SetChipSelectActiveLow();
         }
 
         public void Dispose()
@@ -56,12 +60,9 @@ namespace WPILib.Extras.NavX
             m_spi.Write(toWrite, toWrite.Length);
             byte[] readBytes = new byte[readSize + 1];
             m_spi.Read(false, readBytes, readBytes.Length);
-
-            crc = readBytes[readBytes.Length];
-            
+            crc = readBytes[readBytes.Length - 1];
             byte[] readBytesWithoutCrc = new byte[readBytes.Length - 1];
             Array.Copy(readBytes, readBytesWithoutCrc, readBytesWithoutCrc.Length);
-
             byte calcCrc = CalculateCrc(readBytesWithoutCrc);
 
             if (crc != calcCrc) return null;
