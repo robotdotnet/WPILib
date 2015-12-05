@@ -107,7 +107,70 @@ namespace WPILib
             /// </summary>
             FeedbackStatusNotPresent = 2
         }
+        /*
+        /// <summary>
+        /// Enumerated types for Motion Control Set Values
+        /// </summary>
+        /// <remarks>
+        /// When in Motion Profile control mode, these constants are passed into <see cref="Set(double)"/> 
+        /// to manipulate the motion profile executer. When changing modes, be sure to read the value 
+        /// back using <see cref="GetMotionProfileStatus()"/> to ensure changes in output will take 
+        /// effect before performing buffering actions. <para/>Disable will signal Talon to put motor 
+        /// output into neutral drive. Talon will stop processing motion profile points.  This means 
+        /// the buffer is effectively disconnected from the executer, allowing the robot to gracefully 
+        /// clear and push new traj points. <see cref="IsUnderrun"/> will get cleared. The active trajectory is also cleared.
+        /// <para/>
+        /// Enable will signal Talon to pop a trajectory point from it's buffer and process it. If the 
+        /// active trajectory is empty, Talon will shift in the next point. If the active traj is empty, 
+        /// and so is the buffer, the motor drive is neutral and <see cref="IsUnderrun"/> is set. 
+        /// When active traj times out, and buffer has at least one point, Talon shifts in the next one, 
+        /// and <see cref="IsUnderrun"/> is cleared. When active traj times out, and buffer is empty, 
+        /// Talon keeps processing active traj and sets <see cref="IsUnderrun"/>
+        /// <para/>
+        /// Hold will signal Talon to keep processing the Active Trajectory indefinitely. 
+        /// If the active traj is cleared, Talon will neutral motor drive. Otherwise Talon 
+        /// will kepp processing the active traj but it will not shift in points from the buffer. 
+        /// This means the buffer is effectively disconnected from the executer, allowing the robot 
+        /// to gracefully clear and push new traj points. <see cref="IsUnderrun"/> is set if active 
+        /// traj is empty, otherwise it is cleared.  <see cref="IsLast"/> signal is also cleared.
+        /// <para>
+        /// </para>
+        /// Typical Workflow:
+        /// <list class="bullet">
+        /// <listItem><para>Set(disable)</para></listItem>
+        /// <listItem><para>Confirm disable takes effect.</para></listItem>
+        /// <listItem><para>Clear buffer and push buffer points.</para></listItem>
+        /// <listItem><para>Set(enable) when enough points have been pushed to ensure no underruns,
+        /// wait for MP to finish or decide abort.</para></listItem>
+        /// </list>
+        /// </remarks>
+        public enum SetValueMotionProfile
+        {
+            /// <summary>
+            /// Disable the motion profile controller
+            /// </summary>
+            Disable = 0,
+            /// <summary>
+            /// Enable the motion profile controller
+            /// </summary>
+            Enable = 1,
+            /// <summary>
+            /// Hold the motion profile controller in the last valid state.
+            /// </summary>
+            Hold = 2
+        }
 
+        public class TrajectoryPoint
+        {
+             public double Position { get; }
+        }
+
+
+
+        private long _flagsPtr;
+        private long _profileSlotSelectPtr
+
+        */
 
         private ControlMode m_controlMode;
         private readonly IntPtr m_talonPointer;
@@ -131,7 +194,10 @@ namespace WPILib
         /// </summary>
         public const int TalonIds = 62;
 
-        protected static Resource s_talonIds = new Resource(TalonIds);
+        /// <summary>
+        /// Resource list of all the talons that the program knows of and has control of.
+        /// </summary>
+        protected static readonly Resource s_talonIds = new Resource(TalonIds);
 
 
         /// <summary>

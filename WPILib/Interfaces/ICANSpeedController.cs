@@ -32,6 +32,12 @@ namespace WPILib.Interfaces
         /// Runs the controller in Closed Loop Current mode.
         /// </summary>
         Current = 3,
+        /*
+        /// <summary>
+        /// Runs the controller in Motion Profile mode.
+        /// </summary>
+        MotionProfile = 6,
+        */
         /// <summary>
         /// If this mode is set, the controller is disabled.
         /// </summary>
