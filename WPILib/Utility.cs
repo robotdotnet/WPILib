@@ -16,6 +16,7 @@ namespace WPILib
         {
             int status = 0;
             int value = HAL.Base.HAL.GetFPGAVersion(ref status);
+            CheckStatus(status);
             return value;
         }
 
@@ -28,6 +29,7 @@ namespace WPILib
         {
             int status = 0;
             uint value = HAL.Base.HAL.GetFPGARevision(ref status);
+            CheckStatus(status);
             return value;
         }
 
@@ -38,6 +40,7 @@ namespace WPILib
         {
             int status = 0;
             uint value = HAL.Base.HAL.GetFPGATime(ref status);
+            CheckStatus(status);
             return value;
         }
 
@@ -49,7 +52,7 @@ namespace WPILib
         {
             int status = 0;
             bool value = GetFPGAButton(ref status);
-            //CheckStatus(status); //Not calling check status right now because these functions are returning errors. 
+            CheckStatus(status);
             return value;
         }
 
