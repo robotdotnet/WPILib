@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
@@ -14,6 +13,17 @@ namespace WPILib
     /// <summary>
     /// Class to read quadrature encoders.
     /// </summary>
+    /// <remarks>
+    /// Quadrature encoders are devices that count shaft rotation and can sense direction. 
+    /// The output of the QuadEncoder class is an integer that can count either up or down, 
+    /// and can go negative for reverse direction counting. When creating Quad Encoders, a direction 
+    /// is supplied that changes the sense of the output to make code more readable if the encoder 
+    /// is mounter such that forwrd movement generates negative values. Quadrature encoders have 
+    /// two digital outputs, a A channel and a B channel that are out of phase with each other to 
+    /// allow the FPGA to do direction sensing.
+    /// <para/>All encoders will immediately start counting - <see cref="Reset()"/> them if you need 
+    /// them to be zeroed before use.
+    /// </remarks>
     public class Encoder : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
         /// <summary>
@@ -27,15 +37,24 @@ namespace WPILib
             ResetOnRisingEdge,
         }
 
+        /// <summary>
+        /// The A Source
+        /// </summary>
         protected internal DigitalSource m_aSource;
+        /// <summary>
+        /// The B Source
+        /// </summary>
         protected internal DigitalSource m_bSource;
+        /// <summary>
+        /// The Index Source
+        /// </summary>
         protected DigitalSource m_indexSource = null;
 
         private IntPtr m_encoder;
         private int m_index;
 
         private Counter m_counter;
-        private EncodingType m_encodingType = EncodingType.K4X;
+        private readonly EncodingType m_encodingType = EncodingType.K4X;
         private int m_encodingScale;
         private bool m_allocatedA;
         private bool m_allocatedB;
@@ -77,7 +96,14 @@ namespace WPILib
             Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
         }
 
-        public Encoder(int aChannel, int bChannel, bool reverseDirection)
+        /// <summary>
+        /// Construct an Encoder given A and B Channels.
+        /// </summary>
+        /// <remarks>The encoder will start counting immediately.</remarks>
+        /// <param name="aChannel">The A channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="bChannel">The B channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="reverseDirection">True if to reverse the output, otherwise false</param>
+        public Encoder(int aChannel, int bChannel, bool reverseDirection = false)
         {
             m_allocatedA = true;
             m_allocatedB = true;
@@ -87,11 +113,20 @@ namespace WPILib
             InitEncoder(reverseDirection);
         }
 
-        public Encoder(int aChannel, int bChannel) :
-            this(aChannel, bChannel, false)
-        {
-        }
-
+        /// <summary>
+        /// Construct an Encoder given A and B Channels.
+        /// </summary>
+        /// <remarks>The encoder will start counting immediately.
+        /// <para/>
+        /// For encoding type, if 4X is selected, then an encoder FPGA object is used and the returned counts
+        /// will be 4X the encoder spec'd value since all rising and falling edges are counted. If 1X or 2X
+        /// are slected then a counter object will be used and the returned value will either exactly match the
+        /// spec'd count or be double (2x) the spec'd count.
+        /// </remarks>
+        /// <param name="aChannel">The A channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="bChannel">The B channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="reverseDirection">True if to reverse the output, otherwise false</param>
+        /// <param name="encodingType">Either 1X, 2X or 4X to indicate decoding scale.</param>
         public Encoder(int aChannel, int bChannel, bool reverseDirection, EncodingType encodingType)
         {
             m_allocatedA = true;
@@ -103,8 +138,16 @@ namespace WPILib
             InitEncoder(reverseDirection);
         }
 
+        /// <summary>
+        /// Construct an Encoder given A and B Channels, and an Index pulse channel.
+        /// </summary>
+        /// <remarks>The encoder will start counting immediately.</remarks>
+        /// <param name="aChannel">The A channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="bChannel">The B channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="indexChannel">The Index channel DIO channel. 0-9 are on-board, 10-25 are on the MXP port.</param>
+        /// <param name="reverseDirection">True if to reverse the output, otherwise false</param>
         public Encoder(int aChannel, int bChannel,
-            int indexChannel, bool reverseDirection)
+            int indexChannel, bool reverseDirection = false)
         {
             m_allocatedA = true;
             m_allocatedB = true;
@@ -116,13 +159,14 @@ namespace WPILib
             SetIndexSource(indexChannel);
         }
 
-        public Encoder(int aChannel, int bChannel, int indexChannel) :
-            this(aChannel, bChannel, indexChannel, false)
-        {
-
-        }
-
-        public Encoder(DigitalSource aSource, DigitalSource bSource, bool reverseDirection)
+        /// <summary>
+        /// Construct an Encoder given precreated A and B Channels as <see cref="DigitalSource">DigitalSources</see>.
+        /// </summary>
+        /// <remarks>The encoder will start counting immediately.</remarks>
+        /// <param name="aSource">The A channel <see cref="DigitalSource"/></param>
+        /// <param name="bSource">The B channel <see cref="DigitalSource"/></param>
+        /// <param name="reverseDirection">True if to reverse the output, otherwise false</param>
+        public Encoder(DigitalSource aSource, DigitalSource bSource, bool reverseDirection = false)
         {
             m_allocatedA = false;
             m_allocatedB = false;
@@ -136,12 +180,20 @@ namespace WPILib
             InitEncoder(reverseDirection);
         }
 
-        public Encoder(DigitalSource aSource, DigitalSource bSource) :
-            this(aSource, bSource, false)
-        {
-
-        }
-
+        /// <summary>
+        /// Construct an Encoder given precreated A and B Channels as <see cref="DigitalSource">DigitalSources</see>.
+        /// </summary>
+        /// <remarks>The encoder will start counting immediately.
+        /// <para/>
+        /// For encoding type, if 4X is selected, then an encoder FPGA object is used and the returned counts
+        /// will be 4X the encoder spec'd value since all rising and falling edges are counted. If 1X or 2X
+        /// are slected then a counter object will be used and the returned value will either exactly match the
+        /// spec'd count or be double (2x) the spec'd count.
+        /// </remarks>
+        /// <param name="aSource">The A channel <see cref="DigitalSource"/></param>
+        /// <param name="bSource">The B channel <see cref="DigitalSource"/></param>
+        /// <param name="reverseDirection">True if to reverse the output, otherwise false</param>
+        /// <param name="encodingType">Either 1X, 2X or 4X to indicate decoding scale.</param>
         public Encoder(DigitalSource aSource, DigitalSource bSource,
             bool reverseDirection, EncodingType encodingType)
         {
@@ -159,8 +211,16 @@ namespace WPILib
             InitEncoder(reverseDirection);
         }
 
+        /// <summary>
+        /// Construct an Encoder given precreated A, B, and Index Channels as <see cref="DigitalSource">DigitalSources</see>.
+        /// </summary>
+        /// <remarks>The encoder will start counting immediately.</remarks>
+        /// <param name="aSource">The A channel <see cref="DigitalSource"/></param>
+        /// <param name="bSource">The B channel <see cref="DigitalSource"/></param>
+        /// <param name="indexSource">The Index channel <see cref="DigitalSource"/></param>
+        /// <param name="reverseDirection">True if to reverse the output, otherwise false</param>
         public Encoder(DigitalSource aSource, DigitalSource bSource,
-            DigitalSource indexSource, bool reverseDirection)
+            DigitalSource indexSource, bool reverseDirection = false)
         {
             m_allocatedA = false;
             m_allocatedB = false;
@@ -177,16 +237,17 @@ namespace WPILib
             SetIndexSource(indexSource);
         }
 
-        public Encoder(DigitalSource aSource, DigitalSource bSource, DigitalSource indexSource) :
-            this(aSource, bSource, indexSource, false)
-        {
-
-        }
-
+        /// <summary>
+        /// Gets the encoder's FPGA Index.
+        /// </summary>
         public int FPGAIndex => m_index;
 
+        /// <summary>
+        /// Gets the encoder's Encoding Scale, which is used to divide raw edge counts to spec'd counts.
+        /// </summary>
         public int EncodingScale => m_encodingScale;
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             if (m_aSource != null && m_allocatedA)
@@ -221,6 +282,11 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the raw value from the encoder.
+        /// </summary>
+        /// <remarks>The value is the actual count, not scaled by the scale factor.</remarks>
+        /// <returns>The raw count from the encoder</returns>
         public virtual int GetRaw()
         {
             int value;
@@ -237,8 +303,10 @@ namespace WPILib
             return value;
         }
 
+        /// <inheritdoc/>
         public virtual int Get() => (int)(GetRaw() * DecodingScaleFactor);
 
+        /// <inheritdoc/>
         public virtual void Reset()
         {
             if (m_counter != null)
@@ -251,6 +319,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public virtual double GetPeriod()
         {
             double measuredPeriod;
@@ -267,7 +336,9 @@ namespace WPILib
             return measuredPeriod;
         }
 
-        public virtual double MaxPeriod
+
+        /// <inheritdoc/>
+        public double MaxPeriod
         {
             set
             {
@@ -284,7 +355,8 @@ namespace WPILib
             }
         }
 
-        public virtual bool GetStopped()
+        /// <inheritdoc/>
+        public bool GetStopped()
         {
             if (m_counter != null)
             {
@@ -299,7 +371,8 @@ namespace WPILib
             }
         }
 
-        public virtual bool GetDirection()
+        /// <inheritdoc/>
+        public bool GetDirection()
         {
             if (m_counter != null)
             {
@@ -332,17 +405,41 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the distance the robot has driven since the last reset.
+        /// </summary>
+        /// <returns>Distance driven since the last reset scaled by the <see cref="DistancePerPulse"/></returns>
         public virtual double GetDistance() => GetRaw() * DecodingScaleFactor * DistancePerPulse;
 
+        /// <summary>
+        /// Gets the current rate of the encoder in distance per second.
+        /// </summary>
+        /// <returns>The current rate of the encoder scaled by the <see cref="DistancePerPulse"/></returns>
         public virtual double GetRate() => DistancePerPulse / GetPeriod();
 
+        /// <summary>
+        /// Sets the minimum rate of the device before the hardware reports it stopped.
+        /// </summary>
         public double MinRate
         {
             set { MaxPeriod = DistancePerPulse / value; }
         }
 
+        /// <summary>
+        /// Sets the distance per pulse for this encoder.
+        /// </summary>
+        /// <remarks>
+        /// This sets the multiplier used to determine the distance driven based on the count value 
+        /// from the encoder. Do not include the decoding type in the scale. The library arleady compensates 
+        /// for the decoding type. Set this value based on the encoders rated Pulses Per Revolution and factor 
+        /// in gearing reductions following the encoder shaft.
+        /// </remarks>
         public double DistancePerPulse { get; set; }
 
+        /// <summary>
+        /// Sets the direction sensing for this encoder.
+        /// </summary>
+        /// <param name="direction">True if direction should be reversed, otherwise false.</param>
         public void SetReverseDirection(bool direction)
         {
             if (m_counter != null)
@@ -357,6 +454,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or Sets the number of samples to average when caluclating the period.
+        /// </summary>
         public int SamplesToAverage
         {
             set
@@ -398,6 +498,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public PIDSourceType PIDSourceType
         {
             get
@@ -411,6 +512,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public virtual double PidGet()
         {
             switch (m_pidSource)
@@ -424,17 +526,12 @@ namespace WPILib
             }
         }
 
-        public void SetPIDSourceType(PIDSourceType pidSource)
-        {
-            PIDSourceType = pidSource;
-        }
-
-        public PIDSourceType GetPIDSourceType()
-        {
-            return PIDSourceType;
-        }
-
-        public void SetIndexSource(int channel, IndexingType type)
+        /// <summary>
+        /// Sets the index source for the encoder. Resets based on the <see cref="IndexingType"/> passed.
+        /// </summary>
+        /// <param name="channel">The DIO channel to set as the encoder index.</param>
+        /// <param name="type">The state that will cause the encoder to reset.</param>
+        public void SetIndexSource(int channel, IndexingType type = IndexingType.ResetOnRisingEdge)
         {
             int status = 0;
 
@@ -445,12 +542,12 @@ namespace WPILib
             CheckStatus(status);
         }
 
-        public void SetIndexSource(int channel)
-        {
-            SetIndexSource(channel, IndexingType.ResetOnRisingEdge);
-        }
-
-        public void SetIndexSource(DigitalSource source, IndexingType type)
+        /// <summary>
+        /// Sets the index source for the encoder. Resets based on the <see cref="IndexingType"/> passed.
+        /// </summary>
+        /// <param name="source">The <see cref="DigitalSource"/> to set as the encoder index.</param>
+        /// <param name="type">The state that will cause the encoder to reset.</param>
+        public void SetIndexSource(DigitalSource source, IndexingType type = IndexingType.ResetOnRisingEdge)
         {
             int status = 0;
 
@@ -460,11 +557,6 @@ namespace WPILib
             SetEncoderIndexSource(m_encoder, (uint)source.ChannelForRouting,
                 source.AnalogTriggerForRouting, activeHigh, edgeSensitive, ref status);
             CheckStatus(status);
-        }
-
-        public void SetIndexSource(DigitalSource source)
-        {
-            SetIndexSource(source, IndexingType.ResetOnRisingEdge);
         }
 
         ///<inheritdoc />

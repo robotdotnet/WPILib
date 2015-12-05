@@ -29,7 +29,6 @@ namespace WPILib
         private IntPtr m_counter;
         private uint m_index;
         private PIDSourceType m_pidSource;
-        private double m_distancePerPulse;
 
         private void InitCounter(Mode mode)
         {
@@ -43,7 +42,7 @@ namespace WPILib
             m_downSource = null;
 
             MaxPeriod = 0.5;
-            m_distancePerPulse = 1;
+            DistancePerPulse = 1;
 
             Report(ResourceType.kResourceType_Counter, (byte)m_index, (byte)mode);
         }
@@ -106,6 +105,7 @@ namespace WPILib
             SetUpSource(trigger.CreateOutput(AnalogTriggerType.State));
         }
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             UpdateWhenEmpty = true;
@@ -252,6 +252,7 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <inheritdoc/>
         public virtual int Get()
         {
             int status = 0;
@@ -260,8 +261,13 @@ namespace WPILib
             return value;
         }
 
-        public virtual double GetDistance() => Get() * m_distancePerPulse;
+        /// <summary>
+        /// Gets the distance the robot has driven since the last reset.
+        /// </summary>
+        /// <returns>Distance driven since the last reset scaled by the <see cref="DistancePerPulse"/></returns>
+        public virtual double GetDistance() => Get() * DistancePerPulse;
 
+        /// <inheritdoc/>
         public virtual void Reset()
         {
             int status = 0;
@@ -269,6 +275,7 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <inheritdoc/>
         public double MaxPeriod
         {
             set
@@ -289,7 +296,8 @@ namespace WPILib
             }
         }
 
-        public virtual bool GetStopped()
+        /// <inheritdoc/>
+        public bool GetStopped()
         {
             int status = 0;
             bool value = GetCounterStopped(m_counter, ref status);
@@ -297,6 +305,7 @@ namespace WPILib
             return value;
         }
 
+        /// <inheritdoc/>
         public bool GetDirection()
         {
             int status = 0;
@@ -305,6 +314,10 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Sets the direction sensing for this encoder.
+        /// </summary>
+        /// <param name="direction">True if direction should be reversed, otherwise false.</param>
         public void SetReverseDirection(bool direction)
         {
             int status = 0;
@@ -312,6 +325,7 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <inheritdoc/>
         public virtual double GetPeriod()
         {
             int status = 0;
@@ -320,8 +334,15 @@ namespace WPILib
             return value;
         }
 
-        public virtual double GetRate() => m_distancePerPulse / GetPeriod();
+        /// <summary>
+        /// Gets the current rate of the encoder in distance per second.
+        /// </summary>
+        /// <returns>The current rate of the encoder scaled by the <see cref="DistancePerPulse"/></returns>
+        public virtual double GetRate() => DistancePerPulse / GetPeriod();
 
+        /// <summary>
+        /// Gets or Sets the number of samples to average when caluclating the period.
+        /// </summary>
         public int SamplesToAverage
         {
             set
@@ -343,12 +364,18 @@ namespace WPILib
             }
         }
 
-        public double DistancePerPulse
-        {
-            get { return m_distancePerPulse; }
-            set { m_distancePerPulse = value; }
-        }
+        /// <summary>
+        /// Sets the distance per pulse for this encoder.
+        /// </summary>
+        /// <remarks>
+        /// This sets the multiplier used to determine the distance driven based on the count value 
+        /// from the encoder. Do not include the decoding type in the scale. The library arleady compensates 
+        /// for the decoding type. Set this value based on the encoders rated Pulses Per Revolution and factor 
+        /// in gearing reductions following the encoder shaft.
+        /// </remarks>
+        public double DistancePerPulse { get; set; }
 
+        /// <inheritdoc/>
         public PIDSourceType PIDSourceType
         {
             get { return m_pidSource; }
