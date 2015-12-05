@@ -95,13 +95,6 @@ namespace HAL.Base
                 {
                     throw new Exception($"HAL Initialize Failed with return code {rv}");
                 }
-
-                //This next piece of code is to make sure that the Notifier and Interrupt libraries work.
-                //Note that this leaks 6 bytes, but there is no way in the HAL to delete this structure,
-                //And it is leaked on normal use as well. So this is a workaround, and we hope to fix it
-                //When the HAL fixes it.
-                int status = 0;
-                HALDigital.InitializeDigitalPort(GetPort(0), ref status);
             }
         }
 
