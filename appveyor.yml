@@ -33,7 +33,7 @@ on_success:
 
     ./nuget install EWSoftware.SHFB.NETFramework -Version 4.6 -o sbpackages
 
-     & 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe' Sandcastle\SandcastleLocalBuildsOnly.shfbproj /property:Configuration=Release
+     & 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe' Sandcastle\SandcastleXmlOnly.shfbproj /property:Configuration=Release
 
     ./nuget pack "$env:APPVEYOR_BUILD_FOLDER\WPILib\WPILib.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects
 
