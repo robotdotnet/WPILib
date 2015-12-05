@@ -49,7 +49,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static double getPDPChannelCurrent(byte channel, byte module, ref int status)
+        public static double getPDPChannelCurrent(byte module, byte channel, ref int status)
         {
             status = 0;
             return GetPDP(module).Current[channel];

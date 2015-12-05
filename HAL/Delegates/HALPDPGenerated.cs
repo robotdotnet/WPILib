@@ -20,7 +20,7 @@ namespace HAL.Base
         public delegate double GetPDPVoltageDelegate(byte module, ref int status);
         public static GetPDPVoltageDelegate GetPDPVoltage;
 
-        public delegate double GetPDPChannelCurrentDelegate(byte channel, byte module, ref int status);
+        public delegate double GetPDPChannelCurrentDelegate(byte module, byte channel, ref int status);
         public static GetPDPChannelCurrentDelegate GetPDPChannelCurrent;
 
         public delegate double GetPDPTotalCurrentDelegate(byte module, ref int status);
