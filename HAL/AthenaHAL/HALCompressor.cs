@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using HAL.Base;
 
-namespace HAL.Athena
+namespace HAL.AthenaHAL
 {
     [SuppressUnmanagedCodeSecurity]
     internal class HALCompressor

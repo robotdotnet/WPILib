@@ -74,13 +74,13 @@ namespace HAL.Simulator.Mechanisms
         /// <param name="minimumVelocity">The minimum velocity.</param>
         /// <param name="deaccelConstant">The deaccel constant.</param>
         /// <param name="systemInertia">The system inertia.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Shooter Wheels do not support IsAnalog inputs</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Shooter Wheels do not support analog inputs</exception>
         public ShooterWheelMechanism(ISimSpeedController input, IServoFeedback output, DCMotor model,
             bool invertInput, double minimumVelocity, double deaccelConstant, double systemInertia)
         {
             if (output is SimAnalogInput)
             {
-                throw new ArgumentOutOfRangeException(nameof(output), "Shooter Wheels do not support IsAnalog inputs");
+                throw new ArgumentOutOfRangeException(nameof(output), "Shooter Wheels do not support analog inputs");
             }
             m_input = input;
             m_output = output;

@@ -99,20 +99,20 @@ namespace HAL.AthenaHAL
                         throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
                     }
                     Initialize(library, loader);
-                    Athena.HALAccelerometer.Initialize(library, loader);
-                    Athena.HALAnalog.Initialize(library, loader);
-                    Athena.HALCAN.Initialize(library, loader);
-                    Athena.HALCanTalonSRX.Initialize(library, loader);
-                    Athena.HALCompressor.Initialize(library, loader);
-                    Athena.HALDigital.Initialize(library, loader);
-                    Athena.HALInterrupts.Initialize(library, loader);
-                    Athena.HALNotifier.Initialize(library, loader);
-                    Athena.HALPDP.Initialize(library, loader);
-                    Athena.HALPower.Initialize(library, loader);
-                    Athena.HALSemaphore.Initialize(library, loader);
-                    Athena.HALSerialPort.Initialize(library, loader);
-                    Athena.HALSolenoid.Initialize(library, loader);
-                    Athena.HALUtilities.Initialize(library, loader);
+                    HALAccelerometer.Initialize(library, loader);
+                    HALAnalog.Initialize(library, loader);
+                    HALCAN.Initialize(library, loader);
+                    HALCanTalonSRX.Initialize(library, loader);
+                    HALCompressor.Initialize(library, loader);
+                    HALDigital.Initialize(library, loader);
+                    HALInterrupts.Initialize(library, loader);
+                    HALNotifier.Initialize(library, loader);
+                    HALPDP.Initialize(library, loader);
+                    HALPower.Initialize(library, loader);
+                    HALSemaphore.Initialize(library, loader);
+                    HALSerialPort.Initialize(library, loader);
+                    HALSolenoid.Initialize(library, loader);
+                    HALUtilities.Initialize(library, loader);
                 }
                 catch (Exception e)
                 {
