@@ -12,24 +12,24 @@ namespace HAL.Simulator.Mechanisms
         /// <summary>
         /// The m_input
         /// </summary>
-        protected ISimSpeedController m_input;
+        protected readonly ISimSpeedController m_input;
         /// <summary>
         /// The m_output
         /// </summary>
-        protected IServoFeedback m_output;
+        protected readonly IServoFeedback m_output;
         /// <summary>
         /// The m_model
         /// </summary>
-        protected DCMotor m_model;
+        protected readonly DCMotor m_model;
 
         /// <summary>
         /// The m_invert
         /// </summary>
-        protected bool m_invert;
+        protected readonly bool m_invert;
         /// <summary>
         /// The m_minimum velocity
         /// </summary>
-        protected double m_minimumVelocity;
+        protected readonly double m_minimumVelocity;
 
         /// <summary>
         /// Gets or sets the deacceleration constant.
@@ -74,7 +74,7 @@ namespace HAL.Simulator.Mechanisms
         /// <param name="minimumVelocity">The minimum velocity.</param>
         /// <param name="deaccelConstant">The deaccel constant.</param>
         /// <param name="systemInertia">The system inertia.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Shooter Wheels do not support analog inputs</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Shooter Wheels do not support analog inputs</exception>
         public ShooterWheelMechanism(ISimSpeedController input, IServoFeedback output, DCMotor model,
             bool invertInput, double minimumVelocity, double deaccelConstant, double systemInertia)
         {

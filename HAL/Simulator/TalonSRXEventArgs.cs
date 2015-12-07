@@ -6,7 +6,7 @@ namespace HAL.Simulator
     {
         public TalonSRXEventArgs(bool added)
         {
-            this.Added = added;
+            Added = added;
         }
 
         public bool Added { get; }

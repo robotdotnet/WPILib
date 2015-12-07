@@ -1,15 +1,14 @@
-﻿
-using HAL.Simulator.Data;
+﻿using HAL.Simulator.Data;
 
 namespace HAL.Simulator.Inputs
 {
     public class SimAnalogInput : IServoFeedback
     {
-        private AnalogInData AnalogInData = null;
+        private readonly AnalogInData m_analogInData;
          
         public SimAnalogInput(int pin)
         {
-            AnalogInData = SimData.AnalogIn[pin];
+            m_analogInData = SimData.AnalogIn[pin];
         }
 
         //Volts
@@ -19,13 +18,13 @@ namespace HAL.Simulator.Inputs
                 value = 5.0;
             if (value < 0.0)
                 value = 0.0;
-            AnalogInData.Voltage = value;
+            m_analogInData.Voltage = value;
         }
 
         public void SetRate(double rate)
         {
         }
 
-        public double GetVoltage() => AnalogInData.Voltage;
+        public double GetVoltage() => m_analogInData.Voltage;
     }
 }

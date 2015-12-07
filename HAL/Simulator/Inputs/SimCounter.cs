@@ -5,8 +5,8 @@ namespace HAL.Simulator.Inputs
 {
     public class SimCounter : IServoFeedback
     {
-        private readonly CounterData CounterData = null;
-        private readonly bool k2x = true;
+        private readonly CounterData m_counterData = null;
+        private readonly bool m_k2X;
          
         public SimCounter(int pin)
         {
@@ -27,18 +27,19 @@ namespace HAL.Simulator.Inputs
                 throw new InvalidOperationException($"Counter not found for pin {pin}");
             }
 
-            CounterData = SimData.Counter[index];
-            k2x = CounterData.UpFallingEdge;
+            m_counterData = SimData.Counter[index];
+            m_k2X = m_counterData.UpFallingEdge;
         }
 
         public void SetPosition(double value)
         {
-            CounterData.Count = (int)(value * (k2x ? 2 : 1));
+            m_counterData.Count = (int)(value * (m_k2X ? 2 : 1));
         }
 
         public void SetRate(double rate)
         {
             double output;
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (rate == 0)
             {
                 output = double.NaN;
@@ -47,7 +48,7 @@ namespace HAL.Simulator.Inputs
             {
                 output = 1 / rate;
             }
-            CounterData.Period = output;
+            m_counterData.Period = output;
         }
     }
 }

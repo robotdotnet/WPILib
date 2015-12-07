@@ -5,11 +5,11 @@ using System.Threading;
 namespace HAL.Simulator
 {
     /// <summary>
-    /// This class contains static hooks that can be used by simulators to get specific data.
+    /// This class contains static hooks that can be used by simulators to get specific Data.
     /// </summary>
     public static class SimHooks
     {
-        private static Stopwatch s_timer = new Stopwatch();
+        private static readonly Stopwatch s_timer = new Stopwatch();
 
         internal static void RestartTiming()
         {
@@ -43,7 +43,7 @@ namespace HAL.Simulator
         /// <returns></returns>
         public static long GetTime()
         {
-            return (DateTime.UtcNow.Ticks);
+            return DateTime.UtcNow.Ticks;
         }
 
         /// <summary>
@@ -59,7 +59,9 @@ namespace HAL.Simulator
             {
                 Thread.Sleep(milliSeconds - 12);
             }
-            while (sw.ElapsedMilliseconds < milliSeconds) ;
+            while (sw.ElapsedMilliseconds < milliSeconds)
+            {
+            }
         }
 
         /// <summary>
@@ -75,7 +77,9 @@ namespace HAL.Simulator
             {
                 Thread.Sleep(milliSeconds - 12);
             }
-            while (sw.ElapsedMilliseconds < milliSeconds) ;
+            while (sw.ElapsedMilliseconds < milliSeconds)
+            {
+            }
         }
 
         /// <summary>

@@ -62,8 +62,8 @@ namespace HAL.SimulatorHAL
 
         internal static string ExtractLibrary(OsType type)
         {
-            string inputName = "";
-            string outputName = "";
+            string inputName;
+            string outputName;
             switch (type)
             {
                 case OsType.Windows32:
@@ -88,7 +88,7 @@ namespace HAL.SimulatorHAL
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
             outputName = Path.GetTempPath() + outputName;
-            byte[] bytes = null;
+            byte[] bytes;
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
             {
                 if (s == null || s.Length == 0)

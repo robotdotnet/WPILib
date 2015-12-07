@@ -2,8 +2,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using HAL;
-using HAL.Base;
 
 // ReSharper disable CheckNamespace
 

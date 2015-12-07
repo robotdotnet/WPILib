@@ -28,7 +28,7 @@ namespace HAL.Base
         }
 
         //We use this so we can call initialize multiple times, without it crashing with itself
-        private static bool s_initialized = false;
+        private static bool s_initialized;
         //Makes it so if we call initialize from different threads, its safe.
         private static readonly object s_lockObject = new object();
 

@@ -1,8 +1,5 @@
 ﻿// ReSharper disable CheckNamespace
 
-using HAL;
-using HAL.Base;
-
 namespace HAL.Base
 {
     public partial class HALCAN

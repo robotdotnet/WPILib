@@ -65,7 +65,7 @@ namespace HAL.Simulator.Mechanisms
 
             m_checkHome = () =>
             {
-                if (CurrentMeters < (meters + threshold) && CurrentMeters > (meters - threshold))
+                if (CurrentMeters < meters + threshold && CurrentMeters > meters - threshold)
                 {
                     homeInput.Set(rising);
                 }

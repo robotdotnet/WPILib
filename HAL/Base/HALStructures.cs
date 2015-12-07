@@ -287,7 +287,7 @@ namespace HAL.Base
         public byte buttonCount;
 
         /// byte
-        public byte povCount;
+        public readonly byte povCount;
     }
 
 
@@ -1975,12 +1975,12 @@ namespace HAL.Base
 
     public struct HALControlWord
     {
-        private bool m_enabled;
-        private bool m_autonomous;
-        private bool m_test;
-        private bool m_eStop;
-        private bool m_fmsAttached;
-        private bool m_dsAttached;
+        private readonly bool m_enabled;
+        private readonly bool m_autonomous;
+        private readonly bool m_test;
+        private readonly bool m_eStop;
+        private readonly bool m_fmsAttached;
+        private readonly bool m_dsAttached;
 
         public HALControlWord(bool enabled, bool autonomous, bool test, bool eStop,
             bool fmsAttached, bool dsAttached)
@@ -2100,10 +2100,10 @@ namespace HAL.Base
     [StructLayout(LayoutKind.Sequential)]
     public struct CANStreamMessage
     {
-        public uint messageID;
-        public uint timeStamp;
+        public readonly uint messageID;
+        public readonly uint timeStamp;
         public CANDataArray data;
-        public byte dataSize;
+        public readonly byte dataSize;
     }
 
     [StructLayout(LayoutKind.Sequential)]

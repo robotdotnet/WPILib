@@ -1,9 +1,6 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System;
-using HAL;
-using HAL.Base;
-
 // ReSharper disable CheckNamespace
 
 namespace HAL.Base

@@ -67,6 +67,7 @@ namespace HAL.Simulator.Data
         /// <param name="action">The callback function to cancel.</param>
         public void Cancel(string key, Action<string, dynamic> action)
         {
+            // ReSharper disable once DelegateSubtraction
             if (action != null && m_callbacks.ContainsKey(key)) m_callbacks[key] -= action;
         }
 

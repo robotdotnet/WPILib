@@ -33,12 +33,12 @@ namespace HAL.SimulatorHAL
         public const double AutonomousTime = 15.0;
         public const double TeleopTime = 135.0;
 
-        private static bool libraryLoaded = false;
-        private static IntPtr library;
+        private static bool s_libraryLoaded = false;
+        private static IntPtr s_library;
 
         public static void InitializeImpl()
         {
-            if (!libraryLoaded)
+            if (!s_libraryLoaded)
             {
                 try
                 {
@@ -54,22 +54,25 @@ namespace HAL.SimulatorHAL
 
                     if (library == IntPtr.Zero) throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
                     */
+                    s_library = IntPtr.Zero;
                     ILibraryLoader loader = null;
-                    Initialize(library, loader);
-                    HALAccelerometer.Initialize(library, loader);
-                    HALAnalog.Initialize(library, loader);
-                    HALCAN.Initialize(library, loader);
-                    HALCanTalonSRX.Initialize(library, loader);
-                    HALCompressor.Initialize(library, loader);
-                    HALDigital.Initialize(library, loader);
-                    HALInterrupts.Initialize(library, loader);
-                    HALNotifier.Initialize(library, loader);
-                    HALPDP.Initialize(library, loader);
-                    HALPower.Initialize(library, loader);
-                    HALSemaphore.Initialize(library, loader);
-                    HALSerialPort.Initialize(library, loader);
-                    HALSolenoid.Initialize(library, loader);
-                    HALUtilities.Initialize(library, loader);
+                    // ReSharper disable ExpressionIsAlwaysNull
+                    Initialize(s_library, loader);
+                    HALAccelerometer.Initialize(s_library, loader);
+                    HALAnalog.Initialize(s_library, loader);
+                    HALCAN.Initialize(s_library, loader);
+                    HALCanTalonSRX.Initialize(s_library, loader);
+                    HALCompressor.Initialize(s_library, loader);
+                    HALDigital.Initialize(s_library, loader);
+                    HALInterrupts.Initialize(s_library, loader);
+                    HALNotifier.Initialize(s_library, loader);
+                    HALPDP.Initialize(s_library, loader);
+                    HALPower.Initialize(s_library, loader);
+                    HALSemaphore.Initialize(s_library, loader);
+                    HALSerialPort.Initialize(s_library, loader);
+                    HALSolenoid.Initialize(s_library, loader);
+                    HALUtilities.Initialize(s_library, loader);
+                    // ReSharper restore ExpressionIsAlwaysNull
                 }
                 catch (Exception e)
                 {
@@ -77,7 +80,7 @@ namespace HAL.SimulatorHAL
                     Console.WriteLine(e.StackTrace);
                     Environment.Exit(1);
                 }
-                libraryLoaded = true;
+                s_libraryLoaded = true;
             }
         }
 
@@ -150,7 +153,6 @@ namespace HAL.SimulatorHAL
                     catch (Exception)
                     {
                         //If loading fails, its probably native. Just skip it.
-                        continue;
                     }
 
                 }
@@ -359,7 +361,7 @@ namespace HAL.SimulatorHAL
             else if (code == HALErrorConstants.SPI_READ_NO_MISO)
                 retVal = "HAL: Cannot read from SPI port with no MISO input";
             else if (code == HALErrorConstants.SPI_READ_NO_DATA)
-                retVal = "HAL: No data available to read from SPI";
+                retVal = "HAL: No Data available to read from SPI";
             else if (code == HALErrorConstants.INCOMPATIBLE_STATE)
                 retVal = "HAL: Incompatible State: The operation cannot be completed";
             else if (code == HALErrorConstants.NO_AVAILABLE_RESOURCES)
@@ -430,7 +432,7 @@ namespace HAL.SimulatorHAL
         }
 
         /// <summary>
-        /// Sets the HAL error data
+        /// Sets the HAL error Data
         /// </summary>
         /// <param name="errors"></param>
         /// <param name="wait_ms"></param>
@@ -528,7 +530,7 @@ namespace HAL.SimulatorHAL
         public static int HALGetJoystickDescriptor(byte joystickNum, ref HALJoystickDescriptor desc)
         {
             var stick = DriverStation.Joysticks[joystickNum];
-            desc.isXbox = (byte)(stick.IsXbox);
+            desc.isXbox = (byte)stick.IsXbox;
             desc.type = stick.Type;
             CreateUTF8String(stick.Name, ref desc.name);//stick.Name;
             desc.axisCount = (byte)stick.Axes.Length;

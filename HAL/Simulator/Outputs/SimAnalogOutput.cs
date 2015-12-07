@@ -4,16 +4,16 @@ namespace HAL.Simulator.Outputs
 {
     class SimAnalogOutput
     {
-        AnalogOutData AnalogOutData = null;
+        readonly AnalogOutData m_analogOutData;
 
         public SimAnalogOutput(int pin)
         {
-            AnalogOutData = SimData.AnalogOut[pin];
+            m_analogOutData = SimData.AnalogOut[pin];
         }
 
         public double Get()
         {
-            return AnalogOutData.Voltage;
+            return m_analogOutData.Voltage;
         }
     }
 }

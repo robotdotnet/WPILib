@@ -20,7 +20,7 @@ namespace HAL.SimulatorHAL
     [StructLayout(LayoutKind.Sequential)]
     internal struct SEMAPHORE_ID
     {
-        public Semaphore semaphore;
+        public readonly Semaphore semaphore;
         //public object lockObject;
     }
 

@@ -14,12 +14,10 @@ namespace HAL.AthenaHAL
     {
         private static string ExtractLibrary()
         {
-            string inputName = "";
-            string outputName = "";
-            inputName = "HAL.AthenaHAL.Native.libHALAthena.so";
-            outputName = "libHALAthena.so";
+            var inputName = "HAL.AthenaHAL.Native.libHALAthena.so";
+            var outputName = "libHALAthena.so";
             outputName = Path.GetTempPath() + outputName;
-            byte[] bytes = null;
+            byte[] bytes;
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
             {
                 if (s == null || s.Length == 0)
@@ -73,46 +71,46 @@ namespace HAL.AthenaHAL
 
         }
 
-        private static bool libraryLoaded = false;
-        private static IntPtr library;
+        private static bool s_libraryLoaded;
+        private static IntPtr s_library;
 
         public static void InitializeImpl()
         {
-            if (!libraryLoaded)
+            if (!s_libraryLoaded)
             {
                 try
                 {
                     //Force OS, since we know we are on Linux and the RIO if this is getting called
                     ILibraryLoader loader = new RoboRioLibraryLoader();
 
-                    //Extract our library
+                    //Extract our s_library
                     string loadedPath = ExtractLibrary();
                     if (string.IsNullOrEmpty(loadedPath))
                     {
                         //If fail to load, throw exception
-                        throw new FileNotFoundException($"Library file could not be found in the resorces. Please contact RobotDotNet for support for this issue");
+                        throw new FileNotFoundException("Library file could not be found in the resorces. Please contact RobotDotNet for support for this issue");
                     }
-                    library = loader.LoadLibrary(loadedPath);
-                    if (library == IntPtr.Zero)
+                    s_library = loader.LoadLibrary(loadedPath);
+                    if (s_library == IntPtr.Zero)
                     {
-                        //If library could not be loaded
+                        //If s_library could not be loaded
                         throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
                     }
-                    Initialize(library, loader);
-                    HALAccelerometer.Initialize(library, loader);
-                    HALAnalog.Initialize(library, loader);
-                    HALCAN.Initialize(library, loader);
-                    HALCanTalonSRX.Initialize(library, loader);
-                    HALCompressor.Initialize(library, loader);
-                    HALDigital.Initialize(library, loader);
-                    HALInterrupts.Initialize(library, loader);
-                    HALNotifier.Initialize(library, loader);
-                    HALPDP.Initialize(library, loader);
-                    HALPower.Initialize(library, loader);
-                    HALSemaphore.Initialize(library, loader);
-                    HALSerialPort.Initialize(library, loader);
-                    HALSolenoid.Initialize(library, loader);
-                    HALUtilities.Initialize(library, loader);
+                    Initialize(s_library, loader);
+                    HALAccelerometer.Initialize(s_library, loader);
+                    HALAnalog.Initialize(s_library, loader);
+                    HALCAN.Initialize(s_library, loader);
+                    HALCanTalonSRX.Initialize(s_library, loader);
+                    HALCompressor.Initialize(s_library, loader);
+                    HALDigital.Initialize(s_library, loader);
+                    HALInterrupts.Initialize(s_library, loader);
+                    HALNotifier.Initialize(s_library, loader);
+                    HALPDP.Initialize(s_library, loader);
+                    HALPower.Initialize(s_library, loader);
+                    HALSemaphore.Initialize(s_library, loader);
+                    HALSerialPort.Initialize(s_library, loader);
+                    HALSolenoid.Initialize(s_library, loader);
+                    HALUtilities.Initialize(s_library, loader);
                 }
                 catch (Exception e)
                 {
@@ -120,7 +118,7 @@ namespace HAL.AthenaHAL
                     Console.WriteLine(e.StackTrace);
                     Environment.Exit(1);
                 }
-                libraryLoaded = true;
+                s_libraryLoaded = true;
             }
         }
 

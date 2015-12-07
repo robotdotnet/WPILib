@@ -82,13 +82,13 @@ namespace HAL.SimulatorHAL
                 case ControllerType.Jaguar:
                     return ReverseJaguarPWM(transVal);
                 case ControllerType.Talon:
-                    return ReverseTalonPWM((double)transVal);
+                    return ReverseTalonPWM(transVal);
                 case ControllerType.TalonSRX:
-                    return ReverseTalonSRXPWM((double)transVal);
+                    return ReverseTalonSRXPWM(transVal);
                 case ControllerType.Victor:
-                    return ReverseVictorPWM((double)transVal);
+                    return ReverseVictorPWM(transVal);
                 case ControllerType.VictorSP:
-                    return ReverseVictorSPPWM((double)transVal);
+                    return ReverseVictorSPPWM(transVal);
                 case ControllerType.Servo:
                     return 0.0;
                 default:

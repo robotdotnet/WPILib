@@ -97,6 +97,7 @@ namespace HAL.Simulator.Inputs
         public void SetRate(double rate)
         {
             double output;
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (rate == 0)
             {
                 output = double.NaN;

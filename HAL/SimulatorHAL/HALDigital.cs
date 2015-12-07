@@ -6,6 +6,7 @@ using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using static HAL.Simulator.SimData;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -510,7 +511,7 @@ namespace HAL.SimulatorHAL
             else
             {
                 pin = pin - 1;
-                uint trigIndex = (pin >> 2);
+                uint trigIndex = pin >> 2;
                 counter.UpSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
             }
 
@@ -526,7 +527,7 @@ namespace HAL.SimulatorHAL
                 }
                 else
                 {
-                    uint trigIndex = (pin >> 2);
+                    uint trigIndex = pin >> 2;
                     SetCounterUpAsTwoPulseAnalog(counter, (int)trigIndex);
                 }
                 setCounterUpSourceEdge(counter_pointer, true, false, ref status);
@@ -652,7 +653,7 @@ namespace HAL.SimulatorHAL
         public static void clearCounterUpSource(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            var counter = Counter[PortConverters.GetCounter((counter_pointer)).idx];
+            var counter = Counter[PortConverters.GetCounter(counter_pointer).idx];
 
             if (counter.UpCallback != null)
             {
@@ -701,7 +702,7 @@ namespace HAL.SimulatorHAL
             else
             {
                 pin = pin - 1;
-                uint trigIndex = (pin >> 2);
+                uint trigIndex = pin >> 2;
                 counter.DownSourceChannel = (uint)SimData.AnalogTrigger[(int)trigIndex].AnalogPin;
             }
 
@@ -716,7 +717,7 @@ namespace HAL.SimulatorHAL
                 }
                 else
                 {
-                    uint trigIndex = (pin >> 2);
+                    uint trigIndex = pin >> 2;
                     SetCounterDownAsTwoPulseAnalog(counter, (int)trigIndex);
                 }
             }
@@ -724,7 +725,7 @@ namespace HAL.SimulatorHAL
 
         private static void SetCounterDownAsTwoPulseDigital(CounterData counter, int pin)
         {
-            bool prevValue = DIO[(int)pin].Value;
+            bool prevValue = DIO[pin].Value;
 
             Action<string, dynamic> downCallback = (key, value) =>
             {
@@ -757,7 +758,7 @@ namespace HAL.SimulatorHAL
 
             counter.DownCallback = downCallback;
 
-            DIO[(int)pin].Register("Value", downCallback);
+            DIO[pin].Register("Value", downCallback);
         }
 
         private static void SetCounterDownAsTwoPulseAnalog(CounterData counter, int trigIndex)
@@ -838,7 +839,7 @@ namespace HAL.SimulatorHAL
         public static void clearCounterDownSource(IntPtr counter_pointer, ref int status)
         {
             status = 0;
-            var counter = Counter[PortConverters.GetCounter((counter_pointer)).idx];
+            var counter = Counter[PortConverters.GetCounter(counter_pointer).idx];
 
             if (counter.DownCallback != null)
             {
@@ -1031,14 +1032,14 @@ namespace HAL.SimulatorHAL
         public static int getEncoder(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (int)Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Count;
+            return Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Count;
         }
 
         [CalledSimFunction]
         public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
         {
             status = 0;
-            return (double)Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Period;
+            return Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Period;
         }
 
 
@@ -1246,16 +1247,16 @@ namespace HAL.SimulatorHAL
                     //We are setting range
                     switch (dataToSend[2])
                     {
-                        case ((byte)(0x03 | (((int)0 & 0x03) << 6))):
+                        case 0x03 | ((0 & 0x03) << 6):
                             SPIAccelerometer[port].Range = 0;
                             break;
-                        case ((byte)(0x03 | (((int)1 & 0x03) << 6))):
+                        case 0x03 | ((1 & 0x03) << 6):
                             SPIAccelerometer[port].Range = 1;
                             break;
-                        case ((byte)(0x03 | (((int)2 & 0x03) << 6))):
+                        case 0x03 | ((2 & 0x03) << 6):
                             SPIAccelerometer[port].Range = 2;
                             break;
-                        case ((byte)(0x03 | (((int)3 & 0x03) << 6))):
+                        case 0x03 | ((3 & 0x03) << 6):
                             SPIAccelerometer[port].Range = 3;
                             break;
                     }
@@ -1269,16 +1270,16 @@ namespace HAL.SimulatorHAL
                     //We are writing range
                     switch (dataToSend[1])
                     {
-                        case (0x08 | 0):
+                        case 0x08 | 0:
                             SPIAccelerometer[port].Range = 0;
                             break;
-                        case (0x08 | 1):
+                        case 0x08 | 1:
                             SPIAccelerometer[port].Range = 1;
                             break;
-                        case (0x08 | 2):
+                        case 0x08 | 2:
                             SPIAccelerometer[port].Range = 2;
                             break;
-                        case (0x08 | 3):
+                        case 0x08 | 3:
                             SPIAccelerometer[port].Range = 3;
                             break;
                     }
@@ -1305,14 +1306,12 @@ namespace HAL.SimulatorHAL
         public static void spiSetSpeed(byte port, uint speed)
         {
             //We don't care
-            return;
         }
 
         [CalledSimFunction]
         public static void spiSetOpts(byte port, int msb_first, int sample_on_trailing, int clk_idle_high)
         {
             //We don't care
-            return;
         }
 
 
@@ -1320,7 +1319,6 @@ namespace HAL.SimulatorHAL
         public static void spiSetChipSelectActiveHigh(byte port, ref int status)
         {
             //We don't care
-            return;
         }
 
 
@@ -1328,7 +1326,6 @@ namespace HAL.SimulatorHAL
         public static void spiSetChipSelectActiveLow(byte port, ref int status)
         {
             //We don't care
-            return;
         }
 
         [CalledSimFunction]
@@ -1342,7 +1339,6 @@ namespace HAL.SimulatorHAL
         public static void spiSetHandle(byte port, int handle)
         {
             //We don't care
-            return;
         }
 
         [CalledSimFunction]

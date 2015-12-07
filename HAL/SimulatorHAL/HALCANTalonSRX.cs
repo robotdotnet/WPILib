@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
-using HAL.Simulator;
 using static HAL.Simulator.SimData;
 
 // ReSharper disable RedundantAssignment
@@ -354,7 +353,7 @@ namespace HAL.SimulatorHAL
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_GetCurrent(IntPtr handle, ref double param)
         {
-            param = (double)GetCanTalon(PortConverters.GetTalonSRX(handle)).Current;
+            param = GetCanTalon(PortConverters.GetTalonSRX(handle)).Current;
             return CTR_Code.CTR_OKAY;
         }
 
@@ -424,7 +423,7 @@ namespace HAL.SimulatorHAL
         [CalledSimFunction]
         public static CTR_Code c_TalonSRX_GetTemp(IntPtr handle, ref double param)
         {
-            param = (double)GetCanTalon(PortConverters.GetTalonSRX(handle)).Temp;
+            param = GetCanTalon(PortConverters.GetTalonSRX(handle)).Temp;
             return CTR_Code.CTR_OKAY;
         }
 

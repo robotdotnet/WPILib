@@ -150,8 +150,8 @@ namespace HAL.Simulator.Mechanisms
         /// <param name="staticFriction">The static friction.</param>
         /// <param name="dynamicFriction">The dynamic friction.</param>
         public DriveWheelMechanism(DCMotor motor, ISimSpeedController input, double wheelbaseXM, double wheelDiameterM, IServoFeedback output,
-            double wheelStaticCoef = 1.07, double wheelDynamicCoef = 0.1, double staticFriction = 0.1, double dynamicFriction = 0.01) : 
-            this(motor, input, wheelbaseXM, wheelDiameterM, wheelStaticCoef, wheelDynamicCoef, 
+            double wheelStaticCoef = 1.07, double wheelDynamicCoef = 0.1, double staticFriction = 0.1, double dynamicFriction = 0.01) :
+            this(motor, input, wheelbaseXM, wheelDiameterM, wheelStaticCoef, wheelDynamicCoef,
                 staticFriction, dynamicFriction)
         {
             m_output = output;
@@ -170,7 +170,7 @@ namespace HAL.Simulator.Mechanisms
             double mechAdvantage = 1 / WheelDiameter;
             double massShare = massKg / numberOfWheels;
             double normalForce = massShare * 9.806; // Multiplied by gravity
-            double metersPerSecondPerRadianPerSecond = (WheelDiameter/2);
+            double metersPerSecondPerRadianPerSecond = WheelDiameter / 2;
 
             double ySpeed = botVel[1] + botVel[2] / XPosition;
             double xSpeed = botVel[0];
@@ -198,7 +198,7 @@ namespace HAL.Simulator.Mechanisms
 
             double newRps = CurrentRadiansPerSecond + Acceleration * seconds;
 
-            CurrentRadians += 0.5*(newRps * CurrentRadiansPerSecond) * seconds;
+            CurrentRadians += 0.5 * (newRps * CurrentRadiansPerSecond) * seconds;
 
             CurrentRadiansPerSecond = newRps;
 

@@ -14,7 +14,7 @@ namespace HAL.Simulator.Extensions
         /// <returns>Radians</returns>
         public static double ToRadians(this double degrees)
         {
-            return (Math.PI / 180) * degrees;
+            return Math.PI / 180 * degrees;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace HAL.Simulator.Extensions
         /// <returns>Degrees</returns>
         public static double ToDegrees(this double radians)
         {
-            return (180/Math.PI)*radians;
+            return 180/Math.PI*radians;
         }
 
         /// <summary>

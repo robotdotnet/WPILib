@@ -72,7 +72,7 @@ namespace HAL.Simulator.Mechanisms
 
             m_checkHome = () =>
             {
-                if (AdjustedRadians < (radians + threshold) && AdjustedRadians > (radians - threshold))
+                if (AdjustedRadians < radians + threshold && AdjustedRadians > radians - threshold)
                 {
                     homeInput.Set(rising);
                 }

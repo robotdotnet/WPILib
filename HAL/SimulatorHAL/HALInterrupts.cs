@@ -26,7 +26,7 @@ namespace HAL.SimulatorHAL
         public const int NumInterrupts = 8;
 
         //Holds a list of our interrupts
-        internal static Interrupt[] Interrupts = new Interrupt[NumInterrupts];
+        internal static readonly Interrupt[] Interrupts = new Interrupt[NumInterrupts];
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
