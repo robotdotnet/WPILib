@@ -131,38 +131,17 @@ namespace WPILib
 
         public int GetInt(string key, int backup)
         {
-            try
-            {
-                return (int)m_table.GetNumber(key);
-            }
-            catch (TableKeyNotDefinedException)
-            {
-                return backup;
-            }
+            return (int)m_table.GetNumber(key, backup);
         }
 
         public long GetLong(string key, long backup)
         {
-            try
-            {
-                return (long)m_table.GetNumber(key);
-            }
-            catch (TableKeyNotDefinedException)
-            {
-                return backup;
-            }
+            return (long)m_table.GetNumber(key, backup);
         }
 
         public float GetFloat(string key, float backup)
         {
-            try
-            {
-                return (float)m_table.GetNumber(key);
-            }
-            catch (TableKeyNotDefinedException)
-            {
-                return backup;
-            }
+            return (float)m_table.GetNumber(key, backup);
         }
     }
 }

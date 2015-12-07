@@ -236,5 +236,45 @@ namespace WPILib.Tests
         {
             throw new NotImplementedException();
         }
+
+        public object GetValue(string key, object defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListenerEx(Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListenerEx(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool localNotify)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddTableListener(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -44,14 +44,11 @@ namespace WPILib.SmartDashboard
         public static ISendable GetData(string key)
         {
             ITable subtable = s_table.GetSubTable(key);
-            try
-            {
-                return s_tablesToData[subtable];
-            }
-            catch (KeyNotFoundException)
-            {
-                throw new ArgumentOutOfRangeException(nameof(key), "SmartDashboard data does not exist: " + key);
-            }
+
+            ISendable value;
+            var valid = s_tablesToData.TryGetValue(subtable, out value);
+            if (valid) return value;
+            throw new ArgumentOutOfRangeException(nameof(key), "SmartDashboard data does not exist: " + key);
         }
 
         public static void PutBoolean(string key, bool value)
@@ -59,6 +56,7 @@ namespace WPILib.SmartDashboard
             s_table.PutBoolean(key, value);
         }
 
+        [Obsolete("Please use the Default Value Get... Method instead.")]
         public static bool GetBoolean(string key)
         {
             return s_table.GetBoolean(key);
@@ -74,6 +72,7 @@ namespace WPILib.SmartDashboard
             s_table.PutString(key, value);
         }
 
+        [Obsolete("Please use the Default Value Get... Method instead.")]
         public static string GetString(string key)
         {
             return s_table.GetString(key);
@@ -89,6 +88,7 @@ namespace WPILib.SmartDashboard
             s_table.PutNumber(key, value);
         }
 
+        [Obsolete("Please use the Default Value Get... Method instead.")]
         public static double GetNumber(string key)
         {
             return s_table.GetNumber(key);
@@ -97,6 +97,54 @@ namespace WPILib.SmartDashboard
         public static double GetNumber(string key, double defaultValue)
         {
             return s_table.GetNumber(key, defaultValue);
+        }
+
+        public static void PutBooleanArray(string key, bool[] value)
+        {
+            s_table.PutBooleanArray(key, value);
+        }
+
+        [Obsolete("Please use the Default Value Get... Method instead.")]
+        public static bool[] GetBooleanArray(string key)
+        {
+            return s_table.GetBooleanArray(key);
+        }
+
+        public static bool[] GetBooleanArray(string key, bool[] defaultValue)
+        {
+            return s_table.GetBooleanArray(key, defaultValue);
+        }
+
+        public static void PutStringArray(string key, string[] value)
+        {
+            s_table.PutStringArray(key, value);
+        }
+
+        [Obsolete("Please use the Default Value Get... Method instead.")]
+        public static string[] GetStringArray(string key)
+        {
+            return s_table.GetStringArray(key);
+        }
+
+        public static string[] GetStringArray(string key, string[] defaultValue)
+        {
+            return s_table.GetStringArray(key, defaultValue);
+        }
+
+        public static void PutNumberArray(string key, double[] value)
+        {
+            s_table.PutNumberArray(key, value);
+        }
+
+        [Obsolete("Please use the Default Value Get... Method instead.")]
+        public static double[] GetNumberArray(string key)
+        {
+            return s_table.GetNumberArray(key);
+        }
+
+        public static double[] GetNumberArray(string key, double[] defaultValue)
+        {
+            return s_table.GetNumberArray(key, defaultValue);
         }
     }
 }
