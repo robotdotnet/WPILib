@@ -4,7 +4,7 @@ namespace HAL.Simulator.Outputs
 {
     public class SimCANTalon : ISimSpeedController
     {
-        public CanTalonData Data { get; };
+        public CanTalonData Data { get; }
         public SimCANTalon(int id)
         {
             Data = SimData.GetCanTalon(id);
