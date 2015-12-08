@@ -13,31 +13,18 @@ namespace WPILib.LiveWindow
     /// </summary>
     internal class LiveWindowComponent
     {
-        private string m_subsystem;
-        private string m_name;
-        private bool m_isSensor;
-
         public LiveWindowComponent(string subsystem, string name, bool isSensor)
         {
-            m_isSensor = isSensor;
-            m_subsystem = subsystem;
-            m_name = name;
+            IsSensor = isSensor;
+            Subsystem = subsystem;
+            Name = name;
         }
 
-        public string GetName()
-        {
-            return m_name;
-        }
+        public string Name { get; }
 
-        public string GetSubsystem()
-        {
-            return m_subsystem;
-        }
+        public string Subsystem { get; }
 
-        public bool IsSensor()
-        {
-            return m_isSensor;
-        }
+        public bool IsSensor { get; }
     }
 
     /// <summary>
@@ -45,8 +32,8 @@ namespace WPILib.LiveWindow
     /// </summary>
     public class LiveWindow
     {
-        private static List<ILiveWindowSendable> s_sensors = new List<ILiveWindowSendable>();
-        private static Dictionary<ILiveWindowSendable, LiveWindowComponent> s_components = new Dictionary<ILiveWindowSendable, LiveWindowComponent>();
+        private static readonly List<ILiveWindowSendable> s_sensors = new List<ILiveWindowSendable>();
+        private static readonly Dictionary<ILiveWindowSendable, LiveWindowComponent> s_components = new Dictionary<ILiveWindowSendable, LiveWindowComponent>();
         private static ITable s_liveWindowTable;
         private static ITable s_statusTable;
         private static bool s_liveWindowEnabled = false;
@@ -68,8 +55,8 @@ namespace WPILib.LiveWindow
             foreach (var component in s_components.Keys)
             {
                 LiveWindowComponent c = s_components[component];
-                string subsystem = c.GetSubsystem();
-                string name = c.GetName();
+                string subsystem = c.Subsystem;
+                string name = c.Name;
                 Console.WriteLine("Initializing table for '" + subsystem + "' '" + name + "'");
                 s_liveWindowTable.GetSubTable(subsystem).PutString("~TYPE~", "LW Subsystem");
                 ITable table = s_liveWindowTable.GetSubTable(subsystem).GetSubTable(name);
@@ -77,7 +64,7 @@ namespace WPILib.LiveWindow
                 table.PutString("Name", name);
                 table.PutString("Subsystem", subsystem);
                 component.InitTable(table);
-                if (c.IsSensor())
+                if (c.IsSensor)
                 {
                     s_sensors.Add(component);
                 }
@@ -145,13 +132,9 @@ namespace WPILib.LiveWindow
         /// <param name="component">A LiveWindowSendable component that represents a sensor.</param>
         public static void AddSensor(string subsystem, string name, ILiveWindowSendable component)
         {
-            try
+            if (!s_components.ContainsKey(component))
             {
                 s_components.Add(component, new LiveWindowComponent(subsystem, name, true));
-            }
-            catch (ArgumentException)
-            {
-                //Component already exists. So we don't need to add it again.
             }
         }
 
@@ -163,15 +146,10 @@ namespace WPILib.LiveWindow
         /// <param name="component">A LiveWindowSendable component that represents an actuator.</param>
         public static void AddActuator(string subsystem, string name, ILiveWindowSendable component)
         {
-            try
+            if (!s_components.ContainsKey(component))
             {
                 s_components.Add(component, new LiveWindowComponent(subsystem, name, false));
             }
-            catch (ArgumentException)
-            {
-                //Component already exists. So we don't need to add it again.
-            }
-
         }
 
         /// <summary>

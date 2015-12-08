@@ -7,7 +7,13 @@ namespace WPILib.Buttons
     /// </summary>
     public class NetworkButton : Button
     {
+        /// <summary>
+        /// Gets the source Network Table.
+        /// </summary>
         public NetworkTable SourceTable { get; }
+        /// <summary>
+        /// Gets the key in the network table the button is checking for.
+        /// </summary>
         public string Field { get; }
 
         /// <summary>

@@ -19,11 +19,11 @@ namespace WPILib.SmartDashboard
     /// </remarks>
     public class SendableChooser : ISendable
     {
-        private static readonly string DEFAULT = "default";
+        private const string Default = "default";
 
-        private static readonly string SELECTED = "selected";
+        private const string Selected = "selected";
 
-        private static readonly string OPTIONS = "options";
+        private const string Options = "options";
 
         private readonly List<string> m_choices = new List<string>();
         private readonly List<object> m_values = new List<object>();
@@ -64,7 +64,7 @@ namespace WPILib.SmartDashboard
             m_choices.Add(name);
             m_values.Add(obj);
 
-            Table?.PutStringArray(OPTIONS, m_choices.ToArray());
+            Table?.PutStringArray(Options, m_choices.ToArray());
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace WPILib.SmartDashboard
 
             m_defaultChoice = name;
             m_defaultValue = obj;
-            Table?.PutString(DEFAULT, m_defaultChoice);
+            Table?.PutString(Default, m_defaultChoice);
             AddObject(name, obj);
         }
 
@@ -95,7 +95,7 @@ namespace WPILib.SmartDashboard
         /// <returns>The option selected</returns>
         public object GetSelected()
         {
-            string selected = Table.GetString(SELECTED, null);
+            string selected = Table.GetString(Selected, null);
             for (int i = 0; i < m_values.Count; ++i)
             {
                 if (m_choices[i].Equals(selected))
@@ -107,31 +107,24 @@ namespace WPILib.SmartDashboard
         }
 
 
-        /// <summary>
-        /// Initialize a table for this sendable object.
-        /// </summary>
-        /// <param name="subtable">The table to put the values in.</param>
+        /// <inheritdoc/>
         public void InitTable(ITable subtable)
         {
             Table = subtable;
             if (Table != null)
             {
-                Table.PutStringArray(OPTIONS, m_choices.ToArray());
+                Table.PutStringArray(Options, m_choices.ToArray());
                 if (m_defaultChoice != null)
                 {
-                    Table.PutString(DEFAULT, m_defaultChoice);
+                    Table.PutString(Default, m_defaultChoice);
                 }
             }
         }
 
-        /// <summary>
-        /// Returns the table that is currently associated with the sendable
-        /// </summary>
+        /// <inheritdoc/>
         public ITable Table { get; private set; }
 
-        /// <summary>
-        /// Returns the string representation of the named data type that will be used by the smart dashboard for this sendable
-        /// </summary>
+        /// <inheritdoc/>
         public string SmartDashboardType => "String Chooser";
     }
 }

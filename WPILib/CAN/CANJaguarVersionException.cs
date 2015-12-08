@@ -14,7 +14,7 @@ namespace WPILib.CAN
         /// <summary>
         /// The Minimum RDK Firmware Version
         /// </summary>
-        public const int MinRDKFirmwareVersion = 3330;
+        public const int MinRdkFirmwareVersion = 3330;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CANJaguarVersionException"/> class
@@ -30,7 +30,7 @@ namespace WPILib.CAN
         private static string GetString(int deviceNumber, int fwVersion)
         {
             string msg;
-            msg = fwVersion < MinRDKFirmwareVersion ? 
+            msg = fwVersion < MinRdkFirmwareVersion ? 
                 $"Jaguar {deviceNumber} firmware is too old. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!" 
                 : $"Jaguar {deviceNumber} firmware is not FIRST approved. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!";
             return msg;

@@ -26,7 +26,6 @@ namespace WPILib
     /// <para/> stable values.</remarks>
     public class AnalogInput : SensorBase, IPIDSource, ILiveWindowSendable
     {
-        //private static int AccumulatorSlot = 1;
         private static readonly Resource s_channels = new Resource(AnalogInputChannels);
         private IntPtr m_port;
         private static readonly int[] s_accumulatorChannels = { 0, 1 };
@@ -56,9 +55,7 @@ namespace WPILib
             Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
 
-        /// <summary>
-        /// Channel destructor.
-        /// </summary>
+        /// <inheritdoc/>
         public override void Dispose()
         {
             FreeAnalogInputPort(m_port);
@@ -127,6 +124,13 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Gets the factory scaling least significant bit weight constant that was calibrated
+        /// at manufacturing.
+        /// </summary>
+        /// <remarks>
+        /// Volts = ((<see cref="LSBWeight"/> * 1e-9) * raw) - (<see cref="Offset"/> * 1e-9)
+        /// </remarks>
         public long LSBWeight
         {
             get
@@ -138,6 +142,12 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the factory scaling offset constant that was calibrated at manufacturing.
+        /// </summary>
+        /// <remarks>
+        /// Volts = ((<see cref="LSBWeight"/> * 1e-9) * raw) - (<see cref="Offset"/> * 1e-9)
+        /// </remarks>
         public int Offset
         {
             get
@@ -149,8 +159,18 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the channel of this Analog Input.
+        /// </summary>
         public int Channel { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the averaging bits of this analog input.
+        /// </summary>
+        /// <remarks>
+        /// The actual number of averaged samples is 2^bits. The averaging is done
+        /// automatically in the FPGA.
+        /// </remarks>
         public int AverageBits
         {
             set
@@ -168,6 +188,13 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or Sets the number of oversample bits
+        /// </summary>
+        /// <remarks>
+        /// The actual number of oversampled values is 2^bits. The oversampling is done
+        /// automatically in the FPGA.
+        /// </remarks>
         public int OversampleBits
         {
             set

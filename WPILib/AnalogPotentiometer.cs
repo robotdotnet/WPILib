@@ -26,45 +26,51 @@ namespace WPILib
             m_analogInput = input;
         }
 
-        public AnalogPotentiometer(int channel, double fullRange, double offset)
+        /// <summary>
+        /// Creates a new Analog Potentiometer on the specified channel.
+        /// </summary>
+        /// <remarks>
+        /// Use the fullRange and offset values so that the output produces meaningful
+        /// values. I.E: you have a 270 degree potentiometer and you want the output to
+        /// be degrees with the halfway point at 0 degrees. The fullRange value is 270.0(degrees)
+        /// and the offset is -135.0 since the halfway point after scaling is 135 degrees.
+        /// <para/>
+        /// This will calculate the result from the fullRange times the fraction of the
+        /// supply voltage, plus the offset.
+        /// </remarks>
+        /// <param name="channel">The channel this potentiometer is plugged into.</param>
+        /// <param name="fullRange">The scaling to multiply the fraction by to get a 
+        /// meaningful unit.</param>
+        /// <param name="offset">The offset to add to the scaled value for controlling the
+        /// zero value.</param>
+        public AnalogPotentiometer(int channel, double fullRange = 1, double offset = 0)
         {
             AnalogInput input = new AnalogInput(channel);
             m_initAnalogInput = true;
             InitPot(input, fullRange, offset);
         }
 
-        public AnalogPotentiometer(AnalogInput input, double fullRange, double offset)
+        /// <summary>
+        /// Creates a new Analog Potentiometer with the precreated input.
+        /// </summary>
+        /// <remarks>
+        /// Use the fullRange and offset values so that the output produces meaningful
+        /// values. I.E: you have a 270 degree potentiometer and you want the output to
+        /// be degrees with the halfway point at 0 degrees. The fullRange value is 270.0(degrees)
+        /// and the offset is -135.0 since the halfway point after scaling is 135 degrees.
+        /// <para/>
+        /// This will calculate the result from the fullRange times the fraction of the
+        /// supply voltage, plus the offset.
+        /// </remarks>
+        /// <param name="input">The <see cref="AnalogInput"/> this potentiometer is plugged into.</param>
+        /// <param name="fullRange">The scaling to multiply the fraction by to get a 
+        /// meaningful unit.</param>
+        /// <param name="offset">The offset to add to the scaled value for controlling the
+        /// zero value.</param>
+        public AnalogPotentiometer(AnalogInput input, double fullRange = 1, double offset = 0)
         {
             m_initAnalogInput = false;
             InitPot(input, fullRange, offset);
-        }
-
-        public AnalogPotentiometer(int channel, double scale)
-            : this(channel, scale, 0)
-        {
-        }
-
-        public AnalogPotentiometer(AnalogInput input, double scale)
-            : this(input, scale, 0)
-        {
-        }
-
-        /// <summary>
-        /// AnalogPotentiometer constructor
-        /// </summary>
-        /// <param name="channel">The analog channel this potentiometer is plugged into.</param>
-        public AnalogPotentiometer(int channel)
-            : this(channel, 1, 0)
-        {
-        }
-
-        /// <summary>
-        /// AnalogPotentiometer constructor
-        /// </summary>
-        /// <param name="input">The <see cref="AnalogInput"/> this potentiometer is plugged into.</param>
-        public AnalogPotentiometer(AnalogInput input)
-            : this(input, 1, 0)
-        {
         }
 
         /// <summary>

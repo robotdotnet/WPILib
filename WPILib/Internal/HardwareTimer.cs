@@ -62,7 +62,7 @@ namespace WPILib.Internal
             private double m_accumulatedTime;
             private bool m_running;
 
-            private object m_lockObject = new object();
+            private readonly object m_lockObject = new object();
 
             /// <summary>
             /// Create a new timer object

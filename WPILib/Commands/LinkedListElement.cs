@@ -2,9 +2,9 @@
 {
     internal class LinkedListElement
     {
-        private LinkedListElement next;
-        private LinkedListElement previous;
-        private Command data;
+        private LinkedListElement m_next;
+        private LinkedListElement m_previous;
+        private Command m_data;
 
         public LinkedListElement()
         {
@@ -13,62 +13,62 @@
 
         public void SetData(Command newData)
         {
-            data = newData;
+            m_data = newData;
         }
 
         public Command GetData()
         {
-            return data;
+            return m_data;
         }
 
         public LinkedListElement GetNext()
         {
-            return next;
+            return m_next;
         }
 
         public LinkedListElement GetPrevious()
         {
-            return previous;
+            return m_previous;
         }
 
         public void Add(LinkedListElement l)
         {
-            if (next == null)
+            if (m_next == null)
             {
-                next = l;
-                next.previous = this;
+                m_next = l;
+                m_next.m_previous = this;
             }
             else
             {
-                next.previous = l;
-                l.next = next;
-                l.previous = this;
-                next = l;
+                m_next.m_previous = l;
+                l.m_next = m_next;
+                l.m_previous = this;
+                m_next = l;
             }
         }
 
         public LinkedListElement Remove()
         {
-            if (previous == null && next == null)
+            if (m_previous == null && m_next == null)
             {
                 
             }
-            else if (next == null)
+            else if (m_next == null)
             {
-                previous.next = null;
+                m_previous.m_next = null;
             }
-            else if (previous == null)
+            else if (m_previous == null)
             {
-                next.previous = null;
+                m_next.m_previous = null;
             }
             else
             {
-                next.previous = previous;
-                previous.next = next;
+                m_next.m_previous = m_previous;
+                m_previous.m_next = m_next;
             }
-            LinkedListElement n = next;
-            next = null;
-            previous = null;
+            LinkedListElement n = m_next;
+            m_next = null;
+            m_previous = null;
             return n;
         }
     }

@@ -17,6 +17,9 @@ namespace WPILib
         private static double kCalibrationSampleTime = 5.0;
         private static double kDefaultVoltsPerDegreePerSecond = 0.007;
 
+        /// <summary>
+        /// The <see cref="AnalogInput"/> that this gyro uses.
+        /// </summary>
         protected AnalogInput m_analog;
         private double m_offset;
         private int m_center;
@@ -50,6 +53,10 @@ namespace WPILib
             m_analog.ResetAccumulator();
         }
 
+        /// <summary>
+        /// Creates a new Analog Gyro on the specified channel.
+        /// </summary>
+        /// <param name="channel">The channel the gyro is on.</param>
         public AnalogGyro(int channel)
         {
             AnalogInput aIn = new AnalogInput(channel);
@@ -65,6 +72,10 @@ namespace WPILib
             m_channelAllocated = true;
         }
 
+        /// <summary>
+        /// Creates a new Analog Gyro with an existing <see cref="AnalogInput"/>.
+        /// </summary>
+        /// <param name="channel">The analog input this gyro is attached to.</param>
         public AnalogGyro(AnalogInput channel)
         {
             CreateGyro(channel);
@@ -165,6 +176,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or sets the sensitivity of the gyroscope.
+        /// </summary>
         public double Sensitivity { get; set; }
 
         private double Deadband

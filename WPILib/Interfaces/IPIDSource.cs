@@ -1,20 +1,5 @@
 ﻿namespace WPILib.Interfaces
 {
-    /*
-    /// <summary>
-    /// A description for the type of output value to provide to a <see cref="PIDController"/>
-    /// </summary>
-    public enum PIDSourceParameter
-    {
-        ///The source is a Distance
-        Distance = 0,
-        ///The source is a Rate
-        Rate = 1,
-        ///The source is an Angle
-        Angle = 2,
-    }
-    */
-
     /// <summary>
     /// The PID source type for this PID source.
     /// </summary>

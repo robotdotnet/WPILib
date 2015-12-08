@@ -9,8 +9,8 @@ namespace WPILib.Buttons
     public abstract class ButtonScheduler
     {
         protected bool m_pressedLast;
-        protected Trigger m_button;
-        protected Command m_command;
+        protected readonly Trigger m_button;
+        protected readonly Command m_command;
 
 
         protected ButtonScheduler(bool last, Trigger button, Command orders)

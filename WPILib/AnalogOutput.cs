@@ -14,7 +14,7 @@ namespace WPILib
     /// </summary>
     public class AnalogOutput : SensorBase, ILiveWindowSendable
     {
-        private static Resource s_channels = new Resource(AnalogOutputChannels);
+        private static readonly Resource s_channels = new Resource(AnalogOutputChannels);
         private IntPtr m_port;
         private int m_channel;
 

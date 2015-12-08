@@ -412,9 +412,9 @@ namespace WPILib.Commands
             internal const int BRANCH_CHILD = 2;
 
 
-            internal Command command;
-            internal int state;
-            internal double timeout;
+            internal readonly Command command;
+            internal readonly int state;
+            internal readonly double timeout;
 
             internal Entry(Command command, int state)
             {

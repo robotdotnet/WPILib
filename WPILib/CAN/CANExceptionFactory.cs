@@ -23,7 +23,7 @@ namespace WPILib.CAN
         public const int kRIOStatusResourceNotInitialized = -52010;
 // ReSharper restore InconsistentNaming
 
-        public static void CheckStatus(int status, int messageID)
+        public static void CheckStatus(int status, int messageId)
         {
             switch (status)
             {
@@ -38,7 +38,7 @@ namespace WPILib.CAN
                     throw new CANMessageNotFoundException();
                 case ERR_CANSessionMux_NotAllowed:
                 case kRIOStatusFeatureNotSupported:
-                    throw new CANMessageNotAllowedException("MessageID = " + messageID);
+                    throw new CANMessageNotAllowedException("MessageID = " + messageId);
                 case ERR_CANSessionMux_NotInitialized:
                 case kRIOStatusResourceNotInitialized:
                     throw new CANNotInitializedException();

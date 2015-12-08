@@ -8,7 +8,7 @@ namespace WPILib.Exceptions
     public class UncleanStatusException : InvalidOperationException
     {
 
-        private int m_statusCode;
+        private readonly int m_statusCode;
 
         /// <summary>
         /// Create a new UncleanStatusException
@@ -35,7 +35,7 @@ namespace WPILib.Exceptions
         /// Create a new UncleanStatusException
         /// </summary>
         /// <param name="message">A message describing the exception</param>
-        public UncleanStatusException(String message) : this(-1, message)
+        public UncleanStatusException(string message) : this(-1, message)
         {
         }
 
