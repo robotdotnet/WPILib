@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL.Simulator.Data;
 
 namespace HAL.Simulator.Extensions
 {
@@ -45,6 +46,28 @@ namespace HAL.Simulator.Extensions
         public static double ToMeters(this double inches)
         {
             return inches * 0.0254;
+        }
+
+        /// <summary>
+        /// Converts Rotations Per Minute to Radians Per Second.
+        /// </summary>
+        /// <param name="rpms">Rotations Per Minute</param>
+        /// <returns>Radians Per Second</returns>
+        public static double RpmsToRadiansPerSecond(this double rpms)
+        {
+            double radiansPerMinute = rpms * 2 * Math.PI;
+            return radiansPerMinute / 60.0; 
+        }
+
+        /// <summary>
+        /// Converts Radians Per Second to Rotations Per Minute
+        /// </summary>
+        /// <param name="radiansPerSecond">Radians Per Second</param>
+        /// <returns>Rotations Per Minute</returns>
+        public static double RadiansPerSecondToRpms(this double radiansPerSecond)
+        {
+            double radiansPerMinute = radiansPerSecond * 60.0;
+            return radiansPerMinute / (2 * Math.PI);
         }
     }
 }

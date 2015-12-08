@@ -5,8 +5,22 @@ using HAL.Simulator.Outputs;
 namespace HAL.Simulator.Mechanisms
 {
     /// <summary>
-    /// 
+    /// Mechanism for simulating a shooter wheel.
     /// </summary>
+    /// <remarks>
+    /// This class can be used to simulate a shooter wheel. It has been tested mainly using a Bang-Bang control scheme. 
+    /// In order to use this you will need a model for your motor. In addition, you will need to know the inertia of your
+    /// system, and the drag that your system has on it.
+    /// <para/>
+    /// The drag realistically can only be found experimentally. To find this, spin the wheel up to a known speed, and start
+    /// graphing velocity over time. Velocity should be in Radians Per Second, however it can be in RPMs, which can be converted
+    /// later. Once you are ready, turn off the motor while graphing. Stop graphing when the velocity hits zero. The acceleration is
+    /// the slope of this graph, which should be fairly linear. Make sure this number is in Radians Per Second Squared, 
+    /// and make sure to keep the negative. A good estimate for this number should be around -80 Radians Per Second Squared.
+    /// <para/>
+    /// The system inertia can be found using one of two methods. The first is experimentally. The second is to calculate the inertial manually.
+    /// For reference, this will be around 0.005.
+    /// </remarks>
     public class ShooterWheelMechanism
     {
         /// <summary>
@@ -131,7 +145,7 @@ namespace HAL.Simulator.Mechanisms
 
             double alpha = currentTorque / SystemInertia;
             alpha *= pwmValue;
-            alpha -= DeaccelerationConstant;
+            alpha += DeaccelerationConstant;
 
             double delta = alpha * seconds;
 

@@ -84,6 +84,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Mechanisms\ShooterWheelMechansimTest.cs" />
     <Compile Include="TestADXL345SPI.cs" />
     <Compile Include="TestADXL362.cs" />
     <Compile Include="Commands\AbstractCommandTest.cs" />
