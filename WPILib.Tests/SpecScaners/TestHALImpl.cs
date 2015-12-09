@@ -17,7 +17,7 @@ namespace WPILib.Tests.SpecScaners
     public class TestHALImpl
     {
         [Test]
-        [Ignore("Ignoring until we get a good reliable drop")]
+        //[Ignore("Ignoring until we get a good reliable drop")]
         public void TestHALRoboRioMapsToNativeAssemblySymbols()
         {
             var halRoboRioSymbols = NetProjects.GetHALRoboRioNativeSymbols();
