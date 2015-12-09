@@ -1,9 +1,9 @@
 [
   {
-    "Version": "jenkins-stable-2015.340-247-g5c82146",
+    "Version": "jenkins-stable-2015.340-254-g6851dee",
     "Site": "http://www.tortall.net/~robotpy/hal",
     "FileName": "libHALAthena.so",
     "OutputLocation": "libHALAthena.so",
-    "MD5": "167253241139107122229281997872272161091810"
+    "MD5": "102103156237427676391222168410815010014548"
   },
 ]
