@@ -11,9 +11,9 @@ namespace WPILib.Extras
     /// </summary>
     public enum CallContext
     {
-        ///Called on the first time code enters the mode
+        /// <summary>Called on the first time code enters the mode.</summary>
         Init,
-        ///Called every time after the first time.
+        /// <summary>Called every time after the first time.</summary>
         Execute,
     }
 
