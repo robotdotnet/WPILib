@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL.Simulator.Extensions;
 using HAL.Simulator.Inputs;
 using HAL.Simulator.Outputs;
 
@@ -19,7 +20,7 @@ namespace HAL.Simulator.Mechanisms
     /// and make sure to keep the negative. A good estimate for this number should be around -80 Radians Per Second Squared.
     /// <para/>
     /// The system inertia can be found using one of two methods. The first is experimentally. The second is to calculate the inertial manually.
-    /// For reference, this will be around 0.005.
+    /// For reference, this should be around 0.003 if using an unweighted 6 inch wheel.
     /// </remarks>
     public class ShooterWheelMechanism
     {
@@ -46,6 +47,11 @@ namespace HAL.Simulator.Mechanisms
         protected readonly double m_minimumVelocity;
 
         /// <summary>
+        /// The sensor CPR.
+        /// </summary>
+        protected readonly double m_cpr;
+
+        /// <summary>
         /// Gets or sets the deacceleration constant.
         /// </summary>
         /// <value>
@@ -70,6 +76,11 @@ namespace HAL.Simulator.Mechanisms
         public double CurrentRadiansPerSecond { get; protected set; }
 
         /// <summary>
+        /// Gets the current rotations per minute.
+        /// </summary>
+        public double CurrentRotationsPerMinute => CurrentRadiansPerSecond.RadiansPerSecondToRpms();
+
+        /// <summary>
         /// Gets or sets the deadzone.
         /// </summary>
         /// <value>
@@ -81,16 +92,17 @@ namespace HAL.Simulator.Mechanisms
         /// <summary>
         /// Initializes a new instance of the <see cref="ShooterWheelMechanism"/> class.
         /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="output">The output.</param>
-        /// <param name="model">The model.</param>
-        /// <param name="invertInput">if set to <c>true</c> [invert input].</param>
+        /// <param name="input">The speed controller being used.</param>
+        /// <param name="output">The feedback output.</param>
+        /// <param name="model">The motor model.</param>
+        /// <param name="invertInput">True if the input is inverted.</param>
         /// <param name="minimumVelocity">The minimum velocity.</param>
         /// <param name="deaccelConstant">The deaccel constant.</param>
         /// <param name="systemInertia">The system inertia.</param>
+        /// <param name="cpr">The counts per rotation of the sensor.</param>
         /// <exception cref="ArgumentOutOfRangeException">Shooter Wheels do not support analog inputs</exception>
         public ShooterWheelMechanism(ISimSpeedController input, IServoFeedback output, DCMotor model,
-            bool invertInput, double minimumVelocity, double deaccelConstant, double systemInertia)
+            bool invertInput, double minimumVelocity, double deaccelConstant, double systemInertia, double cpr)
         {
             if (output is SimAnalogInput)
             {
@@ -103,6 +115,7 @@ namespace HAL.Simulator.Mechanisms
             m_minimumVelocity = minimumVelocity;
             DeaccelerationConstant = deaccelConstant;
             SystemInertia = systemInertia;
+            m_cpr = cpr;
         }
 
         /// <summary>
@@ -156,7 +169,7 @@ namespace HAL.Simulator.Mechanisms
             else if (CurrentRadiansPerSecond < m_minimumVelocity)
                 CurrentRadiansPerSecond = m_minimumVelocity;
 
-            m_output.SetRate(CurrentRadiansPerSecond);
+            m_output.SetRate(CurrentRadiansPerSecond.RadiansPerSecondToRpms() / m_cpr);
         }
     }
 }

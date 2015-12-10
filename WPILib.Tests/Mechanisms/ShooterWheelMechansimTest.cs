@@ -26,8 +26,6 @@ namespace WPILib.Tests.Mechanisms
                 double inertia = 0.005;
                 double deaccel = -80.0;
 
-                ShooterWheelMechanism mech = new ShooterWheelMechanism(s, f, motor, false, 0, deaccel, inertia);
-
 
 
 
