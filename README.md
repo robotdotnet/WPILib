@@ -20,7 +20,7 @@ More instructions can be found [Here.](http://robotdotnet.github.io/Documentatio
 Compiling
 =========
 
-Compiling the WPILib currently requires Visual Studio 2015 RC or Mono 4.0. This is because the project uses some C# 6.0 features. Since the program compiles down to a .Net 4.5 program, the library however can be used with VS 2013, or Mono 3.
+Compiling the WPILib currently requires Visual Studio 2015+ or Mono 4.0+. This is because the project uses some C# 6.0 features. Since the program compiles down to a .NET 4.5 program, the library however can be used with VS 2013, or Mono 3.
 
 When you build the project in VS, the DLLs can be found in the Output\ folder. To reference this in your project, you first must uninstall the WPILib using the NuGet packet manager. Then reference the files found in the output folder. Note that if you do this you will loose intellisense for any overriden functions, because the intellisense for those is generated during the release process.
 
@@ -30,9 +30,9 @@ Projects
 ========
 * `WPILib` - DotNet implementation of the WPILib
 * `WPILib.Extras` - Useful functionality to extend the WPILib.
-* `HAL-Base` - The base functionality for interfacing with the HAL
-* `HAL-RoboRIO` - HAL-Base interface to the HAL C library
-* `HAL-Simulation` - The back-end for the HAL Simulator.
+* `HAL` - The Hardware Abstraction Layer, for communicating with either the RoboRIO or the Simulator. Also includes the Simulator code base.
+* `NIVision` - Wrapper for NIVision (Not Fully Functional).
+* `Sandcastle` - Documentation Generator
 
 License
 =======
