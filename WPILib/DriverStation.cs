@@ -36,7 +36,7 @@ namespace WPILib
         private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
 
         //Pointers to the semaphores to the HAL and FPGA
-        private readonly object m_mutex;
+        private readonly object m_dataSem;
 
         private readonly IntPtr m_packetDataAvailableMutex;
         private readonly IntPtr m_packetDataAvailableSem;
@@ -81,7 +81,7 @@ namespace WPILib
             }
 
             //Initializes the HAL semaphores
-            m_mutex = new object();
+            m_dataSem = new object();
             
 
             m_packetDataAvailableMutex = InitializeMutexNormal();
@@ -113,15 +113,18 @@ namespace WPILib
             {
                 //Wait for new DS data, grab the newest data, and return the semaphore.
                 TakeMultiWait(m_packetDataAvailableSem, m_packetDataAvailableMutex);
-                GetData();
+                lock (m_lockObject)
+                {
+                    GetData();
+                }
                 try
                 {
-                    Monitor.Enter(m_mutex);
-                    Monitor.PulseAll(m_mutex);
+                    Monitor.Enter(m_dataSem);
+                    Monitor.PulseAll(m_dataSem);
                 }
                 finally 
                 {
-                    Monitor.Exit(m_mutex);
+                    Monitor.Exit(m_dataSem);
                 }
                 
 
@@ -152,12 +155,12 @@ namespace WPILib
         {
             try
             {
-                Monitor.Enter(m_mutex);
-                Monitor.Wait(m_mutex, timeout);
+                Monitor.Enter(m_dataSem);
+                Monitor.Wait(m_dataSem, timeout);
             }
             finally 
             {
-                Monitor.Exit(m_mutex);
+                Monitor.Exit(m_dataSem);
             }
         }
 
@@ -168,7 +171,7 @@ namespace WPILib
         {
             try
             {
-                Monitor.Enter(m_mutex);
+                Monitor.Enter(m_lockObject);
                 for (byte stick = 0; stick < JoystickPorts; stick++)
                 {
                     HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
@@ -179,7 +182,7 @@ namespace WPILib
             }
             finally
             {
-                Monitor.Exit(m_mutex);
+                Monitor.Exit(m_lockObject);
             }
         }
 
@@ -470,22 +473,25 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public string GetJoystickName(int stick)
         {
-            if (stick < 0 || stick >= JoystickPorts)
+            lock (m_lockObject)
             {
-                throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-            }
+                if (stick < 0 || stick >= JoystickPorts)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(stick),
+                            $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+                }
 
-            //TODO: Remove this when calling for descriptor on empty stick
-            if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
-            {
-                ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
-                    " not available, check if controller is plugged in\n");
-                return "";
+                //TODO: Remove this when calling for descriptor on empty stick
+                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
+                {
+                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
+                        " not available, check if controller is plugged in\n");
+                    return "";
+                }
+                HALJoystickDescriptor desc = new HALJoystickDescriptor();
+                HAL.Base.HAL.HALGetJoystickDescriptor((byte)stick, ref desc);
+                return desc.name.ToString();
             }
-            HALJoystickDescriptor desc = new HALJoystickDescriptor();
-            HAL.Base.HAL.HALGetJoystickDescriptor((byte) stick, ref desc);
-            return desc.name.ToString();
         }
 
         /// <summary>
@@ -587,14 +593,14 @@ namespace WPILib
             {
                 try
                 {
-                    Monitor.Enter(m_mutex);
+                    Monitor.Enter(m_lockObject);
                     bool result = m_newControlData;
                     m_newControlData = false;
                     return result;
                 }
                 finally
                 {
-                    Monitor.Exit(m_mutex);
+                    Monitor.Exit(m_lockObject);
                 }
             }
         }
