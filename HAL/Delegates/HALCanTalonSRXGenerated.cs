@@ -13,7 +13,7 @@ namespace HAL.Base
             HAL.Initialize();
         }
 
-        public delegate IntPtr C_TalonSRX_CreateDelegate(int deviceNumber, int controlPeriodMs);
+        public delegate IntPtr C_TalonSRX_CreateDelegate(int deviceNumber, int controlPeriodMs, int enablePeriodMs);
         public static C_TalonSRX_CreateDelegate C_TalonSRX_Create;
 
         public delegate void C_TalonSRX_DestroyDelegate(IntPtr handle);

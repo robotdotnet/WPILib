@@ -107,7 +107,7 @@ namespace WPILib
             /// </summary>
             FeedbackStatusNotPresent = 2
         }
-        /*
+
         /// <summary>
         /// Enumerated types for Motion Control Set Values
         /// </summary>
@@ -160,17 +160,41 @@ namespace WPILib
             Hold = 2
         }
 
-        public class TrajectoryPoint
+        public struct TrajectoryPoint
         {
-             public double Position { get; }
+            public double Position { get; set; }
+            public double Velocity { get; set; }
+            public int TimeDurMs { get; set; }
+            public int ProfileSlotSelect { get; set; }
+            public bool VelocityOnly { get; set; }
+            public bool IsLastPoint { get; set; }
+            public bool ZeroPos { get; set; }
         }
 
+        public struct MotionProfileStatus
+        {
+            public uint TopBufferRem { get; }
+            public uint TopBufferCnt { get; }
+            public uint BtmBufferCnt { get; }
+            public bool HasUnderrun { get; }
+            public bool IsUnderrrun { get; }
+            public bool ActivePointValid { get; }
+            public TrajectoryPoint ActivePoint { get; }
+            public SetValueMotionProfile OutputEnable { get; }
 
-
-        private long _flagsPtr;
-        private long _profileSlotSelectPtr
-
-        */
+            public MotionProfileStatus(uint topRem, uint topCnt, uint btmCnt, bool hasUnder,
+                bool isUnder, bool activeValid, TrajectoryPoint activePoint, SetValueMotionProfile outEnable)
+            {
+                TopBufferRem = topRem;
+                TopBufferCnt = topCnt;
+                BtmBufferCnt = btmCnt;
+                HasUnderrun = hasUnder;
+                IsUnderrrun = isUnder;
+                ActivePointValid = activeValid;
+                ActivePoint = activePoint;
+                OutputEnable = outEnable;
+            }
+        }
 
         private ControlMode m_controlMode;
         private readonly IntPtr m_talonPointer;
@@ -187,6 +211,9 @@ namespace WPILib
         private int m_numPotTurns;
 
         private FeedbackDevice m_feedbackDevice;
+
+        private const int DefaultControlPeriodMs = 10; //!< default control update rate is 10ms.
+        private const int DefaultEnablePeriodMs = 50;  //!< default enable update rate is 50ms (when using the new control5 frame).
 
 
         /// <summary>
@@ -205,7 +232,7 @@ namespace WPILib
         /// </summary>
         /// <param name="deviceNumber">The id of the Talon SRX this object will communicate with.</param>
         /// <param name="controlPeriodMs">The update period to the Talon SRX.  Defaults to 10ms.</param>
-        public CANTalon(int deviceNumber, int controlPeriodMs = 10)
+        public CANTalon(int deviceNumber, int controlPeriodMs = DefaultControlPeriodMs, int enablePeriodMs = DefaultEnablePeriodMs)
         {
             if (deviceNumber < 0 || deviceNumber >= TalonIds)
             {
@@ -215,7 +242,7 @@ namespace WPILib
             s_talonIds.Allocate(deviceNumber, $"CAN TalonSRX ID {deviceNumber} is already allocated.");
 
             DeviceID = deviceNumber;
-            m_talonPointer = C_TalonSRX_Create(deviceNumber, controlPeriodMs);
+            m_talonPointer = C_TalonSRX_Create(deviceNumber, controlPeriodMs, enablePeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
             m_setPoint = 0;
@@ -349,7 +376,7 @@ namespace WPILib
             C_TalonSRX_GetPulseWidthVelocity(m_talonPointer, ref val);
             return val;
         }
-        
+
         /// <summary>
         /// Gets the pulse width rise to fall time.
         /// </summary>
@@ -914,7 +941,7 @@ namespace WPILib
         [Obsolete("Use IZone property instead.")]
         public void SetIZone(double iZone) { IZone = iZone; }
 
-        
+
         public double IZone
         {
             get
@@ -1734,6 +1761,97 @@ namespace WPILib
                 SetParam(ParamID.eClearPositionOnIdx, 0);
                 SetParam(ParamID.eQuadIdxPolarity, risingEdge ? 1 : 0);
             }
+        }
+
+        public void ChangeMotionControlFramePeriod(uint periodMs)
+        {
+            C_TalonSRX_ChangeMotionControlFramePeriod(m_talonPointer, periodMs);
+        }
+
+        public void ClearMotionProfileTrajectories()
+        {
+            C_TalonSRX_ClearMotionProfileTrajectories(m_talonPointer);
+        }
+
+        public uint GetMotionProfileTopLevelBufferCount()
+        {
+            return C_TalonSRX_GetMotionProfileTopLevelBufferCount(m_talonPointer);
+        }
+
+        public bool PushMotionProfileTrajectory(TrajectoryPoint trajPt)
+        {
+            if (IsMotionProfileTopLevelBufferFull())
+                return false;
+            int targPos = ScaleRotationsToNativeUnits(m_feedbackDevice, trajPt.Position);
+            int targVel = ScaleRotationsToNativeUnits(m_feedbackDevice, trajPt.Velocity);
+
+            int profileSlotSelect = (trajPt.ProfileSlotSelect > 0) ? 1 : 0;
+            int timeDurMs = trajPt.TimeDurMs;
+
+            if (timeDurMs > 255)
+                timeDurMs = 255;
+            if (timeDurMs < 0)
+                timeDurMs = 0;
+            C_TalonSRX_PushMotionProfileTrajectory(m_talonPointer, targPos, targVel, profileSlotSelect, timeDurMs, trajPt.VelocityOnly ? 1 : 0,
+                trajPt.IsLastPoint ? 1 : 0, trajPt.ZeroPos ? 1 : 0);
+            return true;
+        }
+
+        public bool IsMotionProfileTopLevelBufferFull()
+        {
+            return C_TalonSRX_IsMotionProfileTopLevelBufferFull(m_talonPointer);
+        }
+
+        public void ProcessMotionProfileBuffer()
+        {
+            C_TalonSRX_ProcessMotionProfileBuffer(m_talonPointer);
+        }
+
+        public MotionProfileStatus GetMotionProfileStatus()
+        {
+            uint flags = 0;
+            uint profileSelect = 0;
+            int pos = 0;
+            int vel = 0;
+            uint topRem = 0;
+            uint topCnt = 0;
+            uint btmCnt = 0;
+            uint outEnable = 0;
+            C_TalonSRX_GetMotionProfileStatus(m_talonPointer, ref flags, ref profileSelect,
+                ref pos, ref vel, ref topRem, ref topCnt, ref btmCnt, ref outEnable);
+
+            bool hasUnderrun = ((flags & kMotionProfileFlag_HasUnderrun) > 0) ? true : false;
+            bool isUnderrun = ((flags & kMotionProfileFlag_IsUnderrun) > 0) ? true : false;
+            bool activePointValid = ((flags & kMotionProfileFlag_ActTraj_IsValid) > 0) ? true : false;
+            bool isLastPoint = ((flags & kMotionProfileFlag_ActTraj_IsLast) > 0) ? true : false;
+            bool isVelocityOnly = ((flags & kMotionProfileFlag_ActTraj_VelOnly) > 0) ? true : false;
+
+            double position = ScaleNativeUnitsToRotations(m_feedbackDevice, pos);
+            double velocity = ScaleNativeUnitsToRpm(m_feedbackDevice, vel);
+
+            SetValueMotionProfile outputEnable = (SetValueMotionProfile)outEnable;
+
+            bool zeroPos = false;
+            int timeDurMs = 0;
+
+            TrajectoryPoint activePoint = new TrajectoryPoint()
+            {
+                IsLastPoint = isLastPoint,
+                VelocityOnly = isVelocityOnly,
+                Position = position,
+                Velocity = velocity,
+                ProfileSlotSelect = (int)profileSelect,
+                ZeroPos = zeroPos,
+                TimeDurMs = timeDurMs
+            };
+
+            return new MotionProfileStatus(topRem, topCnt, btmCnt, hasUnderrun, isUnderrun,
+                activePointValid, activePoint, outputEnable);
+        }
+
+        public void ClearMotionProfileHasUnderrun()
+        {
+            SetParam(ParamID.eMotionProfileHasUnderrunErr, 0);
         }
 
         ///<inheritdoc/>

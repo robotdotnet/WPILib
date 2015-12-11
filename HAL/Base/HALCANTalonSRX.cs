@@ -36,6 +36,12 @@ namespace HAL.Base
             /* ProfileSlotSelect enumerations*/
             public const int kProfileSlotSelect_Slot0 = 0;
             public const int kProfileSlotSelect_Slot1 = 1;
+            /* Motion Profile status bits */
+            public const int kMotionProfileFlag_ActTraj_IsValid = 0x1;
+            public const int kMotionProfileFlag_HasUnderrun = 0x2;
+            public const int kMotionProfileFlag_IsUnderrun = 0x4;
+            public const int kMotionProfileFlag_ActTraj_IsLast = 0x8;
+            public const int kMotionProfileFlag_ActTraj_VelOnly = 0x10;
             /* status frame rate types */
             public const int kStatusFrame_General = 0;
             public const int kStatusFrame_Feedback = 1;
@@ -134,6 +140,10 @@ namespace HAL.Base
             eAinPosition = 115,
             eProfileParamVcompRate = 116,
             eProfileParamSlot1_AllowableClosedLoopErr = 117,
+            eStatus9FrameRate = 118, // TALON_Status_9_MotProfBuffer_100ms_t
+            eMotionProfileHasUnderrunErr = 119,
+            eReserved120 = 120,
+            eLegacyControlMode = 121,
         }
     }
 }

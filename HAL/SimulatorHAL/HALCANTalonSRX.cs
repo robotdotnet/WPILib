@@ -104,7 +104,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)
+        public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs, int enablePeriodMs)
         {
             if (!InitializeCanTalon(deviceNumber))
             {
