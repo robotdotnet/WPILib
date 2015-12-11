@@ -1,6 +1,7 @@
 //File automatically generated using robotdotnet-tools. Please do not modify.
 
 using System;
+using System.Runtime.InteropServices;
 // ReSharper disable CheckNamespace
 
 namespace HAL.Base
@@ -191,5 +192,35 @@ namespace HAL.Base
 
         public delegate CTR_Code C_TalonSRX_IsPulseWidthSensorPresentDelegate(IntPtr handle, ref int param);
         public static C_TalonSRX_IsPulseWidthSensorPresentDelegate C_TalonSRX_IsPulseWidthSensorPresent;
+
+
+
+
+        public delegate void C_TalonSRX_ChangeMotionControlFramePeriodDelegate(IntPtr handle, uint periodMs);
+        public static C_TalonSRX_ChangeMotionControlFramePeriodDelegate C_TalonSRX_ChangeMotionControlFramePeriod;
+
+        public delegate void C_TalonSRX_ClearMotionProfileTrajectoriesDelegate(IntPtr handle);
+        public static C_TalonSRX_ClearMotionProfileTrajectoriesDelegate C_TalonSRX_ClearMotionProfileTrajectories;
+
+        public delegate uint C_TalonSRX_GetMotionProfileTopLevelBufferCountDelegate(IntPtr handle);
+        public static C_TalonSRX_GetMotionProfileTopLevelBufferCountDelegate C_TalonSRX_GetMotionProfileTopLevelBufferCount;
+
+        [return: MarshalAs(UnmanagedType.I1)]
+        public delegate bool C_TalonSRX_IsMotionProfileTopLevelBufferFullDelegate(IntPtr handle);
+        public static C_TalonSRX_IsMotionProfileTopLevelBufferFullDelegate C_TalonSRX_IsMotionProfileTopLevelBufferFull;
+
+        public delegate CTR_Code C_TalonSRX_PushMotionProfileTrajectoryDelegate(IntPtr handle, int targPos, 
+            int targVel, int profileSlotSelect, int timeDurMs, int velOnly, int isLastPoint, int zeroPos);
+        public static C_TalonSRX_PushMotionProfileTrajectoryDelegate C_TalonSRX_PushMotionProfileTrajectory;
+
+        public delegate void C_TalonSRX_ProcessMotionProfileBufferDelegate(IntPtr handle);
+        public static C_TalonSRX_ProcessMotionProfileBufferDelegate C_TalonSRX_ProcessMotionProfileBuffer;
+
+        public delegate CTR_Code C_TalonSRX_GetMotionProfileStatusDelegate(IntPtr handle, ref uint flags,
+            ref uint profileSelectSlot, ref int targPos, ref int targVel, ref uint topBufferRemaining, 
+            ref uint topBufferCnt, ref uint btmBufferCnt, ref uint outputEnable);
+        public static C_TalonSRX_GetMotionProfileStatusDelegate C_TalonSRX_GetMotionProfileStatus;
+
+
     }
 }
