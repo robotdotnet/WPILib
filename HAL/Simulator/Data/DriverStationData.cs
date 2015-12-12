@@ -258,7 +258,7 @@ namespace HAL.Simulator.Data
         public int NumButtons
         {
             get { return m_numButtons; }
-            internal set
+            set
             {
                 if (m_numButtons == value) return;
                 m_numButtons = value;
@@ -274,7 +274,7 @@ namespace HAL.Simulator.Data
         public int NumAxes
         {
             get { return m_numAxes; }
-            internal set
+            set
             {
                 if (m_numAxes == value) return;
                 m_numAxes = value;

@@ -104,10 +104,10 @@ namespace HAL.Simulator
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
                     $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
             }
-            if (buttonNum < 1 || buttonNum >= SimData.DriverStation.Joysticks[joystickNum].Buttons.Length)
+            if (buttonNum < 1 || buttonNum >= SimData.DriverStation.Joysticks[joystickNum].NumButtons)
             {
                 throw new ArgumentOutOfRangeException(nameof(buttonNum),
-                    $"Button must be between 1 and {SimData.DriverStation.Joysticks[joystickNum].Buttons.Length - 1}");
+                    $"Button must be between 1 and {SimData.DriverStation.Joysticks[joystickNum].NumButtons - 1}");
             }
             SimData.DriverStation.Joysticks[joystickNum].Buttons[buttonNum] = value;
         }
@@ -128,7 +128,7 @@ namespace HAL.Simulator
             if (axisNum < 0 || axisNum >= SimData.DriverStation.Joysticks[joystickNum].Axes.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(axisNum),
-                    $"Axis must be between 0 and {SimData.DriverStation.Joysticks[joystickNum].Axes.Length - 1}");
+                    $"Axis must be between 0 and {SimData.DriverStation.Joysticks[joystickNum].NumAxes - 1}");
             }
             if (value > 1.0)
                 value = 1.0;
