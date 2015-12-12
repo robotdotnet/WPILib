@@ -197,4 +197,3 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 buildLocal.bat
-HAL/AthenaHAL/Native/*.so
