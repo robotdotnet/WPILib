@@ -188,7 +188,7 @@ namespace HAL.Simulator.Data
         internal JoystickData() { }
 
         private bool m_hasSource = false;
-        private bool[] m_buttons = new bool[32];
+        private bool[] m_buttons = new bool[33];
         private double[] m_axes = new double[6];
         private int[] m_povs = new[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
         private int m_numAxes = 6;

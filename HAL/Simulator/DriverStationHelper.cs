@@ -91,6 +91,26 @@ namespace HAL.Simulator
             s_dsTimer = null;
         }
 
+        public static void SetJoystickButtonCount(int joystickNum, int buttonCount)
+        {
+            if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(joystickNum),
+                    $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
+            }
+            SimData.DriverStation.Joysticks[joystickNum].NumButtons = buttonCount;
+        }
+
+        public static void SetJoystickAxesCount(int joystickNum, int axesCount)
+        {
+            if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(joystickNum),
+                    $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
+            }
+            SimData.DriverStation.Joysticks[joystickNum].NumAxes = axesCount;
+        }
+
         /// <summary>
         /// Set the value for a specific joystick button
         /// </summary>
@@ -104,10 +124,10 @@ namespace HAL.Simulator
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
                     $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
             }
-            if (buttonNum < 1 || buttonNum >= SimData.DriverStation.Joysticks[joystickNum].NumButtons)
+            if (buttonNum < 1 || buttonNum > SimData.DriverStation.Joysticks[joystickNum].NumButtons)
             {
                 throw new ArgumentOutOfRangeException(nameof(buttonNum),
-                    $"Button must be between 1 and {SimData.DriverStation.Joysticks[joystickNum].NumButtons - 1}");
+                    $"Button must be between 1 and {SimData.DriverStation.Joysticks[joystickNum].NumButtons}");
             }
             SimData.DriverStation.Joysticks[joystickNum].Buttons[buttonNum] = value;
         }

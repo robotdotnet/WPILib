@@ -518,13 +518,13 @@ namespace HAL.SimulatorHAL
             var b = DriverStation.Joysticks[joystickNum].Buttons;
             var count = DriverStation.Joysticks[joystickNum].NumButtons;
             uint total = 0;
-            for (int i = 1; i < count; i++)
+            for (int i = 1; i < count + 1; i++)
             {
                 total = total + (uint)((b[i] ? 1 : 0) << i - 1);
             }
 
             buttons.buttons = total;
-            buttons.count = (byte)(count - 1);
+            buttons.count = (byte)(count);
             return 0;
         }
 

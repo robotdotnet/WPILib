@@ -3,6 +3,7 @@ using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using NUnit.Framework;
+using System.Threading;
 using static HAL.Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
@@ -234,6 +235,94 @@ namespace WPILib.Tests
             Assert.AreEqual(5.85, DriverStation.Instance.GetMatchTime(), 0.00001);
 
             global::HAL.Base.HAL.HALGetMatchTime = HAL.SimulatorHAL.HAL.HALGetMatchTime;
+        }
+
+        [Test]
+        public void TestJoystickButtons([Range(0,32)] int numButtons)
+        {
+            //StartDSLoop();
+
+            bool[] buttons = new bool[numButtons];
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i] = false;
+            }
+            DriverStationHelper.SetJoystickButtonCount(0, numButtons);
+            DriverStationHelper.JoystickCallback = () =>
+            {
+                for (int i = 0; i < buttons.Length; i++)
+                {
+                    SetJoystickButton(0, i + 1, buttons[i]);
+                }
+            };
+            DriverStationHelper.UpdateData();
+            Thread.Sleep(10);
+            int buttonCount = DriverStation.Instance.GetStickButtonCount(0);
+            Assert.That(buttonCount, Is.EqualTo(numButtons));
+            for (int i = 0; i < buttonCount; i++)
+            {
+                bool button = DriverStation.Instance.GetStickButton(0, (byte) (i + 1));
+                Assert.That(button, Is.EqualTo(buttons[i]));
+            }
+
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i] = true;
+            }
+            DriverStationHelper.UpdateData();
+            Thread.Sleep(10);
+            for (int i = 0; i < buttonCount; i++)
+            {
+                bool button = DriverStation.Instance.GetStickButton(0, (byte)(i + 1));
+                Assert.That(button, Is.EqualTo(buttons[i]));
+            }
+
+            JoystickCallback = null;
+        }
+
+        [Test]
+        public void TestJoystickAxes([Range(0, 6)] int numAxes)
+        {
+            //StartDSLoop();
+
+            double[] axes = new double[numAxes];
+            for (int i = 0; i < axes.Length; i++)
+            {
+                axes[i] = .258;
+            }
+            DriverStationHelper.SetJoystickAxesCount(0, numAxes);
+            DriverStationHelper.JoystickCallback = () =>
+            {
+                for (int i = 0; i < axes.Length; i++)
+                {
+                    SetJoystickAxis(0, i, axes[i]);
+                }
+            };
+            DriverStationHelper.UpdateData();
+            Thread.Sleep(10);
+            int axesCount = DriverStation.Instance.GetStickAxisCount(0);
+            Assert.That(axesCount, Is.EqualTo(numAxes));
+            for (int i = 0; i < axesCount; i++)
+            {
+                double axis = DriverStation.Instance.GetStickAxis(0, i);
+                Assert.That(axis, Is.EqualTo(axes[i]).Within(0.01));
+            }
+
+
+            for (int i = 0; i < axes.Length; i++)
+            {
+                axes[i] = -.598;
+            }
+            DriverStationHelper.UpdateData();
+            Thread.Sleep(10);
+            for (int i = 0; i < axesCount; i++)
+            {
+                double axis = DriverStation.Instance.GetStickAxis(0, i);
+                Assert.That(axis, Is.EqualTo(axes[i]).Within(0.01));
+            }
+
+            JoystickCallback = null;
         }
 
         /*
