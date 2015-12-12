@@ -9,7 +9,7 @@ namespace HAL.Simulator
     /// </summary>
     public static class DriverStationHelper
     {
-        
+
         /// The Robot Modes
         public enum RobotMode
         {
@@ -38,12 +38,17 @@ namespace HAL.Simulator
 
         internal static void UpdateData()
         {
-            //UpdateHalData(HalDSData);
+            JoystickCallback?.Invoke();
             if (SimData.HALNewDataSem != IntPtr.Zero)
             {
                 SimulatorHAL.HALSemaphore.giveMultiWait(SimData.HALNewDataSem);
             }
         }
+
+        /// <summary>
+        /// Assign to this callback to set the joysticks right before updating the robot data.
+        /// </summary>
+        public static Action JoystickCallback { get; set; } = null;
 
         /// <summary>
         /// Start the driver station loop at the default 20ms interval
@@ -253,7 +258,7 @@ namespace HAL.Simulator
         {
             SimData.DriverStation.ControlData.DsAttached = attached;
         }
-        
+
     }
-   
+
 }

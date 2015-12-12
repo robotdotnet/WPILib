@@ -485,7 +485,8 @@ namespace HAL.SimulatorHAL
         {
             axes.axes = new HALJoystickAxesArray();
             var joyData = DriverStation.Joysticks[joystickNum].Axes;
-            for (short i = 0; i < joyData.Length; i++)
+            var count = DriverStation.Joysticks[joystickNum].NumAxes;
+            for (short i = 0; i < count; i++)
             {
                 int tmp = 0;
                 if (joyData[i] < 0)
@@ -494,7 +495,7 @@ namespace HAL.SimulatorHAL
                     tmp = (int)(joyData[i] * 127);
                 axes.axes[i] = (short)tmp;
             }
-            axes.count = (ushort)joyData.Length;
+            axes.count = (ushort)count;
             return 0;
         }
 
@@ -515,14 +516,15 @@ namespace HAL.SimulatorHAL
         public static int HALGetJoystickButtons(byte joystickNum, ref HALJoystickButtons buttons)
         {
             var b = DriverStation.Joysticks[joystickNum].Buttons;
+            var count = DriverStation.Joysticks[joystickNum].NumButtons;
             uint total = 0;
-            for (int i = 1; i < b.Length; i++)
+            for (int i = 1; i < count; i++)
             {
                 total = total + (uint)((b[i] ? 1 : 0) << i - 1);
             }
 
             buttons.buttons = total;
-            buttons.count = (byte)(b.Length - 1);
+            buttons.count = (byte)(count - 1);
             return 0;
         }
 

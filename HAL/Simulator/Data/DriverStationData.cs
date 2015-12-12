@@ -188,9 +188,11 @@ namespace HAL.Simulator.Data
         internal JoystickData() { }
 
         private bool m_hasSource = false;
-        private bool[] m_buttons = new bool[13];
+        private bool[] m_buttons = new bool[32];
         private double[] m_axes = new double[6];
         private int[] m_povs = new[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+        private int m_numAxes = 6;
+        private int m_numButtons = 32;
         private ushort m_leftRumble = 0;
         private ushort m_rightRumble = 0;
         private int m_isXbox = 0;
@@ -246,6 +248,40 @@ namespace HAL.Simulator.Data
                 OnPropertyChanged(value);
             }
         }
+
+        /// <summary>
+        /// Gets the buttons.
+        /// </summary>
+        /// <value>
+        /// The buttons.
+        /// </value>
+        public int NumButtons
+        {
+            get { return m_numButtons; }
+            internal set
+            {
+                if (m_numButtons == value) return;
+                m_numButtons = value;
+                OnPropertyChanged(value);
+            }
+        }
+        /// <summary>
+        /// Gets the axes.
+        /// </summary>
+        /// <value>
+        /// The axes.
+        /// </value>
+        public int NumAxes
+        {
+            get { return m_numAxes; }
+            internal set
+            {
+                if (m_numAxes == value) return;
+                m_numAxes = value;
+                OnPropertyChanged(value);
+            }
+        }
+
         /// <summary>
         /// Gets the left rumble.
         /// </summary>
