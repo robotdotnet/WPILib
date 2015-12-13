@@ -14,8 +14,27 @@ namespace HAL.AthenaHAL
     {
         private static string ExtractLibrary()
         {
+            string[] commandArgs = Environment.GetCommandLineArgs();
+            foreach (var commandArg in commandArgs)
+            {
+                //search for a line with the prefix "-athena:"
+                if (commandArg.ToLower().Contains("-athena:"))
+                {
+                    //Split line to get the library.
+                    int splitLoc = commandArg.IndexOf(':');
+                    string file = commandArg.Substring(splitLoc + 1);
+
+                    //If the file exists, just return it so dlopen can load it.
+                    if (File.Exists(file))
+                    {
+                        return file;
+                    }
+                }
+            }
+
             var inputName = "HAL.AthenaHAL.Native.libHALAthena.so";
             var outputName = "libHALAthena.so";
+
             outputName = Path.GetTempPath() + outputName;
             byte[] bytes;
             using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
