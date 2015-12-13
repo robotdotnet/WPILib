@@ -46,8 +46,8 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkTables, Version=2016.0.0.138, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.2016.0.0.138\lib\net45\NetworkTables.dll</HintPath>
+    <Reference Include="NetworkTables, Version=2016.0.0.139, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.2016.0.0.139\lib\net45\NetworkTables.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
