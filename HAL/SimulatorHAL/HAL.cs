@@ -295,7 +295,7 @@ namespace HAL.SimulatorHAL
         [CalledSimFunction]
         public static void HALSetNewDataSem(IntPtr sem)
         {
-            HALNewDataSem = sem;
+            s_halNewDataSem = sem;
         }
 
         /// <summary>

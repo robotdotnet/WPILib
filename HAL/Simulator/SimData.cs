@@ -362,7 +362,7 @@ namespace HAL.Simulator
             InitializePDP(0);
         }
 
-        internal static IntPtr HALNewDataSem = IntPtr.Zero;
+        internal static IntPtr s_halNewDataSem = IntPtr.Zero;
 
         /// <summary>
         /// Clears all HAL Sim Data and resets it.
@@ -433,7 +433,7 @@ namespace HAL.Simulator
 
             if (resetDS)
             {
-                HALNewDataSem = IntPtr.Zero;
+                s_halNewDataSem = IntPtr.Zero;
             }
         }
     }

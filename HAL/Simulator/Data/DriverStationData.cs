@@ -180,7 +180,9 @@ namespace HAL.Simulator.Data
             {
                 m_povs[i] = -1;
             }
-
+            m_numAxes = 6;
+            m_numButtons = 32;
+            m_numPovs = 12;
 
             base.ResetData();
         }
@@ -193,6 +195,7 @@ namespace HAL.Simulator.Data
         private int[] m_povs = new[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
         private int m_numAxes = 6;
         private int m_numButtons = 32;
+        private int m_numPovs = 12;
         private ushort m_leftRumble = 0;
         private ushort m_rightRumble = 0;
         private int m_isXbox = 0;
@@ -278,6 +281,23 @@ namespace HAL.Simulator.Data
             {
                 if (m_numAxes == value) return;
                 m_numAxes = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets the axes.
+        /// </summary>
+        /// <value>
+        /// The axes.
+        /// </value>
+        public int NumPovs
+        {
+            get { return m_numPovs; }
+            set
+            {
+                if (m_numPovs == value) return;
+                m_numPovs = value;
                 OnPropertyChanged(value);
             }
         }

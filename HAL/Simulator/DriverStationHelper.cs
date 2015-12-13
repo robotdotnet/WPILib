@@ -39,9 +39,9 @@ namespace HAL.Simulator
         internal static void UpdateData()
         {
             JoystickCallback?.Invoke();
-            if (SimData.HALNewDataSem != IntPtr.Zero)
+            if (SimData.s_halNewDataSem != IntPtr.Zero)
             {
-                SimulatorHAL.HALSemaphore.giveMultiWait(SimData.HALNewDataSem);
+                SimulatorHAL.HALSemaphore.giveMultiWait(SimData.s_halNewDataSem);
             }
         }
 
@@ -91,6 +91,11 @@ namespace HAL.Simulator
             s_dsTimer = null;
         }
 
+        /// <summary>
+        /// Sets the number of buttons on the specific joystick.
+        /// </summary>
+        /// <param name="joystickNum">The joystick number.</param>
+        /// <param name="buttonCount">The number of buttons to attach to the controller.</param>
         public static void SetJoystickButtonCount(int joystickNum, int buttonCount)
         {
             if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
@@ -98,9 +103,18 @@ namespace HAL.Simulator
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
                     $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
             }
+            if (buttonCount < 0 || buttonCount > 32)
+            {
+                throw new ArgumentOutOfRangeException(nameof(buttonCount), "Must be between 0 and 32 buttons.");
+            }
             SimData.DriverStation.Joysticks[joystickNum].NumButtons = buttonCount;
         }
 
+        /// <summary>
+        /// Sets the number of axes on the specific joystick.
+        /// </summary>
+        /// <param name="joystickNum">The joystick number.</param>
+        /// <param name="axesCount">The number of axes to attach to the controller.</param>
         public static void SetJoystickAxesCount(int joystickNum, int axesCount)
         {
             if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
@@ -108,14 +122,37 @@ namespace HAL.Simulator
                 throw new ArgumentOutOfRangeException(nameof(joystickNum),
                     $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
             }
+            if (axesCount < 0 || axesCount > 6)
+            {
+                throw new ArgumentOutOfRangeException(nameof(axesCount), "Must be between 0 and 6 axes.");
+            }
             SimData.DriverStation.Joysticks[joystickNum].NumAxes = axesCount;
+        }
+
+        /// <summary>
+        /// Sets the number of povs on the specific joystick.
+        /// </summary>
+        /// <param name="joystickNum">The joystick number.</param>
+        /// <param name="povCount">The number of povs to attach to the controller.</param>
+        public static void SetJoystickPovCount(int joystickNum, int povCount)
+        {
+            if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(joystickNum),
+                    $"Joysticks must be between 0 and {SimData.DriverStation.Joysticks.Count - 1}");
+            }
+            if (povCount < 0 || povCount > 12)
+            {
+                throw new ArgumentOutOfRangeException(nameof(povCount), "Must be between 0 and 12 Povs.");
+            }
+            SimData.DriverStation.Joysticks[joystickNum].NumPovs = povCount;
         }
 
         /// <summary>
         /// Set the value for a specific joystick button
         /// </summary>
-        /// <param name="joystickNum">The joystick index</param>
-        /// <param name="buttonNum">The button number</param>
+        /// <param name="joystickNum">The joystick index [0..5]</param>
+        /// <param name="buttonNum">The button number [1..n], set n using <see cref="SetJoystickButtonCount"/>.</param>
         /// <param name="value">The button value</param>
         public static void SetJoystickButton(int joystickNum, int buttonNum, bool value)
         {
@@ -135,8 +172,8 @@ namespace HAL.Simulator
         /// <summary>
         /// Set the value for a specific joystick axis
         /// </summary>
-        /// <param name="joystickNum">The joystick index</param>
-        /// <param name="axisNum">The axis number</param>
+        /// <param name="joystickNum">The joystick index [0..5]</param>
+        /// <param name="axisNum">The axis number [0..n], set n using <see cref="SetJoystickAxesCount"/>.</param>
         /// <param name="value">The joystick value from -1.0 to 1.0</param>
         public static void SetJoystickAxis(int joystickNum, int axisNum, double value)
         {
@@ -160,10 +197,10 @@ namespace HAL.Simulator
         /// <summary>
         /// Sets the value for a specific joystick POV, in degrees
         /// </summary>
-        /// <param name="joystickNum">The joystick index</param>
-        /// <param name="povNum">The pov number</param>
+        /// <param name="joystickNum">The joystick index [0..6].</param>
+        /// <param name="povNum">The pov number [0..n], set n using <see cref="SetJoystickPovCount"/>.</param>
         /// <param name="povValue">The pov value (-1 if not pressed, degrees otherwise)</param>
-        public static void SetJoystickPOV(int joystickNum, int povNum, int povValue)
+        public static void SetJoystickPov(int joystickNum, int povNum, int povValue)
         {
             if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
             {
@@ -182,6 +219,11 @@ namespace HAL.Simulator
             SimData.DriverStation.Joysticks[joystickNum].Povs[povNum] = (short)povValue;
         }
 
+        /// <summary>
+        /// Sets the joystick name.
+        /// </summary>
+        /// <param name="joystickNum">The joystick number</param>
+        /// <param name="name">The name to attach to the joystick.</param>
         public static void SetJoystickName(int joystickNum, string name)
         {
             if (joystickNum < 0 || joystickNum >= SimData.DriverStation.Joysticks.Count)
