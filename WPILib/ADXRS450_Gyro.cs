@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL.Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
+using static HAL.Base.HAL;
 
 namespace WPILib
 {
@@ -69,7 +71,7 @@ namespace WPILib
 
             Calibrate();
 
-            //UsageReporting.report(tResourceType.kResourceType_ADXRS450, port.getValue()); 	
+            Report(ResourceType.kResourceType_ADXRS450, (byte)port); 	
             LiveWindow.LiveWindow.AddSensor("ADXRS450_Gyro", port.ToString(), this);
         }
 

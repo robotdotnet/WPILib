@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
+using static HAL.Base.HAL;
 
 namespace WPILib
 {
@@ -76,6 +78,7 @@ namespace WPILib
             commands[2] = PowerCtlRegister | PowerCtl_UltraLowNoise;
             m_spi.Write(commands, 3);
 
+            Report(ResourceType.kResourceType_ADXRS450, (byte)port);
             LiveWindow.LiveWindow.AddSensor("ADXL362", port.ToString(), this);
         }
 

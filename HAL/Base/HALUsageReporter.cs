@@ -56,6 +56,9 @@ namespace HAL.Base
         kResourceType_VictorSP,
         kResourceType_TalonSRX,
         kResourceType_CANTalonSRX,
+        kResourceType_ADXL362,
+        kResourceType_ADXRS450,
+        kResourecType_RevSPARK,
         kResourceType_DigitalGlitchFilter
     };
 
@@ -72,6 +75,7 @@ namespace HAL.Base
 
         kFramework_Iterative = 1,
         kFramework_Sample = 2,
+        kFramework_CommandControl =3,
 
         kRobotDrive_ArcadeStandard = 1,
         kRobotDrive_ArcadeButtonSpin = 2,
