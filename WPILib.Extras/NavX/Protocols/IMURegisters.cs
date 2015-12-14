@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPILib.Extras.NavX.Protocols
 {
-    public class IMURegisters
+    internal class IMURegisters
     {
         /**********************************************/
         /* Device Identification Registers            */

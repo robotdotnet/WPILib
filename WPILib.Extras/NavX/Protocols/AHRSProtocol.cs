@@ -1,6 +1,6 @@
 ﻿namespace WPILib.Extras.NavX.Protocols
 {
-    public class AHRSProtocol : IMUProtocol
+    internal class AHRSProtocol : IMUProtocol
     {
         /* NAVX_CAL_STATUS */
 
