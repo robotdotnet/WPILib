@@ -176,6 +176,7 @@
     <Compile Include="Simulator\Outputs\SimDigitalOutput.cs" />
     <Compile Include="Simulator\Outputs\SimPWMController.cs" />
     <Compile Include="Simulator\Outputs\SimRelay.cs" />
+    <Compile Include="Simulator\Outputs\SimSolenoid.cs" />
     <Compile Include="Simulator\SimData.cs" />
     <Compile Include="Simulator\SimHooks.cs" />
     <Compile Include="Simulator\TalonSRXEventArgs.cs" />
@@ -186,7 +187,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent></PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
