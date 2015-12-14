@@ -25,24 +25,24 @@ namespace HAL.Simulator.Mechanisms
     public class ShooterWheelMechanism
     {
         /// <summary>
-        /// The m_input
+        /// The motor driving the system.
         /// </summary>
         protected readonly ISimSpeedController m_input;
         /// <summary>
-        /// The m_output
+        /// The feedback sensor for the system.
         /// </summary>
         protected readonly IServoFeedback m_output;
         /// <summary>
-        /// The m_model
+        /// The model of the motor and transmission for the system.
         /// </summary>
         protected readonly DCMotor m_model;
 
         /// <summary>
-        /// The m_invert
+        /// True if the input is inverted for your code.
         /// </summary>
         protected readonly bool m_invert;
         /// <summary>
-        /// The m_minimum velocity
+        /// The minimum velocity allowed for your shooter wheel. (radians per second)
         /// </summary>
         protected readonly double m_minimumVelocity;
 
@@ -96,9 +96,9 @@ namespace HAL.Simulator.Mechanisms
         /// <param name="output">The feedback output.</param>
         /// <param name="model">The motor model.</param>
         /// <param name="invertInput">True if the input is inverted.</param>
-        /// <param name="minimumVelocity">The minimum velocity.</param>
-        /// <param name="deaccelConstant">The deaccel constant.</param>
-        /// <param name="systemInertia">The system inertia.</param>
+        /// <param name="minimumVelocity">The minimum velocity in Rotations Per Minute</param>
+        /// <param name="deaccelConstant">The deaccel constant in Rotations Per Minute</param>
+        /// <param name="systemInertia">The system inertia in kg*m^2.</param>
         /// <param name="cpr">The counts per rotation of the sensor.</param>
         /// <exception cref="ArgumentOutOfRangeException">Shooter Wheels do not support analog inputs</exception>
         public ShooterWheelMechanism(ISimSpeedController input, IServoFeedback output, DCMotor model,
@@ -112,8 +112,8 @@ namespace HAL.Simulator.Mechanisms
             m_output = output;
             m_model = model;
             m_invert = invertInput;
-            m_minimumVelocity = minimumVelocity;
-            DeaccelerationConstant = deaccelConstant;
+            m_minimumVelocity = minimumVelocity.RpmsToRadiansPerSecond();
+            DeaccelerationConstant = deaccelConstant.RpmsToRadiansPerSecond();
             SystemInertia = systemInertia;
             m_cpr = cpr;
         }

@@ -14,15 +14,15 @@ namespace HAL.Simulator.Mechanisms
         /// <summary>
         /// Initializes a new instance of the <see cref="LinearEncoderMechanism"/> class.
         /// </summary>
-        /// <param name="input">The input.</param>
-        /// <param name="output">The output.</param>
-        /// <param name="encoderCpr">The encoder CPR.</param>
-        /// <param name="model">The model.</param>
-        /// <param name="spoolRadius">The spool radius.</param>
-        /// <param name="startHeight">The start height.</param>
+        /// <param name="input">The motor driving the system.</param>
+        /// <param name="output">The encoder giving feedback to the system.</param>
+        /// <param name="encoderCpr">The CPR of the encoder. If not a 1:1 ratio on the axle, scale this beforehand.</param>
+        /// <param name="model">The transmission model to use.</param>
+        /// <param name="spoolRadius">The radius of your spool in Meters. (Use the radius of the up spool if using a cascade elevator).</param>
+        /// <param name="startHeight">The start height of your elevator relative to the reset sensor in meters. If no reset sensor then use 0.</param>
         /// <param name="invertInput">if set to <c>true</c> [invert input].</param>
         public LinearEncoderMechanism(ISimSpeedController input, SimEncoder output, double encoderCpr, DCMotor model,
-            double spoolRadius, double startHeight, bool invertInput)//, double topLimit = double.MaxValue / 500)
+            double spoolRadius, double startHeight, bool invertInput)
         {
             m_input = input;
             m_output = output;
@@ -53,12 +53,12 @@ namespace HAL.Simulator.Mechanisms
         private Action m_checkHome = null;
 
         /// <summary>
-        /// Sets the home location.
+        /// Sets the homing sensor location.
         /// </summary>
-        /// <param name="homeInput">The home input.</param>
-        /// <param name="rising">if set to <c>true</c> [rising].</param>
-        /// <param name="meters">The meters.</param>
-        /// <param name="threshold">The threshold.</param>
+        /// <param name="homeInput">The digital input to use for the homing sensor</param>
+        /// <param name="rising">True if homing on the rising edge, otherwise false.</param>
+        /// <param name="meters">The distance relative to your lowest elevator point the sensor is located at (in meters).</param>
+        /// <param name="threshold">The threshold for which your encoder would trigger (in meters).</param>
         public void SetHomeLocation(SimDigitalInput homeInput, bool rising, double meters, double threshold)
         {
             homeInput.Set(!rising);

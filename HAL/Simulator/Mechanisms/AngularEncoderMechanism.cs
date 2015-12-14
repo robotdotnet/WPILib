@@ -14,6 +14,11 @@ namespace HAL.Simulator.Mechanisms
         /// </summary>
         public double AdjustedRadians { get; protected set; }
 
+        /// <summary>
+        /// Gets the current rotations of the system offset by the homing location
+        /// </summary>
+        public double AdjustedRotations => AdjustedRadians / (Math.PI * 2);
+
         private double m_offset;
 
         /// <summary>
@@ -23,10 +28,10 @@ namespace HAL.Simulator.Mechanisms
         /// <param name="output">The encoder giving feedback to the system</param>
         /// <param name="encoderCPR">The CPR of the encoder. If not a 1:1 ratio on the axle, scale this beforehand</param>
         /// <param name="model">The transmission model to use</param>
-        /// <param name="startRadians">The location in radians you want the system to start at.</param>
+        /// <param name="startRotations">The location in rotations you want the system to start at.</param>
         /// <param name="invertInput">Inverts the motor input</param>
         public AngularEncoderMechanism(ISimSpeedController input, SimEncoder output, double encoderCPR, DCMotor model,
-            double startRadians, bool invertInput)
+            double startRotations, bool invertInput)
         {
             m_input = input;
             m_output = output;
@@ -37,13 +42,12 @@ namespace HAL.Simulator.Mechanisms
 
             CurrentRadians = 0;
 
-            m_offset = startRadians;
+            m_offset = startRotations * (Math.PI * 2);
 
             AdjustedRadians = m_offset;
 
             m_maxRadians = double.MaxValue;
             m_minRadians = double.MinValue;
-
         }
 
         /// <summary>
