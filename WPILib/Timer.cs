@@ -1,4 +1,6 @@
-﻿using WPILib.Exceptions;
+﻿using System.Diagnostics;
+using System.Threading;
+using WPILib.Exceptions;
 using WPILib.Internal;
 
 namespace WPILib
@@ -66,6 +68,26 @@ namespace WPILib
             {
                 throw new BaseSystemNotInitializedException(Implementation, typeof(Timer));
             }
+        }
+
+        /// <summary>
+        /// Puases the thread for a specific time using a SpinLoop
+        /// </summary>
+        /// <param name="seconds"></param>
+        public static void PreciseDelay(double seconds)
+        {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            double ticks = (Stopwatch.Frequency * seconds);
+
+            int milliSeconds = (int)(seconds * 1e3);
+
+            if (milliSeconds >= 20)
+            {
+                Thread.Sleep(milliSeconds - 12);
+            }
+            while (sw.ElapsedTicks < ticks) ;
+            sw.Stop();
         }
 
         /// <summary>

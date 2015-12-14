@@ -30,18 +30,7 @@ namespace WPILib.Internal
         /// <param name="seconds">Length of time to pause</param>
         public void Delay(double seconds)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-            double ticks = (Stopwatch.Frequency * seconds);
-
-            int milliSeconds = (int)(seconds * 1e3);
-
-            if (milliSeconds >= 20)
-            {
-                Thread.Sleep(milliSeconds - 12);
-            }
-            while (sw.ElapsedTicks < ticks) ;
-            sw.Stop();
+            Thread.Sleep((int)(seconds * 1e3));
         }
 
         /// <summary>
