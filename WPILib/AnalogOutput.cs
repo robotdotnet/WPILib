@@ -21,7 +21,7 @@ namespace WPILib
         /// <summary>
         /// Construct an analog output on a specified MXP channel.
         /// </summary>
-        /// <param name="channel">The channel number to represent.</param>
+        /// <param name="channel">The channel number to represent. [0..1] on MXP.</param>
         public AnalogOutput(int channel)
         {
             m_channel = channel;

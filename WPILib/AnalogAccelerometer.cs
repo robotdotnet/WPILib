@@ -31,7 +31,7 @@ namespace WPILib
         /// <summary>
         /// Create a new instance of an accelerometer, declaring a new analog channel.
         /// </summary>
-        /// <param name="channel">The channel the accelerometer is connected to.</param>
+        /// <param name="channel">The channel the accelerometer is connected to. [0..3] on RIO, [4..7] on MXP</param>
         public AnalogAccelerometer(int channel)
         {
             m_allocatedChannel = true;

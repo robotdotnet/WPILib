@@ -47,11 +47,29 @@ namespace WPILib
             Report(ResourceType.kResourceType_Counter, (byte)m_index, (byte)mode);
         }
 
+        /// <summary>
+        /// Creates an instance of a counter where no sources are selected.
+        /// </summary>
+        /// <remarks>
+        /// If this constructor is used, all sources must then be specified by calling
+        /// functions to specify the upsource, and the downsource independently.
+        /// <para>The counter will start counting immediately.</para>
+        /// </remarks>
         public Counter()
         {
             InitCounter(Mode.TwoPulse);
         }
 
+        /// <summary>
+        /// Creates an instacne of a counter from a <see cref="DigitalSource"/>. 
+        /// </summary>
+        /// <remarks>
+        /// This constructor should be used if an existing <see cref="DigitalSource"/> is to
+        /// be shared by multiple other objects such as <see cref="Encoder">Encoders</see> or if
+        /// the <see cref="DigitalSource"/> is not a DIO Channel (for instance a <see cref="AnalogTrigger"/>.
+        /// <para>The counter will start couting immediately.</para>
+        /// </remarks>
+        /// <param name="source">The <see cref="DigitalSource"/> to count.</param>
         public Counter(DigitalSource source)
         {
             if (source == null)
@@ -59,14 +77,31 @@ namespace WPILib
             InitCounter(Mode.TwoPulse);
             SetUpSource(source);
         }
-        //TwoPulse
+        
+        /// <summary>
+        /// Create an instance of a Counter on the specified digital input, as an up counter.
+        /// </summary>
+        /// <remarks>
+        /// The counter will start counting immediately.
+        /// </remarks>
+        /// <param name="channel">The DIO channel to use as the up source. [0..9] on RIO, [10..25] on MXP.</param>
         public Counter(int channel)
         {
             InitCounter(Mode.TwoPulse);
             SetUpSource(channel);
         }
 
-        //External direction is encoder style.
+        /// <summary>
+        /// Creates an instance of a Counter object from specified <see cref="DigitalSource">
+        /// Digital Sources</see> for up and down counts.
+        /// </summary>
+        /// <remarks>
+        /// The counter will start counting immediately.
+        /// </remarks>
+        /// <param name="encodingType">The EncodingType for the counter. <see cref="EncodingType.K4X"/> is not supported.</param>
+        /// <param name="upSource">The <see cref="DigitalSource"/> to use for up counting.</param>
+        /// <param name="downSource">The <see cref="DigitalSource"/> to use for down counting.</param>
+        /// <param name="inverted">True to invert the direction of counting.</param>
         public Counter(EncodingType encodingType, DigitalSource upSource, DigitalSource downSource, bool inverted)
         {
             InitCounter(Mode.ExternalDirection);
@@ -95,6 +130,14 @@ namespace WPILib
             SetDownSourceEdge(inverted, true);
         }
 
+        /// <summary>
+        /// Create an instance of a Counter object, using an AnalogTrigger.
+        /// </summary>
+        /// <remarks>
+        /// Uses the trigger state output from the analog trigger.
+        /// <para>The counter will start counting immediately.</para>
+        /// </remarks>
+        /// <param name="trigger">The <see cref="AnalogTrigger"/> to count.</param>
         public Counter(AnalogTrigger trigger)
         {
             if (trigger == null)
@@ -122,13 +165,25 @@ namespace WPILib
             m_counter = IntPtr.Zero;
         }
 
+        /// <summary>
+        /// Gets the counters FPGA Index.
+        /// </summary>
         public int FPGAIndex => (int)m_index;
 
+        /// <summary>
+        /// Sets the up source for the counter as a digital input.
+        /// </summary>
+        /// <param name="channel">The DIO channel to count up. [0..9] on RIO, [10..25] are on the MXP.</param>
         public void SetUpSource(int channel)
         {
             SetUpSource(new DigitalInput(channel));
             m_allocatedUpSource = true;
         }
+
+        /// <summary>
+        /// Sets the up source object for the counter.
+        /// </summary>
+        /// <param name="source">The DigitalSource to use for counting up.</param>
         public void SetUpSource(DigitalSource source)
         {
             if (m_upSource != null && m_allocatedUpSource)
@@ -142,6 +197,11 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Sets the up source for the counter as a <see cref="AnalogTrigger"/>.
+        /// </summary>
+        /// <param name="analogTrigger">The AnalogTrigger object that is used for the up source.</param>
+        /// <param name="triggerType">The anlog trigger output that will trigger the counter.</param>
         public void SetUpSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
         {
             if (analogTrigger == null)
@@ -150,6 +210,11 @@ namespace WPILib
             m_allocatedUpSource = true;
         }
 
+        /// <summary>
+        /// Set the edge sensitivity on an up counting source.
+        /// </summary>
+        /// <param name="risingEdge">True to count on rising edge.</param>
+        /// <param name="fallingEdge">True to count on falling edge.</param>
         public void SetUpSourceEdge(bool risingEdge, bool fallingEdge)
         {
             if (m_upSource == null)
@@ -159,6 +224,9 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Disable the up counting source of the counter.
+        /// </summary>
         public void ClearUpSource()
         {
             if (m_upSource != null && m_allocatedUpSource)
@@ -174,12 +242,20 @@ namespace WPILib
         }
 
 
-        //Down Source
+        /// <summary>
+        /// Sets the down source for the counter as a digital input.
+        /// </summary>
+        /// <param name="channel">The DIO channel to count down. [0..9] on RIO, [10..25] are on the MXP.</param>
         public void SetDownSource(int channel)
         {
             SetDownSource(new DigitalInput(channel));
             m_allocatedDownSource = true;
         }
+
+        /// <summary>
+        /// Sets the down source object for the counter.
+        /// </summary>
+        /// <param name="source">The DigitalSource to use for counting down.</param>
         public void SetDownSource(DigitalSource source)
         {
             if (m_downSource != null && m_allocatedDownSource)
@@ -193,6 +269,11 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Sets the down source for the counter as a <see cref="AnalogTrigger"/>.
+        /// </summary>
+        /// <param name="analogTrigger">The AnalogTrigger object that is used for the down source.</param>
+        /// <param name="triggerType">The anlog trigger output that will trigger the counter.</param>
         public void SetDownSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
         {
             if (analogTrigger == null)
@@ -201,6 +282,11 @@ namespace WPILib
             m_allocatedDownSource = true;
         }
 
+        /// <summary>
+        /// Set the edge sensitivity on a down counting source.
+        /// </summary>
+        /// <param name="risingEdge">True to count on rising edge.</param>
+        /// <param name="fallingEdge">True to count on falling edge.</param>
         public void SetDownSourceEdge(bool risingEdge, bool fallingEdge)
         {
             if (m_downSource == null)
@@ -210,6 +296,9 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Disable the down counting source of the counter.
+        /// </summary>
         public void ClearDownSource()
         {
             if (m_downSource != null && m_allocatedDownSource)
@@ -224,6 +313,10 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Set standard up/down counting mode on this counter.
+        /// </summary>
+        /// <remarks>Up and down counts are sourced independently from two outputs.</remarks>
         public void SetUpDownCounterMode()
         {
             int status = 0;
@@ -231,6 +324,11 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Set external direction mode on this counter.
+        /// </summary>
+        /// <remarks>Counts are sourced on the up counter input.
+        /// The down counter input represents the direction to count.</remarks>
         public void SetExternalDirectionMode()
         {
             int status = 0;
@@ -238,6 +336,11 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Set Semi-period mode on this counter.
+        /// </summary>
+        /// <remarks>Counts up on both rising and falling edges.</remarks>
+        /// <param name="highSemiPeriod">True to count up on both rising and falling.</param>
         public void SetSemiPeriodMode(bool highSemiPeriod)
         {
             int status = 0;
@@ -245,6 +348,11 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Configure the counter to count in up or down based on the length of the input pulse.
+        /// </summary>
+        /// <remarks>This mode is most useful for direction sensitive gear sensors.</remarks>
+        /// <param name="threshold">The pulse length beyond which the counter counts in the opposite direction (seconds).</param>
         public void SetPulseLengthMode(double threshold)
         {
             int status = 0;
@@ -286,6 +394,19 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets whether you want to continue updating the event timer output
+        /// when there are no samples captured.
+        /// </summary>
+        /// <remarks>The output of the event timer has a buffer of periods that are averaged
+        /// and posted to a register on the FPGA. When the timer detects that the event
+        /// source has stopped (based on the <see cref="MaxPeriod"/>) the buffer of samples
+        /// to be averaged is emptied. If you enable the update when empty, you will be notfied 
+        /// of the stopped source and the event time will report 0 samples. If you disable update
+        /// when empty, the most recent average will remain on the output until a new sample
+        /// is acquired. You will never see 0 samples output (except when there have been no
+        /// events since an FPGA reset) and you will likely not se the stopped bit become true
+        /// (since it is updated at the end of an average and there are no samples to average.)</remarks>
         public bool UpdateWhenEmpty
         {
             set

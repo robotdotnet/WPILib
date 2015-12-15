@@ -22,7 +22,7 @@ namespace WPILib
         /// <summary>
         /// Initialize an analog trigger from a channel
         /// </summary>
-        /// <param name="channel">The port to use for the analog trigger.</param>
+        /// <param name="channel">The port to use for the analog trigger. [0..3] on RIO, [4..7] on MXP.</param>
         protected void InitTrigger(int channel)
         {
             IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);

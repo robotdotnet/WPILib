@@ -27,7 +27,7 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Creates a new Analog Potentiometer on the specified channel.
+        /// Creates a new Analog Potentiometer on the specified channel. [0..3] on RIO, [4..7] on MXP.
         /// </summary>
         /// <remarks>
         /// Use the fullRange and offset values so that the output produces meaningful

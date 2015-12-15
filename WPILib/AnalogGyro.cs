@@ -56,7 +56,7 @@ namespace WPILib
         /// <summary>
         /// Creates a new Analog Gyro on the specified channel.
         /// </summary>
-        /// <param name="channel">The channel the gyro is on.</param>
+        /// <param name="channel">The channel the gyro is on (Must be an accumulator channel). [0..1] on RIO.</param>
         public AnalogGyro(int channel)
         {
             AnalogInput aIn = new AnalogInput(channel);
