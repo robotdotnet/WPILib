@@ -47,9 +47,9 @@ namespace WPILib.Internal
         /// </summary>
         public class TimerImpl : Timer.ITimerInterface
         {
-            private long m_startTime;
-            private double m_accumulatedTime;
-            private bool m_running;
+            internal long m_startTime;
+            internal double m_accumulatedTime;
+            internal bool m_running;
 
             private readonly object m_lockObject = new object();
 

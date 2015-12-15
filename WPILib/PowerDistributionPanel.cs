@@ -39,6 +39,7 @@ namespace WPILib
         {
             int status = 0;
             double value = GetPDPChannelCurrent((byte)m_module, (byte)channel, ref status);
+            CheckPDPChannel(channel);
             return value;
         }
 

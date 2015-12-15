@@ -132,6 +132,7 @@
     <Compile Include="TestSolenoid.cs" />
     <Compile Include="TestCounter.cs" />
     <Compile Include="TestUtility.cs" />
+    <Compile Include="TestWPITimer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL\HAL.csproj">

@@ -29,252 +29,252 @@ namespace WPILib.Tests
 
         public HashSet<string> GetKeys(NtType types)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public HashSet<string> GetKeys(EntryFlags types)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public HashSet<string> GetKeys(int types)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public HashSet<string> GetKeys()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public HashSet<string> GetSubTables()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public void SetPersistent(string key)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void ClearPersistent(string key)
         {
-            throw new NotImplementedException();
+            
         }
 
         public bool IsPersistent(string key)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void SetFlags(string key, EntryFlags flags)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void ClearFlags(string key, EntryFlags flags)
         {
-            throw new NotImplementedException();
+            
         }
 
         public EntryFlags GetFlags(string key)
         {
-            throw new NotImplementedException();
+            return EntryFlags.None;
         }
 
         public void Delete(string key)
         {
-            throw new NotImplementedException();
+            
         }
 
         public object GetValue(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool PutValue(string key, object value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool PutNumber(string key, double value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public double GetNumber(string key, double defaultValue)
         {
-            throw new NotImplementedException();
+            return 0.0;
         }
 
         public double GetNumber(string key)
         {
-            throw new NotImplementedException();
+            return 0.0;
         }
 
         public bool PutString(string key, string value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public string GetString(string key, string defaultValue)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public string GetString(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool PutBoolean(string key, bool value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool GetBoolean(string key, bool defaultValue)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool GetBoolean(string key)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool PutBooleanArray(string key, bool[] value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public bool[] GetBooleanArray(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool[] GetBooleanArray(string key, bool[] defaultValue)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool PutNumberArray(string key, double[] value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public double[] GetNumberArray(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public double[] GetNumberArray(string key, double[] defaultValue)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool PutStringArray(string key, string[] value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public string[] GetStringArray(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public string[] GetStringArray(string key, string[] defaultValue)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public bool PutRaw(string key, byte[] value)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public byte[] GetRaw(string key)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public byte[] GetRaw(string key, byte[] defaultValue)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public void AddTableListenerEx(ITableListener listener, NotifyFlags flags)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddTableListenerEx(string key, ITableListener listener, NotifyFlags flags)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddSubTableListener(ITableListener listener, bool localNotify)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddTableListener(ITableListener listener, bool immediateNotify = false)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddTableListener(string key, ITableListener listener, bool immediateNotify)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddSubTableListener(ITableListener listener)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void RemoveTableListener(ITableListener listener)
         {
-            throw new NotImplementedException();
+            
         }
 
         public object GetValue(string key, object defaultValue)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public void AddTableListenerEx(Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddTableListenerEx(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool localNotify)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify = false)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddTableListener(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void RemoveTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

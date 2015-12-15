@@ -4,6 +4,7 @@ using HAL.Simulator;
 using HAL.Simulator.Data;
 using NUnit.Framework;
 using WPILib.Exceptions;
+using NetworkTables.Tables;
 // ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
@@ -173,5 +174,121 @@ namespace WPILib.Tests
                 Assert.IsFalse(s.IsBlackListed());
             }
         }
+
+        [Test]
+        public void TestVoltageStickyFault()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                Assert.That(!s.GetPCMSolenoidVoltageStickyFault());
+            }
+        }
+
+        [Test]
+        public void TestVoltageFault()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                Assert.That(!s.GetPCMSolenoidVoltageFault());
+            }
+        }
+
+        [Test]
+        public void TestClearFaults()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                s.ClearAllPCMStickyFaults();
+            }
+        }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Solenoid"));
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStartLiveWindowModeTableNull()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                s.Set(true);
+                Assert.That(s.Get, Is.True);
+                s.StartLiveWindowMode();
+                Assert.That(s.Get, Is.False);
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowModeTableNull()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                s.Set(true);
+                Assert.That(s.Get, Is.True);
+                s.StopLiveWindowMode();
+                Assert.That(s.Get, Is.False);
+            }
+        }
+
+        [Test]
+        public void TestStartLiveWindowModeTable()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                ITable table = new MockNetworkTable();
+                s.InitTable(table);
+                s.Set(true);
+                Assert.That(s.Get, Is.True);
+                s.StartLiveWindowMode();
+                Assert.That(s.Get, Is.False);
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowModeTable()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                ITable table = new MockNetworkTable();
+                s.InitTable(table);
+                s.Set(true);
+                Assert.That(s.Get, Is.True);
+                s.StopLiveWindowMode();
+                Assert.That(s.Get, Is.False);
+            }
+        }
+
+        [Test]
+        public void TestValueChanged()
+        {
+            using (Solenoid s = NewSolenoid())
+            {
+                s.Set(false);
+                Assert.That(s.Get, Is.False);
+                s.ValueChanged(null, null, true, NetworkTables.NotifyFlags.NotifyLocal);
+                Assert.That(s.Get, Is.True);
+                s.ValueChanged(null, null, false, NetworkTables.NotifyFlags.NotifyLocal);
+                Assert.That(s.Get, Is.False);
+            }
+        }
+
+
     }
 }
