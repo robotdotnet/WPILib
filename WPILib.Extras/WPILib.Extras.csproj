@@ -69,12 +69,21 @@
     <Compile Include="AttributedCommandModel\RunCommandOnJoystickAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnNetworkKeyAttribute.cs" />
     <Compile Include="LabVIEWRobot.cs" />
-    <Compile Include="NavX\CapabilityFlags.cs" />
-    <Compile Include="NavX\DeviceRegisters.cs" />
-    <Compile Include="NavX\I2cIO.cs" />
-    <Compile Include="NavX\IIo.cs" />
-    <Compile Include="NavX\NavXMxp.cs" />
-    <Compile Include="NavX\SpiIO.cs" />
+    <Compile Include="NavX\AHRS.cs" />
+    <Compile Include="NavX\ContinuousAngleTracker.cs" />
+    <Compile Include="NavX\IBoardCapabilities.cs" />
+    <Compile Include="NavX\IIOCompleteNotification.cs" />
+    <Compile Include="NavX\IIOProvider.cs" />
+    <Compile Include="NavX\InertialDataIntegrator.cs" />
+    <Compile Include="NavX\IRegisterIO.cs" />
+    <Compile Include="NavX\OffsetTracker.cs" />
+    <Compile Include="NavX\Protocols\AHRSProtocol.cs" />
+    <Compile Include="NavX\Protocols\IMUProtocol.cs" />
+    <Compile Include="NavX\Protocols\IMURegisters.cs" />
+    <Compile Include="NavX\RegisterIO.cs" />
+    <Compile Include="NavX\RegisterIO_I2C.cs" />
+    <Compile Include="NavX\RegisterIO_SPI.cs" />
+    <Compile Include="NavX\SerialIO.cs" />
     <Compile Include="XboxController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
