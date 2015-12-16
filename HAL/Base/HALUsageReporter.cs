@@ -59,7 +59,8 @@ namespace HAL.Base
         kResourceType_ADXL362,
         kResourceType_ADXRS450,
         kResourecType_RevSPARK,
-        kResourceType_DigitalGlitchFilter
+        kResourceType_MindsensorsSD540,
+        kResourceType_DigitalFilter
     };
 
     public enum Instances

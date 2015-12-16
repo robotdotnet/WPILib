@@ -78,7 +78,7 @@ namespace WPILib
             commands[2] = PowerCtlRegister | PowerCtl_UltraLowNoise;
             m_spi.Write(commands, 3);
 
-            Report(ResourceType.kResourceType_ADXRS450, (byte)port);
+            Report(ResourceType.kResourceType_ADXL362, (byte)port);
             LiveWindow.LiveWindow.AddSensor("ADXL362", port.ToString(), this);
         }
 

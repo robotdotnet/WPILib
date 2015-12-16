@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using static HAL.Base.HALDigital;
 using static WPILib.Utility;
+using static HAL.Base.HAL;
+using HAL.Base;
 
 namespace WPILib
 {
@@ -25,6 +27,7 @@ namespace WPILib
         public DigitalGlitchFilter()
         {
             m_channelIndex = s_allocated.Allocate("Could not allocate a new DigitalGlitchFilter");
+            Report(ResourceType.kResourceType_DigitalFilter, (byte)m_channelIndex, 0);
         }
 
         /// <inheritdoc/>
