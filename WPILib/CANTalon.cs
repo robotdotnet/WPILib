@@ -854,10 +854,12 @@ namespace WPILib
 
         private void EnsureInPIDMode()
         {
+            /*
             if (!(MotorControlMode == ControlMode.Position || MotorControlMode == ControlMode.Speed))
             {
                 throw new InvalidOperationException("PID mode only applies to Position and Speed modes.");
             }
+            */
         }
 
         /// <inheritdoc/>
