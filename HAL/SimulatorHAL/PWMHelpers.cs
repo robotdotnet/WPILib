@@ -71,11 +71,11 @@ namespace HAL.SimulatorHAL
         public static double ReverseSparkPWM(double value)
         {
             ushort maxPosPWM = 1502;
-            ushort minPosPWM = 1049;
-            ushort posScale = 453;
-            ushort maxNegPWM = 959;
+            ushort minPosPWM = 999;
+            ushort posScale = 503;
+            ushort maxNegPWM = 997;
             ushort minNegPWM = 498;
-            ushort negScale = 461;
+            ushort negScale = 499;
 
             return rev_pwm(value, maxPosPWM, minPosPWM, posScale, maxNegPWM, minNegPWM, negScale);
         }
@@ -83,11 +83,11 @@ namespace HAL.SimulatorHAL
         public static double ReverseSD540PWM(double value)
         {
             ushort maxPosPWM = 1549;
-            ushort minPosPWM = 1049;
-            ushort posScale = 500;
-            ushort maxNegPWM = 939;
+            ushort minPosPWM = 999;
+            ushort posScale = 550;
+            ushort maxNegPWM = 997;
             ushort minNegPWM = 439;
-            ushort negScale = 500;
+            ushort negScale = 558;
 
             return rev_pwm(value, maxPosPWM, minPosPWM, posScale, maxNegPWM, minNegPWM, negScale);
         }

@@ -70,43 +70,43 @@ namespace WPILib.Tests.MotorControllers
         }
 
         [Test]
-        public void TestPWMSpeedControllerSet()
+        public void TestPWMSpeedControllerSet([Range(-1.0, 1.0, 0.2)] double range)
         {
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
-                t.Set(1);
-                Assert.AreEqual(t.Get(), 1);
+                t.Set(range);
+                Assert.That(t.Get(), Is.EqualTo(range).Within(.01));
             }
         }
 
         [Test]
-        public void TestPWMHelpers()
+        public void TestPWMHelpers([Range(-1.0, 1.0, 0.2)] double range)
         {
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
-                t.Set(1);
-                Assert.AreEqual(SimData.PWM[2].Value, 1);
+                t.Set(range);
+                Assert.That(SimData.PWM[2].Value, Is.EqualTo(range).Within(.01));
             }
         }
 
         [Test]
-        public void TestPIDWrite()
+        public void TestPIDWrite([Range(-1.0, 1.0, 0.2)] double range)
         {
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
-                t.PidWrite(-1);
+                t.PidWrite(range);
 
-                Assert.AreEqual(t.Get(), -1);
+                Assert.That(t.Get(), Is.EqualTo(range).Within(.01));
             }
         }
 
         [Test]
-        public void TestPWMHelpersPID()
+        public void TestPWMHelpersPID([Range(-1.0, 1.0, 0.2)] double range)
         {
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
-                t.PidWrite(-1);
-                Assert.AreEqual(SimData.PWM[2].Value, -1);
+                t.PidWrite(range);
+                Assert.That(SimData.PWM[2].Value, Is.EqualTo(range).Within(.01));
             }
         }
 
