@@ -58,7 +58,7 @@ namespace HAL.Base
         kResourceType_CANTalonSRX,
         kResourceType_ADXL362,
         kResourceType_ADXRS450,
-        kResourecType_RevSPARK,
+        kResourceType_RevSPARK,
         kResourceType_MindsensorsSD540,
         kResourceType_DigitalFilter
     };

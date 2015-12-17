@@ -132,6 +132,7 @@
     <Compile Include="Interfaces\IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />
     <Compile Include="PWMSpeedController.cs" />
+    <Compile Include="SD540.cs" />
     <Compile Include="SmartDashboard\SendableChooser.cs" />
     <Compile Include="Interfaces\ISpeedController.cs" />
     <Compile Include="Internal\HardwareTimer.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="SmartDashboard\SmartDashboard.cs" />
     <Compile Include="Solenoid.cs" />
     <Compile Include="SolenoidBase.cs" />
+    <Compile Include="Spark.cs" />
     <Compile Include="SPI.cs" />
     <Compile Include="Talon.cs" />
     <Compile Include="TalonSRX.cs" />

@@ -720,6 +720,12 @@ namespace HAL.SimulatorHAL
                 case (byte)ResourceType.kResourceType_VictorSP:
                     PWM[instanceNumber].Type = ControllerType.VictorSP;
                     break;
+                case (byte)ResourceType.kResourceType_RevSPARK:
+                    PWM[instanceNumber].Type = ControllerType.Spark;
+                    break;
+                case (byte)ResourceType.kResourceType_MindsensorsSD540:
+                    PWM[instanceNumber].Type = ControllerType.SD540;
+                    break;
                 case (byte)ResourceType.kResourceType_Servo:
                     PWM[instanceNumber].Type = ControllerType.Servo;
                     break;

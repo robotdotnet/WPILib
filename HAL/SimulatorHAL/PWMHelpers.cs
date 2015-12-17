@@ -68,6 +68,30 @@ namespace HAL.SimulatorHAL
             return rev_pwm(value, maxPosPWM, minPosPWM, posScale, maxNegPWM, minNegPWM, negScale);
         }
 
+        public static double ReverseSparkPWM(double value)
+        {
+            ushort maxPosPWM = 1502;
+            ushort minPosPWM = 1049;
+            ushort posScale = 453;
+            ushort maxNegPWM = 959;
+            ushort minNegPWM = 498;
+            ushort negScale = 461;
+
+            return rev_pwm(value, maxPosPWM, minPosPWM, posScale, maxNegPWM, minNegPWM, negScale);
+        }
+
+        public static double ReverseSD540PWM(double value)
+        {
+            ushort maxPosPWM = 1549;
+            ushort minPosPWM = 1049;
+            ushort posScale = 500;
+            ushort maxNegPWM = 939;
+            ushort minNegPWM = 439;
+            ushort negScale = 500;
+
+            return rev_pwm(value, maxPosPWM, minPosPWM, posScale, maxNegPWM, minNegPWM, negScale);
+        }
+
         public static double MotorRawToValue(PWMData pwm)
         {
             if (pwm == null) return 0.0;
@@ -89,6 +113,10 @@ namespace HAL.SimulatorHAL
                     return ReverseVictorPWM(transVal);
                 case ControllerType.VictorSP:
                     return ReverseVictorSPPWM(transVal);
+                case ControllerType.Spark:
+                    return ReverseSparkPWM(transVal);
+                case ControllerType.SD540:
+                    return ReverseSD540PWM(transVal);
                 case ControllerType.Servo:
                     return 0.0;
                 default:

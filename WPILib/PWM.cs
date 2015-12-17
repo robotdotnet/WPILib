@@ -148,7 +148,7 @@ namespace WPILib
         /// <param name="center">The center speed (off)</param>
         /// <param name="deadbandMin">The low end of the deadband range</param>
         /// <param name="min">The minimum PWM value</param>
-        [Obsolete("Recommended so set bounds in ms using SetBounds(double, double, double, double, double")]
+        [Obsolete("Recommended to set bounds in ms using SetBounds(double, double, double, double, double")]
         public void SetBounds(int max, int deadbandMax, int center, int deadbandMin, int min)
         {
             MaxPositivePwm = max;

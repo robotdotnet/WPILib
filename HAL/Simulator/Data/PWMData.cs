@@ -29,6 +29,8 @@
         /// victor sp
         /// </summary>
         VictorSP,
+        Spark,
+        SD540,
         /// <summary>
         /// servo
         /// </summary>
