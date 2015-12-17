@@ -173,16 +173,16 @@ namespace WPILib
 
         public struct MotionProfileStatus
         {
-            public uint TopBufferRem { get; }
-            public uint TopBufferCnt { get; }
-            public uint BtmBufferCnt { get; }
+            public int TopBufferRem { get; }
+            public int TopBufferCnt { get; }
+            public int BtmBufferCnt { get; }
             public bool HasUnderrun { get; }
             public bool IsUnderrrun { get; }
             public bool ActivePointValid { get; }
             public TrajectoryPoint ActivePoint { get; }
             public SetValueMotionProfile OutputEnable { get; }
 
-            public MotionProfileStatus(uint topRem, uint topCnt, uint btmCnt, bool hasUnder,
+            public MotionProfileStatus(int topRem, int topCnt, int btmCnt, bool hasUnder,
                 bool isUnder, bool activeValid, TrajectoryPoint activePoint, SetValueMotionProfile outEnable)
             {
                 TopBufferRem = topRem;
@@ -242,7 +242,7 @@ namespace WPILib
             s_talonIds.Allocate(deviceNumber, $"CAN TalonSRX ID {deviceNumber} is already allocated.");
 
             DeviceID = deviceNumber;
-            m_talonPointer = C_TalonSRX_Create(deviceNumber, controlPeriodMs, enablePeriodMs);
+            m_talonPointer = C_TalonSRX_Create3(deviceNumber, controlPeriodMs, enablePeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
             m_setPoint = 0;
@@ -1763,7 +1763,7 @@ namespace WPILib
             }
         }
 
-        public void ChangeMotionControlFramePeriod(uint periodMs)
+        public void ChangeMotionControlFramePeriod(int periodMs)
         {
             C_TalonSRX_ChangeMotionControlFramePeriod(m_talonPointer, periodMs);
         }
@@ -1773,7 +1773,7 @@ namespace WPILib
             C_TalonSRX_ClearMotionProfileTrajectories(m_talonPointer);
         }
 
-        public uint GetMotionProfileTopLevelBufferCount()
+        public int GetMotionProfileTopLevelBufferCount()
         {
             return C_TalonSRX_GetMotionProfileTopLevelBufferCount(m_talonPointer);
         }
@@ -1799,7 +1799,7 @@ namespace WPILib
 
         public bool IsMotionProfileTopLevelBufferFull()
         {
-            return C_TalonSRX_IsMotionProfileTopLevelBufferFull(m_talonPointer);
+            return C_TalonSRX_IsMotionProfileTopLevelBufferFull(m_talonPointer) != 0;
         }
 
         public void ProcessMotionProfileBuffer()
@@ -1809,14 +1809,14 @@ namespace WPILib
 
         public MotionProfileStatus GetMotionProfileStatus()
         {
-            uint flags = 0;
-            uint profileSelect = 0;
+            int flags = 0;
+            int profileSelect = 0;
             int pos = 0;
             int vel = 0;
-            uint topRem = 0;
-            uint topCnt = 0;
-            uint btmCnt = 0;
-            uint outEnable = 0;
+            int topRem = 0;
+            int topCnt = 0;
+            int btmCnt = 0;
+            int outEnable = 0;
             C_TalonSRX_GetMotionProfileStatus(m_talonPointer, ref flags, ref profileSelect,
                 ref pos, ref vel, ref topRem, ref topCnt, ref btmCnt, ref outEnable);
 

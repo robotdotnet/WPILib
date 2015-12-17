@@ -15,7 +15,7 @@ namespace HAL.SimulatorHAL
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALCanTalonSRX.C_TalonSRX_Create = c_TalonSRX_Create;
+            Base.HALCanTalonSRX.C_TalonSRX_Create3 = c_TalonSRX_Create;
             Base.HALCanTalonSRX.C_TalonSRX_Destroy = c_TalonSRX_Destroy;
             Base.HALCanTalonSRX.C_TalonSRX_SetParam = c_TalonSRX_SetParam;
             Base.HALCanTalonSRX.C_TalonSRX_RequestParam = c_TalonSRX_RequestParam;
@@ -178,7 +178,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, uint frameEnum, uint periodMs)
+        public static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, int frameEnum, int periodMs)
         {
             return CTR_Code.CTR_OKAY;
         }
