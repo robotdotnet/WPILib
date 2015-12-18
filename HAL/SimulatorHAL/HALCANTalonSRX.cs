@@ -15,7 +15,7 @@ namespace HAL.SimulatorHAL
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALCanTalonSRX.C_TalonSRX_Create = c_TalonSRX_Create;
+            Base.HALCanTalonSRX.C_TalonSRX_Create3 = c_TalonSRX_Create;
             Base.HALCanTalonSRX.C_TalonSRX_Destroy = c_TalonSRX_Destroy;
             Base.HALCanTalonSRX.C_TalonSRX_SetParam = c_TalonSRX_SetParam;
             Base.HALCanTalonSRX.C_TalonSRX_RequestParam = c_TalonSRX_RequestParam;
@@ -75,36 +75,53 @@ namespace HAL.SimulatorHAL
             Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToFallUs = CTalonSRXGetPulseRiseToFallUs;
             Base.HALCanTalonSRX.C_TalonSRX_GetPulseWidthRiseToRiseUs = CTalonSRXGetPulseRiseToRiseUs;
             Base.HALCanTalonSRX.C_TalonSRX_IsPulseWidthSensorPresent = CTalonSRXIsPulseWidthSensorPresent;
+            Base.HALCanTalonSRX.C_TalonSRX_Set = c_TalonSRX_Set;
+            Base.HALCanTalonSRX.C_TalonSRX_SetPgain = c_TalonSRX_SetPgain;
+            Base.HALCanTalonSRX.C_TalonSRX_SetIgain = c_TalonSRX_SetIgain;
+            Base.HALCanTalonSRX.C_TalonSRX_SetDgain = c_TalonSRX_SetDgain;
+            Base.HALCanTalonSRX.C_TalonSRX_SetFgain = c_TalonSRX_SetFgain;
+            Base.HALCanTalonSRX.C_TalonSRX_SetIzone = c_TalonSRX_SetIzone;
+            Base.HALCanTalonSRX.C_TalonSRX_SetCloseLoopRampRate = c_TalonSRX_SetCloseLoopRampRate;
+            Base.HALCanTalonSRX.C_TalonSRX_SetVoltageCompensationRate = c_TalonSRX_SetVoltageCompensationRate;
+            Base.HALCanTalonSRX.C_TalonSRX_SetSensorPosition = c_TalonSRX_SetSensorPosition;
+            Base.HALCanTalonSRX.C_TalonSRX_SetForwardSoftLimit = c_TalonSRX_SetForwardSoftLimit;
+            Base.HALCanTalonSRX.C_TalonSRX_SetReverseSoftLimit = c_TalonSRX_SetReverseSoftLimit;
+            Base.HALCanTalonSRX.C_TalonSRX_SetForwardSoftEnable = c_TalonSRX_SetForwardSoftEnable;
+            Base.HALCanTalonSRX.C_TalonSRX_SetReverseSoftEnable = c_TalonSRX_SetReverseSoftEnable;
+            Base.HALCanTalonSRX.C_TalonSRX_GetPgain = c_TalonSRX_GetPgain;
+            Base.HALCanTalonSRX.C_TalonSRX_GetIgain = c_TalonSRX_GetIgain;
+            Base.HALCanTalonSRX.C_TalonSRX_GetDgain = c_TalonSRX_GetDgain;
+            Base.HALCanTalonSRX.C_TalonSRX_GetFgain = c_TalonSRX_GetFgain;
+            Base.HALCanTalonSRX.C_TalonSRX_GetIzone = c_TalonSRX_GetIzone;
+            Base.HALCanTalonSRX.C_TalonSRX_GetCloseLoopRampRate = c_TalonSRX_GetCloseLoopRampRate;
+            Base.HALCanTalonSRX.C_TalonSRX_GetVoltageCompensationRate = c_TalonSRX_GetVoltageCompensationRate;
+            Base.HALCanTalonSRX.C_TalonSRX_GetForwardSoftLimit = c_TalonSRX_GetForwardSoftLimit;
+            Base.HALCanTalonSRX.C_TalonSRX_GetReverseSoftLimit = c_TalonSRX_GetReverseSoftLimit;
+            Base.HALCanTalonSRX.C_TalonSRX_GetForwardSoftEnable = c_TalonSRX_GetForwardSoftEnable;
+            Base.HALCanTalonSRX.C_TalonSRX_GetReverseSoftEnable = c_TalonSRX_GetReverseSoftEnable;
+            Base.HALCanTalonSRX.C_TalonSRX_ChangeMotionControlFramePeriod = c_TalonSRX_ChangeMotionControlFramePeriod;
+            Base.HALCanTalonSRX.C_TalonSRX_ClearMotionProfileTrajectories = c_TalonSRX_ClearMotionProfileTrajectories;
+            Base.HALCanTalonSRX.C_TalonSRX_GetMotionProfileTopLevelBufferCount = c_TalonSRX_GetMotionProfileTopLevelBufferCount;
+            Base.HALCanTalonSRX.C_TalonSRX_IsMotionProfileTopLevelBufferFull = c_TalonSRX_IsMotionProfileTopLevelBufferFull;
+            Base.HALCanTalonSRX.C_TalonSRX_PushMotionProfileTrajectory = c_TalonSRX_PushMotionProfileTrajectory;
+            Base.HALCanTalonSRX.C_TalonSRX_ProcessMotionProfileBuffer = c_TalonSRX_ProcessMotionProfileBuffer;
+            Base.HALCanTalonSRX.C_TalonSRX_GetMotionProfileStatus = c_TalonSRX_GetMotionProfileStatus;
+            Base.HALCanTalonSRX.C_TalonSRX_GetActTraj_IsValid = c_TalonSRX_GetActTraj_IsValid;
+            Base.HALCanTalonSRX.C_TalonSRX_GetActTraj_ProfileSlotSelect = c_TalonSRX_GetActTraj_ProfileSlotSelect;
+            Base.HALCanTalonSRX.C_TalonSRX_GetActTraj_VelOnly = c_TalonSRX_GetActTraj_VelOnly;
+            Base.HALCanTalonSRX.C_TalonSRX_GetActTraj_IsLast = c_TalonSRX_GetActTraj_IsLast;
+            Base.HALCanTalonSRX.C_TalonSRX_GetOutputType = c_TalonSRX_GetOutputType;
+            Base.HALCanTalonSRX.C_TalonSRX_GetHasUnderrun = c_TalonSRX_GetHasUnderrun;
+            Base.HALCanTalonSRX.C_TalonSRX_GetIsUnderrun = c_TalonSRX_GetIsUnderrun;
+            Base.HALCanTalonSRX.C_TalonSRX_GetNextID = c_TalonSRX_GetNextID;
+            Base.HALCanTalonSRX.C_TalonSRX_GetBufferIsFull = c_TalonSRX_GetBufferIsFull;
+            Base.HALCanTalonSRX.C_TalonSRX_GetCount = c_TalonSRX_GetCount;
+            Base.HALCanTalonSRX.C_TalonSRX_GetActTraj_Velocity = c_TalonSRX_GetActTraj_Velocity;
+            Base.HALCanTalonSRX.C_TalonSRX_GetActTraj_Position = c_TalonSRX_GetActTraj_Position;
         }
-
-        private static CTR_Code CTalonSRXIsPulseWidthSensorPresent(IntPtr handle, ref int i)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static CTR_Code CTalonSRXGetPulseRiseToRiseUs(IntPtr handle, ref int i)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static CTR_Code CTalonSRXGetPulseRiseToFallUs(IntPtr handle, ref int i)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static CTR_Code CTalonSRXGetPulseWidthVelocity(IntPtr handle, ref int i)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static CTR_Code CTalonSRXGetPulseWidthPosition(IntPtr handle, ref int i)
-        {
-            throw new NotImplementedException();
-        }
-
 
         [CalledSimFunction]
-        public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs)
+        public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs, int enablePeriodMs)
         {
             if (!InitializeCanTalon(deviceNumber))
             {
@@ -115,6 +132,7 @@ namespace HAL.SimulatorHAL
             TalonSRX srx = new TalonSRX { deviceNumber = deviceNumber };
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(srx));
             Marshal.StructureToPtr(srx, ptr, true);
+            GetCanTalon(deviceNumber).ResetData();
             return ptr;
         }
 
@@ -178,7 +196,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, uint frameEnum, uint periodMs)
+        public static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, int frameEnum, int periodMs)
         {
             return CTR_Code.CTR_OKAY;
         }
@@ -528,5 +546,358 @@ namespace HAL.SimulatorHAL
             GetCanTalon(PortConverters.GetTalonSRX(handle)).RevFeedbackSensor = param != 0;
             return CTR_Code.CTR_OKAY;
         }
+
+        public static void c_TalonSRX_Set(IntPtr handle, double value)
+        {
+            GetCanTalon(PortConverters.GetTalonSRX(handle)).PercentVBusValue = value;
+        }
+
+        public static CTR_Code c_TalonSRX_SetPgain(IntPtr handle, int slotIdx, double gain)
+        {
+            if (slotIdx == 0)
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_P = gain;
+            }
+            else
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_P = gain;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetIgain(IntPtr handle, int slotIdx, double gain)
+        {
+            if (slotIdx == 0)
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_I = gain;
+            }
+            else
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_I = gain;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetDgain(IntPtr handle, int slotIdx, double gain)
+        {
+            if (slotIdx == 0)
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_D = gain;
+            }
+            else
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_D = gain;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetFgain(IntPtr handle, int slotIdx, double gain)
+        {
+            if (slotIdx == 0)
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_F = gain;
+            }
+            else
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_F = gain;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetIzone(IntPtr handle, int slotIdx, int zone)
+        {
+            if (slotIdx == 0)
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_IZone = zone;
+            }
+            else
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_IZone = zone;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetCloseLoopRampRate(IntPtr handle, int slotIdx, int closeLoopRampRate)
+        {
+            if (slotIdx == 0)
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_CloseLoopRampRate = closeLoopRampRate;
+            }
+            else
+            {
+                GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_CloseLoopRampRate = closeLoopRampRate;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetVoltageCompensationRate(IntPtr handle, double voltagePerMs)
+        {
+            GetCanTalon(PortConverters.GetTalonSRX(handle)).VoltageCompensationRate = voltagePerMs;
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetSensorPosition(IntPtr handle, int pos)
+        {
+            GetCanTalon(PortConverters.GetTalonSRX(handle)).SensorPosition = pos;
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetForwardSoftLimit(IntPtr handle, int forwardLimit)
+        {
+            //TODO: Add This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetReverseSoftLimit(IntPtr handle, int reverseLimit)
+        {
+            //TODO: Add This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetForwardSoftEnable(IntPtr handle, int enable)
+        {
+            //TODO: Add This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_SetReverseSoftEnable(IntPtr handle, int enable)
+        {
+            //TODO: Add This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetPgain(IntPtr handle, int slotIdx, ref double gain)
+        {
+            if (slotIdx == 0)
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_P;
+            }
+            else
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_P;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetIgain(IntPtr handle, int slotIdx, ref double gain)
+        {
+            if (slotIdx == 0)
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_I;
+            }
+            else
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_I;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetDgain(IntPtr handle, int slotIdx, ref double gain)
+        {
+            if (slotIdx == 0)
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_D;
+            }
+            else
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_D;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetFgain(IntPtr handle, int slotIdx, ref double gain)
+        {
+            if (slotIdx == 0)
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_F;
+            }
+            else
+            {
+                gain = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_F;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetIzone(IntPtr handle, int slotIdx, ref int zone)
+        {
+            if (slotIdx == 0)
+            {
+                zone = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_IZone;
+            }
+            else
+            {
+                zone = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_IZone;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetCloseLoopRampRate(IntPtr handle, int slotIdx, ref int closeLoopRampRate)
+        {
+            if (slotIdx == 0)
+            {
+                closeLoopRampRate = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot0_CloseLoopRampRate;
+            }
+            else
+            {
+                closeLoopRampRate = GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileParamSlot1_CloseLoopRampRate;
+            }
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetVoltageCompensationRate(IntPtr handle, ref double voltagePerMs)
+        {
+            voltagePerMs = GetCanTalon(PortConverters.GetTalonSRX(handle)).VoltageCompensationRate;
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetForwardSoftLimit(IntPtr handle, ref int forwardLimit)
+        {
+            //TODO: Do This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetReverseSoftLimit(IntPtr handle, ref int reverseLimit)
+        {
+            //TODO: Do This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetForwardSoftEnable(IntPtr handle, ref int enable)
+        {
+            //TODO: Do This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetReverseSoftEnable(IntPtr handle, ref int enable)
+        {
+            //TODO: Do This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static void c_TalonSRX_ChangeMotionControlFramePeriod(IntPtr handle, int periodMs)
+        {
+            //TODO: Do This
+        }
+
+        public static void c_TalonSRX_ClearMotionProfileTrajectories(IntPtr handle)
+        {
+            //TODO: Do This
+        }
+
+        public static int c_TalonSRX_GetMotionProfileTopLevelBufferCount(IntPtr handle)
+        {
+            return 0;
+        }
+
+        public static int c_TalonSRX_IsMotionProfileTopLevelBufferFull(IntPtr handle)
+        {
+            return 0;
+        }
+
+        public static CTR_Code c_TalonSRX_PushMotionProfileTrajectory(IntPtr handle, int targPos, int targVel,
+            int profileSlotSelect, int timeDurMs, int velOnly, int isLastPoint, int zeroPos)
+        {
+            //TODO: Do This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static void c_TalonSRX_ProcessMotionProfileBuffer(IntPtr handle)
+        {
+            
+        }
+
+        public static CTR_Code c_TalonSRX_GetMotionProfileStatus(IntPtr handle, ref int flags, ref int profileSlotSelect,
+            ref int targPos, ref int targVel, ref int topBufferRemaining, ref int topBufferCnt, ref int btmBufferCnt,
+            ref int outputEnable)
+        {
+            //TODO: Do This
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetActTraj_IsValid(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetActTraj_ProfileSlotSelect(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetActTraj_VelOnly(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetActTraj_IsLast(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetOutputType(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetIsUnderrun(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetHasUnderrun(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetNextID(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetBufferIsFull(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetCount(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetActTraj_Velocity(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        public static CTR_Code c_TalonSRX_GetActTraj_Position(IntPtr handle, ref int param)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        private static CTR_Code CTalonSRXIsPulseWidthSensorPresent(IntPtr handle, ref int i)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        private static CTR_Code CTalonSRXGetPulseRiseToRiseUs(IntPtr handle, ref int i)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        private static CTR_Code CTalonSRXGetPulseRiseToFallUs(IntPtr handle, ref int i)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        private static CTR_Code CTalonSRXGetPulseWidthVelocity(IntPtr handle, ref int i)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
+        private static CTR_Code CTalonSRXGetPulseWidthPosition(IntPtr handle, ref int i)
+        {
+            return CTR_Code.CTR_OKAY;
+        }
+
     }
 }

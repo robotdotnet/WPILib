@@ -17,14 +17,14 @@ namespace HAL.Simulator.Data
         private double m_eProfileParamSlot0_I = 0.0;
         private double m_eProfileParamSlot0_D = 0.0;
         private double m_eProfileParamSlot0_F = 0.0;
-        private double m_eProfileParamSlot0_IZone = 0.0;
-        private double m_eProfileParamSlot0_CloseLoopRampRate = 0.0;
+        private int m_eProfileParamSlot0_IZone = 0;
+        private int m_eProfileParamSlot0_CloseLoopRampRate = 0;
         private double m_eProfileParamSlot1_P = 0.0;
         private double m_eProfileParamSlot1_I = 0.0;
         private double m_eProfileParamSlot1_D = 0.0;
         private double m_eProfileParamSlot1_F = 0.0;
-        private double m_eProfileParamSlot1_IZone = 0.0;
-        private double m_eProfileParamSlot1_CloseLoopRampRate = 0.0;
+        private int m_eProfileParamSlot1_IZone = 0;
+        private int m_eProfileParamSlot1_CloseLoopRampRate = 0;
         private double m_eProfileParamSoftLimitForThreshold = 0.0;
         private double m_eProfileParamSoftLimitRevThreshold = 0.0;
         private double m_eProfileParamSoftLimitForEnable = 0.0;
@@ -89,6 +89,10 @@ namespace HAL.Simulator.Data
 
         private double m_demand = 0.0;
 
+        private double m_percentVBusValue = 0.0;
+
+        private double m_voltageCompensationRate = 0.0;
+
         /// <inheritdoc/>
         public override void ResetData()
         {
@@ -96,14 +100,14 @@ namespace HAL.Simulator.Data
             m_eProfileParamSlot0_I = 0.0;
             m_eProfileParamSlot0_D = 0.0;
             m_eProfileParamSlot0_F = 0.0;
-            m_eProfileParamSlot0_IZone = 0.0;
-            m_eProfileParamSlot0_CloseLoopRampRate = 0.0;
+            m_eProfileParamSlot0_IZone = 0;
+            m_eProfileParamSlot0_CloseLoopRampRate = 0;
             m_eProfileParamSlot1_P = 0.0;
             m_eProfileParamSlot1_I = 0.0;
             m_eProfileParamSlot1_D = 0.0;
             m_eProfileParamSlot1_F = 0.0;
-            m_eProfileParamSlot1_IZone = 0.0;
-            m_eProfileParamSlot1_CloseLoopRampRate = 0.0;
+            m_eProfileParamSlot1_IZone = 0;
+            m_eProfileParamSlot1_CloseLoopRampRate = 0;
             m_eProfileParamSoftLimitForThreshold = 0.0;
             m_eProfileParamSoftLimitRevThreshold = 0.0;
             m_eProfileParamSoftLimitForEnable = 0.0;
@@ -167,6 +171,9 @@ namespace HAL.Simulator.Data
             m_overrideBrakeType = 0.0;
 
             m_demand = 0.0;
+
+            m_percentVBusValue = 0.0;
+            m_voltageCompensationRate = 0.0;
         }
 
         internal double GetParam(Base.HALCanTalonSRX.ParamID id)
@@ -336,10 +343,10 @@ namespace HAL.Simulator.Data
                     ProfileParamSlot0_F = value;
                     break;
                 case Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_IZone:
-                    ProfileParamSlot0_IZone = value;
+                    ProfileParamSlot0_IZone = (int)value;
                     break;
                 case Base.HALCanTalonSRX.ParamID.eProfileParamSlot0_CloseLoopRampRate:
-                    ProfileParamSlot0_CloseLoopRampRate = value;
+                    ProfileParamSlot0_CloseLoopRampRate = (int)value;
                     break;
                 case Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_P:
                     ProfileParamSlot1_P = value;
@@ -354,10 +361,10 @@ namespace HAL.Simulator.Data
                     ProfileParamSlot1_F = value;
                     break;
                 case Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_IZone:
-                    ProfileParamSlot1_IZone = value;
+                    ProfileParamSlot1_IZone = (int)value;
                     break;
                 case Base.HALCanTalonSRX.ParamID.eProfileParamSlot1_CloseLoopRampRate:
-                    ProfileParamSlot1_CloseLoopRampRate = value;
+                    ProfileParamSlot1_CloseLoopRampRate = (int)value;
                     break;
                 case Base.HALCanTalonSRX.ParamID.eProfileParamSoftLimitForThreshold:
                     ProfileParamSoftLimitForThreshold = value;
@@ -607,7 +614,7 @@ namespace HAL.Simulator.Data
         /// <value>
         /// The profile parameter slot0_ i zone.
         /// </value>
-        public double ProfileParamSlot0_IZone
+        public int ProfileParamSlot0_IZone
         {
             get { return m_eProfileParamSlot0_IZone; }
             set
@@ -623,7 +630,7 @@ namespace HAL.Simulator.Data
         /// <value>
         /// The profile parameter slot0_ close loop ramp rate.
         /// </value>
-        public double ProfileParamSlot0_CloseLoopRampRate
+        public int ProfileParamSlot0_CloseLoopRampRate
         {
             get { return m_eProfileParamSlot0_CloseLoopRampRate; }
             set
@@ -703,7 +710,7 @@ namespace HAL.Simulator.Data
         /// <value>
         /// The profile parameter slot1_ i zone.
         /// </value>
-        public double ProfileParamSlot1_IZone
+        public int ProfileParamSlot1_IZone
         {
             get { return m_eProfileParamSlot1_IZone; }
             set
@@ -719,7 +726,7 @@ namespace HAL.Simulator.Data
         /// <value>
         /// The profile parameter slot1_ close loop ramp rate.
         /// </value>
-        public double ProfileParamSlot1_CloseLoopRampRate
+        public int ProfileParamSlot1_CloseLoopRampRate
         {
             get { return m_eProfileParamSlot1_CloseLoopRampRate; }
             set
@@ -1709,6 +1716,40 @@ namespace HAL.Simulator.Data
             {
                 if (value == m_demand) return;
                 m_demand = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the demand.
+        /// </summary>
+        /// <value>
+        /// The demand.
+        /// </value>
+        public double PercentVBusValue
+        {
+            get { return m_percentVBusValue; }
+            set
+            {
+                if (value == m_percentVBusValue) return;
+                m_percentVBusValue = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the demand.
+        /// </summary>
+        /// <value>
+        /// The demand.
+        /// </value>
+        public double VoltageCompensationRate
+        {
+            get { return m_voltageCompensationRate; }
+            set
+            {
+                if (value == m_voltageCompensationRate) return;
+                m_voltageCompensationRate = value;
                 OnPropertyChanged(value);
             }
         }
