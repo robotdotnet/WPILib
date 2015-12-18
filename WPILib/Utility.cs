@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using HAL.Base;
 using WPILib.Exceptions;
 using static HAL.Base.HAL;
 
@@ -77,6 +78,15 @@ namespace WPILib
             {
                 DriverStation.ReportError(GetHALErrorMessage(status), true);
             }
+        }
+
+        internal static bool CheckCTRStatus(CTR_Code status)
+        {
+            if (status != CTR_Code.CTR_OKAY)
+            {
+                DriverStation.ReportError(GetHALErrorMessage((int)status), true);
+            }
+            return status == CTR_Code.CTR_OKAY;
         }
     }
 }
