@@ -353,6 +353,28 @@ namespace WPILib.Tests
             }
         }
 
+        [Test]
+        public void TestSetPercentVBus()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                t.MotorControlMode = ControlMode.PercentVbus;
+                t.Set(0.589);
+                Assert.That(GetTalonData().PercentVBusValue, Is.EqualTo(0.589).Within(0.01));
+            }
+        }
+
+        [Test]
+        public void TestDefaultsToPercentVBus()
+        {
+            using (CANTalon t = NewTalon())
+            {
+                t.MotorControlMode = ControlMode.PercentVbus;
+                t.Set(0.589);
+                Assert.That(GetTalonData().PercentVBusValue, Is.EqualTo(0.589).Within(0.01));
+            }
+        }
+
         //TODO:Test Get Position
         //TODO:Test Set Position
         //TODO:Test Get and Set Position

@@ -26,7 +26,7 @@ namespace HAL.Simulator.Outputs
         /// <inheritdoc/>
         public double Get()
         {
-            return Data.Demand / 1023.0d;
+            return Data.PercentVBusValue;
         }
     }
 }

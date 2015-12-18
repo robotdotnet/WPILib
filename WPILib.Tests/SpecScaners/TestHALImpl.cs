@@ -53,7 +53,6 @@ namespace WPILib.Tests.SpecScaners
 
 
         [Test]
-        [Ignore("Ignoring till I get time to add the new CANTalon methods")]
         public void TestHALBaseMapsToHALSim()
         {
             // Load assembly with HAL Base
