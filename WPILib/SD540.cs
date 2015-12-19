@@ -2,6 +2,9 @@
 
 namespace WPILib
 {
+    /// <summary>
+    /// MindSensors SD540 Speed Controller.
+    /// </summary>
     public class SD540 : PWMSpeedController
     {
         /// <summary>
