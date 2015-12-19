@@ -1557,6 +1557,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Not implemented on CANJaguar.
+        /// </summary>
         public double F {
             get { return 0.0; } set {} }
 

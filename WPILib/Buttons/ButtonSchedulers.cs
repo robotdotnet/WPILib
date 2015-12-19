@@ -8,11 +8,25 @@ namespace WPILib.Buttons
     /// </summary>
     public abstract class ButtonScheduler
     {
+        /// <summary>
+        /// True if the button was pressed last.
+        /// </summary>
         protected bool m_pressedLast;
+        /// <summary>
+        /// The button trigger.
+        /// </summary>
         protected readonly Trigger m_button;
+        /// <summary>
+        /// The button command.
+        /// </summary>
         protected readonly Command m_command;
 
-
+        /// <summary>
+        /// Creates a new <see cref="ButtonScheduler"/>.
+        /// </summary>
+        /// <param name="last">True if the button was last pressed.</param>
+        /// <param name="button">The button trigger.</param>
+        /// <param name="orders">The button command.</param>
         protected ButtonScheduler(bool last, Trigger button, Command orders)
         {
             m_pressedLast = last;
@@ -20,8 +34,14 @@ namespace WPILib.Buttons
             m_command = orders;
         }
 
+        /// <summary>
+        /// Executes the trigger.
+        /// </summary>
         public abstract void Execute();
 
+        /// <summary>
+        /// Starts the button scheduler.
+        /// </summary>
         public void Start()
         {
             Scheduler.Instance.AddButton(this);

@@ -3,10 +3,18 @@ using System;
 
 namespace WPILib.Buttons
 {
+    /// <summary>
+    /// Creates a new command button that uses a joytick button.
+    /// </summary>
     public class JoystickButton : Button, IEquatable<JoystickButton>
     {
-
+        /// <summary>
+        /// The joystick the bbutton is on.
+        /// </summary>
         public GenericHID Joystick { get; }
+        /// <summary>
+        /// The button number on the joystick.
+        /// </summary>
         public int ButtonNumber { get; }
 
         /// <summary>
@@ -29,16 +37,17 @@ namespace WPILib.Buttons
             return Joystick.GetRawButton(ButtonNumber);
         }
 
+        /// <inheritdoc/>
         public bool Equals(JoystickButton other)
         {
             return other != null && Joystick.Equals(other.Joystick) && ButtonNumber == other.ButtonNumber;
         }
-
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             return base.Equals(obj as Joystick);
         }
-
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return Joystick.GetHashCode() * 13 + ButtonNumber;

@@ -25,15 +25,24 @@ namespace WPILib
         /// </summary>
         public enum Alliance
         {
+            /// <summary>
+            /// The red alliance
+            /// </summary>
             Red,
+            /// <summary>
+            /// The blue alliance
+            /// </summary>
             Blue,
+            /// <summary>
+            /// The alliance is unknown.
+            /// </summary>
             Invalid
         };
 
         //Private Fields
-        private HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
-        private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
-        private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
+        private readonly HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
+        private readonly HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
+        private readonly HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
 
         //Pointers to the semaphores to the HAL and FPGA
         private readonly object m_dataSem;
@@ -715,23 +724,39 @@ namespace WPILib
             }
         }
 
-
+        /// <summary>
+        /// Only to be used to tell the Driver Station what code you claim to be executing
+        /// for diagnostic purposes only.
+        /// </summary>
+        /// <param name="entering">If true, starting disabled code; if false, leaving disabled code.</param>
         public void InDisabled(bool entering)
         {
             m_userInDisabled = entering;
         }
 
-
+        /// <summary>
+        /// Only to be used to tell the Driver Station what code you claim to be executing
+        /// for diagnostic purposes only.
+        /// </summary>
+        /// <param name="entering">If true, starting autonomous code; if false, leaving autonomous code.</param>
         public void InAutonomous(bool entering)
         {
             m_userInAutonomous = entering;
         }
-
+        /// <summary>
+        /// Only to be used to tell the Driver Station what code you claim to be executing
+        /// for diagnostic purposes only.
+        /// </summary>
+        /// <param name="entering">If true, starting teleop code; if false, leaving teleop code.</param>
         public void InOperatorControl(bool entering)
         {
             m_userInTeleop = entering;
         }
-
+        /// <summary>
+        /// Only to be used to tell the Driver Station what code you claim to be executing
+        /// for diagnostic purposes only.
+        /// </summary>
+        /// <param name="entering">If true, starting test code; if false, leaving test code.</param>
         public void InTest(bool entering)
         {
             m_userInTest = entering;

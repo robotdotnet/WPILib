@@ -9,6 +9,15 @@ namespace WPILib
     /// <summary>
     /// Class for interfacing with an analog gyro to get robot heading.
     /// </summary>
+    /// <remarks>
+    /// Use a rate gyro to return the robots heading relative to a starting position.
+    /// The Gyro class tracks the robots heading based on the starting position.As
+    /// the robot rotates the new heading is computed by integrating the rate of
+    /// rotation returned by the sensor.When the class is instantiated, it does a
+    /// short calibration routine where it samples the gyro while at rest to
+    /// determine the default offset.This is subtracted from each sample to
+    /// determine the heading.
+    /// </remarks>
     public class AnalogGyro : GyroBase, IPIDSource, ILiveWindowSendable
     {
         private static int kOversampleBits = 10;

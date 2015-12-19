@@ -31,9 +31,21 @@ namespace WPILib
         /// </summary>
         public enum IndexingType
         {
+            /// <summary>
+            /// Reset indexing while the index pin is High
+            /// </summary>
             ResetWhileHigh,
+            /// <summary>
+            /// Reset indexing while the index pin is low.
+            /// </summary>
             ResetWhileLow,
+            /// <summary>
+            /// Reset indexing on the falling edge of the index pin.
+            /// </summary>
             ResetOnFallingEdge,
+            /// <summary>
+            /// Reset indexing on the rising edge of the index pin.
+            /// </summary>
             ResetOnRisingEdge,
         }
 

@@ -58,6 +58,10 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Adds a <see cref="Command"/> to the scheduler.
+        /// </summary>
+        /// <param name="command">The command to add to the scheduler.</param>
         public void AddCommand(Command command)
         {
             if (command != null)
@@ -66,6 +70,10 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Adds a button responder to the scheduler.
+        /// </summary>
+        /// <param name="button">The <see cref="ButtonScheduler"/> to add to the scheduler.</param>
         public void AddButton(ButtonScheduler button)
         {
             if (m_buttons == null)
@@ -123,6 +131,18 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Runs a single iteration of the scheduler loop.
+        /// </summary>
+        /// <remarks>This method should be called often in order to have a functioning
+        /// <see cref="Command"/> system. The loop has 5 stages
+        /// <list type="ordered">
+        /// <listItem><para>Poll the buttons.</para></listItem>
+        /// <listItem><para>Execute/Remove the commands.</para></listItem>
+        /// <listItem><para>Send values to the <see cref="SmartDashboard.SmartDashboard"/>.</para></listItem>
+        /// <listItem><para>Add Commands.</para></listItem>
+        /// <listItem><para>Add Defaults.</para></listItem>
+        /// </list></remarks>
         public void Run()
         {
             m_runningCommandsChanged = false;
@@ -204,6 +224,9 @@ namespace WPILib.Commands
             command.Removed();
         }
 
+        /// <summary>
+        /// Removes all existing commands from the scheduler.
+        /// </summary>
         public void RemoveAll()
         {
             while (m_firstCommand != null)
@@ -212,11 +235,17 @@ namespace WPILib.Commands
             }
         }
 
+        /// <summary>
+        /// Disables the scheduler.
+        /// </summary>
         public void Disable()
         {
             m_enabled = false;
         }
 
+        /// <summary>
+        /// Enables the scheduler.
+        /// </summary>
         public void Enable()
         {
             m_enabled = true;

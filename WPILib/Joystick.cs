@@ -44,40 +44,53 @@ namespace WPILib
         }
 
 
-        private const byte s_defaultXAxis = 0;
-        private const byte s_defaultYAxis = 1;
-        private const byte s_defaultZAxis = 2;
-        private const byte s_defaultTwistAxis = 2;
-        private const byte s_defaultThrottleAxis = 3;
-        private const byte s_defaultTriggerButton = 1;
-        private const byte s_defaultTopButton = 2;
+        private const byte DefaultXAxis = 0;
+        private const byte DefaultYAxis = 1;
+        private const byte DefaultZAxis = 2;
+        private const byte DefaultTwistAxis = 2;
+        private const byte DefaultThrottleAxis = 3;
+        private const byte DefaultTriggerButton = 1;
+        private const byte DefaultTopButton = 2;
 
+        /// <summary>
+        /// Gets the port the joystick is attached to on the Driver Station.
+        /// </summary>
         public int Port { get; }
 
-        private DriverStation m_ds;
-        private byte[] m_axes;
-        private byte[] m_buttons;
+        private readonly DriverStation m_ds;
+        private readonly byte[] m_axes;
+        private readonly byte[] m_buttons;
         private int m_outputs;
         private ushort m_leftRumble;
         private ushort m_rightRumble;
 
+        /// <summary>
+        /// Constructs an instance of a joystick with the specified index.
+        /// </summary>
+        /// <param name="port"></param>
         public Joystick(int port)
             : this(port, (int)AxisType.NumAxis, (int)ButtonType.NumButton)
         {
-            m_axes[(int)AxisType.X] = s_defaultXAxis;
+            m_axes[(int)AxisType.X] = DefaultXAxis;
 
-            m_axes[(int)AxisType.X] = s_defaultXAxis;
-            m_axes[(int)AxisType.Y] = s_defaultYAxis;
-            m_axes[(int)AxisType.Z] = s_defaultZAxis;
-            m_axes[(int)AxisType.Twist] = s_defaultTwistAxis;
-            m_axes[(int)AxisType.Throttle] = s_defaultThrottleAxis;
+            m_axes[(int)AxisType.X] = DefaultXAxis;
+            m_axes[(int)AxisType.Y] = DefaultYAxis;
+            m_axes[(int)AxisType.Z] = DefaultZAxis;
+            m_axes[(int)AxisType.Twist] = DefaultTwistAxis;
+            m_axes[(int)AxisType.Throttle] = DefaultThrottleAxis;
 
-            m_buttons[(int)ButtonType.Trigger] = s_defaultTriggerButton;
-            m_buttons[(int)ButtonType.Top] = s_defaultTopButton;
+            m_buttons[(int)ButtonType.Trigger] = DefaultTriggerButton;
+            m_buttons[(int)ButtonType.Top] = DefaultTopButton;
 
             HAL.Base.HAL.Report(ResourceType.kResourceType_Joystick, (byte)port);
         }
 
+        /// <summary>
+        /// Protected version of the constructor to be called by sub-classes.
+        /// </summary>
+        /// <param name="port"></param>
+        /// <param name="numAxisTypes"></param>
+        /// <param name="numButtonTypes"></param>
         protected Joystick(int port, int numAxisTypes, int numButtonTypes)
         {
             m_ds = DriverStation.Instance;
@@ -87,26 +100,26 @@ namespace WPILib
         }
 
 
-
+        /// <inheritdoc/>
         public override double GetX(Hand hand)
         {
             return GetRawAxis(m_axes[(int)AxisType.X]);
         }
-
+        /// <inheritdoc/>
         public override double GetY(Hand hand)
         {
             return GetRawAxis(m_axes[(int)AxisType.Y]);
         }
-
+        /// <inheritdoc/>
         public override double GetZ(Hand hand)
         {
             return GetRawAxis(m_axes[(int)AxisType.Z]);
         }
-
+        /// <inheritdoc/>
         public override double GetTwist() => GetRawAxis(m_axes[(int) AxisType.Twist]);
-
+        /// <inheritdoc/>
         public override double GetThrottle() => GetRawAxis(m_axes[(int) AxisType.Throttle]);
-
+        /// <inheritdoc/>
         public override double GetRawAxis(int axis)
         {
             return m_ds.GetStickAxis(Port, axis);

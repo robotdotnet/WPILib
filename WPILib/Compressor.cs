@@ -95,7 +95,10 @@ namespace WPILib
             return on;
         }
 
-
+        /// <summary>
+        /// Gets the Current being drawed by the compressor.
+        /// </summary>
+        /// <returns></returns>
         public float GetCompressorCurrent()
         {
             int status = 0;
@@ -104,6 +107,9 @@ namespace WPILib
             return current;
         }
 
+        /// <summary>
+        /// Gets or sets whether closed loop control is enabled on the compressor.
+        /// </summary>
         public bool ClosedLoopControl
         {
             set
@@ -121,6 +127,22 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if PCM has a sticky fault for the compressor current draw being too high.
+        /// </summary>
+        /// <returns>True if sticky fault is set for the current draw being too high.</returns>
+        public bool GetCompressorCurrentTooHighStickyFault()
+        {
+            int status = 0;
+            bool retVal = HALCompressor.GetCompressorCurrentTooHighStickyFault(m_pcm, ref status);
+            CheckStatus(status);
+            return retVal;
+        }
+
+        /// <summary>
+        /// Gets if the compressor is disabled due to the current draw being too high.
+        /// </summary>
+        /// <returns>True if the compressor is disabled due to current being too high.</returns>
         public bool GetCompressorCurrentTooHighFault()
         {
             int status = 0;
@@ -129,6 +151,10 @@ namespace WPILib
             return retVal;
         }
 
+        /// <summary>
+        /// Gets if PCM has a sticky fault for the compressor output being shorted.
+        /// </summary>
+        /// <returns>True if sticky fault is set for the compressor output being shorted.</returns>
         public bool GetCompressorShortedStickyFault()
         {
             int status = 0;
@@ -137,6 +163,10 @@ namespace WPILib
             return retVal;
         }
 
+        /// <summary>
+        /// Gets if the compressor is disabled due to an apparent short in the compressor output.
+        /// </summary>
+        /// <returns>True if the compressor is shorted.</returns>
         public bool GetCompressorShortedFault()
         {
             int status = 0;
@@ -145,6 +175,10 @@ namespace WPILib
             return retVal;
         }
 
+        /// <summary>
+        /// Gets if PCM has a sticky fault for the compressor output not being connected.
+        /// </summary>
+        /// <returns>True if sticky fault is set for the compressor output not being connected.</returns>
         public bool GetCompressorNotConnectedStickyFault()
         {
             int status = 0;
@@ -153,6 +187,10 @@ namespace WPILib
             return retVal;
         }
 
+        /// <summary>
+        /// Gets if the compressor is disabled due to the compressor output not being connected.
+        /// </summary>
+        /// <returns>True if the compressor is not connected.</returns>
         public bool GetCompressorNotConnectedFault()
         {
             int status = 0;
@@ -161,6 +199,16 @@ namespace WPILib
             return retVal;
         }
 
+        /// <summary>
+        /// Clears ALL sticky faults inside the PCM that the compressor is wired to.
+        /// </summary>
+        /// <remarks>
+        /// If a sticky fault is set, then it will be persistently cleared. Compressor drive
+        /// may be momentarily disabled while flages are being cleard. Care should be 
+        /// taken to not call this too frequently, otherwise normal compressor functionality
+        /// may be prevented.
+        /// <para>If no sticky faults are set then this call will have no effect.</para>
+        /// </remarks>
         public void ClearAllPCMStickyFaults()
         {
             int status = 0;
@@ -174,19 +222,21 @@ namespace WPILib
             Table = subtable;
             UpdateTable();
         }
-
+        ///<inheritdoc />
         public ITable Table { get; private set; }
+        ///<inheritdoc />
         public string SmartDashboardType => "Compressor";
+        ///<inheritdoc />
         public void UpdateTable()
         {
             Table?.PutBoolean("Enabled", Enabled());
             Table?.PutBoolean("Pressure Switch", GetPressureSwitchValue());
         }
-
+        ///<inheritdoc />
         public void StartLiveWindowMode()
         {
         }
-
+        ///<inheritdoc />
         public void StopLiveWindowMode()
         {
         }

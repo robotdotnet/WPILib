@@ -39,6 +39,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             FreeSolenoidPort(m_port);

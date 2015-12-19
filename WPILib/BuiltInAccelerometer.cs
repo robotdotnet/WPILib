@@ -9,15 +9,23 @@ using HALAccelerometer = HAL.Base.HALAccelerometer;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Class for accessing the RoboRIO's internal accelerometer.
+    /// </summary>
     public class BuiltInAccelerometer : IAccelerometer, ILiveWindowSendable
     {
-        public BuiltInAccelerometer(AccelerometerRange range)
+        /// <summary>
+        /// Creates a new <see cref="BuiltInAccelerometer"/>.
+        /// </summary>
+        /// <param name="range">The range for the accelerometer to measure</param>
+        public BuiltInAccelerometer(AccelerometerRange range = AccelerometerRange.k8G)
         {
             AccelerometerRange = range;
             HAL.Base.HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
             LiveWindow.LiveWindow.AddSensor("BuiltInAccel", 0, this);
         }
 
+        /// <inheritdoc/>
         public AccelerometerRange AccelerometerRange
         {
             set
@@ -42,11 +50,11 @@ namespace WPILib
                 HALAccelerometer.SetAccelerometerActive(true);
             }
         }
-
+        /// <inheritdoc/>
         public virtual double GetX() => HALAccelerometer.GetAccelerometerX();
-
+        /// <inheritdoc/>
         public virtual double GetY() => HALAccelerometer.GetAccelerometerY();
-
+        /// <inheritdoc/>
         public virtual double GetZ() => HALAccelerometer.GetAccelerometerZ();
 
         /// <inheritdoc/>

@@ -20,8 +20,17 @@ namespace WPILib
         /// </summary>
         public enum Value
         {
+            /// <summary>
+            /// Sets the solenoid to not be set.
+            /// </summary>
             Off,
+            /// <summary>
+            /// Sets the solenoid to the forward position.
+            /// </summary>
             Forward,
+            /// <summary>
+            /// Sets the solenoid to the reverse position.
+            /// </summary>
             Reverse
         }
 
@@ -61,11 +70,22 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Creates a new <see cref="DoubleSolenoid"/> using the default PCM Id of 0.
+        /// </summary>
+        /// <param name="forwardChannel">The forward channel number on the PCM [0..7]</param>
+        /// <param name="reverseChannel">The reverse channel number on the PCM [0..7]</param>
         public DoubleSolenoid(int forwardChannel, int reverseChannel)
             : this(DefaultSolenoidModule, forwardChannel, reverseChannel)
         {
         }
 
+        /// <summary>
+        /// Creates a new <see cref="DoubleSolenoid"/> with the specified module number.
+        /// </summary>
+        /// <param name="moduleNumber">The module number of the PCM to use.</param>
+        /// <param name="forwardChannel">The forward channel number on the PCM [0..7]</param>
+        /// <param name="reverseChannel">The reverse channel number on the PCM [0..7]</param>
         public DoubleSolenoid(int moduleNumber, int forwardChannel, int reverseChannel)
             : base(moduleNumber)
         {
@@ -88,7 +108,10 @@ namespace WPILib
                 base.Dispose();
             }
         }
-
+        /// <summary>
+        /// Sets the value of the solenoid.
+        /// </summary>
+        /// <param name="value">The value to set (Off, Forward, Reverse).</param>
         public void Set(Value value)
         {
             bool forward = false;
@@ -110,6 +133,10 @@ namespace WPILib
             CheckStatus(status);
         }
 
+        /// <summary>
+        /// Gets the current value of the solenoid.
+        /// </summary>
+        /// <returns></returns>
         public Value Get()
         {
             int status = 0;
@@ -125,6 +152,12 @@ namespace WPILib
             return Value.Off;
         }
 
+        /// <summary>
+        /// Gets if the forward solenoid is black listed.
+        /// </summary>
+        /// <remarks>If the solenoid is shorted, it is added to the blacklist and disabled
+        /// until power cycle, or until faults are cleared.</remarks>
+        /// <seealso cref="SolenoidBase.ClearAllPCMStickyFaults()"/>
         public bool FwdSolenoidBlackListed
         {
             get
@@ -134,6 +167,12 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if the reverse solenoid is black listed.
+        /// </summary>
+        /// <remarks>If the solenoid is shorted, it is added to the blacklist and disabled
+        /// until power cycle, or until faults are cleared.</remarks>
+        /// <seealso cref="SolenoidBase.ClearAllPCMStickyFaults()"/>
         public bool RevSolenoidBlackListed
         {
             get

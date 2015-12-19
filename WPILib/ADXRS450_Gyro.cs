@@ -10,6 +10,18 @@ using static HAL.Base.HAL;
 
 namespace WPILib
 {
+    /// <summary>
+    /// This class is for the digital ADXRS450 gyro sensor that connects via SPI
+    /// </summary>
+    /// <remarks>
+    /// Use a rate gyro to return the robots heading relative to a starting position.
+    /// The Gyro class tracks the robots heading based on the starting position.As
+    /// the robot rotates the new heading is computed by integrating the rate of
+    /// rotation returned by the sensor.When the class is instantiated, it does a
+    /// short calibration routine where it samples the gyro while at rest to
+    /// determine the default offset.This is subtracted from each sample to
+    /// determine the heading.
+    /// </remarks>
     public class ADXRS450_Gyro : GyroBase, IGyro, IPIDSource, ILiveWindowSendable
     {
         private const double SamplePeriod = 0.001;
@@ -71,7 +83,7 @@ namespace WPILib
 
             Calibrate();
 
-            Report(ResourceType.kResourceType_ADXRS450, (byte)port); 	
+            Report(ResourceType.kResourceType_ADXRS450, (byte)port);
             LiveWindow.LiveWindow.AddSensor("ADXRS450_Gyro", port.ToString(), this);
         }
 
@@ -91,6 +103,7 @@ namespace WPILib
             m_spi.ResetAccumulator();
         }
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             m_spi.FreeAccumulator();
@@ -164,6 +177,7 @@ namespace WPILib
             return m_spi.GetAccumulatorLastValue() * DegreePerSecondPerLSB;
         }
 
+        /// <inheritdoc/>
         public override string SmartDashboardType => nameof(ADXRS450_Gyro);
     }
 }

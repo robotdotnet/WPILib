@@ -244,7 +244,7 @@ namespace WPILib
 
             s_talonIds.Allocate(deviceNumber, $"CAN TalonSRX ID {deviceNumber} is already allocated.");
 
-            DeviceID = deviceNumber;
+            DeviceId = deviceNumber;
             m_talonPointer = C_TalonSRX_Create3(deviceNumber, controlPeriodMs, enablePeriodMs);
             m_safetyHelper = new MotorSafetyHelper(this);
             m_controlEnabled = true;
@@ -261,10 +261,15 @@ namespace WPILib
         /// <inheritdoc/>
         public void Dispose()
         {
-            s_talonIds.Deallocate(DeviceID);
+            s_talonIds.Deallocate(DeviceId);
             C_TalonSRX_Destroy(m_talonPointer);
         }
 
+        /// <summary>
+        /// General set frame.
+        /// </summary>
+        /// <param name="paramEnum">The parameter to set.</param>
+        /// <param name="value">The value to set the parameter to.</param>
         public void SetParameter(ParamID paramEnum, double value)
         {
             CTR_Code status = C_TalonSRX_SetParam(m_talonPointer, (int)paramEnum, value);
@@ -939,7 +944,10 @@ namespace WPILib
                 CheckCTRStatus(status);
             }
         }
-
+        
+        /// <summary>
+        /// Gets or sets the IZone of the CANTalon.
+        /// </summary>
         public int IZone
         {
             get
@@ -969,6 +977,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the integral accumulator value.
+        /// </summary>
+        /// <returns>The value of the accumulated PID integral.</returns>
         public double GetIaccum()
         {
             CTR_Code status = C_TalonSRX_RequestParam(m_talonPointer, (int)ParamID.ePidIaccum);
@@ -981,12 +993,22 @@ namespace WPILib
             return val;
         }
 
+        /// <summary>
+        /// Clears the integral accumulator value.
+        /// </summary>
         public void ClearIAccum()
         {
             CTR_Code status = C_TalonSRX_SetParam(m_talonPointer, (int)ParamID.ePidIaccum, 0);
             CheckCTRStatus(status);
         }
-
+        
+        /// <summary>
+        /// Gets or sets the closed loop ramp rate for the current profile. In Volts/Sec
+        /// </summary>
+        /// <remarks>
+        /// Limits the rate at which the throttle will change. Only affects position and speed closed loop modes.
+        /// </remarks>
+        /// <seealso cref="Profile">See Profile for selecting a specific profile.</seealso>
         public double CloseLoopRampRate
         {
             get
@@ -1059,6 +1081,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or sets which closed loop profile to use.
+        /// </summary>
         public int Profile
         {
             get { return m_profile; }
@@ -1072,6 +1097,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or Sets the voltage compensation ramp rate.
+        /// </summary>
         public double VoltageCompensationRampRate
         {
             get
@@ -1220,15 +1248,22 @@ namespace WPILib
             }
         }
 
-        public int DeviceID { get; }
+        /// <summary>
+        /// Gets the current DeviceId of the CANTalon
+        /// </summary>
+        public int DeviceId { get; }
 
-        public int ForwardSoftLimit
+        /// <summary>
+        /// Gets or Sets the Forward Soft limit of the CAN Talon
+        /// </summary>
+        public double ForwardSoftLimit
         {
             get
             {
                 int retVal = 0;
                 CTR_Code status = C_TalonSRX_GetForwardSoftLimit(m_talonPointer, ref retVal);
                 CheckCTRStatus(status);
+                //TODO: Check official WPILib and see if they need to scale this.
                 return retVal;
             }
             set
@@ -1239,6 +1274,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the forward soft limit is enabled or not.
+        /// </summary>
         public bool ForwardSoftLimitEnabled
         {
             get
@@ -1255,12 +1293,16 @@ namespace WPILib
             }
         }
 
-        public int ReverseSoftLimit
+        /// <summary>
+        /// Gets or Sets the Reverse Soft limit of the CAN Talon
+        /// </summary>
+        public double ReverseSoftLimit
         {
             get
             {
                 int retVal = 0;
                 CTR_Code status = C_TalonSRX_GetReverseSoftLimit(m_talonPointer, ref retVal);
+                //TODO: Check official WPILib and see if they need to scale this.
                 CheckCTRStatus(status);
                 return retVal;
             }
@@ -1272,6 +1314,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the reverse soft limit is enabled or not.
+        /// </summary>
         public bool ReverseSoftLimitEnabled
         {
             get
@@ -1288,30 +1333,43 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Clears all of the sticky faults for this CAN Talon.
+        /// </summary>
         public void ClearStickyFaults()
         {
             CTR_Code status = C_TalonSRX_ClearStickyFaults(m_talonPointer);
             CheckCTRStatus(status);
         }
 
+        /// <summary>
+        /// Sets the enabled state of both the forward and reverse soft limit.
+        /// </summary>
+        /// <param name="forward">True if the forward limit switch is enabled.</param>
+        /// <param name="reverse">True if the reverse limit switch is enabled.</param>
         public void EnableLimitSwitches(bool forward, bool reverse)
         {
             int mask = 1 << 2 | (forward ? 1 : 0) << 1 | (reverse ? 1 : 0);
             CTR_Code status = C_TalonSRX_SetOverrideLimitSwitchEn(m_talonPointer, mask);
-            CheckCTRStatus(status);
             if (status != CTR_Code.CTR_OKAY)
                 CheckCTRStatus(status);
         }
 
+        /// <summary>
+        /// Gets or Sets whether the forward limit switch is normally open.
+        /// </summary>
         public bool ForwardLimitSwitchNormallyOpen
         {
             get
             {
                 int retVal = 0;
-                CTR_Code status = C_TalonSRX_GetParamResponseInt32(m_talonPointer,
+                CTR_Code status = C_TalonSRX_RequestParam(m_talonPointer, (int) ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed);
+                CheckCTRStatus(status);
+                Timer.Delay(DelayForSolicitedSignals);
+                status = C_TalonSRX_GetParamResponseInt32(m_talonPointer,
                     (int) ParamID.eOnBoot_LimitSwitch_Forward_NormallyClosed, ref retVal);
                 CheckCTRStatus(status);
-                return retVal != 0;
+                return retVal == 0;
             }
             set
             {
@@ -1320,15 +1378,21 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether the reverse limit switch is normally open.
+        /// </summary>
         public bool ReverseLimitSwitchNormallyOpen
         {
             get
             {
                 int retVal = 0;
-                CTR_Code status = C_TalonSRX_GetParamResponseInt32(m_talonPointer,
+                CTR_Code status = C_TalonSRX_RequestParam(m_talonPointer, (int)ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed);
+                CheckCTRStatus(status);
+                Timer.Delay(DelayForSolicitedSignals);
+                status = C_TalonSRX_GetParamResponseInt32(m_talonPointer,
                     (int)ParamID.eOnBoot_LimitSwitch_Reverse_NormallyClosed, ref retVal);
                 CheckCTRStatus(status);
-                return retVal != 0;
+                return retVal == 0;
             }
             set
             {
@@ -1337,6 +1401,11 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Configures the output voltage peaks of the Talon.
+        /// </summary>
+        /// <param name="forwardVoltage">The maximum forward voltage to output.</param>
+        /// <param name="reverseVoltage">The maximum reverse voltage to output.</param>
         public void ConfigPeakOutputVoltage(double forwardVoltage, double reverseVoltage)
         {
             if (forwardVoltage > 12)
@@ -1351,6 +1420,11 @@ namespace WPILib
             SetParameter(ParamID.ePeakNegOutput, 1023 * reverseVoltage / 12.0);
         }
 
+        /// <summary>
+        /// Configures the nominal output voltage of the Talon.
+        /// </summary>
+        /// <param name="forwardVoltage">The nominal forward voltage.</param>
+        /// <param name="reverseVoltage">The nominal reverse voltage.</param>
         public void ConfigNominalOutputVoltage(double forwardVoltage, double reverseVoltage)
         {
             if (forwardVoltage > 12)
@@ -1365,12 +1439,9 @@ namespace WPILib
             SetParameter(ParamID.eNominalNegOutput, 1023 * reverseVoltage / 12.0);
         }
 
-        public void EnableBrakeMode(bool brake)
-        {
-            CTR_Code status = C_TalonSRX_SetOverrideBrakeType(m_talonPointer, brake ? 2 : 1);
-            CheckCTRStatus(status);
-        }
-
+        /// <summary>
+        /// Gets if there is currently an Over Temperature fault. (Non-Sticky)
+        /// </summary>
         public int FaultOverTemp
         {
             get
@@ -1382,6 +1453,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if there is currently an UnderVoltage fault. (Non-Sticky)
+        /// </summary>
         public int FaultUnderVoltage
         {
             get
@@ -1393,6 +1467,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if there is currently a fault on the Forward Limit. (Non-Sticky)
+        /// </summary>
         public int FaultForwardLimit
         {
             get
@@ -1403,7 +1480,9 @@ namespace WPILib
                 return val;
             }
         }
-
+        /// <summary>
+        /// Gets if there is currently a fault on the Reverse Limit. (Non-Sticky)
+        /// </summary>
         public int FaultReverseLimit
         {
             get
@@ -1415,6 +1494,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if there is currently a  general hardware failure fault. (Non-Sticky)
+        /// </summary>
         public int FaultHardwareFailure
         {
             get
@@ -1426,6 +1508,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if there is currently a fault on the Forward Soft Limit. (Non-Sticky)
+        /// </summary>
         public int FaultForwardSoftLimit
         {
             get
@@ -1436,7 +1521,9 @@ namespace WPILib
                 return val;
             }
         }
-
+        /// <summary>
+        /// Gets if there is currently a fault on the Reverse Soft Limit. (Non-Sticky)
+        /// </summary>
         public int FaultReverseSoftLimit
         {
             get
@@ -1557,7 +1644,7 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public string Description => $"CAN TalonSRX ID {DeviceID}";
+        public string Description => $"CAN TalonSRX ID {DeviceId}";
 
         /// <inheritdoc/>
         public void PidWrite(double value)

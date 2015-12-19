@@ -38,6 +38,7 @@ namespace WPILib
             LiveWindow.LiveWindow.AddSensor("ADXL345_SPI", (byte)port, this);
         }
 
+        /// <inheritdoc/>
         public override void Dispose()
         {
             m_spi.Dispose();
