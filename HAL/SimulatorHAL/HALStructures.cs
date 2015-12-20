@@ -103,7 +103,7 @@ namespace HAL.SimulatorHAL
         public bool FireOnUp;
         public bool FireOnDown;
     }
-
+    /*
     //Notifier
     [StructLayout(LayoutKind.Sequential)]
     internal struct Notifier
@@ -112,6 +112,7 @@ namespace HAL.SimulatorHAL
         public IntPtr Parameter;
         public Thread Alarm;
     }
+    */
 
     //Solenoid
     [StructLayout(LayoutKind.Sequential)]
