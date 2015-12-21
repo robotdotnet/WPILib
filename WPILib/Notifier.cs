@@ -13,23 +13,22 @@ namespace WPILib
     /// </summary>
     public class Notifier : IDisposable
     {
-        private static Action<uint, IntPtr> ProcessCallback;
+        static private Notifier s_timerQueueHead;
+        static private int s_refCount = 0;
+        static private object s_queueSemaphore = new object();
 
-        private static LinkedList<Notifier> s_timerQueue = new LinkedList<Notifier>();
-        private static readonly object s_queueMutex = new object();
-        private static IntPtr s_notifier = IntPtr.Zero;
-        private static int s_refCount = 0;
-
-        private Action<object> m_handler;
-        private object m_param;
-        private double m_period = 0;
+        private static IntPtr s_notifier;
         private double m_expirationTime = 0;
+
+        private object m_param;
+        private Action<object> m_handler;
+        private double m_period = 0;
         private bool m_periodic = false;
         private bool m_queued = false;
-        private readonly object m_handlerMutex;
+        private Notifier m_nextEvent;
+        private object m_handlerSemaphore;
 
-
-
+        private Action<uint, IntPtr> ProcessCallback;
 
 
 
@@ -40,23 +39,19 @@ namespace WPILib
         /// which is set using <see cref="StartSingle"/> or <see cref="StartPeriodic"/></param>
         public Notifier(Action handler)
         {
-            if (handler == null)
-            {
-                throw new ArgumentNullException(nameof(handler), "Handler must not be null");
-            }
-
             m_handler = o => handler();
             m_param = null;
-            m_handlerMutex = new object();
+            m_nextEvent = null;
+            m_handlerSemaphore = new object();
 
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
                     ProcessCallback = ProcessQueue;
                     s_notifier = InitializeNotifier(ProcessCallback, IntPtr.Zero, ref status);
-				    CheckStatus(status);
+                    CheckStatus(status);
                 }
                 s_refCount++;
             }
@@ -70,23 +65,19 @@ namespace WPILib
         /// <param name="param">The object to pass to the callback.</param>
         public Notifier(Action<object> handler, object param)
         {
-            if (handler == null)
-            {
-                throw new ArgumentNullException(nameof(handler), "Handler must not be null");
-            }
-
             m_handler = handler;
             m_param = param;
-            m_handlerMutex = new object();
+            m_nextEvent = null;
+            m_handlerSemaphore = new object();//InitializeSemaphore(SEMAPHORE_FULL);
 
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 if (s_refCount == 0)
                 {
                     int status = 0;
                     ProcessCallback = ProcessQueue;
                     s_notifier = InitializeNotifier(ProcessCallback, IntPtr.Zero, ref status);
-				    CheckStatus(status);
+                    CheckStatus(status);
                 }
                 s_refCount++;
             }
@@ -97,7 +88,7 @@ namespace WPILib
         /// </summary>
         public void Dispose()
         {
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 DeleteFromQueue();
                 if ((--s_refCount) == 0)
@@ -106,11 +97,6 @@ namespace WPILib
                     CleanNotifier(s_notifier, ref status);
                     CheckStatus(status);
                 }
-            }
-
-            lock (m_handlerMutex)
-            {
-
             }
         }
 
@@ -123,11 +109,10 @@ namespace WPILib
         /// somewhere that is taking care of synchronizing access to the queue.</remarks>
         protected static void UpdateAlarm()
         {
-            if (s_timerQueue.Count != 0)
+            if (s_timerQueueHead != null)
             {
                 int status = 0;
-                Notifier head = s_timerQueue.First.Value;
-                UpdateNotifierAlarm(s_notifier, (uint)(head.m_expirationTime * 1e6), ref status);
+                UpdateNotifierAlarm(s_notifier, (uint)(s_timerQueueHead.m_expirationTime * 1e6), ref status);
                 CheckStatus(status);
             }
         }
@@ -156,27 +141,28 @@ namespace WPILib
             {
                 m_expirationTime -= ((1L << 32) / 1e6);
             }
-
-            //Attempt to insert new entry into queue
-            for (var i = s_timerQueue.First; i != s_timerQueue.Last; i = i.Next)
+            if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= m_expirationTime)
             {
-                if (i.Value.m_expirationTime > m_expirationTime)
-                {
-                    s_timerQueue.AddBefore(i, this);
-                    m_queued = true;
-                }
-            }
-
-            if (!m_queued)
-            {
-                s_timerQueue.AddFirst(this);
-                m_queued = true;
-
+                m_nextEvent = s_timerQueueHead;
+                s_timerQueueHead = this;
                 if (!reschedule)
                 {
                     UpdateAlarm();
                 }
             }
+            else
+            {
+                for (Notifier n = s_timerQueueHead; ; n = n.m_nextEvent)
+                {
+                    if (n.m_nextEvent == null || n.m_nextEvent.m_expirationTime > m_expirationTime)
+                    {
+                        m_nextEvent = n.m_nextEvent;
+                        n.m_nextEvent = this;
+                        break;
+                    }
+                }
+            }
+            m_queued = true;
         }
 
         /// <summary>
@@ -191,18 +177,22 @@ namespace WPILib
             if (m_queued)
             {
                 m_queued = false;
-                if (s_timerQueue.Count == 0)
+                if (s_timerQueueHead == null)
+                    return;
+                if (s_timerQueueHead == this)
                 {
-                    throw new InvalidOperationException("Cannot delete from an empty queue");
-                }
-                if (s_timerQueue.First.Value == this)
-                {
-                    s_timerQueue.RemoveFirst();
+                    s_timerQueueHead = m_nextEvent;
                     UpdateAlarm();
                 }
                 else
                 {
-                    s_timerQueue.Remove(this);
+                    for (Notifier n = s_timerQueueHead; n != null; n = n.m_nextEvent)
+                    {
+                        if (n.m_nextEvent == this)
+                        {
+                            n.m_nextEvent = m_nextEvent;
+                        }
+                    }
                 }
             }
         }
@@ -214,7 +204,7 @@ namespace WPILib
         /// <param name="delay">Seconds to wait before the handler is called.</param>
         public void StartSingle(double delay)
         {
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 m_periodic = false;
                 m_period = delay;
@@ -233,7 +223,7 @@ namespace WPILib
         /// period after  the call to this method.</param>
         public void StartPeriodic(double period)
         {
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 m_periodic = true;
                 m_period = period;
@@ -251,13 +241,18 @@ namespace WPILib
         /// function will block until the handler call is complete.</remarks>
         public void Stop()
         {
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 DeleteFromQueue();
             }
-            lock (m_handlerMutex)
+            try
             {
-
+                Monitor.Enter(m_handlerSemaphore);
+                if (Monitor.IsEntered(m_handlerSemaphore))
+                    Monitor.Exit(m_handlerSemaphore);
+            }
+            catch (ThreadInterruptedException)
+            {
             }
 
         }
@@ -266,46 +261,41 @@ namespace WPILib
         /// Called by the timer to process the queue and see
         /// if there are any handlers to call.
         /// </summary>
-        /// <param name="currentTimeInt">The current time from the FPGA, in 10 us ticks</param>
+        /// <param name="currentTimeInt"></param>
         /// <param name="param"></param>
         private static void ProcessQueue(uint currentTimeInt, IntPtr param)
         {
-            Notifier current;
             while (true)
             {
-                lock (s_queueMutex)
+                Notifier current;
+                lock (s_queueSemaphore)
                 {
                     double currentTime = currentTimeInt * 1.0e-6;
-                    if (s_timerQueue.Count == 0)
+                    current = s_timerQueueHead;
+                    if (current == null || current.m_expirationTime > currentTime)
                     {
                         break;
                     }
-                    current = s_timerQueue.First.Value;
-                    if (current.m_expirationTime > currentTime)
-                    {
-                        break; //No more events to process
-                    }
-
-                    s_timerQueue.RemoveFirst();
-
-                    current.m_queued = false;
-
+                    s_timerQueueHead = current.m_nextEvent;
                     if (current.m_periodic)
                     {
                         current.InsertInQueue(true);
                     }
-
-                    Monitor.Enter(current.m_handlerMutex);
-
+                    else
+                    {
+                        current.m_queued = false;
+                    }
+                    Monitor.Enter(current.m_handlerSemaphore);
                 }
                 current.m_handler(current.m_param);
-                Monitor.Exit(current.m_handlerMutex);
+                if (Monitor.IsEntered(current.m_handlerSemaphore))
+                    Monitor.Exit(current.m_handlerSemaphore);
             }
-
-            lock (s_queueMutex)
+            lock (s_queueSemaphore)
             {
                 UpdateAlarm();
             }
         }
+
     }
 }
