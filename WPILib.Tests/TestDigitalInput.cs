@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 // ReSharper disable UnusedVariable
@@ -112,6 +113,74 @@ namespace WPILib.Tests
                 Assert.IsFalse(input.Get());
                 GetInputDictionary(channel).Value = true;
                 Assert.IsTrue(input.Get());
+            }
+        }
+
+        public void TestGetChannel()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                Assert.That(s.Channel, Is.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Digital Input"));
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
             }
         }
     }

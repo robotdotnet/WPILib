@@ -47,7 +47,7 @@ namespace WPILib
         {
             m_allocatedChannel = false;
             if (channel == null)
-                throw new NullReferenceException("Analog Channel given was null");
+                throw new ArgumentNullException(nameof(channel), "Analog Channel given was null");
             m_analogChannel = channel;
             InitAccelerometer();
         }

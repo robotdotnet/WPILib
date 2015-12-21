@@ -108,7 +108,9 @@
     <Compile Include="TestAnalogGyro.cs" />
     <Compile Include="TestAnalogInput.cs" />
     <Compile Include="TestAnalogOutput.cs" />
+    <Compile Include="TestAnalogPotentiometer.cs" />
     <Compile Include="TestAnalogTrigger.cs" />
+    <Compile Include="TestAnalogTriggerOutput.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="TestBuiltinAccelerometer.cs" />
     <Compile Include="Commands\CommandCreationTest.cs" />

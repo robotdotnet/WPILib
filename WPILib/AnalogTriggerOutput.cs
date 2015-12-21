@@ -6,7 +6,6 @@ using HALAnalog = HAL.Base.HALAnalog;
 
 namespace WPILib
 {
-    //TODO: Add the essay that WPI has in theirs....
     /// <summary>
     /// Class to represent a specific output from an analog trigger.
     /// </summary>
@@ -55,7 +54,7 @@ namespace WPILib
         public AnalogTriggerOutput(AnalogTrigger trigger, AnalogTriggerType outputType)
         {
             if (trigger == null)
-                throw new NullReferenceException("Analog Trigger given was null");
+                throw new ArgumentNullException(nameof(trigger), "Analog Trigger given was null");
             m_trigger = trigger;
             m_outputType = outputType;
 

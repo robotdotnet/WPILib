@@ -79,7 +79,7 @@ namespace WPILib.SmartDashboard
         {
             if (name == null)
             {
-                throw new NullReferenceException("Name cannot be null");
+                throw new ArgumentNullException(nameof(name), "Name cannot be null");
             }
 
             m_defaultChoice = name;

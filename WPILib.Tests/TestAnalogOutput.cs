@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 // ReSharper disable UnusedVariable
@@ -102,6 +103,66 @@ namespace WPILib.Tests
                 Assert.AreEqual(0.5, GetOutputData(channel).Voltage, 0.0001);
                 output.SetVoltage(4.25);
                 Assert.AreEqual(4.25, GetOutputData(channel).Voltage, 0.0001);
+            }
+        }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (AnalogOutput s = GetAnalogOutput(0))
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Analog Output"));
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (AnalogOutput s = GetAnalogOutput(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            using (AnalogOutput s = GetAnalogOutput(0))
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (AnalogOutput s = GetAnalogOutput(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            using (AnalogOutput s = GetAnalogOutput(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
             }
         }
     }

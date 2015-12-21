@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Interfaces;
 
@@ -107,9 +108,61 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestBaccGetSmartDashboardType()
+        public void TestGetSmartDashboardType()
         {
-            Assert.AreEqual("3AxisAccelerometer", new BuiltInAccelerometer(AccelerometerRange.k2G).SmartDashboardType);
+            Assert.AreEqual("3AxisAccelerometer", m_accel.SmartDashboardType);
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            m_accel.Dispose();
+            m_accel = new ADXL362((SPI.Port)m_port, AccelerometerRange.k2G);
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.UpdateTable();
+            });
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.StartLiveWindowMode();
+            });
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.StopLiveWindowMode();
+            });
+        }
+
+        [Test]
+        public void TestStartLiveWindowModeTable()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                ITable table = new MockNetworkTable();
+                m_accel.InitTable(table);
+            });
+
+
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            ITable table = new MockNetworkTable();
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.InitTable(table);
+            });
+            Assert.That(m_accel.Table, Is.EqualTo(table));
         }
     }
 }

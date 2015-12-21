@@ -95,38 +95,41 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestStartLiveWindowModeTableNull()
-        {
-            using (Servo s = NewServo())
-            {
-            }
-        }
-
-        [Test]
-        public void TestStopLiveWindowModeTableNull()
-        {
-            using (Servo s = NewServo())
-            {
-            }
-        }
-
-        [Test]
-        public void TestStartLiveWindowModeTable()
+        public void TestInitTable()
         {
             using (Servo s = NewServo())
             {
                 ITable table = new MockNetworkTable();
-                s.InitTable(table);
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+            
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (Servo s = NewServo())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
             }
         }
 
         [Test]
-        public void TestStopLiveWindowModeTable()
+        public void TestStopLiveWindowMode()
         {
             using (Servo s = NewServo())
             {
-                ITable table = new MockNetworkTable();
-                s.InitTable(table);
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
             }
         }
 

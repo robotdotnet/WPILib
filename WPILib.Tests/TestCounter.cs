@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HAL;
 using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
@@ -75,6 +77,57 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestCounterInvalidEncodingType()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                Counter cnt = new Counter(EncodingType.K4X, null, null, false);
+            });
+        }
+
+        [Test]
+        public void TestCounterDigitalUpSourceNull()
+        {
+            using (DigitalInput validSource = new DigitalInput(0))
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    Counter cnt = new Counter(EncodingType.K2X, null, validSource, false);
+                });
+            }
+        }
+
+        [Test]
+        public void TestCounterDigitalDownSourceNull()
+        {
+            using (DigitalInput validSource = new DigitalInput(0))
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    Counter cnt = new Counter(EncodingType.K2X, validSource, null, false);
+                });
+            }
+        }
+
+        [Test]
+        public void TestCounterSourceNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                Counter cnt = new Counter((DigitalSource) null);
+            });
+        }
+
+        [Test]
+        public void TestCounterTriggerNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                Counter cnt = new Counter((AnalogTrigger)null);
+            });
+        }
+
+        [Test]
         public void TestCounterInit1()
         {
             using (Counter ctr = new Counter())
@@ -122,8 +175,6 @@ namespace WPILib.Tests
         [Test]
         public void TestCounterInit5()
         {
-            //Assert.Pass();
-            //return;
             using (AnalogTrigger at = new AnalogTrigger(2))
             {
                 using (Counter ctr = new Counter(at))
@@ -389,6 +440,111 @@ namespace WPILib.Tests
                 c.SamplesToAverage = samples;
                 Assert.AreEqual(samples, GetCounterData()[0].SamplesToAverage);
                 Assert.AreEqual(samples, c.SamplesToAverage);
+            }
+        }
+
+        [Test]
+        public void TestPidSourceTypeGetSet()
+        {
+            using (Counter c = new Counter())
+            {
+                Assert.That(c.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                c.PIDSourceType = PIDSourceType.Rate;
+                Assert.That(c.PIDSourceType, Is.EqualTo(PIDSourceType.Rate));
+            }
+        }
+
+        [Test]
+        public void TestPidSourceTypeGetSetInterfacee()
+        {
+            using (Counter c = new Counter())
+            {
+                IPIDSource pidSource = c;
+                Assert.That(pidSource.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                pidSource.PIDSourceType = PIDSourceType.Rate;
+                Assert.That(pidSource.PIDSourceType, Is.EqualTo(PIDSourceType.Rate));
+            }
+        }
+
+        [Test]
+        public void TestPidGetDisplacement()
+        {
+            using (Counter c = new Counter())
+            {
+                c.PIDSourceType = PIDSourceType.Displacement;
+                GetCounterData()[0].Count = 50;
+                Assert.That(c.PidGet(), Is.EqualTo(50));
+            }
+        }
+
+        [Test]
+        public void TestPidGetRate()
+        {
+            using (Counter c = new Counter())
+            {
+                c.PIDSourceType = PIDSourceType.Rate;
+                GetCounterData()[0].Period = 1.0/50;
+                Assert.That(c.PidGet(), Is.EqualTo(50));
+            }
+        }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (Counter s = new Counter())
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Counter"));
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (Counter s = new Counter())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            using (Counter s = new Counter())
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (Counter s = new Counter())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            using (Counter s = new Counter())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
             }
         }
     }

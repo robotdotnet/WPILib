@@ -73,7 +73,7 @@ namespace WPILib
         public Counter(DigitalSource source)
         {
             if (source == null)
-                throw new NullReferenceException("Digital Source given was null");
+                throw new ArgumentNullException(nameof(source), "Digital Source given was null");
             InitCounter(Mode.TwoPulse);
             SetUpSource(source);
         }
@@ -104,7 +104,6 @@ namespace WPILib
         /// <param name="inverted">True to invert the direction of counting.</param>
         public Counter(EncodingType encodingType, DigitalSource upSource, DigitalSource downSource, bool inverted)
         {
-            InitCounter(Mode.ExternalDirection);
             if (encodingType != EncodingType.K2X && encodingType != EncodingType.K1X)
             {
                 throw new ArgumentOutOfRangeException(nameof(encodingType), "Counters only support 1X and 2X decoding!");
@@ -113,6 +112,7 @@ namespace WPILib
                 throw new ArgumentNullException(nameof(upSource), "Up Source given was null");
             if (downSource == null)
                 throw new ArgumentNullException(nameof(downSource), "Down Source given was null");
+            InitCounter(Mode.ExternalDirection);
             SetUpSource(upSource);
             SetDownSource(downSource);
             int status = 0;
@@ -205,7 +205,7 @@ namespace WPILib
         public void SetUpSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
         {
             if (analogTrigger == null)
-                throw new NullReferenceException("Analog Trigger given was null");
+                throw new ArgumentNullException(nameof(analogTrigger), "Analog Trigger given was null");
             SetUpSource(analogTrigger.CreateOutput(triggerType));
             m_allocatedUpSource = true;
         }
@@ -277,7 +277,7 @@ namespace WPILib
         public void SetDownSource(AnalogTrigger analogTrigger, AnalogTriggerType triggerType)
         {
             if (analogTrigger == null)
-                throw new NullReferenceException("Analog Trigger given was null");
+                throw new ArgumentNullException(nameof(analogTrigger), "Analog Trigger given was null");
             SetDownSource(analogTrigger.CreateOutput(triggerType));
             m_allocatedDownSource = true;
         }

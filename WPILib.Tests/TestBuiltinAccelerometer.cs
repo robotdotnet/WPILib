@@ -3,6 +3,7 @@ using HAL;
 using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Interfaces;
 // ReSharper disable UnusedVariable
@@ -48,6 +49,16 @@ namespace WPILib.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
                 var x = new BuiltInAccelerometer(AccelerometerRange.k16G);
+            });
+            Assert.IsFalse(GetData().Active);
+        }
+
+        [Test]
+        public void TestRangeOutofEnumRange()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                var x = new BuiltInAccelerometer((AccelerometerRange)11);
             });
             Assert.IsFalse(GetData().Active);
         }
@@ -99,6 +110,61 @@ namespace WPILib.Tests
         public void TestBaccGetSmartDashboardType()
         {
             Assert.AreEqual("3AxisAccelerometer", new BuiltInAccelerometer(AccelerometerRange.k2G).SmartDashboardType);
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            BuiltInAccelerometer m_accel = new BuiltInAccelerometer(AccelerometerRange.k4G);
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.UpdateTable();
+            });
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            BuiltInAccelerometer m_accel = new BuiltInAccelerometer(AccelerometerRange.k4G);
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.StartLiveWindowMode();
+            });
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            BuiltInAccelerometer m_accel = new BuiltInAccelerometer(AccelerometerRange.k4G);
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.StopLiveWindowMode();
+            });
+        }
+
+        [Test]
+        public void TestStartLiveWindowModeTable()
+        {
+            BuiltInAccelerometer m_accel = new BuiltInAccelerometer(AccelerometerRange.k4G);
+            Assert.DoesNotThrow(() =>
+            {
+                ITable table = new MockNetworkTable();
+                m_accel.InitTable(table);
+            });
+
+
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            BuiltInAccelerometer m_accel = new BuiltInAccelerometer(AccelerometerRange.k4G);
+            ITable table = new MockNetworkTable();
+            Assert.DoesNotThrow(() =>
+            {
+                m_accel.InitTable(table);
+            });
+            Assert.That(m_accel.Table, Is.EqualTo(table));
         }
     }
 }

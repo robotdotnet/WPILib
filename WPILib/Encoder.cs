@@ -184,10 +184,10 @@ namespace WPILib
             m_allocatedB = false;
             m_allocatedI = false;
             if (aSource == null)
-                throw new NullReferenceException("Digital Source A was null");
+                throw new ArgumentNullException(nameof(aSource),"Digital Source A was null");
             m_aSource = aSource;
             if (bSource == null)
-                throw new NullReferenceException("Digital Source B was null");
+                throw new ArgumentNullException(nameof(bSource), "Digital Source B was null");
             m_bSource = bSource;
             InitEncoder(reverseDirection);
         }
@@ -214,10 +214,10 @@ namespace WPILib
             m_allocatedI = false;
             m_encodingType = encodingType;
             if (aSource == null)
-                throw new NullReferenceException("Digital Source A was null");
+                throw new ArgumentNullException(nameof(aSource), "Digital Source A was null");
             m_aSource = aSource;
             if (bSource == null)
-                throw new NullReferenceException("Digital Source B was null");
+                throw new ArgumentNullException(nameof(bSource),"Digital Source B was null");
             m_aSource = aSource;
             m_bSource = bSource;
             InitEncoder(reverseDirection);
@@ -238,10 +238,10 @@ namespace WPILib
             m_allocatedB = false;
             m_allocatedI = false;
             if (aSource == null)
-                throw new NullReferenceException("Digital Source A was null");
+                throw new ArgumentNullException(nameof(aSource), "Digital Source A was null");
             m_aSource = aSource;
             if (bSource == null)
-                throw new NullReferenceException("Digital Source B was null");
+                throw new ArgumentNullException(nameof(bSource), "Digital Source B was null");
             m_aSource = aSource;
             m_bSource = bSource;
             m_indexSource = indexSource;

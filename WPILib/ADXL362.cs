@@ -195,7 +195,7 @@ namespace WPILib
         public ITable Table { get; private set; }
 
         /// <inheritdoc/>
-        public string SmartDashboardType => "3AxisAcceleromter";
+        public string SmartDashboardType => "3AxisAccelerometer";
 
         /// <inheritdoc/>
         public void UpdateTable()

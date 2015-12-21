@@ -43,6 +43,7 @@ namespace WPILib
                     case AccelerometerRange.k8G:
                         HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_8G);
                         break;
+                    default:
                     case AccelerometerRange.k16G:
                         throw new ArgumentOutOfRangeException(nameof(value), "16G range not supported (use k2G, k4G, or k8G)");
                 }

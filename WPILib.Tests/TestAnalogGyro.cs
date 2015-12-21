@@ -8,6 +8,7 @@ using HAL.Simulator.Data;
 using HAL.Simulator.Inputs;
 using NUnit.Framework;
 using WPILib.Exceptions;
+using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
@@ -128,6 +129,57 @@ namespace WPILib.Tests
             });
         }
 
+        [Test]
+        public void TestCreationPreCreatedInputNull()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                AnalogGyro gyro = new AnalogGyro(null);
+            });
+        }
+
+        [Test]
+        public void TestReset()
+        {
+            using (AnalogGyro input = GetAnalogGyro(0))
+            {
+                SimAnalogGyro gyro = new SimAnalogGyro(0);
+                gyro.SetRate(1.025);
+                gyro.SetPosition(1.124);
+                Assert.AreEqual(1.025, input.GetRate(), 0.0001);
+                Assert.AreEqual(1.124, input.GetAngle(), 0.0001);
+                Assert.That(GetGyroData(0).AccumulatorCount, Is.Not.EqualTo(0));
+                Assert.That(GetGyroData(0).AccumulatorValue, Is.Not.EqualTo(0));
+                input.Reset();
+                Assert.That(GetGyroData(0).AccumulatorCount, Is.EqualTo(0));
+                Assert.That(GetGyroData(0).AccumulatorValue, Is.EqualTo(0));
+
+            }
+        }
+
+        [Test]
+        public void TestPidSourceTypeGetSet()
+        {
+            using (AnalogGyro gyro = GetAnalogGyro(0))
+            {
+                Assert.That(gyro.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                gyro.PIDSourceType = PIDSourceType.Rate;
+                Assert.That(gyro.PIDSourceType, Is.EqualTo(PIDSourceType.Rate));
+            }
+        }
+
+        [Test]
+        public void TestPidSourceTypeGetSetInterfacee()
+        {
+            using (AnalogGyro input = GetAnalogGyro(0))
+            {
+                IPIDSource gyro = input;
+                Assert.That(gyro.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                gyro.PIDSourceType = PIDSourceType.Rate;
+                Assert.That(gyro.PIDSourceType, Is.EqualTo(PIDSourceType.Rate));
+            }
+        }
+
 
 
         [Test]
@@ -171,6 +223,15 @@ namespace WPILib.Tests
                 Assert.AreEqual(1.025, input.GetAngle(), 0.0001);
                 gyro.SetPosition(-1.0835);
                 Assert.AreEqual(-1.0835, input.GetAngle(), 0.0001);
+            }
+        }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (AnalogGyro s = GetAnalogGyro(0))
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("AnalogGyro"));
             }
         }
     }

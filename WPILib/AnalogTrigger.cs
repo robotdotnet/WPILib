@@ -53,7 +53,7 @@ namespace WPILib
         public AnalogTrigger(AnalogInput channel)
         {
             if (channel == null)
-                throw new NullReferenceException("The Analog Input given was null");
+                throw new ArgumentNullException(nameof(channel), "The Analog Input given was null");
             InitTrigger(channel.Channel);
         }
 
@@ -107,7 +107,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetAnalogTriggerFiltered(Port, value, ref status);
+                SetAnalogTriggerAveraged(Port, value, ref status);
                 CheckStatus(status);
             }
         }

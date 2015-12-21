@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Exceptions;
+using static WPILib.DoubleSolenoid;
 // ReSharper disable UnusedVariable
 
 namespace WPILib.Tests
@@ -183,6 +185,81 @@ namespace WPILib.Tests
             }
         }
 
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (DoubleSolenoid s = NewDoubleSolenoid())
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Double Solenoid"));
+            }
+        }
 
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (DoubleSolenoid s = NewDoubleSolenoid())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            using (DoubleSolenoid s = NewDoubleSolenoid())
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (DoubleSolenoid s = NewDoubleSolenoid())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            using (DoubleSolenoid s = NewDoubleSolenoid())
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
+            }
+        }
+
+
+        [Test]
+        public void TestValueChanged()
+        {
+            using (DoubleSolenoid s = NewDoubleSolenoid())
+            {
+                s.Set(DoubleSolenoid.Value.Forward);
+                Assert.That(s.Get(), Is.EqualTo(Value.Forward));
+                s.ValueChanged(null, null, "Reverse", NetworkTables.NotifyFlags.NotifyLocal);
+                Assert.That(s.Get, Is.EqualTo(Value.Reverse));
+                s.ValueChanged(null, null, "Garbage", NetworkTables.NotifyFlags.NotifyLocal);
+                Assert.That(s.Get, Is.EqualTo(Value.Off));
+                s.ValueChanged(null, null, "Forward", NetworkTables.NotifyFlags.NotifyLocal);
+                Assert.That(s.Get, Is.EqualTo(Value.Forward));
+            }
+        }
     }
 }

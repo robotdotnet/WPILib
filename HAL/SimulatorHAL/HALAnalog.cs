@@ -370,7 +370,7 @@ namespace HAL.SimulatorHAL
             Marshal.FreeHGlobal(analog_trigger_pointer);
         }
 
-        private static double getaAnalogValueToVoltage(IntPtr analog_port_pointer, int value, ref int status)
+        internal static double getaAnalogValueToVoltage(IntPtr analog_port_pointer, int value, ref int status)
         {
             uint LSBWeight = getAnalogLSBWeight(analog_port_pointer, ref status);
             int offset = getAnalogOffset(analog_port_pointer, ref status);
@@ -499,9 +499,9 @@ namespace HAL.SimulatorHAL
         public static bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status)
         {
             if (type == AnalogTriggerType.InWindow)
-                return getAnalogTriggerInWindow(analog_trigger_pointer, ref status);
+                return Base.HALAnalog.GetAnalogTriggerInWindow(analog_trigger_pointer, ref status);
             if (type == AnalogTriggerType.State)
-                return getAnalogTriggerTriggerState(analog_trigger_pointer, ref status);
+                return Base.HALAnalog.GetAnalogTriggerTriggerState(analog_trigger_pointer, ref status);
             else
             {
                 status = HALErrorConstants.ANALOG_TRIGGER_PULSE_OUTPUT_ERROR;

@@ -205,13 +205,13 @@ namespace WPILib
         public void StartLiveWindowMode()
         {
             Set(Value.Off);
-            Table.AddTableListener("Value", this, true);
+            Table?.AddTableListener("Value", this, true);
         }
 
         /// <inheritdoc/>
         public void StopLiveWindowMode()
         {
-            Table.RemoveTableListener(this);
+            Table?.RemoveTableListener(this);
         }
 
         /// <inheritdoc/>
