@@ -132,6 +132,55 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestGetValue()
+        {
+            using (AnalogInput input = GetAnalogInput(0))
+            {
+                double voltage = 4.0;
+                GetInputData(0).Voltage = voltage;
+                short value = GetAnalogVoltageToValue(0, voltage);
+                Assert.That(input.GetValue(), Is.EqualTo(value));
+            }
+        }
+
+        [Test]
+        public void TestGetAverageValue()
+        {
+            using (AnalogInput input = GetAnalogInput(0))
+            {
+                double voltage = 4.0;
+                GetInputData(0).Voltage = voltage;
+                short value = GetAnalogVoltageToValue(0, voltage);
+                Assert.That(input.GetAverageValue(), Is.EqualTo(value));
+            }
+        }
+
+        private short GetAnalogVoltageToValue(int channel, double voltage)
+        {
+            if (voltage > 5.0)
+            {
+                voltage = 5.0;
+            }
+            else if (voltage < 0.0)
+            {
+                voltage = 0.0;
+            }
+
+            long LSBWeight = SimData.AnalogIn[channel].LSBWeight;
+            int offset = SimData.AnalogIn[channel].Offset;
+            return (short)((voltage + offset * 1.0e-9) / (LSBWeight * 1.0e-9));
+        }
+
+        [Test]
+        public void TestGetOffset()
+        {
+            using (AnalogInput input = GetAnalogInput(0))
+            {
+                Assert.That(input.Offset, Is.EqualTo(GetInputData(0).Offset));
+            }
+        }
+
+        [Test]
         public void TestInitAccumulatorValidChannel()
         {
             using (AnalogInput input = GetAnalogInput(0))

@@ -116,11 +116,23 @@ namespace WPILib.Tests
             }
         }
 
+        [Test]
         public void TestGetChannel()
         {
             using (DigitalInput s = GetDigitalInput(0))
             {
                 Assert.That(s.Channel, Is.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void TestDigitalSourceRoutingInformation()
+        {
+            using (DigitalInput s = GetDigitalInput(0))
+            {
+                Assert.That(s.ChannelForRouting, Is.EqualTo(0));
+                Assert.That(s.ModuleForRouting, Is.EqualTo(0));
+                Assert.That(s.AnalogTriggerForRouting, Is.False);
             }
         }
 

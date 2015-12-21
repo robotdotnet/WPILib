@@ -143,6 +143,17 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestCompressorClearAllStickyFaults()
+        {
+            var comp = GetCompressor();
+
+            Assert.DoesNotThrow(() =>
+            {
+                comp.ClearAllPCMStickyFaults();
+            });
+        }
+
+        [Test]
         public void TestCompressorSmartDashboardName()
         {
             Assert.AreEqual("Compressor", GetCompressor().SmartDashboardType);

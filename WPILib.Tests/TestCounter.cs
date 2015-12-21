@@ -114,7 +114,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                Counter cnt = new Counter((DigitalSource) null);
+                Counter cnt = new Counter((DigitalSource)null);
             });
         }
 
@@ -125,6 +125,124 @@ namespace WPILib.Tests
             {
                 Counter cnt = new Counter((AnalogTrigger)null);
             });
+        }
+
+        [Test]
+        public void TestCounterSetUpSourceWithExisitingUpSource()
+        {
+            using (Counter ctr = new Counter(6))
+            {
+                TestInit(0, 6, 0, true, false, false, false);
+                Assert.That(SimData.DIO[6].Initialized, Is.True);
+                using (DigitalInput input = new DigitalInput(5))
+                {
+                    ctr.SetUpSource(input);
+                    Assert.That(SimData.DIO[6].Initialized, Is.False);
+                    Assert.That(SimData.DIO[5].Initialized, Is.True);
+                    TestInit(0, 5, 0, true, false, false, false);
+                }
+                Assert.That(SimData.DIO[5].Initialized, Is.False);
+            }
+        }
+
+        [Test]
+        public void TestCounterSetUpAnalogSource()
+        {
+            using (Counter c = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                using (AnalogTrigger at = new AnalogTrigger(2))
+                {
+                    c.SetUpSource(at, AnalogTriggerType.State);
+                    TestInit(0, 2, 0, true, false, false, false, true);
+                }
+            }
+        }
+
+        [Test]
+        public void TestCounterSetUpAnalogSourceNull()
+        {
+            using (Counter c = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    c.SetUpSource(null, AnalogTriggerType.State);
+                });
+            }
+        }
+
+        [Test]
+        public void TestSetUpSourceEdgeWithNullSource()
+        {
+            using (Counter c = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                Assert.Throws<SystemException>(() =>
+                {
+                    c.SetUpSourceEdge(true, true);
+                });
+            }
+        }
+
+        [Test]
+        public void TestCounterSetDownSourceWithExisitingDownSource()
+        {
+            using (Counter ctr = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                ctr.SetDownSource(6);
+                TestInit(0, 0, 6, false, false, false, false);
+                Assert.That(SimData.DIO[6].Initialized, Is.True);
+                using (DigitalInput input = new DigitalInput(5))
+                {
+                    ctr.SetDownSource(input);
+                    Assert.That(SimData.DIO[6].Initialized, Is.False);
+                    Assert.That(SimData.DIO[5].Initialized, Is.True);
+                    TestInit(0, 0, 5, false, false, false, false);
+                }
+                Assert.That(SimData.DIO[5].Initialized, Is.False);
+            }
+        }
+
+        [Test]
+        public void TestCounterSetDownAnalogSource()
+        {
+            using (Counter c = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                using (AnalogTrigger at = new AnalogTrigger(2))
+                {
+                    c.SetDownSource(at, AnalogTriggerType.State);
+                    TestInit(0, 0, 2, false, false, false, false, false, true);
+                }
+            }
+        }
+
+        [Test]
+        public void TestCounterSetDownAnalogSourceNull()
+        {
+            using (Counter c = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+                    c.SetDownSource(null, AnalogTriggerType.State);
+                });
+            }
+        }
+
+        [Test]
+        public void TestSetDownSourceEdgeWithNullSource()
+        {
+            using (Counter c = new Counter())
+            {
+                TestInit(0, 0, 0, false, false, false, false);
+                Assert.Throws<SystemException>(() =>
+                {
+                    c.SetDownSourceEdge(true, true);
+                });
+            }
         }
 
         [Test]
@@ -483,7 +601,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 c.PIDSourceType = PIDSourceType.Rate;
-                GetCounterData()[0].Period = 1.0/50;
+                GetCounterData()[0].Period = 1.0 / 50;
                 Assert.That(c.PidGet(), Is.EqualTo(50));
             }
         }

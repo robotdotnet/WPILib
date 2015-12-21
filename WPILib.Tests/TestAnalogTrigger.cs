@@ -28,6 +28,7 @@ namespace WPILib.Tests
             Assert.IsFalse(GetData(index).Initialized);
         }
 
+        [Test]
         public void TestAnalogTriggerNullInput()
         {
             Assert.Throws<ArgumentNullException>(() =>

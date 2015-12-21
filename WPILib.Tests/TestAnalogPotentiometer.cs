@@ -87,10 +87,27 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestPotentiometerCreatedWithAnalogInput()
+        {
+            using (AnalogInput aIn = new AnalogInput(0))
+            {
+                Assert.That(GetInputData(0).Initialized, Is.True);
+                using (AnalogPotentiometer pot = new AnalogPotentiometer(aIn))
+                {
+
+                }
+                Assert.That(GetInputData(0).Initialized, Is.True);
+            }
+            Assert.That(GetInputData(0).Initialized, Is.False);
+        }
+
+        [Test]
         public void TestPidSourceTypeGetSet()
         {
             using (AnalogPotentiometer input = GetAnalogInput(0))
             {
+                Assert.That(input.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                input.PIDSourceType = PIDSourceType.Displacement;
                 Assert.That(input.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
                 Assert.Throws<ArgumentOutOfRangeException>(() =>
                 {
@@ -102,7 +119,7 @@ namespace WPILib.Tests
         }
 
         [Test]
-        public void TestPidSourceTypeGetSetInterfacee()
+        public void TestPidSourceTypeGetSetInterface()
         {
             using (AnalogPotentiometer input = GetAnalogInput(0))
             {
