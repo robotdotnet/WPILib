@@ -2,7 +2,6 @@
 {
     public class SPIAccelerometerData : DataBase
     {
-        private bool m_hasSource = false;
         private bool m_active = false;
         private byte m_range = 0;
         private double m_x = 0;
@@ -11,22 +10,6 @@
 
         internal SPIAccelerometerData() { }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (value == m_hasSource) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
-        }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="AccelerometerData"/> is active.
@@ -116,7 +99,6 @@
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_hasSource = false;
             m_active = false;
             m_range = 0;
             m_x = 0;

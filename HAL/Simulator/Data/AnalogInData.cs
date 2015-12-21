@@ -6,7 +6,6 @@
     /// <seealso cref="NotifyDataBase" />
     public class AnalogInData : NotifyDataBase
     {
-        private bool m_hasSource = false;
         private bool m_initialized = false;
         private uint m_averageBits = Base.HALAnalog.DefaultAverageBits;
         private uint m_oversampleBits = Base.HALAnalog.DefaultOversampleBits;
@@ -24,7 +23,6 @@
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_hasSource = false;
             m_initialized = false;
             m_averageBits = Base.HALAnalog.DefaultAverageBits;
             m_oversampleBits = Base.HALAnalog.DefaultOversampleBits;
@@ -37,23 +35,6 @@
             m_accumulatorCenter = 0;
             m_accumulatorDeadband = 0;
             base.ResetData();
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (value == m_hasSource) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
         }
 
         /// <summary>

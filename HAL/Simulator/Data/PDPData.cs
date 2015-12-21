@@ -13,7 +13,6 @@
             {
                 Current[i] = 0.0;
             }
-            HasSource = false;
             Temperature = 0.0;
             Voltage = 0.0;
             TotalEnergy = 0.0;
@@ -27,13 +26,6 @@
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource { get; set; } = false;
         /// <summary>
         /// Gets or sets the temperature.
         /// </summary>

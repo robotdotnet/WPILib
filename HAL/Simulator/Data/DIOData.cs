@@ -7,7 +7,6 @@
     public class DIOData : NotifyDataBase
     {
         private bool m_initialized = false;
-        private bool m_hasSource = false;
         private bool m_value = true;
         private double m_pulseLength = 0;
         private bool m_isInput = true;
@@ -17,30 +16,11 @@
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_initialized = false;
-            m_hasSource = false;
             m_value = true;
             m_pulseLength = 0;
             m_isInput = true;
 
             base.ResetData();
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (value == m_hasSource) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
         }
 
         /// <summary>

@@ -2,7 +2,6 @@
 {
     public class SPIAccumulatorData : DataBase
     {
-        private bool m_hasSource = false;
         private bool m_initialized = false;
         private long m_accumulatorValue = 0;
         private uint m_accumulatorCount = 0;
@@ -11,27 +10,9 @@
 
         public override void ResetData()
         {
-            m_hasSource = false;
             m_initialized = false;
             m_accumulatorCount = 0;
             m_accumulatorValue = 0;
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (value == m_hasSource) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
         }
 
         /// <summary>

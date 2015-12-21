@@ -28,7 +28,6 @@ namespace HAL.Simulator.Data
     /// <seealso cref="DataBase" />
     public class AnalogTriggerData : DataBase
     {
-        private bool m_hasSource = false;
         private bool m_initialized = false;
         private TrigerType m_trigType = TrigerType.Unassigned;
         private bool m_trigState = false;
@@ -40,7 +39,6 @@ namespace HAL.Simulator.Data
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_hasSource = false;
             m_initialized = false;
             AnalogPin = -1;
             TriggerPointer = -1;
@@ -48,23 +46,6 @@ namespace HAL.Simulator.Data
             m_trigState = false;
             m_trigUpper = 0;
             m_trigLower = 0;
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource;}
-            set
-            {
-                if (value == m_hasSource) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
         }
 
         /// <summary>

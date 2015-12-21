@@ -108,13 +108,6 @@ namespace HAL.Simulator.Data
     public class CompressorData : DataBase
     {
         /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource { get; set; } = false;
-        /// <summary>
         /// Gets a value indicating whether this <see cref="CompressorData"/> is initialized.
         /// </summary>
         /// <value>
@@ -155,7 +148,6 @@ namespace HAL.Simulator.Data
         /// <inheritdoc/>
         public override void ResetData()
         {
-            HasSource = false;
             Initialized = false;
             On = false;
             CloseLoopEnabled = true;

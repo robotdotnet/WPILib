@@ -8,7 +8,6 @@ namespace HAL.Simulator.Data
     /// <seealso cref="DataBase" />
     public class AccelerometerData : DataBase
     {
-        private bool m_hasSource = false;
         private bool m_active = false;
         private HALAccelerometerRange m_range = HALAccelerometerRange.Range_2G;
         private double m_x = 0;
@@ -16,23 +15,6 @@ namespace HAL.Simulator.Data
         private double m_z = 1;
 
         internal AccelerometerData() { }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (value == m_hasSource) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
-        }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="AccelerometerData"/> is active.
@@ -122,7 +104,6 @@ namespace HAL.Simulator.Data
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_hasSource = false;
             m_active = false;
             m_range = HALAccelerometerRange.Range_2G;
             m_x = 0.0;

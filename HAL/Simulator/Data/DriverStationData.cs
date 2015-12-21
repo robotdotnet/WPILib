@@ -12,7 +12,6 @@ namespace HAL.Simulator.Data
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_hasSource = false;
             m_enabled = false;
             m_autonomous = false;
             m_test = false;
@@ -23,30 +22,12 @@ namespace HAL.Simulator.Data
 
         internal DSControlData() { }
 
-        private bool m_hasSource = false;
         private bool m_enabled = false;
         private bool m_autonomous = false;
         private bool m_test = false;
         private bool m_eStop = false;
         private bool m_fmsAttached = false;
         private bool m_dsAttached = true;
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (m_hasSource == value) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
-        }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="DSControlData"/> is enabled.
@@ -160,7 +141,6 @@ namespace HAL.Simulator.Data
         /// <inheritdoc/>
         public override void ResetData()
         {
-            m_hasSource = false;
             m_leftRumble = 0;
             m_rightRumble = 0;
             m_isXbox = 0;
@@ -189,7 +169,6 @@ namespace HAL.Simulator.Data
 
         internal JoystickData() { }
 
-        private bool m_hasSource = false;
         private bool[] m_buttons = new bool[33];
         private double[] m_axes = new double[6];
         private int[] m_povs = new[] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
@@ -201,23 +180,6 @@ namespace HAL.Simulator.Data
         private int m_isXbox = 0;
         private byte m_type = 0;
         private string m_name = "Joystick";
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has source.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has source; otherwise, <c>false</c>.
-        /// </value>
-        public bool HasSource
-        {
-            get { return m_hasSource; }
-            set
-            {
-                if (m_hasSource == value) return;
-                m_hasSource = value;
-                OnPropertyChanged(value);
-            }
-        }
 
         /// <summary>
         /// Gets the buttons.
