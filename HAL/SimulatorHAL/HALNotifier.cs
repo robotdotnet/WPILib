@@ -49,19 +49,22 @@ namespace HAL.SimulatorHAL
                 while (notifier != null)
                 {
                     if (notifier.triggerTime != uint.MaxValue)
-                        currentTime = Base.HAL.GetFPGATime(ref status);
-                    if (notifier.triggerTime < currentTime)
                     {
-                        notifier.triggerTime = uint.MaxValue;
-                        var process = notifier.process;
-                        var param = notifier.param;
-                        Monitor.Exit(temp);
-                        process(currentTime, param);
-                        Monitor.Enter(temp);
-                    }
-                    else if (notifier.triggerTime < closestTrigger)
-                    {
-                        updateNotifierAlarm((IntPtr)Notifiers.IndexOf(notifier), notifier.triggerTime, ref status);
+                        if (currentTime == 0)
+                            currentTime = Base.HAL.GetFPGATime(ref status);
+                        if (notifier.triggerTime < currentTime)
+                        {
+                            notifier.triggerTime = uint.MaxValue;
+                            var process = notifier.process;
+                            var param = notifier.param;
+                            Monitor.Exit(temp);
+                            process(currentTime, param);
+                            Monitor.Enter(temp);
+                        }
+                        else if (notifier.triggerTime < closestTrigger)
+                        {
+                            updateNotifierAlarm((IntPtr)Notifiers.IndexOf(notifier), notifier.triggerTime, ref status);
+                        }
                     }
                     notifier = notifier.next;
                 }
@@ -99,7 +102,7 @@ namespace HAL.SimulatorHAL
                 lock (s_notifierInterruptMutex)
                 {
                     //Create manager and alarm if not already created
-                     s_alarm = new NotifierAlarm(AlarmCallback);
+                    s_alarm = new NotifierAlarm(AlarmCallback);
                 }
             }
             lock (s_notifierMutex)
@@ -114,7 +117,7 @@ namespace HAL.SimulatorHAL
 
                 Notifiers.Add(notifier);
 
-                return (IntPtr) Notifiers.IndexOf(notifier);
+                return (IntPtr)Notifiers.IndexOf(notifier);
             }
         }
 
@@ -187,7 +190,7 @@ namespace HAL.SimulatorHAL
                         s_alarm.EnableAlarm();
                     }
                 }
-                finally 
+                finally
                 {
                     if (lockWasTaken)
                     {
