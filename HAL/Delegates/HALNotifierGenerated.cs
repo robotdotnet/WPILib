@@ -13,13 +13,19 @@ namespace HAL.Base
             HAL.Initialize();
         }
 
-        public delegate IntPtr InitializeNotifierDelegate(Action<uint, IntPtr> ProcessQueue, IntPtr param, ref int status);
+        public delegate IntPtr InitializeNotifierDelegate(Action<uint, IntPtr> Process, IntPtr param, ref int status);
         public static InitializeNotifierDelegate InitializeNotifier;
+
+        public delegate IntPtr GetNotifierParamDelegate(IntPtr notifier_pointer, ref int status);
+        public static GetNotifierParamDelegate GetNotifierParam;
 
         public delegate void CleanNotifierDelegate(IntPtr notifier_pointer, ref int status);
         public static CleanNotifierDelegate CleanNotifier;
 
         public delegate void UpdateNotifierAlarmDelegate(IntPtr notifier_pointer, uint triggerTime, ref int status);
         public static UpdateNotifierAlarmDelegate UpdateNotifierAlarm;
+
+        public delegate void StopNotifierAlarmDelegate(IntPtr notifier_pointer, ref int status);
+        public static StopNotifierAlarmDelegate StopNotifierAlarm;
     }
 }
