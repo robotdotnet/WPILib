@@ -1,4 +1,5 @@
 ﻿using System;
+using HAL.Base;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using NUnit.Framework;
@@ -125,7 +126,7 @@ namespace WPILib.Tests
                 {
                     at.SetLimitsRaw(150, 50);
                 });
-                
+
             }
         }
 
@@ -159,7 +160,50 @@ namespace WPILib.Tests
             int offset = SimData.AnalogIn[channel].Offset;
 
             double ret = (value + offset * 1.0e-9) / (LSBWeight * 1.0e-9);
-            return (int) ret;
+            return (int)ret;
+        }
+
+        [Test]
+        public void TestAnalogTriggerGetState()
+        {
+            using (AnalogTrigger trigger = new AnalogTrigger(0))
+            {
+                HALAnalog.GetAnalogTriggerTriggerState = (IntPtr pointer, ref int status) =>
+                {
+                    status = 0;
+                    return false;
+                };
+                Assert.That(trigger.GetTriggerState(), Is.False);
+                HALAnalog.GetAnalogTriggerTriggerState = (IntPtr pointer, ref int status) =>
+                {
+                    status = 0;
+                    return true;
+                };
+                Assert.That(trigger.GetTriggerState(), Is.True);
+                HALAnalog.GetAnalogTriggerTriggerState = HAL.SimulatorHAL.HALAnalog.getAnalogTriggerTriggerState;
+
+            }
+        }
+
+        [Test]
+        public void TestAnalogTriggerGetInWindow()
+        {
+            using (AnalogTrigger trigger = new AnalogTrigger(0))
+            {
+                HALAnalog.GetAnalogTriggerInWindow = (IntPtr pointer, ref int status) =>
+                {
+                    status = 0;
+                    return false;
+                };
+                Assert.That(trigger.GetInWindow(), Is.False);
+                HALAnalog.GetAnalogTriggerInWindow = (IntPtr pointer, ref int status) =>
+                {
+                    status = 0;
+                    return true;
+                };
+                Assert.That(trigger.GetInWindow(), Is.True);
+                HALAnalog.GetAnalogTriggerInWindow = HAL.SimulatorHAL.HALAnalog.getAnalogTriggerInWindow;
+            }
         }
     }
 }

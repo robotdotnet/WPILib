@@ -250,7 +250,7 @@ namespace HAL.SimulatorHAL
             status = 0;
             bool found = false;
             int i = 0;
-            for (i = 0; i < DigitalPWM.Count; i++)
+            for (i = 0; i < DigitalPWM.Length; i++)
             {
                 if (DigitalPWM[i] == null)
                 {

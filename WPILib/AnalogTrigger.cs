@@ -124,34 +124,31 @@ namespace WPILib
                 CheckStatus(status);
             }
         }
-        
+
         /// <summary>
-        /// Return the InWindow output of the analog trigger. True if between the limits.
+        /// Return the InWindow output of the analog trigger. True if the analog input
+        /// is between the upper and lower limits
         /// </summary>
-        public bool InWindow
+        /// <returns>The InWindow output of the analog trigger</returns>
+        public bool GetInWindow()
         {
-            get
-            {
-                int status = 0;
-                bool value = GetAnalogTriggerInWindow(Port, ref status);
-                CheckStatus(status);
-                return value;
-            }
+            int status = 0;
+            bool value = GetAnalogTriggerInWindow(Port, ref status);
+            CheckStatus(status);
+            return value;
         }
 
         /// <summary>
         /// Return the trigger state. True if above upper limit, False if below lower limit.
         /// Maintains previous value if in between limits.
         /// </summary>
-        public bool TriggerState
+        /// <returns>The TriggerState output of the analog trigger</returns>
+        public bool GetTriggerState()
         {
-            get
-            {
-                int status = 0;
-                bool value = GetAnalogTriggerTriggerState(Port, ref status);
-                CheckStatus(status);
-                return value;
-            }
+            int status = 0;
+            bool value = GetAnalogTriggerTriggerState(Port, ref status);
+            CheckStatus(status);
+            return value;
         }
 
         /// <summary>

@@ -74,7 +74,7 @@ namespace HAL.Simulator
         /// <value>
         /// The digital PWM.
         /// </value>
-        public static List<DigitalPWMData> DigitalPWM { get; } = new List<DigitalPWMData>();
+        public static DigitalPWMData[] DigitalPWM { get; } = new DigitalPWMData[6];
 
         /// <summary>
         /// Gets the relay.
@@ -391,10 +391,6 @@ namespace HAL.Simulator
             {
                 pwmData.ResetData();
             }
-            foreach (var digitalPWMData in DigitalPWM)
-            {
-                digitalPWMData.ResetData();
-            }
             foreach (var mxpData in MXP)
             {
                 mxpData.ResetData();
@@ -403,7 +399,10 @@ namespace HAL.Simulator
             {
                 relayData.ResetData();
             }
-            DigitalPWM.Clear();
+            for (int i = 0; i < DigitalPWM.Length; i++)
+            {
+                DigitalPWM[i] = null;
+            }
             foreach (var counterData in Counter)
             {
                 counterData.ResetData();

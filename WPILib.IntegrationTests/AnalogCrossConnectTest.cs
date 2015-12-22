@@ -53,8 +53,8 @@ namespace WPILib.IntegrationTests
             s_analogIo.GetOutput().SetVoltage(1.0f);
             Timer.Delay(DelayTime);
 
-            Assert.IsFalse(trigger.InWindow, "Analog Trigger is in the window (2V, 3V)");
-            Assert.IsFalse(trigger.TriggerState, "Analog trigger is on");
+            Assert.IsFalse(trigger.GetInWindow(), "Analog Trigger is in the window (2V, 3V)");
+            Assert.IsFalse(trigger.GetTriggerState(), "Analog trigger is on");
 
             trigger.Dispose();
         }
@@ -68,7 +68,7 @@ namespace WPILib.IntegrationTests
             s_analogIo.GetOutput().SetVoltage(2.5f);
             Timer.Delay(DelayTime);
 
-            Assert.IsTrue(trigger.InWindow, "Analog Trigger is not in the window (2V, 3V)");
+            Assert.IsTrue(trigger.GetInWindow(), "Analog Trigger is not in the window (2V, 3V)");
             //Not checking for state, because state will be whichever state it was in last.
 
             trigger.Dispose();
@@ -83,8 +83,8 @@ namespace WPILib.IntegrationTests
             s_analogIo.GetOutput().SetVoltage(4.0f);
             Timer.Delay(DelayTime);
 
-            Assert.IsFalse(trigger.InWindow, "Analog Trigger is in the window (2V, 3V)");
-            Assert.IsTrue(trigger.TriggerState, "Analog trigger is not on");
+            Assert.IsFalse(trigger.GetInWindow(), "Analog Trigger is in the window (2V, 3V)");
+            Assert.IsTrue(trigger.GetTriggerState(), "Analog trigger is not on");
 
             trigger.Dispose();
         }
