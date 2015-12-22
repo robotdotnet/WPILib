@@ -248,37 +248,29 @@ namespace HAL.SimulatorHAL
         public static IntPtr allocatePWM(ref int status)
         {
             status = 0;
-            bool found = false;
             int i = 0;
-            for (i = 0; i < DigitalPWM.Length; i++)
+            for (i = 0; i < DigitalPWM.Count; i++)
             {
-                if (DigitalPWM[i] == null)
+                var cnt = DigitalPWM[i];
+                if (!cnt.Initialized)
                 {
-                    found = true;
-                    break;
+                    cnt.Initialized = true;
+                    cnt.DutyCycle = 0;
+
+                    return (IntPtr) i;
                 }
             }
-            if (!found)
-                return IntPtr.Zero;
 
-            DigitalPWM[i] = new DigitalPWMData
-            {
-                DutyCycle = 0,
-                Pin = 0,
-            };
-
-            DigitalPWMStruct p = new DigitalPWMStruct { idx = i };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-
-            return ptr;
+            return (IntPtr) ~0;
         }
 
         [CalledSimFunction]
         public static void freePWM(IntPtr pwmGenerator, ref int status)
         {
             status = 0;
-            DigitalPWM[PortConverters.GetPWM(pwmGenerator).idx] = null;
+            int id = pwmGenerator.ToInt32();
+            if (id == ~0) return;
+            DigitalPWM[id].Initialized = false;
         }
 
 
@@ -294,14 +286,18 @@ namespace HAL.SimulatorHAL
         public static void setPWMDutyCycle(IntPtr pwmGenerator, double dutyCycle, ref int status)
         {
             status = 0;
-            DigitalPWM[PortConverters.GetPWM(pwmGenerator).idx].DutyCycle = dutyCycle;
+            int id = pwmGenerator.ToInt32();
+            if (id == ~0) return;
+            DigitalPWM[id].DutyCycle = dutyCycle;
         }
 
         [CalledSimFunction]
         public static void setPWMOutputChannel(IntPtr pwmGenerator, uint pin, ref int status)
         {
             status = 0;
-            DigitalPWM[PortConverters.GetPWM(pwmGenerator).idx].Pin = pin;
+            int id = pwmGenerator.ToInt32();
+            if (id == ~0) return;
+            DigitalPWM[id].Pin = pin;
         }
 
 

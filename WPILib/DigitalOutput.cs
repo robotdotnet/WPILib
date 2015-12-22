@@ -15,7 +15,14 @@ namespace WPILib
     /// </summary>
     public class DigitalOutput : DigitalSource, ILiveWindowSendable, ITableListener
     {
-        private IntPtr m_pwmGenerator = IntPtr.Zero;
+        private static readonly IntPtr s_invalidPwmGenerator = (IntPtr) ~0; 
+
+        private IntPtr m_pwmGenerator = s_invalidPwmGenerator;
+
+        /// <summary>
+        /// Gets the PWM Generator index for the PWM generator.
+        /// </summary>
+        public int PwmGeneratorChannel => m_pwmGenerator.ToInt32();
 
         /// <summary>
         /// Create an instance of a digital output.
@@ -33,7 +40,7 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
-            if (m_pwmGenerator != IntPtr.Zero)
+            if (m_pwmGenerator != s_invalidPwmGenerator)
             {
                 DisablePWM();
             }
@@ -122,7 +129,7 @@ namespace WPILib
         /// <param name="initialDutyCycle">The duty cycle to start generating. [0..1]</param>
         public void EnablePWM(double initialDutyCycle)
         {
-            if (m_pwmGenerator != IntPtr.Zero)
+            if (m_pwmGenerator != s_invalidPwmGenerator)
                 return;
             int status = 0;
             m_pwmGenerator = AllocatePWM(ref status);
@@ -138,7 +145,7 @@ namespace WPILib
         /// </summary>
         public void DisablePWM()
         {
-            if (m_pwmGenerator == IntPtr.Zero)
+            if (m_pwmGenerator == s_invalidPwmGenerator)
                 return;
             int status = 0;
             SetPWMOutputChannel(m_pwmGenerator, (uint)DigitalChannels, ref status);
@@ -156,7 +163,7 @@ namespace WPILib
         /// <param name="value">The duty-cycle to change to. [0..1]</param>
         public void UpdateDutyCycle(double value)
         {
-            if (m_pwmGenerator == IntPtr.Zero)
+            if (m_pwmGenerator == s_invalidPwmGenerator)
                 return;
             int status = 0;
             SetPWMDutyCycle(m_pwmGenerator, value, ref status);
@@ -196,12 +203,12 @@ namespace WPILib
         /// Start having this sendable object automatically respond to
         /// value changes reflect the value on the table.
         /// </summary>
-        public void StartLiveWindowMode() => Table.AddTableListener("Value", this, true);
+        public void StartLiveWindowMode() => Table?.AddTableListener("Value", this, true);
 
         /// <summary>
         /// Stop having this sendable object automatically respond to value changes.
         /// </summary>
-        public void StopLiveWindowMode() => Table.RemoveTableListener(this);
+        public void StopLiveWindowMode() => Table?.RemoveTableListener(this);
 
         /// <inheritdoc/>
         public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
