@@ -31,6 +31,16 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestSolenoidCreateDefaultModule()
+        {
+            using (Solenoid s = new Solenoid(0))
+            {
+                Assert.IsTrue(SimData.GetPCM(0).Solenoids[0].Initialized);
+            }
+            Assert.That(SimData.GetPCM(0).Solenoids[0].Initialized, Is.False);
+        }
+
+        [Test]
         public void TestSolenoidModuleUnderLimit()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>

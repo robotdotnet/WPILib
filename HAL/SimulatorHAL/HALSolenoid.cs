@@ -46,6 +46,8 @@ namespace HAL.SimulatorHAL
         public static void freeSolenoidPort(IntPtr solenoid_port_pointer)
         {
             if (solenoid_port_pointer == IntPtr.Zero) return;
+            var p = PortConverters.GetSolenoidPort(solenoid_port_pointer);
+            GetPCM(p.port.module).Solenoids[p.port.pin].Initialized = false;
             Marshal.FreeHGlobal(solenoid_port_pointer);
         }
 

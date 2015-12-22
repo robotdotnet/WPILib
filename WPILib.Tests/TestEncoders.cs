@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HAL.Simulator;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
@@ -328,6 +330,181 @@ namespace WPILib.Tests
             {
                 SimData.Counter[0].Count = 1234;
                 Assert.AreEqual(1234, x.Get());
+            }
+        }
+
+        [Test]
+        public void TestEncoderDefaultEncodingTypeNullASource()
+        {
+            using (DigitalInput validChannel = new DigitalInput(0))
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+
+                    Encoder enc = new Encoder(null, validChannel);
+                });
+            }
+        }
+
+        [Test]
+        public void TestEncoderDefaultEncodingTypeNullBSource()
+        {
+            using (DigitalInput validChannel = new DigitalInput(0))
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+
+                    Encoder enc = new Encoder(validChannel, null);
+                });
+            }
+        }
+
+        [Test]
+        public void TestEncoderAssignedEncodingTypeNullASource()
+        {
+            using (DigitalInput validChannel = new DigitalInput(0))
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+
+                    Encoder enc = new Encoder(null, validChannel, false, EncodingType.K4X);
+                });
+            }
+        }
+
+        [Test]
+        public void TestEncoderAssignedEncodingTypeNullBSource()
+        {
+            using (DigitalInput validChannel = new DigitalInput(0))
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                {
+
+                    Encoder enc = new Encoder(validChannel, null, false, EncodingType.K4X);
+                });
+            }
+        }
+
+        [Test]
+        public void TestGetFPGAIndex()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                Assert.That(s.FPGAIndex, Is.EqualTo(0));
+            }
+        }
+
+        [Test]
+        public void TestGetEncodingScale()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                Assert.That(s.EncodingScale, Is.EqualTo(4));
+            }
+        }
+
+        [Test]
+        public void TestPidSourceTypeGetSet()
+        {
+            using (Encoder c = new Encoder(0, 1))
+            {
+                Assert.That(c.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                c.PIDSourceType = PIDSourceType.Rate;
+                Assert.That(c.PIDSourceType, Is.EqualTo(PIDSourceType.Rate));
+            }
+        }
+
+        [Test]
+        public void TestPidSourceTypeGetSetInterfacee()
+        {
+            using (Encoder c = new Encoder(0, 1))
+            {
+                IPIDSource pidSource = c;
+                Assert.That(pidSource.PIDSourceType, Is.EqualTo(PIDSourceType.Displacement));
+                pidSource.PIDSourceType = PIDSourceType.Rate;
+                Assert.That(pidSource.PIDSourceType, Is.EqualTo(PIDSourceType.Rate));
+            }
+        }
+
+        [Test]
+        public void TestPidGetDisplacement()
+        {
+            using (Encoder c = new Encoder(0, 1))
+            {
+                c.PIDSourceType = PIDSourceType.Displacement;
+                SimData.Encoder[0].Count = 50 * 4;
+                Assert.That(c.PidGet(), Is.EqualTo(50));
+            }
+        }
+
+        [Test]
+        public void TestPidGetRate()
+        {
+            using (Encoder c = new Encoder(0, 1))
+            {
+                c.PIDSourceType = PIDSourceType.Rate;
+                SimData.Encoder[0].Period = 1.0 / 50;
+                Assert.That(c.PidGet(), Is.EqualTo(50));
+            }
+        }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Encoder"));
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            using (Encoder s = new Encoder(0, 1))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
             }
         }
     }

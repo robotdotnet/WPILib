@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using HAL.Simulator.Inputs;
+using NetworkTables.Tables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using WPILib.Interfaces;
@@ -232,6 +233,136 @@ namespace WPILib.Tests
             using (AnalogGyro s = GetAnalogGyro(0))
             {
                 Assert.That(s.SmartDashboardType, Is.EqualTo("AnalogGyro"));
+            }
+        }
+
+        [Test]
+        public void TestPidGetDisplacement()
+        {
+            using (AnalogGyro c = GetAnalogGyro(0))
+            {
+                SimAnalogGyro gyro = new SimAnalogGyro(0);
+                c.PIDSourceType = PIDSourceType.Displacement;
+                gyro.SetPosition(1.025);
+                Assert.That(c.PidGet(), Is.EqualTo(1.025).Within(0.001));
+                gyro.SetPosition(-1.0835);
+                Assert.That(c.PidGet(), Is.EqualTo(-1.0835).Within(0.001));
+            }
+        }
+
+        [Test]
+        public void TestPidGetRate()
+        {
+            using (AnalogGyro c = GetAnalogGyro(0))
+            {
+                SimAnalogGyro gyro = new SimAnalogGyro(0);
+                c.PIDSourceType = PIDSourceType.Rate;
+                gyro.SetRate(1.025);
+                Assert.That(c.PidGet(), Is.EqualTo(1.025).Within(0.001));
+                gyro.SetRate(-1.0835);
+                Assert.That(c.PidGet(), Is.EqualTo(-1.0835).Within(0.001));
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNull()
+        {
+            using (AnalogGyro s = GetAnalogGyro(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTable()
+        {
+            using (AnalogGyro s = GetAnalogGyro(0))
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowMode()
+        {
+            using (AnalogGyro s = GetAnalogGyro(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowMode()
+        {
+            using (AnalogGyro s = GetAnalogGyro(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestUpdateTableNullBase()
+        {
+            using (GyroBase s = GetAnalogGyro(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.UpdateTable();
+                });
+            }
+        }
+
+        [Test]
+        public void TestInitTableBase()
+        {
+            using (GyroBase s = GetAnalogGyro(0))
+            {
+                ITable table = new MockNetworkTable();
+                Assert.DoesNotThrow(() =>
+                {
+                    s.InitTable(table);
+                });
+                Assert.That(s.Table, Is.EqualTo(table));
+            }
+
+        }
+
+        [Test]
+        public void TestStartLiveWindowModeBase()
+        {
+            using (GyroBase s = GetAnalogGyro(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StartLiveWindowMode();
+                });
+            }
+        }
+
+        [Test]
+        public void TestStopLiveWindowModeBase()
+        {
+            using (GyroBase s = GetAnalogGyro(0))
+            {
+                Assert.DoesNotThrow(() =>
+                {
+                    s.StopLiveWindowMode();
+                });
             }
         }
     }

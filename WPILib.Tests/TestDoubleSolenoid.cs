@@ -33,6 +33,18 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestDoubleSolenoidCreateDefaultModule()
+        {
+            using (DoubleSolenoid s = new DoubleSolenoid(0, 1))
+            {
+                Assert.IsTrue(SimData.GetPCM(0).Solenoids[0].Initialized);
+                Assert.IsTrue(SimData.GetPCM(0).Solenoids[1].Initialized);
+            }
+            Assert.That(SimData.GetPCM(0).Solenoids[0].Initialized, Is.False);
+            Assert.That(SimData.GetPCM(0).Solenoids[1].Initialized, Is.False);
+        }
+
+        [Test]
         public void TestDoubleSolenoidModuleUnderLimit()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>

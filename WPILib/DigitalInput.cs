@@ -42,11 +42,6 @@ namespace WPILib
         public int Channel => m_channel;
 
         /// <summary>
-        /// Is this an analog trigger?
-        /// </summary>
-        public override bool AnalogTriggerForRouting => false;
-
-        /// <summary>
         /// Initialize a table for this sendable object.
         /// </summary>
         /// <param name="subtable">The table to put the values in.</param>
