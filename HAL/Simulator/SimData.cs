@@ -344,7 +344,7 @@ namespace HAL.Simulator
                 Counter.Add(new CounterData());
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 Encoder.Add(new EncoderData());
             }

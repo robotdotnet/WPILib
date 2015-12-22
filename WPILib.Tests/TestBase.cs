@@ -60,6 +60,6 @@ namespace WPILib.Tests
 
         public const int NumCounters = 8;
 
-        public const int NumEncoders = 4;
+        public const int NumEncoders = 8;
     }
 }
