@@ -338,13 +338,16 @@ namespace HAL.SimulatorHAL
                 var cnt = SimData.AnalogTrigger[i];
                 if (cnt.Initialized == false)
                 {
+                    var port = PortConverters.GetHalPort(port_pointer);
+                    bool preInit = SimData.AnalogIn[port.pin].Initialized;
+
                     IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
                     cnt.Initialized = true;
-                    cnt.AnalogPin = PortConverters.GetHalPort(port_pointer).pin;
+                    cnt.AnalogPin = port.pin;
                     AnalogTrigger trig = new AnalogTrigger()
                     {
                         analogPortPointer = aPt,
-                        
+                        precreatedAnalogInput = preInit,
                     };
                     index = (uint)i;
                     trig.index = i;
@@ -366,8 +369,21 @@ namespace HAL.SimulatorHAL
             status = 0;
             var trig = PortConverters.GetAnalogTrigger(analog_trigger_pointer);
             SimData.AnalogTrigger[trig.index].Initialized = false;
-            freeAnalogInputPort(trig.analogPortPointer);
+            if (trig.precreatedAnalogInput)
+            {
+                freeAnalogInputPortTrigger(trig.analogPortPointer);
+            }
+            else
+            {
+                freeAnalogInputPort(trig.analogPortPointer);
+            }
             Marshal.FreeHGlobal(analog_trigger_pointer);
+        }
+
+        private static void freeAnalogInputPortTrigger(IntPtr analog_port_pointer)
+        {
+            if (analog_port_pointer == IntPtr.Zero) return;
+            Marshal.FreeHGlobal(analog_port_pointer);
         }
 
         internal static double getaAnalogValueToVoltage(IntPtr analog_port_pointer, int value, ref int status)

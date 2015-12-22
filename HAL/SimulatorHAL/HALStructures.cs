@@ -51,6 +51,7 @@ namespace HAL.SimulatorHAL
     {
 		public IntPtr analogPortPointer;
         public int index;
+        public bool precreatedAnalogInput;
     }
 
     //Compressor
@@ -103,16 +104,6 @@ namespace HAL.SimulatorHAL
         public bool FireOnUp;
         public bool FireOnDown;
     }
-    /*
-    //Notifier
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct Notifier
-    {
-        public Action<uint, IntPtr> Callback;
-        public IntPtr Parameter;
-        public Thread Alarm;
-    }
-    */
 
     //Solenoid
     [StructLayout(LayoutKind.Sequential)]

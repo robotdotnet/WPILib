@@ -38,6 +38,24 @@ namespace WPILib.Tests
         }
 
         [Test]
+        public void TestAnalogTriggerTakeAnalogInput()
+        {
+            using (AnalogInput aIn = new AnalogInput(0))
+            {
+                Assert.That(SimData.AnalogIn[0].Initialized, Is.True);
+                int index = 0;
+                using (AnalogTrigger trigger = new AnalogTrigger(aIn))
+                {
+                    index = trigger.Index;
+                    Assert.That(GetData(index).Initialized, Is.True);
+                }
+                Assert.That(GetData(index).Initialized, Is.False);
+                Assert.That(SimData.AnalogIn[0].Initialized, Is.True);
+            }
+            Assert.That(SimData.AnalogIn[0].Initialized, Is.False);
+        }
+
+        [Test]
         public void TestSetAveraged()
         {
             using (AnalogTrigger at = new AnalogTrigger(2))
