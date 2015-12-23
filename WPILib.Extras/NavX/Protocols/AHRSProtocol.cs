@@ -754,7 +754,7 @@
         }
 
         /* 0 to 655.35 */
-        public static float decodeProtocolUnsignedHundredthsFloat(byte[] buffer, int offset)
+        public new static float decodeProtocolUnsignedHundredthsFloat(byte[] buffer, int offset)
         {
             int uint16 = (int)decodeBinaryUint16(buffer, offset);
             if (uint16 < 0)

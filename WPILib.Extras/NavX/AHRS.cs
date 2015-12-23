@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using NetworkTables.Tables;
 using WPILib.Extras.NavX.Protocols;
 using WPILib.Interfaces;
@@ -11,54 +6,91 @@ using WPILib.LiveWindow;
 
 namespace WPILib.Extras.NavX
 {
+
+
+    /// <summary>
+    /// The AHRS class provides access to a KauaiLabs NavX Robotics Navigation Sensor.
+    /// </summary>
+    /// <remarks>
+    /// The Sensor can be connected via the SPI, I2C and Serial (TTL UART and USB) communication interfaces on the RoboRIO.
+    /// <para/>
+    /// The AHRS class enables access to basic connectivity and state information,
+    /// as well as key 6-axis and 9-axis orientation information(yaw, pitch, roll,
+    /// compass heading, fused (9-axis) heading and magnetic disturbance detection.
+    /// <para/>
+    /// Additionally, the ARHS class also provides access to extended information
+    /// including linear acceleration, motion detection, rotation detection and sensor
+    /// temperature.
+    ///<para/>
+    /// If used with the navX Aero, the AHRS class also provides access to
+    /// altitude, barometric pressure and pressure sensor temperature data
+    /// </remarks>
     public class AHRS : SensorBase, IPIDSource, ILiveWindowSendable
     {
-        /**
-     * Identifies one of the three sensing axes on the navX sensor board.  Note that these axes are
-     * board-relative ("Board Frame"), and are not necessarily the same as the logical axes of the 
-     * chassis on which the sensor is mounted.
-     * 
-     * For more information on sensor orientation, please see the navX sensor <a href=http://navx-mxp.kauailabs.com/installation/orientation-2/>Orientation</a> page.
-     */
+        /// <summary>
+        /// Identifies one of the three sensing axes on the NavX sensor board.
+        /// </summary>
+        /// <remarks>
+        /// Note that these axes are board-relative ("Board Frame"), and are not necessarily the same as the logical axes of the 
+        /// chassis on which the sensor is mounted.
+        /// <para></para>
+        /// For more information on sensor orientation, please see the NavX sensor <see cref="!:http://navx-mxp.kauailabs.com/installation/orientation-2/>Orientation"/> page.
+        /// </remarks>
         public enum BoardAxis
         {
+            /// <summary>
+            /// Board X axis.
+            /// </summary>
             KBoardAxisX,
+            /// <summary>
+            /// Board Y axis.
+            /// </summary>
             KBoardAxisY,
+            /// <summary>
+            /// Board Z axis.
+            /// </summary>
             KBoardAxisZ
 
         }
 
-        /**
-         * Indicates which sensor board axis is used as the "yaw" (gravity) axis.
-         * 
-         * This selection may be modified via the <a href=http://navx-mxp.kauailabs.com/installation/omnimount/>Omnimount</a> feature.
-         *
-         */
+        /// <summary>
+        /// Indicates which sensor board axis is used as the "yaw" (gravity) axis.
+        /// </summary>
+        /// <remarks>
+        /// This selection may be modified via the <see cref="!:http://navx-mxp.kauailabs.com/installation/omnimount/>Omnimount"/> feature.
+        /// </remarks>
         public class BoardYawAxis
         {
+            /// <summary>
+            /// The <see cref="BoardAxis"/>/
+            /// </summary>
             public BoardAxis BoardAxis;
+            /// <summary>
+            /// True if axis is up, otherwise down.
+            /// </summary>
             public bool Up;
         };
 
-        /** 
-         * For use with serial communications, the SerialDataType specifies the
-         * type of data to be streamed from the sensor.  Due to limitations in the
-         * streaming bandwidth on some serial interfaces, only a subset of all
-         * available data can be streamed.
-         * <p>
-         * Note that if communicating over I2C/SPI, all available data can be
-         * retrieved, so the SerialDataType need only be specified if using
-         * serial communications.
-         */
+        /// <summary>
+        /// The <see cref="SerialDataType"/> enum specifies the type of data to be streamed from the sensor.
+        /// </summary>
+        /// <remarks>
+        /// Due to limitations in streaming bandwidth on some serial devices, only a subset of all available
+        /// data can be steamed.
+        /// <para/>
+        /// Note that if communicating over I2C/SPI, all available data can be
+        /// retreived, so the <see cref="SerialDataType"/> enum need only to be specified
+        /// if using serial communications.
+        /// </remarks>
         public enum SerialDataType
         {
-            /**
-             * (default):  6 and 9-axis processed data
-             */
+            /// <summary>
+            /// (Default): 6 and 9 axis processed data.
+            /// </summary>
             KProcessedData,
-            /**
-             * unprocessed data from each individual sensor
-             */
+            /// <summary>
+            /// Unprocessed data from each individual sensor.
+            /// </summary>
             KRawData
 
         }
@@ -140,95 +172,86 @@ namespace WPILib.Extras.NavX
         /* Public Interface Implementation                         */
         /***********************************************************/
 
-        /**
-         * Constructs the AHRS class using SPI communication, overriding the 
-         * default update rate with a custom rate which may be from 4 to 60, 
-         * representing the number of updates per second sent by the sensor.  
-         *<p>
-         * This constructor should be used if communicating via SPI.
-         *<p>
-         * Note that increasing the update rate may increase the 
-         * CPU utilization.
-         *<p>
-         * @param spi_port_id SPI Port to use
-         * @param update_rate_hz Custom Update Rate (Hz)
-         */
-        public AHRS(SPI.Port spiPortId, byte updateRateHz)
+        /// <summary>
+        /// Constructs the AHRS class using SPI Communication
+        /// </summary>
+        /// <remarks>
+        /// The update rate may be between 4 Hz and 60 Hz, representing the number
+        /// of updates per second sent by the sensor.
+        /// <para/>
+        /// This constructor should be used if communicating via SPI.
+        /// <para/>
+        /// Note that increasing the update rate may increase the CPU utilization.
+        /// </remarks>
+        /// <param name="spiPortId">The <see cref="SPI.Port">SPI Port</see> to use.</param>
+        /// <param name="updateRateHz">The Update Rate (Hz) [4..60] (Default 50)</param>
+        public AHRS(SPI.Port spiPortId, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
             m_io = new RegisterIO(new RegisterIO_SPI(new SPI(spiPortId)), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
             m_ioThread.Start();
         }
 
-        /**
-         * The AHRS class provides an interface to AHRS capabilities
-         * of the KauaiLabs navX Robotics Navigation Sensor via SPI, I2C and
-         * Serial (TTL UART and USB) communications interfaces on the RoboRIO.
-         *
-         * The AHRS class enables access to basic connectivity and state information,
-         * as well as key 6-axis and 9-axis orientation information (yaw, pitch, roll,
-         * compass heading, fused (9-axis) heading and magnetic disturbance detection.
-         *
-         * Additionally, the ARHS class also provides access to extended information
-         * including linear acceleration, motion detection, rotation detection and sensor
-         * temperature.
-         *
-         * If used with the navX Aero, the AHRS class also provides access to
-         * altitude, barometric pressure and pressure sensor temperature data
-         *
-         * This constructor allows the specification of a custom SPI bitrate, in bits/second.
-         *
-         * @param spi_port_id SPI Port to use
-         * @param spi_bitrate SPI bitrate (Maximum:  2,000,000)
-         * @param update_rate_hz Custom Update Rate (Hz)
-         */
-
-        public AHRS(SPI.Port spiPortId, int spiBitrate, byte updateRateHz)
+        /// <summary>
+        /// Constructs the AHRS class using SPI Communication, overriding the SPI bitrate.
+        /// </summary>
+        /// <remarks>
+        /// The update rate may be between 4 Hz and 60 Hz, representing the number
+        /// of updates per second sent by the sensor.
+        /// <para/>
+        /// This constructor should be used if communicating via SPI.
+        /// <para/>
+        /// Note that increasing the update rate may increase the CPU utilization.
+        /// </remarks>
+        /// <param name="spiPortId">The <see cref="SPI.Port">SPI Port</see> to use.</param>
+        /// <param name="spiBitrate">The SPI bitrate to use (bits/seconds) (Maximum: 2,000,000)</param>
+        /// <param name="updateRateHz">The Update Rate (Hz) [4..60] (Default 50)</param>
+        public AHRS(SPI.Port spiPortId, int spiBitrate, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
             m_io = new RegisterIO(new RegisterIO_SPI(new SPI(spiPortId), spiBitrate), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
             m_ioThread.Start();
-        }/**
-     * Constructs the AHRS class using I2C communication, overriding the 
-     * default update rate with a custom rate which may be from 4 to 60, 
-     * representing the number of updates per second sent by the sensor.  
-     *<p>
-     * This constructor should be used if communicating via I2C.
-     *<p>
-     * Note that increasing the update rate may increase the 
-     * CPU utilization.
-     *<p>
-     * @param i2c_port_id I2C Port to use
-     * @param update_rate_hz Custom Update Rate (Hz)
-     */
-        public AHRS(I2C.Port i2CPortId, byte updateRateHz)
+        }
+
+        /// <summary>
+        /// Constructs the AHRS class using I2C Communication
+        /// </summary>
+        /// <remarks>
+        /// The update rate may be between 4 Hz and 60 Hz, representing the number
+        /// of updates per second sent by the sensor.
+        /// <para/>
+        /// This constructor should be used if communicating via I2C.
+        /// <para/>
+        /// Note that increasing the update rate may increase the CPU utilization.
+        /// </remarks>
+        /// <param name="i2CPortId">The <see cref="I2C.Port">I2C Port</see> to use.</param>
+        /// <param name="updateRateHz">The Update Rate (Hz) [4..60] (Default 50)</param>
+        public AHRS(I2C.Port i2CPortId, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
             m_io = new RegisterIO(new RegisterIO_I2C(new I2C(i2CPortId, 0x32)), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
             m_ioThread.Start();
         }
 
-        /**
-         * Constructs the AHRS class using serial communication, overriding the 
-         * default update rate with a custom rate which may be from 4 to 60, 
-         * representing the number of updates per second sent by the sensor.  
-         *<p>
-         * This constructor should be used if communicating via either 
-         * TTL UART or USB Serial interface.
-         *<p>
-         * Note that the serial interfaces can communicate either 
-         * processed data, or raw data, but not both simultaneously.
-         * If simultaneous processed and raw data are needed, use
-         * one of the register-based interfaces (SPI or I2C).
-         *<p>
-         * Note that increasing the update rate may increase the 
-         * CPU utilization.
-         *<p>
-         * @param serial_port_id SerialPort to use
-         * @param data_type either kProcessedData or kRawData
-         * @param update_rate_hz Custom Update Rate (Hz)
-         */
-        public AHRS(SerialPort.Port serialPortId, SerialDataType dataType, byte updateRateHz)
+        /// <summary>
+        /// Constructs the AHRS class using serial communication.
+        /// </summary>
+        /// <remarks>
+        /// This constructor should be used if communicating via either TTL UART 
+        /// or USB Serial Interface.
+        /// <para></para>
+        /// Note that the serial interfaces can communicate either processed data, or raw data,
+        /// but not both simultaneously. If simultaneous processed and raw data are needed,
+        /// use one of the register-based interfaces (SPI or I2C). The default is processed data.
+        /// <para></para>
+        ///  The update rate may be between 4 Hz and 60 Hz, representing the number
+        /// of updates per second sent by the sensor. Note that increasing the update 
+        /// rate may increase the CPU utilization.
+        /// </remarks>
+        /// <param name="serialPortId">The <see cref="SerialPort.Port">Serial Port</see> to use.</param>
+        /// <param name="dataType">Either <see cref="SerialDataType.KProcessedData"/> (Default) or <see cref="SerialDataType.KRawData"/>.</param>
+        /// <param name="updateRateHz">The Update Rate (Hz) [4..60] (Default 50)</param>
+        public AHRS(SerialPort.Port serialPortId, SerialDataType dataType = SerialDataType.KProcessedData, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
             bool processedData = (dataType == SerialDataType.KProcessedData);
@@ -236,144 +259,103 @@ namespace WPILib.Extras.NavX
             m_ioThread.Start();
         }
 
-        /**
-         * Constructs the AHRS class using SPI communication and the default update rate.  
-         *<p>
-         * This constructor should be used if communicating via SPI.
-         *<p>
-         * @param spi_port_id SPI port to use.
-         */
-        public AHRS(SPI.Port spiPortId) : this(spiPortId, NavxDefaultUpdateRateHz)
-        {
-
-        }
-
-
-        /**
-         * Constructs the AHRS class using I2C communication and the default update rate.  
-         *<p>
-         * This constructor should be used if communicating via I2C.
-         *<p>
-         * @param i2c_port_id I2C port to use
-         */
-        public AHRS(I2C.Port i2CPortId) : this(i2CPortId, NavxDefaultUpdateRateHz)
-        {
-
-        }
-
-
-        /**
-         * Constructs the AHRS class using serial communication and the default update rate, 
-         * and returning processed (rather than raw) data.  
-         *<p>
-         * This constructor should be used if communicating via either 
-         * TTL UART or USB Serial interface.
-         *<p>
-         * @param serial_port_id SerialPort to use
-         */
-        public AHRS(SerialPort.Port serialPortId) : this(serialPortId, SerialDataType.KProcessedData, NavxDefaultUpdateRateHz)
-        {
-
-        }
-
-        /**
-         * Returns the current pitch value (in degrees, from -180 to 180)
-         * reported by the sensor.  Pitch is a measure of rotation around
-         * the X Axis.
-         * @return The current pitch value in degrees (-180 to 180).
-         */
+        /// <summary>
+        /// Returns the current pitch value (in degrees, from -180 to 180) reported by the sensor.
+        /// </summary>
+        /// <remarks>Pitch is a measure of rotation around the X Axis.</remarks>
+        /// <returns>The current pitch value in degrees (-180 to 180).</returns>
         public float GetPitch()
         {
             return m_pitch;
         }
 
-        /**
-         * Returns the current roll value (in degrees, from -180 to 180)
-         * reported by the sensor.  Roll is a measure of rotation around
-         * the X Axis.
-         * @return The current roll value in degrees (-180 to 180).
-         */
+        /// <summary>
+        /// Returns the current roll value (in degrees, from -180 to 180) reported by the sensor.
+        /// </summary>
+        /// <remarks>Roll is a measure of rotation around the Y Axis.</remarks>
+        /// <returns>The current Roll value in degrees (-180 to 180).</returns>
         public float GetRoll()
         {
             return m_roll;
         }
 
-        /**
-         * Returns the current yaw value (in degrees, from -180 to 180)
-         * reported by the sensor.  Yaw is a measure of rotation around
-         * the Z Axis (which is perpendicular to the earth).
-         *<p>
-         * Note that the returned yaw value will be offset by a user-specified
-         * offset value; this user-specified offset value is set by 
-         * invoking the zeroYaw() method.
-         * @return The current yaw value in degrees (-180 to 180).
-         */
+        /// <summary>
+        /// Returns the current yaw value (in degrees, from -180 to 180) reported by the sensor.
+        /// </summary>
+        /// <remarks>
+        /// Yaw is a measure of rotation around the Z Axis (which is perpendicular to the earth).
+        /// <para></para>
+        /// Note that the returned yaw value will be offset by a user-specified
+        /// offset value; this user-specified offset value is set by invoking
+        /// the <see cref="ZeroYaw"/> method.
+        /// </remarks>
+        /// <returns>The current yaw value in degrees (-180 to 180).</returns>
         public float GetYaw()
         {
             if (m_boardCapabilities.IsBoardYawResetSupported())
             {
                 return this.m_yaw;
             }
-            else {
+            else
+            {
                 return (float)m_yawOffsetTracker.ApplyOffset(this.m_yaw);
             }
         }
 
-        /**
-         * Returns the current tilt-compensated compass heading 
-         * value (in degrees, from 0 to 360) reported by the sensor.
-         *<p>
-         * Note that this value is sensed by a magnetometer,
-         * which can be affected by nearby magnetic fields (e.g., the
-         * magnetic fields generated by nearby motors).
-         *<p>
-         * Before using this value, ensure that (a) the magnetometer
-         * has been calibrated and (b) that a magnetic disturbance is
-         * not taking place at the instant when the compass heading
-         * was generated.
-         * @return The current tilt-compensated compass heading, in degrees (0-360).
-         */
+        /// <summary>
+        /// Returns the current tilt-compensated compass heading value (in degrees,
+        /// from 0 to 360) reported by the sensor.
+        /// </summary>
+        /// <remarks>
+        /// Note that this vallue is sensed by a magnetometer, which can
+        /// be affected by nearby magnetic fields (e.g., the magnetic
+        /// fields generated by nearby motors).
+        /// <para/>
+        /// Before using this value, ensure that (a) the magnetometer has been
+        /// calibrated and (b) that a magnetic disturbance is not taking
+        /// place at the instant when the compass heading was generated.
+        /// </remarks>
+        /// <returns>The current tilt-compensated compass heading, in degrees (0-360).</returns>
         public float GetCompassHeading()
         {
             return m_compassHeading;
         }
 
-        /**
-         * Sets the user-specified yaw offset to the current
-         * yaw value reported by the sensor.
-         *<p>
-         * This user-specified yaw offset is automatically
-         * subtracted from subsequent yaw values reported by
-         * the getYaw() method.
-         */
+        /// <summary>
+        /// Sets the user-specified yaw offset to the current
+        /// yaw value reported by the sensor.
+        /// </summary>
+        /// <remarks>
+        /// This user-specified yaw offset is automatically subtracted from subsequent
+        /// yaw values reported by the <see cref="GetYaw"/> method.
+        /// </remarks>
         public void ZeroYaw()
         {
             if (m_boardCapabilities.IsBoardYawResetSupported())
             {
                 m_io.ZeroYaw();
             }
-            else {
+            else
+            {
                 m_yawOffsetTracker.SetOffset();
             }
         }
 
-
-        /**
-         * Returns true if the sensor is currently performing automatic
-         * gyro/accelerometer calibration.  Automatic calibration occurs 
-         * when the sensor is initially powered on, during which time the 
-         * sensor should be held still, with the Z-axis pointing up 
-         * (perpendicular to the earth).
-         *<p>
-         * NOTE:  During this automatic calibration, the yaw, pitch and roll
-         * values returned may not be accurate.
-         *<p>
-         * Once calibration is complete, the sensor will automatically remove 
-         * an internal yaw offset value from all reported values.
-         *<p>
-         * @return Returns true if the sensor is currently automatically 
-         * calibrating the gyro and accelerometer sensors.
-         */
+        /// <summary>
+        /// Returns true if the sensor is currently performing automatic
+        /// gyro/accelerometer calibration.
+        /// </summary>
+        /// <remarks>
+        /// Automatic calibration occurs when the sensor is initially powered on,
+        /// during which time the sensor should be held still, with the Z-axis
+        /// pointing up (perpendicular to the earth).
+        /// <para>NOTE: During this automatic callication, the yaw, pitch and roll
+        /// values returned may not be accurate</para>
+        /// <para>Once calibration is complete, the sensor will automatically remove 
+        /// an internal yaw offset value from all reported values.</para>
+        /// </remarks>
+        /// <returns>True if the sensor is currently automatically calibrating the gyro
+        /// and accelerometer sensors.</returns>
         public bool IsCalibrating()
         {
             return !((m_calStatus &
@@ -381,212 +363,202 @@ namespace WPILib.Extras.NavX
                             AHRSProtocol.NAVX_CAL_STATUS_IMU_CAL_COMPLETE);
         }
 
-        /**
-         * Indicates whether the sensor is currently connected
-         * to the host computer.  A connection is considered established
-         * whenever communication with the sensor has occurred recently.
-         *<p>
-         * @return Returns true if a valid update has been recently received
-         * from the sensor.
-         */
+        /// <summary>
+        /// Indicates whether the sensor is currently connected to the host system.
+        /// </summary>
+        /// <remarks>A connection is considered established whenever 
+        /// communication with the sensor has occured recently.</remarks>
+        /// <returns>True if a valid update has been recently received from the sensor.</returns>
         public bool IsConnected()
         {
             return m_io.IsConnected();
         }
 
-        /**
-         * Returns the count in bytes of data received from the
-         * sensor.  This could can be useful for diagnosing 
-         * connectivity issues.
-         *<p>
-         * If the byte count is increasing, but the update count
-         * (see getUpdateCount()) is not, this indicates a software
-         * misconfiguration.
-         * @return The number of bytes received from the sensor.
-         */
+        /// <summary>
+        /// Returns the count in bytes of data recieved from the sensor.
+        /// </summary>
+        /// <remarks>This could be useful for diagnosing connectivity issues.
+        /// <para>If the byte count is increasing but the update count (see <see cref="GetUpdateCount"/>)
+        /// is not, this indicates a software misconfiguration.</para></remarks>
+        /// <returns>The number of bytes received from the sensor.</returns>
         public double GetByteCount()
         {
             return m_io.GetByteCount();
         }
 
-        /**
-         * Returns the count of valid updates which have
-         * been received from the sensor.  This count should increase
-         * at the same rate indicated by the configured update rate.
-         * @return The number of valid updates received from the sensor.
-         */
+        /// <summary>
+        /// Returns teh count of valid updates which have been received 
+        /// from the sensor.
+        /// </summary>
+        /// <remarks>This count should increase at the same
+        /// rate indicated by the configured update rate.</remarks>
+        /// <returns>The number of valid updates received from the sensor.</returns>
         public double GetUpdateCount()
         {
             return m_io.GetUpdateCount();
         }
 
-        /**
-         * Returns the current linear acceleration in the X-axis (in G).
-         *<p>
-         * World linear acceleration refers to raw acceleration data, which
-         * has had the gravity component removed, and which has been rotated to
-         * the same reference frame as the current yaw value.  The resulting
-         * value represents the current acceleration in the x-axis of the
-         * body (e.g., the robot) on which the sensor is mounted.
-         *<p>
-         * @return Current world linear acceleration in the X-axis (in G).
-         */
+        /// <summary>
+        /// Returns the current linear acceleration in the X-axis (in G).
+        /// </summary>
+        /// <remarks>
+        /// World linear acceleration refers to raw acceleration data, which
+        /// has had the gravity component removed, and which has been rotated to
+        /// the same reference frame as the current yaw value. The resulting
+        /// value represents the current acceleration in the X-Axis of the body
+        /// (e.g., the robot) on which the sensor is mounted.
+        /// </remarks>
+        /// <returns>Current world linear acceleration in the X-axis (in G).</returns>
         public float GetWorldLinearAccelX()
         {
             return this.m_worldLinearAccelX;
         }
 
-        /**
-         * Returns the current linear acceleration in the Y-axis (in G).
-         *<p>
-         * World linear acceleration refers to raw acceleration data, which
-         * has had the gravity component removed, and which has been rotated to
-         * the same reference frame as the current yaw value.  The resulting
-         * value represents the current acceleration in the Y-axis of the
-         * body (e.g., the robot) on which the sensor is mounted.
-         *<p>
-         * @return Current world linear acceleration in the Y-axis (in G).
-         */
+        /// <summary>
+        /// Returns the current linear acceleration in the Y-axis (in G).
+        /// </summary>
+        /// <remarks>
+        /// World linear acceleration refers to raw acceleration data, which
+        /// has had the gravity component removed, and which has been rotated to
+        /// the same reference frame as the current yaw value. The resulting
+        /// value represents the current acceleration in the Y-Axis of the body
+        /// (e.g., the robot) on which the sensor is mounted.
+        /// </remarks>
+        /// <returns>Current world linear acceleration in the Y-axis (in G).</returns>
         public float GetWorldLinearAccelY()
         {
             return this.m_worldLinearAccelY;
         }
 
-        /**
-         * Returns the current linear acceleration in the Z-axis (in G).
-         *<p>
-         * World linear acceleration refers to raw acceleration data, which
-         * has had the gravity component removed, and which has been rotated to
-         * the same reference frame as the current yaw value.  The resulting
-         * value represents the current acceleration in the Z-axis of the
-         * body (e.g., the robot) on which the sensor is mounted.
-         *<p>
-         * @return Current world linear acceleration in the Z-axis (in G).
-         */
+        /// <summary>
+        /// Returns the current linear acceleration in the Z-axis (in G).
+        /// </summary>
+        /// <remarks>
+        /// World linear acceleration refers to raw acceleration data, which
+        /// has had the gravity component removed, and which has been rotated to
+        /// the same reference frame as the current yaw value. The resulting
+        /// value represents the current acceleration in the Z-Axis of the body
+        /// (e.g., the robot) on which the sensor is mounted.
+        /// </remarks>
+        /// <returns>Current world linear acceleration in the Z-axis (in G).</returns>
         public float GetWorldLinearAccelZ()
         {
             return this.m_worldLinearAccelZ;
         }
 
-        /**
-         * Indicates if the sensor is currently detecting motion,
-         * based upon the X and Y-axis world linear acceleration values.
-         * If the sum of the absolute values of the X and Y axis exceed
-         * a "motion threshold", the motion state is indicated.
-         *<p>
-         * @return Returns true if the sensor is currently detecting motion.
-         */
+        /// <summary>
+        /// Indicates if the sensor is currently detecting motion.
+        /// </summary>
+        /// <remarks>This detection is based upon the X and Y-axis world linear
+        /// acceleration values. If the sum of the absolute alues of the X and Y axis
+        /// exceed a "motion threshold", the motion state is indicated.</remarks>
+        /// <returns>True if the sensor is currently detecting motion.</returns>
         public bool IsMoving()
         {
             return m_isMoving;
         }
 
-        /**
-         * Indicates if the sensor is currently detecting yaw rotation,
-         * based upon whether the change in yaw over the last second 
-         * exceeds the "Rotation Threshold."
-         *<p>
-         * Yaw Rotation can occur either when the sensor is rotating, or
-         * when the sensor is not rotating AND the current gyro calibration
-         * is insufficiently calibrated to yield the standard yaw drift rate.
-         *<p>
-         * @return Returns true if the sensor is currently detecting motion.
-         */
+        /// <summary>
+        /// Indicates if the sensor is currently detecting yaw rotation.
+        /// </summary>
+        /// <remarks>The detection is based upon whether the change in yaw over
+        /// the last second exceeds the "Rotation Threshold."
+        /// <para>Yaw Rotation can occur either when the sensor is rotation, or
+        /// when the sensor is not rotating AND the current gyro calibration
+        /// is insufficiently calibrated to yield the standard yaw drift rate.
+        /// </para></remarks>
+        /// <returns>True if the sensor is currently detecting motion.</returns>
         public bool IsRotating()
         {
             return m_isRotating;
         }
 
-        /**
-         * Returns the current barometric pressure, based upon calibrated readings
-         * from the onboard pressure sensor.  This value is in units of millibar.
-         *<p>
-         * NOTE:  This value is only valid for a navX Aero.  To determine
-         * whether this value is valid, see isAltitudeValid().
-         * @return Returns current barometric pressure (navX Aero only).
-         */
+        /// <summary>
+        /// Returns the current barometric pressure.
+        /// </summary>
+        /// <remarks>
+        /// This value is based upon calibrated reading from the onboard
+        /// pressure sensor.
+        /// <para>NOTE: This value is only valid for a NavX Aero. To determine
+        /// whether this value is valid, see <see cref="IsAltitudeValid"/>.</para>
+        /// </remarks>
+        /// <returns>Current barometric pressure in millibar (NavX aero only).</returns>
         public float GetBarometricPressure()
         {
             return m_baroPressure;
         }
 
-        /**
-         * Returns the current altitude, based upon calibrated readings
-         * from a barometric pressure sensor, and the currently-configured
-         * sea-level barometric pressure [navX Aero only].  This value is in units of meters.
-         *<p>
-         * NOTE:  This value is only valid sensors including a pressure
-         * sensor.  To determine whether this value is valid, see 
-         * isAltitudeValid().
-         *<p>
-         * @return Returns current altitude in meters (as long as the sensor includes 
-         * an installed on-board pressure sensor).
-         */
+        /// <summary>
+        /// Returns the current altitude.
+        /// </summary>
+        /// <remarks>This value is based upon calibrated reading from a
+        /// barometric pressure sensor, and the currently configured
+        /// sea-level barometric pressure [NavX Aero only].
+        /// <para>Note: This value is only valid in sensors including a pressure
+        /// sensor. To determine whether this value is valid, see <see cref="IsAltitudeValid"/>.
+        /// </para></remarks>
+        /// <returns>Current altitude in meters (if valid).</returns>
         public float GetAltitude()
         {
             return m_altitude;
         }
 
-        /**
-         * Indicates whether the current altitude (and barometric pressure) data is 
-         * valid. This value will only be true for a sensor with an onboard
-         * pressure sensor installed.
-         *<p>
-         * If this value is false for a board with an installed pressure sensor, 
-         * this indicates a malfunction of the onboard pressure sensor.
-         *<p>
-         * @return Returns true if a working pressure sensor is installed.
-         */
+        /// <summary>
+        /// Indicates whether the current altitude (and barometric pressure) data is valid.
+        /// </summary>
+        /// <remarks>This value will only be true for a sensor with an onboard
+        /// pressure sensor installed.
+        /// <para>If this value is false for a board with an installed pressure sensor,
+        /// this indicates a malfunction of the onboard pressure sensor.</para></remarks>
+        /// <returns>True if a working pressure seonsor is installed.</returns>
         public bool IsAltitudeValid()
         {
             return this.m_altitudeValid;
         }
 
-        /**
-         * Returns the "fused" (9-axis) heading.
-         *<p>
-         * The 9-axis heading is the fusion of the yaw angle, the tilt-corrected
-         * compass heading, and magnetic disturbance detection.  Note that the
-         * magnetometer calibration procedure is required in order to 
-         * achieve valid 9-axis headings.
-         *<p>
-         * The 9-axis Heading represents the sensor's best estimate of current heading, 
-         * based upon the last known valid Compass Angle, and updated by the change in the 
-         * Yaw Angle since the last known valid Compass Angle.  The last known valid Compass 
-         * Angle is updated whenever a Calibrated Compass Angle is read and the sensor 
-         * has recently rotated less than the Compass Noise Bandwidth (~2 degrees).
-         * @return Fused Heading in Degrees (range 0-360)
-         */
+        /// <summary>
+        /// Returns the "fused" (9-axis) heading.
+        /// </summary>
+        /// <remarks>
+        /// The 9-axis heading is the fusion of the yaw angle, the tilt-corrected
+        /// compass heading, and magnetic disturbance detection. Note that the 
+        /// magnetometer calibraion procedure is required in order to achieve valid 9-axis headings.
+        /// <para/>
+        /// The 9-axis Heading represents the sensor's best estimate of current heading,
+        /// based upon the last known valid Compass Angle, and updated b y the change in the
+        /// Yaw Angle since the last known valid Compass Angle. The last known valid Compass
+        /// Angle is updated whenever a Calibrated Compass Alge is read and the sensor has 
+        /// recently rotate less then the Compass Noise Bandwidth (~2 degrees).
+        /// </remarks>
+        /// <returns>Fused Heading in Degrees (range 0-360).</returns>
         public float GetFusedHeading()
         {
             return m_fusedHeading;
         }
 
-        /**
-         * Indicates whether the current magnetic field strength diverges from the 
-         * calibrated value for the earth's magnetic field by more than the currently-
-         * configured Magnetic Disturbance Ratio.
-         *<p>
-         * This function will always return false if the sensor's magnetometer has
-         * not yet been calibrated; see isMagnetometerCalibrated().
-         * @return true if a magnetic disturbance is detected (or the magnetometer is uncalibrated).
-         */
+        /// <summary>
+        /// Indicates whether the current magnetic field strength diverges from the calibrated
+        /// value for the earth's magnetic field by more than the currently-
+        /// configured Magnetic Disturbance Ratio.
+        /// </summary>
+        /// <remarks>This function will always return false if the sensor's magnetometer
+        /// has not yet been calibrated; see <see cref="IsMagnetometerCalibrated"/>.</remarks>
+        /// <returns>True if a magnetic disturbance is detected (or the magnetometer is uncalibrated).</returns>
         public bool IsMagneticDisturbance()
         {
             return m_magneticDisturbance;
         }
 
-        /**
-         * Indicates whether the magnetometer has been calibrated.  
-         *<p>
-         * Magnetometer Calibration must be performed by the user.
-         *<p>
-         * Note that if this function does indicate the magnetometer is calibrated,
-         * this does not necessarily mean that the calibration quality is sufficient
-         * to yield valid compass headings.
-         *<p>
-         * @return Returns true if magnetometer calibration has been performed.
-         */
+        /// <summary>
+        /// Indicates whether the magnetometer has been calibrated.
+        /// </summary>
+        /// <remarks>Magnetometer Calibration must be performed by the user.
+        /// <para/>
+        /// Note that if this function does indicate the magnetometer is calibrated,
+        /// this does not necessarily mean that the calibration quality is sufficient
+        /// to yield valid compass headings.
+        /// </remarks>
+        /// <returns>True if the magnetometer calibration has been performed.</returns>
         public bool IsMagnetometerCalibrated()
         {
             return m_isMagnetometerCalibrated;
@@ -594,185 +566,202 @@ namespace WPILib.Extras.NavX
 
         /* Unit Quaternions */
 
-        /**
-         * Returns the imaginary portion (W) of the Orientation Quaternion which 
-         * fully describes the current sensor orientation with respect to the 
-         * reference angle defined as the angle at which the yaw was last "zeroed".  
-         *<p>
-         * Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
-         * to 2.  This total range (4) can be associated with a unit circle, since
-         * each circle is comprised of 4 PI Radians.
-         * <p>
-         * For more information on Quaternions and their use, please see this <a href=https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation>definition</a>.
-         * @return Returns the imaginary portion (W) of the quaternion.
-         */
+        /// <summary>
+        /// Returns the imaginary porton (W) of the Orientation Quanterion.
+        /// </summary>
+        /// <remarks>W is the Orientation Quanterion which fully describes
+        /// the current sensor orientation with respect to the reference angle
+        /// defined as the angle at which the yaw was last "zeroed".
+        /// <para/>
+        /// Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
+        /// to 2.  This total range(4) can be associated with a unit circle, since
+        /// each circle is comprised of 4 PI Radians.
+        /// <para/>
+        /// For more information on Quanterions and their use, please see this <see cref="!:https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation">description</see>.
+        /// </remarks>
+        /// <returns>The imaginary portion (W) of the quanterion.</returns>
         public float GetQuaternionW()
         {
             return ((float)m_quaternionW / 16384.0f);
         }
-        /**
-         * Returns the real portion (X axis) of the Orientation Quaternion which 
-         * fully describes the current sensor orientation with respect to the 
-         * reference angle defined as the angle at which the yaw was last "zeroed".  
-         * <p>
-         * Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
-         * to 2.  This total range (4) can be associated with a unit circle, since
-         * each circle is comprised of 4 PI Radians.
-         * <p>
-         * For more information on Quaternions and their use, please see this <a href=https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation>description</a>. 
-         * @return Returns the real portion (X) of the quaternion.
-         */
+
+        /// <summary>
+        /// Returns the real portion (X axis) of the Orientation Quanterion.
+        /// </summary>
+        /// <remarks>X is the Orientation Quanterion which fully describes
+        /// the current sensor orientation with respect to the reference angle
+        /// defined as the angle at which the yaw was last "zeroed".
+        /// <para/>
+        /// Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
+        /// to 2.  This total range(4) can be associated with a unit circle, since
+        /// each circle is comprised of 4 PI Radians.
+        /// <para/>
+        /// For more information on Quanterions and their use, please see this <see cref="!:https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation">description</see>.
+        /// </remarks>
+        /// <returns>The real portion (X) of the quanterion.</returns>
         public float GetQuaternionX()
         {
             return ((float)m_quaternionX / 16384.0f);
         }
-        /**
-         * Returns the real portion (X axis) of the Orientation Quaternion which 
-         * fully describes the current sensor orientation with respect to the 
-         * reference angle defined as the angle at which the yaw was last "zeroed".  
-         * 
-         * Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
-         * to 2.  This total range (4) can be associated with a unit circle, since
-         * each circle is comprised of 4 PI Radians.
-         * 
-         * For more information on Quaternions and their use, please see:
-         * 
-         *   https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-         * 
-         * @return Returns the real portion (X) of the quaternion.
-         */
+
+        /// <summary>
+        /// Returns the real portion (Y axis) of the Orientation Quanterion.
+        /// </summary>
+        /// <remarks>Y is the Orientation Quanterion which fully describes
+        /// the current sensor orientation with respect to the reference angle
+        /// defined as the angle at which the yaw was last "zeroed".
+        /// <para/>
+        /// Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
+        /// to 2.  This total range(4) can be associated with a unit circle, since
+        /// each circle is comprised of 4 PI Radians.
+        /// <para/>
+        /// For more information on Quanterions and their use, please see this <see cref="!:https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation">description</see>.
+        /// </remarks>
+        /// <returns>The real portion (Y) of the quanterion.</returns>
         public float GetQuaternionY()
         {
             return ((float)m_quaternionY / 16384.0f);
         }
-        /**
-         * Returns the real portion (X axis) of the Orientation Quaternion which 
-         * fully describes the current sensor orientation with respect to the 
-         * reference angle defined as the angle at which the yaw was last "zeroed".  
-         * 
-         * Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
-         * to 2.  This total range (4) can be associated with a unit circle, since
-         * each circle is comprised of 4 PI Radians.
-         * 
-         * For more information on Quaternions and their use, please see:
-         * 
-         *   https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation
-         * 
-         * @return Returns the real portion (X) of the quaternion.
-         */
+
+        /// <summary>
+        /// Returns the real portion (Z axis) of the Orientation Quanterion.
+        /// </summary>
+        /// <remarks>Z is the Orientation Quanterion which fully describes
+        /// the current sensor orientation with respect to the reference angle
+        /// defined as the angle at which the yaw was last "zeroed".
+        /// <para/>
+        /// Each quaternion value (W,X,Y,Z) is expressed as a value ranging from -2
+        /// to 2.  This total range(4) can be associated with a unit circle, since
+        /// each circle is comprised of 4 PI Radians.
+        /// <para/>
+        /// For more information on Quanterions and their use, please see this <see cref="!:https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation">description</see>.
+        /// </remarks>
+        /// <returns>The real portion (Z) of the quanterion.</returns>
         public float GetQuaternionZ()
         {
             return ((float)m_quaternionZ / 16384.0f);
         }
 
-        /**
-         * Zeros the displacement integration variables.   Invoke this at the moment when
-         * integration begins.
-         */
+        /// <summary>
+        /// Zeros the displacement integration variables.
+        /// </summary>
+        /// <remarks>Invoke this at the moment integration begins.</remarks>
         public void ResetDisplacement()
         {
             if (m_boardCapabilities.IsDisplacementSupported())
             {
                 m_io.ZeroDisplacement();
             }
-            else {
+            else
+            {
                 m_integrator.ResetDisplacement();
             }
         }
 
-        /**
-         * Each time new linear acceleration samples are received, this function should be invoked.
-         * This function transforms acceleration in G to meters/sec^2, then converts this value to
-         * Velocity in meters/sec (based upon velocity in the previous sample).  Finally, this value
-         * is converted to displacement in meters, and integrated.
-         * @return none.
-         */
-
+        /// <summary>
+        /// Updates the displacement of the sensor based on the latest acceleration samples.
+        /// </summary>
+        /// <remarks>
+        /// Each time new linear acceleration samples are received, this function should be invoked.
+        /// This function transforms acceleration in G to meters/sec^2, then converts this value to
+        /// Velocity in meters/sec(based upon velocity in the previous sample).  Finally, this value
+        /// is converted to displacement in meters, and integrated.
+        /// </remarks>
+        /// <param name="accelXG">The X acceleration in Gs</param>
+        /// <param name="accelYG">The Y acceleration in Gs</param>
+        /// <param name="updateRateHz">The update rate of the data.</param>
+        /// <param name="is_moving">True if moving.</param>
         private void UpdateDisplacement(float accelXG, float accelYG,
                                             int updateRateHz, bool is_moving)
         {
             m_integrator.UpdateDisplacement(accelXG, accelYG, updateRateHz, is_moving);
         }
 
-        /**
-         * Returns the velocity (in meters/sec) of the X axis [Experimental].
-         *
-         * NOTE:  This feature is experimental.  Velocity measures rely on integration
-         * of acceleration values from MEMS accelerometers which yield "noisy" values.  The
-         * resulting velocities are not known to be very accurate.
-         * @return Current Velocity (in meters/squared).
-         */
+        /// <summary>
+        /// Returns the velocity of the X axis [Experimental].
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This feature is experimental.  Velocity measures rely on integration
+        /// of acceleration values from MEMS accelerometers which yield "noisy" values.The
+        /// resulting velocities are not known to be very accurate.
+        /// </remarks>
+        /// <returns>The Current X axis velocity in meters/sec</returns>
         public float GetVelocityX()
         {
             return (m_boardCapabilities.IsDisplacementSupported() ? m_velocity[0] : m_integrator.GetVelocityX());
         }
 
-        /**
-         * Returns the velocity (in meters/sec) of the Y axis [Experimental].
-         *
-         * NOTE:  This feature is experimental.  Velocity measures rely on integration
-         * of acceleration values from MEMS accelerometers which yield "noisy" values.  The
-         * resulting velocities are not known to be very accurate.
-         * @return Current Velocity (in meters/squared).
-         */
+        /// <summary>
+        /// Returns the velocity of the Y axis [Experimental].
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This feature is experimental.  Velocity measures rely on integration
+        /// of acceleration values from MEMS accelerometers which yield "noisy" values.The
+        /// resulting velocities are not known to be very accurate.
+        /// </remarks>
+        /// <returns>The Current Y axis velocity in meters/sec</returns>
         public float GetVelocityY()
         {
             return (m_boardCapabilities.IsDisplacementSupported() ? m_velocity[1] : m_integrator.GetVelocityY());
         }
 
-        /**
-         * Returns the velocity (in meters/sec) of the Z axis [Experimental].
-         *
-         * NOTE:  This feature is experimental.  Velocity measures rely on integration
-         * of acceleration values from MEMS accelerometers which yield "noisy" values.  The
-         * resulting velocities are not known to be very accurate.
-         * @return Current Velocity (in meters/squared).
-         */
+        /// <summary>
+        /// Returns the velocity of the Z axis [Experimental].
+        /// </summary>
+        /// <remarks>
+        /// NOTE: This feature is experimental.  Velocity measures rely on integration
+        /// of acceleration values from MEMS accelerometers which yield "noisy" values.The
+        /// resulting velocities are not known to be very accurate.
+        /// </remarks>
+        /// <returns>The Current Z axis velocity in meters/sec</returns>
         public float GetVelocityZ()
         {
             return (m_boardCapabilities.IsDisplacementSupported() ? m_velocity[2] : 0.0f);
         }
 
-        /**
-         * Returns the displacement (in meters) of the X axis since resetDisplacement()
-         * was last invoked [Experimental].
-         * 
-         * NOTE:  This feature is experimental.  Displacement measures rely on double-integration
-         * of acceleration values from MEMS accelerometers which yield "noisy" values.  The
-         * resulting displacement are not known to be very accurate, and the amount of error 
-         * increases quickly as time progresses.
-         * @return Displacement since last reset (in meters).
-         */
+        /// <summary>
+        /// Returns the last displacement of the X axis since <see cref="ResetDisplacement"/> was last 
+        /// invoked [Experimental].
+        /// </summary>
+        /// <remarks>
+        /// NOTE:  This feature is experimental.  Displacement measures rely on double-integration
+        /// of acceleration values from MEMS accelerometers which yield "noisy" values.The
+        /// resulting displacement are not known to be very accurate, and the amount of error 
+        /// increases quickly as time progresses.
+        /// </remarks>
+        /// <returns>The Current X axis displacement since last reset (meters).</returns>
         public float GetDisplacementX()
         {
             return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[0] : m_integrator.GetVelocityX());
         }
 
-        /**
-         * Returns the displacement (in meters) of the Y axis since resetDisplacement()
-         * was last invoked [Experimental].
-         * 
-         * NOTE:  This feature is experimental.  Displacement measures rely on double-integration
-         * of acceleration values from MEMS accelerometers which yield "noisy" values.  The
-         * resulting displacement are not known to be very accurate, and the amount of error 
-         * increases quickly as time progresses.
-         * @return Displacement since last reset (in meters).
-         */
+        /// <summary>
+        /// Returns the last displacement of the Y axis since <see cref="ResetDisplacement"/> was last 
+        /// invoked [Experimental].
+        /// </summary>
+        /// <remarks>
+        /// NOTE:  This feature is experimental.  Displacement measures rely on double-integration
+        /// of acceleration values from MEMS accelerometers which yield "noisy" values.The
+        /// resulting displacement are not known to be very accurate, and the amount of error 
+        /// increases quickly as time progresses.
+        /// </remarks>
+        /// <returns>The Current Y axis displacement since last reset (meters).</returns>
         public float GetDisplacementY()
         {
             return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[1] : m_integrator.GetVelocityY());
         }
 
-        /**
-         * Returns the displacement (in meters) of the Z axis since resetDisplacement()
-         * was last invoked [Experimental].
-         * 
-         * NOTE:  This feature is experimental.  Displacement measures rely on double-integration
-         * of acceleration values from MEMS accelerometers which yield "noisy" values.  The
-         * resulting displacement are not known to be very accurate, and the amount of error 
-         * increases quickly as time progresses.
-         * @return Displacement since last reset (in meters).
-         */
+        /// <summary>
+        /// Returns the last displacement of the Z axis since <see cref="ResetDisplacement"/> was last 
+        /// invoked [Experimental].
+        /// </summary>
+        /// <remarks>
+        /// NOTE:  This feature is experimental.  Displacement measures rely on double-integration
+        /// of acceleration values from MEMS accelerometers which yield "noisy" values.The
+        /// resulting displacement are not known to be very accurate, and the amount of error 
+        /// increases quickly as time progresses.
+        /// </remarks>
+        /// <returns>The Current Z axis displacement since last reset (meters).</returns>
         public float GetDisplacementZ()
         {
             return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[2] : 0.0f);
@@ -797,61 +786,69 @@ namespace WPILib.Extras.NavX
         /* PIDSource Interface Implementation                      */
         /***********************************************************/
 
-        /**
-         * Returns the current yaw value reported by the sensor.  This
-         * yaw value is useful for implementing features including "auto rotate 
-         * to a known angle".
-         * @return The current yaw angle in degrees (-180 to 180).
-         */
+        /// <summary>
+        /// Returns the current value to use for PID, based on <see cref="PIDSourceType"/>.
+        /// </summary>
+        /// <remarks>
+        /// If <see cref="PIDSourceType"/> is <see cref="PIDSourceType.Displacement"/>, this
+        /// returns the Yaw angle in degrees (-180 to 180) <see cref="GetYaw"/>.
+        /// If <see cref="PIDSourceType"/> is <see cref="PIDSourceType.Rate"/>, this
+        /// returns the rate of rotation in degrees per second. <see cref="GetRate"/>. 
+        /// </remarks>
+        /// <returns>The current yaw angle or rate.</returns>
         public double PidGet()
         {
-            return GetYaw();
+            switch (PIDSourceType)
+            {
+                case PIDSourceType.Rate:
+                    return GetRate();
+                case PIDSourceType.Displacement:
+                    return GetYaw();
+                default:
+                    return 0.0;
+            }
         }
 
-        public PIDSourceType PIDSourceType { get; set; }
+        /// <inheritdoc/>
+        public PIDSourceType PIDSourceType { get; set; } = PIDSourceType.Displacement;
 
-        /**
-         * Returns the total accumulated yaw angle (Z Axis, in degrees)
-         * reported by the sensor.
-         *<p>
-         * NOTE: The angle is continuous, meaning it's range is beyond 360 degrees.
-         * This ensures that algorithms that wouldn't want to see a discontinuity 
-         * in the gyro output as it sweeps past 0 on the second time around.
-         *<p>
-         * Note that the returned yaw value will be offset by a user-specified
-         * offset value; this user-specified offset value is set by 
-         * invoking the zeroYaw() method.
-         *<p>
-         * @return The current total accumulated yaw angle (Z axis) of the robot 
-         * in degrees. This heading is based on integration of the returned rate 
-         * from the Z-axis (yaw) gyro.
-         */
-
+        /// <summary>
+        /// Returns the total accumulated yaw angle (Z Axis, in degrees) reported by
+        /// the sensor.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: The angle is continuous, meaning it's range is beyond 360 degrees.
+        /// This ensures that algorithms that wouldn't want to see a discontinuity 
+        /// in the gyro output as it sweeps past 0 on the second time around.
+        /// <para/>
+        /// Note that the returned yaw value will be offset by a user-specified
+        /// offset value; this user-specified offset value is set by 
+        /// invoking the <see cref="ZeroYaw"/> method.
+        /// <para/>The returned value is based on integration of the returned rate
+        /// from the Z-axis (yaw) gyro.
+        /// </remarks>
+        /// <returns>The total accumulated yaw angle (Z axis) of the robot in degrees.</returns>
         public double GetAngle()
         {
             return m_yawAngleTracker.GetAngle();
         }
 
-        /**
-         * Return the rate of rotation of the yaw (Z-axis) gyro, in degrees per second.
-         *<p>
-         * The rate is based on the most recent reading of the yaw gyro angle.
-         *<p>
-         * @return The current rate of change in yaw angle (in degrees per second)
-         */
-
+        /// <summary>
+        /// Return the rate of rotation of the yaw (Z-axis) gyro.
+        /// </summary>
+        /// <remarks>The rate is based on the most recent reading of the yaw gyro angle.</remarks>
+        /// <returns>The current rate of change in yaw angle (degrees/second).</returns>
         public double GetRate()
         {
             return m_yawAngleTracker.GetRate();
         }
 
-        /**
-         * Reset the Yaw gyro.
-         *<p>
-         * Resets the Gyro Z (Yaw) axis to a heading of zero. This can be used if 
-         * there is significant drift in the gyro and it needs to be recalibrated 
-         * after it has been running.
-         */
+        /// <summary>
+        /// Reset the Yaw gyro.
+        /// </summary>
+        /// <remarks>Resets the Gyro Z (yaw) axis to a heading of zero. This can be used
+        /// if there is significant drift in the gyro and it needs to be recallibrated
+        /// after it has been running.</remarks>
         public void Reset()
         {
             ZeroYaw();
@@ -859,82 +856,88 @@ namespace WPILib.Extras.NavX
 
         private const float DevUnitsMax = 32768.0f;
 
-        /**
-         * Returns the current raw (unprocessed) X-axis gyro rotation rate (in degrees/sec).  NOTE:  this
-         * value is un-processed, and should only be accessed by advanced users.
-         * Typically, rotation about the X Axis is referred to as "Pitch".  Calibrated
-         * and Integrated Pitch data is accessible via the {@link #getPitch()} method.  
-         *<p>
-         * @return Returns the current rotation rate (in degrees/sec).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) X-axis gyro rotation rate.
+        /// </summary>
+        /// <remarks>
+        /// NOTE:  this value is un-processed, and should only be accessed by advanced users.
+        /// Typically, rotation about the X Axis is referred to as "Pitch".  Calibrated
+        /// and Integrated Pitch data is accessible via the <see cref="GetPitch"/> method.
+        /// </remarks>
+        /// <returns>The current X rotation rate (degrees/sec).</returns>
         public float GetRawGyroX()
         {
             return this.m_rawGyroX / (DevUnitsMax / (float)m_gyroFsrDps);
         }
 
-        /**
-         * Returns the current raw (unprocessed) Y-axis gyro rotation rate (in degrees/sec).  NOTE:  this
-         * value is un-processed, and should only be accessed by advanced users.
-         * Typically, rotation about the T Axis is referred to as "Roll".  Calibrated
-         * and Integrated Pitch data is accessible via the {@link #getRoll()} method.  
-         *<p>
-         * @return Returns the current rotation rate (in degrees/sec).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) Y-axis gyro rotation rate.
+        /// </summary>
+        /// <remarks>
+        /// NOTE:  this value is un-processed, and should only be accessed by advanced users.
+        /// Typically, rotation about the Y Axis is referred to as "Roll".  Calibrated
+        /// and Integrated Roll data is accessible via the <see cref="GetRoll"/> method.
+        /// </remarks>
+        /// <returns>The current Y rotation rate (degrees/sec).</returns>
         public float GetRawGyroY()
         {
             return this.m_rawGyroY / (DevUnitsMax / (float)m_gyroFsrDps);
         }
 
-        /**
-         * Returns the current raw (unprocessed) Z-axis gyro rotation rate (in degrees/sec).  NOTE:  this
-         * value is un-processed, and should only be accessed by advanced users.
-         * Typically, rotation about the T Axis is referred to as "Yaw".  Calibrated
-         * and Integrated Pitch data is accessible via the {@link #getYaw()} method.  
-         *<p>
-         * @return Returns the current rotation rate (in degrees/sec).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) Z-axis gyro rotation rate.
+        /// </summary>
+        /// <remarks>
+        /// NOTE:  this value is un-processed, and should only be accessed by advanced users.
+        /// Typically, rotation about the Z Axis is referred to as "Yaw".  Calibrated
+        /// and Integrated Yaw data is accessible via the <see cref="GetYaw"/> method.
+        /// </remarks>
+        /// <returns>The current Z rotation rate (degrees/sec).</returns>
         public float GetRawGyroZ()
         {
             return this.m_rawGyroZ / (DevUnitsMax / (float)m_gyroFsrDps);
         }
 
-        /**
-         * Returns the current raw (unprocessed) X-axis acceleration rate (in G).  NOTE:  this
-         * value is unprocessed, and should only be accessed by advanced users.  This raw value
-         * has not had acceleration due to gravity removed from it, and has not been rotated to
-         * the world reference frame.  Gravity-corrected, world reference frame-corrected 
-         * X axis acceleration data is accessible via the {@link #getWorldLinearAccelX()} method.
-         *<p>
-         * @return Returns the current acceleration rate (in G).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) X-Axis acceleration rate (In G).
+        /// </summary>
+        /// <remarks>
+        /// NOTE: this value is unprocessed, and should only be accessed by advanced users.  This raw value
+        /// has not had acceleration due to gravity removed from it, and has not been rotated to
+        /// the world reference frame. Gravity-corrected, world reference frame-corrected
+        /// X axis acceleration data is accessible via the <see cref="GetWorldLinearAccelX"/> method.
+        /// </remarks>
+        /// <returns>The current X acceleration rate (in G)</returns>
         public float GetRawAccelX()
         {
             return this.m_rawAccelX / (DevUnitsMax / (float)m_accelFsrG);
         }
 
-        /**
-         * Returns the current raw (unprocessed) Y-axis acceleration rate (in G).  NOTE:  this
-         * value is unprocessed, and should only be accessed by advanced users.  This raw value
-         * has not had acceleration due to gravity removed from it, and has not been rotated to
-         * the world reference frame.  Gravity-corrected, world reference frame-corrected 
-         * Y axis acceleration data is accessible via the {@link #getWorldLinearAccelY()} method.
-         *<p>
-         * @return Returns the current acceleration rate (in G).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) Y-Axis acceleration rate (In G).
+        /// </summary>
+        /// <remarks>
+        /// NOTE: this value is unprocessed, and should only be accessed by advanced users.  This raw value
+        /// has not had acceleration due to gravity removed from it, and has not been rotated to
+        /// the world reference frame. Gravity-corrected, world reference frame-corrected
+        /// Y axis acceleration data is accessible via the <see cref="GetWorldLinearAccelY"/> method.
+        /// </remarks>
+        /// <returns>The current Y acceleration rate (in G)</returns>
         public float GetRawAccelY()
         {
             return this.m_rawAccelY / (DevUnitsMax / (float)m_accelFsrG);
         }
 
-        /**
-         * Returns the current raw (unprocessed) Z-axis acceleration rate (in G).  NOTE:  this
-         * value is unprocessed, and should only be accessed by advanced users.  This raw value
-         * has not had acceleration due to gravity removed from it, and has not been rotated to
-         * the world reference frame.  Gravity-corrected, world reference frame-corrected 
-         * Z axis acceleration data is accessible via the {@link #getWorldLinearAccelZ()} method.
-         *<p>
-         * @return Returns the current acceleration rate (in G).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) Z-Axis acceleration rate (In G).
+        /// </summary>
+        /// <remarks>
+        /// NOTE: this value is unprocessed, and should only be accessed by advanced users.  This raw value
+        /// has not had acceleration due to gravity removed from it, and has not been rotated to
+        /// the world reference frame. Gravity-corrected, world reference frame-corrected
+        /// Z axis acceleration data is accessible via the <see cref="GetWorldLinearAccelZ"/> method.
+        /// </remarks>
+        /// <returns>The current Z acceleration rate (in G)</returns>
         public float GetRawAccelZ()
         {
             return this.m_rawAccelZ / (DevUnitsMax / (float)m_accelFsrG);
@@ -942,88 +945,88 @@ namespace WPILib.Extras.NavX
 
         private const float UteslaPerDevUnit = 0.15f;
 
-        /**
-         * Returns the current raw (unprocessed) X-axis magnetometer reading (in uTesla).  NOTE:
-         * this value is unprocessed, and should only be accessed by advanced users.  This raw value
-         * has not been tilt-corrected, and has not been combined with the other magnetometer axis
-         * data to yield a compass heading.  Tilt-corrected compass heading data is accessible 
-         * via the {@link #getCompassHeading()} method.
-         *<p>
-         * @return Returns the mag field strength (in uTesla).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) X-axis magnetometer reading.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: this value is unprocessed, and should only be accessed by advanced users.  This raw value
+        /// has not been tilt-corrected, and has not been combined with the other magnetometer axis
+        /// data to yield a compass heading.Tilt-corrected compass heading data is accessible
+        /// via the <see cref="GetCompassHeading"/> method.
+        /// </remarks>
+        /// <returns>Returns the X mag field strenth (in uTesla).</returns>
         public float GetRawMagX()
         {
             return this.m_calMagX / UteslaPerDevUnit;
         }
 
-        /**
-         * Returns the current raw (unprocessed) Y-axis magnetometer reading (in uTesla).  NOTE:
-         * this value is unprocessed, and should only be accessed by advanced users.  This raw value
-         * has not been tilt-corrected, and has not been combined with the other magnetometer axis
-         * data to yield a compass heading.  Tilt-corrected compass heading data is accessible 
-         * via the {@link #getCompassHeading()} method.
-         *<p>
-         * @return Returns the mag field strength (in uTesla).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) Y-axis magnetometer reading.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: this value is unprocessed, and should only be accessed by advanced users.  This raw value
+        /// has not been tilt-corrected, and has not been combined with the other magnetometer axis
+        /// data to yield a compass heading.Tilt-corrected compass heading data is accessible
+        /// via the <see cref="GetCompassHeading"/> method.
+        /// </remarks>
+        /// <returns>Returns the Y mag field strenth (in uTesla).</returns>
         public float GetRawMagY()
         {
             return this.m_calMagY / UteslaPerDevUnit;
         }
 
-        /**
-         * Returns the current raw (unprocessed) Z-axis magnetometer reading (in uTesla).  NOTE:
-         * this value is unprocessed, and should only be accessed by advanced users.  This raw value
-         * has not been tilt-corrected, and has not been combined with the other magnetometer axis
-         * data to yield a compass heading.  Tilt-corrected compass heading data is accessible 
-         * via the {@link #getCompassHeading()} method.
-         *<p>
-         * @return Returns the mag field strength (in uTesla).
-         */
+        /// <summary>
+        /// Returns the current raw (unprocessed) Z-axis magnetometer reading.
+        /// </summary>
+        /// <remarks>
+        /// NOTE: this value is unprocessed, and should only be accessed by advanced users.  This raw value
+        /// has not been tilt-corrected, and has not been combined with the other magnetometer axis
+        /// data to yield a compass heading.Tilt-corrected compass heading data is accessible
+        /// via the <see cref="GetCompassHeading"/> method.
+        /// </remarks>
+        /// <returns>Returns the Z mag field strenth (in uTesla).</returns>
         public float GetRawMagZ()
         {
             return this.m_calMagZ / UteslaPerDevUnit;
         }
 
-        /**
-         * Returns the current barometric pressure (in millibar) [navX Aero only].
-         *<p>
-         *This value is valid only if a barometric pressure sensor is onboard.
-         *
-         * @return Returns the current barometric pressure (in millibar).
-         */
+        /// <summary>
+        /// Returns the current barometric pressure [NavX Aero only].
+        /// </summary>
+        /// <remarks>
+        /// This value is valid only if a barometric pressure sensor is onboard.
+        /// </remarks>
+        /// <returns>The current barometric pressure (millibar).</returns>
         public float GetPressure()
         {
             // TODO implement for navX-Aero.
             return 0;
         }
 
-
-        /**
-         * Returns the current temperature (in degrees centigrade) reported by
-         * the sensor's gyro/accelerometer circuit.
-         *<p>
-         * This value may be useful in order to perform advanced temperature-
-         * correction of raw gyroscope and accelerometer values.
-         *<p>
-         * @return The current temperature (in degrees centigrade).
-         */
+        /// <summary>
+        /// Returns the current reported temperature.
+        /// </summary>
+        /// <remarks>
+        /// This value may be useful in order to perfomr advanced temperature-
+        /// correction of raw gyroscope and acceleraometer values.
+        /// </remarks>
+        /// <returns>The current temperature (degrees centigrade).</returns>
         public float GetTempC()
         {
             return this.m_mpuTempC;
         }
 
-        /**
-         * Returns information regarding which sensor board axis (X,Y or Z) and
-         * direction (up/down) is currently configured to report Yaw (Z) angle 
-         * values.   NOTE:  If the board firmware supports Omnimount, the board yaw 
-         * axis/direction are configurable.
-         *<p>
-         * For more information on Omnimount, please see:
-         *<p>
-         * http://navx-mxp.kauailabs.com/navx-mxp/installation/omnimount/
-         *<p>
-         * @return The currently-configured board yaw axis/direction.
-         */
+        /// <summary>
+        /// Returns information regarding which sensor board axis (X, Y or Z) and direction
+        /// (up/down) is currently configured to report angle values.
+        /// </summary>
+        /// <remarks>If the board firmware configuration supports Omnimount, the board yaw
+        /// axis/direction are configurable.
+        /// <para/>
+        /// For more information on Omnimount, please see: 
+        /// <see cref="!:http://navx-mxp.kauailabs.com/installation/omnimount/>Omnimount"/>
+        /// </remarks>
+        /// <returns>The currently-configured board yaw axis/direction.</returns>
         public BoardYawAxis GetBoardYawAxis()
         {
             BoardYawAxis yawAxis = new BoardYawAxis();
@@ -1034,7 +1037,8 @@ namespace WPILib.Extras.NavX
                 yawAxis.Up = true;
                 yawAxis.BoardAxis = BoardAxis.KBoardAxisZ;
             }
-            else {
+            else
+            {
                 yawAxis.Up = (((yawAxisInfo & 0x01) != 0) ? true : false);
                 yawAxisInfo >>= 1;
                 switch ((byte)yawAxisInfo)
@@ -1054,21 +1058,19 @@ namespace WPILib.Extras.NavX
             return yawAxis;
         }
 
-        /**
-         * Returns the version number of the firmware currently executing
-         * on the sensor.
-         *<p>
-         * To update the firmware to the latest version, please see:
-         *<p>
-         *   http://navx-mxp.kauailabs.com/navx-mxp/support/updating-firmware/
-         *<p>
-         * @return The firmware version in the format [MajorVersion].[MinorVersion]
-         */
-        public String GetFirmwareVersion()
+        /// <summary>
+        /// Returns the version number of the firmware currently executing on the sensor.
+        /// </summary>
+        /// <remarks>
+        /// To update the firmware to the latest version, please see:
+        /// <see cref="!:http://navx-mxp.kauailabs.com/navx-mxp/support/updating-firmware/"/>
+        /// </remarks>
+        /// <returns>The firmware version in the format [MajorVersion].[MinorVersion]</returns>
+        public string GetFirmwareVersion()
         {
             double versionNumber = (double)m_fwVerMajor;
             versionNumber += ((double)m_fwVerMinor / 10);
-            String fwVersion = versionNumber.ToString();
+            string fwVersion = versionNumber.ToString();
             return fwVersion;
         }
 
@@ -1351,33 +1353,34 @@ namespace WPILib.Extras.NavX
         /* LiveWindowSendable Interface Implementation             */
         /***********************************************************/
 
+        /// <inheritdoc/>
         public void UpdateTable()
         {
             Table?.PutNumber("Value", GetYaw());
         }
-
+        /// <inheritdoc/>
         public void StartLiveWindowMode()
         {
         }
-
+        /// <inheritdoc/>
         public void StopLiveWindowMode()
         {
         }
-
+        /// <inheritdoc/>
         public void InitTable(ITable itable)
         {
             Table = itable;
             UpdateTable();
         }
-
+        /// <inheritdoc/>
         public ITable GetTable()
         {
             return Table;
         }
+        /// <inheritdoc/>
+        public string SmartDashboardType => "Gyro";
 
-        public String SmartDashboardType => "Gyro";
-
-
+        /// <inheritdoc/>
         public ITable Table { get; private set; }
     }
 }
