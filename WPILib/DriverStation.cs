@@ -11,6 +11,8 @@ using static HAL.Base.HALSemaphore;
 using static HAL.Base.HAL.DriverStationConstants;
 using static WPILib.Utility;
 using HALPower = HAL.Base.HALPower;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace WPILib
 {
@@ -703,18 +705,23 @@ namespace WPILib
         /// </summary>
         /// <param name="error">The error to send</param>
         /// <param name="printTrace">If true, append stack trace to error string</param>
-        public static void ReportError(string error, bool printTrace)
+        /// <param name="filePath">The file path</param>
+        /// <param name="lineNumber">The line number</param>
+        /// <param name="memberName">The member name</param>
+        public static void ReportError(string error, bool printTrace, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
-            string errorString = error;
+            StringBuilder builder = new StringBuilder();
+            builder.Append(error);
+            builder.Append($" Caller: {memberName}, File: {filePath}, Line: {lineNumber}\n");
             if (printTrace)
             {
-                errorString += " at ";
-                var stacktrace = new StackTrace();
-                var traces = stacktrace.GetFrames();
-                errorString = traces?.Aggregate(errorString, (current, s) => current + (s + "\n"));
+
+                var stacktrace = Environment.StackTrace;
+                builder.Append(stacktrace);
             }
             TextWriter errorWriter = Console.Error;
-            errorWriter.WriteLine(errorString);
+            errorWriter.WriteLine(builder.ToString());
 
 
             HALControlWord controlWord = GetControlWord();

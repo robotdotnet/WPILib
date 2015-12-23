@@ -76,7 +76,8 @@ namespace WPILib
             }
             else if (status > 0)
             {
-                DriverStation.ReportError(GetHALErrorMessage(status), true);
+                //Pass the caller members along.
+                DriverStation.ReportError(GetHALErrorMessage(status), true, memberName, filePath, lineNumber);
             }
         }
 
