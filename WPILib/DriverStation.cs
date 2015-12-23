@@ -727,7 +727,7 @@ namespace WPILib
             HALControlWord controlWord = GetControlWord();
             if (controlWord.GetDSAttached())
             {
-                HALSetErrorData(errorString, 0);
+                HALSetErrorData(builder.ToString(), 0);
             }
         }
 
