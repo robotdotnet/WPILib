@@ -713,6 +713,7 @@ namespace WPILib
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(error);
+            builder.AppendLine();
             builder.Append($" Caller: {memberName}, File: {filePath}, Line: {lineNumber}\n");
             if (printTrace)
             {
