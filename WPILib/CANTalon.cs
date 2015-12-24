@@ -1212,7 +1212,7 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Gets or sets the maximum voltage change rate in Volts/s.
+        /// Sets the maximum voltage change rate in Volts/s.
         /// </summary>
         /// <remarks>
         /// When in <see cref="ControlMode.PercentVbus"/> or <see cref="ControlMode.Voltage"/> output mode,
@@ -1221,13 +1221,6 @@ namespace WPILib
         /// </remarks>
         public double VoltageRampRate
         {
-            get
-            {
-                int retVal = 0;
-                CTR_Code status = C_TalonSRX_GetParamResponseInt32(m_talonPointer, (int)ParamID.eRampThrottle, ref retVal);
-                CheckCTRStatus(status);
-                return retVal / 1023.0 * 12.0 * 1000.0;
-            }
             set
             {
                 int rate = (int)(value * 1023.0 / 12.0 / 100.0);

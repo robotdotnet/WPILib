@@ -81,11 +81,13 @@ namespace WPILib
             }
         }
 
-        internal static bool CheckCTRStatus(CTR_Code status)
+        internal static bool CheckCTRStatus(CTR_Code status, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
             if (status != CTR_Code.CTR_OKAY)
             {
-                DriverStation.ReportError(GetHALErrorMessage((int)status), true);
+                //Pass the caller memebers along
+                DriverStation.ReportError(GetHALErrorMessage((int)status), true, memberName, filePath, lineNumber);
             }
             return status == CTR_Code.CTR_OKAY;
         }
