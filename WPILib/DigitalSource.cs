@@ -17,15 +17,15 @@ namespace WPILib
         /// <summary>
         /// A collection of the Digital Sources.
         /// </summary>
-        protected static Resource s_channels = new Resource(DigitalChannels);
+        protected static readonly Resource Channels = new Resource(DigitalChannels);
         /// <summary>
         /// The Port this source is attached to.
         /// </summary>
-        protected internal IntPtr m_port;
+        protected internal IntPtr Port;
         /// <summary>
         /// The channel this source is connected to
         /// </summary>
-        protected int m_channel;
+        protected int Channel;
 
         /// <summary>
         /// Base Initialization function for all Ports.
@@ -34,16 +34,16 @@ namespace WPILib
         /// <param name="input">True if port is input, false if output</param>
         protected void InitDigitalPort(int channel, bool input)
         {
-            m_channel = channel;
+            Channel = channel;
 
             CheckDigitalChannel(channel);
 
-            s_channels.Allocate(channel, "Digital input " + channel + " is already allocated");
+            Channels.Allocate(channel, "Digital input " + channel + " is already allocated");
 
             IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);
             int status = 0;
-            m_port = InitializeDigitalPort(portPointer, ref status);
-            AllocateDIO(m_port, input, ref status);
+            Port = InitializeDigitalPort(portPointer, ref status);
+            AllocateDIO(Port, input, ref status);
             CheckStatus(status);
         }
 
@@ -52,20 +52,20 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
-            s_channels.Deallocate(m_channel);
+            Channels.Deallocate(Channel);
             int status = 0;
-            FreeDIO(m_port, ref status);
+            FreeDIO(Port, ref status);
             CheckStatus(status);
-            FreeDigitalPort(m_port);
-            m_port = IntPtr.Zero;
-            m_channel = 0;
+            FreeDigitalPort(Port);
+            Port = IntPtr.Zero;
+            Channel = 0;
             base.Dispose();
         }
 
         /// <summary>
         /// Get the channel routing number.
         /// </summary>
-        public override int ChannelForRouting => m_channel;
+        public override int ChannelForRouting => Channel;
 
         /// <summary>
         /// Get the module routing number.

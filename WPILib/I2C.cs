@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using WPILib.Exceptions;
 using static WPILib.Utility;

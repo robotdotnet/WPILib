@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using HAL;
 using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Interfaces;

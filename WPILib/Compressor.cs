@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using NetworkTables.Tables;
 using WPILib.LiveWindow;
 using static HAL.Base.HALCompressor;

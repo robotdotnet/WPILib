@@ -221,12 +221,12 @@ namespace WPILib
         /// <summary>
         /// The max Id allowed for a CAN Talon
         /// </summary>
-        public const int TalonIds = 62;
+        public const int MaxTalonId = 62;
 
         /// <summary>
         /// Resource list of all the talons that the program knows of and has control of.
         /// </summary>
-        protected static readonly Resource s_talonIds = new Resource(TalonIds);
+        protected static readonly Resource TalonIds = new Resource(MaxTalonId);
 
 
         /// <summary>
@@ -237,12 +237,12 @@ namespace WPILib
         /// <param name="enablePeriodMs">The period in ms to send the enable control frame.</param>
         public CANTalon(int deviceNumber, int controlPeriodMs = DefaultControlPeriodMs, int enablePeriodMs = DefaultEnablePeriodMs)
         {
-            if (deviceNumber < 0 || deviceNumber >= TalonIds)
+            if (deviceNumber < 0 || deviceNumber >= MaxTalonId)
             {
                 throw new ArgumentOutOfRangeException(nameof(deviceNumber), "Talon IDs must be between 0 and 62 inclusive.");
             }
 
-            s_talonIds.Allocate(deviceNumber, $"CAN TalonSRX ID {deviceNumber} is already allocated.");
+            TalonIds.Allocate(deviceNumber, $"CAN TalonSRX ID {deviceNumber} is already allocated.");
 
             DeviceId = deviceNumber;
             m_talonPointer = C_TalonSRX_Create3(deviceNumber, controlPeriodMs, enablePeriodMs);
@@ -261,7 +261,7 @@ namespace WPILib
         /// <inheritdoc/>
         public void Dispose()
         {
-            s_talonIds.Deallocate(DeviceId);
+            TalonIds.Deallocate(DeviceId);
             C_TalonSRX_Destroy(m_talonPointer);
         }
 

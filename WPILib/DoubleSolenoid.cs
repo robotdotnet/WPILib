@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
@@ -46,27 +45,27 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                CheckSolenoidModule(m_moduleNumber);
+                CheckSolenoidModule(ModuleNumber);
                 CheckSolenoidChannel(m_forwardChannel);
                 CheckSolenoidChannel(m_reverseChannel);
 
-                s_allocated.Allocate(m_moduleNumber*SolenoidChannels + m_forwardChannel,
-                    "Solenoid channel " + m_forwardChannel + " on module " + m_moduleNumber + " is already allocated");
-                s_allocated.Allocate(m_moduleNumber*SolenoidChannels + m_reverseChannel,
-                    "Solenoid channel " + m_reverseChannel + " on module " + m_moduleNumber + " is already allocated");
+                Allocated.Allocate(ModuleNumber*SolenoidChannels + m_forwardChannel,
+                    "Solenoid channel " + m_forwardChannel + " on module " + ModuleNumber + " is already allocated");
+                Allocated.Allocate(ModuleNumber*SolenoidChannels + m_reverseChannel,
+                    "Solenoid channel " + m_reverseChannel + " on module " + ModuleNumber + " is already allocated");
 
                 int status = 0;
-                IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_forwardChannel);
+                IntPtr port = GetPortWithModule((byte)ModuleNumber, (byte)m_forwardChannel);
                 m_forwardSolenoid = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
 
-                port = GetPortWithModule((byte)m_moduleNumber, (byte)m_reverseChannel);
+                port = GetPortWithModule((byte)ModuleNumber, (byte)m_reverseChannel);
                 m_reverseSolenoid = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
 
-                HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(m_moduleNumber));
-                HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(m_moduleNumber));
-                LiveWindow.LiveWindow.AddActuator("DoubleSolenoid", m_moduleNumber, m_forwardChannel, this);
+                HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(ModuleNumber));
+                HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(ModuleNumber));
+                LiveWindow.LiveWindow.AddActuator("DoubleSolenoid", ModuleNumber, m_forwardChannel, this);
             }
         }
 
@@ -99,8 +98,8 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_forwardChannel);
-                s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_reverseChannel);
+                Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_forwardChannel);
+                Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_reverseChannel);
                 FreeSolenoidPort(m_forwardSolenoid);
                 m_forwardSolenoid = IntPtr.Zero;
                 FreeSolenoidPort(m_reverseSolenoid);

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using HAL;
 using HAL.Base;
 using NetworkTables;
 using WPILib.Internal;

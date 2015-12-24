@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using HAL;
 using HAL.Base;
 using NetworkTables;
-using NetworkTables.Native.Exceptions;
 using NetworkTables.Tables;
 
 namespace WPILib

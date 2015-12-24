@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
@@ -29,20 +28,20 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                CheckSolenoidModule(m_moduleNumber);
+                CheckSolenoidModule(ModuleNumber);
                 CheckSolenoidChannel(m_channel);
 
                 //Check to see if it is already allocated
-                s_allocated.Allocate(m_moduleNumber*SolenoidChannels + m_channel,
-                    "Solenoid channel " + m_channel + " on module " + m_moduleNumber + " is already allocated");
+                Allocated.Allocate(ModuleNumber*SolenoidChannels + m_channel,
+                    "Solenoid channel " + m_channel + " on module " + ModuleNumber + " is already allocated");
 
                 int status = 0;
 
-                IntPtr port = GetPortWithModule((byte)m_moduleNumber, (byte)m_channel);
+                IntPtr port = GetPortWithModule((byte)ModuleNumber, (byte)m_channel);
                 m_solenoidPort = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
-                LiveWindow.LiveWindow.AddActuator("Solenoid", m_moduleNumber, m_channel, this);
-                Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)m_moduleNumber);
+                LiveWindow.LiveWindow.AddActuator("Solenoid", ModuleNumber, m_channel, this);
+                Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)ModuleNumber);
             }
         }
 
@@ -72,7 +71,7 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                s_allocated.Deallocate(m_moduleNumber * SolenoidChannels + m_channel);
+                Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_channel);
                 FreeSolenoidPort(m_solenoidPort);
                 m_solenoidPort = IntPtr.Zero;
                 base.Dispose();

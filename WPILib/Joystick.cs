@@ -1,7 +1,6 @@
 ﻿
 
 using System;
-using HAL;
 using HAL.Base;
 
 namespace WPILib

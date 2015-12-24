@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using static WPILib.Utility;
 using static HAL.Base.HAL;

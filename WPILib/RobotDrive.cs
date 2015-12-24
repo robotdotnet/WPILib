@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HAL;
 using HAL.Base;
 using WPILib.Interfaces;
 
@@ -26,7 +25,7 @@ namespace WPILib
     public class RobotDrive : IMotorSafety, IDisposable
     {
         /// The RobotDrive MotorSafetyHelper
-        protected MotorSafetyHelper m_safetyHelper;
+        protected MotorSafetyHelper SafetyHelper;
 
         /// Default Expiration Time for MotorSafety
         public const double DefaultExpirationTime = 0.1;
@@ -36,34 +35,31 @@ namespace WPILib
         public const double DefaultMaxOutput = 1.0;
 
         /// The Default max number of motors
-        protected static int s_maxNumberOfMotors = 4;
-        /// The current motor sensitivity
-        protected double m_sensitivity;
-        /// The current max output
-        protected double m_maxOutput;
+        protected static int MaxNumberOfMotors = 4;
+
         /// The Front Left Motor
-        protected ISpeedController m_frontLeftMotor;
+        protected ISpeedController FrontLeftMotor;
         /// The Front Right Motor
-        protected ISpeedController m_frontRightMotor;
+        protected ISpeedController FrontRightMotor;
         /// The Rear Left Motor
-        protected ISpeedController m_rearLeftMotor;
+        protected ISpeedController RearLeftMotor;
         /// The Rear Right Motor
-        protected ISpeedController m_rearRightMotor;
+        protected ISpeedController RearRightMotor;
         /// Returns if this class allocated the speed controllers or was passed them.
-        protected bool m_allocatedSpeedControllers;
+        protected bool AllocatedSpeedControllers;
         /// The SyncGroup for Jaguar Motor Controllers
-        protected byte m_syncGroup;
+        protected byte SyncGroup;
 
         /// Usage Reporters
-        protected static bool s_arcadeRatioCurveReported;
-        /// <inheritdoc cref="s_arcadeRatioCurveReported"/>
-        protected static bool s_tankReported;
-        /// <inheritdoc cref="s_arcadeRatioCurveReported"/>
-        protected static bool s_arcadeStandardReported;
-        /// <inheritdoc cref="s_arcadeRatioCurveReported"/>
-        protected static bool s_mecanumCartesianReported;
-        /// <inheritdoc cref="s_arcadeRatioCurveReported"/>
-        protected static bool s_mecanumPolarReported;
+        protected static bool ArcadeRatioCurveReported;
+        /// <inheritdoc cref="ArcadeRatioCurveReported"/>
+        protected static bool TankReported;
+        /// <inheritdoc cref="ArcadeRatioCurveReported"/>
+        protected static bool ArcadeStandardReported;
+        /// <inheritdoc cref="ArcadeRatioCurveReported"/>
+        protected static bool MecanumCartesianReported;
+        /// <inheritdoc cref="ArcadeRatioCurveReported"/>
+        protected static bool MecanumPolarReported;
 
         /// <summary>
         /// Constructor for RobotDrive with 2 motors specified with channel numbers.
@@ -75,13 +71,13 @@ namespace WPILib
         /// <param name="rightMotorChannel">The PWM channel number that drives the right motor</param>
         public RobotDrive(int leftMotorChannel, int rightMotorChannel)
         {
-            m_sensitivity = DefaultSensitivity;
-            m_maxOutput = DefaultMaxOutput;
-            m_frontLeftMotor = null;
-            m_rearLeftMotor = new Talon(leftMotorChannel);
-            m_frontRightMotor = null;
-            m_rearRightMotor = new Talon(rightMotorChannel);
-            m_allocatedSpeedControllers = true;
+            Sensitivity = DefaultSensitivity;
+            MaxOutput = DefaultMaxOutput;
+            FrontLeftMotor = null;
+            RearLeftMotor = new Talon(leftMotorChannel);
+            FrontRightMotor = null;
+            RearRightMotor = new Talon(rightMotorChannel);
+            AllocatedSpeedControllers = true;
             SetupMotorSafety();
             Drive(0, 0);
         }
@@ -99,13 +95,13 @@ namespace WPILib
         public RobotDrive(int frontLeftMotor, int rearLeftMotor,
                        int frontRightMotor, int rearRightMotor)
         {
-            m_sensitivity = DefaultSensitivity;
-            m_maxOutput = DefaultMaxOutput;
-            m_rearLeftMotor = new Talon(rearLeftMotor);
-            m_rearRightMotor = new Talon(rearRightMotor);
-            m_frontLeftMotor = new Talon(frontLeftMotor);
-            m_frontRightMotor = new Talon(frontRightMotor);
-            m_allocatedSpeedControllers = true;
+            Sensitivity = DefaultSensitivity;
+            MaxOutput = DefaultMaxOutput;
+            RearLeftMotor = new Talon(rearLeftMotor);
+            RearRightMotor = new Talon(rearRightMotor);
+            FrontLeftMotor = new Talon(frontLeftMotor);
+            FrontRightMotor = new Talon(frontRightMotor);
+            AllocatedSpeedControllers = true;
             SetupMotorSafety();
             Drive(0, 0);
         }
@@ -127,13 +123,13 @@ namespace WPILib
             {
                 throw new ArgumentNullException(nameof(rightMotor), "Null Motor Controller Provided");
             }
-            m_frontLeftMotor = null;
-            m_rearLeftMotor = leftMotor;
-            m_frontRightMotor = null;
-            m_rearRightMotor = rightMotor;
-            m_sensitivity = DefaultSensitivity;
-            m_maxOutput = DefaultMaxOutput;
-            m_allocatedSpeedControllers = false;
+            FrontLeftMotor = null;
+            RearLeftMotor = leftMotor;
+            FrontRightMotor = null;
+            RearRightMotor = rightMotor;
+            Sensitivity = DefaultSensitivity;
+            MaxOutput = DefaultMaxOutput;
+            AllocatedSpeedControllers = false;
             SetupMotorSafety();
             Drive(0, 0);
         }
@@ -166,13 +162,13 @@ namespace WPILib
             {
                 throw new ArgumentNullException(nameof(rearRightMotor), "Null Motor Controller Provided");
             }
-            m_frontLeftMotor = frontLeftMotor;
-            m_rearLeftMotor = rearLeftMotor;
-            m_frontRightMotor = frontRightMotor;
-            m_rearRightMotor = rearRightMotor;
-            m_sensitivity = DefaultSensitivity;
-            m_maxOutput = DefaultMaxOutput;
-            m_allocatedSpeedControllers = false;
+            FrontLeftMotor = frontLeftMotor;
+            RearLeftMotor = rearLeftMotor;
+            FrontRightMotor = frontRightMotor;
+            RearRightMotor = rearRightMotor;
+            Sensitivity = DefaultSensitivity;
+            MaxOutput = DefaultMaxOutput;
+            AllocatedSpeedControllers = false;
             SetupMotorSafety();
             Drive(0, 0);
         }
@@ -190,15 +186,15 @@ namespace WPILib
         {
             double leftOutput, rightOutput;
 
-            if (!s_arcadeRatioCurveReported)
+            if (!ArcadeRatioCurveReported)
             {
                 HAL.Base.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeRatioCurve, (byte)NumMotors);
-                s_arcadeRatioCurveReported = true;
+                ArcadeRatioCurveReported = true;
             }
             if (curve < 0)
             {
                 double value = Math.Log(-curve);
-                double ratio = (value - m_sensitivity) / (value + m_sensitivity);
+                double ratio = (value - Sensitivity) / (value + Sensitivity);
                 if (ratio == 0)
                 {
                     ratio = .0000000001;
@@ -209,7 +205,7 @@ namespace WPILib
             else if (curve > 0)
             {
                 double value = Math.Log(curve);
-                double ratio = (value - m_sensitivity) / (value + m_sensitivity);
+                double ratio = (value - Sensitivity) / (value + Sensitivity);
                 if (ratio == 0)
                 {
                     ratio = .0000000001;
@@ -271,10 +267,10 @@ namespace WPILib
         /// <param name="squaredInputs">If this setting is true, it decreases the sensitvity at lower speeds.</param>
         public void TankDrive(double leftValue, double rightValue, bool squaredInputs = true)
         {
-            if (!s_tankReported)
+            if (!TankReported)
             {
                 HAL.Base.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_Tank, (byte)NumMotors);
-                s_tankReported = true;
+                TankReported = true;
             }
 
             // square the inputs (while preserving the sign) to increase fine control while permitting full power
@@ -349,10 +345,10 @@ namespace WPILib
         /// <param name="squaredInputs">If this setting is true, it decreases the sensitvity at lower speeds.</param>
         public void ArcadeDrive(double moveValue, double rotateValue, bool squaredInputs = true)
         {
-            if (!s_arcadeStandardReported)
+            if (!ArcadeStandardReported)
             {
                 HAL.Base.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_ArcadeStandard, (byte)NumMotors);
-                s_arcadeStandardReported = true;
+                ArcadeStandardReported = true;
             }
 
             double leftMotorSpeed;
@@ -426,10 +422,10 @@ namespace WPILib
         /// <param name="gyroAngle">The current angle reading from the gyro. Use this to implement field-oriented controls.</param>
         public void MecanumDrive_Cartesian(double x, double y, double rotation, double gyroAngle = 0)
         {
-            if (!s_mecanumCartesianReported)
+            if (!MecanumCartesianReported)
             {
                 HAL.Base.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_MecanumCartesian, (byte)NumMotors);
-                s_mecanumCartesianReported = true;
+                MecanumCartesianReported = true;
             }
             double xIn = x;
             double yIn = y;
@@ -438,24 +434,24 @@ namespace WPILib
             // Compenstate for gyro angle.
             RotateVector(ref xIn, ref yIn, gyroAngle);
 
-            double[] wheelSpeeds = new double[s_maxNumberOfMotors];
+            double[] wheelSpeeds = new double[MaxNumberOfMotors];
             wheelSpeeds[(int)MotorType.FrontLeft] = xIn + yIn + rotation;
             wheelSpeeds[(int)MotorType.FrontRight] = -xIn + yIn - rotation;
             wheelSpeeds[(int)MotorType.RearLeft] = -xIn + yIn + rotation;
             wheelSpeeds[(int)MotorType.RearRight] = xIn + yIn - rotation;
 
             Normalize(wheelSpeeds);
-            m_frontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
-            m_frontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
-            m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
-            m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
+            FrontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * MaxOutput, SyncGroup);
+            FrontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * MaxOutput, SyncGroup);
+            RearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * MaxOutput, SyncGroup);
+            RearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * MaxOutput, SyncGroup);
 
-            if (m_syncGroup != 0)
+            if (SyncGroup != 0)
             {
-                CANJaguar.UpdateSyncGroup(m_syncGroup);
+                CANJaguar.UpdateSyncGroup(SyncGroup);
             }
 
-            m_safetyHelper?.Feed();
+            SafetyHelper?.Feed();
         }
 
         /// <summary>
@@ -471,10 +467,10 @@ namespace WPILib
         /// <param name="rotation">The rate of rotation. This is independant from translation.</param>
         public void mecanumDrive_Polar(double magnitude, double direction, double rotation)
         {
-            if (!s_mecanumPolarReported)
+            if (!MecanumPolarReported)
             {
                 HAL.Base.HAL.Report(ResourceType.kResourceType_RobotDrive, Instances.kRobotDrive_MecanumPolar, (byte)NumMotors);
-                s_mecanumPolarReported = true;
+                MecanumPolarReported = true;
             }
             // Normalized for full power along the Cartesian axes.
             magnitude = Limit(magnitude) * Math.Sqrt(2.0);
@@ -483,7 +479,7 @@ namespace WPILib
             double cosD = Math.Cos(dirInRad);
             double sinD = Math.Sin(dirInRad);
 
-            double[] wheelSpeeds = new double[s_maxNumberOfMotors];
+            double[] wheelSpeeds = new double[MaxNumberOfMotors];
             wheelSpeeds[(int)MotorType.FrontLeft] = (sinD * magnitude + rotation);
             wheelSpeeds[(int)MotorType.FrontRight] = (cosD * magnitude - rotation);
             wheelSpeeds[(int)MotorType.RearLeft] = (cosD * magnitude + rotation);
@@ -491,17 +487,17 @@ namespace WPILib
 
             Normalize(wheelSpeeds);
 
-            m_frontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * m_maxOutput, m_syncGroup);
-            m_frontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * m_maxOutput, m_syncGroup);
-            m_rearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * m_maxOutput, m_syncGroup);
-            m_rearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * m_maxOutput, m_syncGroup);
+            FrontLeftMotor.Set(wheelSpeeds[(int)MotorType.FrontLeft] * MaxOutput, SyncGroup);
+            FrontRightMotor.Set(wheelSpeeds[(int)MotorType.FrontRight] * MaxOutput, SyncGroup);
+            RearLeftMotor.Set(wheelSpeeds[(int)MotorType.RearLeft] * MaxOutput, SyncGroup);
+            RearRightMotor.Set(wheelSpeeds[(int)MotorType.RearRight] * MaxOutput, SyncGroup);
 
-            if (m_syncGroup != 0)
+            if (SyncGroup != 0)
             {
-                CANJaguar.UpdateSyncGroup(m_syncGroup);
+                CANJaguar.UpdateSyncGroup(SyncGroup);
             }
 
-            m_safetyHelper?.Feed();
+            SafetyHelper?.Feed();
         }
 
         /// <summary>
@@ -511,23 +507,23 @@ namespace WPILib
         /// <param name="rightOutput">The speed to send to the right side.</param>
         public void SetLeftRightMotorOutputs(double leftOutput, double rightOutput)
         {             
-            if (m_rearLeftMotor == null || m_rearRightMotor == null)
+            if (RearLeftMotor == null || RearRightMotor == null)
             {
                 throw new NullReferenceException("The motor controllers have been set to null.");
             }
 
-            m_frontLeftMotor?.Set(Limit(leftOutput) * m_maxOutput, m_syncGroup);
-            m_rearLeftMotor.Set(Limit(leftOutput) * m_maxOutput, m_syncGroup);
+            FrontLeftMotor?.Set(Limit(leftOutput) * MaxOutput, SyncGroup);
+            RearLeftMotor.Set(Limit(leftOutput) * MaxOutput, SyncGroup);
 
-            m_frontRightMotor?.Set(-Limit(rightOutput) * m_maxOutput, m_syncGroup);
-            m_rearRightMotor.Set(-Limit(rightOutput) * m_maxOutput, m_syncGroup);
+            FrontRightMotor?.Set(-Limit(rightOutput) * MaxOutput, SyncGroup);
+            RearRightMotor.Set(-Limit(rightOutput) * MaxOutput, SyncGroup);
 
-            if (m_syncGroup != 0)
+            if (SyncGroup != 0)
             {
-                CANJaguar.UpdateSyncGroup(m_syncGroup);
+                CANJaguar.UpdateSyncGroup(SyncGroup);
             }
 
-            m_safetyHelper?.Feed();
+            SafetyHelper?.Feed();
         }
 
         /// <summary>
@@ -554,18 +550,18 @@ namespace WPILib
         /// <param name="wheelSpeeds">The wheel speeds to normalize</param>
         protected static void Normalize(IList<double> wheelSpeeds)
         {
-            if (wheelSpeeds.Count > s_maxNumberOfMotors)
+            if (wheelSpeeds.Count > MaxNumberOfMotors)
                 throw new ArgumentOutOfRangeException(nameof(wheelSpeeds), "Not enough motors to normalize provided.");
             double maxMagnitude = Math.Abs(wheelSpeeds[0]);
             int i;
-            for (i = 1; i < s_maxNumberOfMotors; i++)
+            for (i = 1; i < MaxNumberOfMotors; i++)
             {
                 double temp = Math.Abs(wheelSpeeds[i]);
                 if (maxMagnitude < temp) maxMagnitude = temp;
             }
             if (maxMagnitude > 1.0)
             {
-                for (i = 0; i < s_maxNumberOfMotors; i++)
+                for (i = 0; i < MaxNumberOfMotors; i++)
                 {
                     wheelSpeeds[i] = wheelSpeeds[i] / maxMagnitude;
                 }
@@ -601,16 +597,16 @@ namespace WPILib
             switch (motor)
             {
                 case MotorType.FrontLeft:
-                    m_frontLeftMotor.Inverted = isInverted;
+                    FrontLeftMotor.Inverted = isInverted;
                     break;
                 case MotorType.FrontRight:
-                    m_frontRightMotor.Inverted = isInverted;
+                    FrontRightMotor.Inverted = isInverted;
                     break;
                 case MotorType.RearLeft:
-                    m_rearLeftMotor.Inverted = isInverted;
+                    RearLeftMotor.Inverted = isInverted;
                     break;
                 case MotorType.RearRight:
-                    m_rearRightMotor.Inverted = isInverted;
+                    RearRightMotor.Inverted = isInverted;
                     break;
             }
         }
@@ -618,57 +614,51 @@ namespace WPILib
         /// <summary>
         /// Sets the turning sensitivity for the <see cref="Drive(double, double)"/> function.
         /// </summary>
-        public double Sensitivity
-        {
-            set { m_sensitivity = value; }
-        }
+        public double Sensitivity { get; protected set; }
 
         /// <summary>
         /// Sets the maximum output allowed to be outputed by the drive.
         /// </summary>
-        public double MaxOutput
-        {
-            set { m_maxOutput = value; }
-        }
+        public double MaxOutput { set; protected get; }
 
         /// <summary>
         /// Sets the sync group for the motor controllers if they are <see cref="CANJaguar">CANJaguars</see>
         /// </summary>
         public byte CANJaguarSyncGroup
         {
-            set { m_syncGroup = value; }
+            set { SyncGroup = value; }
         }
 
         /// <inheritdoc/>
         public void Dispose()
         {
-            if (m_allocatedSpeedControllers)
+            if (AllocatedSpeedControllers)
             {
-                m_frontLeftMotor?.Dispose();
-                m_frontRightMotor?.Dispose();
-                m_rearLeftMotor?.Dispose();
-                m_rearRightMotor?.Dispose();
+                FrontLeftMotor?.Dispose();
+                FrontRightMotor?.Dispose();
+                RearLeftMotor?.Dispose();
+                RearRightMotor?.Dispose();
             }
         }
 
         /// <inheritdoc/>
-        public bool Alive => m_safetyHelper.Alive;
+        public bool Alive => SafetyHelper.Alive;
 
         /// <inheritdoc/>
         public double Expiration
         {
-            set { m_safetyHelper.Expiration = value; }
-            get { return m_safetyHelper.Expiration; }
+            set { SafetyHelper.Expiration = value; }
+            get { return SafetyHelper.Expiration; }
         }
 
         /// <inheritdoc/>
         public void StopMotor()
         {
-            m_frontLeftMotor?.Set(0.0);
-            m_frontRightMotor?.Set(0.0);
-            m_rearLeftMotor?.Set(0.0);
-            m_rearRightMotor?.Set(0.0);
-            m_safetyHelper?.Feed();
+            FrontLeftMotor?.Set(0.0);
+            FrontRightMotor?.Set(0.0);
+            RearLeftMotor?.Set(0.0);
+            RearRightMotor?.Set(0.0);
+            SafetyHelper?.Feed();
         }
 
         /// <inheritdoc/>
@@ -677,13 +667,13 @@ namespace WPILib
         /// <inheritdoc/>
         public bool SafetyEnabled
         {
-            set { m_safetyHelper.SafetyEnabled = value; }
-            get { return m_safetyHelper.SafetyEnabled; }
+            set { SafetyHelper.SafetyEnabled = value; }
+            get { return SafetyHelper.SafetyEnabled; }
         }
 
         private void SetupMotorSafety()
         {
-            m_safetyHelper = new MotorSafetyHelper(this)
+            SafetyHelper = new MotorSafetyHelper(this)
             {
                 Expiration = DefaultExpirationTime,
                 SafetyEnabled = true
@@ -698,10 +688,10 @@ namespace WPILib
             get
             {
                 int motors = 0;
-                if (m_frontLeftMotor != null) motors++;
-                if (m_frontRightMotor != null) motors++;
-                if (m_rearLeftMotor != null) motors++;
-                if (m_rearRightMotor != null) motors++;
+                if (FrontLeftMotor != null) motors++;
+                if (FrontRightMotor != null) motors++;
+                if (RearLeftMotor != null) motors++;
+                if (RearRightMotor != null) motors++;
                 return motors;
             }
         }

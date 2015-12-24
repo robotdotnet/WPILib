@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static HAL.Base.HALDigital;
 using static WPILib.Utility;
 using static HAL.Base.HAL;
@@ -46,9 +42,9 @@ namespace WPILib
             if (input != null)
             {
                 int status = 0;
-                SetFilterSelect(input.m_port, channelIndex, ref status);
+                SetFilterSelect(input.Port, channelIndex, ref status);
                 CheckStatus(status);
-                int selected = GetFilterSelect(input.m_port, ref status);
+                int selected = GetFilterSelect(input.Port, ref status);
                 CheckStatus(status);
                 if (selected != channelIndex)
                     throw new InvalidOperationException($"SetFilterSelect for {channelIndex} failed -> {selected}");

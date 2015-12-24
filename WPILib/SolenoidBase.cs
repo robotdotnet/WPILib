@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using static WPILib.Utility;
 using static HAL.Base.HAL;
 using static HAL.Base.HALSolenoid;
@@ -17,11 +16,11 @@ namespace WPILib
         /// <summary>
         /// The module number for the solenoid.
         /// </summary>
-        protected int m_moduleNumber;
+        protected readonly int ModuleNumber;
         /// <summary>
         /// The allocated resources for the solenoid.
         /// </summary>
-        protected static Resource s_allocated = new Resource(63 * SolenoidChannels);
+        protected static readonly Resource Allocated = new Resource(63 * SolenoidChannels);
         private readonly object m_lockObject = new object();
 
         /// <summary>
@@ -32,9 +31,9 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_moduleNumber = moduleNumber;
+                ModuleNumber = moduleNumber;
                 int status = 0;
-                m_port = InitializeSolenoidPort(GetPortWithModule((byte) m_moduleNumber, 0), ref status);
+                m_port = InitializeSolenoidPort(GetPortWithModule((byte) ModuleNumber, 0), ref status);
                 CheckStatus(status);
             }
         }

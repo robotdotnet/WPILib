@@ -1,5 +1,4 @@
-﻿using HAL;
-using HAL.Base;
+﻿using HAL.Base;
 using static HAL.Base.HAL;
 using static System.Console;
 

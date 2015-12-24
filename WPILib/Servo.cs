@@ -1,5 +1,4 @@
-﻿using HAL;
-using HAL.Base;
+﻿using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using static HAL.Base.HAL;

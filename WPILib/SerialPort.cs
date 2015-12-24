@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using HAL;
 using HAL.Base;
 using static HAL.Base.HALSerialPort;
 using static HAL.Base.HAL;

@@ -45,8 +45,8 @@ namespace WPILib
         private double m_error = 0.0;
         private double m_result = 0.0;
         private double m_period;
-        protected IPIDSource m_pidInput;
-        protected IPIDOutput m_pidOutput;
+        protected IPIDSource PIDInput;
+        protected IPIDOutput PIDOutput;
         private readonly object m_lockObject = new object();
 
         private int m_bufLength = 0;
@@ -58,7 +58,7 @@ namespace WPILib
         private Notifier m_controlLoop;
 
 
-        public PIDController(double Kp, double Ki, double Kd, double Kf,
+        public PIDController(double kp, double ki, double kd, double kf,
             IPIDSource source, IPIDOutput output,
             double period)
         {
@@ -69,13 +69,13 @@ namespace WPILib
 
             m_controlLoop = new Notifier(CallCalculate, this);
 
-            m_P = Kp;
-            m_I = Ki;
-            m_D = Kd;
-            m_F = Kf;
+            m_P = kp;
+            m_I = ki;
+            m_D = kd;
+            m_F = kf;
 
-            m_pidInput = source;
-            m_pidOutput = output;
+            PIDInput = source;
+            PIDOutput = output;
             m_period = period;
 
             m_controlLoop.StartPeriodic(m_period);
@@ -87,24 +87,24 @@ namespace WPILib
             m_buf = new Queue<double>();
         }
 
-        public PIDController(double Kp, double Ki, double Kd,
+        public PIDController(double kp, double ki, double kd,
             IPIDSource source, IPIDOutput output,
             double period)
-            : this(Kp, Ki, Kd, 0.0, source, output, period)
+            : this(kp, ki, kd, 0.0, source, output, period)
         {
 
         }
 
-        public PIDController(double Kp, double Ki, double Kd,
+        public PIDController(double kp, double ki, double kd,
             IPIDSource source, IPIDOutput output)
-            : this(Kp, Ki, Kd, source, output, DefaultPeriod)
+            : this(kp, ki, kd, source, output, DefaultPeriod)
         {
 
         }
 
-        public PIDController(double Kp, double Ki, double Kd, double Kf,
+        public PIDController(double kp, double ki, double kd, double kf,
             IPIDSource source, IPIDOutput output)
-            : this(Kp, Ki, Kd, Kf, source, output, DefaultPeriod)
+            : this(kp, ki, kd, kf, source, output, DefaultPeriod)
         {
 
         }
@@ -114,8 +114,8 @@ namespace WPILib
             m_controlLoop.Stop();
             lock (this)
             {
-                m_pidOutput = null;
-                m_pidInput = null;
+                PIDOutput = null;
+                PIDInput = null;
                 m_controlLoop.Dispose();
                 m_controlLoop = null;
             }
@@ -136,16 +136,16 @@ namespace WPILib
 
             lock (m_lockObject)
             {
-                if (m_pidInput == null)
+                if (PIDInput == null)
                 {
                     return;
                 }
-                if (m_pidOutput == null)
+                if (PIDOutput == null)
                 {
                     return;
                 }
                 enabled = m_enabled; // take snapshot of these values...
-                pidInput = m_pidInput;
+                pidInput = PIDInput;
             }
 
             if (!enabled) return;
@@ -233,7 +233,7 @@ namespace WPILib
                 {
                     m_result = m_minimumOutput;
                 }
-                pidOutput = m_pidOutput;
+                pidOutput = PIDOutput;
                 result = m_result;
 
                 m_buf.Enqueue(m_error);
@@ -404,14 +404,14 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                return Setpoint - m_pidInput.PidGet();
+                return Setpoint - PIDInput.PidGet();
             }
         }
 
         ///<inheritdoc/>
         internal PIDSourceType PIDSourceType {
-            get { return m_pidInput.PIDSourceType; }
-            set { m_pidInput.PIDSourceType = value; }
+            get { return PIDInput.PIDSourceType; }
+            set { PIDInput.PIDSourceType = value; }
         }
 
         public double GetAvgError()
@@ -487,7 +487,7 @@ namespace WPILib
         {
             lock (m_lockObject)
             {
-                m_pidOutput.PidWrite(0);
+                PIDOutput.PidWrite(0);
                 m_enabled = false;
             }
         }

@@ -1,5 +1,4 @@
-﻿using HAL;
-using HAL.Base;
+﻿using HAL.Base;
 
 namespace WPILib.Internal
 {

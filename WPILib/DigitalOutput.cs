@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
@@ -55,14 +54,14 @@ namespace WPILib
         public virtual void Set(bool value)
         {
             int status = 0;
-            SetDIO(m_port, (short)(value ? 1 : 0), ref status);
+            SetDIO(Port, (short)(value ? 1 : 0), ref status);
             CheckStatus(status);
         }
 
         /// <summary>
         /// Get the GPIO channel number that this object represents.
         /// </summary>
-        public int Channel => m_channel;
+        public new int Channel => base.Channel;
 
         /// <summary>
         /// Write a pulse to the digital output.
@@ -72,7 +71,7 @@ namespace WPILib
         public void Pulse(float pulseLength)
         {
             int status = 0;
-            HALDigital.Pulse(m_port, pulseLength, ref status);
+            HALDigital.Pulse(Port, pulseLength, ref status);
             CheckStatus(status);
         }
 
@@ -86,7 +85,7 @@ namespace WPILib
         {
             int status = 0;
             float convertedPulse = (float)(pulseLength / 1.0e9 * (GetLoopTiming(ref status) * 25));
-            HALDigital.Pulse(m_port, convertedPulse, ref status);
+            HALDigital.Pulse(Port, convertedPulse, ref status);
             CheckStatus(status);
         }
 
@@ -98,7 +97,7 @@ namespace WPILib
             get
             {
                 int status = 0;
-                bool value = IsPulsing(m_port, ref status);
+                bool value = IsPulsing(Port, ref status);
                 CheckStatus(status);
                 return value;
             }
@@ -136,7 +135,7 @@ namespace WPILib
             CheckStatus(status);
             SetPWMDutyCycle(m_pwmGenerator, initialDutyCycle, ref status);
             CheckStatus(status);
-            SetPWMOutputChannel(m_pwmGenerator, (uint)m_channel, ref status);
+            SetPWMOutputChannel(m_pwmGenerator, (uint)base.Channel, ref status);
             CheckStatus(status);
         }
 

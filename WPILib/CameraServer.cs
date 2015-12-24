@@ -15,19 +15,16 @@ namespace WPILib
     public class CameraServer
     {
         private const int Port = 1180;
-        private static readonly byte[] MagicNumber = { 0x01, 0x00, 0x00, 0x00 };
+        private static readonly byte[] s_magicNumber = { 0x01, 0x00, 0x00, 0x00 };
         private const int kSize640x480 = 0;
         private const int kSize320x240 = 1;
         private const int kSize160x120 = 2;
         private const int kHardwareCompression = -1;
         private const string kDefaultCameraName = "cam1";
         private const int kMaxImageSize = 200000;
-        private static CameraServer server;
+        private static CameraServer s_server;
 
-        public static CameraServer Instance
-        {
-            get { return server ?? (server = new CameraServer()); }
-        }
+        public static CameraServer Instance => s_server ?? (s_server = new CameraServer());
 
         private Thread serverThread;
         private int m_quality;
@@ -39,13 +36,13 @@ namespace WPILib
 
         private class CameraData
         {
-            internal RawData data;
-            internal int start;
+            internal RawData m_data;
+            internal int m_start;
 
             public CameraData(RawData d, int s)
             {
-                data = d;
-                start = s;
+                m_data = d;
+                m_start = s;
             }
         }
 
@@ -74,9 +71,8 @@ namespace WPILib
                 catch (Exception)
                 {
                 }
-            });
+            }) {Name = "CameraServer Send Thread"};
 
-            serverThread.Name = "CameraServer Send Thread";
             serverThread.Start();
         }
 
@@ -92,11 +88,11 @@ namespace WPILib
             try
             {
                 Monitor.Enter(m_lockObject);
-                if (m_imageData?.data != null)
+                if (m_imageData?.m_data != null)
                 {
-                    m_imageData.data.Dispose();
+                    m_imageData.m_data.Dispose();
                     //Free Data
-                    if (m_imageData.data.Data != IntPtr.Zero)
+                    if (m_imageData.m_data.Data != IntPtr.Zero)
                         m_imageDataPool.AddLast(data.Data);
                     m_imageData = null;
                 }
@@ -187,9 +183,8 @@ namespace WPILib
 
                 m_camera.StartCapture();
 
-                Thread captureThread = new Thread(Capture);
+                Thread captureThread = new Thread(Capture) {Name = "Camera Capture Thread"};
 
-                captureThread.Name = "Camera Capture Thread";
                 captureThread.Start();
             }
         }
@@ -298,9 +293,11 @@ namespace WPILib
             {
                 return;
             }
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Unspecified);
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Unspecified)
+            {
+                ExclusiveAddressUse = false
+            };
 
-            socket.ExclusiveAddressUse = false;
 
             socket.Bind(new IPEndPoint(IPAddress.Any, Port));
 
@@ -364,12 +361,12 @@ namespace WPILib
 
                         if (imageData == null) continue;
 
-                        byte[] imageArray = new byte[imageData.data.Size];
-                        Marshal.Copy(imageData.data.Data, imageArray, 0, (int)imageData.data.Size);
+                        byte[] imageArray = new byte[imageData.m_data.Size];
+                        Marshal.Copy(imageData.m_data.Data, imageArray, 0, (int)imageData.m_data.Size);
 
                         try
                         {
-                            stream.Write(MagicNumber, 0, MagicNumber.Length);
+                            stream.Write(s_magicNumber, 0, s_magicNumber.Length);
                             byte[] imgLength = BitConverter.GetBytes(imageArray.Length);
                             stream.Write(imgLength, 0, imgLength.Length);
                             stream.Write(imageArray, 0, imageArray.Length);
@@ -386,12 +383,12 @@ namespace WPILib
                         }
                         finally
                         {
-                            imageData.data.Dispose();
-                            if (imageData.data.Data != IntPtr.Zero)
+                            imageData.m_data.Dispose();
+                            if (imageData.m_data.Data != IntPtr.Zero)
                             {
                                 lock (m_lockObject)
                                 {
-                                    m_imageDataPool.AddLast(imageData.data.Data);
+                                    m_imageDataPool.AddLast(imageData.m_data.Data);
                                 }
                             }
                         }

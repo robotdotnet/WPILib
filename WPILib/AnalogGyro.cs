@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
@@ -27,9 +26,9 @@ namespace WPILib
         private static double kDefaultVoltsPerDegreePerSecond = 0.007;
 
         /// <summary>
-        /// The <see cref="AnalogInput"/> that this gyro uses.
+        /// The <see cref="WPILib.AnalogInput"/> that this gyro uses.
         /// </summary>
-        protected AnalogInput m_analog;
+        protected AnalogInput AnalogInput;
         private double m_offset;
         private int m_center;
         readonly bool m_channelAllocated = false;
@@ -37,8 +36,8 @@ namespace WPILib
         /// <inheritdoc/>
         public override void Calibrate()
         {
-            m_analog.InitAccumulator();
-            m_analog.ResetAccumulator();
+            AnalogInput.InitAccumulator();
+            AnalogInput.ResetAccumulator();
 
             if (RobotBase.IsSimulation)
             {
@@ -50,7 +49,7 @@ namespace WPILib
 
             long value = 0;
             uint count = 0;
-            m_analog.GetAccumulatorOutput(ref value, ref count);
+            AnalogInput.GetAccumulatorOutput(ref value, ref count);
 
             m_center = (int)((double)value / (double)count + .5);
 
@@ -58,8 +57,8 @@ namespace WPILib
                     - m_center;
 
 
-            m_analog.AccumulatorCenter = m_center;
-            m_analog.ResetAccumulator();
+            AnalogInput.AccumulatorCenter = m_center;
+            AnalogInput.ResetAccumulator();
         }
 
         /// <summary>
@@ -82,7 +81,7 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Creates a new Analog Gyro with an existing <see cref="AnalogInput"/>.
+        /// Creates a new Analog Gyro with an existing <see cref="WPILib.AnalogInput"/>.
         /// </summary>
         /// <param name="channel">The analog input this gyro is attached to.</param>
         public AnalogGyro(AnalogInput channel)
@@ -92,18 +91,18 @@ namespace WPILib
 
         private void CreateGyro(AnalogInput channel)
         {
-            m_analog = channel;
-            if (m_analog == null)
+            AnalogInput = channel;
+            if (AnalogInput == null)
             {
                 throw new ArgumentNullException(nameof(channel), "AnalogInput supplied to Gyro constructor is null");
             }
-            if (!m_analog.IsAccumulatorChannel)
+            if (!AnalogInput.IsAccumulatorChannel)
             {
                 throw new ArgumentOutOfRangeException(nameof(channel), "Channel must be an accumulator channel");
             }
             Sensitivity = kDefaultVoltsPerDegreePerSecond;
-            m_analog.AverageBits = kAverageBits;
-            m_analog.OversampleBits = kOversampleBits;
+            AnalogInput.AverageBits = kAverageBits;
+            AnalogInput.OversampleBits = kOversampleBits;
             double sampleRate = kSamplesPerSecond
                     * (1 << (kAverageBits + kOversampleBits));
             AnalogInput.GlobalSampleRate = sampleRate;
@@ -114,30 +113,30 @@ namespace WPILib
             PIDSourceType = PIDSourceType.Displacement;
 
 
-            HAL.Base.HAL.Report(ResourceType.kResourceType_Gyro, (byte)m_analog.Channel);
-            LiveWindow.LiveWindow.AddSensor("AnalogGyro", m_analog.Channel, this);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Gyro, (byte)AnalogInput.Channel);
+            LiveWindow.LiveWindow.AddSensor("AnalogGyro", AnalogInput.Channel, this);
 
             Calibrate();
         }
 
         ///<inheritdoc/>
-        public override void Reset() => m_analog?.ResetAccumulator();
+        public override void Reset() => AnalogInput?.ResetAccumulator();
 
         ///<inheritdoc/>
         public override void Dispose()
         {
-            if (m_analog != null && m_channelAllocated)
+            if (AnalogInput != null && m_channelAllocated)
             {
-                m_analog.Dispose();
+                AnalogInput.Dispose();
             }
-            m_analog = null;
+            AnalogInput = null;
             base.Dispose();
         }
 
         ///<inheritdoc/>
         public override double GetAngle()
         {
-            if (m_analog == null)
+            if (AnalogInput == null)
             {
                 return 0.0;
             }
@@ -146,18 +145,18 @@ namespace WPILib
                 if (RobotBase.IsSimulation)
                 {
                     //Use our simulator hack.
-                    return BitConverter.Int64BitsToDouble(m_analog.GetAccumulatorValue());
+                    return BitConverter.Int64BitsToDouble(AnalogInput.GetAccumulatorValue());
                 }
                 long rawValue = 0;
                 uint count = 0;
-                m_analog.GetAccumulatorOutput(ref rawValue, ref count);
+                AnalogInput.GetAccumulatorOutput(ref rawValue, ref count);
 
                 long value = rawValue - (long)(count * m_offset);
 
                 double scaledValue = value
                                      * 1e-9
-                                     * m_analog.LSBWeight
-                                     * (1 << m_analog.AverageBits)
+                                     * AnalogInput.LSBWeight
+                                     * (1 << AnalogInput.AverageBits)
                                      / (AnalogInput.GlobalSampleRate * Sensitivity);
 
                 return scaledValue;
@@ -167,7 +166,7 @@ namespace WPILib
         ///<inheritdoc/>
         public override double GetRate()
         {
-            if (m_analog == null)
+            if (AnalogInput == null)
             {
                 return 0.0;
             }
@@ -176,12 +175,12 @@ namespace WPILib
                 if (RobotBase.IsSimulation)
                 {
                     //Use our simulator hack
-                    return BitConverter.ToSingle(BitConverter.GetBytes(m_analog.GetAccumulatorCount()), 0);
+                    return BitConverter.ToSingle(BitConverter.GetBytes(AnalogInput.GetAccumulatorCount()), 0);
                 }
-                return (m_analog.GetAverageValue() - (m_center + m_offset))
+                return (AnalogInput.GetAverageValue() - (m_center + m_offset))
                        * 1e-9
-                       * m_analog.LSBWeight
-                       / ((1 << m_analog.OversampleBits) * Sensitivity);
+                       * AnalogInput.LSBWeight
+                       / ((1 << AnalogInput.OversampleBits) * Sensitivity);
             }
         }
 
@@ -194,8 +193,8 @@ namespace WPILib
         {
             set
             {
-                int deadband = (int)(value * 1e9 / m_analog.LSBWeight * (1 << m_analog.OversampleBits));
-                m_analog.AccumulatorDeadband = deadband;
+                int deadband = (int)(value * 1e9 / AnalogInput.LSBWeight * (1 << AnalogInput.OversampleBits));
+                AnalogInput.AccumulatorDeadband = deadband;
             }
         }
 

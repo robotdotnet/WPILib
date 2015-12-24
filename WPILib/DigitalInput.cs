@@ -1,5 +1,4 @@
-﻿using HAL;
-using HAL.Base;
+﻿using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.LiveWindow;
 using static WPILib.Utility;
@@ -31,7 +30,7 @@ namespace WPILib
         public virtual bool Get()
         {
             int status = 0;
-            bool value = HALDigital.GetDIO(m_port, ref status);
+            bool value = HALDigital.GetDIO(Port, ref status);
             CheckStatus(status);
             return value;
         }
@@ -39,7 +38,7 @@ namespace WPILib
         /// <summary>
         /// Get the channel of the digital input.
         /// </summary>
-        public int Channel => m_channel;
+        public new int Channel => base.Channel;
 
         /// <summary>
         /// Initialize a table for this sendable object.

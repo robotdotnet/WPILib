@@ -47,7 +47,7 @@ namespace WPILib.Tests
         {
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
-                var s = new CANTalon(CANTalon.TalonIds);
+                var s = new CANTalon(CANTalon.MaxTalonId);
             });
         }
 

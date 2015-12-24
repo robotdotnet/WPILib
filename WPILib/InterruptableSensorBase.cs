@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using WPILib.Exceptions;
 using HALInterrupts = HAL.Base.HALInterrupts;
 
@@ -28,29 +27,24 @@ namespace WPILib
         /// <summary>
         /// The interrupt resource.
         /// </summary>
-        protected IntPtr m_interrupt;
-
-        /// <summary>
-        /// The index of the interrupt
-        /// </summary>
-        protected uint m_interruptIndex;
+        protected IntPtr Interrupt;
 
         /// <summary>
         /// Resource manager
         /// </summary>
-        protected static Resource s_interrupts = new Resource(8);
+        protected static readonly Resource Interrupts = new Resource(8);
 
         /// <summary>
         /// Flags if the interrupt being allocated is synchronous.
         /// </summary>
-        protected bool m_isSynchronousInterrupt = false;
+        protected bool IsSynchronousInterrupt = false;
 
         /// <summary>
         /// Creates a new <see cref="InterruptableSensorBase"/>.
         /// </summary>
         protected InterruptableSensorBase()
         {
-            m_interrupt = IntPtr.Zero;
+            Interrupt = IntPtr.Zero;
         }
 
         private Action<uint, IntPtr> m_function;
@@ -72,7 +66,7 @@ namespace WPILib
         /// <summary>
         /// Gets the index of the Interrupt
         /// </summary>
-        public uint InterruptIndex => m_interruptIndex;
+        public uint InterruptIndex { get; protected set; }
 
         /// <summary>
         /// Requests one of the 8 interrupts asynchronously on this input.
@@ -84,7 +78,7 @@ namespace WPILib
         public void RequestInterrupts(Action handler)
         {
             m_function = (mask, t) => handler();
-            if (m_interrupt != IntPtr.Zero)
+            if (Interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
             }
@@ -93,10 +87,10 @@ namespace WPILib
             m_param = null;
 
             int status = 0;
-            HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
+            HALInterrupts.RequestInterrupts(Interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
             Utility.CheckStatus(status);
             SetUpSourceEdge(true, false);
-            HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
+            HALInterrupts.AttachInterruptHandler(Interrupt, m_function, IntPtr.Zero, ref status);
             Utility.CheckStatus(status);
         }
 
@@ -111,7 +105,7 @@ namespace WPILib
         public void RequestInterrupts(Action<uint, object> handler, object param)
         {
             m_function = (mask, t) => handler(mask, m_param);
-            if (m_interrupt != IntPtr.Zero)
+            if (Interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
             }
@@ -120,10 +114,10 @@ namespace WPILib
             m_param = param;
 
             int status = 0;
-            HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
+            HALInterrupts.RequestInterrupts(Interrupt, ModuleForRouting, (uint)ChannelForRouting, AnalogTriggerForRouting, ref status);
             Utility.CheckStatus(status);
             SetUpSourceEdge(true, false);
-            HALInterrupts.AttachInterruptHandler(m_interrupt, m_function, IntPtr.Zero, ref status);
+            HALInterrupts.AttachInterruptHandler(Interrupt, m_function, IntPtr.Zero, ref status);
             Utility.CheckStatus(status);
         }
 
@@ -135,7 +129,7 @@ namespace WPILib
         /// The default is interrupt on rising edges only.</remarks>
         public void RequestInterrupts()
         {
-            if (m_interrupt != IntPtr.Zero)
+            if (Interrupt != IntPtr.Zero)
             {
                 throw new AllocationException("The interrupt has already been allocated");
             }
@@ -143,7 +137,7 @@ namespace WPILib
             AllocateInterrupts(true);
 
             int status = 0;
-            HALInterrupts.RequestInterrupts(m_interrupt, ModuleForRouting, (uint)ChannelForRouting,
+            HALInterrupts.RequestInterrupts(Interrupt, ModuleForRouting, (uint)ChannelForRouting,
                 AnalogTriggerForRouting, ref status);
             Utility.CheckStatus(status);
             SetUpSourceEdge(true, false);
@@ -157,11 +151,11 @@ namespace WPILib
         /// to occur.</param>
         protected void AllocateInterrupts(bool watcher)
         {
-            m_interruptIndex = (uint)s_interrupts.Allocate("No interrupts are left to be allocated");
-            m_isSynchronousInterrupt = watcher;
+            InterruptIndex = (uint)Interrupts.Allocate("No interrupts are left to be allocated");
+            IsSynchronousInterrupt = watcher;
 
             int status = 0;
-            m_interrupt = HALInterrupts.InitializeInterrupts(m_interruptIndex, watcher, ref status);
+            Interrupt = HALInterrupts.InitializeInterrupts(InterruptIndex, watcher, ref status);
             Utility.CheckStatus(status);
         }
 
@@ -171,16 +165,16 @@ namespace WPILib
         /// <remarks>This deallocates all the structures and disables any interrupts.</remarks>
         public void CancelInterrupts()
         {
-            if (m_interrupt == IntPtr.Zero)
+            if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
             int status = 0;
-            HALInterrupts.CleanInterrupts(m_interrupt, ref status);
+            HALInterrupts.CleanInterrupts(Interrupt, ref status);
             Utility.CheckStatus(status);
 
-            m_interrupt = IntPtr.Zero;
-            s_interrupts.Deallocate((int)m_interruptIndex);
+            Interrupt = IntPtr.Zero;
+            Interrupts.Deallocate((int)InterruptIndex);
         }
 
         /// /// <summary>
@@ -192,12 +186,12 @@ namespace WPILib
         /// <returns>The <see cref="WaitResult"/> of the interrupt</returns>
         public WaitResult WaitForInterrupt(double timeout, bool ignorePrevious)
         {
-            if (m_interrupt == IntPtr.Zero)
+            if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
             int status = 0;
-            uint value = HALInterrupts.WaitForInterrupt(m_interrupt, timeout, ignorePrevious, ref status);
+            uint value = HALInterrupts.WaitForInterrupt(Interrupt, timeout, ignorePrevious, ref status);
             Utility.CheckStatus(status);
             return (WaitResult)value;
         }
@@ -220,16 +214,16 @@ namespace WPILib
         /// the field interrupts.</remarks>
         public void EnableInterrupts()
         {
-            if (m_interrupt == IntPtr.Zero)
+            if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
-            if (m_isSynchronousInterrupt)
+            if (IsSynchronousInterrupt)
             {
                 throw new InvalidOperationException("You do not need to enable synchronous interrupts");
             }
             int status = 0;
-            HALInterrupts.EnableInterrupts(m_interrupt, ref status);
+            HALInterrupts.EnableInterrupts(Interrupt, ref status);
             Utility.CheckStatus(status);
         }
 
@@ -238,16 +232,16 @@ namespace WPILib
         /// </summary>
         public void DisableInterrupts()
         {
-            if (m_interrupt == IntPtr.Zero)
+            if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
-            if (m_isSynchronousInterrupt)
+            if (IsSynchronousInterrupt)
             {
                 throw new InvalidOperationException("You do not need to enable synchronous interrupts");
             }
             int status = 0;
-            HALInterrupts.DisableInterrupts(m_interrupt, ref status);
+            HALInterrupts.DisableInterrupts(Interrupt, ref status);
             Utility.CheckStatus(status);
         }
 
@@ -259,12 +253,12 @@ namespace WPILib
         /// should be enabled with <see cref="SetUpSourceEdge"/></remarks>
         public double ReadRisingTimestanp()
         {
-            if (m_interrupt == IntPtr.Zero)
+            if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
             int status = 0;
-            double timestamp = HALInterrupts.ReadRisingTimestamp(m_interrupt, ref status);
+            double timestamp = HALInterrupts.ReadRisingTimestamp(Interrupt, ref status);
             Utility.CheckStatus(status);
             return timestamp;
         }
@@ -277,12 +271,12 @@ namespace WPILib
         /// should be enabled with <see cref="SetUpSourceEdge"/></remarks>
         public double ReadFallingTimestanp()
         {
-            if (m_interrupt == IntPtr.Zero)
+            if (Interrupt == IntPtr.Zero)
             {
                 throw new InvalidOperationException("The interrupt is not allocated.");
             }
             int status = 0;
-            double timestamp = HALInterrupts.ReadFallingTimestamp(m_interrupt, ref status);
+            double timestamp = HALInterrupts.ReadFallingTimestamp(Interrupt, ref status);
             Utility.CheckStatus(status);
             return timestamp;
         }
@@ -294,10 +288,10 @@ namespace WPILib
         /// <param name="fallingEdge">True to interrupt on the falling edge</param>
         public void SetUpSourceEdge(bool risingEdge, bool fallingEdge)
         {
-            if (m_interrupt != IntPtr.Zero)
+            if (Interrupt != IntPtr.Zero)
             {
                 int status = 0;
-                HALInterrupts.SetInterruptUpSourceEdge(m_interrupt, risingEdge, fallingEdge, ref status);
+                HALInterrupts.SetInterruptUpSourceEdge(Interrupt, risingEdge, fallingEdge, ref status);
                 Utility.CheckStatus(status);
             }
             else
@@ -309,7 +303,7 @@ namespace WPILib
         ///<inheritdoc/>
         public override void Dispose()
         {
-            if (m_interrupt != IntPtr.Zero)
+            if (Interrupt != IntPtr.Zero)
             {
                 CancelInterrupts();
             }

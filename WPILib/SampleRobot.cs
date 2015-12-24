@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using HAL;
 using HAL.Base;
 using static HAL.Base.HAL;
 

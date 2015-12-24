@@ -1,5 +1,4 @@
 ﻿using System;
-using HAL;
 using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;

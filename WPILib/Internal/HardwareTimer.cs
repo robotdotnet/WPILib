@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Threading;
+﻿using System.Threading;
 using static WPILib.Utility;
 
 namespace WPILib.Internal
