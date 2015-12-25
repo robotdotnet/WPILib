@@ -26,15 +26,6 @@ namespace WPILib.Tests
             }
 
         }
-        /*
-        public static void StartCode()
-        {
-            RobotBase.InitializeHardwareConfiguration();
-            HAL_Base.HAL.Initialize();
-            SimData.ResetHALData();
-            Resource.RestartProgram();
-        }
-        */
 
         public const int SystemClockTicksPerMicrosecond = 40;
 

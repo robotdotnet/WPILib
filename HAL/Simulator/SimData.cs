@@ -23,6 +23,8 @@ namespace HAL.Simulator
         /// The global data.
         /// </value>
         public static GlobalData GlobalData { get; } = new GlobalData();
+
+        public static NavXData NavXData { get; } = new NavXData();
         /// <summary>
         /// Gets the analog out data.
         /// </summary>
@@ -99,9 +101,9 @@ namespace HAL.Simulator
         /// </value>
         public static List<EncoderData> Encoder { get; } = new List<EncoderData>();
 
-        public static List<SPIAccelerometerData> SPIAccelerometer { get; } = new List<SPIAccelerometerData>(); 
+        public static List<SPIAccelerometerData> SPIAccelerometer { get; } = new List<SPIAccelerometerData>();
 
-        public static List<SPIAccumulatorData> SPIAccumulator { get; } = new List<SPIAccumulatorData>(); 
+        public static List<SPIAccumulatorData> SPIAccumulator { get; } = new List<SPIAccumulatorData>();
 
         private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
 
