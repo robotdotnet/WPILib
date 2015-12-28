@@ -142,14 +142,15 @@ namespace WPILib.IntegrationTests
 
             double synchronousDelay = SynchronousTimeout / 2.0;
 
-            long startTimeStamp = Utility.GetFPGATime();
-            new Thread(() =>
+            Thread t = new Thread(() =>
             {
                 Delay(synchronousDelay);
-                SetInterruptHigh();
                 SetInterruptLow();
-            }).Start();
+                SetInterruptHigh();
+            });
 
+            long startTimeStamp = Utility.GetFPGATime();
+            t.Start();
             GetInterruptable().WaitForInterrupt(SynchronousTimeout * 2);
             long stopTimeStamp = Utility.GetFPGATime();
 
