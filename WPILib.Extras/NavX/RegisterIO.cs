@@ -197,40 +197,39 @@ namespace WPILib.Extras.NavX
             }
         }
 
-        
-    public bool IsConnected()
+
+        public bool IsConnected()
         {
             double time_since_last_update = Timer.GetFPGATimestamp() - this.last_update_time;
             return time_since_last_update <= IO_TIMEOUT_SECONDS;
         }
 
-        
-    public double GetByteCount()
+        public double GetByteCount()
         {
             return byte_count;
         }
 
-        
-    public double GetUpdateCount()
+
+        public double GetUpdateCount()
         {
             return update_count;
         }
 
-        
-    public void SetUpdateRateHz(byte update_rate)
+
+        public void SetUpdateRateHz(byte update_rate)
         {
             io_provider.Write(IMURegisters.NAVX_REG_UPDATE_RATE_HZ, update_rate);
         }
 
-        
-    public void ZeroYaw()
+
+        public void ZeroYaw()
         {
             io_provider.Write(IMURegisters.NAVX_REG_INTEGRATION_CTL,
                                        AHRSProtocol.NAVX_INTEGRATION_CTL_RESET_YAW);
         }
 
-        
-    public void ZeroDisplacement()
+
+        public void ZeroDisplacement()
         {
             io_provider.Write(IMURegisters.NAVX_REG_INTEGRATION_CTL,
                                 (byte)(AHRSProtocol.NAVX_INTEGRATION_CTL_RESET_DISP_X |
