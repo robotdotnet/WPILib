@@ -91,7 +91,7 @@ namespace WPILib.IntegrationTests
 
             while (function.InterruptComplete == 0)
             {
-                Delay(0.005);
+                Thread.Yield();
             }
 
 
@@ -126,7 +126,7 @@ namespace WPILib.IntegrationTests
                 SetInterruptHigh();
                 while (function.InterruptComplete == 0)
                 {
-                    Delay(0.005);
+                    Thread.Yield();
                 }
                 function.InterruptComplete = 0;
             }
@@ -159,7 +159,7 @@ namespace WPILib.IntegrationTests
             Assert.AreEqual(synchronousDelay, interruptRunTime, 0.1, "The interrupt did not run for the expected ammount of time (units in seconds)");
         }
 
-        [Test, Timeout(4000)]
+        [Test, Timeout(5000)]
         public void TestDisableStopsInterruptFiring()
         {
             InterruptCounter counter = new InterruptCounter();
@@ -175,7 +175,7 @@ namespace WPILib.IntegrationTests
                 SetInterruptHigh();
                 while (function.InterruptComplete == 0)
                 {
-                    Delay(0.005);
+                    Thread.Yield();
                 }
                 function.InterruptComplete = 0;
             }
@@ -186,7 +186,7 @@ namespace WPILib.IntegrationTests
             {
                 SetInterruptLow();
                 SetInterruptHigh();
-                Delay(0.005);
+                Thread.Yield();
             }
 
             Assert.AreEqual(fireCount, counter.GetCount(), "The interrupt did not fire the expected number of times");
