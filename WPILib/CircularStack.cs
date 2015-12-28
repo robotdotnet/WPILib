@@ -26,13 +26,12 @@ namespace WPILib
 
             if (m_front == 0)
             {
-                m_front = m_data.Length + 1;
+                m_front = m_data.Length - 1;
             }
             else
             {
-                m_front++;
+                m_front--;
             }
-
             m_data[m_front] = value;
         }
 
