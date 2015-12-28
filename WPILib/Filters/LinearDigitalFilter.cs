@@ -1,4 +1,5 @@
-﻿using WPILib.Interfaces;
+﻿using System;
+using WPILib.Interfaces;
 
 namespace WPILib.Filters
 {
@@ -54,8 +55,8 @@ namespace WPILib.Filters
     /// </remarks>
     public class LinearDigitalFilter : Filter
     {
-        private CircularBuffer m_inputs;
-        private CircularBuffer m_outputs;
+        private CircularStack<double> m_inputs;
+        private CircularStack<double> m_outputs;
         private double[] m_inputGains;
         private double[] m_outputGains;
 
@@ -67,8 +68,8 @@ namespace WPILib.Filters
         /// <param name="fbGains">The "feed back" or IIR gains.</param>
         public LinearDigitalFilter(IPIDSource source, double[] ffGains, double[] fbGains) : base(source)
         {
-            m_inputs = new CircularBuffer(ffGains.Length);
-            m_outputs = new CircularBuffer(fbGains.Length);
+            m_inputs = new CircularStack<double>(ffGains.Length);
+            m_outputs = new CircularStack<double>(fbGains.Length);
             m_inputGains = ffGains;
             m_outputGains = fbGains;
         }
@@ -89,6 +90,29 @@ namespace WPILib.Filters
         {
             double[] ffGains = { gain };
             double[] fbGains = { gain - 1.0 };
+            return new LinearDigitalFilter(source, ffGains, fbGains);
+        }
+
+        /// <summary>
+        /// Creates a first-order high-pass filter.
+        /// </summary>
+        /// <remarks>
+        /// The filter is in the form
+        /// y[n] = gain*x[n] + (-gain)*x[n-1] + gain*y[n-1]
+        /// where gain = e^(-dt / T), T is the time constant in seconds.
+        /// <para>This filter is stable for time constants greater then zero.</para>
+        /// </remarks>
+        /// <param name="source">The <see cref="IPIDSource"/> object that is used to get values.</param>
+        /// <param name="timeConstant">The discrete-time time constant in seconds.</param>
+        /// <param name="period">The period in seconds between samples taken by the user.</param>
+        /// <returns></returns>
+        public static LinearDigitalFilter HighPass(IPIDSource source, double timeConstant,
+            double period)
+        {
+            double gain = Math.Exp(-period / timeConstant);
+            double[] ffGains = { gain, -gain };
+            double[] fbGains = { -gain };
+
             return new LinearDigitalFilter(source, ffGains, fbGains);
         }
 
@@ -120,7 +144,19 @@ namespace WPILib.Filters
         }
 
         /// <inheritdoc/>
-        public override double Get() => m_outputs.Get(0);
+        public override double Get()
+        {
+            double retVal = 0.0;
+            for (int i = 0; i < m_inputGains.Length; i++)
+            {
+                retVal += m_inputs[i] * m_inputGains[i];
+            }
+            for (int i = 0; i < m_outputGains.Length; i++)
+            {
+                retVal -= m_outputs[i] * m_outputGains[i];
+            }
+            return retVal;
+        }
 
         /// <inheritdoc/>
         public override void Reset()
@@ -134,10 +170,7 @@ namespace WPILib.Filters
             double retVal = 0.0;
 
             // Rotate the inputs 	
-            if (m_inputGains.Length > 0)
-            {
-                m_inputs.Update(PidGetSource());
-            }
+            m_inputs.Push(PidGetSource());
 
             // Calculate the new value 	
             for (int i = 0; i < m_inputGains.Length; i++)
@@ -151,48 +184,10 @@ namespace WPILib.Filters
             }
 
 
-            // Rotate the outputs 	
-            if (m_outputGains.Length > 0)
-            {
-                m_outputs.Update(retVal);
-            }
+            m_outputs.Push(retVal);
 
             return retVal;
         }
-
-        private class CircularBuffer
-        {
-            private readonly double[] m_data;
-            private int m_front = 0;
-            public CircularBuffer(int size)
-            {
-                m_data = new double[size];
-            }
-
-            public void Update(double value)
-            {
-                m_front++;
-                if (m_front > m_data.Length)
-                {
-                    m_front = 0;
-                }
-                m_data[m_front] = value;
-            }
-
-            public void Reset()
-            {
-                for (int i = 0; i < m_data.Length; i++)
-                {
-                    m_data[i] = 0.0;
-                }
-            }
-
-            public double Get(int index)
-            {
-                return m_data[(index + m_front) % m_data.Length];
-            }
-        }
-
 
     }
 }
