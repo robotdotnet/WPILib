@@ -228,6 +228,15 @@ namespace WPILib
         /// </summary>
         protected static readonly Resource TalonIds = new Resource(MaxTalonId);
 
+        /// <summary>
+        /// Constructs an new CANTalon object with default timing.
+        /// </summary>
+        /// <param name="deviceNumber">The id of the Talon SRX this object will communicate with.</param>
+        public CANTalon(int deviceNumber) : this(deviceNumber, DefaultControlPeriodMs, DefaultEnablePeriodMs)
+        {
+            
+        }
+
 
         /// <summary>
         /// Constructs a CANTalon object.
@@ -235,7 +244,7 @@ namespace WPILib
         /// <param name="deviceNumber">The id of the Talon SRX this object will communicate with.</param>
         /// <param name="controlPeriodMs">The update period to the Talon SRX.  Defaults to 10ms.</param>
         /// <param name="enablePeriodMs">The period in ms to send the enable control frame.</param>
-        public CANTalon(int deviceNumber, int controlPeriodMs = DefaultControlPeriodMs, int enablePeriodMs = DefaultEnablePeriodMs)
+        public CANTalon(int deviceNumber, int controlPeriodMs, int enablePeriodMs)
         {
             if (deviceNumber < 0 || deviceNumber >= MaxTalonId)
             {
