@@ -5,7 +5,6 @@ using WPILib.IntegrationTests.Test;
 namespace WPILib.IntegrationTests
 {
     [TestFixture]
-    [Ignore("Ignoring Timer Test because it often fails. No way to solve")]
     public class TimerTest : AbstractComsSetup
     {
         private static readonly long TIMER_TOLERANCE = (long)(2.5 * 1000);
@@ -24,7 +23,8 @@ namespace WPILib.IntegrationTests
             Console.WriteLine("Ending Delay");
             long offset = difference - TIMER_RUNTIME;
             Console.WriteLine($"Offset: {offset}");
-            Assert.AreEqual(TIMER_RUNTIME, difference, TIMER_TOLERANCE, $"Timer.Delay ran {offset} microseconds too long");
+            Assert.AreEqual(TIMER_RUNTIME, difference, TIMER_TOLERANCE, 
+                $"Timer.Delay ran {offset} microseconds ({offset * 1000} milliseconds) too long");
 
         }
     }

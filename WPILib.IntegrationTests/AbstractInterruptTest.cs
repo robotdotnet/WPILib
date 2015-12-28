@@ -70,7 +70,7 @@ namespace WPILib.IntegrationTests
             }
         }
 
-        [Test, Timeout(1300)]
+        [Test, Timeout(1500)]
         public void TestSingleInterruptsTriggering()
         {
             InterruptCounter counter = new InterruptCounter();
@@ -110,7 +110,7 @@ namespace WPILib.IntegrationTests
 
         }
 
-        [Test, Timeout(1800)]
+        [Test, Timeout(2100)]
         public void TestMultipleInterruptsTriggering()
         {
             InterruptCounter counter = new InterruptCounter();
@@ -148,9 +148,9 @@ namespace WPILib.IntegrationTests
                 SetInterruptLow();
                 SetInterruptHigh();
             });
-
-            long startTimeStamp = Utility.GetFPGATime();
             t.Start();
+            long startTimeStamp = Utility.GetFPGATime();
+            
             GetInterruptable().WaitForInterrupt(SynchronousTimeout * 2);
             long stopTimeStamp = Utility.GetFPGATime();
 
@@ -159,7 +159,7 @@ namespace WPILib.IntegrationTests
             Assert.AreEqual(synchronousDelay, interruptRunTime, 0.1, "The interrupt did not run for the expected ammount of time (units in seconds)");
         }
 
-        [Test, Timeout(3000)]
+        [Test, Timeout(4000)]
         public void TestDisableStopsInterruptFiring()
         {
             InterruptCounter counter = new InterruptCounter();
