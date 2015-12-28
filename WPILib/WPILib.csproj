@@ -79,6 +79,7 @@
     <Compile Include="CAN\CANJaguarVersionException.cs" />
     <Compile Include="CAN\CANMessageNotAllowedException.cs" />
     <Compile Include="CAN\CANNotInitializedException.cs" />
+    <Compile Include="CircularStack.cs" />
     <Compile Include="Commands\LinkedListElement.cs" />
     <Compile Include="DigitalGlitchFilter.cs" />
     <Compile Include="Exceptions\AllocationException.cs" />
