@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using static WPILib.Timer;
 using static HAL.Base.HALNotifier;
 using static WPILib.Utility;
@@ -11,23 +10,33 @@ namespace WPILib
     /// </summary>
     public class Notifier : IDisposable
     {
-        static private Notifier s_timerQueueHead;
-        static private int s_refCount = 0;
-        static private object s_queueSemaphore = new object();
-
-        private static IntPtr s_notifier;
-        private double m_expirationTime = 0;
-
-        private object m_param;
+        private readonly object m_processMutex = new object();
+        private IntPtr m_notifier;
         private Action<object> m_handler;
+        private object m_param;
+        private double m_expirationTime = 0;
         private double m_period = 0;
         private bool m_periodic = false;
-        private bool m_queued = false;
-        private Notifier m_nextEvent;
-        private object m_handlerSemaphore;
 
-        private Action<uint, IntPtr> ProcessCallback;
+        private readonly object m_handlerMutex = new object();
 
+        private Action<uint, IntPtr> process;
+
+        private void Notify(uint currentTimeInt, IntPtr param)
+        {
+            lock(m_processMutex)
+            {
+                if (m_periodic)
+                {
+                    m_expirationTime += m_period;
+                    UpdateAlarm();
+                }
+            }
+            lock (m_handlerMutex)
+            {
+                m_handler?.Invoke(m_param);
+            }
+        }
 
 
         /// <summary>
@@ -37,22 +46,19 @@ namespace WPILib
         /// which is set using <see cref="StartSingle"/> or <see cref="StartPeriodic"/></param>
         public Notifier(Action handler)
         {
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler), "Handler must not be null.");
+            }
+
             m_handler = o => handler();
             m_param = null;
-            m_nextEvent = null;
-            m_handlerSemaphore = new object();
 
-            lock (s_queueSemaphore)
-            {
-                if (s_refCount == 0)
-                {
-                    int status = 0;
-                    ProcessCallback = ProcessQueue;
-                    s_notifier = InitializeNotifier(ProcessCallback, IntPtr.Zero, ref status);
-                    CheckStatus(status);
-                }
-                s_refCount++;
-            }
+            process = Notify;
+
+            int status = 0;
+            m_notifier = InitializeNotifier(process, IntPtr.Zero, ref status);
+            CheckStatus(status);
         }
 
         /// <summary>
@@ -63,22 +69,19 @@ namespace WPILib
         /// <param name="param">The object to pass to the callback.</param>
         public Notifier(Action<object> handler, object param)
         {
+            if (handler == null)
+            {
+                throw new ArgumentNullException(nameof(handler), "Handler must not be null.");
+            }
+
             m_handler = handler;
             m_param = param;
-            m_nextEvent = null;
-            m_handlerSemaphore = new object();//InitializeSemaphore(SEMAPHORE_FULL);
 
-            lock (s_queueSemaphore)
-            {
-                if (s_refCount == 0)
-                {
-                    int status = 0;
-                    ProcessCallback = ProcessQueue;
-                    s_notifier = InitializeNotifier(ProcessCallback, IntPtr.Zero, ref status);
-                    CheckStatus(status);
-                }
-                s_refCount++;
-            }
+            process = Notify;
+
+            int status = 0;
+            m_notifier = InitializeNotifier(process, IntPtr.Zero, ref status);
+            CheckStatus(status);
         }
 
         /// <summary>
@@ -86,113 +89,21 @@ namespace WPILib
         /// </summary>
         public void Dispose()
         {
-            lock (s_queueSemaphore)
-            {
-                DeleteFromQueue();
-                if ((--s_refCount) == 0)
-                {
-                    int status = 0;
-                    CleanNotifier(s_notifier, ref status);
-                    CheckStatus(status);
-                }
-            }
+            int status = 0;
+            CleanNotifier(m_notifier, ref status);
+            CheckStatus(status);
+
+            lock (m_handlerMutex) { }
         }
 
         /// <summary>
-        /// Update the alarm hardware to reflect the current first element in the queue
+        /// Update the HAL alarm time.
         /// </summary>
-        /// <remarks>Compute the time the next alarm should occur based on the current time and
-        /// the period for the first element in the timer queue.
-        /// WARNING: this method does not do synchronization! It must be called from
-        /// somewhere that is taking care of synchronizing access to the queue.</remarks>
-        protected static void UpdateAlarm()
+        private void UpdateAlarm()
         {
-            if (s_timerQueueHead != null)
-            {
-                int status = 0;
-                UpdateNotifierAlarm(s_notifier, (uint)(s_timerQueueHead.m_expirationTime * 1e6), ref status);
-                CheckStatus(status);
-            }
-        }
-
-        /// <summary>
-        /// Insert this Notifier into the timer queue in the right place.
-        /// </summary>
-        /// <remarks>WARNING: this method does not do synchronization! It must be called from
-        /// somewhere that is taking care of synchronizing access to the queue.</remarks>
-        /// <param name="reschedule">If false, the scheduled alarm is based on the current
-        /// time and UpdateAlarm method is called which will enable the alarm if
-        /// necessary.If true, update the time by adding the period(no drift) when
-        /// rescheduled periodic from ProcessQueue.This ensures that the public
-        /// methods only update the queue after finishing inserting.</param>
-        protected void InsertInQueue(bool reschedule)
-        {
-            if (reschedule)
-            {
-                m_expirationTime += m_period;
-            }
-            else
-            {
-                m_expirationTime = GetFPGATimestamp() + m_period;
-            }
-            if (m_expirationTime > ((1L << 32) / 1e6))
-            {
-                m_expirationTime -= ((1L << 32) / 1e6);
-            }
-            if (s_timerQueueHead == null || s_timerQueueHead.m_expirationTime >= m_expirationTime)
-            {
-                m_nextEvent = s_timerQueueHead;
-                s_timerQueueHead = this;
-                if (!reschedule)
-                {
-                    UpdateAlarm();
-                }
-            }
-            else
-            {
-                for (Notifier n = s_timerQueueHead; ; n = n.m_nextEvent)
-                {
-                    if (n.m_nextEvent == null || n.m_nextEvent.m_expirationTime > m_expirationTime)
-                    {
-                        m_nextEvent = n.m_nextEvent;
-                        n.m_nextEvent = this;
-                        break;
-                    }
-                }
-            }
-            m_queued = true;
-        }
-
-        /// <summary>
-        /// Delete this Notifier from the timer queue.
-        /// </summary>
-        /// <remarks>WARNING: this method does not do synchronization! It must be called from
-        /// somewhere that is taking care of synchronizing access to the queue.
-        /// Remove this Notifier from the timer queue and adjust the next interrupt
-        /// time to reflect the current top of the queue.</remarks>
-        private void DeleteFromQueue()
-        {
-            if (m_queued)
-            {
-                m_queued = false;
-                if (s_timerQueueHead == null)
-                    return;
-                if (s_timerQueueHead == this)
-                {
-                    s_timerQueueHead = m_nextEvent;
-                    UpdateAlarm();
-                }
-                else
-                {
-                    for (Notifier n = s_timerQueueHead; n != null; n = n.m_nextEvent)
-                    {
-                        if (n.m_nextEvent == this)
-                        {
-                            n.m_nextEvent = m_nextEvent;
-                        }
-                    }
-                }
-            }
+            int status = 0;
+            UpdateNotifierAlarm(m_notifier, (uint)(m_expirationTime * 1e6), ref status);
+            CheckStatus(status);
         }
 
         /// <summary>
@@ -202,12 +113,12 @@ namespace WPILib
         /// <param name="delay">Seconds to wait before the handler is called.</param>
         public void StartSingle(double delay)
         {
-            lock (s_queueSemaphore)
+            lock (m_processMutex)
             {
                 m_periodic = false;
                 m_period = delay;
-                DeleteFromQueue();
-                InsertInQueue(false);
+                m_expirationTime = GetFPGATimestamp() + m_period;
+                UpdateAlarm();
             }
         }
 
@@ -221,12 +132,12 @@ namespace WPILib
         /// period after  the call to this method.</param>
         public void StartPeriodic(double period)
         {
-            lock (s_queueSemaphore)
+            lock (m_processMutex)
             {
                 m_periodic = true;
                 m_period = period;
-                DeleteFromQueue();
-                InsertInQueue(false);
+                m_expirationTime = GetFPGATimestamp() + m_period;
+                UpdateAlarm();
             }
         }
 
@@ -239,60 +150,11 @@ namespace WPILib
         /// function will block until the handler call is complete.</remarks>
         public void Stop()
         {
-            lock (s_queueSemaphore)
-            {
-                DeleteFromQueue();
-            }
-            try
-            {
-                Monitor.Enter(m_handlerSemaphore);
-                if (Monitor.IsEntered(m_handlerSemaphore))
-                    Monitor.Exit(m_handlerSemaphore);
-            }
-            catch (ThreadInterruptedException)
-            {
-            }
-
-        }
-
-        /// <summary>
-        /// Called by the timer to process the queue and see
-        /// if there are any handlers to call.
-        /// </summary>
-        /// <param name="currentTimeInt"></param>
-        /// <param name="param"></param>
-        private static void ProcessQueue(uint currentTimeInt, IntPtr param)
-        {
-            while (true)
-            {
-                Notifier current;
-                lock (s_queueSemaphore)
-                {
-                    double currentTime = currentTimeInt * 1.0e-6;
-                    current = s_timerQueueHead;
-                    if (current == null || current.m_expirationTime > currentTime)
-                    {
-                        break;
-                    }
-                    s_timerQueueHead = current.m_nextEvent;
-                    if (current.m_periodic)
-                    {
-                        current.InsertInQueue(true);
-                    }
-                    else
-                    {
-                        current.m_queued = false;
-                    }
-                    Monitor.Enter(current.m_handlerSemaphore);
-                }
-                current.m_handler(current.m_param);
-                if (Monitor.IsEntered(current.m_handlerSemaphore))
-                    Monitor.Exit(current.m_handlerSemaphore);
-            }
-            lock (s_queueSemaphore)
-            {
-                UpdateAlarm();
-            }
+            int status = 0;
+            StopNotifierAlarm(m_notifier, ref status);
+            CheckStatus(status);
+            
+            lock(m_handlerMutex) { }
         }
 
     }
