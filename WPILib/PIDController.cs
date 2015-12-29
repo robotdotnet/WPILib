@@ -57,6 +57,8 @@ namespace WPILib
 
         private Notifier m_controlLoop;
 
+        private Action CalculateCallback;
+
 
         public PIDController(double kp, double ki, double kd, double kf,
             IPIDSource source, IPIDOutput output,
@@ -67,7 +69,8 @@ namespace WPILib
             if (output == null)
                 throw new ArgumentNullException(nameof(output), "Null PIDOutput was given");
 
-            m_controlLoop = new Notifier(CallCalculate, this);
+            CalculateCallback = Calculate;
+            m_controlLoop = new Notifier(CalculateCallback);
 
             m_P = kp;
             m_I = ki;
@@ -120,13 +123,6 @@ namespace WPILib
                 m_controlLoop = null;
             }
             Table?.RemoveTableListener(this);
-        }
-
-
-        public static void CallCalculate(object o)
-        {
-            PIDController controller = (PIDController)o;
-            controller.Calculate();
         }
 
         protected virtual void Calculate()
