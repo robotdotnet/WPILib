@@ -56,6 +56,8 @@ namespace HAL.Simulator
         /// </value>
         public static List<DIOData> DIO { get; } = new List<DIOData>();
 
+        public static List<DigitalGlitchFilterData> DigitalGlitchFilter { get; } = new List<DigitalGlitchFilterData>(); 
+
         /// <summary>
         /// </summary>
         /// <value>
@@ -331,6 +333,11 @@ namespace HAL.Simulator
                 DigitalPWM.Add(new DigitalPWMData());
             }
 
+            for (int i = 0; i < 4; i++)
+            {
+                DigitalGlitchFilter.Add(new DigitalGlitchFilterData());
+            }
+
             for (int i = 0; i < 20; i++)
             {
                 PWM.Add(new PWMData());
@@ -409,6 +416,10 @@ namespace HAL.Simulator
             foreach (var digitalPWMData in DigitalPWM)
             {
                 digitalPWMData.ResetData();
+            }
+            foreach (var digitalGlitchFilterData in DigitalGlitchFilter)
+            {
+                digitalGlitchFilterData.ResetData();
             }
             foreach (var counterData in Counter)
             {

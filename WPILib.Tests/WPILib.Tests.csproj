@@ -119,6 +119,7 @@
     <Compile Include="TestCircularStack.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
+    <Compile Include="TestDigitalGlitchFilter.cs" />
     <Compile Include="TestDigitalInput.cs" />
     <Compile Include="TestDigitalOutput.cs" />
     <Compile Include="TestDriverStation.cs" />

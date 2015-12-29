@@ -424,25 +424,62 @@ namespace HAL.SimulatorHAL
         [CalledSimFunction]
         private static void setFilterPeriod(int filterIndex, uint value, ref int status)
         {
-            throw new NotImplementedException();
+            if (filterIndex < 0 || filterIndex > 2)
+            {
+                status = HALErrorConstants.PARAMETER_OUT_OF_RANGE;
+                return;
+            }
+
+            status = 0;
+            DigitalGlitchFilter[filterIndex].Period = value;
         }
 
         [CalledSimFunction]
         private static uint getFilterPeriod(int filterIndex, ref int status)
         {
-            throw new NotImplementedException();
+            if (filterIndex < 0 || filterIndex > 2)
+            {
+                status = HALErrorConstants.PARAMETER_OUT_OF_RANGE;
+                return 0;
+            }
+
+            status = 0;
+            return DigitalGlitchFilter[filterIndex].Period;
         }
 
         [CalledSimFunction]
         private static void setFilterSelect(IntPtr digitalPortPointer, int filterIndex, ref int status)
         {
-            throw new NotImplementedException();
+            DigitalPort port = PortConverters.GetDigitalPort(digitalPortPointer);
+
+            if (filterIndex < 0 || filterIndex > 3)
+            {
+                status = HALErrorConstants.PARAMETER_OUT_OF_RANGE;
+                return;
+            }
+
+            if (filterIndex == 0)
+            {
+                filterIndex = SimData.DIO[port.port.pin].FilterIndex;
+                SimData.DIO[port.port.pin].FilterIndex = -1;
+                SimData.DigitalGlitchFilter[filterIndex].Enabled = false;
+            }
+            else
+            {
+                filterIndex = filterIndex - 1;
+                DigitalGlitchFilter[filterIndex].Enabled = true;
+                DIO[port.port.pin].FilterIndex = filterIndex;
+            }
+            status = 0;
         }
 
         [CalledSimFunction]
         private static int getFilterSelect(IntPtr digitalPortPointer, ref int status)
         {
-            throw new NotImplementedException();
+            status = 0;
+            int filterIdx = DIO[PortConverters.GetDigitalPort(digitalPortPointer).port.pin].FilterIndex;
+            if (filterIdx == -1) return 0;
+            return filterIdx + 1; 
         }
 
         [CalledSimFunction]

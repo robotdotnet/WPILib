@@ -10,15 +10,18 @@
         private bool m_value = true;
         private double m_pulseLength = 0;
         private bool m_isInput = true;
+        private int m_filterIdx = -1;
 
         internal DIOData() { }
 
         /// <inheritdoc/>
         public override void ResetData()
         {
+            m_initialized = false;
             m_value = true;
             m_pulseLength = 0;
             m_isInput = true;
+            m_filterIdx = -1;
 
             base.ResetData();
         }
@@ -87,6 +90,53 @@
             {
                 if (value == m_isInput) return;
                 m_isInput = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public int FilterIndex
+        {
+            get { return m_filterIdx; }
+            internal set
+            {
+                if (value == m_filterIdx) return;
+                m_filterIdx = value;
+                OnPropertyChanged(value);
+            }
+        }
+    }
+
+    public class DigitalGlitchFilterData : NotifyDataBase
+    {
+        private bool m_enabled = false;
+        private uint m_period = 0;
+
+        public override void ResetData()
+        {
+            m_enabled = false;
+            m_period = 0;
+
+            base.ResetData();
+        }
+
+        public bool Enabled
+        {
+            get { return m_enabled; }
+            internal set
+            {
+                if (value == m_enabled) return;
+                m_enabled = value;
+                OnPropertyChanged(value);
+            }
+        }
+
+        public uint Period
+        {
+            get { return m_period; }
+            internal set
+            {
+                if (value == m_period) return;
+                m_period = value;
                 OnPropertyChanged(value);
             }
         }
