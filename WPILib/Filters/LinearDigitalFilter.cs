@@ -55,8 +55,8 @@ namespace WPILib.Filters
     /// </remarks>
     public class LinearDigitalFilter : Filter
     {
-        private CircularStack<double> m_inputs;
-        private CircularStack<double> m_outputs;
+        private CircularBuffer<double> m_inputs;
+        private CircularBuffer<double> m_outputs;
         private double[] m_inputGains;
         private double[] m_outputGains;
 
@@ -68,8 +68,8 @@ namespace WPILib.Filters
         /// <param name="fbGains">The "feed back" or IIR gains.</param>
         public LinearDigitalFilter(IPIDSource source, double[] ffGains, double[] fbGains) : base(source)
         {
-            m_inputs = new CircularStack<double>(ffGains.Length);
-            m_outputs = new CircularStack<double>(fbGains.Length);
+            m_inputs = new CircularBuffer<double>(ffGains.Length);
+            m_outputs = new CircularBuffer<double>(fbGains.Length);
             m_inputGains = ffGains;
             m_outputGains = fbGains;
         }
@@ -86,10 +86,13 @@ namespace WPILib.Filters
         /// <param name="source">The <see cref="IPIDSource"/> object that is used to get values.</param>
         /// <param name="gain">The filter's feedforward gain factor (lower = smoother but slower).</param>
         /// <returns>A new Single Pole IIR <see cref="LinearDigitalFilter"/></returns>
-        public static LinearDigitalFilter SinglePoleIIR(IPIDSource source, double gain)
+        public static LinearDigitalFilter SinglePoleIIR(IPIDSource source, double timeConstant,
+            double period)
         {
-            double[] ffGains = { gain };
-            double[] fbGains = { gain - 1.0 };
+            double gain = Math.Exp(-period / timeConstant);
+            double[] ffGains = { 1.0 - gain };
+            double[] fbGains = { -gain };
+
             return new LinearDigitalFilter(source, ffGains, fbGains);
         }
 
@@ -131,9 +134,13 @@ namespace WPILib.Filters
         /// <returns>A new Moving Average <see cref="LinearDigitalFilter"/></returns>
         public static LinearDigitalFilter MovingAverage(IPIDSource source, int taps)
         {
-            if (taps == 0) taps = 1;
+            if (taps <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(taps), "Number of taps was not at least 1.");
+            }
+
             double[] ffGains = new double[taps];
-            for (int i = 0; i < taps; i++)
+            for (int i = 0; i < ffGains.Length; i++)
             {
                 ffGains[i] = 1.0 / taps;
             }
@@ -170,7 +177,7 @@ namespace WPILib.Filters
             double retVal = 0.0;
 
             // Rotate the inputs 	
-            m_inputs.Push(PidGetSource());
+            m_inputs.PushFront(PidGetSource());
 
             // Calculate the new value 	
             for (int i = 0; i < m_inputGains.Length; i++)
@@ -184,7 +191,7 @@ namespace WPILib.Filters
             }
 
 
-            m_outputs.Push(retVal);
+            m_outputs.PushFront(retVal);
 
             return retVal;
         }

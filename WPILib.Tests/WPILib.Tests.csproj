@@ -116,7 +116,7 @@
     <Compile Include="TestBuiltinAccelerometer.cs" />
     <Compile Include="Commands\CommandCreationTest.cs" />
     <Compile Include="TestCANTalon.cs" />
-    <Compile Include="TestCircularStack.cs" />
+    <Compile Include="TestCircularBuffer.cs" />
     <Compile Include="TestCompressor.cs" />
     <Compile Include="TestControllerPower.cs" />
     <Compile Include="TestDigitalGlitchFilter.cs" />
