@@ -20,7 +20,6 @@ namespace HAL.SimulatorHAL
 
         private static NotifierAlarm s_alarm;
 
-
         private static uint closestTrigger = uint.MaxValue;
 
         private class Notifier
@@ -94,7 +93,7 @@ namespace HAL.SimulatorHAL
         {
             if (process == null)
             {
-                status = -1005;
+                status = HALErrorConstants.NULL_PARAMETER;
                 return IntPtr.Zero;
             }
             if (Interlocked.Increment(ref notifierRefCount) == 1)
@@ -142,8 +141,13 @@ namespace HAL.SimulatorHAL
             {
                 lock (s_notifierInterruptMutex)
                 {
-                    //Clean up alarm and manager
-                    s_alarm.Dispose();
+                    if (s_alarm != null)
+                    {
+                        //Clean up alarm and manager
+                        s_alarm.Dispose();
+                        s_alarm = null;
+                    }
+
                 }
             }
         }
@@ -172,18 +176,16 @@ namespace HAL.SimulatorHAL
                 var temp = s_notifierInterruptMutex;
                 try
                 {
-                    lockWasTaken = Monitor.TryEnter(temp);
-                    if (!lockWasTaken || notifierRefCount == 0)
+                    Monitor.TryEnter(temp, ref lockWasTaken);
+                    if (!lockWasTaken || notifierRefCount == 0 || s_alarm == null)
                     {
                         return;
                     }
                     if (triggerTime < closestTrigger)
                     {
                         closestTrigger = triggerTime;
-                        //WriteTriggerTimeToAlarm
                         s_alarm.WriteTriggerTime(triggerTime);
                     }
-                    //Enable the alarm
                     if (!wasActive)
                     {
                         //Activate

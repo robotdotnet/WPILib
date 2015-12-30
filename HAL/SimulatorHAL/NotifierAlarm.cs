@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using HAL.Simulator;
 
 namespace HAL.SimulatorHAL
@@ -30,37 +26,45 @@ namespace HAL.SimulatorHAL
             m_alarmThread.Start();
         }
 
-        private readonly object m_mutex = new object();
-
         private bool m_enabled = false;
+        private bool m_continue = true;
 
         public void Run()
         {
-            lock (m_mutex)
+            while (true)
             {
-                while (true)
+                while (!m_enabled)
                 {
-                    while (!m_enabled) Thread.Yield();
-                    m_enabled = false;
+                    Thread.Yield();
+                }
 
-                    uint triggerTime = m_triggerTime;
-                    while (triggerTime > SimHooks.GetFPGATime())
+                if (!m_continue) return;
+
+                uint triggerTime = m_triggerTime;
+                while (triggerTime > SimHooks.GetFPGATime())
+                {
+
+                    bool gotLock = false;
+                    try
                     {
-
-                        bool gotLock = false;
-                        try
-                        {
-                            m_lockObject.Enter(ref gotLock);
-                            triggerTime = m_triggerTime;
-                        }
-                        finally
-                        {
-                            if (gotLock) m_lockObject.Exit();
-                        }
+                        m_lockObject.Enter(ref gotLock);
+                        triggerTime = m_triggerTime;
                     }
+                    finally
+                    {
+                        if (gotLock) m_lockObject.Exit();
+                    }
+                    if (!m_continue) return;
+                }
+                if (m_enabled)
+                {
+                    m_enabled = false;
                     m_callback?.Invoke((uint)SimHooks.GetFPGATime(), IntPtr.Zero);
                 }
+
+               
             }
+
         }
 
         public void EnableAlarm()
@@ -70,7 +74,7 @@ namespace HAL.SimulatorHAL
 
         public void DisableAlarm()
         {
-            //Not implemented.
+            m_enabled = false;
         }
 
         public void WriteTriggerTime(uint triggerTime)
@@ -89,7 +93,8 @@ namespace HAL.SimulatorHAL
 
         public void Dispose()
         {
-            m_alarmThread.Abort();
+            m_continue = false;
+            m_enabled = true;
             m_alarmThread.Join();
         }
     }

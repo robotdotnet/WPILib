@@ -22,6 +22,12 @@ namespace WPILib
 
         private Action<uint, IntPtr> process;
 
+        /// <summary>
+        /// Notify is called by the HAL Layer. We simply need to pass it through to
+        /// the user handler.
+        /// </summary>
+        /// <param name="currentTimeInt">Current FPGA Time</param>
+        /// <param name="param">Param passed to the notifier</param>
         private void Notify(uint currentTimeInt, IntPtr param)
         {
             lock(m_processMutex)
