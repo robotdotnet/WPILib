@@ -13,9 +13,9 @@ namespace HAL.AthenaHAL
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
             Base.HALNotifier.InitializeNotifier = (Base.HALNotifier.InitializeNotifierDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "initializeNotifier"), typeof(Base.HALNotifier.InitializeNotifierDelegate));
-
+            Base.HALNotifier.GetNotifierParam = (Base.HALNotifier.GetNotifierParamDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getNotifierParam"), typeof(Base.HALNotifier.GetNotifierParamDelegate));
             Base.HALNotifier.CleanNotifier = (Base.HALNotifier.CleanNotifierDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "cleanNotifier"), typeof(Base.HALNotifier.CleanNotifierDelegate));
-
+            Base.HALNotifier.StopNotifierAlarm = (Base.HALNotifier.StopNotifierAlarmDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "stopNotifierAlarm"), typeof(Base.HALNotifier.StopNotifierAlarmDelegate));
             Base.HALNotifier.UpdateNotifierAlarm = (Base.HALNotifier.UpdateNotifierAlarmDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "updateNotifierAlarm"), typeof(Base.HALNotifier.UpdateNotifierAlarmDelegate));
 
         }

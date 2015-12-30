@@ -24,7 +24,7 @@ namespace WPILib.IntegrationTests
             long offset = difference - TIMER_RUNTIME;
             Console.WriteLine($"Offset: {offset}");
             Assert.AreEqual(TIMER_RUNTIME, difference, TIMER_TOLERANCE, 
-                $"Timer.Delay ran {offset} microseconds ({offset * 1000} milliseconds) too long");
+                $"Timer.Delay ran {offset} microseconds ({offset / 1000.0} milliseconds) too long");
 
         }
     }
