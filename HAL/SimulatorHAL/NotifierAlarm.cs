@@ -23,6 +23,7 @@ namespace HAL.SimulatorHAL
             m_callback = alarmCallback;
 
             m_alarmThread = new Thread(Run);
+            m_alarmThread.Name = "Notifier Alarm";
             m_alarmThread.Start();
         }
 
