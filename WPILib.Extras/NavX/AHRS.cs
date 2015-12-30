@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using NetworkTables.Tables;
 using WPILib.Extras.NavX.Protocols;
 using WPILib.Interfaces;
@@ -25,7 +26,7 @@ namespace WPILib.Extras.NavX
     /// If used with the navX Aero, the AHRS class also provides access to
     /// altitude, barometric pressure and pressure sensor temperature data
     /// </remarks>
-    public class AHRS : SensorBase, IPIDSource, ILiveWindowSendable
+    public class AHRS : SensorBase, IPIDSource, ILiveWindowSendable, IGyro
     {
         /// <summary>
         /// Identifies one of the three sensing axes on the NavX sensor board.
@@ -1377,6 +1378,15 @@ namespace WPILib.Extras.NavX
         {
             return Table;
         }
+
+        /// <summary>
+        /// Not needed on the NavX. Calibration is Automatic.
+        /// </summary>
+        public void Calibrate()
+        {
+            //Ignore because calibration is not needed.
+        }
+
         /// <inheritdoc/>
         public string SmartDashboardType => "Gyro";
 
