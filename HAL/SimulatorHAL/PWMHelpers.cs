@@ -98,6 +98,8 @@ namespace HAL.SimulatorHAL
 
             ControllerType type = pwm.Type;
             double transVal = pwm.RawValue;
+            //Make sure motor safety works
+            if (transVal == 0) return 0.0;
 
             switch (type)
             {
