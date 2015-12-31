@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using HAL.Base;
 using HAL.Simulator;
+using System.Runtime.InteropServices;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming
@@ -116,13 +117,13 @@ namespace HAL.SimulatorHAL
 
                 Notifiers.Add(notifier);
 
-                return (IntPtr)Notifiers.IndexOf(notifier);
+                return (IntPtr)Notifiers.IndexOf(notifier) + 1;
             }
         }
 
         public static IntPtr getNotifierParam(IntPtr notifier_pointer, ref int status)
         {
-            return Notifiers[notifier_pointer.ToInt32()].param;
+            return Notifiers[notifier_pointer.ToInt32() - 1].param;
         }
 
         [CalledSimFunction]
@@ -130,11 +131,11 @@ namespace HAL.SimulatorHAL
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
+                Notifier notifier = Notifiers[notifier_pointer.ToInt32() - 1];
                 if (notifier.prev != null) notifier.prev.next = notifier.next;
                 if (notifier.next != null) notifier.next.prev = notifier.prev;
                 if (notifiers == notifier) notifiers = notifier.next;
-                Notifiers.Remove(notifier);
+                Notifiers[notifier_pointer.ToInt32() - 1]= null;
             }
 
             if (Interlocked.Decrement(ref notifierRefCount) == 0)
@@ -156,7 +157,7 @@ namespace HAL.SimulatorHAL
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
+                Notifier notifier = Notifiers[notifier_pointer.ToInt32() - 1];
                 notifier.triggerTime = uint.MaxValue;
             }
         }
@@ -168,7 +169,7 @@ namespace HAL.SimulatorHAL
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
+                Notifier notifier = Notifiers[notifier_pointer.ToInt32() - 1];
                 notifier.triggerTime = triggerTime;
                 bool wasActive = (closestTrigger != uint.MaxValue);
 
