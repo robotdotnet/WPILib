@@ -29,6 +29,7 @@ namespace HAL.SimulatorHAL
             public IntPtr param;
             public Action<uint, IntPtr> process;
             public uint triggerTime = uint.MaxValue;
+            public int index;
         }
 
         private static Notifier notifiers = null;
@@ -63,7 +64,7 @@ namespace HAL.SimulatorHAL
                         }
                         else if (notifier.triggerTime < closestTrigger)
                         {
-                            updateNotifierAlarm((IntPtr)Notifiers.IndexOf(notifier), notifier.triggerTime, ref status);
+                            updateNotifierAlarm((IntPtr)notifier.index, notifier.triggerTime, ref status);
                         }
                     }
                     notifier = notifier.next;
@@ -78,7 +79,9 @@ namespace HAL.SimulatorHAL
             }
         }
 
-        private static readonly List<Notifier> Notifiers = new List<Notifier>();
+        static int s_notifierCount = 1;
+
+        private static readonly Dictionary<int, Notifier> Notifiers = new Dictionary<int, Notifier>();
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
@@ -113,17 +116,20 @@ namespace HAL.SimulatorHAL
                 if (notifier.next != null) notifier.next.prev = notifier;
                 notifier.param = param;
                 notifier.process = process;
+                notifier.index = s_notifierCount;
                 notifiers = notifier;
+                
 
-                Notifiers.Add(notifier);
+                Notifiers.Add(s_notifierCount, notifier);
+                s_notifierCount++;
 
-                return (IntPtr)Notifiers.IndexOf(notifier) + 1;
+                return (IntPtr)s_notifierCount - 1;
             }
         }
 
         public static IntPtr getNotifierParam(IntPtr notifier_pointer, ref int status)
         {
-            return Notifiers[notifier_pointer.ToInt32() - 1].param;
+            return Notifiers[notifier_pointer.ToInt32()].param;
         }
 
         [CalledSimFunction]
@@ -131,11 +137,11 @@ namespace HAL.SimulatorHAL
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32() - 1];
+                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
                 if (notifier.prev != null) notifier.prev.next = notifier.next;
                 if (notifier.next != null) notifier.next.prev = notifier.prev;
                 if (notifiers == notifier) notifiers = notifier.next;
-                Notifiers[notifier_pointer.ToInt32() - 1]= null;
+                Notifiers.Remove(notifier_pointer.ToInt32());
             }
 
             if (Interlocked.Decrement(ref notifierRefCount) == 0)
@@ -157,7 +163,7 @@ namespace HAL.SimulatorHAL
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32() - 1];
+                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
                 notifier.triggerTime = uint.MaxValue;
             }
         }
@@ -169,7 +175,7 @@ namespace HAL.SimulatorHAL
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32() - 1];
+                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
                 notifier.triggerTime = triggerTime;
                 bool wasActive = (closestTrigger != uint.MaxValue);
 
