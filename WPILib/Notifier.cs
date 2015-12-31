@@ -2,6 +2,7 @@
 using static WPILib.Timer;
 using static HAL.Base.HALNotifier;
 using static WPILib.Utility;
+using System.Threading;
 
 namespace WPILib
 {
@@ -30,17 +31,38 @@ namespace WPILib
         /// <param name="param">Param passed to the notifier</param>
         private void Notify(uint currentTimeInt, IntPtr param)
         {
-            lock(m_processMutex)
+            bool processMutexEntered = false;
+            bool handlerMutexEntered = false;
+            object tempProcessMutex = m_processMutex;
+            object tempHandlerMutex = m_handlerMutex;
+
+            try
             {
+                //Enter the process mutex
+                Monitor.Enter(tempProcessMutex, ref processMutexEntered);
+                //Update the alarm if we are a periodic alarm
                 if (m_periodic)
                 {
                     m_expirationTime += m_period;
                     UpdateAlarm();
                 }
-            }
-            lock (m_handlerMutex)
-            {
+                //Enter the handler mutex before leaving the process mutex
+                //To ensure safety.
+                Monitor.Enter(tempHandlerMutex, ref handlerMutexEntered);
+                Monitor.Exit(tempProcessMutex);
+                processMutexEntered = false;
                 m_handler?.Invoke(m_param);
+            }
+            finally
+            {
+                if (processMutexEntered)
+                {
+                    Monitor.Exit(tempProcessMutex);
+                }
+                if (handlerMutexEntered)
+                {
+                    Monitor.Exit(tempHandlerMutex);
+                }
             }
         }
 
