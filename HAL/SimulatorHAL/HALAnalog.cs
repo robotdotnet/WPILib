@@ -83,7 +83,7 @@ namespace HAL.SimulatorHAL
 
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
-
+            HAL.freePort(port_pointer);
             return ptr;
         }
 
@@ -136,7 +136,7 @@ namespace HAL.SimulatorHAL
 
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
-
+            HAL.freePort(port_pointer);
             return ptr;
         }
 

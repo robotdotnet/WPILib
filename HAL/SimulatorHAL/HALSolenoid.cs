@@ -39,6 +39,7 @@ namespace HAL.SimulatorHAL
             InitializePCM(p.port.module);
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
+            HAL.freePort(port_pointer);
             return ptr;
         }
 

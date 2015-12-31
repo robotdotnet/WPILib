@@ -123,11 +123,14 @@ namespace HAL.SimulatorHAL
         [CalledSimFunction]
         public static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
         {
-            DigitalPort p = new DigitalPort { port = (Port)Marshal.PtrToStructure(port_pointer, typeof(Port)) };
+            DigitalPort p = new DigitalPort
+            {
+                port = PortConverters.GetHalPort(port_pointer)
+            };
             status = 0;
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
-
+            HAL.freePort(port_pointer);
             return ptr;
         }
 

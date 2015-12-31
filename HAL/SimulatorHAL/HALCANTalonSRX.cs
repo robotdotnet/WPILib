@@ -140,6 +140,7 @@ namespace HAL.SimulatorHAL
         public static void c_TalonSRX_Destroy(IntPtr handle)
         {
             RemoveCanTalon(PortConverters.GetTalonSRX(handle));
+            Marshal.FreeHGlobal(handle);
         }
 
         [CalledSimFunction]
