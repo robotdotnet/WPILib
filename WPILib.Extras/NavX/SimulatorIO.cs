@@ -63,7 +63,7 @@ namespace WPILib.Extras.NavX
 
         public void ZeroYaw()
         {
-            SimData.NavXData.GryoAngleYaw = 0;
+            SimData.NavXData.GyroAngleYaw = 0;
         }
 
 
@@ -91,85 +91,109 @@ namespace WPILib.Extras.NavX
 
         private bool GetConfiguration()
         {
-            /*
-            board_id.hw_rev = config[IMURegisters.NAVX_REG_HW_REV];
-            board_id.fw_ver_major = config[IMURegisters.NAVX_REG_FW_VER_MAJOR];
-            board_id.fw_ver_minor = config[IMURegisters.NAVX_REG_FW_VER_MINOR];
-            board_id.type = config[IMURegisters.NAVX_REG_WHOAMI];
+
+            board_id.hw_rev = 33;
+            board_id.fw_ver_major = 2;
+            board_id.fw_ver_minor = 3;
+            board_id.type = 50;
             notify_sink.SetBoardID(board_id);
 
-            board_state.CalStatus = config[IMURegisters.NAVX_REG_CAL_STATUS];
-            board_state.OpStatus = config[IMURegisters.NAVX_REG_OP_STATUS];
-            board_state.SelftestStatus = config[IMURegisters.NAVX_REG_SELFTEST_STATUS];
-            board_state.SensorStatus = AHRSProtocol.decodeBinaryUint16(config, IMURegisters.NAVX_REG_SENSOR_STATUS_L);
-            board_state.GyroFsrDps = AHRSProtocol.decodeBinaryUint16(config, IMURegisters.NAVX_REG_GYRO_FSR_DPS_L);
-            board_state.AccelFsrG = (short)config[IMURegisters.NAVX_REG_ACCEL_FSR_G];
-            board_state.UpdateRateHz = config[IMURegisters.NAVX_REG_UPDATE_RATE_HZ];
-            board_state.CapabilityFlags = AHRSProtocol.decodeBinaryUint16(config, IMURegisters.NAVX_REG_CAPABILITY_FLAGS_L);
+            board_state.CalStatus = 6;
+            board_state.OpStatus = 4;
+            board_state.SelftestStatus = 135;
+            board_state.SensorStatus = 1542;
+            board_state.GyroFsrDps = 2000;
+            board_state.AccelFsrG = 2;
+            board_state.UpdateRateHz = update_rate_hz;
+            board_state.CapabilityFlags = 236;
             notify_sink.SetBoardState(board_state);
-            */
+
 
             return true;
         }
 
+        public float WrapNeg180To180(float value)
+        {
+            const float max = 180;
+            const float min = -180;
+            if (value > max)
+                return (value - max) + min;
+            if (value < min)
+                return max - (min - value);
+            return value;
+        }
+
+        public float Wrap0To360(float value)
+        {
+            const float max = 180;
+            const float min = -180;
+            if (value > max)
+                return (value - max) + min;
+            if (value < min)
+                return max - (min - value);
+            return value;
+        }
+
         private void GetCurrentData()
         {
-            /*
-            ahrspos_update.op_status = curr_data[IMURegisters.NAVX_REG_OP_STATUS - first_address];
-            ahrspos_update.selftest_status = curr_data[IMURegisters.NAVX_REG_SELFTEST_STATUS - first_address];
-            ahrspos_update.cal_status = curr_data[IMURegisters.NAVX_REG_CAL_STATUS];
-            ahrspos_update.sensor_status = curr_data[IMURegisters.NAVX_REG_SENSOR_STATUS_L - first_address];
-            ahrspos_update.yaw = AHRSProtocol.decodeProtocolSignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_YAW_L - first_address);
-            ahrspos_update.pitch = AHRSProtocol.decodeProtocolSignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_PITCH_L - first_address);
-            ahrspos_update.roll = AHRSProtocol.decodeProtocolSignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_ROLL_L - first_address);
-            ahrspos_update.compass_heading = AHRSProtocol.decodeProtocolUnsignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_HEADING_L - first_address);
-            ahrspos_update.mpu_temp = AHRSProtocol.decodeProtocolSignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_MPU_TEMP_C_L - first_address);
-            ahrspos_update.linear_accel_x = AHRSProtocol.decodeProtocolSignedThousandthsFloat(curr_data, IMURegisters.NAVX_REG_LINEAR_ACC_X_L - first_address);
-            ahrspos_update.linear_accel_y = AHRSProtocol.decodeProtocolSignedThousandthsFloat(curr_data, IMURegisters.NAVX_REG_LINEAR_ACC_Y_L - first_address);
-            ahrspos_update.linear_accel_z = AHRSProtocol.decodeProtocolSignedThousandthsFloat(curr_data, IMURegisters.NAVX_REG_LINEAR_ACC_Z_L - first_address);
-            ahrspos_update.altitude = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_ALTITUDE_D_L - first_address);
-            ahrspos_update.barometric_pressure = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_PRESSURE_DL - first_address);
-            ahrspos_update.fused_heading = AHRSProtocol.decodeProtocolUnsignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_FUSED_HEADING_L - first_address);
-            ahrspos_update.quat_w = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_W_L - first_address);
-            ahrspos_update.quat_x = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_X_L - first_address);
-            ahrspos_update.quat_y = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_Y_L - first_address);
-            ahrspos_update.quat_z = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_Z_L - first_address);
 
-            ahrspos_update.vel_x = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_VEL_X_I_L - first_address);
-            ahrspos_update.vel_y = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_VEL_Y_I_L - first_address);
-            ahrspos_update.vel_z = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_VEL_Z_I_L - first_address);
-            ahrspos_update.disp_x = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_DISP_X_I_L - first_address);
-            ahrspos_update.disp_y = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_DISP_Y_I_L - first_address);
-            ahrspos_update.disp_z = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_DISP_Z_I_L - first_address);
+            ahrspos_update.op_status = 4;
+            ahrspos_update.selftest_status = 135;
+            ahrspos_update.cal_status = 6;
+            ahrspos_update.sensor_status = 6;
+            ahrspos_update.yaw = WrapNeg180To180((float)SimData.NavXData.GyroAngleYaw);
+            ahrspos_update.pitch = WrapNeg180To180((float)SimData.NavXData.GyroAnglePitch);
+            ahrspos_update.roll = WrapNeg180To180((float)SimData.NavXData.GyroAngleRoll);
+            ahrspos_update.compass_heading = WrapNeg180To180((float)SimData.NavXData.GyroAngleYaw);
+            ahrspos_update.mpu_temp = 20.0f;
+            ahrspos_update.linear_accel_x = (float)SimData.NavXData.AccelX;
+            ahrspos_update.linear_accel_y = (float)SimData.NavXData.AccelY;
+            ahrspos_update.linear_accel_z = (float)SimData.NavXData.AccelZ;
+            ahrspos_update.altitude = 0.0f;
+            ahrspos_update.barometric_pressure = 0.0f;
+            ahrspos_update.fused_heading = Wrap0To360((float)SimData.NavXData.GyroAngleYaw);
+            ahrspos_update.quat_w = 0;
+            ahrspos_update.quat_x = 0;
+            ahrspos_update.quat_y = 0;
+            ahrspos_update.quat_z = 0;
+
+            ahrspos_update.vel_x = 0;
+            ahrspos_update.vel_y = 0;
+            ahrspos_update.vel_z = 0;
+            ahrspos_update.disp_x = 0;
+            ahrspos_update.disp_y = 0;
+            ahrspos_update.disp_z = 0;
             notify_sink.SetAHRSPosData(ahrspos_update);
 
 
-            board_state.CalStatus = curr_data[IMURegisters.NAVX_REG_CAL_STATUS - first_address];
-            board_state.OpStatus = curr_data[IMURegisters.NAVX_REG_OP_STATUS - first_address];
-            board_state.SelftestStatus = curr_data[IMURegisters.NAVX_REG_SELFTEST_STATUS - first_address];
-            board_state.SensorStatus = AHRSProtocol.decodeBinaryUint16(curr_data, IMURegisters.NAVX_REG_SENSOR_STATUS_L - first_address);
-            board_state.UpdateRateHz = curr_data[IMURegisters.NAVX_REG_UPDATE_RATE_HZ - first_address];
-            board_state.GyroFsrDps = AHRSProtocol.decodeBinaryUint16(curr_data, IMURegisters.NAVX_REG_GYRO_FSR_DPS_L);
-            board_state.AccelFsrG = (short)curr_data[IMURegisters.NAVX_REG_ACCEL_FSR_G];
-            board_state.CapabilityFlags = AHRSProtocol.decodeBinaryUint16(curr_data, IMURegisters.NAVX_REG_CAPABILITY_FLAGS_L - first_address);
+            board_state.CalStatus = 6;
+            board_state.OpStatus = 4;
+            board_state.SelftestStatus = 135;
+            board_state.SensorStatus = 1542;
+            board_state.UpdateRateHz = update_rate_hz;
+            board_state.GyroFsrDps = 2000;
+            board_state.AccelFsrG = 2;
+            board_state.CapabilityFlags = 236;
             notify_sink.SetBoardState(board_state);
 
-            raw_data_update.gyro_x = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_GYRO_X_L - first_address);
-            raw_data_update.gyro_y = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_GYRO_Y_L - first_address);
-            raw_data_update.gyro_z = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_GYRO_Z_L - first_address);
-            raw_data_update.accel_x = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_ACC_X_L - first_address);
-            raw_data_update.accel_y = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_ACC_Y_L - first_address);
-            raw_data_update.accel_z = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_ACC_Z_L - first_address);
-            raw_data_update.mag_x = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_MAG_X_L - first_address);
-            raw_data_update.mag_y = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_MAG_Y_L - first_address);
-            raw_data_update.mag_z = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_MAG_Z_L - first_address);
+            raw_data_update.gyro_x = (short)(SimData.NavXData.GyroRatePitch * (DevUnitsMax / 2000.0));
+            raw_data_update.gyro_y = (short)(SimData.NavXData.GyroRateRoll * (DevUnitsMax / 2000.0));
+            raw_data_update.gyro_z = (short)(SimData.NavXData.GyroRateYaw * (DevUnitsMax / 2000.0));
+            raw_data_update.accel_x = (short)(SimData.NavXData.AccelX * (DevUnitsMax / 2.0));
+            raw_data_update.accel_y = (short)(SimData.NavXData.AccelY * (DevUnitsMax / 2.0));
+            raw_data_update.accel_z = (short)(SimData.NavXData.AccelZ * (DevUnitsMax / 2.0));
+            raw_data_update.mag_x = 0;
+            raw_data_update.mag_y = 0;
+            raw_data_update.mag_z = 0;
             raw_data_update.temp_c = ahrspos_update.mpu_temp;
             notify_sink.SetRawData(raw_data_update);
-            */
+
 
             byte_count += 108;
             update_count++;
         }
+
+        private const float DevUnitsMax = 32768.0f;
 
         public void Stop()
         {

@@ -26,7 +26,7 @@ namespace WPILib.Extras.NavX
     /// If used with the navX Aero, the AHRS class also provides access to
     /// altitude, barometric pressure and pressure sensor temperature data
     /// </remarks>
-    public class AHRS : SensorBase, IPIDSource, ILiveWindowSendable, IGyro
+    public class AHRS : GyroBase, IPIDSource, ILiveWindowSendable, IGyro
     {
         /// <summary>
         /// Identifies one of the three sensing axes on the NavX sensor board.
@@ -96,7 +96,7 @@ namespace WPILib.Extras.NavX
 
         }
 
-        const byte NavxDefaultUpdateRateHz = 60;
+        const byte NavxDefaultUpdateRateHz = 50;
         const int YawHistoryLength = 10;
         const short DefaultAccelFsrG = 2;
         const short DefaultGyroFsrDps = 2000;
@@ -189,7 +189,14 @@ namespace WPILib.Extras.NavX
         public AHRS(SPI.Port spiPortId, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
-            m_io = new RegisterIO(new RegisterIO_SPI(new SPI(spiPortId)), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            if (RobotBase.IsSimulation)
+            {
+                m_io = new SimulatorIO(updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            }
+            else
+            {
+                m_io = new RegisterIO(new RegisterIO_SPI(new SPI(spiPortId)), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            }
             m_ioThread.Start();
         }
 
@@ -210,7 +217,15 @@ namespace WPILib.Extras.NavX
         public AHRS(SPI.Port spiPortId, int spiBitrate, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
-            m_io = new RegisterIO(new RegisterIO_SPI(new SPI(spiPortId), spiBitrate), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            if (RobotBase.IsSimulation)
+            {
+                m_io = new SimulatorIO(updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            }
+            else
+            {
+                m_io = new RegisterIO(new RegisterIO_SPI(new SPI(spiPortId), spiBitrate), updateRateHz, m_ioCompleteSink,
+                    m_boardCapabilities);
+            }
             m_ioThread.Start();
         }
 
@@ -230,7 +245,15 @@ namespace WPILib.Extras.NavX
         public AHRS(I2C.Port i2CPortId, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
-            m_io = new RegisterIO(new RegisterIO_I2C(new I2C(i2CPortId, 0x32)), updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            if (RobotBase.IsSimulation)
+            {
+                m_io = new SimulatorIO(updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            }
+            else
+            {
+                m_io = new RegisterIO(new RegisterIO_I2C(new I2C(i2CPortId, 0x32)), updateRateHz, m_ioCompleteSink,
+                    m_boardCapabilities);
+            }
             m_ioThread.Start();
         }
 
@@ -255,8 +278,15 @@ namespace WPILib.Extras.NavX
         public AHRS(SerialPort.Port serialPortId, SerialDataType dataType = SerialDataType.KProcessedData, byte updateRateHz = NavxDefaultUpdateRateHz)
         {
             CommonInit(updateRateHz);
-            bool processedData = (dataType == SerialDataType.KProcessedData);
-            m_io = new SerialIO(serialPortId, updateRateHz, processedData, m_ioCompleteSink, m_boardCapabilities);
+            if (RobotBase.IsSimulation)
+            {
+                m_io = new SimulatorIO(updateRateHz, m_ioCompleteSink, m_boardCapabilities);
+            }
+            else
+            {
+                bool processedData = (dataType == SerialDataType.KProcessedData);
+                m_io = new SerialIO(serialPortId, updateRateHz, processedData, m_ioCompleteSink, m_boardCapabilities);
+            }
             m_ioThread.Start();
         }
 
@@ -829,7 +859,7 @@ namespace WPILib.Extras.NavX
         /// from the Z-axis (yaw) gyro.
         /// </remarks>
         /// <returns>The total accumulated yaw angle (Z axis) of the robot in degrees.</returns>
-        public double GetAngle()
+        public override double GetAngle()
         {
             return m_yawAngleTracker.GetAngle();
         }
@@ -839,7 +869,7 @@ namespace WPILib.Extras.NavX
         /// </summary>
         /// <remarks>The rate is based on the most recent reading of the yaw gyro angle.</remarks>
         /// <returns>The current rate of change in yaw angle (degrees/second).</returns>
-        public double GetRate()
+        public override double GetRate()
         {
             return m_yawAngleTracker.GetRate();
         }
@@ -850,7 +880,7 @@ namespace WPILib.Extras.NavX
         /// <remarks>Resets the Gyro Z (yaw) axis to a heading of zero. This can be used
         /// if there is significant drift in the gyro and it needs to be recallibrated
         /// after it has been running.</remarks>
-        public void Reset()
+        public override void Reset()
         {
             ZeroYaw();
         }
@@ -1350,47 +1380,12 @@ namespace WPILib.Extras.NavX
             }
         };
 
-        /***********************************************************/
-        /* LiveWindowSendable Interface Implementation             */
-        /***********************************************************/
-
-        /// <inheritdoc/>
-        public void UpdateTable()
-        {
-            Table?.PutNumber("Value", GetYaw());
-        }
-        /// <inheritdoc/>
-        public void StartLiveWindowMode()
-        {
-        }
-        /// <inheritdoc/>
-        public void StopLiveWindowMode()
-        {
-        }
-        /// <inheritdoc/>
-        public void InitTable(ITable itable)
-        {
-            Table = itable;
-            UpdateTable();
-        }
-        /// <inheritdoc/>
-        public ITable GetTable()
-        {
-            return Table;
-        }
-
         /// <summary>
         /// Not needed on the NavX. Calibration is Automatic.
         /// </summary>
-        public void Calibrate()
+        public override void Calibrate()
         {
             //Ignore because calibration is not needed.
         }
-
-        /// <inheritdoc/>
-        public string SmartDashboardType => "Gyro";
-
-        /// <inheritdoc/>
-        public ITable Table { get; private set; }
     }
 }

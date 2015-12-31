@@ -110,6 +110,7 @@
     <Compile Include="Base\HALUtilities.cs" />
     <Compile Include="SimulatorHAL\NotifierAlarm.cs" />
     <Compile Include="Simulator\Data\NavXData.cs" />
+    <Compile Include="Simulator\Inputs\SimNavXGyro.cs" />
     <Compile Include="Simulator\ISimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulatorHAL\HAL.cs" />

@@ -48,7 +48,7 @@ namespace HAL.Simulator.Data
             }
         }
 
-        public double GryoRateRoll
+        public double GyroRateRoll
         {
             get { return m_gyroRateRoll; }
             set
@@ -59,7 +59,7 @@ namespace HAL.Simulator.Data
             }
         }
 
-        public double GryoRateYaw
+        public double GyroRateYaw
         {
             get { return m_gyroRateYaw; }
             set
@@ -70,7 +70,7 @@ namespace HAL.Simulator.Data
             }
         }
 
-        public double GryoAnglePitch
+        public double GyroAnglePitch
         {
             get { return m_gyroAnglePitch; }
             set
@@ -81,7 +81,7 @@ namespace HAL.Simulator.Data
             }
         }
 
-        public double GryoAngleRoll
+        public double GyroAngleRoll
         {
             get { return m_gyroAngleRoll; }
             set
@@ -92,7 +92,7 @@ namespace HAL.Simulator.Data
             }
         }
 
-        public double GryoAngleYaw
+        public double GyroAngleYaw
         {
             get { return m_gyroAngleYaw; }
             set
