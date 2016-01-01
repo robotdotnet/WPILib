@@ -84,7 +84,8 @@ namespace WPILib.Filters
         /// This filter is stable for gains in the range [0, 1]
         /// </remarks>
         /// <param name="source">The <see cref="IPIDSource"/> object that is used to get values.</param>
-        /// <param name="gain">The filter's feedforward gain factor (lower = smoother but slower).</param>
+        /// <param name="timeConstant">The filter's feedforward gain factor (lower = smoother but slower).</param>
+        /// <param name="period"></param>
         /// <returns>A new Single Pole IIR <see cref="LinearDigitalFilter"/></returns>
         public static LinearDigitalFilter SinglePoleIIR(IPIDSource source, double timeConstant,
             double period)

@@ -117,21 +117,21 @@ namespace WPILib
         /// effect before performing buffering actions. <para/>Disable will signal Talon to put motor 
         /// output into neutral drive. Talon will stop processing motion profile points.  This means 
         /// the buffer is effectively disconnected from the executer, allowing the robot to gracefully 
-        /// clear and push new traj points. <see cref="IsUnderrun"/> will get cleared. The active trajectory is also cleared.
+        /// clear and push new traj points. <see cref="MotionProfileStatus.IsUnderrun"/> will get cleared. The active trajectory is also cleared.
         /// <para/>
         /// Enable will signal Talon to pop a trajectory point from it's buffer and process it. If the 
         /// active trajectory is empty, Talon will shift in the next point. If the active traj is empty, 
-        /// and so is the buffer, the motor drive is neutral and <see cref="IsUnderrun"/> is set. 
+        /// and so is the buffer, the motor drive is neutral and <see cref="MotionProfileStatus.IsUnderrun"/> is set. 
         /// When active traj times out, and buffer has at least one point, Talon shifts in the next one, 
-        /// and <see cref="IsUnderrun"/> is cleared. When active traj times out, and buffer is empty, 
-        /// Talon keeps processing active traj and sets <see cref="IsUnderrun"/>
+        /// and <see cref="MotionProfileStatus.IsUnderrun"/> is cleared. When active traj times out, and buffer is empty, 
+        /// Talon keeps processing active traj and sets <see cref="MotionProfileStatus.IsUnderrun"/>
         /// <para/>
         /// Hold will signal Talon to keep processing the Active Trajectory indefinitely. 
         /// If the active traj is cleared, Talon will neutral motor drive. Otherwise Talon 
         /// will kepp processing the active traj but it will not shift in points from the buffer. 
         /// This means the buffer is effectively disconnected from the executer, allowing the robot 
-        /// to gracefully clear and push new traj points. <see cref="IsUnderrun"/> is set if active 
-        /// traj is empty, otherwise it is cleared.  <see cref="IsLast"/> signal is also cleared.
+        /// to gracefully clear and push new traj points. <see cref="MotionProfileStatus.IsUnderrun"/> is set if active 
+        /// traj is empty, otherwise it is cleared.  <see cref="TrajectoryPoint.IsLastPoint"/> signal is also cleared.
         /// <para>
         /// </para>
         /// Typical Workflow:
@@ -179,7 +179,7 @@ namespace WPILib
             /// <summary>
             /// 
             /// </summary>
-            public bool IsUnderrrun { get; }
+            public bool IsUnderrun { get; }
             public bool ActivePointValid { get; }
             public TrajectoryPoint ActivePoint { get; }
             public SetValueMotionProfile OutputEnable { get; }
@@ -191,7 +191,7 @@ namespace WPILib
                 TopBufferCnt = topCnt;
                 BtmBufferCnt = btmCnt;
                 HasUnderrun = hasUnder;
-                IsUnderrrun = isUnder;
+                IsUnderrun = isUnder;
                 ActivePointValid = activeValid;
                 ActivePoint = activePoint;
                 OutputEnable = outEnable;
@@ -1887,21 +1887,37 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the period for motion control frames to be sent at.
+        /// </summary>
+        /// <param name="periodMs">The motion control frame period in seconds</param>
         public void ChangeMotionControlFramePeriod(int periodMs)
         {
             C_TalonSRX_ChangeMotionControlFramePeriod(m_talonPointer, periodMs);
         }
 
+        /// <summary>
+        /// Clears the Motion Profile Trajectories on this Talon SRX.
+        /// </summary>
         public void ClearMotionProfileTrajectories()
         {
             C_TalonSRX_ClearMotionProfileTrajectories(m_talonPointer);
         }
 
+        /// <summary>
+        /// Gets the Top Level Buffer Count of the Motion Profile.
+        /// </summary>
+        /// <returns>The number of Items in the top level buffer.</returns>
         public int GetMotionProfileTopLevelBufferCount()
         {
             return C_TalonSRX_GetMotionProfileTopLevelBufferCount(m_talonPointer);
         }
 
+        /// <summary>
+        /// Pushes a new <see cref="TrajectoryPoint"/> to the Talon for Motion Profiling.
+        /// </summary>
+        /// <param name="trajPt">The TrajectoryPoint to send.</param>
+        /// <returns>True if successful, otherwise false.</returns>
         public bool PushMotionProfileTrajectory(TrajectoryPoint trajPt)
         {
             if (IsMotionProfileTopLevelBufferFull())
@@ -1922,16 +1938,27 @@ namespace WPILib
             return true;
         }
 
+        /// <summary>
+        /// Gets if the top level buffer for motion profiling is full.
+        /// </summary>
+        /// <returns>True if the top level buffer is full.</returns>
         public bool IsMotionProfileTopLevelBufferFull()
         {
             return C_TalonSRX_IsMotionProfileTopLevelBufferFull(m_talonPointer) != 0;
         }
 
+        /// <summary>
+        /// Processes the Motion Profile Buffer.
+        /// </summary>
         public void ProcessMotionProfileBuffer()
         {
             C_TalonSRX_ProcessMotionProfileBuffer(m_talonPointer);
         }
 
+        /// <summary>
+        /// Gets the status of the currently running the motion profile.
+        /// </summary>
+        /// <returns>The status of the motion profile.</returns>
         public MotionProfileStatus GetMotionProfileStatus()
         {
             int flags = 0;
@@ -1974,6 +2001,9 @@ namespace WPILib
                 activePointValid, activePoint, outputEnable);
         }
 
+        /// <summary>
+        /// Clears the motion profile has underrun flag.
+        /// </summary>
         public void ClearMotionProfileHasUnderrun()
         {
             SetParameter(ParamID.eMotionProfileHasUnderrunErr, 0);

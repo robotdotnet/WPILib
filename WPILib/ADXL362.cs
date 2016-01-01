@@ -36,16 +36,34 @@ namespace WPILib
         private const byte PowerCtl_AutoSleep = 0x04;
         private const byte PowerCtl_Measure = 0x02;
 
+        /// <summary>
+        /// The Axes for ADXL362 Gyros
+        /// </summary>
         public enum Axes
         {
+            /// <summary>
+            /// The X Axis
+            /// </summary>
             X = 0x00,
+            /// <summary>
+            /// The Y Axis
+            /// </summary>
             Y = 0x02,
+            /// <summary>
+            /// The Z Axis
+            /// </summary>
             Z = 0x04
         }
 
-        private SPI m_spi;
+        private readonly SPI m_spi;
         private double m_gsPerLSB = 0.001;
 
+        /// <summary>
+        /// Creates a new <see cref="ADXL362"/> with the specified <see cref="SPI.Port">Port</see> 
+        /// and <see cref="AccelerometerRange">Range</see>.
+        /// </summary>
+        /// <param name="port">The SPI Port the accelerometer is connected to.</param>
+        /// <param name="range">The range that the accelerometer will measure.</param>
         public ADXL362(SPI.Port port, AccelerometerRange range)
         {
             m_spi = new SPI(port);
@@ -160,6 +178,10 @@ namespace WPILib
             return rawAccel * m_gsPerLSB;
         }
 
+        /// <summary>
+        /// Get the acceleration of all axes in Gs.
+        /// </summary>
+        /// <returns>A structure containing all axes measured in Gs.</returns>
         public AllAxes GetAccelerations()
         {
             if (m_gsPerLSB == 0.0)

@@ -7,8 +7,14 @@ namespace WPILib
     /// </summary>
     public class HLUsageReporting
     {
+        /// <summary>
+        /// Gets or Sets the HLUsageReporting interface.
+        /// </summary>
         public static Interface Implementation { get; set; }
 
+        /// <summary>
+        /// Reports usage of the scheduler
+        /// </summary>
         public static void ReportScheduler()
         {
             if (Implementation != null)
@@ -21,6 +27,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Reports usages of a PID Controller
+        /// </summary>
+        /// <param name="num"></param>
         public static void ReportPIDController(int num)
         {
             if (Implementation != null)
@@ -33,6 +43,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Reports usage of the Smart Dashboard.
+        /// </summary>
         public static void ReportSmartDashboard()
         {
             if (Implementation != null)
@@ -50,8 +63,18 @@ namespace WPILib
         /// </summary>
         public interface Interface
         {
+            /// <summary>
+            /// Reports the scheduler
+            /// </summary>
             void ReportScheduler();
+            /// <summary>
+            /// Reports the PID Controller
+            /// </summary>
+            /// <param name="num"></param>
             void ReportPIDController(int num);
+            /// <summary>
+            /// Reports the SmartDashboard.
+            /// </summary>
             void ReportSmartDashboard();
         }
     }

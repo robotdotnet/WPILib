@@ -57,7 +57,7 @@ namespace WPILib.Extras.NavX
                 {
                     serial_port.Dispose();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // This has been seen to happen before....
                 }
@@ -79,7 +79,7 @@ namespace WPILib.Extras.NavX
                     serial_port.EnableTermination('\n');
                     serial_port.Reset();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     /* Error opening serial port. Perhaps it doesn't exist... */
                     serial_port = null;
@@ -641,6 +641,11 @@ namespace WPILib.Extras.NavX
         public void Stop()
         {
             m_stop = true;
+        }
+
+        public void Dispose()
+        {
+            Stop();
         }
 
     }

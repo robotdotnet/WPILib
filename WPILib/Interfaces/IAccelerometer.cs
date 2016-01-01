@@ -38,7 +38,7 @@ namespace WPILib.Interfaces
     /// </summary>
     public enum AccelerometerRange
     {
-// ReSharper disable InconsistentNaming
+        // ReSharper disable InconsistentNaming
         /// <summary>
         /// 2G Maximum
         /// </summary>
@@ -55,7 +55,7 @@ namespace WPILib.Interfaces
         /// 16G Maximum
         /// </summary>
         k16G,
-// ReSharper restore InconsistentNaming
+        // ReSharper restore InconsistentNaming
     }
 
     /// <summary>

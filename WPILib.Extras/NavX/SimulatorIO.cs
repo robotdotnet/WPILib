@@ -199,5 +199,10 @@ namespace WPILib.Extras.NavX
         {
             m_stop = true;
         }
+
+        public void Dispose()
+        {
+            Stop();
+        }
     }
 }

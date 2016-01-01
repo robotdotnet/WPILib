@@ -236,5 +236,10 @@ namespace WPILib.Extras.NavX
                                        AHRSProtocol.NAVX_INTEGRATION_CTL_RESET_DISP_Y |
                                        AHRSProtocol.NAVX_INTEGRATION_CTL_RESET_DISP_Z));
         }
+
+        public void Dispose()
+        {
+            Stop();
+        }
     }
 }

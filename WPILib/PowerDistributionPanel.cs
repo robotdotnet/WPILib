@@ -11,6 +11,10 @@ namespace WPILib
     {
         private readonly int m_module = 0;
 
+        /// <summary>
+        /// Creates a new <see cref="PowerDistributionPanel"/> class using the specified module.
+        /// </summary>
+        /// <param name="module">The module number of the PDP.</param>
         public PowerDistributionPanel(int module)
         {
             m_module = module;
@@ -18,16 +22,27 @@ namespace WPILib
             InitializePDP(m_module);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="PowerDistributionPanel"/> with the default module of 0.
+        /// </summary>
         public PowerDistributionPanel() : this(0)
         { }
 
+        /// <summary>
+        /// Query the input voltage of the PDP
+        /// </summary>
+        /// <returns>The voltage of the PDP in volts.</returns>
         public double GetVoltage()
         {
             int status = 0;
             double value = GetPDPVoltage((byte)m_module, ref status);
             return value;
         }
-
+        
+        /// <summary>
+        /// Query the temperature of the PDP.
+        /// </summary>
+        /// <returns>The temperature of the PDP in degrees Celsius.</returns>
         public double GetTemperature()
         {
             int status = 0;
@@ -35,6 +50,11 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Query the current of a single channel of the PDP.
+        /// </summary>
+        /// <param name="channel">The channel to read from. [0..15]</param>
+        /// <returns>The current of the PDP channel in Amperes.</returns>
         public double GetCurrent(int channel)
         {
             int status = 0;
@@ -43,6 +63,10 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Query the current of all monitored PDP channels (0-15).
+        /// </summary>
+        /// <returns>The current of all channels in Amperes.</returns>
         public double GetTotalCurrent()
         {
             int status = 0;
@@ -50,6 +74,10 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Query the total power drawn from the monitored PDP channels.
+        /// </summary>
+        /// <returns>The total power in Watts.</returns>
         public double GetTotalPower()
         {
             int status = 0;
@@ -57,6 +85,10 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Query the total energy drawn from the monitored PDP channels.
+        /// </summary>
+        /// <returns>The total enegery in Joules.</returns>
         public double GetTotalEnergy()
         {
             int status = 0;
@@ -64,12 +96,19 @@ namespace WPILib
             return value;
         }
 
+        /// <summary>
+        /// Resets the total energy to 0.
+        /// </summary>
         public void ResetTotalEnergy()
         {
             int status = 0;
             ResetPDPTotalEnergy((byte)m_module, ref status);
         }
 
+
+        /// <summary>
+        /// Clears all PDP Sticky Faults.
+        /// </summary>
         public void ClearStickyFaults()
         {
             int status = 0;

@@ -16,17 +16,29 @@ namespace HAL.Base
     public enum HALAllianceStationID
     {
         // ReSharper disable InconsistentNaming
+        /// <summary>
+        /// Red 1 Station
+        /// </summary>
         HALAllianceStationID_red1,
-
+        /// <summary>
+        /// Red 2 Station
+        /// </summary>
         HALAllianceStationID_red2,
-
+        /// <summary>
+        /// Red 3 Station
+        /// </summary>
         HALAllianceStationID_red3,
-
+        /// <summary>
+        /// Blue 1 Stations
+        /// </summary>
         HALAllianceStationID_blue1,
-
+        /// <summary>
+        /// Blue 2 Stations
+        /// </summary>
         HALAllianceStationID_blue2,
-
-
+        /// <summary>
+        /// Blue 3 Station
+        /// </summary>
         HALAllianceStationID_blue3,
         // ReSharper restore InconsistentNaming
     }

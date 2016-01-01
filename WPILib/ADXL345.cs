@@ -9,9 +9,21 @@ namespace WPILib
     /// </summary>
     public abstract class ADXL345 : SensorBase, IAccelerometer, ILiveWindowSendable
     {
+        /// <summary>
+        /// The Power Control Register
+        /// </summary>
         protected const byte PowerCtlRegister = 0x2D;
+        /// <summary>
+        /// The Data Format Register
+        /// </summary>
         protected const byte DataFormatRegister = 0x31;
+        /// <summary>
+        /// The Data Register
+        /// </summary>
         protected const byte DataRegister = 0x32;
+        /// <summary>
+        /// The G's per LSB
+        /// </summary>
         protected const double GsPerLSB = 0.00390625;
 
         /// <summary>
@@ -19,9 +31,21 @@ namespace WPILib
         /// </summary>
         protected enum PowerCtl : byte
         {
+            /// <summary>
+            /// Link Mode
+            /// </summary>
             Link = 0x20,
+            /// <summary>
+            /// Auto Sleep Mode
+            /// </summary>
             AutoSleep = 0x10,
+            /// <summary>
+            /// Measure Mode
+            /// </summary>
             Measure = 0x08,
+            /// <summary>
+            /// Sleep Mode
+            /// </summary>
             Sleep = 0x04
         }
 
@@ -30,10 +54,25 @@ namespace WPILib
         /// </summary>
         protected enum DataFormat : byte
         {
+            /// <summary>
+            /// Self Test Mode
+            /// </summary>
             SelfTest = 0x80,
+            /// <summary>
+            /// SPI Mode
+            /// </summary>
             SPI = 0x40,
+            /// <summary>
+            /// Invert Mode
+            /// </summary>
             IntInvert = 0x20,
+            /// <summary>
+            /// The Full Resolution
+            /// </summary>
             FullRes = 0x08,
+            /// <summary>
+            /// Justify
+            /// </summary>
             Justify = 0x04
         }
 
@@ -42,8 +81,17 @@ namespace WPILib
         /// </summary>
         public enum Axes
         {
+            /// <summary>
+            /// The X Axis
+            /// </summary>
             X = 1,
+            /// <summary>
+            /// The Y Axis
+            /// </summary>
             Y = 1 << 1,
+            /// <summary>
+            /// The Z Axis
+            /// </summary>
             Z = 1 << 2
         }
 

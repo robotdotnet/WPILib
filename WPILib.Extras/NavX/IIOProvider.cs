@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPILib.Extras.NavX
 {
-    interface IIoProvider
+    interface IIoProvider : IDisposable
     {
         bool IsConnected();
         double GetByteCount();

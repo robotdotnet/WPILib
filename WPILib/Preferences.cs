@@ -59,6 +59,12 @@ namespace WPILib
         /// </summary>
         public List<string> GetKeys => m_table.GetKeys().ToList();
 
+        /// <summary>
+        /// Puts the given string into the preferences table.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
+        /// <exception cref="ArgumentNullException">Thrown if value is null.</exception>
         public void PutString(string key, string value)
         {
             if (value == null)
@@ -69,71 +75,159 @@ namespace WPILib
             m_table.SetPersistent(key);
         }
 
+        /// <summary>
+        /// Puts the given double into the preferences table.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
         public void PutDouble(string key, double value)
         {
             m_table.PutNumber(key, value);
             m_table.SetPersistent(key);
         }
 
+        /// <summary>
+        /// Puts the given int into the preferences table.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
         public void PutInt(string key, int value)
         {
             m_table.PutNumber(key, value);
             m_table.SetPersistent(key);
         }
 
+        /// <summary>
+        /// Puts the given long into the preferences table.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
         public void PutLong(string key, long value)
         {
             m_table.PutNumber(key, value);
             m_table.SetPersistent(key);
         }
 
+        /// <summary>
+        /// Puts the given float into the preferences table.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
         public void PutFloat(string key, float value)
         {
             m_table.PutNumber(key, value);
             m_table.SetPersistent(key);
         }
 
+        /// <summary>
+        /// Puts the given boolean into the preferences table.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <param name="value">The value</param>
         public void PutBoolean(string key, bool value)
         {
             m_table.PutBoolean(key, value);
             m_table.SetPersistent(key);
         }
 
+        /// <summary>
+        /// Gets whether or not there is a key with the given name.
+        /// </summary>
+        /// <param name="key">The key</param>
+        /// <returns>True if there is a value at the given key.</returns>
         public bool ContainsKey(string key)
         {
             return m_table.ContainsKey(key);
         }
 
+        /// <summary>
+        /// Removes a preference.
+        /// </summary>
+        /// <param name="key">The key.</param>
         public void Remove(string key)
         {
             m_table.Delete(key);
         }
 
+        /// <summary>
+        /// Returns the string at the given key. 
+        /// </summary>
+        /// <remarks>
+        /// If this table does not have a value for that position, then the given backup value will be returned.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <param name="backup">The value to return if non exists in the table.</param>
+        /// <returns>The value in the table, or the backup if value does not exist in table.</returns>
         public string GetString(string key, string backup)
         {
             return m_table.GetString(key, backup);
         }
 
+        /// <summary>
+        /// Returns the double at the given key. 
+        /// </summary>
+        /// <remarks>
+        /// If this table does not have a value for that position, then the given backup value will be returned.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <param name="backup">The value to return if non exists in the table.</param>
+        /// <returns>The value in the table, or the backup if value does not exist in table.</returns>
         public double GetDouble(string key, double backup)
         {
             return m_table.GetNumber(key, backup);
         }
 
+        /// <summary>
+        /// Returns the boolean at the given key. 
+        /// </summary>
+        /// <remarks>
+        /// If this table does not have a value for that position, then the given backup value will be returned.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <param name="backup">The value to return if non exists in the table.</param>
+        /// <returns>The value in the table, or the backup if value does not exist in table.</returns>
         public bool GetBoolean(string key, bool backup)
         {
             return m_table.GetBoolean(key, backup);
         }
 
+        /// <summary>
+        /// Returns the int at the given key. 
+        /// </summary>
+        /// <remarks>
+        /// If this table does not have a value for that position, then the given backup value will be returned.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <param name="backup">The value to return if non exists in the table.</param>
+        /// <returns>The value in the table, or the backup if value does not exist in table.</returns>
         public int GetInt(string key, int backup)
         {
             return (int)m_table.GetNumber(key, backup);
         }
 
+        /// <summary>
+        /// Returns the long at the given key. 
+        /// </summary>
+        /// <remarks>
+        /// If this table does not have a value for that position, then the given backup value will be returned.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <param name="backup">The value to return if non exists in the table.</param>
+        /// <returns>The value in the table, or the backup if value does not exist in table.</returns>
         public long GetLong(string key, long backup)
         {
             return (long)m_table.GetNumber(key, backup);
         }
 
+        /// <summary>
+        /// Returns the float at the given key. 
+        /// </summary>
+        /// <remarks>
+        /// If this table does not have a value for that position, then the given backup value will be returned.
+        /// </remarks>
+        /// <param name="key">The key.</param>
+        /// <param name="backup">The value to return if non exists in the table.</param>
+        /// <returns>The value in the table, or the backup if value does not exist in table.</returns>
         public float GetFloat(string key, float backup)
         {
             return (float)m_table.GetNumber(key, backup);

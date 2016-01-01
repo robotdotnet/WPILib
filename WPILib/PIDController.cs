@@ -13,16 +13,30 @@ namespace WPILib
     /// </summary>
     public class PIDController : IController, IPIDInterface, ILiveWindowSendable, ITableListener, IDisposable
     {
+        /// <summary>
+        /// Tolerance Types allowed for this PIDController.
+        /// </summary>
         public enum ToleranceType
         {
+            /// <summary>
+            /// Absolute Tolerance
+            /// </summary>
             AbsoluteTolerance,
+            /// <summary>
+            /// Percent Tolerance
+            /// </summary>
             PercentTolerance,
+            /// <summary>
+            /// No Tolerance
+            /// </summary>
             NoTolerance,
         }
 
         private ToleranceType m_toleranceType;
 
-
+        /// <summary>
+        /// The default period to run the controller at.
+        /// </summary>
         public const double DefaultPeriod = 0.05;
 
         private static int s_instances = 0;
@@ -45,12 +59,18 @@ namespace WPILib
         private double m_error = 0.0;
         private double m_result = 0.0;
         private double m_period;
+        /// <summary>
+        /// The PIDInput for this controller.
+        /// </summary>
         protected IPIDSource PIDInput;
+        /// <summary>
+        /// The PIDOutput for this controller.
+        /// </summary>
         protected IPIDOutput PIDOutput;
         private readonly object m_lockObject = new object();
 
         private int m_bufLength = 0;
-        private Queue<double> m_buf;
+        private readonly Queue<double> m_buf;
         private double m_bufTotal = 0.0;
 
         private double m_tolerance = 0.05;
@@ -59,7 +79,16 @@ namespace WPILib
 
         private Action CalculateCallback;
 
-
+        /// <summary>
+        /// Creates a new PID object with the given contants for P, I, D and F.
+        /// </summary>
+        /// <param name="kp">The proportional coefficient.</param>
+        /// <param name="ki">The integral coefficient</param>
+        /// <param name="kd">The derivative coefficient</param>
+        /// <param name="kf">The feed forward term.</param>
+        /// <param name="source">The PIDSource object that is used to get values.</param>
+        /// <param name="output">The PIDOutput object that is set to the output percentage.</param>
+        /// <param name="period">The loop time for doing calculations.</param>
         public PIDController(double kp, double ki, double kd, double kf,
             IPIDSource source, IPIDOutput output,
             double period)
@@ -90,6 +119,15 @@ namespace WPILib
             m_buf = new Queue<double>();
         }
 
+        /// <summary>
+        /// Creates a new PID object with the given contants for P, I and D.
+        /// </summary>
+        /// <param name="kp">The proportional coefficient.</param>
+        /// <param name="ki">The integral coefficient</param>
+        /// <param name="kd">The derivative coefficient</param>
+        /// <param name="source">The PIDSource object that is used to get values.</param>
+        /// <param name="output">The PIDOutput object that is set to the output percentage.</param>
+        /// <param name="period">The loop time for doing calculations.</param>
         public PIDController(double kp, double ki, double kd,
             IPIDSource source, IPIDOutput output,
             double period)
@@ -98,6 +136,14 @@ namespace WPILib
 
         }
 
+        /// <summary>
+        /// Creates a new PID object with the given contants for P, I and D using a 50ms period.
+        /// </summary>
+        /// <param name="kp">The proportional coefficient.</param>
+        /// <param name="ki">The integral coefficient</param>
+        /// <param name="kd">The derivative coefficient</param>
+        /// <param name="source">The PIDSource object that is used to get values.</param>
+        /// <param name="output">The PIDOutput object that is set to the output percentage.</param>
         public PIDController(double kp, double ki, double kd,
             IPIDSource source, IPIDOutput output)
             : this(kp, ki, kd, source, output, DefaultPeriod)
@@ -105,6 +151,15 @@ namespace WPILib
 
         }
 
+        /// <summary>
+        /// Creates a new PID object with the given contants for P, I, D and F using a 50ms period
+        /// </summary>
+        /// <param name="kp">The proportional coefficient.</param>
+        /// <param name="ki">The integral coefficient</param>
+        /// <param name="kd">The derivative coefficient</param>
+        /// <param name="kf">The feed forward term.</param>
+        /// <param name="source">The PIDSource object that is used to get values.</param>
+        /// <param name="output">The PIDOutput object that is set to the output percentage.</param>
         public PIDController(double kp, double ki, double kd, double kf,
             IPIDSource source, IPIDOutput output)
             : this(kp, ki, kd, kf, source, output, DefaultPeriod)
@@ -112,6 +167,7 @@ namespace WPILib
 
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             m_controlLoop.Stop();
@@ -125,6 +181,10 @@ namespace WPILib
             Table?.RemoveTableListener(this);
         }
 
+        /// <summary>
+        /// Read the inpout, calculate the output accordinglyu, and write to the input.
+        /// This should only be called by the Notifier timer and is created during initialization.
+        /// </summary>
         protected virtual void Calculate()
         {
             bool enabled;
@@ -244,6 +304,7 @@ namespace WPILib
             pidOutput.PidWrite(result);
         }
 
+        ///<inheritdoc/>
         public void SetPID(double p, double i, double d)
         {
             lock (m_lockObject)
@@ -254,6 +315,13 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the PID Controller Gain Parameters.
+        /// </summary>
+        /// <param name="p">The proportional coefficient</param>
+        /// <param name="i">The integral coefficient</param>
+        /// <param name="d">The derivative coefficient</param>
+        /// <param name="f">The feed forward coefficient</param>
         public void SetPID(double p, double i, double d, double f)
         {
             lock (m_lockObject)
@@ -265,6 +333,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public double P
         {
             get
@@ -278,7 +347,7 @@ namespace WPILib
                     m_P = value;
             }
         }
-
+        /// <inheritdoc/>
         public double I
         {
             get
@@ -292,7 +361,7 @@ namespace WPILib
                     m_I = value;
             }
         }
-
+        /// <inheritdoc/>
         public double D
         {
             get
@@ -306,7 +375,7 @@ namespace WPILib
                     m_D = value;
             }
         }
-
+        /// <inheritdoc/>
         public double F
         {
             get
@@ -320,22 +389,46 @@ namespace WPILib
                     m_F = value;
             }
         }
-
+        /// <summary>
+        /// Gets teh current PID result.
+        /// </summary>
+        /// <remarks>
+        /// This is always centered on zero and constrained by the max and min output values.
+        /// </remarks>
+        /// <returns>The latest calculated output.</returns>
         public double Get()
         {
             lock (m_lockObject)
                 return m_result;
         }
 
-        public bool Continouous
+        /// <summary>
+        /// Gets or Sets whether the PID controller input is continouous.
+        /// </summary>
+        /// <remarks>
+        /// Rather then using the max and min inputs as constraints, it considers them
+        /// to be the same point and automatically calculates the shortest route to the
+        /// setpoint.
+        /// </remarks>
+        public bool Continuous
         {
             set
             {
                 lock (m_lockObject)
                     m_continuous = value;
             }
+            get
+            {
+                lock (m_lockObject)
+                    return m_continuous;
+            }
         }
 
+        /// <summary>
+        /// Sets the minimum and maximum values expected from the input and setpoint.
+        /// </summary>
+        /// <param name="minimumInput">The minimum value expected from the input and setpoint.</param>
+        /// <param name="maximumInput">The maximum value expected from the input and setpoint.</param>
         public void SetInputRange(double minimumInput, double maximumInput)
         {
             lock (m_lockObject)
@@ -348,6 +441,11 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the maximum and minimum values to write.
+        /// </summary>
+        /// <param name="minimumOutput">The minimum value to write to the output.</param>
+        /// <param name="maximumOutput">The maximum value to write to the output.</param>
         public void SetOutputRange(double minimumOutput, double maximumOutput)
         {
             lock (m_lockObject)
@@ -360,6 +458,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets or sets the setpoint for the PID Controller.
+        /// </summary>
         public double Setpoint
         {
             get
@@ -396,6 +497,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Returns the current difference of the input from the setpoint.
+        /// </summary>
+        /// <returns>The current error.</returns>
         public double GetError()
         {
             lock (m_lockObject)
@@ -410,6 +515,14 @@ namespace WPILib
             set { PIDInput.PIDSourceType = value; }
         }
 
+        /// <summary>
+        /// Returns the current difference of the error over the past few iterations.
+        /// </summary>
+        /// <remarks>
+        /// You can specify the number of iterations to average with <see cref="SetToleranceBuffer"/> (defaults to 1).
+        /// <see cref="GetAvgError"/> is used for the <see cref="OnTarget"/> method.
+        /// </remarks>
+        /// <returns>The current average of the error.</returns>
         public double GetAvgError()
         {
             lock (m_lockObject)
@@ -420,7 +533,14 @@ namespace WPILib
             }
         }
 
-        [Obsolete]
+        /// <summary>
+        /// Sets the percentage error which is considered tolerable for use
+        /// with <see cref="OnTarget"/>.
+        /// </summary>
+        /// <remarks>Obsolete. Please use <see cref="SetPercentTolerance"/> or 
+        /// <see cref="SetAbsoluteTolerance"/> instead.</remarks>
+        /// <param name="percent">The percent error which is tolerable.</param>
+        [Obsolete("Use SetPercentTolerance or SetAbsoluteTolerance instead.")]
         public void SetTolerance(double percent)
         {
             lock (m_lockObject)
@@ -430,6 +550,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Set the percentage error which is considered tolerable for use with <see cref="OnTarget"/>.
+        /// </summary>
+        /// <param name="percent">The percent tolerance.</param>
         public void SetPercentTolerance(double percent)
         {
             lock (m_lockObject)
@@ -438,7 +562,11 @@ namespace WPILib
                 m_tolerance = percent;
             }
         }
-
+        /// <summary>
+        /// Sets the absolute error which is considered tolerable for use with <see cref="OnTarget"/>.
+        /// </summary>
+        /// <remarks>The value is in the same range as the PIDInput values.</remarks>
+        /// <param name="absTolerance">The absolute tolerance.</param>
         public void SetAbsoluteTolerance(double absTolerance)
         {
             lock (m_lockObject)
@@ -448,6 +576,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Sets the number of previous error samples to average for tolerancing.
+        /// </summary>
+        /// <param name="bufLength">The number of previous cycles to average.</param>
         public void SetToleranceBuffer(int bufLength)
         {
             m_bufLength = bufLength;
@@ -457,6 +589,15 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets if the PID system is on target.
+        /// </summary>
+        /// <remarks>
+        /// Returns true if the error is within the percentage of the total input range,
+        /// determined by SetTolerance. This assumes theat the maximum and minimum input were
+        /// set using <see cref="SetInputRange"/>.
+        /// </remarks>
+        /// <returns>True if the error is less then the tolerance.</returns>
         public bool OnTarget()
         {
             lock (m_lockObject)
@@ -488,6 +629,7 @@ namespace WPILib
             }
         }
 
+        /// <inheritdoc/>
         public bool Enabled
         {
             get
@@ -496,7 +638,7 @@ namespace WPILib
                     return m_enabled;
             }
         }
-
+        /// <inheritdoc/>
         public void Reset()
         {
             lock (m_lockObject)
