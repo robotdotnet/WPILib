@@ -8,9 +8,21 @@ namespace WPILib
     /// The location of a motor on the robot for the purpose of driving.
     public enum MotorType
     {
+        /// <summary>
+        /// The front left motor
+        /// </summary>
         FrontLeft = 0,
+        /// <summary>
+        /// The front right motor
+        /// </summary>
         FrontRight,
+        /// <summary>
+        /// The rear left motor
+        /// </summary>
         RearLeft,
+        /// <summary>
+        /// The rear right motor.
+        /// </summary>
         RearRight,
     }
 
