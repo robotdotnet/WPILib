@@ -214,7 +214,7 @@ namespace WPILib
             byte[] output = Read(count);
             try
             {
-                return Encoding.ASCII.GetString(output);
+                return Encoding.ASCII.GetString(output, 0, output.Length);
             }
             catch (DecoderFallbackException e)
             {

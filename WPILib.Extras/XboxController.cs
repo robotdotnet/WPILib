@@ -147,7 +147,7 @@ namespace WPILib.Extras
         /// <summary>
         /// Initializes an instance of the <see cref="XboxController"/> class
         /// </summary>
-        /// <param name="port">The port the controller is in.</param>
+        /// <param name="port">The port the controller is in. [0..5]</param>
         public XboxController(int port)
             : base(port)
         {
