@@ -413,10 +413,10 @@ namespace HAL.SimulatorHAL
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
-        public static uint getFPGATime(ref int status)
+        public static ulong getFPGATime(ref int status)
         {
             status = 0;
-            return (uint)SimHooks.GetFPGATime();
+            return (ulong)SimHooks.GetFPGATime();
         }
 
         /// <summary>
