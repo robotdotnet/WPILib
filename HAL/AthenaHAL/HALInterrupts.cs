@@ -28,7 +28,7 @@ namespace HAL.AthenaHAL
 
             Base.HALInterrupts.RequestInterrupts = (Base.HALInterrupts.RequestInterruptsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "requestInterrupts"), typeof(Base.HALInterrupts.RequestInterruptsDelegate));
 
-            Base.HALInterrupts.AttachInterruptHandler = (Base.HALInterrupts.AttachInterruptHandlerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "attachInterruptHandler"), typeof(Base.HALInterrupts.AttachInterruptHandlerDelegate));
+            Base.HALInterrupts.AttachInterruptHandler = (Base.HALInterrupts.AttachInterruptHandlerDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "attachInterruptHandlerShim"), typeof(Base.HALInterrupts.AttachInterruptHandlerDelegate));
 
             Base.HALInterrupts.SetInterruptUpSourceEdge = (Base.HALInterrupts.SetInterruptUpSourceEdgeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setInterruptUpSourceEdge"), typeof(Base.HALInterrupts.SetInterruptUpSourceEdgeDelegate));
 
