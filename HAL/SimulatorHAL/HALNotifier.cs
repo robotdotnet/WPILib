@@ -21,21 +21,21 @@ namespace HAL.SimulatorHAL
 
         private static NotifierAlarm s_alarm;
 
-        private static ulong closestTrigger = ulong.MaxValue;
+        private static uint closestTrigger = uint.MaxValue;
 
         private class Notifier
         {
             public Notifier prev, next;
             public IntPtr param;
-            public Action<ulong, IntPtr> process;
-            public ulong triggerTime = ulong.MaxValue;
+            public Action<uint, IntPtr> process;
+            public uint triggerTime = uint.MaxValue;
             public int index;
         }
 
         private static Notifier notifiers = null;
         private static int notifierRefCount = 0;
 
-        private static void AlarmCallback(ulong mask, IntPtr o)
+        private static void AlarmCallback(uint mask, IntPtr o)
         {
             bool lockWasTaken = false;
             var temp = s_notifierMutex;
@@ -43,19 +43,19 @@ namespace HAL.SimulatorHAL
             {
                 Monitor.Enter(temp, ref lockWasTaken);
                 int status = 0;
-                ulong currentTime = 0;
-                closestTrigger = ulong.MaxValue;
+                uint currentTime = 0;
+                closestTrigger = uint.MaxValue;
 
                 Notifier notifier = notifiers;
                 while (notifier != null)
                 {
-                    if (notifier.triggerTime != ulong.MaxValue)
+                    if (notifier.triggerTime != uint.MaxValue)
                     {
                         if (currentTime == 0)
-                            currentTime = (ulong)Base.HAL.GetFPGATime(ref status);
+                            currentTime = Base.HAL.GetFPGATime(ref status);
                         if (notifier.triggerTime < currentTime)
                         {
-                            notifier.triggerTime = ulong.MaxValue;
+                            notifier.triggerTime = uint.MaxValue;
                             var process = notifier.process;
                             var param = notifier.param;
                             Monitor.Exit(temp);
@@ -93,7 +93,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeNotifier(Action<ulong, IntPtr> process, IntPtr param, ref int status)
+        public static IntPtr initializeNotifier(Action<uint, IntPtr> process, IntPtr param, ref int status)
         {
             if (process == null)
             {
@@ -164,20 +164,20 @@ namespace HAL.SimulatorHAL
             lock (s_notifierMutex)
             {
                 Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
-                notifier.triggerTime = ulong.MaxValue;
+                notifier.triggerTime = uint.MaxValue;
             }
         }
 
 
 
         [CalledSimFunction]
-        public static void updateNotifierAlarm(IntPtr notifier_pointer, ulong triggerTime, ref int status)
+        public static void updateNotifierAlarm(IntPtr notifier_pointer, uint triggerTime, ref int status)
         {
             lock (s_notifierMutex)
             {
                 Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
                 notifier.triggerTime = triggerTime;
-                bool wasActive = (closestTrigger != ulong.MaxValue);
+                bool wasActive = (closestTrigger != uint.MaxValue);
 
                 bool lockWasTaken = false;
                 var temp = s_notifierInterruptMutex;

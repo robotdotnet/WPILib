@@ -8,13 +8,13 @@ namespace HAL.SimulatorHAL
     {
         private SpinLock m_lockObject = new SpinLock();
 
-        private ulong m_triggerTime = 0;
+        private uint m_triggerTime = 0;
 
-        private readonly Action<ulong, IntPtr> m_callback = null;
+        private readonly Action<uint, IntPtr> m_callback = null;
 
         private Thread m_alarmThread;
 
-        public NotifierAlarm(Action<ulong, IntPtr> alarmCallback)
+        public NotifierAlarm(Action<uint, IntPtr> alarmCallback)
         {
             if (alarmCallback == null)
             {
@@ -41,8 +41,8 @@ namespace HAL.SimulatorHAL
 
                 if (!m_continue) return;
 
-                ulong triggerTime = m_triggerTime;
-                while (triggerTime > (ulong)SimHooks.GetFPGATime())
+                uint triggerTime = m_triggerTime;
+                while (triggerTime > SimHooks.GetFPGATime())
                 {
 
                     bool gotLock = false;
@@ -78,7 +78,7 @@ namespace HAL.SimulatorHAL
             m_enabled = false;
         }
 
-        public void WriteTriggerTime(ulong triggerTime)
+        public void WriteTriggerTime(uint triggerTime)
         {
             bool gotLock = false;
             try

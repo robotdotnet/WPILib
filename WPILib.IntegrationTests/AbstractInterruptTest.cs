@@ -62,7 +62,7 @@ namespace WPILib.IntegrationTests
 
             public void Fired(uint u, object o)
             {
-                Interlocked.Exchange(ref InterruptFireTime, (long)Utility.GetFPGATime());
+                Interlocked.Exchange(ref InterruptFireTime, Utility.GetFPGATime());
                 m_counter.Increment();
                 Assert.AreSame(m_counter, o);
                 Interlocked.Exchange(ref InterruptComplete, 1);
@@ -85,7 +85,7 @@ namespace WPILib.IntegrationTests
             SetInterruptLow();
             Delay(0.01);
 
-            long interruptTriggerTime = (long)Utility.GetFPGATime();
+            long interruptTriggerTime = Utility.GetFPGATime();
 
             SetInterruptHigh();
 
@@ -149,10 +149,10 @@ namespace WPILib.IntegrationTests
                 SetInterruptHigh();
             });
             t.Start();
-            long startTimeStamp = (long)Utility.GetFPGATime();
+            long startTimeStamp = Utility.GetFPGATime();
             
             GetInterruptable().WaitForInterrupt(SynchronousTimeout * 2);
-            long stopTimeStamp = (long)Utility.GetFPGATime();
+            long stopTimeStamp = Utility.GetFPGATime();
 
             double interruptRunTime = (stopTimeStamp - startTimeStamp) * 1e-6;
 

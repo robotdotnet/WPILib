@@ -38,7 +38,7 @@ namespace HAL.Base
         public delegate uint GetFPGARevisionDelegate(ref int status);
         public static GetFPGARevisionDelegate GetFPGARevision;
 
-        public delegate ulong GetFPGATimeDelegate(ref int status);
+        public delegate uint GetFPGATimeDelegate(ref int status);
         public static GetFPGATimeDelegate GetFPGATime;
 
         [return: MarshalAs(UnmanagedType.I1)]

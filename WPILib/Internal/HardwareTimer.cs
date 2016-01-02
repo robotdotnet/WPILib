@@ -61,7 +61,7 @@ namespace WPILib.Internal
                 Reset();
             }
 
-            private static long MsClock => (long)GetFPGATime() / 1000;
+            private static long MsClock => GetFPGATime() / 1000;
 
             /// <summary>
             /// Get the current time from the timer

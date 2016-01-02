@@ -14,11 +14,11 @@ namespace WPILib.IntegrationTests
         public void DelayTest()
         {
             Console.WriteLine("Starting Delay");
-            long startTime = (long)Utility.GetFPGATime();
+            long startTime = Utility.GetFPGATime();
 
             Timer.Delay(TIMER_RUNTIME / 1000000.0);
 
-            long endTime = (long)Utility.GetFPGATime();
+            long endTime = Utility.GetFPGATime();
             long difference = endTime - startTime;
             Console.WriteLine("Ending Delay");
             long offset = difference - TIMER_RUNTIME;

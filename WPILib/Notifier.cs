@@ -21,7 +21,7 @@ namespace WPILib
 
         private readonly object m_handlerMutex = new object();
 
-        private Action<ulong, IntPtr> process;
+        private Action<uint, IntPtr> process;
 
         /// <summary>
         /// Notify is called by the HAL Layer. We simply need to pass it through to
@@ -29,7 +29,7 @@ namespace WPILib
         /// </summary>
         /// <param name="currentTimeInt">Current FPGA Time</param>
         /// <param name="param">Param passed to the notifier</param>
-        private void Notify(ulong currentTimeInt, IntPtr param)
+        private void Notify(uint currentTimeInt, IntPtr param)
         {
             bool processMutexEntered = false;
             bool handlerMutexEntered = false;
@@ -130,7 +130,7 @@ namespace WPILib
         private void UpdateAlarm()
         {
             int status = 0;
-            UpdateNotifierAlarm(m_notifier, (ulong)(m_expirationTime * 1e6), ref status);
+            UpdateNotifierAlarm(m_notifier, (uint)(m_expirationTime * 1e6), ref status);
             CheckStatus(status);
         }
 
