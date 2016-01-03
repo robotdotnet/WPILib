@@ -1,4 +1,10 @@
+#include "HAL/Notifier.hpp"
+#include "HAL/Interrupts.hpp"
+#include <iostream>
+#include "errno.h"
+#include <stdint.h>
 #include <atomic>
+#include <cstdlib>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
@@ -13,7 +19,7 @@ class SafeThread {
   std::condition_variable m_cond;
 };
 
-namespace detailInterrupt {
+namespace detail {
 
 // Non-template proxy base class for common proxy code.
 class SafeThreadProxyBase {
@@ -63,19 +69,19 @@ class SafeThreadOwnerBase {
   std::atomic<SafeThread*> m_thread;
 };
 
-}  // namespace detailInterrupt
+}  // namespace detail
 
 template <typename T>
-class SafeThreadOwner : public detailInterrupt::SafeThreadOwnerBase {
+class SafeThreadOwner : public detail::SafeThreadOwnerBase {
  public:
   void Start() { Start(new T); }
-  void Start(T* thr) { detailInterrupt::SafeThreadOwnerBase::Start(thr); }
+  void Start(T* thr) { detail::SafeThreadOwnerBase::Start(thr); }
 
-  using Proxy = typename detailInterrupt::SafeThreadProxy<T>;
-  Proxy GetThread() { return Proxy(detailInterrupt::SafeThreadOwnerBase::GetThread()); }
+  using Proxy = typename detail::SafeThreadProxy<T>;
+  Proxy GetThread() { return Proxy(detail::SafeThreadOwnerBase::GetThread()); }
 };
 
-void detailInterrupt::SafeThreadOwnerBase::Start(SafeThread* thr) {
+void detail::SafeThreadOwnerBase::Start(SafeThread* thr) {
   SafeThread* curthr = nullptr;
   SafeThread* newthr = thr;
   if (!m_thread.compare_exchange_strong(curthr, newthr)) {
@@ -88,7 +94,7 @@ void detailInterrupt::SafeThreadOwnerBase::Start(SafeThread* thr) {
   }).detach();
 }
 
-void detailInterrupt::SafeThreadOwnerBase::Stop() {
+void detail::SafeThreadOwnerBase::Stop() {
   SafeThread* thr = m_thread.exchange(nullptr);
   if (!thr) return;
   std::lock_guard<std::mutex> lock(thr->m_mutex);
@@ -96,6 +102,81 @@ void detailInterrupt::SafeThreadOwnerBase::Stop() {
   thr->m_cond.notify_one();
 }
 
+// Notifier Fixes
+class NotifierThreadJNI : public SafeThread {
+ public:
+  void Main();
+
+  bool m_notify = false;
+  void* m_func = nullptr;
+  void (*process)(uint64_t, void*);
+  uint64_t m_currentTime;
+};
+
+class NotifierShim : public SafeThreadOwner<NotifierThreadJNI> {
+ public:
+  void SetFunc(void (*process)(uint64_t, void*));
+
+  void Notify(uint64_t currentTime) {
+    auto thr = GetThread();
+    if (!thr) return;
+    thr->m_currentTime = currentTime;
+    thr->m_notify = true;
+    thr->m_cond.notify_one();
+  }
+};
+
+void NotifierShim::SetFunc(void (*process)(uint64_t, void*)) {
+  auto thr = GetThread();
+  if (!thr) return;
+  thr->process = process;
+}
+
+void NotifierThreadJNI::Main() {
+
+  std::unique_lock<std::mutex> lock(m_mutex);
+  while (m_active) {
+    m_cond.wait(lock, [&] { return !m_active || m_notify; });
+    if (!m_active) break;
+    m_notify = false;
+    uint64_t currentTime = m_currentTime;
+    lock.unlock();  // don't hold mutex during callback execution
+	process(currentTime, nullptr);
+    lock.lock();
+  }
+}
+
+void notifierHandler(uint64_t currentTimeInt, void* param) {
+  ((NotifierShim*)param)->Notify(currentTimeInt);
+}
+extern "C" {
+
+void* initializeNotifierShim(void (*process)(uint64_t, void*), void *param, int32_t *status)
+{
+	NotifierShim* notify = new NotifierShim;
+	notify->Start();
+	notify->SetFunc(process);
+	
+	void *notifierPtr = initializeNotifier(notifierHandler, notify, status);
+	
+	if (!notifierPtr || *status != 0)
+	{
+		delete notify;
+	}
+	
+	return notifierPtr;
+}
+
+void cleanNotifierShim(void* notifier_pointer, int32_t *status)
+{
+	NotifierShim* notify = (NotifierShim*)getNotifierParam(notifier_pointer, status);
+	cleanNotifier(notifier_pointer, status);
+	delete notify;
+}
+
+}
+
+//Interrupt Fixes
 class InterruptThreadJNI : public SafeThread {
  public:
   void Main();
@@ -139,6 +220,7 @@ void InterruptThreadJNI::Main() {
     lock.lock();
   }
 }
+extern "C" {
 
 void interruptHandler(uint32_t mask, void* param) {
   ((InterruptShim*)param)->Notify(mask);
@@ -152,4 +234,6 @@ void attachInterruptHandlerShim(void* interrupt_pointer, InterruptHandlerFunctio
 	intr->SetFunc(handler);
 	
 	attachInterruptHandler(interrupt_pointer, interruptHandler, intr, status);
+}
+
 }
