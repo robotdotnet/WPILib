@@ -88,9 +88,7 @@
     <Compile Include="Exceptions\InvalidValueException.cs" />
     <Compile Include="Exceptions\UncleanStatusException.cs" />
     <Compile Include="Filters\Filter.cs" />
-    <Compile Include="Filters\KalmanFilter.cs" />
     <Compile Include="Filters\LinearDigitalFilter.cs" />
-    <Compile Include="Filters\MovingAverage.cs" />
     <Compile Include="GyroBase.cs" />
     <Compile Include="Interfaces\ICANSpeedController.cs" />
     <Compile Include="CANTalon.cs" />

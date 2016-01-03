@@ -17,12 +17,10 @@ namespace WPILib.Tests
         private double[] pushBackOut = {342.657, 234.252, 716.126, 132.344, 445.697,
                                   22.727, 421.125, 799.913};
 
-        private CircularBuffer<double> queue = new CircularBuffer<double>(8);
-
         [Test]
         public void PushFrontTest()
         {
-            queue.Reset();
+            CircularBuffer<double> queue = new CircularBuffer<double>(8);
 
             foreach(double value in values)
             {
@@ -38,7 +36,7 @@ namespace WPILib.Tests
         [Test]
         public void PushBackTest()
         {
-            queue.Reset();
+            CircularBuffer<double> queue = new CircularBuffer<double>(8);
 
             foreach (double value in values)
             {
@@ -54,7 +52,7 @@ namespace WPILib.Tests
         [Test]
         public void TestPushPop()
         {
-            queue = new CircularBuffer<double>(3);
+            CircularBuffer<double> queue = new CircularBuffer<double>(3);
 
             queue.PushBack(1.0);
             queue.PushBack(2.0);
