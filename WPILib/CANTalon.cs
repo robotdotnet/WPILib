@@ -264,7 +264,6 @@ namespace WPILib
             m_feedbackDevice = FeedbackDevice.QuadEncoder;
             ApplyControlMode(ControlMode.PercentVbus);
             LiveWindow.LiveWindow.AddActuator("CANTalonSRX", deviceNumber, this);
-            HAL.Base.HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(deviceNumber + 1), (byte)m_controlMode);
         }
 
         /// <inheritdoc/>
@@ -766,6 +765,8 @@ namespace WPILib
             if (value == ControlMode.Disabled)
                 m_controlEnabled = false;
             C_TalonSRX_SetModeSelect(m_talonPointer, (int)ControlMode.Disabled);
+
+            HAL.Base.HAL.Report(ResourceType.kResourceType_CANTalonSRX, (byte)(DeviceId + 1), (byte)m_controlMode);
         }
 
         /// <inheritdoc/>
