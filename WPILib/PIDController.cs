@@ -69,7 +69,7 @@ namespace WPILib
         protected IPIDOutput PIDOutput;
         private readonly object m_lockObject = new object();
 
-        private int m_bufLength = 0;
+        private int m_bufLength = 1;
         private readonly Queue<double> m_buf;
         private double m_bufTotal = 0.0;
 
