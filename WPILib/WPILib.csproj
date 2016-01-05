@@ -181,10 +181,6 @@
       <Name>HAL</Name>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\NIVision\NIVision.csproj">
-      <Project>{d461ad43-b66d-4c66-925d-9759bf1e4654}</Project>
-      <Name>NIVision</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Runtime.InteropServices;
 using System.Threading;
 using NIVision;
@@ -10,6 +11,7 @@ using static NIVision.IMAQdx.PublicMethods;
 
 namespace WPILib.Vision
 {
+    
     public class USBCamera
     {
 
@@ -222,7 +224,11 @@ namespace WPILib.Vision
             }
             return 0;
         }
+        
     }
+    
 }
 #pragma warning restore 1591
 #pragma warning restore 169
+
+    */
