@@ -26,17 +26,6 @@ namespace HAL.SimulatorHAL
             Base.HALSemaphore.GiveMultiWait = giveMultiWait;
         }
 
-
-        [CalledSimFunction]
-        public static IntPtr initializeMutexRecursive()
-        {
-            MUTEX_ID p = new MUTEX_ID { lockObject = new object() };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-
-            return ptr;
-        }
-
         [CalledSimFunction]
         public static IntPtr initializeMutexNormal()
         {
@@ -74,50 +63,6 @@ namespace HAL.SimulatorHAL
         {
             var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
             Monitor.Exit(temp.lockObject);
-        }
-
-        [CalledSimFunction]
-        public static IntPtr initializeSemaphore(uint initial_value)
-        {
-            var p = new MULTIWAIT_ID {lockObject = new object()};
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-
-            return ptr;
-        }
-
-
-        [CalledSimFunction]
-        public static void deleteSemaphore(IntPtr sem)
-        {
-            Marshal.FreeHGlobal(sem);
-            sem = IntPtr.Zero;
-        }
-
-        [CalledSimFunction]
-        public static sbyte takeSemaphore(IntPtr sem)
-        {
-            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-            Monitor.Enter(temp.lockObject);//temp.semaphore.WaitOne();
-            return 0;
-        }
-
-        [CalledSimFunction]
-        public static sbyte tryTakeSemaphore(IntPtr sem)
-        {
-            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-            bool retVal = Monitor.TryEnter(temp.lockObject);
-
-            return retVal ? (sbyte)0 : (sbyte)1;
-        }
-
-        [CalledSimFunction]
-        public static sbyte giveSemaphore(IntPtr sem)
-        {
-            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
-            if (Monitor.IsEntered(temp.lockObject))
-                Monitor.Exit(temp.lockObject);
-            return 0;
         }
 
         [CalledSimFunction]
