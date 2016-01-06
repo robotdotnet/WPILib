@@ -29,6 +29,7 @@ namespace WPILib
         protected RobotBase()
         {
             NetworkTable.SetNetworkIdentity("Robot");
+            NetworkTable.SetPersistentFilename("/home/lvuser/networktables.ini");
             NetworkTable.SetServerMode();
             m_ds = DriverStation.Instance;
             NetworkTable.GetTable("");
