@@ -53,7 +53,7 @@ namespace WPILib
         private double m_minimumInput = 0.0;    // minimum input - limit setpoint to this
         private bool m_continuous = false; // do the endpoints wrap around? eg. Absolute encoder
         private bool m_enabled = false;    //is the pid controller enabled
-        private double m_prevInput = 0.0; // the prior sensor input (used to compute velocity)
+        private double m_prevError = 0.0; // the prior sensor error (used to compute velocity)
         private double m_totalError = 0.0; //the sum of the errors for use in the integral calc
         private double m_setpoint = 0.0;
         private double m_error = 0.0;
@@ -72,6 +72,9 @@ namespace WPILib
         private int m_bufLength = 1;
         private readonly Queue<double> m_buf;
         private double m_bufTotal = 0.0;
+
+        private double m_prevSetpoint = 0.0;
+        private Timer m_setpointTimer;
 
         private double m_tolerance = 0.05;
 
@@ -100,6 +103,8 @@ namespace WPILib
 
             CalculateCallback = Calculate;
             m_controlLoop = new Notifier(CalculateCallback);
+            m_setpointTimer = new Timer();
+            m_setpointTimer.Start();
 
             m_P = kp;
             m_I = ki;
@@ -252,7 +257,7 @@ namespace WPILib
                             m_totalError = m_maximumOutput / m_P;
                         }
                     }
-                    m_result = m_P * m_totalError + m_D * m_error + m_setpoint * m_F;
+                    m_result = m_P * m_totalError + m_D * m_error + CalculateFeedForward();
                 }
                 else
                 {
@@ -275,11 +280,12 @@ namespace WPILib
                             m_totalError = m_maximumOutput / m_I;
                         }
                     }
+                    m_result = m_P * m_error + m_I * m_totalError + m_D * (m_error - m_prevError) + CalculateFeedForward();
                 }
 
-                m_result = m_P * m_error + m_I * m_totalError + m_D * (m_prevInput - input) + m_setpoint * m_F;
 
-                m_prevInput = input;
+
+                m_prevError = m_error; ;
 
                 if (m_result > m_maximumOutput)
                 {
@@ -302,6 +308,38 @@ namespace WPILib
             }
 
             pidOutput.PidWrite(result);
+        }
+
+        /// <summary>
+        /// Calculate the feed forward term.
+        /// </summary>
+        /// <remarks>
+        ///Both of the provided feed forward calculations are velocity feed forwards.
+        /// If a different feed forward calculation is desired, the user can override
+        /// this function and provide his or her own.This function  does no
+        /// synchronization because the PIDController class only calls it in
+        /// synchronized code, so be careful if calling it oneself.
+        ///	<para></para>
+        /// If a velocity PID controller is being used, the F term should be set to 1
+        /// over the maximum setpoint for the output.If a position PID controller is
+        /// being used, the F term should be set to 1 over the maximum speed for the
+        /// output measured in setpoint units per this controller's update period (see
+        /// the default period in this class's constructor).
+        /// </remarks>
+        /// <returns>The calculated Feed Forward Value</returns>
+        protected virtual double CalculateFeedForward()
+        {
+            if (PIDInput.PIDSourceType == PIDSourceType.Rate)
+            {
+                return m_F * Setpoint;
+            }
+            else
+            {
+                double temp = m_F * GetDeltaSetpoint();
+                m_prevSetpoint = m_setpoint;
+                m_setpointTimer.Reset();
+                return temp;
+            }
         }
 
         ///<inheritdoc/>
@@ -498,6 +536,15 @@ namespace WPILib
         }
 
         /// <summary>
+        /// Retunrs the change in setpoing over time of the PIDController.
+        /// </summary>
+        /// <returns>The change in setpoint over time.</returns>
+        public double GetDeltaSetpoint()
+        {
+            return (m_setpoint - m_prevSetpoint) / m_setpointTimer.Get();
+        }
+
+        /// <summary>
         /// Returns the current difference of the input from the setpoint.
         /// </summary>
         /// <returns>The current error.</returns>
@@ -644,7 +691,7 @@ namespace WPILib
             lock (m_lockObject)
             {
                 Disable();
-                m_prevInput = 0;
+                m_prevError = 0;
                 m_totalError = 0;
                 m_result = 0;
             }
