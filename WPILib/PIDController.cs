@@ -581,6 +581,22 @@ namespace WPILib
         }
 
         /// <summary>
+        /// Returns whether or not any values have been collected.
+        /// </summary>
+        /// <remarks>
+        /// If no values have been collected, <see cref="GetAvgError"/> is 0, which
+        /// is invalid.
+        /// </remarks>
+        /// <returns>True if <see cref="GetAvgError"/> is currently valid.</returns>
+        public bool IsAvgErrorValid()
+        {
+            lock (m_lockObject)
+            {
+                return m_buf.Count != 0;
+            }
+        }
+
+        /// <summary>
         /// Sets the percentage error which is considered tolerable for use
         /// with <see cref="OnTarget"/>.
         /// </summary>
@@ -652,9 +668,9 @@ namespace WPILib
                 switch (m_toleranceType)
                 {
                     case ToleranceType.PercentTolerance:
-                        return Math.Abs(GetAvgError()) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
+                        return IsAvgErrorValid() && Math.Abs(GetAvgError()) < (m_tolerance / 100 * (m_maximumInput - m_minimumInput));
                     case ToleranceType.AbsoluteTolerance:
-                        return Math.Abs(GetAvgError()) < m_tolerance;
+                        return IsAvgErrorValid() && Math.Abs(GetAvgError()) < m_tolerance;
                     default:
                         throw new InvalidOperationException("Tolerance type must be set before calling OnTarget");
                 }
