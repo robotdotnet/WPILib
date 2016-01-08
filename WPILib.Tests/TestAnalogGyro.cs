@@ -232,7 +232,7 @@ namespace WPILib.Tests
         {
             using (AnalogGyro s = GetAnalogGyro(0))
             {
-                Assert.That(s.SmartDashboardType, Is.EqualTo("AnalogGyro"));
+                Assert.That(s.SmartDashboardType, Is.EqualTo("Gyro"));
             }
         }
 

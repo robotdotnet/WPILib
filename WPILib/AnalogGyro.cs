@@ -197,8 +197,5 @@ namespace WPILib
                 AnalogInput.AccumulatorDeadband = deadband;
             }
         }
-
-        ///<inheritdoc />
-        public override string SmartDashboardType => "AnalogGyro";
     }
 }

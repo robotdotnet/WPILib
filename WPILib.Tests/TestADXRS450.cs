@@ -77,5 +77,11 @@ namespace WPILib.Tests
             m_gyro.Reset();
             Assert.AreEqual(0.0, m_gyro.GetAngle(), 0.0001);
         }
+
+        [Test]
+        public void TestSmartDashboardType()
+        {
+            Assert.That(m_gyro.SmartDashboardType, Is.EqualTo("Gyro"));
+        }
     }
 }

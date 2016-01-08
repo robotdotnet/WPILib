@@ -172,8 +172,5 @@ namespace WPILib
             }
             return m_spi.GetAccumulatorLastValue() * DegreePerSecondPerLSB;
         }
-
-        /// <inheritdoc/>
-        public override string SmartDashboardType => nameof(ADXRS450_Gyro);
     }
 }
