@@ -282,53 +282,11 @@ namespace WPILib.Tests.SpecScaners
 
     }
 
-    internal struct Function
-    {
-        public bool Equals(Function other)
-        {
-            return string.Equals(m_retType, other.m_retType) && string.Equals(m_identifier.ToLower(), other.m_identifier.ToLower()) && m_parameters.SequenceEqual(other.m_parameters);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                var hashCode = m_retType?.GetHashCode() ?? 0;
-                hashCode = (hashCode * 397) ^ (m_identifier?.GetHashCode() ?? 0);
-                hashCode = (hashCode * 397) ^ (m_parameters?.GetHashCode() ?? 0);
-                return hashCode;
-            }
-        }
-
-        public Function(string ret, string id, string[] p)
-        {
-            m_retType = ret;
-            m_identifier = id;
-            m_parameters = p;
-        }
-
-        private readonly string m_retType;
-        private readonly string m_identifier;
-        private readonly string[] m_parameters;
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is Function && Equals((Function)obj);
-        }
-    }
-
-    public struct HALMethodClass
-    {
-        public string ClassName;
-        public List<MethodDeclarationSyntax> Methods;
-    }
-
     public struct HALDelegateClass
     {
         public string ClassName;
         public List<DelegateDeclarationSyntax> Methods;
     }
 
-
+    
 }

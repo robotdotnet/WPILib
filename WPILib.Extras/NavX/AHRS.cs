@@ -763,7 +763,7 @@ namespace WPILib.Extras.NavX
         /// <returns>The Current X axis displacement since last reset (meters).</returns>
         public float GetDisplacementX()
         {
-            return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[0] : m_integrator.GetVelocityX());
+            return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[0] : m_integrator.GetDisplacementX());
         }
 
         /// <summary>
@@ -779,7 +779,7 @@ namespace WPILib.Extras.NavX
         /// <returns>The Current Y axis displacement since last reset (meters).</returns>
         public float GetDisplacementY()
         {
-            return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[1] : m_integrator.GetVelocityY());
+            return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[1] : m_integrator.GetDisplacementY());
         }
 
         /// <summary>
@@ -1189,200 +1189,187 @@ namespace WPILib.Extras.NavX
 
             public void SetYawPitchRoll(IMUProtocol.YPRUpdate yprUpdate)
             {
-                lock (this)
-                { // synchronized block
-                    m_parent.m_yaw = yprUpdate.yaw;
-                    m_parent.m_pitch = yprUpdate.pitch;
-                    m_parent.m_roll = yprUpdate.roll;
-                    m_parent.m_compassHeading = yprUpdate.compass_heading;
-                }
+                m_parent.m_yaw = yprUpdate.yaw;
+                m_parent.m_pitch = yprUpdate.pitch;
+                m_parent.m_roll = yprUpdate.roll;
+                m_parent.m_compassHeading = yprUpdate.compass_heading;
+
             }
 
 
             public void SetAHRSPosData(AHRSProtocol.AHRSPosUpdate ahrsUpdate)
             {
-                lock (this)
-                { // synchronized block
 
-                    /* Update base IMU class variables */
+                /* Update base IMU class variables */
 
-                    m_parent.m_yaw = ahrsUpdate.yaw;
-                    m_parent.m_pitch = ahrsUpdate.pitch;
-                    m_parent.m_roll = ahrsUpdate.roll;
-                    m_parent.m_compassHeading = ahrsUpdate.compass_heading;
-                    m_parent.m_yawOffsetTracker.UpdateHistory(ahrsUpdate.yaw);
+                m_parent.m_yaw = ahrsUpdate.yaw;
+                m_parent.m_pitch = ahrsUpdate.pitch;
+                m_parent.m_roll = ahrsUpdate.roll;
+                m_parent.m_compassHeading = ahrsUpdate.compass_heading;
+                m_parent.m_yawOffsetTracker.UpdateHistory(ahrsUpdate.yaw);
 
-                    /* Update AHRS class variables */
+                /* Update AHRS class variables */
 
-                    // 9-axis data
-                    m_parent.m_fusedHeading = ahrsUpdate.fused_heading;
+                // 9-axis data
+                m_parent.m_fusedHeading = ahrsUpdate.fused_heading;
 
-                    // Gravity-corrected linear acceleration (world-frame)
-                    m_parent.m_worldLinearAccelX = ahrsUpdate.linear_accel_x;
-                    m_parent.m_worldLinearAccelY = ahrsUpdate.linear_accel_y;
-                    m_parent.m_worldLinearAccelZ = ahrsUpdate.linear_accel_z;
+                // Gravity-corrected linear acceleration (world-frame)
+                m_parent.m_worldLinearAccelX = ahrsUpdate.linear_accel_x;
+                m_parent.m_worldLinearAccelY = ahrsUpdate.linear_accel_y;
+                m_parent.m_worldLinearAccelZ = ahrsUpdate.linear_accel_z;
 
-                    // Gyro/Accelerometer Die Temperature
-                    m_parent.m_mpuTempC = ahrsUpdate.mpu_temp;
+                // Gyro/Accelerometer Die Temperature
+                m_parent.m_mpuTempC = ahrsUpdate.mpu_temp;
 
-                    // Barometric Pressure/Altitude
-                    m_parent.m_altitude = ahrsUpdate.altitude;
-                    m_parent.m_baroPressure = ahrsUpdate.barometric_pressure;
+                // Barometric Pressure/Altitude
+                m_parent.m_altitude = ahrsUpdate.altitude;
+                m_parent.m_baroPressure = ahrsUpdate.barometric_pressure;
 
-                    // Status/Motion Detection
-                    m_parent.m_isMoving =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_MOVING) != 0)
-                                    ? true : false);
-                    m_parent.m_isRotating =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_YAW_STABLE) != 0)
-                                    ? false : true);
-                    m_parent.m_altitudeValid =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_ALTITUDE_VALID) != 0)
-                                    ? true : false);
-                    m_parent.m_isMagnetometerCalibrated =
-                            (((ahrsUpdate.cal_status &
-                                    AHRSProtocol.NAVX_CAL_STATUS_MAG_CAL_COMPLETE) != 0)
-                                    ? true : false);
-                    m_parent.m_magneticDisturbance =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_MAG_DISTURBANCE) != 0)
-                                    ? true : false);
+                // Status/Motion Detection
+                m_parent.m_isMoving =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_MOVING) != 0)
+                                ? true : false);
+                m_parent.m_isRotating =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_YAW_STABLE) != 0)
+                                ? false : true);
+                m_parent.m_altitudeValid =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_ALTITUDE_VALID) != 0)
+                                ? true : false);
+                m_parent.m_isMagnetometerCalibrated =
+                        (((ahrsUpdate.cal_status &
+                                AHRSProtocol.NAVX_CAL_STATUS_MAG_CAL_COMPLETE) != 0)
+                                ? true : false);
+                m_parent.m_magneticDisturbance =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_MAG_DISTURBANCE) != 0)
+                                ? true : false);
 
-                    m_parent.m_quaternionW = ahrsUpdate.quat_w;
-                    m_parent.m_quaternionX = ahrsUpdate.quat_x;
-                    m_parent.m_quaternionY = ahrsUpdate.quat_y;
-                    m_parent.m_quaternionZ = ahrsUpdate.quat_z;
+                m_parent.m_quaternionW = ahrsUpdate.quat_w;
+                m_parent.m_quaternionX = ahrsUpdate.quat_x;
+                m_parent.m_quaternionY = ahrsUpdate.quat_y;
+                m_parent.m_quaternionZ = ahrsUpdate.quat_z;
 
-                    m_parent.m_velocity[0] = ahrsUpdate.vel_x;
-                    m_parent.m_velocity[1] = ahrsUpdate.vel_y;
-                    m_parent.m_velocity[2] = ahrsUpdate.vel_z;
-                    m_parent.m_displacement[0] = ahrsUpdate.disp_x;
-                    m_parent.m_displacement[1] = ahrsUpdate.disp_y;
-                    m_parent.m_displacement[2] = ahrsUpdate.disp_z;
+                m_parent.m_velocity[0] = ahrsUpdate.vel_x;
+                m_parent.m_velocity[1] = ahrsUpdate.vel_y;
+                m_parent.m_velocity[2] = ahrsUpdate.vel_z;
+                m_parent.m_displacement[0] = ahrsUpdate.disp_x;
+                m_parent.m_displacement[1] = ahrsUpdate.disp_y;
+                m_parent.m_displacement[2] = ahrsUpdate.disp_z;
 
-                    m_parent.m_yawAngleTracker.NextAngle(m_parent.GetYaw());
-                }
+                m_parent.m_yawAngleTracker.NextAngle(m_parent.GetYaw());
+
             }
 
 
             public void SetRawData(AHRSProtocol.GyroUpdate rawDataUpdate)
             {
-                lock (this)
-                { // synchronized block
-                    m_parent.m_rawGyroX = rawDataUpdate.gyro_x;
-                    m_parent.m_rawGyroY = rawDataUpdate.gyro_y;
-                    m_parent.m_rawGyroZ = rawDataUpdate.gyro_z;
-                    m_parent.m_rawAccelX = rawDataUpdate.accel_x;
-                    m_parent.m_rawAccelY = rawDataUpdate.accel_y;
-                    m_parent.m_rawAccelZ = rawDataUpdate.accel_z;
-                    m_parent.m_calMagX = rawDataUpdate.mag_x;
-                    m_parent.m_calMagY = rawDataUpdate.mag_y;
-                    m_parent.m_calMagZ = rawDataUpdate.mag_z;
-                    m_parent.m_mpuTempC = rawDataUpdate.temp_c;
-                }
+                m_parent.m_rawGyroX = rawDataUpdate.gyro_x;
+                m_parent.m_rawGyroY = rawDataUpdate.gyro_y;
+                m_parent.m_rawGyroZ = rawDataUpdate.gyro_z;
+                m_parent.m_rawAccelX = rawDataUpdate.accel_x;
+                m_parent.m_rawAccelY = rawDataUpdate.accel_y;
+                m_parent.m_rawAccelZ = rawDataUpdate.accel_z;
+                m_parent.m_calMagX = rawDataUpdate.mag_x;
+                m_parent.m_calMagY = rawDataUpdate.mag_y;
+                m_parent.m_calMagZ = rawDataUpdate.mag_z;
+                m_parent.m_mpuTempC = rawDataUpdate.temp_c;
+
             }
 
 
             public void SetAHRSData(AHRSProtocol.AHRSUpdate ahrsUpdate)
             {
-                lock (this)
-                { // synchronized block
 
-                    /* Update base IMU class variables */
+                /* Update base IMU class variables */
 
-                    m_parent.m_yaw = ahrsUpdate.yaw;
-                    m_parent.m_pitch = ahrsUpdate.pitch;
-                    m_parent.m_roll = ahrsUpdate.roll;
-                    m_parent.m_compassHeading = ahrsUpdate.compass_heading;
-                    m_parent.m_yawOffsetTracker.UpdateHistory(ahrsUpdate.yaw);
+                m_parent.m_yaw = ahrsUpdate.yaw;
+                m_parent.m_pitch = ahrsUpdate.pitch;
+                m_parent.m_roll = ahrsUpdate.roll;
+                m_parent.m_compassHeading = ahrsUpdate.compass_heading;
+                m_parent.m_yawOffsetTracker.UpdateHistory(ahrsUpdate.yaw);
 
-                    /* Update AHRS class variables */
+                /* Update AHRS class variables */
 
-                    // 9-axis data
-                    m_parent.m_fusedHeading = ahrsUpdate.fused_heading;
+                // 9-axis data
+                m_parent.m_fusedHeading = ahrsUpdate.fused_heading;
 
-                    // Gravity-corrected linear acceleration (world-frame)
-                    m_parent.m_worldLinearAccelX = ahrsUpdate.linear_accel_x;
-                    m_parent.m_worldLinearAccelY = ahrsUpdate.linear_accel_y;
-                    m_parent.m_worldLinearAccelZ = ahrsUpdate.linear_accel_z;
+                // Gravity-corrected linear acceleration (world-frame)
+                m_parent.m_worldLinearAccelX = ahrsUpdate.linear_accel_x;
+                m_parent.m_worldLinearAccelY = ahrsUpdate.linear_accel_y;
+                m_parent.m_worldLinearAccelZ = ahrsUpdate.linear_accel_z;
 
-                    // Gyro/Accelerometer Die Temperature
-                    m_parent.m_mpuTempC = ahrsUpdate.mpu_temp;
+                // Gyro/Accelerometer Die Temperature
+                m_parent.m_mpuTempC = ahrsUpdate.mpu_temp;
 
-                    // Barometric Pressure/Altitude
-                    m_parent.m_altitude = ahrsUpdate.altitude;
-                    m_parent.m_baroPressure = ahrsUpdate.barometric_pressure;
+                // Barometric Pressure/Altitude
+                m_parent.m_altitude = ahrsUpdate.altitude;
+                m_parent.m_baroPressure = ahrsUpdate.barometric_pressure;
 
-                    // Magnetometer Data
-                    m_parent.m_calMagX = ahrsUpdate.cal_mag_x;
-                    m_parent.m_calMagY = ahrsUpdate.cal_mag_y;
-                    m_parent.m_calMagZ = ahrsUpdate.cal_mag_z;
+                // Magnetometer Data
+                m_parent.m_calMagX = ahrsUpdate.cal_mag_x;
+                m_parent.m_calMagY = ahrsUpdate.cal_mag_y;
+                m_parent.m_calMagZ = ahrsUpdate.cal_mag_z;
 
-                    // Status/Motion Detection
-                    m_parent.m_isMoving =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_MOVING) != 0)
-                                    ? true : false);
-                    m_parent.m_isRotating =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_YAW_STABLE) != 0)
-                                    ? false : true);
-                    m_parent.m_altitudeValid =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_ALTITUDE_VALID) != 0)
-                                    ? true : false);
-                    m_parent.m_isMagnetometerCalibrated =
-                            (((ahrsUpdate.cal_status &
-                                    AHRSProtocol.NAVX_CAL_STATUS_MAG_CAL_COMPLETE) != 0)
-                                    ? true : false);
-                    m_parent.m_magneticDisturbance =
-                            (((ahrsUpdate.sensor_status &
-                                    AHRSProtocol.NAVX_SENSOR_STATUS_MAG_DISTURBANCE) != 0)
-                                    ? true : false);
+                // Status/Motion Detection
+                m_parent.m_isMoving =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_MOVING) != 0)
+                                ? true : false);
+                m_parent.m_isRotating =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_YAW_STABLE) != 0)
+                                ? false : true);
+                m_parent.m_altitudeValid =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_ALTITUDE_VALID) != 0)
+                                ? true : false);
+                m_parent.m_isMagnetometerCalibrated =
+                        (((ahrsUpdate.cal_status &
+                                AHRSProtocol.NAVX_CAL_STATUS_MAG_CAL_COMPLETE) != 0)
+                                ? true : false);
+                m_parent.m_magneticDisturbance =
+                        (((ahrsUpdate.sensor_status &
+                                AHRSProtocol.NAVX_SENSOR_STATUS_MAG_DISTURBANCE) != 0)
+                                ? true : false);
 
-                    m_parent.m_quaternionW = ahrsUpdate.quat_w;
-                    m_parent.m_quaternionX = ahrsUpdate.quat_x;
-                    m_parent.m_quaternionY = ahrsUpdate.quat_y;
-                    m_parent.m_quaternionZ = ahrsUpdate.quat_z;
+                m_parent.m_quaternionW = ahrsUpdate.quat_w;
+                m_parent.m_quaternionX = ahrsUpdate.quat_x;
+                m_parent.m_quaternionY = ahrsUpdate.quat_y;
+                m_parent.m_quaternionZ = ahrsUpdate.quat_z;
 
-                    m_parent.UpdateDisplacement(m_parent.m_worldLinearAccelX,
-                            m_parent.m_worldLinearAccelY,
-                            m_parent.m_updateRateHz,
-                            m_parent.m_isMoving);
+                m_parent.UpdateDisplacement(m_parent.m_worldLinearAccelX,
+                        m_parent.m_worldLinearAccelY,
+                        m_parent.m_updateRateHz,
+                        m_parent.m_isMoving);
 
-                    m_parent.m_yawAngleTracker.NextAngle(m_parent.GetYaw());
-                }
+                m_parent.m_yawAngleTracker.NextAngle(m_parent.GetYaw());
+
             }
 
 
             public void SetBoardID(AHRSProtocol.BoardID boardId)
             {
-                lock (this)
-                { // synchronized block
-                    m_parent.m_boardType = boardId.type;
-                    m_parent.m_hwRev = boardId.hw_rev;
-                    m_parent.m_fwVerMajor = boardId.fw_ver_major;
-                    m_parent.m_fwVerMinor = boardId.fw_ver_minor;
-                }
+                m_parent.m_boardType = boardId.type;
+                m_parent.m_hwRev = boardId.hw_rev;
+                m_parent.m_fwVerMajor = boardId.fw_ver_major;
+                m_parent.m_fwVerMinor = boardId.fw_ver_minor;
+
             }
 
 
             public void SetBoardState(BoardState boardState)
             {
-                lock (this)
-                { // synchronized block
-                    m_parent.m_updateRateHz = boardState.UpdateRateHz;
-                    m_parent.m_accelFsrG = boardState.AccelFsrG;
-                    m_parent.m_gyroFsrDps = boardState.GyroFsrDps;
-                    m_parent.m_capabilityFlags = boardState.CapabilityFlags;
-                    m_parent.m_opStatus = boardState.OpStatus;
-                    m_parent.m_sensorStatus = boardState.SensorStatus;
-                    m_parent.m_calStatus = boardState.CalStatus;
-                    m_parent.m_selftestStatus = boardState.SelftestStatus;
-                }
+                m_parent.m_updateRateHz = boardState.UpdateRateHz;
+                m_parent.m_accelFsrG = boardState.AccelFsrG;
+                m_parent.m_gyroFsrDps = boardState.GyroFsrDps;
+                m_parent.m_capabilityFlags = boardState.CapabilityFlags;
+                m_parent.m_opStatus = boardState.OpStatus;
+                m_parent.m_sensorStatus = boardState.SensorStatus;
+                m_parent.m_calStatus = boardState.CalStatus;
+                m_parent.m_selftestStatus = boardState.SelftestStatus;
             }
         };
 
