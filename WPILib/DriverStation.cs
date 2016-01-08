@@ -42,12 +42,16 @@ namespace WPILib
         private readonly HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
         private readonly HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
         private readonly HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
+        private readonly HALJoystickDescriptor[] m_joystickDescriptors = new HALJoystickDescriptor[JoystickPorts];
 
         //Pointers to the semaphores to the HAL and FPGA
         private readonly object m_dataSem;
 
         private readonly IntPtr m_packetDataAvailableMutex;
         private readonly IntPtr m_packetDataAvailableSem;
+        
+        //New Control Data Fast Semaphore Lock
+        private readonly object m_newControlDataLock = new object();
         private bool m_newControlData = false;
 
         //Driver station thread keep alive
@@ -60,7 +64,7 @@ namespace WPILib
         private bool m_userInTest;
 
         //Thread lock objects
-        private readonly object m_lockObject = new object();
+        private readonly ReaderWriterLockSlim m_readWriteLock;
 
         //Reporting interval time limiters
         private const double JoystickUnpluggedMessageInterval = 1.0;
@@ -86,11 +90,18 @@ namespace WPILib
                 m_joystickButtons[i].count = 0;
                 m_joystickAxes[i].count = 0;
                 m_joystickPOVs[i].count = 0;
+                m_joystickDescriptors[i] = new HALJoystickDescriptor();
+                m_joystickDescriptors[i].isXbox = 0;
+                m_joystickDescriptors[i].type = 0xFF;
+                m_joystickDescriptors[i].name.byte0 = 0;
             }
+
+            m_readWriteLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+
 
             //Initializes the HAL semaphores
             m_dataSem = new object();
-            
+
 
             m_packetDataAvailableMutex = InitializeMutexNormal();
             m_packetDataAvailableSem = InitializeMultiWait();
@@ -121,20 +132,17 @@ namespace WPILib
             {
                 //Wait for new DS data, grab the newest data, and return the semaphore.
                 TakeMultiWait(m_packetDataAvailableSem, m_packetDataAvailableMutex);
-                lock (m_lockObject)
-                {
-                    GetData();
-                }
+                GetData();
                 try
                 {
                     Monitor.Enter(m_dataSem);
                     Monitor.PulseAll(m_dataSem);
                 }
-                finally 
+                finally
                 {
                     Monitor.Exit(m_dataSem);
                 }
-                
+
 
                 //Every 4 loops (80ms) check all of the motors to make sure they have been updated
                 if (++safetyCounter >= 4)
@@ -166,7 +174,7 @@ namespace WPILib
                 Monitor.Enter(m_dataSem);
                 Monitor.Wait(m_dataSem, timeout);
             }
-            finally 
+            finally
             {
                 Monitor.Exit(m_dataSem);
             }
@@ -177,20 +185,25 @@ namespace WPILib
         /// </summary>
         protected void GetData()
         {
+            bool lockEntered = false;
             try
             {
-                Monitor.Enter(m_lockObject);
+                m_readWriteLock.EnterWriteLock();
+                lockEntered = true;
                 for (byte stick = 0; stick < JoystickPorts; stick++)
                 {
                     HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
                     HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
                     HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
-                }
-                m_newControlData = true;
+                    HALGetJoystickDescriptor(stick, ref m_joystickDescriptors[stick]);               }
             }
             finally
             {
-                Monitor.Exit(m_lockObject);
+                if (lockEntered) m_readWriteLock.ExitWriteLock();
+            }
+            lock (m_newControlDataLock)
+            {
+                m_newControlData = true;
             }
         }
 
@@ -230,16 +243,25 @@ namespace WPILib
         /// Thrown if the stick or axis are out of range.</exception>
         public double GetStickAxis(int stick, int axis)
         {
-            lock (m_joystickAxes)
+            if (stick >= JoystickPorts)
             {
-                if (stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+
+
+
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
 
                 if (axis > m_joystickAxes[stick].count)
                 {
+                    m_readWriteLock.ExitReadLock();
+                    lockEntered = false;
+
                     if (axis >= MaxJoystickAxes)
                         throw new ArgumentOutOfRangeException(nameof(axis),
                             $"Joystick axis is out of range, should be between 0 and {m_joystickAxes[stick].count}");
@@ -262,6 +284,10 @@ namespace WPILib
                     return value / 127.0d;
                 }
             }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
+            }
 
         }
 
@@ -274,16 +300,24 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetStickAxisCount(int stick)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick index is out of range, should be 0-{JoystickPorts}");
+            }
 
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
                 return m_joystickAxes[stick].count;
             }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
+            }
+
         }
 
         /// <summary>
@@ -296,23 +330,28 @@ namespace WPILib
         /// Thrown if the stick or povs are out of range.</exception>
         public int GetStickPOV(int stick, int pov)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
 
-                if (pov < 0 || pov >= MaxJoystickPOVs)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(pov),
-                        $"Joystick POV is out of range, should be between 0 and {MaxJoystickPOVs}");
-                }
+            if (pov < 0 || pov >= MaxJoystickPOVs)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pov),
+                    $"Joystick POV is out of range, should be between 0 and {MaxJoystickPOVs}");
+            }
 
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
 
                 if (pov >= m_joystickPOVs[stick].count)
                 {
+                    m_readWriteLock.ExitReadLock();
+                    lockEntered = false;
                     ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
                     return -1;
@@ -320,6 +359,11 @@ namespace WPILib
 
                 return m_joystickPOVs[stick].povs[pov];
             }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
+            }
+
         }
 
         /// <summary>
@@ -331,16 +375,24 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetStickPOVCount(int stick)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
 
                 return m_joystickPOVs[stick].count;
             }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
+            }
+
         }
 
         /// <summary>
@@ -352,15 +404,24 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetStickButtons(int stick)
         {
-            lock (m_lockObject)
+
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
                 return (int)m_joystickButtons[stick].buttons;
             }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
+            }
+
         }
 
         /// <summary>
@@ -373,27 +434,38 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public bool GetStickButton(int stick, byte button)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+            if (button <= 0)
+            {
+                ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
+                return false;
+            }
+
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
 
                 if (button > m_joystickButtons[stick].count)
                 {
+                    m_readWriteLock.ExitReadLock();
+                    lockEntered = false;
                     ReportJoystickUnpluggedError("WARNING: Joystick Button " + button + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
                     return false;
                 }
 
-                if (button <= 0)
-                {
-                    ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
-                    return false;
-                }
+
                 return ((0x1 << (button - 1)) & m_joystickButtons[stick].buttons) != 0;
+            }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
             }
         }
 
@@ -406,15 +478,22 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetStickButtonCount(int stick)
         {
-            lock (m_lockObject)
-            {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
 
+            if (stick < 0 || stick >= JoystickPorts)
+            {
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
                 return m_joystickButtons[stick].count;
+            }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
             }
         }
 
@@ -427,22 +506,23 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public bool GetJoystickIsXbox(int stick)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
-                //TODO: Remove this when calling for descriptor on empty stick no longer crashes
-                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
-                {
-                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
-                        " not available, check if controller is plugged in\n");
-                    return false;
-                }
-                return HALGetJoystickIsXbox((byte)stick) == 1;
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
+                return m_joystickDescriptors[stick].isXbox != 0;
+            }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
+            }
+
         }
 
         /// <summary>
@@ -454,21 +534,21 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetJoystickType(int stick)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
-                //TODO: Remove this when calling for descriptor on empty stick
-                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
-                {
-                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
-                        " not available, check if controller is plugged in\n");
-                    return -1;
-                }
-                return HALGetJoystickType((byte)stick);
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
+                return m_joystickDescriptors[stick].type;
+            }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
             }
         }
 
@@ -481,24 +561,22 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public string GetJoystickName(int stick)
         {
-            lock (m_lockObject)
+            if (stick < 0 || stick >= JoystickPorts)
             {
-                if (stick < 0 || stick >= JoystickPorts)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(stick),
-                            $"Joystick Index is out of range, should be 0-{JoystickPorts}");
-                }
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                        $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
 
-                //TODO: Remove this when calling for descriptor on empty stick
-                if (1 > m_joystickButtons[stick].count && 1 > m_joystickAxes[stick].count)
-                {
-                    ReportJoystickUnpluggedError("WARNING: Joystick on port " + stick +
-                        " not available, check if controller is plugged in\n");
-                    return "";
-                }
-                HALJoystickDescriptor desc = new HALJoystickDescriptor();
-                HAL.Base.HAL.HALGetJoystickDescriptor((byte)stick, ref desc);
-                return desc.name.ToString();
+            bool lockEntered = false;
+            try
+            {
+                m_readWriteLock.EnterReadLock();
+                lockEntered = true;
+                return m_joystickDescriptors[stick].name.ToString();
+            }
+            finally
+            {
+                if (lockEntered) m_readWriteLock.ExitReadLock();
             }
         }
 
@@ -599,16 +677,11 @@ namespace WPILib
         {
             get
             {
-                try
+                lock (m_newControlDataLock)
                 {
-                    Monitor.Enter(m_lockObject);
                     bool result = m_newControlData;
                     m_newControlData = false;
                     return result;
-                }
-                finally
-                {
-                    Monitor.Exit(m_lockObject);
                 }
             }
         }
