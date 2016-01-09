@@ -95,7 +95,7 @@
     <Compile Include="Base\HALAccelerometer.cs" />
     <Compile Include="Base\HALAnalog.cs" />
     <Compile Include="Base\HALCAN.cs" />
-    <Compile Include="Base\HALCanTalonSRX.cs" />
+    <Compile Include="Base\HALCANTalonSRX.cs" />
     <Compile Include="Base\HALCompressor.cs" />
     <Compile Include="Base\HALDigital.cs" />
     <Compile Include="Base\HALErrors.cs" />
