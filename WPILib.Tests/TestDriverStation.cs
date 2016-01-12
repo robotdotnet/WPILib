@@ -256,7 +256,7 @@ namespace WPILib.Tests
                 }
             };
             DriverStationHelper.UpdateData();
-            Thread.Sleep(10);
+            Thread.Sleep(150);
             int buttonCount = DriverStation.Instance.GetStickButtonCount(0);
             Assert.That(buttonCount, Is.EqualTo(numButtons));
             for (int i = 0; i < buttonCount; i++)
@@ -271,7 +271,7 @@ namespace WPILib.Tests
                 buttons[i] = true;
             }
             DriverStationHelper.UpdateData();
-            Thread.Sleep(10);
+            Thread.Sleep(150);
             for (int i = 0; i < buttonCount; i++)
             {
                 bool button = DriverStation.Instance.GetStickButton(0, (byte)(i + 1));
@@ -301,7 +301,7 @@ namespace WPILib.Tests
                 }
             };
             DriverStationHelper.UpdateData();
-            Thread.Sleep(10);
+            Thread.Sleep(150);
             int axesCount = DriverStation.Instance.GetStickAxisCount(0);
             Assert.That(axesCount, Is.EqualTo(numAxes));
             for (int i = 0; i < axesCount; i++)
@@ -316,7 +316,7 @@ namespace WPILib.Tests
                 axes[i] = -.598;
             }
             DriverStationHelper.UpdateData();
-            Thread.Sleep(10);
+            Thread.Sleep(150);
             for (int i = 0; i < axesCount; i++)
             {
                 double axis = DriverStation.Instance.GetStickAxis(0, i);

@@ -39,17 +39,22 @@ namespace WPILib
         };
 
         //Private Fields
-        private readonly HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
-        private readonly HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
-        private readonly HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
-        private readonly HALJoystickDescriptor[] m_joystickDescriptors = new HALJoystickDescriptor[JoystickPorts];
+        private HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
+        private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
+        private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
+        private HALJoystickDescriptor[] m_joystickDescriptors = new HALJoystickDescriptor[JoystickPorts];
+
+        private HALJoystickAxes[] m_joystickAxesCache = new HALJoystickAxes[JoystickPorts];
+        private HALJoystickPOVs[] m_joystickPOVsCache = new HALJoystickPOVs[JoystickPorts];
+        private HALJoystickButtons[] m_joystickButtonsCache = new HALJoystickButtons[JoystickPorts];
+        private HALJoystickDescriptor[] m_joystickDescriptorsCache = new HALJoystickDescriptor[JoystickPorts];
 
         //Pointers to the semaphores to the HAL and FPGA
         private readonly object m_dataSem;
 
         private readonly IntPtr m_packetDataAvailableMutex;
         private readonly IntPtr m_packetDataAvailableSem;
-        
+
         //New Control Data Fast Semaphore Lock
         private readonly object m_newControlDataLock = new object();
         private bool m_newControlData = false;
@@ -94,6 +99,14 @@ namespace WPILib
                 m_joystickDescriptors[i].isXbox = 0;
                 m_joystickDescriptors[i].type = 0xFF;
                 m_joystickDescriptors[i].name.byte0 = 0;
+
+                m_joystickButtonsCache[i].count = 0;
+                m_joystickAxesCache[i].count = 0;
+                m_joystickPOVsCache[i].count = 0;
+                m_joystickDescriptorsCache[i] = new HALJoystickDescriptor();
+                m_joystickDescriptorsCache[i].isXbox = 0;
+                m_joystickDescriptorsCache[i].type = 0xFF;
+                m_joystickDescriptorsCache[i].name.byte0 = 0;
             }
 
             m_readWriteLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
@@ -185,17 +198,34 @@ namespace WPILib
         /// </summary>
         protected void GetData()
         {
+            for (byte stick = 0; stick < JoystickPorts; stick++)
+            {
+                HALGetJoystickAxes(stick, ref m_joystickAxesCache[stick]);
+                HALGetJoystickPOVs(stick, ref m_joystickPOVsCache[stick]);
+                HALGetJoystickButtons(stick, ref m_joystickButtonsCache[stick]);
+                HALGetJoystickDescriptor(stick, ref m_joystickDescriptorsCache[stick]);
+            }
             bool lockEntered = false;
             try
             {
                 m_readWriteLock.EnterWriteLock();
                 lockEntered = true;
-                for (byte stick = 0; stick < JoystickPorts; stick++)
-                {
-                    HALGetJoystickAxes(stick, ref m_joystickAxes[stick]);
-                    HALGetJoystickPOVs(stick, ref m_joystickPOVs[stick]);
-                    HALGetJoystickButtons(stick, ref m_joystickButtons[stick]);
-                    HALGetJoystickDescriptor(stick, ref m_joystickDescriptors[stick]);               }
+
+                HALJoystickAxes[] currentAxes = m_joystickAxes;
+                m_joystickAxes = m_joystickAxesCache;
+                m_joystickAxesCache = currentAxes;
+
+                HALJoystickButtons[] currentButtons = m_joystickButtons;
+                m_joystickButtons = m_joystickButtonsCache;
+                m_joystickButtonsCache = currentButtons;
+
+                HALJoystickPOVs[] currentPOVs = m_joystickPOVs;
+                m_joystickPOVs = m_joystickPOVsCache;
+                m_joystickPOVsCache = currentPOVs;
+
+                HALJoystickDescriptor[] currentDescriptor = m_joystickDescriptors;
+                m_joystickDescriptors = m_joystickDescriptorsCache;
+                m_joystickDescriptorsCache = currentDescriptor;
             }
             finally
             {
