@@ -645,10 +645,13 @@ namespace WPILib
         /// <param name="bufLength">The number of previous cycles to average.</param>
         public void SetToleranceBuffer(int bufLength)
         {
-            m_bufLength = bufLength;
-            while (m_buf.Count > bufLength)
+            lock (m_lockObject)
             {
-                m_bufTotal -= m_buf.Dequeue();
+                m_bufLength = bufLength;
+                while (m_buf.Count > bufLength)
+                {
+                    m_bufTotal -= m_buf.Dequeue();
+                }
             }
         }
 
