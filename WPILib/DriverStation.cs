@@ -210,12 +210,13 @@ namespace WPILib
         /// Reports errors related to unplugged joysticks.
         /// </summary>
         /// <param name="message">The message to send.</param>
-        private void ReportJoystickUnpluggedError(string message)
+        private void ReportJoystickUnpluggedError(string message, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
             double currentTime = GetFPGATimestamp();
             if (currentTime > m_nextMessageTime)
             {
-                ReportError(message, false);
+                ReportError(message, false, memberName, filePath, lineNumber);
                 m_nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
             }
         }
