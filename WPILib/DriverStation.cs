@@ -253,6 +253,9 @@ namespace WPILib
         /// Reports errors related to unplugged joysticks.
         /// </summary>
         /// <param name="message">The message to send.</param>
+        /// <param name="memberName">The Member Name</param>
+        /// <param name="filePath">The File Path</param>
+        /// <param name="lineNumber">The Line Number</param>
         private void ReportJoystickUnpluggedError(string message, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
