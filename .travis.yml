@@ -3,7 +3,6 @@ solution: robotdotnet-wpilib.sln
 
 os:
   - linux
-  - osx
 
 addons:
   apt:
