@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+#if !NO_REFLECTION_CONTEXT
 using System.Reflection.Context;
+#endif
 using WPILib.Commands;
 using WPILib.Extras.AttributedCommandModel;
 
@@ -11,6 +13,7 @@ namespace WPILib.Tests.Commands
     [TestFixture]
     public class AttributedSubsystemTest : AbstractCommandTest
     {
+#if !NO_REFLECTION_CONTEXT
         internal class TestReflectionContext : CustomReflectionContext
         {
             protected override IEnumerable<object> GetCustomAttributes(MemberInfo member, IEnumerable<object> declaredAttributes)
@@ -22,6 +25,7 @@ namespace WPILib.Tests.Commands
                 foreach (var attr in declaredAttributes) yield return attr;
             }
         }
+#endif
 
         [ExportSubsystem(DefaultCommandType = typeof(AttributedMockCommand))]
         [ExportSubsystem(DefaultCommandType = typeof(AttributedMockCommand))]
@@ -54,6 +58,7 @@ namespace WPILib.Tests.Commands
             }
         }
 
+#if !NO_REFLECTION_CONTEXT
         [Test]
         public void SubsystemSetsDefaultCommandByAttributeThroughReflectionContext()
         {
@@ -65,6 +70,7 @@ namespace WPILib.Tests.Commands
                 Assert.IsInstanceOf<MockCommand>(robot.Subsystems.OfType<ASubsystem>().First().GetCurrentCommand());
             }
         }
+#endif
 
         [Test]
         public void MultipleSubsystemsGeneratedByMultipleAttributes()

@@ -15,5 +15,5 @@ install:
   - nuget restore robotdotnet-wpilib.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
-  - xbuild /p:Configuration=AppVeyor robotdotnet-wpilib.sln
+  - xbuild /p:Configuration=Travis robotdotnet-wpilib.sln
   - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./WPILib.Tests/Output/WPILib.Tests.dll
