@@ -27,7 +27,7 @@ namespace WPILib.Extras.NavX
             return port.Write(address | 0x80, value);
         }
 
-        const int MAX_WPILIB_I2C_READ_BYTES = 7;
+        const int MAX_WPILIB_I2C_READ_BYTES = 127;
 
 
         public bool Read(byte first_address, byte[] buffer)
