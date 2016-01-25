@@ -162,6 +162,7 @@ namespace WPILib
             bool errorOnExit = false;
             try
             {
+                Console.WriteLine("********** Robot program starting **********");
                 s_robot.StartCompetition();
             }
             catch (Exception ex)
