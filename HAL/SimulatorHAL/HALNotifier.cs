@@ -143,7 +143,7 @@ namespace HAL.SimulatorHAL
                 if (notifiers == notifier) notifiers = notifier.next;
                 Notifiers.Remove(notifier_pointer.ToInt32());
             }
-
+            /*
             if (Interlocked.Decrement(ref notifierRefCount) == 0)
             {
                 lock (s_notifierInterruptMutex)
@@ -157,6 +157,7 @@ namespace HAL.SimulatorHAL
 
                 }
             }
+            */
         }
 
         public static void stopNotifierAlarm(IntPtr notifier_pointer, ref int status)

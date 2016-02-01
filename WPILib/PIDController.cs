@@ -121,7 +121,7 @@ namespace WPILib
             HLUsageReporting.ReportPIDController(s_instances);
 
             m_toleranceType = ToleranceType.NoTolerance;
-            m_buf = new Queue<double>();
+            m_buf = new Queue<double>(m_bufLength + 1);
         }
 
         /// <summary>
