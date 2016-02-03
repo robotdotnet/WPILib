@@ -8,7 +8,7 @@ using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
-    //[TestFixture]
+    [TestFixture]
     public class TestPIDTolerance : TestBase
     {
         private PIDController pid;
@@ -47,7 +47,7 @@ namespace WPILib.Tests
 
         private FakeOutput output;
 
-        //[SetUp]
+        [SetUp]
         public void SetUp()
         {
             input = new FakeInput();
@@ -56,14 +56,14 @@ namespace WPILib.Tests
             pid.SetInputRange(-range/2, range/2);
         }
 
-        //[TearDown]
+        [TearDown]
         public void TearDown()
         {
             pid.Dispose();
             pid = null;
         }
 
-        //[Test]
+        [Test]
         public void TestAbsoluteTolerance()
         {
             pid.SetAbsoluteTolerance(tolerance);
@@ -79,7 +79,7 @@ namespace WPILib.Tests
             Assert.That(pid.OnTarget(), Is.False, $"Error was in tolerance when it should not have been. Error was {pid.GetAvgError()}");
         }
 
-        //[Test]
+        [Test]
         public void TestPercentTolerance()
         {
             pid.SetPercentTolerance(tolerance);

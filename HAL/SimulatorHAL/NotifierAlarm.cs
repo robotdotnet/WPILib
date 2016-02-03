@@ -62,8 +62,6 @@ namespace HAL.SimulatorHAL
                     m_enabled = false;
                     m_callback?.Invoke((uint)SimHooks.GetFPGATime(), IntPtr.Zero);
                 }
-
-               
             }
 
         }
@@ -94,8 +92,18 @@ namespace HAL.SimulatorHAL
 
         public void Dispose()
         {
-            m_continue = false;
-            m_enabled = true;
+            bool gotLock = false;
+            try
+            {
+                m_lockObject.Enter(ref gotLock);
+                m_continue = false;
+                m_enabled = true;
+            }
+            finally
+            {
+                if (gotLock) m_lockObject.Exit();
+            }
+
             m_alarmThread.Join();
         }
     }

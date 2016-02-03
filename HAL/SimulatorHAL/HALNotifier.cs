@@ -142,6 +142,7 @@ namespace HAL.SimulatorHAL
                 if (notifier.next != null) notifier.next.prev = notifier.prev;
                 if (notifiers == notifier) notifiers = notifier.next;
                 Notifiers.Remove(notifier_pointer.ToInt32());
+                s_notifierCount--;
             }
             
             if (Interlocked.Decrement(ref notifierRefCount) == 0)
@@ -153,6 +154,8 @@ namespace HAL.SimulatorHAL
                         //Clean up alarm and manager
                         s_alarm.Dispose();
                         s_alarm = null;
+                        //Reset closest trigger to max value for next time.
+                        closestTrigger = ulong.MaxValue;
                     }
 
                 }
