@@ -95,6 +95,7 @@ namespace HAL.SimulatorHAL
             Base.HAL.GetFPGATime = getFPGATime;
             Base.HAL.GetFPGAButton = getFPGAButton;
             Base.HAL.HALSetErrorData = HALSetErrorData;
+            Base.HAL.HALSendError = HALSendError;
             Base.HAL.GetControlWord = HALGetControlWord;
             Base.HAL.HALGetAllianceStation = HALGetAllianceStation;
             Base.HAL.HALGetJoystickAxes = HALGetJoystickAxes;
@@ -442,6 +443,13 @@ namespace HAL.SimulatorHAL
         {
             //TODO: Logger 
             ErrorData = errors;
+            return 0;
+        }
+
+        public static int HALSendError(bool isError, int errorCode, bool isLVCode, string details,
+            string location, string callStack, bool printMsg)
+        {
+            //TODO: Log This
             return 0;
         }
 

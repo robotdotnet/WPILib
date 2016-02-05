@@ -813,27 +813,17 @@ namespace WPILib
         /// <param name="lineNumber">The line number</param>
         /// <param name="memberName">The member name</param>
         public static void ReportError(string error, bool printTrace, [CallerMemberName] string memberName = "",
-            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0, int errorCode = 1)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(error);
-            builder.AppendLine();
-            builder.Append($" Caller: {memberName}, File: {filePath}, Line: {lineNumber}\n");
+            string locString = $"Caller: {memberName}, File: {filePath}, Line: {lineNumber}\n";
+            string trace = string.Empty;
             if (printTrace)
             {
-
                 var stacktrace = Environment.StackTrace;
-                builder.Append(stacktrace);
+                trace = " at " + stacktrace + "\n";
             }
-            TextWriter errorWriter = Console.Error;
-            errorWriter.WriteLine(builder.ToString());
 
-
-            HALControlWord controlWord = GetControlWord();
-            if (controlWord.GetDSAttached())
-            {
-                HALSetErrorData(builder.ToString(), 0);
-            }
+            HALSendError(true, errorCode, false, error, locString, trace, true);
         }
 
         /// <summary>
