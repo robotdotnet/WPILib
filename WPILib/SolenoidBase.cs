@@ -33,8 +33,10 @@ namespace WPILib
             {
                 ModuleNumber = moduleNumber;
                 int status = 0;
-                m_port = InitializeSolenoidPort(GetPortWithModule((byte) ModuleNumber, 0), ref status);
+                IntPtr port = GetPortWithModule((byte)ModuleNumber, 0);
+                m_port = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
+                FreePort(port);
             }
         }
 
