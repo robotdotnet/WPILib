@@ -42,7 +42,7 @@ namespace WPILib
     /// </remarks>
     public class PWM : SensorBase, ILiveWindowSendable, ITableListener
     {
-        private IntPtr m_port;
+        private DigitalPortSafeHandle m_port;
 
         /// <summary>
         /// DefaultPWMPeriod is in milliseconds.
@@ -118,7 +118,7 @@ namespace WPILib
         /// <remarks>Free the resource associated with the PWM channel and set the value to 0.</remarks>
         public override void Dispose()
         {
-            if (m_port == IntPtr.Zero) return;
+            if (m_port == null) return;
             int status = 0;
             SetPWM(m_port, 0, ref status);
             CheckStatus(status);
@@ -126,8 +126,10 @@ namespace WPILib
             CheckStatus(status);
             FreeDIO(m_port, ref status);
             CheckStatus(status);
-            FreeDigitalPort(m_port);
-            m_port = IntPtr.Zero;
+            //FreeDigitalPort(m_port);
+            //m_port = IntPtr.Zero;
+            m_port.Dispose();
+            m_port = null;
         }
 
         /// <summary>

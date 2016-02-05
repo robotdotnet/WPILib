@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HAL.Base;
+using System;
 using static HAL.Base.HALDigital;
 using static WPILib.Utility;
 
@@ -21,7 +22,7 @@ namespace WPILib
         /// <summary>
         /// The Port this source is attached to.
         /// </summary>
-        protected internal IntPtr Port;
+        protected internal DigitalPortSafeHandle Port;
         /// <summary>
         /// The channel this source is connected to
         /// </summary>
@@ -56,8 +57,10 @@ namespace WPILib
             int status = 0;
             FreeDIO(Port, ref status);
             CheckStatus(status);
-            FreeDigitalPort(Port);
-            Port = IntPtr.Zero;
+            Port.Dispose();
+            //FreeDigitalPort(Port);
+            Port = null;
+            //Port = IntPtr.Zero;
             Channel = 0;
             base.Dispose();
         }

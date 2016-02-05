@@ -51,7 +51,7 @@ namespace WPILib
         }
 
         private readonly int m_channel;
-        private IntPtr m_port;
+        private DigitalPortSafeHandle m_port;
 
         private Direction m_direction;
         private static readonly Resource s_relayChannels = new Resource(RelayChannels * 2);
@@ -124,8 +124,10 @@ namespace WPILib
             CheckStatus(status);
             HALDigital.FreeDIO(m_port, ref status);
             CheckStatus(status);
-            HALDigital.FreeDigitalPort(m_port);
-            m_port = IntPtr.Zero;
+            //HALDigital.FreeDigitalPort(m_port);
+            //m_port = IntPtr.Zero;
+            m_port.Dispose();
+            m_port = null;
         }
 
         /// <summary>

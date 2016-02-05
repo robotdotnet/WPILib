@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HAL.Base;
+using System;
 using System.Runtime.InteropServices;
 
 namespace HAL.SimulatorHAL
@@ -10,9 +11,10 @@ namespace HAL.SimulatorHAL
             return (Port)Marshal.PtrToStructure(ptr, typeof(Port));
         }
 
-        internal static DigitalPort GetDigitalPort(IntPtr ptr)
+        internal static DigitalPort GetDigitalPort(DigitalPortSafeHandle ptr)
         {
-            return (DigitalPort)Marshal.PtrToStructure(ptr, typeof(DigitalPort));
+            return ptr.GetSimulatorPort();
+           // return (DigitalPort)Marshal.PtrToStructure(ptr, typeof(DigitalPort));
         }
 
         internal static SolenoidPort GetSolenoidPort(IntPtr ptr)

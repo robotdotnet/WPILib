@@ -76,6 +76,7 @@
     <Compile Include="AthenaHAL\HALSolenoid.cs" />
     <Compile Include="AthenaHAL\HALUtilities.cs" />
     <Compile Include="Base\LibraryLoader.cs" />
+    <Compile Include="Base\SafeHandles.cs" />
     <Compile Include="Delegates\HALAccelerometerGenerated.cs" />
     <Compile Include="Delegates\HALAnalogGenerated.cs" />
     <Compile Include="Delegates\HALCANGenerated.cs" />

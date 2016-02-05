@@ -14,37 +14,37 @@ namespace HAL.Base
             HAL.Initialize();
         }
 
-        public delegate IntPtr InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
+        public delegate DigitalPortSafeHandle InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
         public static InitializeDigitalPortDelegate InitializeDigitalPort;
 
-        public delegate void FreeDigitalPortDelegate(IntPtr digital_port_pointer);
+        public delegate void FreeDigitalPortDelegate(DigitalPortSafeHandle digital_port_pointer);
         public static FreeDigitalPortDelegate FreeDigitalPort;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool CheckPWMChannelDelegate(IntPtr digital_port_pointer);
+        public delegate bool CheckPWMChannelDelegate(DigitalPortSafeHandle digital_port_pointer);
         public static CheckPWMChannelDelegate CheckPWMChannel;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool CheckRelayChannelDelegate(IntPtr digital_port_pointer);
+        public delegate bool CheckRelayChannelDelegate(DigitalPortSafeHandle digital_port_pointer);
         public static CheckRelayChannelDelegate CheckRelayChannel;
 
-        public delegate void SetPWMDelegate(IntPtr digital_port_pointer, ushort value, ref int status);
+        public delegate void SetPWMDelegate(DigitalPortSafeHandle digital_port_pointer, ushort value, ref int status);
         public static SetPWMDelegate SetPWM;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool AllocatePWMChannelDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate bool AllocatePWMChannelDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static AllocatePWMChannelDelegate AllocatePWMChannel;
 
-        public delegate void FreePWMChannelDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate void FreePWMChannelDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static FreePWMChannelDelegate FreePWMChannel;
 
-        public delegate ushort GetPWMDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate ushort GetPWMDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static GetPWMDelegate GetPWM;
 
-        public delegate void LatchPWMZeroDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate void LatchPWMZeroDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static LatchPWMZeroDelegate LatchPWMZero;
 
-        public delegate void SetPWMPeriodScaleDelegate(IntPtr digital_port_pointer, uint squelchMask, ref int status);
+        public delegate void SetPWMPeriodScaleDelegate(DigitalPortSafeHandle digital_port_pointer, uint squelchMask, ref int status);
         public static SetPWMPeriodScaleDelegate SetPWMPeriodScale;
 
         public delegate IntPtr AllocatePWMDelegate(ref int status);
@@ -62,53 +62,53 @@ namespace HAL.Base
         public delegate void SetPWMOutputChannelDelegate(IntPtr pwmGenerator, uint pin, ref int status);
         public static SetPWMOutputChannelDelegate SetPWMOutputChannel;
 
-        public delegate void SetRelayForwardDelegate(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool on, ref int status);
+        public delegate void SetRelayForwardDelegate(DigitalPortSafeHandle digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool on, ref int status);
         public static SetRelayForwardDelegate SetRelayForward;
 
-        public delegate void SetRelayReverseDelegate(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool on, ref int status);
+        public delegate void SetRelayReverseDelegate(DigitalPortSafeHandle digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool on, ref int status);
         public static SetRelayReverseDelegate SetRelayReverse;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetRelayForwardDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetRelayForwardDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static GetRelayForwardDelegate GetRelayForward;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetRelayReverseDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetRelayReverseDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static GetRelayReverseDelegate GetRelayReverse;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool AllocateDIODelegate(IntPtr digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool input, ref int status);
+        public delegate bool AllocateDIODelegate(DigitalPortSafeHandle digital_port_pointer, [MarshalAs(UnmanagedType.I1)]bool input, ref int status);
         public static AllocateDIODelegate AllocateDIO;
 
-        public delegate void FreeDIODelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate void FreeDIODelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static FreeDIODelegate FreeDIO;
 
-        public delegate void SetDIODelegate(IntPtr digital_port_pointer, short value, ref int status);
+        public delegate void SetDIODelegate(DigitalPortSafeHandle digital_port_pointer, short value, ref int status);
         public static SetDIODelegate SetDIO;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetDIODelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetDIODelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static GetDIODelegate GetDIO;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetDIODirectionDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate bool GetDIODirectionDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static GetDIODirectionDelegate GetDIODirection;
 
-        public delegate void PulseDelegate(IntPtr digital_port_pointer, double pulseLength, ref int status);
+        public delegate void PulseDelegate(DigitalPortSafeHandle digital_port_pointer, double pulseLength, ref int status);
         public static PulseDelegate Pulse;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool IsPulsingDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate bool IsPulsingDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static IsPulsingDelegate IsPulsing;
 
         [return: MarshalAs(UnmanagedType.I1)]
         public delegate bool IsAnyPulsingDelegate(ref int status);
         public static IsAnyPulsingDelegate IsAnyPulsing;
 
-        public delegate void SetFilterSelectDelegate(IntPtr digital_port_pointer, int filter_index, ref int status);
+        public delegate void SetFilterSelectDelegate(DigitalPortSafeHandle digital_port_pointer, int filter_index, ref int status);
         public static SetFilterSelectDelegate SetFilterSelect;
 
-        public delegate int GetFilterSelectDelegate(IntPtr digital_port_pointer, ref int status);
+        public delegate int GetFilterSelectDelegate(DigitalPortSafeHandle digital_port_pointer, ref int status);
         public static GetFilterSelectDelegate GetFilterSelect;
 
         public delegate void SetFilterPeriodDelegate(int filter_index, uint value, ref int status);

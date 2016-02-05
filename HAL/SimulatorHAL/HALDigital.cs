@@ -121,24 +121,31 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeDigitalPort(IntPtr port_pointer, ref int status)
+        public static DigitalPortSafeHandle initializeDigitalPort(IntPtr port_pointer, ref int status)
         {
             DigitalPort p = new DigitalPort
             {
                 port = PortConverters.GetHalPort(port_pointer)
             };
             status = 0;
+            return new DigitalPortSafeHandle(p);
+            /*
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
             HAL.freePort(port_pointer);
             return ptr;
+            */
         }
 
         [CalledSimFunction]
-        public static void freeDigitalPort(IntPtr digital_port_pointer)
+        public static void freeDigitalPort(DigitalPortSafeHandle digital_port_pointer)
         {
+            //Do Nothing
+            return;
+            /*
             if (digital_port_pointer == IntPtr.Zero) return;
             Marshal.FreeHGlobal(digital_port_pointer);
+            */
         }
 
         private static int RemapMXPChannel(int pin)
@@ -156,7 +163,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static bool checkPWMChannel(IntPtr digital_port_pointer)
+        public static bool checkPWMChannel(DigitalPortSafeHandle digital_port_pointer)
         {
             var dPort = PortConverters.GetDigitalPort(digital_port_pointer);
             return dPort.port.pin < PwmPins;
@@ -164,7 +171,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static bool checkRelayChannel(IntPtr digital_port_pointer)
+        public static bool checkRelayChannel(DigitalPortSafeHandle digital_port_pointer)
         {
             var dPort = PortConverters.GetDigitalPort(digital_port_pointer);
             return dPort.port.pin < RelayPins;
@@ -172,7 +179,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void setPWM(IntPtr digital_port_pointer, ushort value, ref int status)
+        public static void setPWM(DigitalPortSafeHandle digital_port_pointer, ushort value, ref int status)
         {
             status = 0;
             var pwm = PWM[PortConverters.GetDigitalPort(digital_port_pointer).port.pin];
@@ -181,7 +188,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool allocatePWMChannel(IntPtr digital_port_pointer, ref int status)
+        public static bool allocatePWMChannel(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             var pin = PortConverters.GetDigitalPort(digital_port_pointer).port.pin;
@@ -209,7 +216,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void freePWMChannel(IntPtr digital_port_pointer, ref int status)
+        public static void freePWMChannel(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             var pin = PortConverters.GetDigitalPort(digital_port_pointer).port.pin;
@@ -227,21 +234,21 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static ushort getPWM(IntPtr digital_port_pointer, ref int status)
+        public static ushort getPWM(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             return (ushort)PWM[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].RawValue;
         }
 
         [CalledSimFunction]
-        public static void latchPWMZero(IntPtr digital_port_pointer, ref int status)
+        public static void latchPWMZero(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             PWM[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].ZeroLatch = true;
         }
 
         [CalledSimFunction]
-        public static void setPWMPeriodScale(IntPtr digital_port_pointer, uint squelchMask, ref int status)
+        public static void setPWMPeriodScale(DigitalPortSafeHandle digital_port_pointer, uint squelchMask, ref int status)
         {
             status = 0;
             PWM[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].PeriodScale = squelchMask;
@@ -305,7 +312,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void setRelayForward(IntPtr digital_port_pointer, bool on, ref int status)
+        public static void setRelayForward(DigitalPortSafeHandle digital_port_pointer, bool on, ref int status)
         {
             status = 0;
             var dPort = PortConverters.GetDigitalPort(digital_port_pointer);
@@ -315,7 +322,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setRelayReverse(IntPtr digital_port_pointer, bool on, ref int status)
+        public static void setRelayReverse(DigitalPortSafeHandle digital_port_pointer, bool on, ref int status)
         {
             status = 0;
             var dPort = PortConverters.GetDigitalPort(digital_port_pointer);
@@ -325,21 +332,21 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool getRelayForward(IntPtr digital_port_pointer, ref int status)
+        public static bool getRelayForward(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             return Relay[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].Forward;
         }
 
         [CalledSimFunction]
-        public static bool getRelayReverse(IntPtr digital_port_pointer, ref int status)
+        public static bool getRelayReverse(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             return Relay[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].Reverse;
         }
 
         [CalledSimFunction]
-        public static bool allocateDIO(IntPtr digital_port_pointer, bool input,
+        public static bool allocateDIO(DigitalPortSafeHandle digital_port_pointer, bool input,
             ref int status)
         {
             status = 0;
@@ -369,7 +376,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void freeDIO(IntPtr digital_port_pointer, ref int status)
+        public static void freeDIO(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             var pin = PortConverters.GetDigitalPort(digital_port_pointer).port.pin;
@@ -382,28 +389,28 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setDIO(IntPtr digital_port_pointer, short value, ref int status)
+        public static void setDIO(DigitalPortSafeHandle digital_port_pointer, short value, ref int status)
         {
             status = 0;
             DIO[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].Value = value != 0;
         }
 
         [CalledSimFunction]
-        public static bool getDIO(IntPtr digital_port_pointer, ref int status)
+        public static bool getDIO(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             return DIO[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].Value;
         }
 
         [CalledSimFunction]
-        public static bool getDIODirection(IntPtr digital_port_pointer, ref int status)
+        public static bool getDIODirection(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             return DIO[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].IsInput;
         }
 
         [CalledSimFunction]
-        public static void pulse(IntPtr digital_port_pointer, double pulseLength, ref int status)
+        public static void pulse(DigitalPortSafeHandle digital_port_pointer, double pulseLength, ref int status)
         {
             status = 0;
             DIO[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].PulseLength = pulseLength;
@@ -411,7 +418,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool isPulsing(IntPtr digital_port_pointer, ref int status)
+        public static bool isPulsing(DigitalPortSafeHandle digital_port_pointer, ref int status)
         {
             status = 0;
             return DIO[PortConverters.GetDigitalPort(digital_port_pointer).port.pin].PulseLength != 0;
@@ -451,7 +458,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        private static void setFilterSelect(IntPtr digitalPortPointer, int filterIndex, ref int status)
+        private static void setFilterSelect(DigitalPortSafeHandle digitalPortPointer, int filterIndex, ref int status)
         {
             DigitalPort port = PortConverters.GetDigitalPort(digitalPortPointer);
 
@@ -477,7 +484,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        private static int getFilterSelect(IntPtr digitalPortPointer, ref int status)
+        private static int getFilterSelect(DigitalPortSafeHandle digitalPortPointer, ref int status)
         {
             status = 0;
             int filterIdx = DIO[PortConverters.GetDigitalPort(digitalPortPointer).port.pin].FilterIndex;
