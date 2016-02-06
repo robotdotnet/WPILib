@@ -130,12 +130,6 @@ namespace HAL.SimulatorHAL
             };
             AnalogIn[p.port.pin].Initialized = true;
             return new AnalogInputPortSafeHandle(p);
-            /*
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-            HAL.freePort(port_pointer);
-            return ptr;
-            */
         }
 
         [CalledSimFunction]
@@ -349,14 +343,10 @@ namespace HAL.SimulatorHAL
                     };
                     index = (uint)i;
                     trig.index = i;
-                   // IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
-                  //  Marshal.StructureToPtr(trig, ptr, true);
                     AnalogTriggerPortSafeHandle ptr = new AnalogTriggerPortSafeHandle(trig);
                     cnt.TriggerPointer = ptr;
 
                     return ptr;
-                    
-                 //   return ptr;
                 }
             }
             status = HALErrorConstants.NO_AVAILABLE_RESOURCES;

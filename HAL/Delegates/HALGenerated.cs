@@ -81,7 +81,7 @@ namespace HAL.Base
         public delegate int HALGetMatchTimeDelegate(ref float matchTime);
         public static HALGetMatchTimeDelegate HALGetMatchTime;
 
-        public delegate void HALSetNewDataSemDelegate(IntPtr sem);
+        public delegate void HALSetNewDataSemDelegate(MultiWaitSafeHandle sem);
         public static HALSetNewDataSemDelegate HALSetNewDataSem;
 
         [return: MarshalAs(UnmanagedType.I1)]

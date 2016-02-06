@@ -3,6 +3,7 @@ using static WPILib.Timer;
 using static HAL.Base.HALNotifier;
 using static WPILib.Utility;
 using System.Threading;
+using HAL.Base;
 
 namespace WPILib
 {
@@ -12,7 +13,7 @@ namespace WPILib
     public class Notifier : IDisposable
     {
         private readonly object m_processMutex = new object();
-        private IntPtr m_notifier;
+        private NotifierSafeHandle m_notifier;
         private Action<object> m_handler;
         private object m_param;
         private double m_expirationTime = 0;

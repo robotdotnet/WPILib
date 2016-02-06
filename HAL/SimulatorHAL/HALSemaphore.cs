@@ -27,65 +27,55 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeMutexNormal()
+        public static MutexSafeHandle initializeMutexNormal()
         {
             MUTEX_ID p = new MUTEX_ID { lockObject = new object() };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-
-            return ptr;
+            return new MutexSafeHandle(p);
         }
 
         [CalledSimFunction]
-        public static void deleteMutex(IntPtr sem)
+        public static void deleteMutex(MutexSafeHandle sem)
         {
-            Marshal.FreeHGlobal(sem);
-            sem = IntPtr.Zero;
         }
 
         [CalledSimFunction]
-        public static void takeMutex(IntPtr sem)
+        public static void takeMutex(MutexSafeHandle sem)
         {
-            var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
+            var temp = sem.GetSimulatorPort();
             Monitor.Enter(temp.lockObject);
         }
 
         [CalledSimFunction]
-        public static bool tryTakeMutex(IntPtr sem)
+        public static bool tryTakeMutex(MutexSafeHandle sem)
         {
-            var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
+            var temp = sem.GetSimulatorPort();
             bool retVal = Monitor.TryEnter(temp.lockObject);
             return retVal;
         }
 
         [CalledSimFunction]
-        public static void giveMutex(IntPtr sem)
+        public static void giveMutex(MutexSafeHandle sem)
         {
-            var temp = (MUTEX_ID)Marshal.PtrToStructure(sem, typeof(MUTEX_ID));
+            var temp = sem.GetSimulatorPort();
             Monitor.Exit(temp.lockObject);
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeMultiWait()
+        public static MultiWaitSafeHandle initializeMultiWait()
         {
             MULTIWAIT_ID p = new MULTIWAIT_ID { lockObject = new object() };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-
-            return ptr;
+            return new MultiWaitSafeHandle(p);
         }
 
         [CalledSimFunction]
-        public static void deleteMultiWait(IntPtr sem)
+        public static void deleteMultiWait(MultiWaitSafeHandle sem)
         {
-            Marshal.FreeHGlobal(sem);
-            sem = IntPtr.Zero;
         }
 
         [CalledSimFunction]
-        public static void takeMultiWait(IntPtr sem, IntPtr m)
+        public static void takeMultiWait(MultiWaitSafeHandle sem, MutexSafeHandle m)
         {
-            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            var temp = sem.GetSimulatorPort();
 
             lock (temp.lockObject)
             {
@@ -100,9 +90,9 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void giveMultiWait(IntPtr sem)
+        public static void giveMultiWait(MultiWaitSafeHandle sem)
         {
-            var temp = (MULTIWAIT_ID)Marshal.PtrToStructure(sem, typeof(MULTIWAIT_ID));
+            var temp = sem.GetSimulatorPort();
             lock (temp.lockObject)
             {
                 try

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL.Simulator.Data;
+using HAL.Base;
 
 namespace HAL.Simulator
 {
@@ -376,7 +377,7 @@ namespace HAL.Simulator
             InitializePDP(0);
         }
 
-        internal static IntPtr s_halNewDataSem = IntPtr.Zero;
+        internal static MultiWaitSafeHandle s_halNewDataSem = null;
 
         /// <summary>
         /// Clears all HAL Sim Data and resets it.
@@ -450,7 +451,7 @@ namespace HAL.Simulator
 
             if (resetDS)
             {
-                s_halNewDataSem = IntPtr.Zero;
+                s_halNewDataSem = null;
             }
         }
     }

@@ -291,7 +291,7 @@ namespace HAL.SimulatorHAL
         /// </summary>
         /// <param name="sem"></param>
         [CalledSimFunction]
-        public static void HALSetNewDataSem(IntPtr sem)
+        public static void HALSetNewDataSem(MultiWaitSafeHandle sem)
         {
             s_halNewDataSem = sem;
         }

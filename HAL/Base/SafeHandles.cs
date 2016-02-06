@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HAL.SimulatorHAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -372,5 +373,166 @@ namespace HAL.Base
         }
     }
 
+    public class MutexSafeHandle : SafeHandle
+    {
+        private bool m_simulator;
+        private SimulatorHAL.MUTEX_ID m_digitalPort;
+        private bool m_valid = true;
+
+        public MutexSafeHandle() : base(IntPtr.Zero, true)
+        {
+            m_simulator = false;
+        }
+
+        internal MutexSafeHandle(SimulatorHAL.MUTEX_ID dPort) : base(IntPtr.Zero, true)
+        {
+            m_valid = true;
+            m_digitalPort = dPort;
+        }
+
+        internal SimulatorHAL.MUTEX_ID GetSimulatorPort()
+        {
+            return m_digitalPort;
+        }
+
+        public override bool IsInvalid
+        {
+            get
+            {
+                if (m_simulator) return m_valid;
+                return handle != IntPtr.Zero;
+            }
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            m_valid = false;
+            HALSemaphore.DeleteMutex(this);
+            handle = IntPtr.Zero;
+            return true;
+        }
+    }
+
+    public class MultiWaitSafeHandle : SafeHandle
+    {
+        private bool m_simulator;
+        private SimulatorHAL.MULTIWAIT_ID m_digitalPort;
+        private bool m_valid = true;
+
+        public MultiWaitSafeHandle() : base(IntPtr.Zero, true)
+        {
+            m_simulator = false;
+        }
+
+        internal MultiWaitSafeHandle(SimulatorHAL.MULTIWAIT_ID dPort) : base(IntPtr.Zero, true)
+        {
+            m_valid = true;
+            m_digitalPort = dPort;
+        }
+
+        internal SimulatorHAL.MULTIWAIT_ID GetSimulatorPort()
+        {
+            return m_digitalPort;
+        }
+
+        public override bool IsInvalid
+        {
+            get
+            {
+                if (m_simulator) return m_valid;
+                return handle != IntPtr.Zero;
+            }
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            m_valid = false;
+            HALSemaphore.DeleteMultiWait(this);
+            handle = IntPtr.Zero;
+            return true;
+        }
+    }
+
+    public class InterruptSafeHandle : SafeHandle
+    {
+        private bool m_simulator;
+        private Interrupt m_digitalPort;
+        private bool m_valid = true;
+
+        public InterruptSafeHandle() : base(IntPtr.Zero, true)
+        {
+            m_simulator = false;
+        }
+
+        internal InterruptSafeHandle(Interrupt dPort) : base(IntPtr.Zero, true)
+        {
+            m_valid = true;
+            m_digitalPort = dPort;
+        }
+
+        internal Interrupt GetSimulatorPort()
+        {
+            return m_digitalPort;
+        }
+
+        public override bool IsInvalid
+        {
+            get
+            {
+                if (m_simulator) return m_valid;
+                return handle != IntPtr.Zero;
+            }
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            m_valid = false;
+            int status = 0;
+            HALInterrupts.CleanInterrupts(this, ref status);
+            handle = IntPtr.Zero;
+            return true;
+        }
+    }
+
+    public class NotifierSafeHandle : SafeHandle
+    {
+        private bool m_simulator;
+        private SimulatorHAL.HALNotifier.Notifier m_digitalPort;
+        private bool m_valid = true;
+
+        public NotifierSafeHandle() : base(IntPtr.Zero, true)
+        {
+            m_simulator = false;
+        }
+
+        internal NotifierSafeHandle(SimulatorHAL.HALNotifier.Notifier dPort) : base(IntPtr.Zero, true)
+        {
+            m_valid = true;
+            m_digitalPort = dPort;
+        }
+
+        internal SimulatorHAL.HALNotifier.Notifier GetSimulatorPort()
+        {
+            return m_digitalPort;
+        }
+
+        public override bool IsInvalid
+        {
+            get
+            {
+                if (m_simulator) return m_valid;
+                return handle != IntPtr.Zero;
+            }
+        }
+
+        protected override bool ReleaseHandle()
+        {
+            m_valid = false;
+            int status = 0;
+            HALNotifier.CleanNotifier(this, ref status);
+            handle = IntPtr.Zero;
+            return true;
+        }
+    }
 
 }

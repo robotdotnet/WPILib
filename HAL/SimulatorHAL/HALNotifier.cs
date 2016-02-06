@@ -23,13 +23,12 @@ namespace HAL.SimulatorHAL
 
         private static ulong closestTrigger = ulong.MaxValue;
 
-        private class Notifier
+        internal class Notifier
         {
             public Notifier prev, next;
             public IntPtr param;
             public Action<ulong, IntPtr> process;
             public ulong triggerTime = ulong.MaxValue;
-            public int index;
         }
 
         private static Notifier notifiers = null;
@@ -64,7 +63,7 @@ namespace HAL.SimulatorHAL
                         }
                         else if (notifier.triggerTime < closestTrigger)
                         {
-                            updateNotifierAlarm((IntPtr)notifier.index, notifier.triggerTime, ref status);
+                            updateNotifierAlarm(notifier, notifier.triggerTime, ref status);
                         }
                     }
                     notifier = notifier.next;
@@ -81,7 +80,7 @@ namespace HAL.SimulatorHAL
 
         static int s_notifierCount = 1;
 
-        private static readonly Dictionary<int, Notifier> Notifiers = new Dictionary<int, Notifier>();
+        //private static readonly Dictionary<int, Notifier> Notifiers = new Dictionary<int, Notifier>();
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
@@ -93,12 +92,12 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeNotifier(Action<ulong, IntPtr> process, IntPtr param, ref int status)
+        public static NotifierSafeHandle initializeNotifier(Action<ulong, IntPtr> process, IntPtr param, ref int status)
         {
             if (process == null)
             {
                 status = HALErrorConstants.NULL_PARAMETER;
-                return IntPtr.Zero;
+                return null;
             }
             if (Interlocked.Increment(ref notifierRefCount) == 1)
             {
@@ -116,32 +115,33 @@ namespace HAL.SimulatorHAL
                 if (notifier.next != null) notifier.next.prev = notifier;
                 notifier.param = param;
                 notifier.process = process;
-                notifier.index = s_notifierCount;
                 notifiers = notifier;
                 
 
-                Notifiers.Add(s_notifierCount, notifier);
+                //Notifiers.Add(s_notifierCount, notifier);
                 s_notifierCount++;
 
-                return (IntPtr)s_notifierCount - 1;
+                return new NotifierSafeHandle(notifier);
+
+                //return (IntPtr)s_notifierCount - 1;
             }
         }
 
-        public static IntPtr getNotifierParam(IntPtr notifier_pointer, ref int status)
+        public static IntPtr getNotifierParam(NotifierSafeHandle notifier_pointer, ref int status)
         {
-            return Notifiers[notifier_pointer.ToInt32()].param;
+            return notifier_pointer.GetSimulatorPort().param;// Notifiers[notifier_pointer.ToInt32()].param;
         }
 
         [CalledSimFunction]
-        public static void cleanNotifier(IntPtr notifier_pointer, ref int status)
+        public static void cleanNotifier(NotifierSafeHandle notifier_pointer, ref int status)
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
+                Notifier notifier = notifier_pointer.GetSimulatorPort();
                 if (notifier.prev != null) notifier.prev.next = notifier.next;
                 if (notifier.next != null) notifier.next.prev = notifier.prev;
                 if (notifiers == notifier) notifiers = notifier.next;
-                Notifiers.Remove(notifier_pointer.ToInt32());
+                //Notifiers.Remove(notifier_pointer.ToInt32());
                 s_notifierCount--;
             }
             
@@ -163,23 +163,26 @@ namespace HAL.SimulatorHAL
             
         }
 
-        public static void stopNotifierAlarm(IntPtr notifier_pointer, ref int status)
+        public static void stopNotifierAlarm(NotifierSafeHandle notifier_pointer, ref int status)
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
+                Notifier notifier = notifier_pointer.GetSimulatorPort();
                 notifier.triggerTime = ulong.MaxValue;
             }
         }
 
-
-
         [CalledSimFunction]
-        public static void updateNotifierAlarm(IntPtr notifier_pointer, ulong triggerTime, ref int status)
+        public static void updateNotifierAlarm(NotifierSafeHandle notifier_pointer, ulong triggerTime, ref int status)
+        {
+            updateNotifierAlarm(notifier_pointer.GetSimulatorPort(), triggerTime, ref status);
+        }
+
+        private static void updateNotifierAlarm(Notifier notifier_pointer, ulong triggerTime, ref int status)
         {
             lock (s_notifierMutex)
             {
-                Notifier notifier = Notifiers[notifier_pointer.ToInt32()];
+                Notifier notifier = notifier_pointer;
                 notifier.triggerTime = triggerTime;
                 bool wasActive = (closestTrigger != ulong.MaxValue);
 

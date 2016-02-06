@@ -17,12 +17,7 @@ namespace HAL.SimulatorHAL
     {
         public object lockObject;
     }
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct SEMAPHORE_ID
-    {
-        public readonly Semaphore semaphore;
-        //public object lockObject;
-    }
+
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct MULTIWAIT_ID
@@ -100,6 +95,7 @@ namespace HAL.SimulatorHAL
         public double RisingTimestamp;
         public double FallingTimestamp;
         public bool PreviousState;
+        public uint Index;
 
         public bool FireOnUp;
         public bool FireOnDown;

@@ -129,12 +129,6 @@ namespace HAL.SimulatorHAL
             };
             status = 0;
             return new DigitalPortSafeHandle(p);
-            /*
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-            HAL.freePort(port_pointer);
-            return ptr;
-            */
         }
 
         [CalledSimFunction]
@@ -142,10 +136,6 @@ namespace HAL.SimulatorHAL
         {
             //Do Nothing
             return;
-            /*
-            if (digital_port_pointer == IntPtr.Zero) return;
-            Marshal.FreeHGlobal(digital_port_pointer);
-            */
         }
 
         private static int RemapMXPChannel(int pin)
@@ -507,13 +497,9 @@ namespace HAL.SimulatorHAL
                     cnt.UpdateWhenEmpty = false;
 
                     CounterStruct c = new CounterStruct() { idx = i };
-                    //IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
-                    //Marshal.StructureToPtr(c, ptr, true);
                     index = (uint)i;
 
                     return new CounterSafeHandle(c);
-
-                    //return ptr;
 
                 }
             }

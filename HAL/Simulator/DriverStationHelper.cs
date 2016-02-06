@@ -39,7 +39,7 @@ namespace HAL.Simulator
         internal static void UpdateData()
         {
             JoystickCallback?.Invoke();
-            if (SimData.s_halNewDataSem != IntPtr.Zero)
+            if (SimData.s_halNewDataSem != null)
             {
                 SimulatorHAL.HALSemaphore.giveMultiWait(SimData.s_halNewDataSem);
             }

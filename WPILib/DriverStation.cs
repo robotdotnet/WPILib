@@ -52,8 +52,8 @@ namespace WPILib
         //Pointers to the semaphores to the HAL and FPGA
         private readonly object m_dataSem;
 
-        private readonly IntPtr m_packetDataAvailableMutex;
-        private readonly IntPtr m_packetDataAvailableSem;
+        private readonly MutexSafeHandle m_packetDataAvailableMutex;
+        private readonly MultiWaitSafeHandle m_packetDataAvailableSem;
 
         //New Control Data Fast Semaphore Lock
         private readonly object m_newControlDataLock = new object();

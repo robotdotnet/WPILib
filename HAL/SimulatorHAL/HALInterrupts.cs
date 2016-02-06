@@ -26,10 +26,15 @@ namespace HAL.SimulatorHAL
         public const int NumInterrupts = 8;
 
         //Holds a list of our interrupts
-        internal static readonly Interrupt[] Interrupts = new Interrupt[NumInterrupts];
+        internal static readonly bool[] AllocatedInterrupts = new bool[NumInterrupts];
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
+            for (int i = 0; i < AllocatedInterrupts.Length; i++)
+            {
+                AllocatedInterrupts[i] = false;
+            }
+
             Base.HALInterrupts.InitializeInterrupts = initializeInterrupts;
             Base.HALInterrupts.CleanInterrupts = cleanInterrupts;
             Base.HALInterrupts.WaitForInterrupt = waitForInterrupt;
@@ -47,9 +52,9 @@ namespace HAL.SimulatorHAL
         //We have to use index's 1-8, instead of 0-7. So when we create in 
         //initializeInterrupt, we add one to the index, and when we get the interrupt
         //here, we subtract 1.
-        private static Interrupt GetInterrupt(IntPtr ptr)
+        private static Interrupt GetInterrupt(InterruptSafeHandle ptr)
         {
-            return Interrupts[ptr.ToInt32() - 1];
+            return ptr.GetSimulatorPort();
         }
 
         /// <summary>
@@ -60,19 +65,19 @@ namespace HAL.SimulatorHAL
         /// <param name="status">Return Status</param>
         /// <returns>Interrupt Pointer</returns>
         [CalledSimFunction]
-        public static IntPtr initializeInterrupts(uint interruptIndex, bool watcher,
+        public static InterruptSafeHandle initializeInterrupts(uint interruptIndex, bool watcher,
             ref int status)
         {
             //Check to see if we are already allocated, or if we have already allocated 8.
-            if (Interrupts[interruptIndex] != null)
+            if (AllocatedInterrupts[interruptIndex])
             {
                 status = HALErrorConstants.RESOURCE_IS_ALLOCATED;
-                return IntPtr.Zero;
+                return null;
             }
             if (interruptIndex >= NumInterrupts)
             {
                 status = HALErrorConstants.NO_AVAILABLE_RESOURCES;
-                return IntPtr.Zero;
+                return null;
             }
 
             Interrupt interrupt = new Interrupt
@@ -80,11 +85,13 @@ namespace HAL.SimulatorHAL
                 Callback = null,
                 Watcher = watcher,
                 Pin = -1,
+                Index = interruptIndex,
             };
             status = HALErrorConstants.NiFpga_Status_Success;
-            Interrupts[interruptIndex] = interrupt;
+            AllocatedInterrupts[interruptIndex] = true;
+            //Interrupts[interruptIndex] = interrupt;
             //Returns + 1. See GetInterrupts comments for the reason.
-            return (IntPtr)interruptIndex + 1;
+            return new InterruptSafeHandle(interrupt);
         }
 
 
@@ -94,7 +101,7 @@ namespace HAL.SimulatorHAL
         /// <param name="interrupt_pointer">The Interrupt Pointer</param>
         /// <param name="status">Return Status</param>
         [CalledSimFunction]
-        public static void cleanInterrupts(IntPtr interrupt_pointer, ref int status)
+        public static void cleanInterrupts(InterruptSafeHandle interrupt_pointer, ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
@@ -113,7 +120,7 @@ namespace HAL.SimulatorHAL
                 }
             }
             interrupt.DictCallback = null;
-            Interrupts[interrupt_pointer.ToInt32() - 1] = null;
+            AllocatedInterrupts[interrupt.Index] = false;
         }
 
         private static uint WaitForInterruptDigital(Interrupt interrupt, double timeout, bool ignorePrevious)
@@ -255,7 +262,7 @@ namespace HAL.SimulatorHAL
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
-        public static uint waitForInterrupt(IntPtr interrupt_pointer, double timeout, bool ignorePrevious,
+        public static uint waitForInterrupt(InterruptSafeHandle interrupt_pointer, double timeout, bool ignorePrevious,
             ref int status)
         {
 
@@ -373,7 +380,7 @@ namespace HAL.SimulatorHAL
         /// <param name="interrupt_pointer"></param>
         /// <param name="status"></param>
         [CalledSimFunction]
-        public static void enableInterrupts(IntPtr interrupt_pointer, ref int status)
+        public static void enableInterrupts(InterruptSafeHandle interrupt_pointer, ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
 
@@ -401,7 +408,7 @@ namespace HAL.SimulatorHAL
         /// <param name="interrupt_pointer"></param>
         /// <param name="status"></param>
         [CalledSimFunction]
-        public static void disableInterrupts(IntPtr interrupt_pointer, ref int status)
+        public static void disableInterrupts(InterruptSafeHandle interrupt_pointer, ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
@@ -427,7 +434,7 @@ namespace HAL.SimulatorHAL
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
-        public static double readRisingTimestamp(IntPtr interrupt_pointer, ref int status)
+        public static double readRisingTimestamp(InterruptSafeHandle interrupt_pointer, ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
             return GetInterrupt(interrupt_pointer).RisingTimestamp;
@@ -440,7 +447,7 @@ namespace HAL.SimulatorHAL
         /// <param name="status"></param>
         /// <returns></returns>
         [CalledSimFunction]
-        public static double readFallingTimestamp(IntPtr interrupt_pointer, ref int status)
+        public static double readFallingTimestamp(InterruptSafeHandle interrupt_pointer, ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
             return GetInterrupt(interrupt_pointer).FallingTimestamp;
@@ -457,7 +464,7 @@ namespace HAL.SimulatorHAL
         /// <param name="routing_analog_trigger">If IsAnalog trigger (must be false)</param>
         /// <param name="status"></param>
         [CalledSimFunction]
-        public static void requestInterrupts(IntPtr interrupt_pointer, byte routing_module, uint routing_pin,
+        public static void requestInterrupts(InterruptSafeHandle interrupt_pointer, byte routing_module, uint routing_pin,
             bool routing_analog_trigger, ref int status)
         {
             Interrupt interrupt = GetInterrupt(interrupt_pointer);
@@ -502,7 +509,7 @@ namespace HAL.SimulatorHAL
         /// <param name="param"></param>
         /// <param name="status"></param>
         [CalledSimFunction]
-        public static void attachInterruptHandler(IntPtr interrupt_pointer, Action<uint, IntPtr> handler, IntPtr param,
+        public static void attachInterruptHandler(InterruptSafeHandle interrupt_pointer, Action<uint, IntPtr> handler, IntPtr param,
             ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
@@ -519,7 +526,7 @@ namespace HAL.SimulatorHAL
         /// <param name="fallingEdge"></param>
         /// <param name="status"></param>
         [CalledSimFunction]
-        public static void setInterruptUpSourceEdge(IntPtr interrupt_pointer, bool risingEdge, bool fallingEdge,
+        public static void setInterruptUpSourceEdge(InterruptSafeHandle interrupt_pointer, bool risingEdge, bool fallingEdge,
             ref int status)
         {
             status = HALErrorConstants.NiFpga_Status_Success;
