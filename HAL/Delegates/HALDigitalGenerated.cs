@@ -14,7 +14,7 @@ namespace HAL.Base
             HAL.Initialize();
         }
 
-        public delegate DigitalPortSafeHandle InitializeDigitalPortDelegate(IntPtr port_pointer, ref int status);
+        public delegate DigitalPortSafeHandle InitializeDigitalPortDelegate(HALPortSafeHandle port_pointer, ref int status);
         public static InitializeDigitalPortDelegate InitializeDigitalPort;
 
         public delegate void FreeDigitalPortDelegate(DigitalPortSafeHandle digital_port_pointer);
@@ -117,113 +117,113 @@ namespace HAL.Base
         public delegate uint GetFilterPeriodDelegate(int filter_index, ref int status);
         public static GetFilterPeriodDelegate GetFilterPeriod;
 
-        public delegate IntPtr InitializeCounterDelegate(Mode mode, ref uint index, ref int status);
+        public delegate CounterSafeHandle InitializeCounterDelegate(Mode mode, ref uint index, ref int status);
         public static InitializeCounterDelegate InitializeCounter;
 
-        public delegate void FreeCounterDelegate(IntPtr counter_pointer, ref int status);
+        public delegate void FreeCounterDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static FreeCounterDelegate FreeCounter;
 
-        public delegate void SetCounterAverageSizeDelegate(IntPtr counter_pointer, int size, ref int status);
+        public delegate void SetCounterAverageSizeDelegate(CounterSafeHandle counter_pointer, int size, ref int status);
         public static SetCounterAverageSizeDelegate SetCounterAverageSize;
 
-        public delegate void SetCounterUpSourceDelegate(IntPtr counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, ref int status);
+        public delegate void SetCounterUpSourceDelegate(CounterSafeHandle counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, ref int status);
         public static SetCounterUpSourceDelegate SetCounterUpSource;
 
-        public delegate void SetCounterUpSourceEdgeDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool risingEdge, [MarshalAs(UnmanagedType.I1)]bool fallingEdge, ref int status);
+        public delegate void SetCounterUpSourceEdgeDelegate(CounterSafeHandle counter_pointer, [MarshalAs(UnmanagedType.I1)]bool risingEdge, [MarshalAs(UnmanagedType.I1)]bool fallingEdge, ref int status);
         public static SetCounterUpSourceEdgeDelegate SetCounterUpSourceEdge;
 
-        public delegate void ClearCounterUpSourceDelegate(IntPtr counter_pointer, ref int status);
+        public delegate void ClearCounterUpSourceDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static ClearCounterUpSourceDelegate ClearCounterUpSource;
 
-        public delegate void SetCounterDownSourceDelegate(IntPtr counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, ref int status);
+        public delegate void SetCounterDownSourceDelegate(CounterSafeHandle counter_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, ref int status);
         public static SetCounterDownSourceDelegate SetCounterDownSource;
 
-        public delegate void SetCounterDownSourceEdgeDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool risingEdge, [MarshalAs(UnmanagedType.I1)]bool fallingEdge, ref int status);
+        public delegate void SetCounterDownSourceEdgeDelegate(CounterSafeHandle counter_pointer, [MarshalAs(UnmanagedType.I1)]bool risingEdge, [MarshalAs(UnmanagedType.I1)]bool fallingEdge, ref int status);
         public static SetCounterDownSourceEdgeDelegate SetCounterDownSourceEdge;
 
-        public delegate void ClearCounterDownSourceDelegate(IntPtr counter_pointer, ref int status);
+        public delegate void ClearCounterDownSourceDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static ClearCounterDownSourceDelegate ClearCounterDownSource;
 
-        public delegate void SetCounterUpDownModeDelegate(IntPtr counter_pointer, ref int status);
+        public delegate void SetCounterUpDownModeDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static SetCounterUpDownModeDelegate SetCounterUpDownMode;
 
-        public delegate void SetCounterExternalDirectionModeDelegate(IntPtr counter_pointer, ref int status);
+        public delegate void SetCounterExternalDirectionModeDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static SetCounterExternalDirectionModeDelegate SetCounterExternalDirectionMode;
 
-        public delegate void SetCounterSemiPeriodModeDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool highSemiPeriod, ref int status);
+        public delegate void SetCounterSemiPeriodModeDelegate(CounterSafeHandle counter_pointer, [MarshalAs(UnmanagedType.I1)]bool highSemiPeriod, ref int status);
         public static SetCounterSemiPeriodModeDelegate SetCounterSemiPeriodMode;
 
-        public delegate void SetCounterPulseLengthModeDelegate(IntPtr counter_pointer, double threshold, ref int status);
+        public delegate void SetCounterPulseLengthModeDelegate(CounterSafeHandle counter_pointer, double threshold, ref int status);
         public static SetCounterPulseLengthModeDelegate SetCounterPulseLengthMode;
 
-        public delegate int GetCounterSamplesToAverageDelegate(IntPtr counter_pointer, ref int status);
+        public delegate int GetCounterSamplesToAverageDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static GetCounterSamplesToAverageDelegate GetCounterSamplesToAverage;
 
-        public delegate void SetCounterSamplesToAverageDelegate(IntPtr counter_pointer, int samplesToAverage, ref int status);
+        public delegate void SetCounterSamplesToAverageDelegate(CounterSafeHandle counter_pointer, int samplesToAverage, ref int status);
         public static SetCounterSamplesToAverageDelegate SetCounterSamplesToAverage;
 
-        public delegate void ResetCounterDelegate(IntPtr counter_pointer, ref int status);
+        public delegate void ResetCounterDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static ResetCounterDelegate ResetCounter;
 
-        public delegate int GetCounterDelegate(IntPtr counter_pointer, ref int status);
+        public delegate int GetCounterDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static GetCounterDelegate GetCounter;
 
-        public delegate double GetCounterPeriodDelegate(IntPtr counter_pointer, ref int status);
+        public delegate double GetCounterPeriodDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static GetCounterPeriodDelegate GetCounterPeriod;
 
-        public delegate void SetCounterMaxPeriodDelegate(IntPtr counter_pointer, double maxPeriod, ref int status);
+        public delegate void SetCounterMaxPeriodDelegate(CounterSafeHandle counter_pointer, double maxPeriod, ref int status);
         public static SetCounterMaxPeriodDelegate SetCounterMaxPeriod;
 
-        public delegate void SetCounterUpdateWhenEmptyDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool enabled, ref int status);
+        public delegate void SetCounterUpdateWhenEmptyDelegate(CounterSafeHandle counter_pointer, [MarshalAs(UnmanagedType.I1)]bool enabled, ref int status);
         public static SetCounterUpdateWhenEmptyDelegate SetCounterUpdateWhenEmpty;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetCounterStoppedDelegate(IntPtr counter_pointer, ref int status);
+        public delegate bool GetCounterStoppedDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static GetCounterStoppedDelegate GetCounterStopped;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetCounterDirectionDelegate(IntPtr counter_pointer, ref int status);
+        public delegate bool GetCounterDirectionDelegate(CounterSafeHandle counter_pointer, ref int status);
         public static GetCounterDirectionDelegate GetCounterDirection;
 
-        public delegate void SetCounterReverseDirectionDelegate(IntPtr counter_pointer, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int status);
+        public delegate void SetCounterReverseDirectionDelegate(CounterSafeHandle counter_pointer, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int status);
         public static SetCounterReverseDirectionDelegate SetCounterReverseDirection;
 
-        public delegate IntPtr InitializeEncoderDelegate(byte port_a_module, uint port_a_pin, [MarshalAs(UnmanagedType.I1)]bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, [MarshalAs(UnmanagedType.I1)]bool port_b_analog_trigger, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int index, ref int status);
+        public delegate EncoderSafeHandle InitializeEncoderDelegate(byte port_a_module, uint port_a_pin, [MarshalAs(UnmanagedType.I1)]bool port_a_analog_trigger, byte port_b_module, uint port_b_pin, [MarshalAs(UnmanagedType.I1)]bool port_b_analog_trigger, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int index, ref int status);
         public static InitializeEncoderDelegate InitializeEncoder;
 
-        public delegate void ResetEncoderDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate void ResetEncoderDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static ResetEncoderDelegate ResetEncoder;
 
-        public delegate void FreeEncoderDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate void FreeEncoderDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static FreeEncoderDelegate FreeEncoder;
 
-        public delegate int GetEncoderDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate int GetEncoderDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static GetEncoderDelegate GetEncoder;
 
-        public delegate double GetEncoderPeriodDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate double GetEncoderPeriodDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static GetEncoderPeriodDelegate GetEncoderPeriod;
 
-        public delegate void SetEncoderMaxPeriodDelegate(IntPtr encoder_pointer, double maxPeriod, ref int status);
+        public delegate void SetEncoderMaxPeriodDelegate(EncoderSafeHandle encoder_pointer, double maxPeriod, ref int status);
         public static SetEncoderMaxPeriodDelegate SetEncoderMaxPeriod;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetEncoderStoppedDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate bool GetEncoderStoppedDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static GetEncoderStoppedDelegate GetEncoderStopped;
 
         [return: MarshalAs(UnmanagedType.I1)]
-        public delegate bool GetEncoderDirectionDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate bool GetEncoderDirectionDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static GetEncoderDirectionDelegate GetEncoderDirection;
 
-        public delegate void SetEncoderReverseDirectionDelegate(IntPtr encoder_pointer, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int status);
+        public delegate void SetEncoderReverseDirectionDelegate(EncoderSafeHandle encoder_pointer, [MarshalAs(UnmanagedType.I1)]bool reverseDirection, ref int status);
         public static SetEncoderReverseDirectionDelegate SetEncoderReverseDirection;
 
-        public delegate void SetEncoderSamplesToAverageDelegate(IntPtr encoder_pointer, uint samplesToAverage, ref int status);
+        public delegate void SetEncoderSamplesToAverageDelegate(EncoderSafeHandle encoder_pointer, uint samplesToAverage, ref int status);
         public static SetEncoderSamplesToAverageDelegate SetEncoderSamplesToAverage;
 
-        public delegate uint GetEncoderSamplesToAverageDelegate(IntPtr encoder_pointer, ref int status);
+        public delegate uint GetEncoderSamplesToAverageDelegate(EncoderSafeHandle encoder_pointer, ref int status);
         public static GetEncoderSamplesToAverageDelegate GetEncoderSamplesToAverage;
 
-        public delegate void SetEncoderIndexSourceDelegate(IntPtr encoder_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, [MarshalAs(UnmanagedType.I1)]bool activeHigh, [MarshalAs(UnmanagedType.I1)]bool edgeSensitive, ref int status);
+        public delegate void SetEncoderIndexSourceDelegate(EncoderSafeHandle encoder_pointer, uint pin, [MarshalAs(UnmanagedType.I1)]bool analogTrigger, [MarshalAs(UnmanagedType.I1)]bool activeHigh, [MarshalAs(UnmanagedType.I1)]bool edgeSensitive, ref int status);
         public static SetEncoderIndexSourceDelegate SetEncoderIndexSource;
 
         public delegate ushort GetLoopTimingDelegate(ref int status);

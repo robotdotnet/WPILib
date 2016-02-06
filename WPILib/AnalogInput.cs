@@ -26,7 +26,7 @@ namespace WPILib
     public class AnalogInput : SensorBase, IPIDSource, ILiveWindowSendable
     {
         private static readonly Resource s_channels = new Resource(AnalogInputChannels);
-        private IntPtr m_port;
+        private AnalogInputPortSafeHandle m_port;
         private static readonly int[] s_accumulatorChannels = { 0, 1 };
         private long m_accumulatorOffset;
 
@@ -46,7 +46,7 @@ namespace WPILib
 
             s_channels.Allocate(channel, "Analog input channel " + Channel +" is already allocated");
 
-            IntPtr portPointer = GetPort((byte)channel);
+            HALPortSafeHandle portPointer = GetPort((byte)channel);
             int status = 0;
             m_port = InitializeAnalogInputPort(portPointer, ref status);
             CheckStatus(status);
@@ -57,8 +57,8 @@ namespace WPILib
         /// <inheritdoc/>
         public override void Dispose()
         {
-            FreeAnalogInputPort(m_port);
-            m_port = IntPtr.Zero;
+            m_port.Dispose();
+            m_port = null;
             s_channels.Deallocate(Channel);
             Channel = 0;
             m_accumulatorOffset = 0;

@@ -177,6 +177,9 @@ namespace WPILib.Tests.SpecScaners
                 "float",
                 "void",
                 "double",
+
+                //Allow SafeHandles, as they are marshalled correctly.
+                "SafeHandle",
             
                 // For now force our enum types to be OK
                 "CTR_Code",

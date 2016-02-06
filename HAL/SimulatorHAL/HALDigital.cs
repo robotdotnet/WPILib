@@ -121,7 +121,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static DigitalPortSafeHandle initializeDigitalPort(IntPtr port_pointer, ref int status)
+        public static DigitalPortSafeHandle initializeDigitalPort(HALPortSafeHandle port_pointer, ref int status)
         {
             DigitalPort p = new DigitalPort
             {
@@ -493,7 +493,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeCounter(Mode mode, ref uint index, ref int status)
+        public static CounterSafeHandle initializeCounter(Mode mode, ref uint index, ref int status)
         {
             status = 0;
             int i = 0;
@@ -507,39 +507,41 @@ namespace HAL.SimulatorHAL
                     cnt.UpdateWhenEmpty = false;
 
                     CounterStruct c = new CounterStruct() { idx = i };
-                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
-                    Marshal.StructureToPtr(c, ptr, true);
+                    //IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(c));
+                    //Marshal.StructureToPtr(c, ptr, true);
                     index = (uint)i;
 
-                    return ptr;
+                    return new CounterSafeHandle(c);
+
+                    //return ptr;
 
                 }
             }
 
             status = HALErrorConstants.NO_AVAILABLE_RESOURCES;
-            return IntPtr.Zero;
+            return null;
         }
 
         [CalledSimFunction]
-        public static void freeCounter(IntPtr counter_pointer, ref int status)
+        public static void freeCounter(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             clearCounterUpSource(counter_pointer, ref status);
             clearCounterDownSource(counter_pointer, ref status);
             Counter[PortConverters.GetCounter(counter_pointer).idx].Initialized = false;
 
-            Marshal.FreeHGlobal(counter_pointer);
+            //Marshal.FreeHGlobal(counter_pointer);
         }
 
         [CalledSimFunction]
-        public static void setCounterAverageSize(IntPtr counter_pointer, int size, ref int status)
+        public static void setCounterAverageSize(CounterSafeHandle counter_pointer, int size, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].AverageSize = size;
         }
 
         [CalledSimFunction]
-        public static void setCounterUpSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
+        public static void setCounterUpSource(CounterSafeHandle counter_pointer, uint pin, bool analogTrigger, ref int status)
         {
             var idx = PortConverters.GetCounter(counter_pointer).idx;
             status = 0;
@@ -592,7 +594,7 @@ namespace HAL.SimulatorHAL
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
+                HALAnalog.getAnalogTriggerTriggerState(SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
             double prevAnalogVoltage = AnalogIn[analogIn].Voltage;//halData["analog_in"][analogIn]["voltage"];
@@ -605,7 +607,7 @@ namespace HAL.SimulatorHAL
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
+                            SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -683,7 +685,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setCounterUpSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
+        public static void setCounterUpSourceEdge(CounterSafeHandle counter_pointer, bool risingEdge, bool fallingEdge,
             ref int status)
         {
             status = 0;
@@ -693,7 +695,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void clearCounterUpSource(IntPtr counter_pointer, ref int status)
+        public static void clearCounterUpSource(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             var counter = Counter[PortConverters.GetCounter(counter_pointer).idx];
@@ -721,7 +723,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setCounterDownSource(IntPtr counter_pointer, uint pin, bool analogTrigger, ref int status)
+        public static void setCounterDownSource(CounterSafeHandle counter_pointer, uint pin, bool analogTrigger, ref int status)
         {
             var idx = PortConverters.GetCounter(counter_pointer).idx;
             status = 0;
@@ -819,7 +821,7 @@ namespace HAL.SimulatorHAL
 
             int status = 0;
             bool prevTrigValue =
-                HALAnalog.getAnalogTriggerTriggerState((IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer,
+                HALAnalog.getAnalogTriggerTriggerState(SimData.AnalogTrigger[trigIndex].TriggerPointer,
                     ref status);
 
             double prevAnalogVoltage = AnalogIn[analogIn].Voltage;
@@ -832,7 +834,7 @@ namespace HAL.SimulatorHAL
                     //Grab our trigger state.
                     bool trigValue =
                         HALAnalog.getAnalogTriggerTriggerState(
-                            (IntPtr)SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
+                            SimData.AnalogTrigger[trigIndex].TriggerPointer, ref status);
 
                     //Was low
                     if (!prevTrigValue)
@@ -869,7 +871,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setCounterDownSourceEdge(IntPtr counter_pointer, bool risingEdge, bool fallingEdge,
+        public static void setCounterDownSourceEdge(CounterSafeHandle counter_pointer, bool risingEdge, bool fallingEdge,
             ref int status)
         {
             status = 0;
@@ -879,7 +881,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void clearCounterDownSource(IntPtr counter_pointer, ref int status)
+        public static void clearCounterDownSource(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             var counter = Counter[PortConverters.GetCounter(counter_pointer).idx];
@@ -907,21 +909,21 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setCounterUpDownMode(IntPtr counter_pointer, ref int status)
+        public static void setCounterUpDownMode(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].Mode = (int)Mode.TwoPulse;
         }
 
         [CalledSimFunction]
-        public static void setCounterExternalDirectionMode(IntPtr counter_pointer, ref int status)
+        public static void setCounterExternalDirectionMode(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].Mode = Mode.ExternalDirection;
         }
 
         [CalledSimFunction]
-        public static void setCounterSemiPeriodMode(IntPtr counter_pointer, bool highSemiPeriod, ref int status)
+        public static void setCounterSemiPeriodMode(CounterSafeHandle counter_pointer, bool highSemiPeriod, ref int status)
         {
             status = 0;
             var counter = Counter[PortConverters.GetCounter(counter_pointer).idx];
@@ -931,7 +933,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setCounterPulseLengthMode(IntPtr counter_pointer, double threshold, ref int status)
+        public static void setCounterPulseLengthMode(CounterSafeHandle counter_pointer, double threshold, ref int status)
         {
             status = 0;
             var counter = Counter[PortConverters.GetCounter(counter_pointer).idx];
@@ -940,21 +942,21 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static int getCounterSamplesToAverage(IntPtr counter_pointer, ref int status)
+        public static int getCounterSamplesToAverage(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             return (int)Counter[PortConverters.GetCounter(counter_pointer).idx].SamplesToAverage;
         }
 
         [CalledSimFunction]
-        public static void setCounterSamplesToAverage(IntPtr counter_pointer, int samplesToAverage, ref int status)
+        public static void setCounterSamplesToAverage(CounterSafeHandle counter_pointer, int samplesToAverage, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].SamplesToAverage = (uint)samplesToAverage;
         }
 
         [CalledSimFunction]
-        public static void resetCounter(IntPtr counter_pointer, ref int status)
+        public static void resetCounter(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].Count = 0;
@@ -964,14 +966,14 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static int getCounter(IntPtr counter_pointer, ref int status)
+        public static int getCounter(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             return Counter[PortConverters.GetCounter(counter_pointer).idx].Count;
         }
 
         [CalledSimFunction]
-        public static double getCounterPeriod(IntPtr counter_pointer, ref int status)
+        public static double getCounterPeriod(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             return Counter[PortConverters.GetCounter(counter_pointer).idx].Period;
@@ -980,21 +982,21 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void setCounterMaxPeriod(IntPtr counter_pointer, double maxPeriod, ref int status)
+        public static void setCounterMaxPeriod(CounterSafeHandle counter_pointer, double maxPeriod, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].MaxPeriod = maxPeriod;
         }
 
         [CalledSimFunction]
-        public static void setCounterUpdateWhenEmpty(IntPtr counter_pointer, bool enabled, ref int status)
+        public static void setCounterUpdateWhenEmpty(CounterSafeHandle counter_pointer, bool enabled, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].UpdateWhenEmpty = enabled;
         }
 
         [CalledSimFunction]
-        public static bool getCounterStopped(IntPtr counter_pointer, ref int status)
+        public static bool getCounterStopped(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             var cnt = Counter[PortConverters.GetCounter(counter_pointer).idx];
@@ -1002,14 +1004,14 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool getCounterDirection(IntPtr counter_pointer, ref int status)
+        public static bool getCounterDirection(CounterSafeHandle counter_pointer, ref int status)
         {
             status = 0;
             return Counter[PortConverters.GetCounter(counter_pointer).idx].Direction;
         }
 
         [CalledSimFunction]
-        public static void setCounterReverseDirection(IntPtr counter_pointer, bool reverseDirection, ref int status)
+        public static void setCounterReverseDirection(CounterSafeHandle counter_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
             Counter[PortConverters.GetCounter(counter_pointer).idx].ReverseDirection = reverseDirection;
@@ -1017,7 +1019,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static IntPtr initializeEncoder(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger,
+        public static EncoderSafeHandle initializeEncoder(byte port_a_module, uint port_a_pin, bool port_a_analog_trigger,
             byte port_b_module, uint port_b_pin, bool port_b_analog_trigger, bool reverseDirection, ref int index,
             ref int status)
         {
@@ -1041,29 +1043,27 @@ namespace HAL.SimulatorHAL
                     enc.ReverseDirection = reverseDirection;
 
                     EncoderStruct e = new EncoderStruct { idx = i };
-                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
-                    Marshal.StructureToPtr(e, ptr, true);
 
-                    return ptr;
+                    return new EncoderSafeHandle(e);
 
                 }
             }
 
             status = HALErrorConstants.NO_AVAILABLE_RESOURCES;
-            return IntPtr.Zero;
+            return null;
         }
 
         [CalledSimFunction]
-        public static void freeEncoder(IntPtr encoder_pointer, ref int status)
+        public static void freeEncoder(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Initialized = false;
 
-            Marshal.FreeHGlobal(encoder_pointer);
+            //Marshal.FreeHGlobal(encoder_pointer);
         }
 
         [CalledSimFunction]
-        public static void resetEncoder(IntPtr encoder_pointer, ref int status)
+        public static void resetEncoder(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Count = 0;
@@ -1072,14 +1072,14 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static int getEncoder(IntPtr encoder_pointer, ref int status)
+        public static int getEncoder(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             return Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Count;
         }
 
         [CalledSimFunction]
-        public static double getEncoderPeriod(IntPtr encoder_pointer, ref int status)
+        public static double getEncoderPeriod(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             return Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Period;
@@ -1087,14 +1087,14 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void setEncoderMaxPeriod(IntPtr encoder_pointer, double maxPeriod, ref int status)
+        public static void setEncoderMaxPeriod(EncoderSafeHandle encoder_pointer, double maxPeriod, ref int status)
         {
             status = 0;
             Encoder[PortConverters.GetEncoder(encoder_pointer).idx].MaxPeriod = maxPeriod;
         }
 
         [CalledSimFunction]
-        public static bool getEncoderStopped(IntPtr encoder_pointer, ref int status)
+        public static bool getEncoderStopped(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             var enc = Encoder[PortConverters.GetEncoder(encoder_pointer).idx];
@@ -1102,28 +1102,28 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool getEncoderDirection(IntPtr encoder_pointer, ref int status)
+        public static bool getEncoderDirection(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             return Encoder[PortConverters.GetEncoder(encoder_pointer).idx].Direction;
         }
 
         [CalledSimFunction]
-        public static void setEncoderReverseDirection(IntPtr encoder_pointer, bool reverseDirection, ref int status)
+        public static void setEncoderReverseDirection(EncoderSafeHandle encoder_pointer, bool reverseDirection, ref int status)
         {
             status = 0;
             Encoder[PortConverters.GetEncoder(encoder_pointer).idx].ReverseDirection = reverseDirection;
         }
 
         [CalledSimFunction]
-        public static void setEncoderSamplesToAverage(IntPtr encoder_pointer, uint samplesToAverage, ref int status)
+        public static void setEncoderSamplesToAverage(EncoderSafeHandle encoder_pointer, uint samplesToAverage, ref int status)
         {
             status = 0;
             Encoder[PortConverters.GetEncoder(encoder_pointer).idx].SamplesToAverage = samplesToAverage;
         }
 
         [CalledSimFunction]
-        public static uint getEncoderSamplesToAverage(IntPtr encoder_pointer, ref int status)
+        public static uint getEncoderSamplesToAverage(EncoderSafeHandle encoder_pointer, ref int status)
         {
             status = 0;
             return Encoder[PortConverters.GetEncoder(encoder_pointer).idx].SamplesToAverage;
@@ -1131,7 +1131,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void setEncoderIndexSource(IntPtr encoder_pointer, uint pin, bool analogTrigger,
+        public static void setEncoderIndexSource(EncoderSafeHandle encoder_pointer, uint pin, bool analogTrigger,
             bool activeHigh, bool edgeSensitive, ref int status)
         {
             status = 0;

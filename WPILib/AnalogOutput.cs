@@ -14,7 +14,7 @@ namespace WPILib
     public class AnalogOutput : SensorBase, ILiveWindowSendable
     {
         private static readonly Resource s_channels = new Resource(AnalogOutputChannels);
-        private IntPtr m_port;
+        private AnalogOutputPortSafeHandle m_port;
         private int m_channel;
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace WPILib
 
             s_channels.Allocate(channel, "Analog output channel " + m_channel +" is already allocated");
 
-            IntPtr portPointer = HAL.Base.HAL.GetPort((byte) channel);
+            HALPortSafeHandle portPointer = HAL.Base.HAL.GetPort((byte) channel);
 
             int status = 0;
             m_port = HALAnalog.InitializeAnalogOutputPort(portPointer, ref status);
@@ -47,8 +47,9 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
-            HALAnalog.FreeAnalogOutputPort(m_port);
-            m_port = IntPtr.Zero;
+            //HALAnalog.FreeAnalogOutputPort(m_port);
+            m_port.Dispose();
+            m_port = null;
             s_channels.Deallocate(m_channel);
             m_channel = 0;
         }

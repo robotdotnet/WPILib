@@ -62,7 +62,7 @@ namespace WPILib
         /// </summary>
         protected DigitalSource m_indexSource = null;
 
-        private IntPtr m_encoder;
+        private EncoderSafeHandle m_encoder;
         private int m_index;
 
         private Counter m_counter;
@@ -289,8 +289,10 @@ namespace WPILib
             else
             {
                 int status = 0;
-                FreeEncoder(m_encoder, ref status);
-                CheckStatus(status);
+                //FreeEncoder(m_encoder, ref status);
+                //CheckStatus(status);
+                m_encoder.Dispose();
+                m_encoder = null;
             }
         }
 

@@ -168,13 +168,13 @@ namespace WPILib.Tests
         {
             using (AnalogTrigger trigger = new AnalogTrigger(0))
             {
-                HALAnalog.GetAnalogTriggerTriggerState = (IntPtr pointer, ref int status) =>
+                HALAnalog.GetAnalogTriggerTriggerState = (AnalogTriggerPortSafeHandle pointer, ref int status) =>
                 {
                     status = 0;
                     return false;
                 };
                 Assert.That(trigger.GetTriggerState(), Is.False);
-                HALAnalog.GetAnalogTriggerTriggerState = (IntPtr pointer, ref int status) =>
+                HALAnalog.GetAnalogTriggerTriggerState = (AnalogTriggerPortSafeHandle pointer, ref int status) =>
                 {
                     status = 0;
                     return true;
@@ -190,13 +190,13 @@ namespace WPILib.Tests
         {
             using (AnalogTrigger trigger = new AnalogTrigger(0))
             {
-                HALAnalog.GetAnalogTriggerInWindow = (IntPtr pointer, ref int status) =>
+                HALAnalog.GetAnalogTriggerInWindow = (AnalogTriggerPortSafeHandle pointer, ref int status) =>
                 {
                     status = 0;
                     return false;
                 };
                 Assert.That(trigger.GetInWindow(), Is.False);
-                HALAnalog.GetAnalogTriggerInWindow = (IntPtr pointer, ref int status) =>
+                HALAnalog.GetAnalogTriggerInWindow = (AnalogTriggerPortSafeHandle pointer, ref int status) =>
                 {
                     status = 0;
                     return true;

@@ -11,7 +11,7 @@ namespace WPILib
     /// </summary>
     public class AnalogTrigger : IDisposable
     {
-        internal IntPtr Port { get; private set; }
+        internal AnalogTriggerPortSafeHandle Port { get; private set; }
 
         /// <summary>
         /// Gets the index of the analog trigger
@@ -24,7 +24,7 @@ namespace WPILib
         /// <param name="channel">The port to use for the analog trigger. [0..3] on RIO, [4..7] on MXP.</param>
         protected void InitTrigger(int channel)
         {
-            IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);
+            HALPortSafeHandle portPointer = HAL.Base.HAL.GetPort((byte)channel);
             int status = 0;
             uint index = 0;
 
@@ -62,9 +62,8 @@ namespace WPILib
         public void Dispose()
         {
             int status = 0;
-            CleanAnalogTrigger(Port, ref status);
-            CheckStatus(status);
-            Port = IntPtr.Zero;
+            Port.Dispose();
+            Port = null;
         }
 
         /// <summary>

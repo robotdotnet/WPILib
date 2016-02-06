@@ -49,7 +49,7 @@ namespace HAL.SimulatorHAL
     [StructLayout(LayoutKind.Sequential)]
     internal struct AnalogTrigger
     {
-		public IntPtr analogPortPointer;
+		public AnalogInputPortSafeHandle analogPortPointer;
         public int index;
         public bool precreatedAnalogInput;
     }

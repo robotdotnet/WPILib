@@ -19,13 +19,13 @@ namespace HAL.Base
             Initialize();
         }
 
-        public delegate IntPtr GetPortDelegate(byte pin);
+        public delegate HALPortSafeHandle GetPortDelegate(byte pin);
         public static GetPortDelegate GetPort;
 
-        public delegate IntPtr GetPortWithModuleDelegate(byte module, byte pin);
+        public delegate HALPortSafeHandle GetPortWithModuleDelegate(byte module, byte pin);
         public static GetPortWithModuleDelegate GetPortWithModule;
 
-        public delegate void FreePortDelegate(IntPtr port_pointer);
+        public delegate void FreePortDelegate(HALPortSafeHandle port_pointer);
         public static FreePortDelegate FreePort;
 
         [return:HALAllowNonBlittable]

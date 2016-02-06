@@ -41,7 +41,7 @@ namespace HAL.Simulator.Data
         {
             m_initialized = false;
             AnalogPin = -1;
-            TriggerPointer = -1;
+            TriggerPointer = null;
             m_trigType = TrigerType.Unassigned;
             m_trigState = false;
             m_trigUpper = 0;
@@ -79,7 +79,7 @@ namespace HAL.Simulator.Data
         /// <value>
         /// The trigger pointer.
         /// </value>
-        public long TriggerPointer { get; internal set; } = -1;
+        public AnalogTriggerPortSafeHandle TriggerPointer { get; internal set; } = null;
 
         /// <summary>
         /// Gets the type of the trig.
@@ -157,7 +157,7 @@ namespace HAL.Simulator.Data
         /// <returns></returns>
         public bool GetTriggerValue(AnalogTriggerType type, ref int status)
         {
-            return SimulatorHAL.HALAnalog.getAnalogTriggerOutput((IntPtr) TriggerPointer, type, ref status);
+            return SimulatorHAL.HALAnalog.getAnalogTriggerOutput(TriggerPointer, type, ref status);
         }
     }
 }

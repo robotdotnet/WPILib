@@ -18,7 +18,7 @@ namespace WPILib
     public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
         private readonly int m_channel;//The channel to control.
-        private IntPtr m_solenoidPort;
+        private SolenoidPortSafeHandle m_solenoidPort;
         private readonly object m_lockObject = new object();
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace WPILib
 
                 int status = 0;
 
-                IntPtr port = GetPortWithModule((byte)ModuleNumber, (byte)m_channel);
+                HALPortSafeHandle port = GetPortWithModule((byte)ModuleNumber, (byte)m_channel);
                 m_solenoidPort = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
                 LiveWindow.LiveWindow.AddActuator("Solenoid", ModuleNumber, m_channel, this);
@@ -72,8 +72,10 @@ namespace WPILib
             lock (m_lockObject)
             {
                 Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_channel);
-                FreeSolenoidPort(m_solenoidPort);
-                m_solenoidPort = IntPtr.Zero;
+                m_solenoidPort.Dispose();
+                m_solenoidPort = null;
+                //FreeSolenoidPort(m_solenoidPort);
+                //m_solenoidPort = IntPtr.Zero;
                 base.Dispose();
             }
         }

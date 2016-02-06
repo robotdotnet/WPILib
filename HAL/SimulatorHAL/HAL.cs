@@ -256,7 +256,7 @@ namespace HAL.SimulatorHAL
         /// <param name="pin">The hardware pin of the port</param>
         /// <returns>IntPtr containing the port</returns>
         [CalledSimFunction]
-        public static IntPtr getPort(byte pin)
+        public static HALPortSafeHandle getPort(byte pin)
         {
             return getPortWithModule(0, pin);
         }
@@ -268,23 +268,21 @@ namespace HAL.SimulatorHAL
         /// <param name="pin">Hardware Pin</param>
         /// <returns>IntPtr containing the port</returns>
         [CalledSimFunction]
-        public static IntPtr getPortWithModule(byte module, byte pin)
+        public static HALPortSafeHandle getPortWithModule(byte module, byte pin)
         {
             Port port = new Port
             {
                 pin = pin,
                 module = module
             };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(port));
-            Marshal.StructureToPtr(port, ptr, true);
-            return ptr;
+            return new HALPortSafeHandle(port);
         }
 
         [CalledSimFunction]
-        public static void freePort(IntPtr port_pointer)
+        public static void freePort(HALPortSafeHandle port_pointer)
         {
-            if (port_pointer == IntPtr.Zero) return;
-            Marshal.FreeHGlobal(port_pointer);
+            //Do Nothing
+            return;
         }
 
 

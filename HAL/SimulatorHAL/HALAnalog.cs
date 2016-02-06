@@ -71,7 +71,7 @@ namespace HAL.SimulatorHAL
 
         //The HAL by default stores raw values instead of voltage behind the scenes. We are using voltage
         [CalledSimFunction]
-        public static IntPtr initializeAnalogOutputPort(IntPtr port_pointer, ref int status)
+        public static AnalogOutputPortSafeHandle initializeAnalogOutputPort(HALPortSafeHandle port_pointer, ref int status)
         {
             status = 0;
             AnalogPort p = new AnalogPort()
@@ -81,41 +81,37 @@ namespace HAL.SimulatorHAL
             AnalogOut[p.port.pin].Initialized = true;
             AnalogOut[p.port.pin].Voltage = 0.0;
 
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-            HAL.freePort(port_pointer);
-            return ptr;
+            return new AnalogOutputPortSafeHandle(p);
         }
 
         [CalledSimFunction]
-        public static void freeAnalogOutputPort(IntPtr analog_port_pointer)
+        public static void freeAnalogOutputPort(AnalogOutputPortSafeHandle analog_port_pointer)
         {
-            if (analog_port_pointer == IntPtr.Zero) return;
-            AnalogOut[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].Initialized = false;
-            Marshal.FreeHGlobal(analog_port_pointer);
+            if (analog_port_pointer == null) return;
+            AnalogOut[PortConverters.GetAnalogOutputPort(analog_port_pointer).port.pin].Initialized = false;
         }
 
         [CalledSimFunction]
-        public static void freeAnalogInputPort(IntPtr analog_port_pointer)
+        public static void freeAnalogInputPort(AnalogInputPortSafeHandle analog_port_pointer)
         {
-            if (analog_port_pointer == IntPtr.Zero) return;
+            if (analog_port_pointer == null) return;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].Initialized = false;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AccumulatorInitialized = false;
-            Marshal.FreeHGlobal(analog_port_pointer);
+            //Marshal.FreeHGlobal(analog_port_pointer);
         }
 
         [CalledSimFunction]
-        public static void setAnalogOutput(IntPtr analog_port_pointer, double voltage, ref int status)
+        public static void setAnalogOutput(AnalogOutputPortSafeHandle analog_port_pointer, double voltage, ref int status)
         {
             status = 0;
-            AnalogOut[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].Voltage = voltage;
+            AnalogOut[PortConverters.GetAnalogOutputPort(analog_port_pointer).port.pin].Voltage = voltage;
         }
 
         [CalledSimFunction]
-        public static double getAnalogOutput(IntPtr analog_port_pointer, ref int status)
+        public static double getAnalogOutput(AnalogOutputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
-            return AnalogOut[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].Voltage;
+            return AnalogOut[PortConverters.GetAnalogOutputPort(analog_port_pointer).port.pin].Voltage;
         }
 
         [CalledSimFunction]
@@ -125,7 +121,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeAnalogInputPort(IntPtr port_pointer, ref int status)
+        public static AnalogInputPortSafeHandle initializeAnalogInputPort(HALPortSafeHandle port_pointer, ref int status)
         {
             status = 0;
             AnalogPort p = new AnalogPort()
@@ -133,11 +129,13 @@ namespace HAL.SimulatorHAL
                 port = PortConverters.GetHalPort(port_pointer)
             };
             AnalogIn[p.port.pin].Initialized = true;
-
+            return new AnalogInputPortSafeHandle(p);
+            /*
             IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
             Marshal.StructureToPtr(p, ptr, true);
             HAL.freePort(port_pointer);
             return ptr;
+            */
         }
 
         [CalledSimFunction]
@@ -167,35 +165,35 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setAnalogAverageBits(IntPtr analog_port_pointer, uint bits, ref int status)
+        public static void setAnalogAverageBits(AnalogInputPortSafeHandle analog_port_pointer, uint bits, ref int status)
         {
             status = 0;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AverageBits = bits;
         }
 
         [CalledSimFunction]
-        public static uint getAnalogAverageBits(IntPtr analog_port_pointer, ref int status)
+        public static uint getAnalogAverageBits(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AverageBits;
         }
 
         [CalledSimFunction]
-        public static void setAnalogOversampleBits(IntPtr analog_port_pointer, uint bits, ref int status)
+        public static void setAnalogOversampleBits(AnalogInputPortSafeHandle analog_port_pointer, uint bits, ref int status)
         {
             status = 0;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].OversampleBits = bits;
         }
 
         [CalledSimFunction]
-        public static uint getAnalogOversampleBits(IntPtr analog_port_pointer, ref int status)
+        public static uint getAnalogOversampleBits(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].OversampleBits;
         }
 
         [CalledSimFunction]
-        public static short getAnalogValue(IntPtr analog_port_pointer, ref int status)
+        public static short getAnalogValue(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             //Will need to port this to use voltage and scale it
@@ -205,7 +203,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static int getAnalogAverageValue(IntPtr analog_port_pointer, ref int status)
+        public static int getAnalogAverageValue(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             //Just use regular voltage. Averaging doesn't work without constant updating
@@ -213,7 +211,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static int getAnalogVoltsToValue(IntPtr analog_port_pointer, double voltage, ref int status)
+        public static int getAnalogVoltsToValue(AnalogInputPortSafeHandle analog_port_pointer, double voltage, ref int status)
         {
             status = 0;
             if (voltage > 5.0)
@@ -234,14 +232,14 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static float getAnalogVoltage(IntPtr analog_port_pointer, ref int status)
+        public static float getAnalogVoltage(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return (float)AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].Voltage;
         }
 
         [CalledSimFunction]
-        public static float getAnalogAverageVoltage(IntPtr analog_port_pointer, ref int status)
+        public static float getAnalogAverageVoltage(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             //Just use regular voltage. Averaging doesn't work without constant updating
@@ -249,35 +247,35 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static uint getAnalogLSBWeight(IntPtr analog_port_pointer, ref int status)
+        public static uint getAnalogLSBWeight(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return (uint)AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].LSBWeight;
         }
 
         [CalledSimFunction]
-        public static int getAnalogOffset(IntPtr analog_port_pointer, ref int status)
+        public static int getAnalogOffset(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].Offset;
         }
 
         [CalledSimFunction]
-        public static bool isAccumulatorChannel(IntPtr analog_port_pointer, ref int status)
+        public static bool isAccumulatorChannel(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return AccumulatorChannels.Contains(PortConverters.GetAnalogPort(analog_port_pointer).port.pin);
         }
 
         [CalledSimFunction]
-        public static void initAccumulator(IntPtr analog_port_pointer, ref int status)
+        public static void initAccumulator(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AccumulatorInitialized = true;
         }
 
         [CalledSimFunction]
-        public static void resetAccumulator(IntPtr analog_port_pointer, ref int status)
+        public static void resetAccumulator(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             int pin = PortConverters.GetAnalogPort(analog_port_pointer).port.pin;
@@ -287,28 +285,28 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setAccumulatorCenter(IntPtr analog_port_pointer, int center, ref int status)
+        public static void setAccumulatorCenter(AnalogInputPortSafeHandle analog_port_pointer, int center, ref int status)
         {
             status = 0;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AccumulatorCenter = center;
         }
 
         [CalledSimFunction]
-        public static void setAccumulatorDeadband(IntPtr analog_port_pointer, int deadband, ref int status)
+        public static void setAccumulatorDeadband(AnalogInputPortSafeHandle analog_port_pointer, int deadband, ref int status)
         {
             status = 0;
             AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AccumulatorDeadband = deadband;
         }
 
         [CalledSimFunction]
-        public static long getAccumulatorValue(IntPtr analog_port_pointer, ref int status)
+        public static long getAccumulatorValue(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             status = 0;
             return AnalogIn[PortConverters.GetAnalogPort(analog_port_pointer).port.pin].AccumulatorValue;
         }
 
         [CalledSimFunction]
-        public static uint getAccumulatorCount(IntPtr analog_port_pointer, ref int status)
+        public static uint getAccumulatorCount(AnalogInputPortSafeHandle analog_port_pointer, ref int status)
         {
             if (!isAccumulatorChannel(analog_port_pointer, ref status))
             {
@@ -320,7 +318,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void getAccumulatorOutput(IntPtr analog_port_pointer, ref long value, ref uint count,
+        public static void getAccumulatorOutput(AnalogInputPortSafeHandle analog_port_pointer, ref long value, ref uint count,
             ref int status)
         {
             status = 0;
@@ -329,7 +327,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeAnalogTrigger(IntPtr port_pointer, ref uint index, ref int status)
+        public static AnalogTriggerPortSafeHandle initializeAnalogTrigger(HALPortSafeHandle port_pointer, ref uint index, ref int status)
         {
             status = 0;
 
@@ -341,7 +339,7 @@ namespace HAL.SimulatorHAL
                     var port = PortConverters.GetHalPort(port_pointer);
                     bool preInit = SimData.AnalogIn[port.pin].Initialized;
 
-                    IntPtr aPt = initializeAnalogInputPort(port_pointer, ref status);
+                    AnalogInputPortSafeHandle aPt = initializeAnalogInputPort(port_pointer, ref status);
                     cnt.Initialized = true;
                     cnt.AnalogPin = port.pin;
                     AnalogTrigger trig = new AnalogTrigger()
@@ -351,21 +349,24 @@ namespace HAL.SimulatorHAL
                     };
                     index = (uint)i;
                     trig.index = i;
-                    IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
-                    Marshal.StructureToPtr(trig, ptr, true);
-                    cnt.TriggerPointer = ptr.ToInt64();
-                    
+                   // IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(trig));
+                  //  Marshal.StructureToPtr(trig, ptr, true);
+                    AnalogTriggerPortSafeHandle ptr = new AnalogTriggerPortSafeHandle(trig);
+                    cnt.TriggerPointer = ptr;
+
                     return ptr;
+                    
+                 //   return ptr;
                 }
             }
             status = HALErrorConstants.NO_AVAILABLE_RESOURCES;
-            return IntPtr.Zero;
+            return null;
         }
 
         [CalledSimFunction]
-        public static void cleanAnalogTrigger(IntPtr analog_trigger_pointer, ref int status)
+        public static void cleanAnalogTrigger(AnalogTriggerPortSafeHandle analog_trigger_pointer, ref int status)
         {
-            if (analog_trigger_pointer == IntPtr.Zero) return;
+            if (analog_trigger_pointer == null) return;
             status = 0;
             var trig = PortConverters.GetAnalogTrigger(analog_trigger_pointer);
             SimData.AnalogTrigger[trig.index].Initialized = false;
@@ -377,16 +378,16 @@ namespace HAL.SimulatorHAL
             {
                 freeAnalogInputPort(trig.analogPortPointer);
             }
-            Marshal.FreeHGlobal(analog_trigger_pointer);
+            //Marshal.FreeHGlobal(analog_trigger_pointer);
         }
 
-        private static void freeAnalogInputPortTrigger(IntPtr analog_port_pointer)
+        private static void freeAnalogInputPortTrigger(AnalogInputPortSafeHandle analog_port_pointer)
         {
-            if (analog_port_pointer == IntPtr.Zero) return;
-            Marshal.FreeHGlobal(analog_port_pointer);
+            //if (analog_port_pointer == IntPtr.Zero) return;
+            //Marshal.FreeHGlobal(analog_port_pointer);
         }
 
-        internal static double getaAnalogValueToVoltage(IntPtr analog_port_pointer, int value, ref int status)
+        internal static double getaAnalogValueToVoltage(AnalogInputPortSafeHandle analog_port_pointer, int value, ref int status)
         {
             uint LSBWeight = getAnalogLSBWeight(analog_port_pointer, ref status);
             int offset = getAnalogOffset(analog_port_pointer, ref status);
@@ -396,7 +397,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerLimitsRaw(IntPtr analog_trigger_pointer, int lower, int upper, ref int status)
+        public static void setAnalogTriggerLimitsRaw(AnalogTriggerPortSafeHandle analog_trigger_pointer, int lower, int upper, ref int status)
         {
             if (lower > upper)
             {
@@ -414,7 +415,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerLimitsVoltage(IntPtr analog_trigger_pointer, double lower,
+        public static void setAnalogTriggerLimitsVoltage(AnalogTriggerPortSafeHandle analog_trigger_pointer, double lower,
             double upper, ref int status)
         {
             if (lower > upper)
@@ -430,7 +431,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerAveraged(IntPtr analog_trigger_pointer, bool useAveragedValue, ref int status)
+        public static void setAnalogTriggerAveraged(AnalogTriggerPortSafeHandle analog_trigger_pointer, bool useAveragedValue, ref int status)
         {
             var trigPort = PortConverters.GetAnalogTrigger(analog_trigger_pointer);
             if (SimData.AnalogTrigger[trigPort.index].TrigType == TrigerType.Filtered)
@@ -446,7 +447,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static void setAnalogTriggerFiltered(IntPtr analog_trigger_pointer,
+        public static void setAnalogTriggerFiltered(AnalogTriggerPortSafeHandle analog_trigger_pointer,
             bool useFilteredValue, ref int status)
         {
             var trigPort = PortConverters.GetAnalogTrigger(analog_trigger_pointer);
@@ -481,7 +482,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool getAnalogTriggerInWindow(IntPtr analog_trigger_pointer, ref int status)
+        public static bool getAnalogTriggerInWindow(AnalogTriggerPortSafeHandle analog_trigger_pointer, ref int status)
         {
             status = 0;
             var trig = PortConverters.GetAnalogTrigger(analog_trigger_pointer);
@@ -491,7 +492,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool getAnalogTriggerTriggerState(IntPtr analog_trigger_pointer, ref int status)
+        public static bool getAnalogTriggerTriggerState(AnalogTriggerPortSafeHandle analog_trigger_pointer, ref int status)
         {
             status = 0;
             var trig = PortConverters.GetAnalogTrigger(analog_trigger_pointer);
@@ -512,7 +513,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static bool getAnalogTriggerOutput(IntPtr analog_trigger_pointer, AnalogTriggerType type, ref int status)
+        public static bool getAnalogTriggerOutput(AnalogTriggerPortSafeHandle analog_trigger_pointer, AnalogTriggerType type, ref int status)
         {
             if (type == AnalogTriggerType.InWindow)
                 return Base.HALAnalog.GetAnalogTriggerInWindow(analog_trigger_pointer, ref status);

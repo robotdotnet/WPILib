@@ -199,7 +199,7 @@ namespace WPILib
         }
 
         private ControlMode m_controlMode;
-        private readonly IntPtr m_talonPointer;
+        private CANTalonSafeHandle m_talonPointer;
         private const double DelayForSolicitedSignals = 0.004;
         private bool m_controlEnabled;
         private int m_profile;
@@ -270,7 +270,9 @@ namespace WPILib
         public void Dispose()
         {
             TalonIds.Deallocate(DeviceId);
-            C_TalonSRX_Destroy(m_talonPointer);
+            //C_TalonSRX_Destroy(m_talonPointer);
+            m_talonPointer.Dispose();
+            m_talonPointer = null;
         }
 
         /// <summary>

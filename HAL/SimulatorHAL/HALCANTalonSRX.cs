@@ -121,7 +121,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr c_TalonSRX_Create(int deviceNumber, int controlPeriodMs, int enablePeriodMs)
+        public static CANTalonSafeHandle c_TalonSRX_Create(int deviceNumber, int controlPeriodMs, int enablePeriodMs)
         {
             if (!InitializeCanTalon(deviceNumber))
             {
@@ -130,28 +130,26 @@ namespace HAL.SimulatorHAL
 
 
             TalonSRX srx = new TalonSRX { deviceNumber = deviceNumber };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(srx));
-            Marshal.StructureToPtr(srx, ptr, true);
-            GetCanTalon(deviceNumber).ResetData();
-            return ptr;
+
+            return new CANTalonSafeHandle(srx);
         }
 
         [CalledSimFunction]
-        public static void c_TalonSRX_Destroy(IntPtr handle)
+        public static void c_TalonSRX_Destroy(CANTalonSafeHandle handle)
         {
             RemoveCanTalon(PortConverters.GetTalonSRX(handle));
-            Marshal.FreeHGlobal(handle);
+            //Marshal.FreeHGlobal(handle);
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetParam(IntPtr handle, int paramEnum, double value)
+        public static CTR_Code c_TalonSRX_SetParam(CANTalonSafeHandle handle, int paramEnum, double value)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).SetParam((Base.HALCanTalonSRX.ParamID)paramEnum, value);
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_RequestParam(IntPtr handle, int paramEnum)
+        public static CTR_Code c_TalonSRX_RequestParam(CANTalonSafeHandle handle, int paramEnum)
         {
             try
             {
@@ -167,7 +165,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetParamResponse(IntPtr handle, int paramEnum, ref double value)
+        public static CTR_Code c_TalonSRX_GetParamResponse(CANTalonSafeHandle handle, int paramEnum, ref double value)
         {
             try
             {
@@ -182,7 +180,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetParamResponseInt32(IntPtr handle, int paramEnum, ref int value)
+        public static CTR_Code c_TalonSRX_GetParamResponseInt32(CANTalonSafeHandle handle, int paramEnum, ref int value)
         {
             try
             {
@@ -197,13 +195,13 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetStatusFrameRate(IntPtr handle, int frameEnum, int periodMs)
+        public static CTR_Code c_TalonSRX_SetStatusFrameRate(CANTalonSafeHandle handle, int frameEnum, int periodMs)
         {
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_ClearStickyFaults(IntPtr handle)
+        public static CTR_Code c_TalonSRX_ClearStickyFaults(CANTalonSafeHandle handle)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_OverTemp = 0;
             GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_UnderVoltage = 0;
@@ -216,294 +214,294 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_OverTemp(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_OverTemp(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_OverTemp;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_UnderVoltage(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_UnderVoltage(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_UnderVoltage;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_ForLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_ForLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_ForLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_RevLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_RevLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_RevLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_HardwareFailure(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_HardwareFailure(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_HardwareFailure;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_ForSoftLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_ForSoftLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_ForSoftLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFault_RevSoftLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFault_RevSoftLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).Fault_RevSoftLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetStckyFault_OverTemp(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetStckyFault_OverTemp(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_OverTemp;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetStckyFault_UnderVoltage(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetStckyFault_UnderVoltage(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_UnderVoltage;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetStckyFault_ForLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetStckyFault_ForLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_ForLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetStckyFault_RevLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetStckyFault_RevLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_RevLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetStckyFault_ForSoftLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetStckyFault_ForSoftLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_ForSoftLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetStckyFault_RevSoftLim(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetStckyFault_RevSoftLim(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).StckyFault_RevSoftLim;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetAppliedThrottle(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetAppliedThrottle(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).AppliedThrottle;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetCloseLoopErr(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetCloseLoopErr(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).CloseLoopErr;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFeedbackDeviceSelect(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFeedbackDeviceSelect(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).FeedbackDeviceSelect;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetModeSelect(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetModeSelect(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).ModeSelect;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetLimitSwitchEn(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetLimitSwitchEn(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).LimitSwitchEn;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetLimitSwitchClosedFor(CANTalonSafeHandle handle, ref int param)
         {
             param = GetCanTalon(PortConverters.GetTalonSRX(handle)).LimitSwitchClosedFor ? 1 : 0;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetLimitSwitchClosedRev(CANTalonSafeHandle handle, ref int param)
         {
             param = GetCanTalon(PortConverters.GetTalonSRX(handle)).LimitSwitchClosedRev ? 1 : 0;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetSensorPosition(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetSensorPosition(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).SensorPosition;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetSensorVelocity(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetSensorVelocity(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).SensorVelocity;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetCurrent(IntPtr handle, ref double param)
+        public static CTR_Code c_TalonSRX_GetCurrent(CANTalonSafeHandle handle, ref double param)
         {
             param = GetCanTalon(PortConverters.GetTalonSRX(handle)).Current;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetBrakeIsEnabled(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetBrakeIsEnabled(CANTalonSafeHandle handle, ref int param)
         {
             param = GetCanTalon(PortConverters.GetTalonSRX(handle)).BrakeIsEnabled ? 1 : 0;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetEncPosition(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetEncPosition(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).EncPosition;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetEncVel(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetEncVel(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).EncVel;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetEncIndexRiseEvents(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetEncIndexRiseEvents(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).EncIndexRiseEvents;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetQuadApin(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetQuadApin(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).QuadApin;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetQuadBpin(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetQuadBpin(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).QuadBpin;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetQuadIdxpin(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetQuadIdxpin(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).QuadIdxpin;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetAnalogInWithOv(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetAnalogInWithOv(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).AnalogInWithOv;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetAnalogInVel(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetAnalogInVel(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).AnalogInVel;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetTemp(IntPtr handle, ref double param)
+        public static CTR_Code c_TalonSRX_GetTemp(CANTalonSafeHandle handle, ref double param)
         {
             param = GetCanTalon(PortConverters.GetTalonSRX(handle)).Temp;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetBatteryV(IntPtr handle, ref double param)
+        public static CTR_Code c_TalonSRX_GetBatteryV(CANTalonSafeHandle handle, ref double param)
         {
             param = GetCanTalon(PortConverters.GetTalonSRX(handle)).BatteryV;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetResetCount(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetResetCount(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).ResetCount;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetResetFlags(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetResetFlags(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).ResetFlags;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_GetFirmVers(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetFirmVers(CANTalonSafeHandle handle, ref int param)
         {
             param = (int)GetCanTalon(PortConverters.GetTalonSRX(handle)).FirmVers;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetDemand(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetDemand(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).Demand = param;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetOverrideLimitSwitchEn(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetOverrideLimitSwitchEn(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).OverrideLimitSwitch = param;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetFeedbackDeviceSelect(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetFeedbackDeviceSelect(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).FeedbackDeviceSelect = param;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetRevMotDuringCloseLoopEn(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).RevMotDuringCloseLoopEn = param != 0;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetOverrideBrakeType(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetOverrideBrakeType(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).OverrideBrakeType = param;
             return CTR_Code.CTR_OKAY;
@@ -511,14 +509,14 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetModeSelect(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetModeSelect(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).ModeSelect = param;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetModeSelect2(IntPtr handle, int modeSelect, int demand)
+        public static CTR_Code c_TalonSRX_SetModeSelect2(CANTalonSafeHandle handle, int modeSelect, int demand)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).ModeSelect = modeSelect;
             GetCanTalon(PortConverters.GetTalonSRX(handle)).Demand = demand;
@@ -527,14 +525,14 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetProfileSlotSelect(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetProfileSlotSelect(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).ProfileSlotSelect = param;
             return CTR_Code.CTR_OKAY;
         }
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetRampThrottle(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetRampThrottle(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).RampThrottle = param;
             return CTR_Code.CTR_OKAY;
@@ -542,18 +540,18 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static CTR_Code c_TalonSRX_SetRevFeedbackSensor(IntPtr handle, int param)
+        public static CTR_Code c_TalonSRX_SetRevFeedbackSensor(CANTalonSafeHandle handle, int param)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).RevFeedbackSensor = param != 0;
             return CTR_Code.CTR_OKAY;
         }
 
-        public static void c_TalonSRX_Set(IntPtr handle, double value)
+        public static void c_TalonSRX_Set(CANTalonSafeHandle handle, double value)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).PercentVBusValue = value;
         }
 
-        public static CTR_Code c_TalonSRX_SetPgain(IntPtr handle, int slotIdx, double gain)
+        public static CTR_Code c_TalonSRX_SetPgain(CANTalonSafeHandle handle, int slotIdx, double gain)
         {
             if (slotIdx == 0)
             {
@@ -566,7 +564,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetIgain(IntPtr handle, int slotIdx, double gain)
+        public static CTR_Code c_TalonSRX_SetIgain(CANTalonSafeHandle handle, int slotIdx, double gain)
         {
             if (slotIdx == 0)
             {
@@ -579,7 +577,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetDgain(IntPtr handle, int slotIdx, double gain)
+        public static CTR_Code c_TalonSRX_SetDgain(CANTalonSafeHandle handle, int slotIdx, double gain)
         {
             if (slotIdx == 0)
             {
@@ -592,7 +590,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetFgain(IntPtr handle, int slotIdx, double gain)
+        public static CTR_Code c_TalonSRX_SetFgain(CANTalonSafeHandle handle, int slotIdx, double gain)
         {
             if (slotIdx == 0)
             {
@@ -605,7 +603,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetIzone(IntPtr handle, int slotIdx, int zone)
+        public static CTR_Code c_TalonSRX_SetIzone(CANTalonSafeHandle handle, int slotIdx, int zone)
         {
             if (slotIdx == 0)
             {
@@ -618,7 +616,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetCloseLoopRampRate(IntPtr handle, int slotIdx, int closeLoopRampRate)
+        public static CTR_Code c_TalonSRX_SetCloseLoopRampRate(CANTalonSafeHandle handle, int slotIdx, int closeLoopRampRate)
         {
             if (slotIdx == 0)
             {
@@ -631,43 +629,43 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetVoltageCompensationRate(IntPtr handle, double voltagePerMs)
+        public static CTR_Code c_TalonSRX_SetVoltageCompensationRate(CANTalonSafeHandle handle, double voltagePerMs)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).VoltageCompensationRate = voltagePerMs;
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetSensorPosition(IntPtr handle, int pos)
+        public static CTR_Code c_TalonSRX_SetSensorPosition(CANTalonSafeHandle handle, int pos)
         {
             GetCanTalon(PortConverters.GetTalonSRX(handle)).SensorPosition = pos;
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetForwardSoftLimit(IntPtr handle, int forwardLimit)
+        public static CTR_Code c_TalonSRX_SetForwardSoftLimit(CANTalonSafeHandle handle, int forwardLimit)
         {
             //TODO: Add This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetReverseSoftLimit(IntPtr handle, int reverseLimit)
+        public static CTR_Code c_TalonSRX_SetReverseSoftLimit(CANTalonSafeHandle handle, int reverseLimit)
         {
             //TODO: Add This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetForwardSoftEnable(IntPtr handle, int enable)
+        public static CTR_Code c_TalonSRX_SetForwardSoftEnable(CANTalonSafeHandle handle, int enable)
         {
             //TODO: Add This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_SetReverseSoftEnable(IntPtr handle, int enable)
+        public static CTR_Code c_TalonSRX_SetReverseSoftEnable(CANTalonSafeHandle handle, int enable)
         {
             //TODO: Add This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetPgain(IntPtr handle, int slotIdx, ref double gain)
+        public static CTR_Code c_TalonSRX_GetPgain(CANTalonSafeHandle handle, int slotIdx, ref double gain)
         {
             if (slotIdx == 0)
             {
@@ -680,7 +678,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetIgain(IntPtr handle, int slotIdx, ref double gain)
+        public static CTR_Code c_TalonSRX_GetIgain(CANTalonSafeHandle handle, int slotIdx, ref double gain)
         {
             if (slotIdx == 0)
             {
@@ -693,7 +691,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetDgain(IntPtr handle, int slotIdx, ref double gain)
+        public static CTR_Code c_TalonSRX_GetDgain(CANTalonSafeHandle handle, int slotIdx, ref double gain)
         {
             if (slotIdx == 0)
             {
@@ -706,7 +704,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetFgain(IntPtr handle, int slotIdx, ref double gain)
+        public static CTR_Code c_TalonSRX_GetFgain(CANTalonSafeHandle handle, int slotIdx, ref double gain)
         {
             if (slotIdx == 0)
             {
@@ -719,7 +717,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetIzone(IntPtr handle, int slotIdx, ref int zone)
+        public static CTR_Code c_TalonSRX_GetIzone(CANTalonSafeHandle handle, int slotIdx, ref int zone)
         {
             if (slotIdx == 0)
             {
@@ -732,7 +730,7 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetCloseLoopRampRate(IntPtr handle, int slotIdx, ref int closeLoopRampRate)
+        public static CTR_Code c_TalonSRX_GetCloseLoopRampRate(CANTalonSafeHandle handle, int slotIdx, ref int closeLoopRampRate)
         {
             if (slotIdx == 0)
             {
@@ -745,69 +743,69 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetVoltageCompensationRate(IntPtr handle, ref double voltagePerMs)
+        public static CTR_Code c_TalonSRX_GetVoltageCompensationRate(CANTalonSafeHandle handle, ref double voltagePerMs)
         {
             voltagePerMs = GetCanTalon(PortConverters.GetTalonSRX(handle)).VoltageCompensationRate;
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetForwardSoftLimit(IntPtr handle, ref int forwardLimit)
+        public static CTR_Code c_TalonSRX_GetForwardSoftLimit(CANTalonSafeHandle handle, ref int forwardLimit)
         {
             //TODO: Do This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetReverseSoftLimit(IntPtr handle, ref int reverseLimit)
+        public static CTR_Code c_TalonSRX_GetReverseSoftLimit(CANTalonSafeHandle handle, ref int reverseLimit)
         {
             //TODO: Do This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetForwardSoftEnable(IntPtr handle, ref int enable)
+        public static CTR_Code c_TalonSRX_GetForwardSoftEnable(CANTalonSafeHandle handle, ref int enable)
         {
             //TODO: Do This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetReverseSoftEnable(IntPtr handle, ref int enable)
+        public static CTR_Code c_TalonSRX_GetReverseSoftEnable(CANTalonSafeHandle handle, ref int enable)
         {
             //TODO: Do This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static void c_TalonSRX_ChangeMotionControlFramePeriod(IntPtr handle, int periodMs)
+        public static void c_TalonSRX_ChangeMotionControlFramePeriod(CANTalonSafeHandle handle, int periodMs)
         {
             //TODO: Do This
         }
 
-        public static void c_TalonSRX_ClearMotionProfileTrajectories(IntPtr handle)
+        public static void c_TalonSRX_ClearMotionProfileTrajectories(CANTalonSafeHandle handle)
         {
             //TODO: Do This
         }
 
-        public static int c_TalonSRX_GetMotionProfileTopLevelBufferCount(IntPtr handle)
+        public static int c_TalonSRX_GetMotionProfileTopLevelBufferCount(CANTalonSafeHandle handle)
         {
             return 0;
         }
 
-        public static int c_TalonSRX_IsMotionProfileTopLevelBufferFull(IntPtr handle)
+        public static int c_TalonSRX_IsMotionProfileTopLevelBufferFull(CANTalonSafeHandle handle)
         {
             return 0;
         }
 
-        public static CTR_Code c_TalonSRX_PushMotionProfileTrajectory(IntPtr handle, int targPos, int targVel,
+        public static CTR_Code c_TalonSRX_PushMotionProfileTrajectory(CANTalonSafeHandle handle, int targPos, int targVel,
             int profileSlotSelect, int timeDurMs, int velOnly, int isLastPoint, int zeroPos)
         {
             //TODO: Do This
             return CTR_Code.CTR_OKAY;
         }
 
-        public static void c_TalonSRX_ProcessMotionProfileBuffer(IntPtr handle)
+        public static void c_TalonSRX_ProcessMotionProfileBuffer(CANTalonSafeHandle handle)
         {
             
         }
 
-        public static CTR_Code c_TalonSRX_GetMotionProfileStatus(IntPtr handle, ref int flags, ref int profileSlotSelect,
+        public static CTR_Code c_TalonSRX_GetMotionProfileStatus(CANTalonSafeHandle handle, ref int flags, ref int profileSlotSelect,
             ref int targPos, ref int targVel, ref int topBufferRemaining, ref int topBufferCnt, ref int btmBufferCnt,
             ref int outputEnable)
         {
@@ -815,87 +813,87 @@ namespace HAL.SimulatorHAL
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetActTraj_IsValid(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetActTraj_IsValid(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetActTraj_ProfileSlotSelect(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetActTraj_ProfileSlotSelect(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetActTraj_VelOnly(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetActTraj_VelOnly(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetActTraj_IsLast(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetActTraj_IsLast(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetOutputType(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetOutputType(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetIsUnderrun(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetIsUnderrun(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetHasUnderrun(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetHasUnderrun(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetNextID(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetNextID(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetBufferIsFull(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetBufferIsFull(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetCount(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetCount(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetActTraj_Velocity(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetActTraj_Velocity(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        public static CTR_Code c_TalonSRX_GetActTraj_Position(IntPtr handle, ref int param)
+        public static CTR_Code c_TalonSRX_GetActTraj_Position(CANTalonSafeHandle handle, ref int param)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        private static CTR_Code CTalonSRXIsPulseWidthSensorPresent(IntPtr handle, ref int i)
+        private static CTR_Code CTalonSRXIsPulseWidthSensorPresent(CANTalonSafeHandle handle, ref int i)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        private static CTR_Code CTalonSRXGetPulseRiseToRiseUs(IntPtr handle, ref int i)
+        private static CTR_Code CTalonSRXGetPulseRiseToRiseUs(CANTalonSafeHandle handle, ref int i)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        private static CTR_Code CTalonSRXGetPulseRiseToFallUs(IntPtr handle, ref int i)
+        private static CTR_Code CTalonSRXGetPulseRiseToFallUs(CANTalonSafeHandle handle, ref int i)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        private static CTR_Code CTalonSRXGetPulseWidthVelocity(IntPtr handle, ref int i)
+        private static CTR_Code CTalonSRXGetPulseWidthVelocity(CANTalonSafeHandle handle, ref int i)
         {
             return CTR_Code.CTR_OKAY;
         }
 
-        private static CTR_Code CTalonSRXGetPulseWidthPosition(IntPtr handle, ref int i)
+        private static CTR_Code CTalonSRXGetPulseWidthPosition(CANTalonSafeHandle handle, ref int i)
         {
             return CTR_Code.CTR_OKAY;
         }

@@ -36,8 +36,8 @@ namespace WPILib
         private readonly int m_forwardChannel;
         private readonly int m_reverseChannel;
 
-        private IntPtr m_forwardSolenoid;
-        private IntPtr m_reverseSolenoid;
+        private SolenoidPortSafeHandle m_forwardSolenoid;
+        private SolenoidPortSafeHandle m_reverseSolenoid;
 
         private readonly object m_lockObject = new object();
 
@@ -55,7 +55,7 @@ namespace WPILib
                     "Solenoid channel " + m_reverseChannel + " on module " + ModuleNumber + " is already allocated");
 
                 int status = 0;
-                IntPtr port = GetPortWithModule((byte)ModuleNumber, (byte)m_forwardChannel);
+                HALPortSafeHandle port = GetPortWithModule((byte)ModuleNumber, (byte)m_forwardChannel);
                 m_forwardSolenoid = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
 
@@ -100,10 +100,14 @@ namespace WPILib
             {
                 Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_forwardChannel);
                 Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_reverseChannel);
-                FreeSolenoidPort(m_forwardSolenoid);
-                m_forwardSolenoid = IntPtr.Zero;
-                FreeSolenoidPort(m_reverseSolenoid);
-                m_reverseSolenoid = IntPtr.Zero;
+                m_forwardSolenoid.Dispose();
+                m_forwardSolenoid = null;
+                m_reverseSolenoid.Dispose();
+                m_reverseSolenoid = null;
+                //(m_forwardSolenoid);
+                //m_forwardSolenoid = IntPtr.Zero;
+                //FreeSolenoidPort(m_reverseSolenoid);
+                //m_reverseSolenoid = IntPtr.Zero;
                 base.Dispose();
             }
         }

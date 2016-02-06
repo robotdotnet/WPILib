@@ -29,7 +29,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static IntPtr initializeSolenoidPort(IntPtr port_pointer, ref int status)
+        public static SolenoidPortSafeHandle initializeSolenoidPort(HALPortSafeHandle port_pointer, ref int status)
         {
             SolenoidPort p = new SolenoidPort
             {
@@ -37,19 +37,16 @@ namespace HAL.SimulatorHAL
             };
             status = 0;
             InitializePCM(p.port.module);
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(p));
-            Marshal.StructureToPtr(p, ptr, true);
-            HAL.freePort(port_pointer);
-            return ptr;
+            return new SolenoidPortSafeHandle(p);
         }
 
         [CalledSimFunction]
-        public static void freeSolenoidPort(IntPtr solenoid_port_pointer)
+        public static void freeSolenoidPort(SolenoidPortSafeHandle solenoid_port_pointer)
         {
-            if (solenoid_port_pointer == IntPtr.Zero) return;
+            if (solenoid_port_pointer == null) return;
             var p = PortConverters.GetSolenoidPort(solenoid_port_pointer);
             GetPCM(p.port.module).Solenoids[p.port.pin].Initialized = false;
-            Marshal.FreeHGlobal(solenoid_port_pointer);
+            //Marshal.FreeHGlobal(solenoid_port_pointer);
         }
 
         [CalledSimFunction]
@@ -59,7 +56,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static bool getSolenoid(IntPtr solenoid_port_pointer, ref int status)
+        public static bool getSolenoid(SolenoidPortSafeHandle solenoid_port_pointer, ref int status)
         {
             status = 0;
             var p = PortConverters.GetSolenoidPort(solenoid_port_pointer);
@@ -67,7 +64,7 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static byte getAllSolenoids(IntPtr solenoid_port_pointer, ref int status)
+        public static byte getAllSolenoids(SolenoidPortSafeHandle solenoid_port_pointer, ref int status)
         {
             status = 0;
             var port = PortConverters.GetSolenoidPort(solenoid_port_pointer);
@@ -82,7 +79,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void setSolenoid(IntPtr solenoid_port_pointer, bool value,
+        public static void setSolenoid(SolenoidPortSafeHandle solenoid_port_pointer, bool value,
             ref int status)
         {
             status = 0;
@@ -91,14 +88,14 @@ namespace HAL.SimulatorHAL
         }
 
         [CalledSimFunction]
-        public static int getPCMSolenoidBlackList(IntPtr solenoid_port_pointer, ref int status)
+        public static int getPCMSolenoidBlackList(SolenoidPortSafeHandle solenoid_port_pointer, ref int status)
         {
             status = 0;
             return 0;
         }
 
         [CalledSimFunction]
-        public static bool getPCMSolenoidVoltageStickyFault(IntPtr solenoid_port_pointer, ref int status)
+        public static bool getPCMSolenoidVoltageStickyFault(SolenoidPortSafeHandle solenoid_port_pointer, ref int status)
         {
             status = 0;
             return false;
@@ -106,7 +103,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static bool getPCMSolenoidVoltageFault(IntPtr solenoid_port_pointer, ref int status)
+        public static bool getPCMSolenoidVoltageFault(SolenoidPortSafeHandle solenoid_port_pointer, ref int status)
         {
             status = 0;
             return false;
@@ -114,7 +111,7 @@ namespace HAL.SimulatorHAL
 
 
         [CalledSimFunction]
-        public static void clearAllPCMStickyFaults_sol(IntPtr solenoid_port_pointer, ref int status)
+        public static void clearAllPCMStickyFaults_sol(SolenoidPortSafeHandle solenoid_port_pointer, ref int status)
         {
             status = 0;
         }

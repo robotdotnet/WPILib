@@ -3,6 +3,7 @@ using static WPILib.Utility;
 using static HAL.Base.HAL;
 using static HAL.Base.HALSolenoid;
 using HALSolenoid = HAL.Base.HALSolenoid;
+using HAL.Base;
 
 namespace WPILib
 {
@@ -12,7 +13,7 @@ namespace WPILib
     /// </summary>
     public abstract class SolenoidBase : SensorBase
     {
-        private IntPtr m_port;
+        private SolenoidPortSafeHandle m_port;
         /// <summary>
         /// The module number for the solenoid.
         /// </summary>
@@ -41,8 +42,10 @@ namespace WPILib
         /// <inheritdoc/>
         public override void Dispose()
         {
-            FreeSolenoidPort(m_port);
-            m_port = IntPtr.Zero;
+            m_port.Dispose();
+            m_port = null;
+            //FreeSolenoidPort(m_port);
+            //m_port = IntPtr.Zero;
             base.Dispose();
         }
 

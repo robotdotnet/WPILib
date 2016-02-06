@@ -41,7 +41,7 @@ namespace WPILib
 
             Channels.Allocate(channel, "Digital input " + channel + " is already allocated");
 
-            IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);
+            HALPortSafeHandle portPointer = HAL.Base.HAL.GetPort((byte)channel);
             int status = 0;
             Port = InitializeDigitalPort(portPointer, ref status);
             AllocateDIO(Port, input, ref status);

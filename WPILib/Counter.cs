@@ -25,7 +25,7 @@ namespace WPILib
         internal DigitalSource m_downSource;
         private bool m_allocatedUpSource;
         private bool m_allocatedDownSource;
-        private IntPtr m_counter;
+        private CounterSafeHandle m_counter;
         private uint m_index;
         private PIDSourceType m_pidSource;
 
@@ -156,12 +156,14 @@ namespace WPILib
             ClearDownSource();
 
             int status = 0;
-            FreeCounter(m_counter, ref status);
-            CheckStatus(status);
+            //FreeCounter(m_counter, ref status);
+            //CheckStatus(status);
+            m_counter.Dispose();
+            m_counter = null;
 
             m_upSource = null;
             m_downSource = null;
-            m_counter = IntPtr.Zero;
+            //m_counter = IntPtr.Zero;
         }
 
         /// <summary>
