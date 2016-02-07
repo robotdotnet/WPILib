@@ -58,11 +58,11 @@ namespace WPILib
                 IntPtr port = GetPortWithModule((byte)ModuleNumber, (byte)m_forwardChannel);
                 m_forwardSolenoid = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
-                FreePort(port);
+
                 port = GetPortWithModule((byte)ModuleNumber, (byte)m_reverseChannel);
                 m_reverseSolenoid = InitializeSolenoidPort(port, ref status);
                 CheckStatus(status);
-                FreePort(port);
+
                 HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_forwardChannel, (byte)(ModuleNumber));
                 HAL.Base.HAL.Report(ResourceType.kResourceType_Solenoid, (byte)m_reverseChannel, (byte)(ModuleNumber));
                 LiveWindow.LiveWindow.AddActuator("DoubleSolenoid", ModuleNumber, m_forwardChannel, this);
