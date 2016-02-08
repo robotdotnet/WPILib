@@ -442,14 +442,29 @@ namespace HAL.SimulatorHAL
         public static int HALSetErrorData(string errors, int wait_ms)
         {
             //TODO: Logger 
-            ErrorData = errors;
+            //ErrorData = errors;
+            HALSendError(true, 1, false, errors, "", "", true);
             return 0;
         }
 
         public static int HALSendError(bool isError, int errorCode, bool isLVCode, string details,
             string location, string callStack, bool printMsg)
         {
-            //TODO: Log This
+            //No need to rate limit sim
+            //Log Error
+            ErrorList.Add(new ErrorData(isError, errorCode, isLVCode, details, location, callStack));
+
+            if (printMsg)
+            {
+                if (location != null && location[0] != '\0')
+                {
+                    Console.Error.WriteLine($"{(isError ? "Error" : "Warning")} at {location}");
+                }
+                if (callStack != null && callStack[0] != '\0')
+                {
+                    Console.Error.WriteLine(callStack);
+                }
+            }
             return 0;
         }
 

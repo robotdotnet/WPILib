@@ -1,4 +1,5 @@
 ﻿using HAL.Simulator;
+using HAL.Simulator.Data;
 using NUnit.Framework;
 using System;
 using WPILib.Tests;
@@ -45,50 +46,26 @@ namespace RobotCode.Tests
     [TestFixture]
     public class TestUtilityStatus : TestBase
     {
-        //bool isError, int errorCode, bool isLVCode, [HALAllowNonBlittable]string details,
-          //  [HALAllowNonBlittable]string location, [HALAllowNonBlittable]string callStack, bool printMsg
-
         [Test]
         public void TestCheckStatusReportingError()
         {
-            var oldDelegate = HAL.Base.HAL.HALSendError;
-            bool error = false;
-            int ec = 0;
-            bool isLV = true;
-            string dets = "";
-            string location = "";
-            string stackTrace = "";
-            bool printMsg = false;
-
-            HAL.Base.HAL.HALSendError = (isError, errorCode, isLVCode, details, loc, stack, print) =>
-            {
-                error = isError;
-                ec = errorCode;
-                isLV = isLVCode;
-                dets = details;
-                location = loc;
-                stackTrace = stack;
-                printMsg = print;
-                return 0;
-            };
-
+            SimData.ErrorList.Clear();
             ReportErrorTesting test = new ReportErrorTesting();
             test.ThrowError(10);
 
-            Assert.That(error, Is.True);
-            Assert.That(ec, Is.EqualTo(10));
-            Assert.That(isLV, Is.False);
-            Assert.That(dets, Is.EqualTo(HAL.Base.HAL.GetHALErrorMessage(ec)));
-            Console.WriteLine(location);
-            var split = location.Split('\n');
+            Assert.That(SimData.ErrorList.Count, Is.EqualTo(1));
+            ErrorData data = SimData.ErrorList[0];
+
+            Assert.That(data.IsError, Is.True);
+            Assert.That(data.ErrorCode, Is.EqualTo(10));
+            Assert.That(data.IsLVCode, Is.False);
+            Assert.That(data.Details, Is.EqualTo(HAL.Base.HAL.GetHALErrorMessage(data.ErrorCode)));
+            Console.WriteLine(data.Location);
+            var split = data.Location.Split('\n');
             Assert.That(split.Length, Is.EqualTo(3));
             Assert.That(split[0].StartsWith("WPILib: ThrowError,"));
             Assert.That(split[1].StartsWith("Caller: RobotCode.Tests.TestUtilityStatus.TestCheckStatusReportingError"));
-            Assert.That(stackTrace, Is.Not.Null.Or.Empty);
-            Assert.That(printMsg, Is.True);
-
-
-            HAL.Base.HAL.HALSendError = oldDelegate;
+            Assert.That(data.StackTrace, Is.Not.Null.Or.Empty);
         }
     }
 }
