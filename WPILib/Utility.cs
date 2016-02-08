@@ -79,7 +79,7 @@ namespace WPILib
             else if (status > 0)
             {
                 //Pass the caller members along.
-                DriverStation.ReportError(GetHALErrorMessage(status), true, memberName, filePath, lineNumber, status);
+                DriverStation.ReportError(GetHALErrorMessage(status), true, status, memberName, filePath, lineNumber);
             }
         }
 
@@ -89,7 +89,7 @@ namespace WPILib
             if (status != CTR_Code.CTR_OKAY)
             {
                 //Pass the caller memebers along
-                DriverStation.ReportError(GetHALErrorMessage((int)status), true, memberName, filePath, lineNumber, (int)status);
+                DriverStation.ReportError(GetHALErrorMessage((int)status), true, (int) status, memberName, filePath, lineNumber);
             }
             return status == CTR_Code.CTR_OKAY;
         }

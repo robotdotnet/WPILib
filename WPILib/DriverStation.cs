@@ -262,7 +262,25 @@ namespace WPILib
             double currentTime = GetFPGATimestamp();
             if (currentTime > m_nextMessageTime)
             {
-                ReportError(message, false, memberName, filePath, lineNumber);
+                ReportError(message, false, 1, memberName, filePath, lineNumber);
+                m_nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
+            }
+        }
+
+        /// <summary>
+        /// Reports errors related to unplugged joysticks.
+        /// </summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="memberName">The Member Name</param>
+        /// <param name="filePath">The File Path</param>
+        /// <param name="lineNumber">The Line Number</param>
+        private void ReportJoystickUnpluggedWarning(string message, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+        {
+            double currentTime = GetFPGATimestamp();
+            if (currentTime > m_nextMessageTime)
+            {
+                ReportWarning(message, false, 1, memberName, filePath, lineNumber);
                 m_nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
             }
         }
@@ -301,7 +319,7 @@ namespace WPILib
                             $"Joystick axis is out of range, should be between 0 and {m_joystickAxes[stick].count}");
                     else
                     {
-                        ReportJoystickUnpluggedError("WARNING: Joystick axis " + axis + " on port " + stick +
+                        ReportJoystickUnpluggedWarning("Joystick axis " + axis + " on port " + stick +
                                                      " not available, check if controller is plugged in\n");
                     }
                     return 0.0;
@@ -386,7 +404,7 @@ namespace WPILib
                 {
                     m_readWriteLock.ExitReadLock();
                     lockEntered = false;
-                    ReportJoystickUnpluggedError("WARNING: Joystick POV " + pov + " on port " + stick +
+                    ReportJoystickUnpluggedWarning("Joystick POV " + pov + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
                     return -1;
                 }
@@ -475,7 +493,7 @@ namespace WPILib
             }
             if (button <= 0)
             {
-                ReportJoystickUnpluggedError("ERROR: Button indexes begin at 1 in WPILib for C#\n");
+                ReportJoystickUnpluggedError("Button indexes begin at 1 in WPILib for C#\n");
                 return false;
             }
 
@@ -489,7 +507,7 @@ namespace WPILib
                 {
                     m_readWriteLock.ExitReadLock();
                     lockEntered = false;
-                    ReportJoystickUnpluggedError("WARNING: Joystick Button " + button + " on port " + stick +
+                    ReportJoystickUnpluggedWarning("Joystick Button " + button + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
                     return false;
                 }
@@ -804,6 +822,18 @@ namespace WPILib
             return temp;
         }
 
+        public static void ReportWarning(string error, bool printTrace, int errorCode = 1, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+        {
+            ReportErrorImpl(false, errorCode, error, printTrace, memberName, filePath, lineNumber);
+        }
+
+        public static void ReportError(string error, bool printTrace, int errorCode = 1, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+        {
+            ReportErrorImpl(true, errorCode, error, printTrace, memberName, filePath, lineNumber);
+        }
+
         /// <summary>
         /// Report an error to the driver station.
         /// </summary>
@@ -812,18 +842,32 @@ namespace WPILib
         /// <param name="filePath">The file path</param>
         /// <param name="lineNumber">The line number</param>
         /// <param name="memberName">The member name</param>
-        public static void ReportError(string error, bool printTrace, [CallerMemberName] string memberName = "",
-            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0, int errorCode = 1)
+        private static void ReportErrorImpl(bool isError, int code, string error, bool printTrace, [CallerMemberName] string memberName = "",
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
-            string locString = $"Caller: {memberName}, File: {filePath}, Line: {lineNumber}\n";
+            string locString = $"WPILib: {memberName}, File: {filePath}, Line: {lineNumber}\n";
+            var stackTrace = Environment.StackTrace;
+            string[] stackSplit = stackTrace.Split('\n');
+            bool haveLoc = false;
+
+            for (int i = 3; i < stackSplit.Length; i++)
+            {
+                string loc = stackSplit[i];
+                if (!haveLoc && !loc.StartsWith("   at WPILib"))
+                {
+                    loc = loc.Substring(("   at ").Length);
+                    locString = locString + "Caller: " + loc + "\n";
+                    haveLoc = true;
+                }
+            }
+
             string trace = string.Empty;
             if (printTrace)
             {
-                var stacktrace = Environment.StackTrace;
-                trace = " at " + stacktrace + "\n";
+                trace = stackTrace + "\n";
             }
 
-            HALSendError(true, errorCode, false, error, locString, trace, true);
+            HALSendError(isError, code, false, error, locString, trace, true);
         }
 
         /// <summary>
