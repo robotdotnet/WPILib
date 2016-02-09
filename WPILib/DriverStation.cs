@@ -853,9 +853,9 @@ namespace WPILib
             for (int i = 3; i < stackSplit.Length; i++)
             {
                 string loc = stackSplit[i];
-                if (!haveLoc && !loc.StartsWith("   at WPILib"))
+                if (!haveLoc && !loc.Contains("at WPILib"))
                 {
-                    loc = loc.Substring(("   at ").Length);
+                    loc = loc.Substring(loc.IndexOf("at") + 3);
                     locString = locString + "Caller: " + loc + "\n";
                     haveLoc = true;
                 }
