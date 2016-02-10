@@ -46,7 +46,7 @@ namespace WPILib.Internal
         /// </summary>
         public class TimerImpl : Timer.ITimerInterface
         {
-            internal long m_startTime;
+            internal double m_startTime;
             internal double m_accumulatedTime;
             internal bool m_running;
 
@@ -61,7 +61,7 @@ namespace WPILib.Internal
                 Reset();
             }
 
-            private static long MsClock => (long)GetFPGATime() / 1000;
+            private static double MsClock => GetFPGATime() / 1000.0;
 
             /// <summary>
             /// Get the current time from the timer
