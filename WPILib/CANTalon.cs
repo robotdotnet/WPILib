@@ -204,6 +204,7 @@ namespace WPILib
         private bool m_controlEnabled;
         private int m_profile;
         private double m_setPoint;
+        private bool m_stopped;
 
         /// <inheritdoc/>
         public bool Inverted { get; set; }
@@ -1637,6 +1638,7 @@ namespace WPILib
         public void StopMotor()
         {
             ControlEnabled = false;
+            m_stopped = true;
         }
 
         ///<inheritdoc/>
@@ -1675,6 +1677,11 @@ namespace WPILib
         public virtual void Set(double value)
         {
             m_safetyHelper.Feed();
+            if (m_stopped)
+            {
+                ControlEnabled = true;
+                m_stopped = false;
+            }
             if (m_controlEnabled)
             {
                 m_setPoint = value;
