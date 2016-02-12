@@ -81,9 +81,7 @@ namespace WPILib
                 return;
             if (m_stopTime < GetFPGATimestamp())
             {
-                TextWriter errorWriter = Console.Error;
-                errorWriter.WriteLine(m_safeObject.Description + "... Output not updated often enough.");
-                errorWriter.Close();
+                DriverStation.ReportError($"{m_safeObject.Description}... Output not updated often enough", false);
 
                 m_safeObject.StopMotor();
             }
