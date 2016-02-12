@@ -165,6 +165,10 @@ namespace HAL.AthenaHAL
                 
             NativeHALSetErrorData = (NativeHALSetErrorDataDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetErrorData"), typeof(NativeHALSetErrorDataDelegate));
 
+            Base.HAL.HALSendError = HALSendError;
+
+            NativeHALSendError = (NativeHALSendErrorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSendError"), typeof(NativeHALSendErrorDelegate));
+
             Base.HAL.GetControlWord = HALGetControlWord;
 
             NativeHALGetControlWord = (NativeHALGetControlWordDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetControlWord"), typeof(NativeHALGetControlWordDelegate));
@@ -231,6 +235,21 @@ namespace HAL.AthenaHAL
             int len;
             byte[] errorB = CreateUTF8String(errors, out len);
             return NativeHALSetErrorData(errorB, len, waitMs); 
+        }
+
+        private delegate int NativeHALSendErrorDelegate(int isError, int errorCode, int isLVCode, 
+            byte[] details, byte[] location, byte[] callStack, int printMsg);
+
+        private static NativeHALSendErrorDelegate NativeHALSendError;
+
+        public static int HALSendError(bool isError, int errorCode, bool isLVCode, string details,
+            string location, string callStack, bool printMsg)
+        {
+            int len;
+            byte[] loc = CreateUTF8String(location, out len);
+            byte[] det = CreateUTF8String(details, out len);
+            byte[] stack = CreateUTF8String(callStack, out len);
+            return NativeHALSendError(isError ? 1 : 0, errorCode, isLVCode ? 1 : 0, det, loc, stack, printMsg ? 1 : 0);
         }
 
         private delegate IntPtr NativeGetHALErrorMessageDelegate(int code);
