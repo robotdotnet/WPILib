@@ -45,6 +45,15 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MonoDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\MonoDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NO_REFLECTION_CONTEXT</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="NetworkTables, Version=2016.0.0.148, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.NetworkTables.2016.0.0.148\lib\net45\NetworkTables.dll</HintPath>

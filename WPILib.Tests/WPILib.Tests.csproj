@@ -46,11 +46,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Travis|AnyCPU' ">
-    <OutputPath>Output\</OutputPath>
-    <DefineConstants>TRACE;NO_REFLECTION_CONTEXT</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MonoDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\MonoDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NO_REFLECTION_CONTEXT</DefineConstants>
+    <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
@@ -83,7 +83,7 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)' != 'Travis'">
+  <ItemGroup Condition="'$(Configuration)' != 'MonoDebug'">
     <Reference Include="System.Reflection.Context" />
   </ItemGroup>
   <Choose>
