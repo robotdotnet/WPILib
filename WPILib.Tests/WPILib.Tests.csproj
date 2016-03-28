@@ -48,7 +48,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MonoDebug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\MonoDebug\</OutputPath>
+    <OutputPath>Output\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NO_REFLECTION_CONTEXT</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
