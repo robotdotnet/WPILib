@@ -17,7 +17,9 @@ namespace WPILib.Extras.AttributedCommandModel
     /// </summary>
     public class AttributedRobot : RobotBase
     {
+#if !NO_REFLECTION_CONTEXT
         private readonly ReflectionContext m_reflectionContext;
+#endif
 
         private readonly List<KeyValuePair<Subsystem, string>> m_subsystems = new List<KeyValuePair<Subsystem, string>>();
 
@@ -47,6 +49,7 @@ namespace WPILib.Extras.AttributedCommandModel
             }
         }
 
+#if !NO_REFLECTION_CONTEXT
         /// <summary>
         /// Creates an <see cref="AttributedRobot"/> with a <see cref="ReflectionContext"/> object to find types through.
         /// </summary>
@@ -58,12 +61,14 @@ namespace WPILib.Extras.AttributedCommandModel
         {
             m_reflectionContext = reflectionContext;
         }
-
+#endif
         /// <summary>
         /// Constructs an <see cref="AttributedRobot"/> that will automatically load <see cref="Subsystem"/>s and <see cref="Command"/>s.
         /// </summary>
         public AttributedRobot()
+#if !NO_REFLECTION_CONTEXT
             :this(null)
+#endif
         {
             m_autonomousInitialized = false;
             m_disabledInitialized = false;
@@ -83,9 +88,14 @@ namespace WPILib.Extras.AttributedCommandModel
                     // the program from crashing if a dynamic assembly is loaded in the AppDomain
                     try
                     {
+
+#if !NO_REFLECTION_CONTEXT
                         return assembly.GetExportedTypes()
                             .Select(type => m_reflectionContext != null ? m_reflectionContext.MapType(type.GetTypeInfo())
                                                                       : type.GetTypeInfo());
+#else
+                        return assembly.GetExportedTypes().Select(type => type.GetTypeInfo());
+#endif
                     }
                     catch (NotSupportedException)
                     {
@@ -124,8 +134,12 @@ namespace WPILib.Extras.AttributedCommandModel
         private IEnumerable<Assembly> GetAssemblies()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+#if !NO_REFLECTION_CONTEXT
             return assemblies.Select(assembly => m_reflectionContext != null ? m_reflectionContext.MapAssembly(assembly)
                 : assembly);
+#else
+            return assemblies;
+#endif
         }
 
         private static IEnumerable<KeyValuePair<Subsystem, string>> EnumerateGeneratedSubsystems(TypeInfo subsystemType)

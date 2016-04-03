@@ -48,6 +48,15 @@ namespace WPILib.Interfaces
         void Disable();
 
         /// <summary>
+        /// Stops motor movement.
+        /// </summary>
+        /// <remarks>
+        /// Motor can be moved again by calling set without having to
+        /// re-enable the motor.
+        /// </remarks>
+        void StopMotor();
+
+        /// <summary>
         /// Inverts the direction of the motors rotation.
         /// </summary>
         bool Inverted { get; set; }

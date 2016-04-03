@@ -48,6 +48,11 @@ namespace HAL.Base
         public delegate int HALSetErrorDataDelegate([HALAllowNonBlittable]string errors, int wait_ms);
         public static HALSetErrorDataDelegate HALSetErrorData;
 
+        public delegate int HALSendErrorDelegate(bool isError, int errorCode, bool isLVCode, [HALAllowNonBlittable]string details,
+            [HALAllowNonBlittable]string location, [HALAllowNonBlittable]string callStack, bool printMsg);
+
+        public static HALSendErrorDelegate HALSendError;
+
         public delegate HALControlWord HALGetControlWordDelegate();
         public static HALGetControlWordDelegate GetControlWord;
 

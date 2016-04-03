@@ -1,7 +1,9 @@
 ﻿using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
+#if !NO_REFLECTION_CONTEXT
 using System.Reflection.Context;
+#endif
 using WPILib.Extras.AttributedCommandModel;
 
 namespace WPILib.Tests.Commands
@@ -9,7 +11,7 @@ namespace WPILib.Tests.Commands
     [TestFixture]
     public class PhaseAttributedCommandTest : AbstractCommandTest
     {
-
+#if !NO_REFLECTION_CONTEXT
         class TestReflectionContext : CustomReflectionContext
         {
             protected override IEnumerable<object> GetCustomAttributes(MemberInfo member, IEnumerable<object> declaredAttributes)
@@ -84,5 +86,6 @@ namespace WPILib.Tests.Commands
                 }
             }
         }
+#endif
     }
 }

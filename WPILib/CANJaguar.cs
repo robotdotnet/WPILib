@@ -243,6 +243,7 @@ namespace WPILib
         private const int ReceiveStatusAttempts = 50;
 
         bool m_controlEnabled = true;
+        bool m_stopped = false;
 
         /// <inheritdoc/>
         public double Expiration
@@ -399,6 +400,13 @@ namespace WPILib
         {
             byte[] data = new byte[8];
 
+            m_safetyHelper?.Feed();
+            if (m_stopped)
+            {
+                EnableControl();
+                m_stopped = false;
+            }
+
             if (m_controlEnabled)
             {
                 int messageId;
@@ -436,7 +444,6 @@ namespace WPILib
                 }
 
                 SendMessage(messageId, data, dataSize, SendMessagePeriod);
-                m_safetyHelper?.Feed();
             }
             m_value = value;
             Verify();
@@ -1560,8 +1567,11 @@ namespace WPILib
         /// <summary>
         /// Not implemented on CANJaguar.
         /// </summary>
-        public double F {
-            get { return 0.0; } set {} }
+        public double F
+        {
+            get { return 0.0; }
+            set { }
+        }
 
         /// <inheritdoc/>
         public void SetPID(double p, double i, double d)

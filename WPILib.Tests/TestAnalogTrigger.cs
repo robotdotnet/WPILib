@@ -84,11 +84,10 @@ namespace WPILib.Tests
             using (AnalogTrigger at = new AnalogTrigger(2))
             {
                 SimData.DriverStation.ControlData.DsAttached = true;
-                SimData.ErrorData = null;
+                int count = SimData.ErrorList.Count;
                 at.Averaged = true;
                 at.Filtered = true;
-                Assert.That(SimData.ErrorData, Is.Not.Null);
-                SimData.ErrorData = null;
+                Assert.That(SimData.ErrorList.Count, Is.EqualTo(count + 1));
             }
         }
 
@@ -98,11 +97,10 @@ namespace WPILib.Tests
             using (AnalogTrigger at = new AnalogTrigger(2))
             {
                 SimData.DriverStation.ControlData.DsAttached = true;
-                SimData.ErrorData = null;
+                int count = SimData.ErrorList.Count;
                 at.Filtered = true;
                 at.Averaged = true;
-                Assert.That(SimData.ErrorData, Is.Not.Null);
-                SimData.ErrorData = null;
+                Assert.That(SimData.ErrorList.Count, Is.EqualTo(count + 1));
             }
         }
 

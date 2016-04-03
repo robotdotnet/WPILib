@@ -136,13 +136,7 @@ namespace HAL.Simulator
         /// </value>
         public static NotifyDict<byte, dynamic> Reports { get; } = new NotifyDict<byte, dynamic>();
 
-        /// <summary>
-        /// Gets the error data.
-        /// </summary>
-        /// <value>
-        /// The error data.
-        /// </value>
-        public static string ErrorData { get; internal set; } = "";
+        public static List<ErrorData> ErrorList { get; } = new List<ErrorData>();
 
         /// <summary>
         /// Gets the can talon.
@@ -374,6 +368,7 @@ namespace HAL.Simulator
             }
 
             InitializePDP(0);
+            ErrorList.Clear();
         }
 
         internal static IntPtr s_halNewDataSem = IntPtr.Zero;
@@ -445,6 +440,7 @@ namespace HAL.Simulator
             {
                 spiAccelerometerData.ResetData();
             }
+            ErrorList.Clear();
             DriverStation.ResetData();
             SimHooks.RestartTiming();
 

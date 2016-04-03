@@ -666,10 +666,10 @@ namespace WPILib
         /// <inheritdoc/>
         public void StopMotor()
         {
-            FrontLeftMotor?.Set(0.0);
-            FrontRightMotor?.Set(0.0);
-            RearLeftMotor?.Set(0.0);
-            RearRightMotor?.Set(0.0);
+            FrontLeftMotor?.StopMotor();
+            FrontRightMotor?.StopMotor();
+            RearLeftMotor?.StopMotor();
+            RearRightMotor?.StopMotor();
             SafetyHelper?.Feed();
         }
 
