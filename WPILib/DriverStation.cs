@@ -16,7 +16,7 @@ namespace WPILib
     /// <summary>
     /// Provides access to the network communication data to/from the Driver Station.
     /// </summary>
-    public class DriverStation : RobotState.Interface
+    public class DriverStation
     {
         //Enums
         /// <summary>

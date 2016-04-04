@@ -69,14 +69,6 @@ namespace WPILib
         /// </summary>
         public abstract void StartCompetition();
 
-        /// <summary>
-        /// Common initialization for all robot programs.
-        /// </summary>
-        public static void InitializeHardwareConfiguration()
-        {
-            RobotState.Implementation = DriverStation.Instance;
-        }
-
         private static RobotBase s_robot;
         /// <summary>
         /// Starting point for robot applications. You can provide either an assembly, or a type. 
@@ -89,7 +81,6 @@ namespace WPILib
             try
             {
                 HAL.Base.HAL.Initialize();
-                InitializeHardwareConfiguration();
             }
             catch (Exception e)
             {

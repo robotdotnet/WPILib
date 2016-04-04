@@ -132,7 +132,6 @@
     <Compile Include="SD540.cs" />
     <Compile Include="SmartDashboard\SendableChooser.cs" />
     <Compile Include="Interfaces\ISpeedController.cs" />
-    <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />
