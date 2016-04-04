@@ -327,7 +327,7 @@ namespace WPILib
         /// The DS currently supports 2 rumble values, left rumble and right rumble.
         /// </remarks>
         /// <param name="type">Which rumble value to set.</param>
-        /// <param name="value">The normalized value (0 to 1) to set the rumbble to.</param>
+        /// <param name="value">The normalized value (0 to 1) to set the rumble to.</param>
         public void SetRumble(RumbleType type, float value)
         {
             if (value < 0)
