@@ -3,8 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using HAL.Base;
-using NetworkTables;
-using WPILib.Internal;
+using NetworkTables; 
 using static HAL.Base.HAL;
 
 namespace WPILib
@@ -76,7 +75,6 @@ namespace WPILib
         public static void InitializeHardwareConfiguration()
         {
             RobotState.Implementation = DriverStation.Instance;
-            Timer.Implementation = new HardwareTimer();
         }
 
         private static RobotBase s_robot;
