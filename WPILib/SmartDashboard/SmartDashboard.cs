@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Interfaces;
@@ -18,7 +19,7 @@ namespace WPILib.SmartDashboard
 
         static SmartDashboard()
         {
-            HLUsageReporting.ReportSmartDashboard();
+            HAL.Base.HAL.Report(ResourceType.kResourceType_SmartDashboard, (byte)0);
         }
 
         /// <summary>

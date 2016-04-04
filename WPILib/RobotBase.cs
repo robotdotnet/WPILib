@@ -77,7 +77,6 @@ namespace WPILib
         {
             RobotState.Implementation = DriverStation.Instance;
             Timer.Implementation = new HardwareTimer();
-            HLUsageReporting.Implementation = new HardwareHLUsageReporting();
         }
 
         private static RobotBase s_robot;
