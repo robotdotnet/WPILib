@@ -130,11 +130,11 @@ namespace WPILib.Tests
             }
         }
 
-        [TestCase(CANTalon.FeedbackDevice.AnalogEncoder, Result = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
-        [TestCase(CANTalon.FeedbackDevice.AnalogPotentiometer, Result = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
-        [TestCase(CANTalon.FeedbackDevice.QuadEncoder, Result = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
-        [TestCase(CANTalon.FeedbackDevice.EncoderRising, Result = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
-        [TestCase(CANTalon.FeedbackDevice.EncoderFalling, Result = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
+        [TestCase(CANTalon.FeedbackDevice.AnalogEncoder, ExpectedResult = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
+        [TestCase(CANTalon.FeedbackDevice.AnalogPotentiometer, ExpectedResult = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
+        [TestCase(CANTalon.FeedbackDevice.QuadEncoder, ExpectedResult = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
+        [TestCase(CANTalon.FeedbackDevice.EncoderRising, ExpectedResult = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
+        [TestCase(CANTalon.FeedbackDevice.EncoderFalling, ExpectedResult = CANTalon.FeedbackDeviceStatus.FeedbackStatusUnknown)]
         public CANTalon.FeedbackDeviceStatus TestIsSensorPresent(CANTalon.FeedbackDevice device)
         {
             using (CANTalon t = NewTalon())

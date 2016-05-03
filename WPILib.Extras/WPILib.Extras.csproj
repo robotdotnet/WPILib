@@ -55,8 +55,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkTables, Version=2016.0.1.16, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.2016.0.1.16\lib\net45\NetworkTables.dll</HintPath>
+    <Reference Include="NetworkTables, Version=2016.0.2.17, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.2016.0.2.17\lib\net45\NetworkTables.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

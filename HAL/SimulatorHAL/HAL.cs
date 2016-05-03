@@ -164,19 +164,34 @@ namespace HAL.SimulatorHAL
             //Find all types inheriting from ISimulator
             Type simulatorType = typeof(ISimulator);
             ICollection<Type> simulatorTypes = new List<Type>();
-            foreach (var type in from assembly in assemblies where assembly != null select assembly.GetTypes() into types from type in types select type)
+            try
             {
-                if (type.IsInterface || type.IsAbstract)
+                foreach (var type in from assembly in assemblies where assembly != null select assembly.GetTypes() into types from type in types select type)
                 {
-                }
-                else
-                {
-                    if (type.GetInterface(simulatorType.FullName) != null)
+                    try
                     {
-                        simulatorTypes.Add(type);
+                        if (type.IsInterface || type.IsAbstract)
+                        {
+                        }
+                        else
+                        {
+                            if (type.GetInterface(simulatorType.FullName) != null)
+                            {
+                                simulatorTypes.Add(type);
+                            }
+                        }
                     }
+                    catch
+                    {
+                    }
+
                 }
             }
+            catch
+            {
+                return;
+            }
+            
 
             //If none were found, just return
             if (simulatorTypes.Count == 0)
