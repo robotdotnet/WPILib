@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -22,13 +23,18 @@ namespace WPILib.Tests.SpecScaners
         {
             var halRoboRioSymbols = NetProjects.GetHALRoboRioNativeSymbols();
 
+            var assembly = Assembly.GetExecutingAssembly();
+            var ps = Path.DirectorySeparatorChar;
+            var path = assembly.CodeBase.Replace("file:///", "").Replace("/", ps.ToString());
+            path = Path.GetDirectoryName(path);
+
 
             // Start the child process.
             Process p = new Process();
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.FileName = "..\\..\\HAL\\AthenaHAL\\Native\\frcnm.exe";
-            p.StartInfo.Arguments = "..\\..\\HAL\\AthenaHAL\\Native\\libHALAthena.so";
+            p.StartInfo.FileName = path + "\\..\\..\\HAL\\AthenaHAL\\Native\\frcnm.exe";
+            p.StartInfo.Arguments = path + "\\..\\..\\HAL\\AthenaHAL\\Native\\libHALAthena.so";
             p.Start();
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();

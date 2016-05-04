@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using HAL.SimulatorHAL;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -22,7 +23,12 @@ namespace WPILib.Tests.SpecScaners
         {
             List<string> nativeFunctions = new List<string>();
 
-            var dir = "..\\..\\HAL\\AthenaHAL";
+            var assembly = Assembly.GetExecutingAssembly();
+            var ps = Path.DirectorySeparatorChar;
+            var path = assembly.CodeBase.Replace("file:///", "").Replace("/", ps.ToString());
+            path = Path.GetDirectoryName(path);
+
+            var dir = path + "\\..\\..\\HAL\\AthenaHAL";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 if (!file.ToLower().Contains("hal")) continue;
@@ -57,7 +63,13 @@ namespace WPILib.Tests.SpecScaners
         public static List<HALDelegateClass> GetHalBaseDelegates()
         {
             List<HALDelegateClass> halBaseMethods = new List<HALDelegateClass>();
-            var dir = "..\\..\\HAL\\Delegates";
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var ps = Path.DirectorySeparatorChar;
+            var path = assembly.CodeBase.Replace("file:///", "").Replace("/", ps.ToString());
+            path = Path.GetDirectoryName(path);
+
+            var dir = path + "\\..\\..\\HAL\\Delegates";
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 HALDelegateClass cs = new HALDelegateClass
