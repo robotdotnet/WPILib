@@ -98,7 +98,6 @@ namespace WPILib
         {
             int status = 0;
             m_port = (byte)port;
-            System.IO.Ports.SerialPort p  = new System.IO.Ports.SerialPort();
             SerialInitializePort(m_port, ref status);
             CheckStatus(status);
             SerialSetBaudRate(m_port, (uint) baudRate, ref status);

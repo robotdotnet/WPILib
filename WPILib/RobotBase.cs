@@ -120,6 +120,7 @@ namespace WPILib
                         throw new Exception(
                             "Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
                     robotName = robotClasses[0].FullName;
+                    
                     s_robot = (RobotBase) (Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
                 }
                 else
@@ -150,7 +151,7 @@ namespace WPILib
                 {
                     if (File.Exists(file))
                         File.Delete(file);
-                    var version = Assembly.GetExecutingAssembly().GetName().Version;
+                    var version = typeof(RobotBase).GetTypeInfo().Assembly.GetName().Version;
                     File.WriteAllText(file, "RobotDotNet V" + version);
                 }
                 catch (IOException ex)
