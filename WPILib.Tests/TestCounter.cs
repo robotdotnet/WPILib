@@ -178,7 +178,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 TestInit(0, 0, 0, false, false, false, false);
-                Assert.Throws<SystemException>(() =>
+                Assert.Throws<Exception>(() =>
                 {
                     c.SetUpSourceEdge(true, true);
                 });
@@ -238,7 +238,7 @@ namespace WPILib.Tests
             using (Counter c = new Counter())
             {
                 TestInit(0, 0, 0, false, false, false, false);
-                Assert.Throws<SystemException>(() =>
+                Assert.Throws<Exception>(() =>
                 {
                     c.SetDownSourceEdge(true, true);
                 });

@@ -6,7 +6,7 @@ namespace WPILib.Exceptions
     /// Thrown if there is an error caused by a basic system or setting
     /// not being properly initialized before being used.
     /// </summary>
-    public class BaseSystemNotInitializedException : SystemException
+    public class BaseSystemNotInitializedException : Exception
     {
         /// <summary>
         /// Create a new BaseSystemNotInitializedException

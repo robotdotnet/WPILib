@@ -7,7 +7,7 @@ namespace WPILib.CAN
     /// </summary>
     /// <remarks>Communications.This usually just means we already have the most recent
     /// value cached locally.</remarks>
-    public class CANMessageNotFoundException : SystemException
+    public class CANMessageNotFoundException : Exception
     {
     }
 }

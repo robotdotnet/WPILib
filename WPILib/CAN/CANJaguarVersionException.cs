@@ -5,7 +5,7 @@ namespace WPILib.CAN
     /// <summary>
     /// Exception indicating that the CAN Jaguar does not have the correct version
     /// </summary>
-    public class CANJaguarVersionException : SystemException
+    public class CANJaguarVersionException : Exception
     {
         /// <summary>
         /// The Minimum FIRST Legal version of the firmware

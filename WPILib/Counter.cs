@@ -217,7 +217,7 @@ namespace WPILib
         public void SetUpSourceEdge(bool risingEdge, bool fallingEdge)
         {
             if (m_upSource == null)
-                throw new SystemException("Up Source must be set before setting the edge!");
+                throw new Exception("Up Source must be set before setting the edge!");
             int status = 0;
             SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
             CheckStatus(status);
@@ -289,7 +289,7 @@ namespace WPILib
         public void SetDownSourceEdge(bool risingEdge, bool fallingEdge)
         {
             if (m_downSource == null)
-                throw new SystemException("Up Source must be set before setting the edge!");
+                throw new Exception("Up Source must be set before setting the edge!");
             int status = 0;
             SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
             CheckStatus(status);

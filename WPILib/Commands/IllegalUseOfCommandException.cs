@@ -12,7 +12,7 @@ namespace WPILib.Commands
     /// its requirements changes, it is put into multiple command groups,
     /// its is started from outside its command group, or it adds a new child.
     /// </remarks>
-    public class IllegalUseOfCommandException : SystemException
+    public class IllegalUseOfCommandException : Exception
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="IllegalUseOfCommandException"/> class

@@ -6,7 +6,7 @@ namespace WPILib.CAN
     /// Exception indicating that the Jaguar CAN Driver layer refused to send a
     /// restricted message ID to the CAN bus.
     /// </summary>
-    public class CANMessageNotAllowedException : SystemException
+    public class CANMessageNotAllowedException : Exception
     {
         /// <summary>
         /// Initialized a new instance of the <see cref="CANMessageNotAllowedException"/> class

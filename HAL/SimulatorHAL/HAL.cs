@@ -170,12 +170,12 @@ namespace HAL.SimulatorHAL
                 {
                     try
                     {
-                        if (type.IsInterface || type.IsAbstract)
+                        if (type.GetTypeInfo().IsInterface || type.GetTypeInfo().IsAbstract)
                         {
                         }
                         else
                         {
-                            if (type.GetInterface(simulatorType.FullName) != null)
+                            if (type.GetTypeInfo().GetInterface(simulatorType.FullName) != null)
                             {
                                 simulatorTypes.Add(type);
                             }

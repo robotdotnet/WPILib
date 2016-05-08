@@ -6,7 +6,7 @@ namespace WPILib.Exceptions
     /// This exception represent an error in which a lower limit was set as higher
     /// then an upper limit.
     /// </summary>
-    public class BoundaryException : SystemException
+    public class BoundaryException : Exception
     {
         /// <summary>
         /// Create a new exception with the given message

@@ -8,7 +8,7 @@ namespace WPILib.CAN
     /// <remarks>
     /// Typically, this is due to a buffer being too small to include the 
     /// needed safety token.</remarks>
-    public class CANInvalidBufferException : SystemException
+    public class CANInvalidBufferException : Exception
     {
     }
 }

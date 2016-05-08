@@ -7,7 +7,7 @@ namespace WPILib.CAN
     /// </summary>
     /// <remarks>This happens when an entry-point is called before a CAN driver plugin
     /// has been installed.</remarks>
-    public class CANNotInitializedException : SystemException
+    public class CANNotInitializedException : Exception
     {
     }
 }

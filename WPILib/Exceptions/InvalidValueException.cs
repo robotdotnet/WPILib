@@ -6,7 +6,7 @@ namespace WPILib.Exceptions
     /// This class represents errors in trying to set relay values contradictory
     /// to the direction to which the relay is set.
     /// </summary>
-    public class InvalidValueException : SystemException
+    public class InvalidValueException : Exception
     {
         /// <summary>
         /// Create a new exception with the given message

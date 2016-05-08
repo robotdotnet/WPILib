@@ -101,8 +101,6 @@ namespace WPILib
                 Environment.Exit(1);
             }
             Report(ResourceType.kResourceType_Language, Instances.kLanguage_DotNet);
-            string robotName = "";
-            string robotAssemblyName = "";
             //Find the robot code class
             try
             {
@@ -110,18 +108,17 @@ namespace WPILib
                 if (robotType == null && robotAssembly != null)
                 {
                     //Load the first non abstract class inheriting from RobotBase we can find.
-                    robotAssemblyName = robotAssembly.GetName().Name;
                     var robotClasses =
                         (from t in robotAssembly.GetTypes()
-                         where typeof (RobotBase).IsAssignableFrom(t) && !t.IsAbstract && !t.IsInterface
+                         where typeof (RobotBase).IsAssignableFrom(t) && !t.GetTypeInfo().IsAbstract && !t.GetTypeInfo().IsInterface
                          select t)
                             .ToList();
                     if (robotClasses.Count == 0)
                         throw new Exception(
                             "Could not find base robot class. Are you sure the assembly got passed correctly to the main function?");
-                    robotName = robotClasses[0].FullName;
-                    
-                    s_robot = (RobotBase) (Activator.CreateInstance(robotAssemblyName, robotName)).Unwrap();
+                    robotType = robotClasses[0];
+
+                    s_robot = (RobotBase) Activator.CreateInstance(robotType);
                 }
                 else
                 {
@@ -131,11 +128,16 @@ namespace WPILib
                         throw new Exception("Both robotAssembly and robotType cannot be null.");
                     }
                     //Otherwise just initialize the type we were passed.
-                    s_robot = (RobotBase) (Activator.CreateInstance(robotType));
+                    s_robot = (RobotBase) Activator.CreateInstance(robotType);
                 }
             }
             catch (Exception ex)
             {
+                string robotName = "";
+                if (robotType != null)
+                {
+                    robotName = robotType.Name;
+                }
                 DriverStation.ReportError("ERROR Unhandled exception instantiating robot " + robotName + " " + ex + " at " + ex.StackTrace, false);
                 Console.Error.WriteLine("WARNING: Robots don't quit!");
                 Console.Error.WriteLine("Error: Could not instantiate robot " + robotName + "!");

@@ -5,7 +5,7 @@ namespace WPILib.Exceptions
     /// <summary>
     /// Exceptions dealing with improper operation of the Analog trigger.
     /// </summary>
-    public class AnalogTriggerException : SystemException
+    public class AnalogTriggerException : Exception
     {
         /// <summary>
         /// Create a new exception with the given message

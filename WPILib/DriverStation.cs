@@ -124,7 +124,6 @@ namespace WPILib
             //Starts the driver station thread in the background.
             var thread = new Thread(Task)
             {
-                Priority = ThreadPriority.AboveNormal,
                 IsBackground = true,
                 Name = "FRCDriverStation"
             };

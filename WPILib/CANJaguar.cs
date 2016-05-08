@@ -1023,7 +1023,7 @@ namespace WPILib
                 {
                     if (dataSize > MaxMessageDataSize - 2)
                     {
-                        throw new SystemException("CAN message has too much data.");
+                        throw new Exception("CAN message has too much data.");
                     }
 
                     byte[] trustedData = new byte[dataSize + 2];

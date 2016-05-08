@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using HAL.Base;
 
 namespace HAL.SimulatorHAL
@@ -17,13 +18,22 @@ namespace HAL.SimulatorHAL
 
     internal static class LoaderUtilities
     {
+        internal static bool Is64BitOs()
+        {
+            return Marshal.SizeOf(typeof(IntPtr)) == 8;
+        }
+
+        internal static bool IsWindows()
+        {
+            return Path.DirectorySeparatorChar == '\\';
+        }
+
         internal static OsType GetOsType()
         {
-            var platform = (int) Environment.OSVersion.Platform;
-            if (platform == 4 || platform == 6 || platform == 128)
+            if (!IsWindows())
             {
                 //These 3 mean we are running on a unix based system
-                if (Environment.Is64BitProcess)
+                if (Is64BitOs())
                 {
                     //We are 64 bit. RIO is not 64 bit, so we can force return.
                     return OsType.Linux64;
@@ -37,7 +47,7 @@ namespace HAL.SimulatorHAL
             else
             {
                 //Assume we are on windows otherwise
-                return Environment.Is64BitProcess ? OsType.Windows64 : OsType.Windows32;
+                return Is64BitOs() ? OsType.Windows64 : OsType.Windows32;
             }
         }
 
@@ -89,7 +99,7 @@ namespace HAL.SimulatorHAL
             }
             outputName = Path.GetTempPath() + outputName;
             byte[] bytes;
-            using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(inputName))
+            using (Stream s = typeof(LoaderUtilities).GetTypeInfo().Assembly.GetManifestResourceStream(inputName))
             {
                 if (s == null || s.Length == 0)
                     return null;

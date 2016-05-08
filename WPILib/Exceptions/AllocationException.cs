@@ -5,7 +5,7 @@ namespace WPILib.Exceptions
     /// <summary>
     /// Exception indicating that the resource is already allocated.
     /// </summary>
-    public class AllocationException : SystemException
+    public class AllocationException : Exception
     {
         /// <summary>
         /// Create a new AllocationException
