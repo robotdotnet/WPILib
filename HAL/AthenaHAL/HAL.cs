@@ -129,7 +129,6 @@ namespace HAL.AthenaHAL
                     HALSemaphore.Initialize(s_library, loader);
                     HALSerialPort.Initialize(s_library, loader);
                     HALSolenoid.Initialize(s_library, loader);
-                    HALUtilities.Initialize(s_library, loader);
                 }
                 catch (Exception e)
                 {
