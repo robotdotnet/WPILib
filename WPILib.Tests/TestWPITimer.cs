@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using WPILib.Internal;
 
 namespace WPILib.Tests
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HAL.Base;
 using NetworkTables.Tables;
 using WPILib.Buttons;
 using WPILib.Interfaces;
@@ -41,7 +42,7 @@ namespace WPILib.Commands
 
         private Scheduler()
         {
-            HLUsageReporting.ReportScheduler();
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Command, Instances.kCommand_Scheduler);
         }
 
         /// <summary>

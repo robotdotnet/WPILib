@@ -13,7 +13,7 @@ namespace WPILib.IntegrationTests.Test
         {
             if (!s_initialized)
             {
-                RobotBase.InitializeHardwareConfiguration();
+
                 HAL.Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
 
                 LiveWindow.LiveWindow.SetEnabled(false);
