@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.Exceptions;
@@ -118,7 +119,7 @@ namespace WPILib
             m_controlLoop.StartPeriodic(m_period);
 
             s_instances++;
-            HLUsageReporting.ReportPIDController(s_instances);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_PIDController, (byte)s_instances);
 
             m_toleranceType = ToleranceType.NoTolerance;
             m_buf = new Queue<double>(m_bufLength + 1);

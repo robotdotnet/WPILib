@@ -3,8 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using HAL.Base;
-using NetworkTables;
-using WPILib.Internal;
+using NetworkTables; 
 using static HAL.Base.HAL;
 
 namespace WPILib
@@ -70,16 +69,6 @@ namespace WPILib
         /// </summary>
         public abstract void StartCompetition();
 
-        /// <summary>
-        /// Common initialization for all robot programs.
-        /// </summary>
-        public static void InitializeHardwareConfiguration()
-        {
-            RobotState.Implementation = DriverStation.Instance;
-            Timer.Implementation = new HardwareTimer();
-            HLUsageReporting.Implementation = new HardwareHLUsageReporting();
-        }
-
         private static RobotBase s_robot;
         /// <summary>
         /// Starting point for robot applications. You can provide either an assembly, or a type. 
@@ -92,7 +81,6 @@ namespace WPILib
             try
             {
                 HAL.Base.HAL.Initialize();
-                InitializeHardwareConfiguration();
             }
             catch (Exception e)
             {

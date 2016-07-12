@@ -74,7 +74,6 @@
     <Compile Include="AthenaHAL\HALSemaphore.cs" />
     <Compile Include="AthenaHAL\HALSerialPort.cs" />
     <Compile Include="AthenaHAL\HALSolenoid.cs" />
-    <Compile Include="AthenaHAL\HALUtilities.cs" />
     <Compile Include="Base\LibraryLoader.cs" />
     <Compile Include="Delegates\HALAccelerometerGenerated.cs" />
     <Compile Include="Delegates\HALAnalogGenerated.cs" />
@@ -90,7 +89,6 @@
     <Compile Include="Delegates\HALSemaphoreGenerated.cs" />
     <Compile Include="Delegates\HALSerialPortGenerated.cs" />
     <Compile Include="Delegates\HALSolenoidGenerated.cs" />
-    <Compile Include="Delegates\HALUtilitiesGenerated.cs" />
     <Compile Include="Base\HAL.cs" />
     <Compile Include="Base\HALAccelerometer.cs" />
     <Compile Include="Base\HALAnalog.cs" />
@@ -108,7 +106,6 @@
     <Compile Include="Base\HALSolenoid.cs" />
     <Compile Include="Base\HALStructures.cs" />
     <Compile Include="Base\HALUsageReporter.cs" />
-    <Compile Include="Base\HALUtilities.cs" />
     <Compile Include="SimulatorHAL\NotifierAlarm.cs" />
     <Compile Include="Simulator\Data\ErrorData.cs" />
     <Compile Include="Simulator\Data\NavXData.cs" />
@@ -131,7 +128,6 @@
     <Compile Include="SimulatorHAL\HALSerialPort.cs" />
     <Compile Include="SimulatorHAL\HALSolenoid.cs" />
     <Compile Include="SimulatorHAL\HALStructures.cs" />
-    <Compile Include="SimulatorHAL\HALUtilities.cs" />
     <Compile Include="SimulatorHAL\LoaderUtilities.cs" />
     <Compile Include="SimulatorHAL\PortConverters.cs" />
     <Compile Include="SimulatorHAL\PWMHelpers.cs" />

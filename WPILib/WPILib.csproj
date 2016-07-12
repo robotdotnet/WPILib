@@ -118,13 +118,11 @@
     <Compile Include="Encoder.cs" />
     <Compile Include="GearTooth.cs" />
     <Compile Include="AnalogGyro.cs" />
-    <Compile Include="HLUsageReporting.cs" />
     <Compile Include="I2C.cs" />
     <Compile Include="Interfaces\IAccelerometer.cs" />
     <Compile Include="Interfaces\ICounterBase.cs" />
     <Compile Include="GenericHID.cs" />
     <Compile Include="Interfaces\IGyro.cs" />
-    <Compile Include="Internal\HardwareHLUsageReporting.cs" />
     <Compile Include="Interfaces\IMotorSafety.cs" />
     <Compile Include="Interfaces\IPIDInterface.cs" />
     <Compile Include="Interfaces\IPIDOutput.cs" />
@@ -134,7 +132,6 @@
     <Compile Include="SD540.cs" />
     <Compile Include="SmartDashboard\SendableChooser.cs" />
     <Compile Include="Interfaces\ISpeedController.cs" />
-    <Compile Include="Internal\HardwareTimer.cs" />
     <Compile Include="IterativeRobot.cs" />
     <Compile Include="Jaguar.cs" />
     <Compile Include="Joystick.cs" />

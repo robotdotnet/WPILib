@@ -12,7 +12,6 @@ namespace WPILib.Tests
         {
             if (!initialized)
             {
-                RobotBase.InitializeHardwareConfiguration();
                 global::HAL.Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
 
                 LiveWindow.LiveWindow.SetEnabled(false);

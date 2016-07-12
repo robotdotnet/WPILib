@@ -71,7 +71,6 @@ namespace HAL.SimulatorHAL
                     HALSemaphore.Initialize(s_library, loader);
                     HALSerialPort.Initialize(s_library, loader);
                     HALSolenoid.Initialize(s_library, loader);
-                    HALUtilities.Initialize(s_library, loader);
                     // ReSharper restore ExpressionIsAlwaysNull
                 }
                 catch (Exception e)
