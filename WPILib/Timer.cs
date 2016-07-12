@@ -86,6 +86,7 @@ namespace WPILib
             {
                 Thread.Sleep(milliSeconds - 12);
             }
+            // ReSharper disable once EmptyEmbeddedStatement
             while (sw.ElapsedTicks < ticks) ;
             sw.Stop();
         }
@@ -105,7 +106,7 @@ namespace WPILib
             ITimerInterface NewTimer();
         }
 
-        private ITimerInterface m_timer;
+        private readonly ITimerInterface m_timer;
 
         /// <summary>
         /// Creates a new Timer

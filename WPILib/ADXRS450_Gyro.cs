@@ -18,6 +18,7 @@ namespace WPILib
     /// determine the default offset.This is subtracted from each sample to
     /// determine the heading.
     /// </remarks>
+    // ReSharper disable once InconsistentNaming
     public class ADXRS450_Gyro : GyroBase, IGyro, IPIDSource, ILiveWindowSendable
     {
         private const double SamplePeriod = 0.001;
@@ -25,15 +26,18 @@ namespace WPILib
         private const double DegreePerSecondPerLSB = 0.0125;
         private const int RateRegister = 0x00;
         private const int TemRegister = 0x02;
+        // ReSharper disable InconsistentNaming
         private const int LoCSTRegister = 0x04;
+
         private const int HiCSTRegister = 0x06;
         private const int QuadRegister = 0x08;
         private const int FaultRegister = 0x0A;
         private const int PIDRegister = 0x0C;
         private const int SNHighRegister = 0x0E;
         private const int SNLowRegister = 0x10;
+        // ReSharper restore InconsistentNaming
 
-        private SPI m_spi;
+        private readonly SPI m_spi;
 
         /// <summary>
         /// Constructor. Uses the onboard CS0
@@ -118,6 +122,7 @@ namespace WPILib
             return parity;
         }
 
+        // ReSharper disable once InconsistentNaming
         private static uint BytesToIntBE(byte[] buf)
         {
             uint result = ((uint)buf[0]) << 24;

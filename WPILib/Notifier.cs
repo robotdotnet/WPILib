@@ -12,16 +12,16 @@ namespace WPILib
     public class Notifier : IDisposable
     {
         private readonly object m_processMutex = new object();
-        private IntPtr m_notifier;
-        private Action<object> m_handler;
-        private object m_param;
+        private readonly IntPtr m_notifier;
+        private readonly Action<object> m_handler;
+        private readonly object m_param;
         private double m_expirationTime = 0;
         private double m_period = 0;
         private bool m_periodic = false;
 
         private readonly object m_handlerMutex = new object();
 
-        private Action<ulong, IntPtr> process;
+        private readonly Action<ulong, IntPtr> process;
 
         /// <summary>
         /// Notify is called by the HAL Layer. We simply need to pass it through to

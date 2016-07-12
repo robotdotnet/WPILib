@@ -61,6 +61,7 @@ namespace WPILib
         /// <summary>
         /// The interface to use for High Level usage reporting.
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public interface Interface
         {
             /// <summary>

@@ -959,6 +959,7 @@ namespace WPILib
         /// <summary>
         /// Gets or sets the IZone of the CANTalon.
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public int IZone
         {
             get

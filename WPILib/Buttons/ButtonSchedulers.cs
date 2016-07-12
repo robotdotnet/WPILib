@@ -11,15 +11,15 @@ namespace WPILib.Buttons
         /// <summary>
         /// True if the button was pressed last.
         /// </summary>
-        protected bool m_pressedLast;
+        protected bool PressedLast;
         /// <summary>
         /// The button trigger.
         /// </summary>
-        protected readonly Trigger m_button;
+        protected readonly Trigger Button;
         /// <summary>
         /// The button command.
         /// </summary>
-        protected readonly Command m_command;
+        protected readonly Command Command;
 
         /// <summary>
         /// Creates a new <see cref="ButtonScheduler"/>.
@@ -29,9 +29,9 @@ namespace WPILib.Buttons
         /// <param name="orders">The button command.</param>
         protected ButtonScheduler(bool last, Trigger button, Command orders)
         {
-            m_pressedLast = last;
-            m_button = button;
-            m_command = orders;
+            PressedLast = last;
+            Button = button;
+            Command = orders;
         }
 
         /// <summary>
@@ -62,17 +62,17 @@ namespace WPILib.Buttons
 
         public override void Execute()
         {
-            if (m_button.Grab())
+            if (Button.Grab())
             {
-                if (!m_pressedLast)
+                if (!PressedLast)
                 {
-                    m_pressedLast = true;
-                    m_command.Start();
+                    PressedLast = true;
+                    Command.Start();
                 }
             }
             else
             {
-                m_pressedLast = false;
+                PressedLast = false;
             }
         }
     }
@@ -91,16 +91,16 @@ namespace WPILib.Buttons
 
         public override void Execute()
         {
-            if (m_button.Grab())
+            if (Button.Grab())
             {
-                m_pressedLast = true;
+                PressedLast = true;
             }
             else
             {
-                if (m_pressedLast)
+                if (PressedLast)
                 {
-                    m_pressedLast = false;
-                    m_command.Start();
+                    PressedLast = false;
+                    Command.Start();
                 }
             }
         }
@@ -120,17 +120,17 @@ namespace WPILib.Buttons
 
         public override void Execute()
         {
-            if (m_button.Grab())
+            if (Button.Grab())
             {
-                m_pressedLast = true;
-                m_command.Start();
+                PressedLast = true;
+                Command.Start();
             }
             else
             {
-                if (m_pressedLast)
+                if (PressedLast)
                 {
-                    m_pressedLast = false;
-                    m_command.Cancel();
+                    PressedLast = false;
+                    Command.Cancel();
                 }
             }
         }
@@ -150,16 +150,16 @@ namespace WPILib.Buttons
 
         public override void Execute()
         {
-            if (m_button.Grab())
+            if (Button.Grab())
             {
-                if (!m_pressedLast)
+                if (!PressedLast)
                 {
-                    m_pressedLast = true;
-                    m_command.Cancel();
+                    PressedLast = true;
+                    Command.Cancel();
                 }
                 else
                 {
-                    m_pressedLast = false;
+                    PressedLast = false;
                 }
             }
         }
@@ -179,24 +179,24 @@ namespace WPILib.Buttons
 
         public override void Execute()
         {
-            if (m_button.Grab())
+            if (Button.Grab())
             {
-                if (!m_pressedLast)
+                if (!PressedLast)
                 {
-                    m_pressedLast = true;
-                    if (m_command.IsRunning())
+                    PressedLast = true;
+                    if (Command.IsRunning())
                     {
-                        m_command.Cancel();
+                        Command.Cancel();
                     }
                     else
                     {
-                        m_command.Start();
+                        Command.Start();
                     }
                 }
             }
             else
             {
-                m_pressedLast = false;
+                PressedLast = false;
             }
         }
     }

@@ -29,8 +29,7 @@ namespace WPILib.CAN
 
         private static string GetString(int deviceNumber, int fwVersion)
         {
-            string msg;
-            msg = fwVersion < MinRdkFirmwareVersion ? 
+            var msg = fwVersion < MinRdkFirmwareVersion ? 
                 $"Jaguar {deviceNumber} firmware is too old. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!" 
                 : $"Jaguar {deviceNumber} firmware is not FIRST approved. It must be updated to at least version {MinLegalFIRSTFirmwareVersion} of the FIRST approved firmware!";
             return msg;

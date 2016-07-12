@@ -66,8 +66,8 @@ namespace WPILib
         /// <param name="encoder">The <see cref="Encoder"/> to add.</param>
         public void Add(Encoder encoder)
         {
-            Add(encoder.m_aSource);
-            Add(encoder.m_bSource);
+            Add(encoder.ASource);
+            Add(encoder.BSource);
         }
 
 
@@ -96,8 +96,8 @@ namespace WPILib
         /// <param name="encoder">The <see cref="Encoder"/> to remove.</param>
         public void Remove(Encoder encoder)
         {
-            Remove(encoder.m_aSource);
-            Remove(encoder.m_bSource);
+            Remove(encoder.ASource);
+            Remove(encoder.BSource);
         }
 
         /// <summary>

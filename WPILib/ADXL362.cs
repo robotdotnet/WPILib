@@ -27,6 +27,7 @@ namespace WPILib
         private const byte FilterCtlRegister = 0x2C;
         private const byte PowerCtlRegister = 0x2D;
 
+        // ReSharper disable InconsistentNaming
         private const byte FilterCtl_Range2G = 0x00;
         private const byte FilterCtl_Range4G = 0x40;
         private const byte FilterCtl_Range8G = (byte)0x80;
@@ -35,6 +36,7 @@ namespace WPILib
         private const byte PowerCtl_UltraLowNoise = 0x20;
         private const byte PowerCtl_AutoSleep = 0x04;
         private const byte PowerCtl_Measure = 0x02;
+        // ReSharper restore InconsistentNaming
 
         /// <summary>
         /// The Axes for ADXL362 Gyros

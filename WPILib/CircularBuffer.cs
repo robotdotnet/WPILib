@@ -10,6 +10,10 @@
         private int m_front = 0;
         private int m_length = 0;
 
+        /// <summary>
+        /// Creates a circular buffer of the specified size.
+        /// </summary>
+        /// <param name="size">The size to make the buffer</param>
         public CircularBuffer(int size)
         {
             m_data = new T[size];

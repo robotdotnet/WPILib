@@ -19,11 +19,11 @@ namespace WPILib
     /// </remarks>
     public class AnalogGyro : GyroBase, IPIDSource, ILiveWindowSendable
     {
-        private static int kOversampleBits = 10;
-        private static int kAverageBits = 0;
-        private static double kSamplesPerSecond = 50.0;
-        private static double kCalibrationSampleTime = 5.0;
-        private static double kDefaultVoltsPerDegreePerSecond = 0.007;
+        private static readonly int kOversampleBits = 10;
+        private static readonly int kAverageBits = 0;
+        private static readonly double kSamplesPerSecond = 50.0;
+        private static readonly double kCalibrationSampleTime = 5.0;
+        private static readonly double kDefaultVoltsPerDegreePerSecond = 0.007;
 
         /// <summary>
         /// The <see cref="WPILib.AnalogInput"/> that this gyro uses.

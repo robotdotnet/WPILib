@@ -50,15 +50,15 @@ namespace WPILib
         protected static int MaxNumberOfMotors = 4;
 
         /// The Front Left Motor
-        protected ISpeedController FrontLeftMotor;
+        protected readonly ISpeedController FrontLeftMotor;
         /// The Front Right Motor
-        protected ISpeedController FrontRightMotor;
+        protected readonly ISpeedController FrontRightMotor;
         /// The Rear Left Motor
-        protected ISpeedController RearLeftMotor;
+        protected readonly ISpeedController RearLeftMotor;
         /// The Rear Right Motor
-        protected ISpeedController RearRightMotor;
+        protected readonly ISpeedController RearRightMotor;
         /// Returns if this class allocated the speed controllers or was passed them.
-        protected bool AllocatedSpeedControllers;
+        protected readonly bool AllocatedSpeedControllers;
         /// The SyncGroup for Jaguar Motor Controllers
         protected byte SyncGroup;
 
@@ -626,12 +626,14 @@ namespace WPILib
         /// <summary>
         /// Sets the turning sensitivity for the <see cref="Drive(double, double)"/> function.
         /// </summary>
+        // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
         public double Sensitivity { get; protected set; }
 
         /// <summary>
         /// Sets the maximum output allowed to be outputed by the drive.
         /// </summary>
         public double MaxOutput { set; protected get; }
+        // ReSharper restore AutoPropertyCanBeMadeGetOnly.Global
 
         /// <summary>
         /// Sets the sync group for the motor controllers if they are <see cref="CANJaguar">CANJaguars</see>

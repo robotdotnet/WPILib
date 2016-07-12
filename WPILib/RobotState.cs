@@ -90,6 +90,7 @@ namespace WPILib
         /// <summary>
         /// Interface for robot state reporters.
         /// </summary>
+        // ReSharper disable once InconsistentNaming
         public interface Interface
         {
             /// <summary>

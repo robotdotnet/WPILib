@@ -55,10 +55,10 @@ namespace WPILib.Filters
     /// </remarks>
     public class LinearDigitalFilter : Filter
     {
-        private CircularBuffer<double> m_inputs;
-        private CircularBuffer<double> m_outputs;
-        private double[] m_inputGains;
-        private double[] m_outputGains;
+        private readonly CircularBuffer<double> m_inputs;
+        private readonly CircularBuffer<double> m_outputs;
+        private readonly double[] m_inputGains;
+        private readonly double[] m_outputGains;
 
         /// <summary>
         /// Creates a linear FIR or IIR filter.
@@ -87,6 +87,7 @@ namespace WPILib.Filters
         /// <param name="timeConstant">The filter's feedforward gain factor (lower = smoother but slower).</param>
         /// <param name="period"></param>
         /// <returns>A new Single Pole IIR <see cref="LinearDigitalFilter"/></returns>
+        // ReSharper disable once InconsistentNaming
         public static LinearDigitalFilter SinglePoleIIR(IPIDSource source, double timeConstant,
             double period)
         {

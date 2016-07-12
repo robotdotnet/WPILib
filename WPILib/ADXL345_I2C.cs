@@ -78,10 +78,10 @@ namespace WPILib
             byte[] rawData = new byte[6];
             m_i2C.Read(DataRegister, rawData.Length, rawData);
 
-            double XAxis = BitConverter.ToInt16(rawData, 0) * GsPerLSB;
-            double YAxis = BitConverter.ToInt16(rawData, 2) * GsPerLSB;
-            double ZAxis = BitConverter.ToInt16(rawData, 4) * GsPerLSB;
-            return new AllAxes(XAxis, YAxis, ZAxis);
+            double xAxis = BitConverter.ToInt16(rawData, 0) * GsPerLSB;
+            double yAxis = BitConverter.ToInt16(rawData, 2) * GsPerLSB;
+            double zAxis = BitConverter.ToInt16(rawData, 4) * GsPerLSB;
+            return new AllAxes(xAxis, yAxis, zAxis);
         }
 
     }

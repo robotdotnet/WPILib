@@ -52,15 +52,15 @@ namespace WPILib
         /// <summary>
         /// The A Source
         /// </summary>
-        protected internal DigitalSource m_aSource;
+        protected internal DigitalSource ASource;
         /// <summary>
         /// The B Source
         /// </summary>
-        protected internal DigitalSource m_bSource;
+        protected internal DigitalSource BSource;
         /// <summary>
         /// The Index Source
         /// </summary>
-        protected DigitalSource m_indexSource = null;
+        protected DigitalSource IndexSource = null;
 
         private IntPtr m_encoder;
         private int m_index;
@@ -80,23 +80,23 @@ namespace WPILib
                 case EncodingType.K4X:
                     m_encodingScale = 4;
                     int status = 0;
-                    m_encoder = InitializeEncoder(m_aSource.ModuleForRouting,
-                        (uint)m_aSource.ChannelForRouting,
-                        m_aSource.AnalogTriggerForRouting, m_bSource.ModuleForRouting,
-                        (uint)m_bSource.ChannelForRouting,
-                        m_bSource.AnalogTriggerForRouting, reverseDirection, ref m_index, ref status);
+                    m_encoder = InitializeEncoder(ASource.ModuleForRouting,
+                        (uint)ASource.ChannelForRouting,
+                        ASource.AnalogTriggerForRouting, BSource.ModuleForRouting,
+                        (uint)BSource.ChannelForRouting,
+                        BSource.AnalogTriggerForRouting, reverseDirection, ref m_index, ref status);
                     CheckStatus(status);
                     m_counter = null;
                     MaxPeriod = 0.5;
                     break;
                 case EncodingType.K2X:
                     m_encodingScale = 2;
-                    m_counter = new Counter(m_encodingType, m_aSource, m_bSource, reverseDirection);
+                    m_counter = new Counter(m_encodingType, ASource, BSource, reverseDirection);
                     m_index = m_counter.FPGAIndex;
                     break;
                 case EncodingType.K1X:
                     m_encodingScale = 1;
-                    m_counter = new Counter(m_encodingType, m_aSource, m_bSource, reverseDirection);
+                    m_counter = new Counter(m_encodingType, ASource, BSource, reverseDirection);
                     m_index = m_counter.FPGAIndex;
                     break;
             }
@@ -104,7 +104,7 @@ namespace WPILib
 
             m_pidSource = PIDSourceType.Displacement;
 
-            LiveWindow.LiveWindow.AddSensor("Encoder", m_aSource.ChannelForRouting, this);
+            LiveWindow.LiveWindow.AddSensor("Encoder", ASource.ChannelForRouting, this);
             Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
         }
 
@@ -120,8 +120,8 @@ namespace WPILib
             m_allocatedA = true;
             m_allocatedB = true;
             m_allocatedI = false;
-            m_aSource = new DigitalInput(aChannel);
-            m_bSource = new DigitalInput(bChannel);
+            ASource = new DigitalInput(aChannel);
+            BSource = new DigitalInput(bChannel);
             InitEncoder(reverseDirection);
         }
 
@@ -145,8 +145,8 @@ namespace WPILib
             m_allocatedB = true;
             m_allocatedI = false;
             m_encodingType = encodingType;
-            m_aSource = new DigitalInput(aChannel);
-            m_bSource = new DigitalInput(bChannel);
+            ASource = new DigitalInput(aChannel);
+            BSource = new DigitalInput(bChannel);
             InitEncoder(reverseDirection);
         }
 
@@ -164,9 +164,9 @@ namespace WPILib
             m_allocatedA = true;
             m_allocatedB = true;
             m_allocatedI = true;
-            m_aSource = new DigitalInput(aChannel);
-            m_bSource = new DigitalInput(bChannel);
-            m_indexSource = new DigitalInput(indexChannel);
+            ASource = new DigitalInput(aChannel);
+            BSource = new DigitalInput(bChannel);
+            IndexSource = new DigitalInput(indexChannel);
             InitEncoder(reverseDirection);
             SetIndexSource(indexChannel);
         }
@@ -185,10 +185,10 @@ namespace WPILib
             m_allocatedI = false;
             if (aSource == null)
                 throw new ArgumentNullException(nameof(aSource),"Digital Source A was null");
-            m_aSource = aSource;
+            ASource = aSource;
             if (bSource == null)
                 throw new ArgumentNullException(nameof(bSource), "Digital Source B was null");
-            m_bSource = bSource;
+            BSource = bSource;
             InitEncoder(reverseDirection);
         }
 
@@ -215,11 +215,11 @@ namespace WPILib
             m_encodingType = encodingType;
             if (aSource == null)
                 throw new ArgumentNullException(nameof(aSource), "Digital Source A was null");
-            m_aSource = aSource;
+            ASource = aSource;
             if (bSource == null)
                 throw new ArgumentNullException(nameof(bSource),"Digital Source B was null");
-            m_aSource = aSource;
-            m_bSource = bSource;
+            ASource = aSource;
+            BSource = bSource;
             InitEncoder(reverseDirection);
         }
 
@@ -239,12 +239,12 @@ namespace WPILib
             m_allocatedI = false;
             if (aSource == null)
                 throw new ArgumentNullException(nameof(aSource), "Digital Source A was null");
-            m_aSource = aSource;
+            ASource = aSource;
             if (bSource == null)
                 throw new ArgumentNullException(nameof(bSource), "Digital Source B was null");
-            m_aSource = aSource;
-            m_bSource = bSource;
-            m_indexSource = indexSource;
+            ASource = aSource;
+            BSource = bSource;
+            IndexSource = indexSource;
             InitEncoder(reverseDirection);
             SetIndexSource(indexSource);
         }
@@ -262,25 +262,25 @@ namespace WPILib
         /// <inheritdoc/>
         public override void Dispose()
         {
-            if (m_aSource != null && m_allocatedA)
+            if (ASource != null && m_allocatedA)
             {
-                m_aSource.Dispose();
+                ASource.Dispose();
                 m_allocatedA = false;
             }
-            if (m_bSource != null && m_allocatedB)
+            if (BSource != null && m_allocatedB)
             {
-                m_bSource.Dispose();
+                BSource.Dispose();
                 m_allocatedB = false;
             }
-            if (m_indexSource != null && m_allocatedI)
+            if (IndexSource != null && m_allocatedI)
             {
-                m_indexSource.Dispose();
+                IndexSource.Dispose();
                 m_allocatedI = false;
             }
 
-            m_aSource = null;
-            m_bSource = null;
-            m_indexSource = null;
+            ASource = null;
+            BSource = null;
+            IndexSource = null;
             if (m_counter != null)
             {
                 m_counter.Dispose();

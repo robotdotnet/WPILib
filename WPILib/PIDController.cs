@@ -58,7 +58,7 @@ namespace WPILib
         private double m_setpoint = 0.0;
         private double m_error = 0.0;
         private double m_result = 0.0;
-        private double m_period;
+        private readonly double m_period;
         /// <summary>
         /// The PIDInput for this controller.
         /// </summary>
@@ -74,13 +74,13 @@ namespace WPILib
         private double m_bufTotal = 0.0;
 
         private double m_prevSetpoint = 0.0;
-        private Timer m_setpointTimer;
+        private readonly Timer m_setpointTimer;
 
         private double m_tolerance = 0.05;
 
         private Notifier m_controlLoop;
 
-        private Action CalculateCallback;
+        private readonly Action CalculateCallback;
 
         /// <summary>
         /// Creates a new PID object with the given contants for P, I, D and F.
@@ -285,7 +285,7 @@ namespace WPILib
 
 
 
-                m_prevError = m_error; ;
+                m_prevError = m_error;
 
                 if (m_result > m_maximumOutput)
                 {

@@ -78,10 +78,10 @@ namespace WPILib
             {
                 dataBuffer[0] = (byte)(AddressRead | AddressMultiByte | DataRegister);
                 m_spi.Transaction(dataBuffer, dataBuffer, 7);
-                double XAxis = BitConverter.ToInt16(dataBuffer, 1) * GsPerLSB;
-                double YAxis = BitConverter.ToInt16(dataBuffer, 3) * GsPerLSB;
-                double ZAxis = BitConverter.ToInt16(dataBuffer, 5) * GsPerLSB;
-                return new AllAxes(XAxis, YAxis, ZAxis);
+                double xAxis = BitConverter.ToInt16(dataBuffer, 1) * GsPerLSB;
+                double yAxis = BitConverter.ToInt16(dataBuffer, 3) * GsPerLSB;
+                double zAxis = BitConverter.ToInt16(dataBuffer, 5) * GsPerLSB;
+                return new AllAxes(xAxis, yAxis, zAxis);
             }
             return new AllAxes();
         }

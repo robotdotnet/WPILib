@@ -20,10 +20,10 @@ namespace WPILib
         public const double DefaultSafetyExpiration = 0.1;
 
         private double m_stopTime;
-        private IMotorSafety m_safeObject;
-        private MotorSafetyHelper m_nextHelper;
+        private readonly IMotorSafety m_safeObject;
+        private readonly MotorSafetyHelper m_nextHelper;
         private static MotorSafetyHelper s_headHelper;
-        private static object s_lockObject = new object();
+        private static readonly object s_lockObject = new object();
 
         /// <summary>
         /// The constructor for a <see cref="MotorSafetyHelper"/> object

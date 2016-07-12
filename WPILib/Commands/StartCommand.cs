@@ -6,7 +6,7 @@
     /// </summary>
     public class StartCommand : Command
     {
-        private Command m_commandToFork;
+        private readonly Command m_commandToFork;
 
         /// <summary>
         /// Instantiates a <see cref="StartCommand"/> which will start the given command when its 

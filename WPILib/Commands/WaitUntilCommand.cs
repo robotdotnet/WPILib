@@ -9,7 +9,7 @@ namespace WPILib.Commands
     /// some value, then will continue to the next command</remarks>
     public class WaitUntilCommand : Command
     {
-        private double m_time;
+        private readonly double m_time;
 
         /// <summary>
         /// Initializes a new <see cref="WaitUntilCommand"/>.

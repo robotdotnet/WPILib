@@ -199,11 +199,11 @@ namespace WPILib
         NeutralMode m_neutralMode = NeutralMode.Jumper;
         short m_encoderCodesPerRev = 0;
         short m_potentiometerTurns = 0;
-        LimitMode m_limitMode = LimitMode.SwitchInputsOnly;
+        readonly LimitMode m_limitMode = LimitMode.SwitchInputsOnly;
         double m_forwardLimit = 0.0;
         double m_reverseLimit = 0.0;
         double m_maxOutputVoltage = ApproxBusVoltage;
-        double m_voltageRampRate = 0.0;
+        readonly double m_voltageRampRate = 0.0;
         float m_faultTime = 0.0f;
 
         // Which parameters have been verified since they were last set?

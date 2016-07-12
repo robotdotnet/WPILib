@@ -8,7 +8,7 @@ namespace WPILib.Commands
     /// <remarks>It is useful if you want a <see cref="CommandGroup"/> to print out a string when it reaches a certain point.</remarks>
     public class PrintCommand : Command
     {
-        private string m_message;
+        private readonly string m_message;
 
         /// <summary>
         /// Instantiates a <see cref="PrintCommand"/> which will print the given message when it is run.

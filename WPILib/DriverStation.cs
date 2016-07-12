@@ -40,6 +40,7 @@ namespace WPILib
 
         //Private Fields
         private HALJoystickAxes[] m_joystickAxes = new HALJoystickAxes[JoystickPorts];
+        // ReSharper disable InconsistentNaming
         private HALJoystickPOVs[] m_joystickPOVs = new HALJoystickPOVs[JoystickPorts];
         private HALJoystickButtons[] m_joystickButtons = new HALJoystickButtons[JoystickPorts];
         private HALJoystickDescriptor[] m_joystickDescriptors = new HALJoystickDescriptor[JoystickPorts];
@@ -48,6 +49,7 @@ namespace WPILib
         private HALJoystickPOVs[] m_joystickPOVsCache = new HALJoystickPOVs[JoystickPorts];
         private HALJoystickButtons[] m_joystickButtonsCache = new HALJoystickButtons[JoystickPorts];
         private HALJoystickDescriptor[] m_joystickDescriptorsCache = new HALJoystickDescriptor[JoystickPorts];
+        // ReSharper restore InconsistentNaming
 
         //Pointers to the semaphores to the HAL and FPGA
         private readonly object m_dataSem;
@@ -218,6 +220,7 @@ namespace WPILib
                 m_joystickButtons = m_joystickButtonsCache;
                 m_joystickButtonsCache = currentButtons;
 
+                // ReSharper disable once InconsistentNaming
                 HALJoystickPOVs[] currentPOVs = m_joystickPOVs;
                 m_joystickPOVs = m_joystickPOVsCache;
                 m_joystickPOVsCache = currentPOVs;
@@ -836,6 +839,8 @@ namespace WPILib
         /// <summary>
         /// Report an error to the driver station.
         /// </summary>
+        /// <param name="isError">True is error, fasle if warning</param>
+        /// <param name="code">The code linked to the error.</param>
         /// <param name="error">The error to send</param>
         /// <param name="printTrace">If true, append stack trace to error string</param>
         /// <param name="filePath">The file path</param>
@@ -854,7 +859,7 @@ namespace WPILib
                 string loc = stackSplit[i];
                 if (!haveLoc && !loc.Contains("at WPILib"))
                 {
-                    loc = loc.Substring(loc.IndexOf("at") + 3);
+                    loc = loc.Substring(loc.IndexOf("at", StringComparison.Ordinal) + 3);
                     locString = locString + "Caller: " + loc + "\n";
                     haveLoc = true;
                 }
