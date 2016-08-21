@@ -155,9 +155,11 @@ namespace HAL.Simulator.Data
         /// <param name="type">The type.</param>
         /// <param name="status">The status.</param>
         /// <returns></returns>
-        public bool GetTriggerValue(AnalogTriggerType type, ref int status)
+        public bool GetTriggerValue(HALAnalogTriggerType type, ref int status)
         {
-            return SimulatorHAL.HALAnalog.getAnalogTriggerOutput((IntPtr) TriggerPointer, type, ref status);
+            // TODO: FIX THIS
+            throw new ArgumentOutOfRangeException();
+            return false;//SimulatorHAL.HALAnalog.getAnalogTriggerOutput((IntPtr) TriggerPointer, type, ref status);
         }
     }
 }

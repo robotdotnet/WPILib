@@ -2055,7 +2055,7 @@ namespace HAL.Base
     #endregion
 
     #region Analog
-    public enum AnalogTriggerType
+    public enum HALAnalogTriggerType
     {
         /// kInWindow -> 0
         InWindow = 0,
@@ -2091,7 +2091,7 @@ namespace HAL.Base
     #endregion
 
     #region Digital
-    public enum Mode
+    public enum HALCounterMode
     {
         /// kTwoPulse -> 0
         TwoPulse = 0,
@@ -2105,6 +2105,22 @@ namespace HAL.Base
         /// kExternalDirection -> 3
         ExternalDirection = 3,
     }
+
+    public enum HALEncoderIndexingType
+    {
+        kResetWhileHigh,
+        kResetWhileLow,
+        kResetOnFallingEdge,
+        kResetOnRisingEdge
+    };
+
+    public enum HALEncoderEncodingType
+    {
+        Encoder_k1X,
+        Encoder_k2X,
+        Encoder_k4X
+    }
+}
     #endregion
 
     #region CAN
@@ -2193,4 +2209,3 @@ namespace HAL.Base
 
 
     #endregion
-}

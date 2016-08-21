@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL.Simulator.Data;
+using HAL.SimulatorHAL;
+using static HAL.SimulatorHAL.HALPorts;
 
 namespace HAL.Simulator
 {
@@ -23,6 +25,8 @@ namespace HAL.Simulator
         /// The global data.
         /// </value>
         public static GlobalData GlobalData { get; } = new GlobalData();
+
+        public static List<AnalogGyroData> AnalogGyro { get; } = new List<AnalogGyroData>();
 
         public static NavXData NavXData { get; } = new NavXData();
         /// <summary>
@@ -64,13 +68,6 @@ namespace HAL.Simulator
         /// The PWM.
         /// </value>
         public static List<PWMData> PWM { get; } = new List<PWMData>();
-
-        /// <summary>
-        /// </summary>
-        /// <value>
-        /// The MXP.
-        /// </value>
-        public static List<MXPData> MXP { get; } = new List<MXPData>();
 
         /// <summary>
         /// Gets the digital PWM.
@@ -302,27 +299,32 @@ namespace HAL.Simulator
 
         static SimData()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < kNumAccumulators; i++)
+            {
+                AnalogGyro.Add(new AnalogGyroData());
+            }
+
+            for (int i = 0; i < kNumAnalogOutputs; i++)
             {
                 AnalogOut.Add(new AnalogOutData());
             }
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < kNumAnalogInputs; i++)
             {
                 AnalogIn.Add(new AnalogInData());
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < kNumAnalogTriggers; i++)
             {
                 AnalogTrigger.Add(new AnalogTriggerData());
             }
 
-            for (int i = 0; i < 26; i++)
+            for (int i = 0; i < kNumDigitalPins; i++)
             {
                 DIO.Add(new DIOData());
             }
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < kNumDigitalPWMOutputs; i++)
             {
                 DigitalPWM.Add(new DigitalPWMData());
             }
@@ -332,14 +334,9 @@ namespace HAL.Simulator
                 DigitalGlitchFilter.Add(new DigitalGlitchFilterData());
             }
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < kNumPWMPins; i++)
             {
                 PWM.Add(new PWMData());
-            }
-
-            for (int i = 0; i < 16; i++)
-            {
-                MXP.Add(new MXPData());
             }
 
             for (int i = 0; i < 4; i++)
@@ -380,6 +377,10 @@ namespace HAL.Simulator
         public static void ResetHALData(bool resetDS)
         {
             Accelerometer.ResetData();
+            foreach (var analogGyroData in AnalogGyro)
+            {
+                analogGyroData.ResetData();
+            }
             foreach (var analogInData in AnalogIn)
             {
                 analogInData.ResetData();
@@ -399,10 +400,6 @@ namespace HAL.Simulator
             foreach (var pwmData in PWM)
             {
                 pwmData.ResetData();
-            }
-            foreach (var mxpData in MXP)
-            {
-                mxpData.ResetData();
             }
             foreach (var relayData in Relay)
             {

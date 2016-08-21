@@ -1,27 +1,24 @@
-//File automatically generated using robotdotnet-tools. Please do not modify.
-
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
 using HAL.Base;
-
 namespace HAL.AthenaHAL
 {
-    [SuppressUnmanagedCodeSecurity]
     internal class HALAccelerometer
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALAccelerometer.SetAccelerometerActive = (Base.HALAccelerometer.SetAccelerometerActiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAccelerometerActive"), typeof(Base.HALAccelerometer.SetAccelerometerActiveDelegate));
 
-            Base.HALAccelerometer.SetAccelerometerRange = (Base.HALAccelerometer.SetAccelerometerRangeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "setAccelerometerRange"), typeof(Base.HALAccelerometer.SetAccelerometerRangeDelegate));
+            Base.HALAccelerometer.HAL_SetAccelerometerActive = (Base.HALAccelerometer.HAL_SetAccelerometerActiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_SetAccelerometerActive"), typeof(Base.HALAccelerometer.HAL_SetAccelerometerActiveDelegate));
 
-            Base.HALAccelerometer.GetAccelerometerX = (Base.HALAccelerometer.GetAccelerometerXDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccelerometerX"), typeof(Base.HALAccelerometer.GetAccelerometerXDelegate));
+            Base.HALAccelerometer.HAL_SetAccelerometerRange = (Base.HALAccelerometer.HAL_SetAccelerometerRangeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_SetAccelerometerRange"), typeof(Base.HALAccelerometer.HAL_SetAccelerometerRangeDelegate));
 
-            Base.HALAccelerometer.GetAccelerometerY = (Base.HALAccelerometer.GetAccelerometerYDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccelerometerY"), typeof(Base.HALAccelerometer.GetAccelerometerYDelegate));
+            Base.HALAccelerometer.HAL_GetAccelerometerX = (Base.HALAccelerometer.HAL_GetAccelerometerXDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetAccelerometerX"), typeof(Base.HALAccelerometer.HAL_GetAccelerometerXDelegate));
 
-            Base.HALAccelerometer.GetAccelerometerZ = (Base.HALAccelerometer.GetAccelerometerZDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getAccelerometerZ"), typeof(Base.HALAccelerometer.GetAccelerometerZDelegate));
+            Base.HALAccelerometer.HAL_GetAccelerometerY = (Base.HALAccelerometer.HAL_GetAccelerometerYDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetAccelerometerY"), typeof(Base.HALAccelerometer.HAL_GetAccelerometerYDelegate));
 
+            Base.HALAccelerometer.HAL_GetAccelerometerZ = (Base.HALAccelerometer.HAL_GetAccelerometerZDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetAccelerometerZ"), typeof(Base.HALAccelerometer.HAL_GetAccelerometerZDelegate));
         }
     }
 }
+

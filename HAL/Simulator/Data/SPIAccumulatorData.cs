@@ -4,7 +4,7 @@
     {
         private bool m_initialized = false;
         private long m_accumulatorValue = 0;
-        private uint m_accumulatorCount = 0;
+        private long m_accumulatorCount = 0;
 
         internal SPIAccumulatorData() { }
 
@@ -55,7 +55,7 @@
         /// <value>
         /// The accumulator count.
         /// </value>
-        public uint AccumulatorCount
+        public long AccumulatorCount
         {
             get { return m_accumulatorCount; }
             set

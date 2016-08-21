@@ -5,6 +5,8 @@ namespace HAL.Base
 {
     public partial class HAL
     {
+        public const int HALInvalidHandle = 0;
+
         /// <summary>
         /// This contains all of the HAL Constants
         /// </summary>
@@ -76,7 +78,9 @@ namespace HAL.Base
                         case HALTypes.Simulation:
                         case HALTypes.Other:
                         case HALTypes.None:
-                            SimulatorHAL.HAL.InitializeImpl();
+                            throw new ArgumentOutOfRangeException();
+                            // TODO: FIX THIS
+                            //SimulatorHAL.HAL.InitializeImpl();
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -90,7 +94,7 @@ namespace HAL.Base
                     Environment.Exit(1);
                 }
 
-                var rv = HALInitialize(mode);
+                var rv = HAL_Initialize(mode);
                 if (rv != 1)
                 {
                     throw new Exception($"HAL Initialize Failed with return code {rv}");
@@ -99,24 +103,24 @@ namespace HAL.Base
         }
 
 
-        public static uint Report(ResourceType resource, Instances instanceNumber, byte context = 0, string feature = null)
+        public static long Report(ResourceType resource, Instances instanceNumber, int context = 0, string feature = null)
         {
-            return HALReport((byte) resource, (byte) instanceNumber, context, feature);
+            return HAL_Report((int) resource, (int) instanceNumber, context, feature);
         }
 
-        public static uint Report(ResourceType resource, byte instanceNumber, byte context = 0, string feature = null)
+        public static long Report(ResourceType resource, int instanceNumber, int context = 0, string feature = null)
         {
-            return HALReport((byte) resource, instanceNumber, context, feature);
+            return HAL_Report((byte) resource, instanceNumber, context, feature);
         }
 
-        public static uint Report(byte resource, Instances instanceNumber, byte context = 0, string feature = null)
+        public static long Report(int resource, Instances instanceNumber, int context = 0, string feature = null)
         {
-            return HALReport(resource, (byte) instanceNumber, context, feature);
+            return HAL_Report(resource, (int) instanceNumber, context, feature);
         }
 
-        public static uint Report(byte resource, byte instanceNumber, byte context = 0, string feature = null)
+        public static long Report(int resource, int instanceNumber, int context = 0, string feature = null)
         {
-            return HALReport(resource, instanceNumber, context, feature);
+            return HAL_Report(resource, instanceNumber, context, feature);
         }
     }
 }

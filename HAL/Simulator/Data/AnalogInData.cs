@@ -1,4 +1,6 @@
-﻿namespace HAL.Simulator.Data
+﻿using HAL.SimulatorHAL;
+
+namespace HAL.Simulator.Data
 {
     /// <summary>
     /// Analog Input Sim Data
@@ -7,14 +9,12 @@
     public class AnalogInData : NotifyDataBase
     {
         private bool m_initialized = false;
-        private uint m_averageBits = Base.HALAnalog.DefaultAverageBits;
-        private uint m_oversampleBits = Base.HALAnalog.DefaultOversampleBits;
+        private int m_averageBits = HALAnalogInput.DefaultAverageBits;
+        private int m_oversampleBits = HALAnalogInput.DefaultOversampleBits;
         private double m_voltage = 0.0;
-        private long m_lsbWeight = Base.HALAnalog.DefaultLSBWeight;
-        private int m_offset = Base.HALAnalog.DefaultOffset;
         private bool m_accumulatorInitialized = false;
         private long m_accumulatorValue = 0;
-        private uint m_accumulatorCount = 0;
+        private long m_accumulatorCount = 0;
         private int m_accumulatorCenter = 0;
         private int m_accumulatorDeadband = 0;
 
@@ -24,11 +24,9 @@
         public override void ResetData()
         {
             m_initialized = false;
-            m_averageBits = Base.HALAnalog.DefaultAverageBits;
-            m_oversampleBits = Base.HALAnalog.DefaultOversampleBits;
+            m_averageBits = HALAnalogInput.DefaultAverageBits;
+            m_oversampleBits = HALAnalogInput.DefaultOversampleBits;
             m_voltage = 0.0;
-            m_lsbWeight = Base.HALAnalog.DefaultLSBWeight;
-            m_offset = Base.HALAnalog.DefaultOffset;
             m_accumulatorInitialized = false;
             m_accumulatorValue = 0;
             m_accumulatorCount = 0;
@@ -60,7 +58,7 @@
         /// <value>
         /// The average bits.
         /// </value>
-        public uint AverageBits
+        public int AverageBits
         {
             get { return m_averageBits; }
             internal set
@@ -77,7 +75,7 @@
         /// <value>
         /// The oversample bits.
         /// </value>
-        public uint OversampleBits
+        public int OversampleBits
         {
             get { return m_oversampleBits; }
             internal set
@@ -101,40 +99,6 @@
             {
                 if (value.Equals(m_voltage)) return;
                 m_voltage = value;
-                OnPropertyChanged(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the LSB weight.
-        /// </summary>
-        /// <value>
-        /// The LSB weight.
-        /// </value>
-        public long LSBWeight
-        {
-            get { return m_lsbWeight; }
-            set
-            {
-                if (value == m_lsbWeight) return;
-                m_lsbWeight = value;
-                OnPropertyChanged(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the offset.
-        /// </summary>
-        /// <value>
-        /// The offset.
-        /// </value>
-        public int Offset
-        {
-            get { return m_offset; }
-            set
-            {
-                if (value == m_offset) return;
-                m_offset = value;
                 OnPropertyChanged(value);
             }
         }
@@ -196,7 +160,7 @@
         /// <value>
         /// The accumulator count.
         /// </value>
-        public uint AccumulatorCount
+        public long AccumulatorCount
         {
             get { return m_accumulatorCount; }
             set

@@ -11,7 +11,7 @@ namespace HAL.Simulator.Data
     {
         internal CounterData() { }
 
-        private Mode m_mode = 0;
+        private HALCounterMode m_mode = 0;
         private int m_averageSize = 0;
 
         private uint m_upSourceChannel = 0;
@@ -142,7 +142,7 @@ namespace HAL.Simulator.Data
         /// <value>
         /// The mode.
         /// </value>
-        public Mode Mode
+        public HALCounterMode Mode
         {
             get { return m_mode; }
             internal set

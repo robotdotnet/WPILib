@@ -1,94 +1,72 @@
-﻿using System;
-using System.Linq;
+using System;
+using System.Runtime.InteropServices;
 using HAL.Base;
-using HAL.Simulator.Data;
-using static HAL.Simulator.SimData;
 
-// ReSharper disable RedundantAssignment
-// ReSharper disable InconsistentNaming
-
-#pragma warning disable 1591
-
+// ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
 {
-    ///<inheritdoc cref="HAL"/>
     internal class HALPDP
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALPDP.InitializePDP = initializePDP;
-            Base.HALPDP.GetPDPTemperature = getPDPTemperature;
-            Base.HALPDP.GetPDPVoltage = getPDPVoltage;
-            Base.HALPDP.GetPDPChannelCurrent = getPDPChannelCurrent;
-            Base.HALPDP.GetPDPTotalCurrent = getPDPTotalCurrent;
-            Base.HALPDP.GetPDPTotalPower = getPDPTotalPower;
-            Base.HALPDP.GetPDPTotalEnergy = getPDPTotalEnergy;
-            Base.HALPDP.ResetPDPTotalEnergy = resetPDPTotalEnergy;
-            Base.HALPDP.ClearPDPStickyFaults = clearPDPStickyFaults;
+            Base.HALPDP.HAL_InitializePDP = HAL_InitializePDP;
+            Base.HALPDP.HAL_CheckPDPModule = HAL_CheckPDPModule;
+            Base.HALPDP.HAL_GetPDPTemperature = HAL_GetPDPTemperature;
+            Base.HALPDP.HAL_GetPDPVoltage = HAL_GetPDPVoltage;
+            Base.HALPDP.HAL_GetPDPChannelCurrent = HAL_GetPDPChannelCurrent;
+            Base.HALPDP.HAL_GetPDPTotalCurrent = HAL_GetPDPTotalCurrent;
+            Base.HALPDP.HAL_GetPDPTotalPower = HAL_GetPDPTotalPower;
+            Base.HALPDP.HAL_GetPDPTotalEnergy = HAL_GetPDPTotalEnergy;
+            Base.HALPDP.HAL_ResetPDPTotalEnergy = HAL_ResetPDPTotalEnergy;
+            Base.HALPDP.HAL_ClearPDPStickyFaults = HAL_ClearPDPStickyFaults;
         }
 
-
-        [CalledSimFunction]
-        public static void initializePDP(int module)
+        public static void HAL_InitializePDP(int module, ref int status)
         {
-            InitializePDP(module);
         }
 
-        [CalledSimFunction]
-        public static double getPDPTemperature(byte module, ref int status)
+        public static bool HAL_CheckPDPModule(int module)
         {
-            status = 0;
-            return GetPDP(module).Temperature;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static double getPDPVoltage(byte module, ref int status)
+        public static double HAL_GetPDPTemperature(int module, ref int status)
         {
-            status = 0;
-            return GetPDP(module).Voltage;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static double getPDPChannelCurrent(byte module, byte channel, ref int status)
+        public static double HAL_GetPDPVoltage(int module, ref int status)
         {
-            status = 0;
-            return GetPDP(module).Current[channel];
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static double getPDPTotalCurrent(byte module, ref int status)
+        public static double HAL_GetPDPChannelCurrent(int module, int channel, ref int status)
         {
-            status = 0;
-            PDPData data = GetPDP(module);
-            return data.Current.Sum();
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static double getPDPTotalPower(byte module, ref int status)
+        public static double HAL_GetPDPTotalCurrent(int module, ref int status)
         {
-            status = 0;
-            return getPDPTotalCurrent(module, ref status) * getPDPVoltage(module, ref status);
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static double getPDPTotalEnergy(byte module, ref int status)
+        public static double HAL_GetPDPTotalPower(int module, ref int status)
         {
-            status = 0;
-            return GetPDP(module).TotalEnergy;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static void resetPDPTotalEnergy(byte module, ref int status)
+        public static double HAL_GetPDPTotalEnergy(int module, ref int status)
         {
-            status = 0;
-            GetPDP(module).TotalEnergy = 0;
+            throw new NotImplementedException();
         }
 
-
-        [CalledSimFunction]
-        public static void clearPDPStickyFaults(byte module, ref int status)
+        public static void HAL_ResetPDPTotalEnergy(int module, ref int status)
         {
-            status = 0;
+        }
+
+        public static void HAL_ClearPDPStickyFaults(int module, ref int status)
+        {
         }
     }
 }
+

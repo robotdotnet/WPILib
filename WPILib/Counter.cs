@@ -5,7 +5,7 @@ using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
 using static HAL.Base.HAL;
-using static HAL.Base.HALDigital;
+using static HAL.Base.HALCounter;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -21,18 +21,26 @@ namespace WPILib
     /// them to be zeroes before use.</para></remarks>
     public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
+        public enum Mode
+        {
+            TwoPulse = 0,
+            Semiperiod = 1,
+            PulseLength = 2,
+            ExternalDirection = 3
+        }
+
         internal DigitalSource m_upSource;
         internal DigitalSource m_downSource;
         private bool m_allocatedUpSource;
         private bool m_allocatedDownSource;
-        private IntPtr m_counter;
-        private uint m_index;
+        private int m_counter;
+        private int m_index;
         private PIDSourceType m_pidSource;
 
         private void InitCounter(Mode mode)
         {
             int status = 0;
-            m_counter = InitializeCounter(mode, ref m_index, ref status);
+            m_counter = HAL_InitializeCounter((HALCounterMode)mode, ref m_index, ref status);
             CheckStatus(status);
 
             m_allocatedUpSource = false;

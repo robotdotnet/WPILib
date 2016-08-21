@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using HAL;
 using HAL.Base;
 using static HAL.Base.HAL;
+using static HAL.Base.HALDriverStation;
 
 namespace WPILib.Extras.AttributedCommandModel
 {
@@ -383,7 +384,7 @@ namespace WPILib.Extras.AttributedCommandModel
 
             _RobotInit();
 
-            HALNetworkCommunicationObserveUserProgramStarting();
+            HAL_ObserveUserProgramStarting();
 
             LiveWindow.LiveWindow.SetEnabled(false);
             while (true)
@@ -406,7 +407,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramDisabled();
+                        HAL_ObserveUserProgramDisabled();
                         _DisabledPeriodic();
                     }
                 }
@@ -425,7 +426,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramTest();
+                        HAL_ObserveUserProgramTest();
                         _TestPeriodic();
                     }
                 }
@@ -447,7 +448,7 @@ namespace WPILib.Extras.AttributedCommandModel
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramAutonomous();
+                        HAL_ObserveUserProgramAutonomous();
                         _AutonomousPeriodic();
                     }
                 }
@@ -466,8 +467,8 @@ namespace WPILib.Extras.AttributedCommandModel
                     }
                     if (NextPeriodReady)
                     {
-                        //HAL.NetworkCommunicationObserveUserProgramTeleop();
-                        HALNetworkCommunicationObserveUserProgramTeleop();
+                        //HAL._ObserveUserProgramTeleop();
+                        HAL_ObserveUserProgramTeleop();
                         _TeleopPeriodic();
                     }
                 }

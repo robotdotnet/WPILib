@@ -1,59 +1,45 @@
-﻿using System;
+using System;
 using HAL.Base;
 using static HAL.Simulator.SimData;
 
-// ReSharper disable RedundantAssignment
-// ReSharper disable InconsistentNaming
-#pragma warning disable 1591
-
+// ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
 {
-    ///<inheritdoc cref="HAL"/>
     internal class HALAccelerometer
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALAccelerometer.SetAccelerometerActive = setAccelerometerActive;
-            Base.HALAccelerometer.SetAccelerometerRange = setAccelerometerRange;
-            Base.HALAccelerometer.GetAccelerometerX = getAccelerometerX;
-            Base.HALAccelerometer.GetAccelerometerY = getAccelerometerY;
-            Base.HALAccelerometer.GetAccelerometerZ = getAccelerometerZ;
+            Base.HALAccelerometer.HAL_SetAccelerometerActive = HAL_SetAccelerometerActive;
+            Base.HALAccelerometer.HAL_SetAccelerometerRange = HAL_SetAccelerometerRange;
+            Base.HALAccelerometer.HAL_GetAccelerometerX = HAL_GetAccelerometerX;
+            Base.HALAccelerometer.HAL_GetAccelerometerY = HAL_GetAccelerometerY;
+            Base.HALAccelerometer.HAL_GetAccelerometerZ = HAL_GetAccelerometerZ;
         }
 
-        /// Return Type: void
-        ///range: boolean
-        [CalledSimFunction]
-        public static void setAccelerometerActive(bool active)
+        public static void HAL_SetAccelerometerActive(bool active)
         {
             Accelerometer.Active = active;
         }
 
-
-        /// Return Type: void
-        ///range: HALAccelerometerRange
-        [CalledSimFunction]
-        public static void setAccelerometerRange(HALAccelerometerRange range)
+        public static void HAL_SetAccelerometerRange(HALAccelerometerRange range)
         {
             Accelerometer.Range = range;
         }
 
-
-        [CalledSimFunction]
-        public static double getAccelerometerX()
+        public static double HAL_GetAccelerometerX()
         {
             return Accelerometer.X;
         }
 
-        [CalledSimFunction]
-        public static double getAccelerometerY()
+        public static double HAL_GetAccelerometerY()
         {
             return Accelerometer.Y;
         }
 
-        [CalledSimFunction]
-        public static double getAccelerometerZ()
+        public static double HAL_GetAccelerometerZ()
         {
             return Accelerometer.Z;
         }
     }
 }
+

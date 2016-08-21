@@ -31,7 +31,7 @@ namespace WPILib
         public static long GetFPGARevision()
         {
             int status = 0;
-            uint value = HAL.Base.HAL.GetFPGARevision(ref status);
+            long value = HAL.Base.HAL.HAL_GetFPGARevision(ref status);
             CheckStatus(status);
             return value;
         }
@@ -42,7 +42,7 @@ namespace WPILib
         public static ulong GetFPGATime()
         {
             int status = 0;
-            ulong value = HAL.Base.HAL.GetFPGATime(ref status);
+            ulong value = HAL.Base.HAL.HAL_GetFPGATime(ref status);
             CheckStatus(status);
             return value;
         }
@@ -54,7 +54,7 @@ namespace WPILib
         public static bool GetUserButton()
         {
             int status = 0;
-            bool value = GetFPGAButton(ref status);
+            bool value = HAL_GetFPGAButton(ref status);
             CheckStatus(status);
             return value;
         }
@@ -74,14 +74,16 @@ namespace WPILib
             //TODO: Use Caller attributes
             if (status < 0)
             {
-                throw new UncleanStatusException(status, $" Code : {status}. {GetHALErrorMessage(status)}");
+                throw new UncleanStatusException(status, $" Code : {status}. {HAL_GetErrorMessage(status)}");
             }
             else if (status > 0)
             {
                 //Pass the caller members along.
-                DriverStation.ReportError(GetHALErrorMessage(status), true, status, memberName, filePath, lineNumber);
+                DriverStation.ReportError(HAL_GetErrorMessage(status), true, status, memberName, filePath, lineNumber);
             }
         }
+
+        public static void CheckStatus
 
         internal static bool CheckCTRStatus(CTR_Code status, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
@@ -89,7 +91,7 @@ namespace WPILib
             if (status != CTR_Code.CTR_OKAY)
             {
                 //Pass the caller memebers along
-                DriverStation.ReportError(GetHALErrorMessage((int)status), true, (int) status, memberName, filePath, lineNumber);
+                DriverStation.ReportError(HAL_GetErrorMessage((int)status), true, (int) status, memberName, filePath, lineNumber);
             }
             return status == CTR_Code.CTR_OKAY;
         }

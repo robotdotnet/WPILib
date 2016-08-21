@@ -1,13 +1,11 @@
-//File automatically generated using robotdotnet-tools. Please do not modify.
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using HAL.Base;
-
 namespace HAL.AthenaHAL
 {
     internal class HAL
@@ -117,18 +115,30 @@ namespace HAL.AthenaHAL
                     }
                     Initialize(s_library, loader);
                     HALAccelerometer.Initialize(s_library, loader);
-                    HALAnalog.Initialize(s_library, loader);
+                    HALAnalogAccumulator.Initialize(s_library, loader);
+                    HALAnalogGyro.Initialize(s_library, loader);
+                    HALAnalogInput.Initialize(s_library, loader);
+                    HALAnalogOutput.Initialize(s_library, loader);
+                    HALAnalogTrigger.Initialize(s_library, loader);
                     HALCAN.Initialize(s_library, loader);
                     HALCanTalonSRX.Initialize(s_library, loader);
                     HALCompressor.Initialize(s_library, loader);
-                    HALDigital.Initialize(s_library, loader);
+                    HALConstants.Initialize(s_library, loader);
+                    HALCounter.Initialize(s_library, loader);
+                    HALDIO.Initialize(s_library, loader);
+                    HALDriverStation.Initialize(s_library, loader);
+                    HALEncoder.Initialize(s_library, loader);
+                    HALI2C.Initialize(s_library, loader);
                     HALInterrupts.Initialize(s_library, loader);
                     HALNotifier.Initialize(s_library, loader);
                     HALPDP.Initialize(s_library, loader);
+                    HALPorts.Initialize(s_library, loader);
                     HALPower.Initialize(s_library, loader);
-                    HALSemaphore.Initialize(s_library, loader);
+                    HALPWM.Initialize(s_library, loader);
+                    HALRelay.Initialize(s_library, loader);
                     HALSerialPort.Initialize(s_library, loader);
                     HALSolenoid.Initialize(s_library, loader);
+                    HALSPI.Initialize(s_library, loader);
                 }
                 catch (Exception e)
                 {
@@ -142,127 +152,56 @@ namespace HAL.AthenaHAL
 
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HAL.GetPort = (Base.HAL.GetPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPort"), typeof(Base.HAL.GetPortDelegate));
 
-            Base.HAL.GetPortWithModule = (Base.HAL.GetPortWithModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getPortWithModule"), typeof(Base.HAL.GetPortWithModuleDelegate));
+            Base.HAL.HAL_GetPort = (Base.HAL.HAL_GetPortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetPort"), typeof(Base.HAL.HAL_GetPortDelegate));
 
-            Base.HAL.FreePort = (Base.HAL.FreePortDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "freePort"), typeof(Base.HAL.FreePortDelegate));
+            Base.HAL.HAL_GetPortWithModule = (Base.HAL.HAL_GetPortWithModuleDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetPortWithModule"), typeof(Base.HAL.HAL_GetPortWithModuleDelegate));
 
-            Base.HAL.GetHALErrorMessage = GetHALErrorMessage;
+            Base.HAL.HAL_GetErrorMessage = HAL_GetErrorMessage;
 
-            NativeGetHALErrorMessage = (NativeGetHALErrorMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getHALErrorMessage"), typeof(NativeGetHALErrorMessageDelegate));
+            NativeHALGetErrorMessage = (NativeGetHALErrorMessageDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetErrorMessage"), typeof(NativeGetHALErrorMessageDelegate));
 
-            Base.HAL.GetFPGAVersion = (Base.HAL.GetFPGAVersionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAVersion"), typeof(Base.HAL.GetFPGAVersionDelegate));
+            Base.HAL.HAL_GetFPGAVersion = (Base.HAL.HAL_GetFPGAVersionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetFPGAVersion"), typeof(Base.HAL.HAL_GetFPGAVersionDelegate));
 
-            Base.HAL.GetFPGARevision = (Base.HAL.GetFPGARevisionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGARevision"), typeof(Base.HAL.GetFPGARevisionDelegate));
+            Base.HAL.HAL_GetFPGARevision = (Base.HAL.HAL_GetFPGARevisionDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetFPGARevision"), typeof(Base.HAL.HAL_GetFPGARevisionDelegate));
 
-            Base.HAL.GetFPGATime = (Base.HAL.GetFPGATimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGATime"), typeof(Base.HAL.GetFPGATimeDelegate));
+            Base.HAL.HAL_GetFPGATime = (Base.HAL.HAL_GetFPGATimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetFPGATime"), typeof(Base.HAL.HAL_GetFPGATimeDelegate));
 
-            Base.HAL.GetFPGAButton = (Base.HAL.GetFPGAButtonDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "getFPGAButton"), typeof(Base.HAL.GetFPGAButtonDelegate));
+            Base.HAL.HAL_GetFPGAButton = (Base.HAL.HAL_GetFPGAButtonDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetFPGAButton"), typeof(Base.HAL.HAL_GetFPGAButtonDelegate));
 
-            Base.HAL.HALSetErrorData = HALSetErrorData;
-                
-            NativeHALSetErrorData = (NativeHALSetErrorDataDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetErrorData"), typeof(NativeHALSetErrorDataDelegate));
+            Base.HAL.HAL_GetSystemActive = (Base.HAL.HAL_GetSystemActiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetSystemActive"), typeof(Base.HAL.HAL_GetSystemActiveDelegate));
 
-            Base.HAL.HALSendError = HALSendError;
+            Base.HAL.HAL_GetBrownedOut = (Base.HAL.HAL_GetBrownedOutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_GetBrownedOut"), typeof(Base.HAL.HAL_GetBrownedOutDelegate));
 
-            NativeHALSendError = (NativeHALSendErrorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSendError"), typeof(NativeHALSendErrorDelegate));
+            Base.HAL.HAL_Initialize = (Base.HAL.HAL_InitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_Initialize"), typeof(Base.HAL.HAL_InitializeDelegate));
 
-            Base.HAL.GetControlWord = HALGetControlWord;
-
-            NativeHALGetControlWord = (NativeHALGetControlWordDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetControlWord"), typeof(NativeHALGetControlWordDelegate));
-
-            Base.HAL.HALGetAllianceStation = (Base.HAL.HALGetAllianceStationDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetAllianceStation"), typeof(Base.HAL.HALGetAllianceStationDelegate));
-
-            Base.HAL.HALGetJoystickAxes = (Base.HAL.HALGetJoystickAxesDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxes"), typeof(Base.HAL.HALGetJoystickAxesDelegate));
-
-            Base.HAL.HALGetJoystickPOVs = (Base.HAL.HALGetJoystickPOVsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickPOVs"), typeof(Base.HAL.HALGetJoystickPOVsDelegate));
-
-            Base.HAL.HALGetJoystickButtons = (Base.HAL.HALGetJoystickButtonsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickButtons"), typeof(Base.HAL.HALGetJoystickButtonsDelegate));
-
-            Base.HAL.HALGetJoystickDescriptor = (Base.HAL.HALGetJoystickDescriptorDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickDescriptor"), typeof(Base.HAL.HALGetJoystickDescriptorDelegate));
-
-            Base.HAL.HALGetJoystickIsXbox = (Base.HAL.HALGetJoystickIsXboxDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickIsXbox"), typeof(Base.HAL.HALGetJoystickIsXboxDelegate));
-
-            Base.HAL.HALGetJoystickType = (Base.HAL.HALGetJoystickTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickType"), typeof(Base.HAL.HALGetJoystickTypeDelegate));
-
-            Base.HAL.HALGetJoystickAxisType = (Base.HAL.HALGetJoystickAxisTypeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetJoystickAxisType"), typeof(Base.HAL.HALGetJoystickAxisTypeDelegate));
-
-            Base.HAL.HALSetJoystickOutputs = (Base.HAL.HALSetJoystickOutputsDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetJoystickOutputs"), typeof(Base.HAL.HALSetJoystickOutputsDelegate));
-
-            Base.HAL.HALGetMatchTime = (Base.HAL.HALGetMatchTimeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetMatchTime"), typeof(Base.HAL.HALGetMatchTimeDelegate));
-
-            Base.HAL.HALSetNewDataSem = (Base.HAL.HALSetNewDataSemDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALSetNewDataSem"), typeof(Base.HAL.HALSetNewDataSemDelegate));
-
-            Base.HAL.HALGetSystemActive = (Base.HAL.HALGetSystemActiveDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetSystemActive"), typeof(Base.HAL.HALGetSystemActiveDelegate));
-
-            Base.HAL.HALGetBrownedOut = (Base.HAL.HALGetBrownedOutDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALGetBrownedOut"), typeof(Base.HAL.HALGetBrownedOutDelegate));
-
-            Base.HAL.HALInitialize = (Base.HAL.HALInitializeDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALInitialize"), typeof(Base.HAL.HALInitializeDelegate));
-
-            Base.HAL.HALNetworkCommunicationObserveUserProgramStarting = (Base.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramStarting"), typeof(Base.HAL.HALNetworkCommunicationObserveUserProgramStartingDelegate));
-
-            Base.HAL.HALNetworkCommunicationObserveUserProgramDisabled = (Base.HAL.HALNetworkCommunicationObserveUserProgramDisabledDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramDisabled"), typeof(Base.HAL.HALNetworkCommunicationObserveUserProgramDisabledDelegate));
-
-            Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomous = (Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomousDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramAutonomous"), typeof(Base.HAL.HALNetworkCommunicationObserveUserProgramAutonomousDelegate));
-
-            Base.HAL.HALNetworkCommunicationObserveUserProgramTeleop = (Base.HAL.HALNetworkCommunicationObserveUserProgramTeleopDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTeleop"), typeof(Base.HAL.HALNetworkCommunicationObserveUserProgramTeleopDelegate));
-
-            Base.HAL.HALNetworkCommunicationObserveUserProgramTest = (Base.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALNetworkCommunicationObserveUserProgramTest"), typeof(Base.HAL.HALNetworkCommunicationObserveUserProgramTestDelegate));
-
-            Base.HAL.HALReport = HALReport;
-            NativeHALReport = (NativeHALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HALReport"), typeof(NativeHALReportDelegate));
+            Base.HAL.HAL_Report = HALReport;
+            NativeHALReport = (NativeHALReportDelegate)Marshal.GetDelegateForFunctionPointer(loader.GetProcAddress(library, "HAL_Report"), typeof(NativeHALReportDelegate));
 
         }
 
-        private delegate uint NativeHALReportDelegate(byte resource, byte instanceNumber, byte context, byte[] feature);
+        private delegate long NativeHALReportDelegate(int resource, int instanceNumber, int context, byte[] feature);
 
         private static NativeHALReportDelegate NativeHALReport;
 
-        public static uint HALReport(byte resource, byte instanceNumber, byte context, string feature)
+        public static long HALReport(int resource, int instanceNumber, int context, string feature)
         {
             int len;
             return NativeHALReport(resource, instanceNumber, context, CreateUTF8String(feature, out len));
         }
 
-        private delegate int NativeHALSetErrorDataDelegate(byte[] errors, int errorsLength, int waitMs);
-
-        private static NativeHALSetErrorDataDelegate NativeHALSetErrorData;
-
-        public static int HALSetErrorData(string errors, int waitMs)
-        {
-            int len;
-            byte[] errorB = CreateUTF8String(errors, out len);
-            return NativeHALSetErrorData(errorB, len, waitMs); 
-        }
-
-        private delegate int NativeHALSendErrorDelegate(int isError, int errorCode, int isLVCode, 
-            byte[] details, byte[] location, byte[] callStack, int printMsg);
-
-        private static NativeHALSendErrorDelegate NativeHALSendError;
-
-        public static int HALSendError(bool isError, int errorCode, bool isLVCode, string details,
-            string location, string callStack, bool printMsg)
-        {
-            int len;
-            byte[] loc = CreateUTF8String(location, out len);
-            byte[] det = CreateUTF8String(details, out len);
-            byte[] stack = CreateUTF8String(callStack, out len);
-            return NativeHALSendError(isError ? 1 : 0, errorCode, isLVCode ? 1 : 0, det, loc, stack, printMsg ? 1 : 0);
-        }
-
         private delegate IntPtr NativeGetHALErrorMessageDelegate(int code);
 
-        private static NativeGetHALErrorMessageDelegate NativeGetHALErrorMessage;
+        private static NativeGetHALErrorMessageDelegate NativeHALGetErrorMessage;
 
         /// <summary>
         /// Gets an Error Message from the HAL
         /// </summary>
         /// <param name="code">The Error Code</param>
         /// <returns>The Error Message</returns>
-        public static string GetHALErrorMessage(int code)
+        public static string HAL_GetErrorMessage(int code)
         {
-            return ReadUTF8String(NativeGetHALErrorMessage(code));
+            return ReadUTF8String(NativeHALGetErrorMessage(code));
         }
 
         internal static string ReadUTF8String(IntPtr ptr)
@@ -296,22 +235,6 @@ namespace HAL.AthenaHAL
             buffer[bytes] = 0;
             return buffer;
         }
-
-        private delegate int NativeHALGetControlWordDelegate(ref uint data);
-
-        private static NativeHALGetControlWordDelegate NativeHALGetControlWord;
-
-        /// <summary>
-        /// Gets the HAL Control Word
-        /// </summary>
-        /// <returns></returns>
-        public static HALControlWord HALGetControlWord()
-        {
-            //HALControlWord temp = new HALControlWord();
-            uint word = 0;
-            NativeHALGetControlWord(ref word);
-            return new HALControlWord((word & 1) != 0, ((word >> 1) & 1) != 0, ((word >> 2) & 1) != 0,
-                ((word >> 3) & 1) != 0, ((word >> 4) & 1) != 0, ((word >> 5) & 1) != 0);
-        }
     }
 }
+

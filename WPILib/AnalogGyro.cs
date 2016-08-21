@@ -19,46 +19,28 @@ namespace WPILib
     /// </remarks>
     public class AnalogGyro : GyroBase, IPIDSource, ILiveWindowSendable
     {
-        private static readonly int kOversampleBits = 10;
-        private static readonly int kAverageBits = 0;
-        private static readonly double kSamplesPerSecond = 50.0;
-        private static readonly double kCalibrationSampleTime = 5.0;
-        private static readonly double kDefaultVoltsPerDegreePerSecond = 0.007;
+        private const double DefaultVoltsPerDegreePerSecond = 0.007;
 
         /// <summary>
         /// The <see cref="WPILib.AnalogInput"/> that this gyro uses.
         /// </summary>
         protected AnalogInput AnalogInput;
-        private double m_offset;
-        private int m_center;
-        readonly bool m_channelAllocated = false;
+
+        private int m_gyroHandle = 0;
+        private readonly bool m_channelAllocated = false;
 
         /// <inheritdoc/>
         public override void Calibrate()
         {
-            AnalogInput.InitAccumulator();
-            AnalogInput.ResetAccumulator();
-
             if (RobotBase.IsSimulation)
             {
                 //In simulation, we do not have to do anything here.
                 return;
             }
 
-            Timer.Delay(kCalibrationSampleTime);
+            int status = 0;
+            HALAnalogGyro.HAL_CalibrateAnalogGyro(m_gyroHandle, ref status);
 
-            long value = 0;
-            uint count = 0;
-            AnalogInput.GetAccumulatorOutput(ref value, ref count);
-
-            m_center = (int)((double)value / (double)count + .5);
-
-            m_offset = ((double)value / (double)count)
-                    - m_center;
-
-
-            AnalogInput.AccumulatorCenter = m_center;
-            AnalogInput.ResetAccumulator();
         }
 
         /// <summary>

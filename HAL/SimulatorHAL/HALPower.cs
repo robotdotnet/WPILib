@@ -1,132 +1,99 @@
-﻿using System;
+using System;
+using System.Runtime.InteropServices;
 using HAL.Base;
-using static HAL.Simulator.SimData;
 
-// ReSharper disable RedundantAssignment
-// ReSharper disable InconsistentNaming
-
-#pragma warning disable 1591
-
+// ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
 {
-    ///<inheritdoc cref="HAL"/>
     internal class HALPower
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALPower.GetVinVoltage = getVinVoltage;
-            Base.HALPower.GetVinCurrent = getVinCurrent;
-            Base.HALPower.GetUserVoltage6V = getUserVoltage6V;
-            Base.HALPower.GetUserCurrent6V = getUserCurrent6V;
-            Base.HALPower.GetUserActive6V = getUserActive6V;
-            Base.HALPower.GetUserCurrentFaults6V = getUserCurrentFaults6V;
-            Base.HALPower.GetUserVoltage5V = getUserVoltage5V;
-            Base.HALPower.GetUserCurrent5V = getUserCurrent5V;
-            Base.HALPower.GetUserActive5V = getUserActive5V;
-            Base.HALPower.GetUserCurrentFaults5V = getUserCurrentFaults5V;
-            Base.HALPower.GetUserVoltage3V3 = getUserVoltage3V3;
-            Base.HALPower.GetUserCurrent3V3 = getUserCurrent3V3;
-            Base.HALPower.GetUserActive3V3 = getUserActive3V3;
-            Base.HALPower.GetUserCurrentFaults3V3 = getUserCurrentFaults3V3;
+            Base.HALPower.HAL_GetVinVoltage = HAL_GetVinVoltage;
+            Base.HALPower.HAL_GetVinCurrent = HAL_GetVinCurrent;
+            Base.HALPower.HAL_GetUserVoltage6V = HAL_GetUserVoltage6V;
+            Base.HALPower.HAL_GetUserCurrent6V = HAL_GetUserCurrent6V;
+            Base.HALPower.HAL_GetUserActive6V = HAL_GetUserActive6V;
+            Base.HALPower.HAL_GetUserCurrentFaults6V = HAL_GetUserCurrentFaults6V;
+            Base.HALPower.HAL_GetUserVoltage5V = HAL_GetUserVoltage5V;
+            Base.HALPower.HAL_GetUserCurrent5V = HAL_GetUserCurrent5V;
+            Base.HALPower.HAL_GetUserActive5V = HAL_GetUserActive5V;
+            Base.HALPower.HAL_GetUserCurrentFaults5V = HAL_GetUserCurrentFaults5V;
+            Base.HALPower.HAL_GetUserVoltage3V3 = HAL_GetUserVoltage3V3;
+            Base.HALPower.HAL_GetUserCurrent3V3 = HAL_GetUserCurrent3V3;
+            Base.HALPower.HAL_GetUserActive3V3 = HAL_GetUserActive3V3;
+            Base.HALPower.HAL_GetUserCurrentFaults3V3 = HAL_GetUserCurrentFaults3V3;
         }
 
-
-        [CalledSimFunction]
-        public static float getVinVoltage(ref int status)
+        public static double HAL_GetVinVoltage(ref int status)
         {
-            status = 0;
-            return RoboRioData.VInVoltage;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getVinCurrent(ref int status)
+        public static double HAL_GetVinCurrent(ref int status)
         {
-            status = 0;
-            return RoboRioData.VInCurrent;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getUserVoltage6V(ref int status)
+        public static double HAL_GetUserVoltage6V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserVoltage6V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getUserCurrent6V(ref int status)
+        public static double HAL_GetUserCurrent6V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserCurrent6V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static bool getUserActive6V(ref int status)
+        public static bool HAL_GetUserActive6V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserActive6V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static int getUserCurrentFaults6V(ref int status)
+        public static int HAL_GetUserCurrentFaults6V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserFaults6V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getUserVoltage5V(ref int status)
+        public static double HAL_GetUserVoltage5V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserVoltage5V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getUserCurrent5V(ref int status)
+        public static double HAL_GetUserCurrent5V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserCurrent5V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static bool getUserActive5V(ref int status)
+        public static bool HAL_GetUserActive5V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserActive5V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static int getUserCurrentFaults5V(ref int status)
+        public static int HAL_GetUserCurrentFaults5V(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserFaults5V;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getUserVoltage3V3(ref int status)
+        public static double HAL_GetUserVoltage3V3(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserVoltage3V3;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static float getUserCurrent3V3(ref int status)
+        public static double HAL_GetUserCurrent3V3(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserCurrent3V3;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static bool getUserActive3V3(ref int status)
+        public static bool HAL_GetUserActive3V3(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserActive3V3;
+            throw new NotImplementedException();
         }
 
-        [CalledSimFunction]
-        public static int getUserCurrentFaults3V3(ref int status)
+        public static int HAL_GetUserCurrentFaults3V3(ref int status)
         {
-            status = 0;
-            return RoboRioData.UserFaults3V3;
+            throw new NotImplementedException();
         }
     }
 }
+

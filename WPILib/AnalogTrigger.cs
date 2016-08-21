@@ -1,46 +1,42 @@
 ﻿using System;
 using HAL.Base;
 using WPILib.Exceptions;
-using static HAL.Base.HALAnalog;
+using static HAL.Base.HAL;
+using static HAL.Base.HALAnalogTrigger;
 using static WPILib.Utility;
 
 namespace WPILib
 {
+    public enum AnalogTriggerType
+    {
+        InWindow = 0,
+        State = 1,
+        RisingPulse = 2,
+        FallingPulse = 3,
+    }
+
     /// <summary>
     /// Class for creating and configuring Analog Triggers.
     /// </summary>
     public class AnalogTrigger : IDisposable
     {
-        internal IntPtr Port { get; private set; }
+        internal int Port { get; private set; }
 
         /// <summary>
         /// Gets the index of the analog trigger
         /// </summary>
         public int Index { get; protected set; }
 
-        /// <summary>
-        /// Initialize an analog trigger from a channel
-        /// </summary>
-        /// <param name="channel">The port to use for the analog trigger. [0..3] on RIO, [4..7] on MXP.</param>
-        protected void InitTrigger(int channel)
-        {
-            IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);
-            int status = 0;
-            uint index = 0;
-
-            Port = InitializeAnalogTrigger(portPointer, ref index, ref status);
-            Index = (int)index;
-            CheckStatus(status);
-            HAL.Base.HAL.Report(ResourceType.kResourceType_AnalogTrigger, (byte)channel);
-        }
+        private AnalogInput m_analogInput = null;
+        private bool m_ownsAnalog = false;
 
         /// <summary>
         /// Constructor for an analog trigger given a channel number.
         /// </summary>
         /// <param name="channel">The port to use for the analog trigger 0-3 are on-board, 4-7 are on the MXP port</param>
-        public AnalogTrigger(int channel)
+        public AnalogTrigger(int channel) : this (new AnalogInput(channel))
         {
-            InitTrigger(channel);
+            m_ownsAnalog = true;
         }
 
         /// <summary>
@@ -53,7 +49,16 @@ namespace WPILib
         {
             if (channel == null)
                 throw new ArgumentNullException(nameof(channel), "The Analog Input given was null");
-            InitTrigger(channel.Channel);
+            m_analogInput = channel;
+
+            int index = 0;
+            int status = 0;
+
+            Port = HAL_InitializeAnalogTrigger(m_analogInput.Port, ref index, ref status);
+            CheckStatus(status);
+            Index = index;
+
+            Report(ResourceType.kResourceType_AnalogTrigger, m_analogInput.Channel);
         }
 
         /// <summary>
@@ -62,9 +67,14 @@ namespace WPILib
         public void Dispose()
         {
             int status = 0;
-            CleanAnalogTrigger(Port, ref status);
+            HAL_CleanAnalogTrigger(Port, ref status);
+            Port = 0;
+            if (m_ownsAnalog)
+            {
+                m_analogInput?.Dispose();
+            }
             CheckStatus(status);
-            Port = IntPtr.Zero;
+            
         }
 
         /// <summary>
@@ -79,7 +89,7 @@ namespace WPILib
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            SetAnalogTriggerLimitsRaw(Port, lower, upper, ref status);
+            HAL_SetAnalogTriggerLimitsRaw(Port, lower, upper, ref status);
             CheckStatus(status);
         }
 
@@ -94,7 +104,7 @@ namespace WPILib
             if (lower > upper)
                 throw new BoundaryException("Lower bound is greater than upper");
             int status = 0;
-            SetAnalogTriggerLimitsVoltage(Port, lower, upper, ref status);
+            HAL_SetAnalogTriggerLimitsVoltage(Port, lower, upper, ref status);
             CheckStatus(status);
         }
 
@@ -106,7 +116,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetAnalogTriggerAveraged(Port, value, ref status);
+                HAL_SetAnalogTriggerAveraged(Port, value, ref status);
                 CheckStatus(status);
             }
         }
@@ -119,7 +129,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetAnalogTriggerFiltered(Port, value, ref status);
+                HAL_SetAnalogTriggerFiltered(Port, value, ref status);
                 CheckStatus(status);
             }
         }
@@ -132,7 +142,7 @@ namespace WPILib
         public bool GetInWindow()
         {
             int status = 0;
-            bool value = GetAnalogTriggerInWindow(Port, ref status);
+            bool value = HAL_GetAnalogTriggerInWindow(Port, ref status);
             CheckStatus(status);
             return value;
         }
@@ -145,7 +155,7 @@ namespace WPILib
         public bool GetTriggerState()
         {
             int status = 0;
-            bool value = GetAnalogTriggerTriggerState(Port, ref status);
+            bool value = HAL_GetAnalogTriggerTriggerState(Port, ref status);
             CheckStatus(status);
             return value;
         }

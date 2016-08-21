@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Threading;
 using HAL.Base;
 
@@ -41,7 +42,9 @@ namespace HAL.Simulator
             JoystickCallback?.Invoke();
             if (SimData.s_halNewDataSem != IntPtr.Zero)
             {
-                SimulatorHAL.HALSemaphore.giveMultiWait(SimData.s_halNewDataSem);
+                throw new ArgumentOutOfRangeException();
+                // TODO:: FIX
+                //SimulatorHAL.HALSemaphore.giveMultiWait(SimData.s_halNewDataSem);
             }
         }
 

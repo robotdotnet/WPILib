@@ -1,137 +1,147 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
+using HAL.Simulator.Data;
+using HAL.SimulatorHAL.Handles;
+using static HAL.Base.HALErrors;
+using static HAL.Base.HAL;
+using static HAL.SimulatorHAL.HALPorts;
+using static HAL.SimulatorHAL.Handles.Handle;
 using static HAL.Simulator.SimData;
 
-// ReSharper disable RedundantAssignment
-// ReSharper disable InconsistentNaming
-#pragma warning disable 1591
-
+// ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
 {
-    ///<inheritdoc cref="HAL"/>
     internal class HALCompressor
     {
+
+
+
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALCompressor.InitializeCompressor = initializeCompressor;
-            Base.HALCompressor.CheckCompressorModule = checkCompressorModule;
-            Base.HALCompressor.GetCompressor = getCompressor;
-            Base.HALCompressor.SetClosedLoopControl = setClosedLoopControl;
-            Base.HALCompressor.GetClosedLoopControl = getClosedLoopControl;
-            Base.HALCompressor.GetPressureSwitch = getPressureSwitch;
-            Base.HALCompressor.GetCompressorCurrent = getCompressorCurrent;
-            Base.HALCompressor.GetCompressorCurrentTooHighFault = getCompressorCurrentTooHighFault;
-            Base.HALCompressor.GetCompressorCurrentTooHighStickyFault = getCompressorCurrentTooHighStickyFault;
-            Base.HALCompressor.GetCompressorShortedStickyFault = getCompressorShortedStickyFault;
-            Base.HALCompressor.GetCompressorShortedFault = getCompressorShortedFault;
-            Base.HALCompressor.GetCompressorNotConnectedStickyFault = getCompressorNotConnectedStickyFault;
-            Base.HALCompressor.GetCompressorNotConnectedFault = getCompressorNotConnectedFault;
-            Base.HALCompressor.ClearAllPCMStickyFaults = clearAllPCMStickyFaults;
+            Base.HALCompressor.HAL_InitializeCompressor = HAL_InitializeCompressor;
+            Base.HALCompressor.HAL_CheckCompressorModule = HAL_CheckCompressorModule;
+            Base.HALCompressor.HAL_GetCompressor = HAL_GetCompressor;
+            Base.HALCompressor.HAL_SetCompressorClosedLoopControl = HAL_SetCompressorClosedLoopControl;
+            Base.HALCompressor.HAL_GetCompressorClosedLoopControl = HAL_GetCompressorClosedLoopControl;
+            Base.HALCompressor.HAL_GetCompressorPressureSwitch = HAL_GetCompressorPressureSwitch;
+            Base.HALCompressor.HAL_GetCompressorCurrent = HAL_GetCompressorCurrent;
+            Base.HALCompressor.HAL_GetCompressorCurrentTooHighFault = HAL_GetCompressorCurrentTooHighFault;
+            Base.HALCompressor.HAL_GetCompressorCurrentTooHighStickyFault = HAL_GetCompressorCurrentTooHighStickyFault;
+            Base.HALCompressor.HAL_GetCompressorShortedStickyFault = HAL_GetCompressorShortedStickyFault;
+            Base.HALCompressor.HAL_GetCompressorShortedFault = HAL_GetCompressorShortedFault;
+            Base.HALCompressor.HAL_GetCompressorNotConnectedStickyFault = HAL_GetCompressorNotConnectedStickyFault;
+            Base.HALCompressor.HAL_GetCompressorNotConnectedFault = HAL_GetCompressorNotConnectedFault;
         }
 
-        [CalledSimFunction]
-        public static IntPtr initializeCompressor(byte module)
+        public static int HAL_InitializeCompressor(int module, ref int status)
         {
-           
-            InitializePCM(module);
+            bool initialized = InitializePCM(module);
+            if (!initialized)
+            {
+                status = PARAMETER_OUT_OF_RANGE;
+                return HALInvalidHandle;
+            }
+
             GetPCM(module).Compressor.Initialized = true;
-            PCM pcm = new PCM { module = module };
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(pcm));
-            Marshal.StructureToPtr(pcm, ptr, true);
-            return ptr;
+
+            return CreateHandle((short) module, HALHandleEnum.Compressor);
         }
 
-        [CalledSimFunction]
-        public static bool checkCompressorModule(byte module)
+        public static bool HAL_CheckCompressorModule(int module)
         {
-            return module < 63;
+            return module < kNumPCMModules && module >= 0;
         }
 
-        [CalledSimFunction]
-        public static bool getCompressor(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressor(int compressor_handle, ref int status)
         {
-            status = 0;
-            
-            return GetPCM(PortConverters.GetPCM(pcm_pointer)).Compressor.On;
+            short index = GetHandleTypedIndex(compressor_handle, HALHandleEnum.Compressor);
+            if (index == InvalidHandleIndex)
+            {
+                status = HAL_HANDLE_ERROR;
+                return false;
+            }
+
+            return GetPCM(index).Compressor.On;
         }
 
-        [CalledSimFunction]
-        public static void setClosedLoopControl(IntPtr pcm_pointer, bool value, ref int status)
+        public static void HAL_SetCompressorClosedLoopControl(int compressor_handle, bool value, ref int status)
         {
-            status = 0;
-            GetPCM(PortConverters.GetPCM(pcm_pointer)).Compressor.CloseLoopEnabled = value;
+            short index = GetHandleTypedIndex(compressor_handle, HALHandleEnum.Compressor);
+            if (index == InvalidHandleIndex)
+            {
+                status = HAL_HANDLE_ERROR;
+                return;
+            }
+
+            GetPCM(index).Compressor.CloseLoopEnabled = value;
         }
 
-        [CalledSimFunction]
-        public static bool getClosedLoopControl(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorClosedLoopControl(int compressor_handle, ref int status)
         {
-            status = 0;
-            return GetPCM(PortConverters.GetPCM(pcm_pointer)).Compressor.CloseLoopEnabled;
+            short index = GetHandleTypedIndex(compressor_handle, HALHandleEnum.Compressor);
+            if (index == InvalidHandleIndex)
+            {
+                status = HAL_HANDLE_ERROR;
+                return false;
+            }
+
+            return GetPCM(index).Compressor.CloseLoopEnabled;
         }
 
-        [CalledSimFunction]
-        public static bool getPressureSwitch(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorPressureSwitch(int compressor_handle, ref int status)
         {
-            status = 0;
-            return GetPCM(PortConverters.GetPCM(pcm_pointer)).Compressor.PressureSwitch;
+            short index = GetHandleTypedIndex(compressor_handle, HALHandleEnum.Compressor);
+            if (index == InvalidHandleIndex)
+            {
+                status = HAL_HANDLE_ERROR;
+                return false;
+            }
+
+            return GetPCM(index).Compressor.PressureSwitch;
         }
 
-        [CalledSimFunction]
-        public static float getCompressorCurrent(IntPtr pcm_pointer, ref int status)
+        public static double HAL_GetCompressorCurrent(int compressor_handle, ref int status)
         {
-            status = 0;
-            return GetPCM(PortConverters.GetPCM(pcm_pointer)).Compressor.Current;
+            short index = GetHandleTypedIndex(compressor_handle, HALHandleEnum.Compressor);
+            if (index == InvalidHandleIndex)
+            {
+                status = HAL_HANDLE_ERROR;
+                return  0.0;
+            }
+
+            return GetPCM(index).Compressor.Current;
         }
 
-        [CalledSimFunction]
-        public static bool getCompressorCurrentTooHighFault(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorCurrentTooHighFault(int compressor_handle, ref int status)
         {
-            status = 0;
             return false;
         }
 
-        [CalledSimFunction]
-        public static bool getCompressorCurrentTooHighStickyFault(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorCurrentTooHighStickyFault(int compressor_handle, ref int status)
         {
-            status = 0;
             return false;
         }
 
-        [CalledSimFunction]
-        public static bool getCompressorShortedStickyFault(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorShortedStickyFault(int compressor_handle, ref int status)
         {
-            status = 0;
             return false;
         }
 
-
-        [CalledSimFunction]
-        public static bool getCompressorShortedFault(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorShortedFault(int compressor_handle, ref int status)
         {
-            status = 0;
             return false;
         }
 
-        [CalledSimFunction]
-        public static bool getCompressorNotConnectedStickyFault(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorNotConnectedStickyFault(int compressor_handle, ref int status)
         {
-            status = 0;
             return false;
         }
 
-        [CalledSimFunction]
-        public static bool getCompressorNotConnectedFault(IntPtr pcm_pointer, ref int status)
+        public static bool HAL_GetCompressorNotConnectedFault(int compressor_handle, ref int status)
         {
-            status = 0;
             return false;
-        }
-
-
-        [CalledSimFunction]
-        public static void clearAllPCMStickyFaults(IntPtr pcm_pointer, ref int status)
-        {
-            status = 0;
         }
     }
 }
+
