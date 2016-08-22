@@ -82,18 +82,12 @@ namespace WPILib
             {
                 throw new ArgumentOutOfRangeException(nameof(channel), "Channel must be an accumulator channel");
             }
-            Sensitivity = kDefaultVoltsPerDegreePerSecond;
-            AnalogInput.AverageBits = kAverageBits;
-            AnalogInput.OversampleBits = kOversampleBits;
-            double sampleRate = kSamplesPerSecond
-                    * (1 << (kAverageBits + kOversampleBits));
-            AnalogInput.GlobalSampleRate = sampleRate;
-            Timer.Delay(0.1);
 
-            Deadband = 0.0;
-
-            PIDSourceType = PIDSourceType.Displacement;
-
+            if (m_gyroHandle == 0)
+            {
+                int status = 0;
+                m_gyroHandle = HALAnalogGyro.HAL_InitializeAnalogGyro(channel.)
+            }
 
             HAL.Base.HAL.Report(ResourceType.kResourceType_Gyro, (byte)AnalogInput.Channel);
             LiveWindow.LiveWindow.AddSensor("AnalogGyro", AnalogInput.Channel, this);

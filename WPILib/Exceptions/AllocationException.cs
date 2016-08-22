@@ -7,13 +7,16 @@ namespace WPILib.Exceptions
     /// </summary>
     public class AllocationException : Exception
     {
+        public int Status { get; private set; }
+
         /// <summary>
         /// Create a new AllocationException
         /// </summary>
         /// <param name="message">The message to attach to the exception</param>
-        public AllocationException(string message)
+        public AllocationException(int status, string message)
             : base(message)
         {
+            Status = status;
         }
     }
 }

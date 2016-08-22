@@ -6,7 +6,8 @@ using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
 using static HAL.Base.HAL;
-using static HAL.Base.HALAnalog;
+using static HAL.Base.HALAnalogInput;
+using static HAL.Base.HALPorts;
 using static WPILib.Utility;
 using HALAnalog = HAL.Base.HALAnalog;
 
@@ -25,8 +26,7 @@ namespace WPILib
     /// <para/> stable values.</remarks>
     public class AnalogInput : SensorBase, IPIDSource, ILiveWindowSendable
     {
-        private static readonly Resource s_channels = new Resource(AnalogInputChannels);
-        private IntPtr m_port;
+        private int m_port;
         private static readonly int[] s_accumulatorChannels = { 0, 1 };
         private long m_accumulatorOffset;
 
@@ -43,13 +43,16 @@ namespace WPILib
             Channel = channel;
 
             CheckAnalogInputChannel(channel);
-
-            s_channels.Allocate(channel, "Analog input channel " + Channel +" is already allocated");
-
-            IntPtr portPointer = GetPort((byte)channel);
             int status = 0;
-            m_port = InitializeAnalogInputPort(portPointer, ref status);
-            CheckStatus(status);
+            m_port = HAL_InitializeAnalogInputPort(HAL_GetPort(channel), ref status);
+            if (status != 0)
+            {
+                CheckStatusRange(status, 0, HAL_GetNumAnalogInputs(), channel);
+                Channel = Int32.MaxValue;
+                m_port = HALInvalidHandle;
+                return;
+            }
+
             LiveWindow.LiveWindow.AddSensor("AnalogInput", channel, this);
             Report(ResourceType.kResourceType_AnalogChannel, (byte)channel);
         }
@@ -57,9 +60,8 @@ namespace WPILib
         /// <inheritdoc/>
         public override void Dispose()
         {
-            FreeAnalogInputPort(m_port);
-            m_port = IntPtr.Zero;
-            s_channels.Deallocate(Channel);
+            HAL_FreeAnalogInputPort(m_port);
+            m_port = HALInvalidHandle;
             Channel = 0;
             m_accumulatorOffset = 0;
         }
@@ -75,7 +77,7 @@ namespace WPILib
         public virtual int GetValue()
         {
             int status = 0;
-            int value = GetAnalogValue(m_port, ref status);
+            int value = HAL_GetAnalogValue(m_port, ref status);
             CheckStatus(status);
             return value;
         }
@@ -93,7 +95,7 @@ namespace WPILib
         public virtual int GetAverageValue()
         {
             int status = 0;
-            int value = GetAnalogAverageValue(m_port, ref status);
+            int value = HAL_GetAnalogAverageValue(m_port, ref status);
             CheckStatus(status);
             return value;
         }
