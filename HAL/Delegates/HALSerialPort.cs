@@ -34,7 +34,7 @@ namespace HAL.Base
         public delegate void HAL_SetSerialTimeoutDelegate(int port, double timeout, ref int status);
         public static HAL_SetSerialTimeoutDelegate HAL_SetSerialTimeout;
 
-        public delegate void HAL_EnableSerialTerminationDelegate(int port, [HALAllowNonBlittable]byte terminator, ref int status);
+        public delegate void HAL_EnableSerialTerminationDelegate(int port, byte terminator, ref int status);
         public static HAL_EnableSerialTerminationDelegate HAL_EnableSerialTermination;
 
         public delegate void HAL_DisableSerialTerminationDelegate(int port, ref int status);
@@ -49,10 +49,10 @@ namespace HAL.Base
         public delegate int HAL_GetSerialBytesReceivedDelegate(int port, ref int status);
         public static HAL_GetSerialBytesReceivedDelegate HAL_GetSerialBytesReceived;
 
-        public delegate int HAL_ReadSerialDelegate(int port, [HALAllowNonBlittable]byte buffer, int count, ref int status);
+        public delegate int HAL_ReadSerialDelegate(int port, byte[] buffer, int count, ref int status);
         public static HAL_ReadSerialDelegate HAL_ReadSerial;
 
-        public delegate int HAL_WriteSerialDelegate(int port, [HALAllowNonBlittable]byte buffer, int count, ref int status);
+        public delegate int HAL_WriteSerialDelegate(int port, byte[] buffer, int count, ref int status);
         public static HAL_WriteSerialDelegate HAL_WriteSerial;
 
         public delegate void HAL_FlushSerialDelegate(int port, ref int status);

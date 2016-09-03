@@ -1,5 +1,6 @@
 ﻿namespace HAL.Simulator.Data
 {
+
     /// <summary>
     /// The robot program state
     /// </summary>
@@ -20,7 +21,7 @@
     public class GlobalData : DataBase
     {
         private bool m_programStarted = false;
-        private double m_analogSampleRate = Base.HALAnalog.DefaultSampleRate;
+        //private double m_analogSampleRate = Base.HALAnalog.DefaultSampleRate;
 
         private ushort m_pwmLoopTiming = 40;
 
@@ -30,7 +31,7 @@
         public override void ResetData()
         {
             m_programStarted = false;
-            m_analogSampleRate = Base.HALAnalog.DefaultSampleRate;
+           // m_analogSampleRate = Base.HALAnalog.DefaultSampleRate;
             m_pwmLoopTiming = 40;
             DigitalPWMRate = 0;
             m_programState = ProgramState.None;
@@ -80,11 +81,10 @@
         /// </value>
         public double AnalogSampleRate
         {
-            get { return m_analogSampleRate; }
+            get { return 0; }
             internal set
             {
-                if (value.Equals(m_analogSampleRate)) return;
-                m_analogSampleRate = value;
+                if (value.Equals(0)) return;
                 OnPropertyChanged(value);
             }
         }

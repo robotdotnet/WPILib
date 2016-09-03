@@ -1,4 +1,4 @@
-﻿using static  HAL.Base.HALPower;
+﻿using static HAL.Base.HALPower;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -16,7 +16,7 @@ namespace WPILib
         public static double GetInputVoltage()
         {
             int status = 0;
-            float retVal = GetVinVoltage(ref status);
+            double retVal = HAL_GetVinVoltage(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -28,7 +28,7 @@ namespace WPILib
         public static double GetInputCurrrent()
         {
             int status = 0;
-            double retVal = GetVinCurrent(ref status);
+            double retVal = HAL_GetVinCurrent(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -40,7 +40,7 @@ namespace WPILib
         public static double GetVoltage3V3()
         {
             int status = 0;
-            double retVal = GetUserVoltage3V3(ref status);
+            double retVal = HAL_GetUserVoltage3V3(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -52,7 +52,7 @@ namespace WPILib
         public static double GetCurrent3V3()
         {
             int status = 0;
-            double retVal = GetUserCurrent3V3(ref status);
+            double retVal = HAL_GetUserCurrent3V3(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -64,7 +64,7 @@ namespace WPILib
         public static bool GetEnabled3V3()
         {
             int status = 0;
-            bool retVal = GetUserActive3V3(ref status);
+            bool retVal = HAL_GetUserActive3V3(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -76,7 +76,7 @@ namespace WPILib
         public static int GetFaultCount3V3()
         {
             int status = 0;
-            int retVal = GetUserCurrentFaults3V3(ref status);
+            int retVal = HAL_GetUserCurrentFaults3V3(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -88,7 +88,7 @@ namespace WPILib
         public static double GetVoltage5V()
         {
             int status = 0;
-            double retVal = GetUserVoltage5V(ref status);
+            double retVal = HAL_GetUserVoltage5V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -100,7 +100,7 @@ namespace WPILib
         public static double GetCurrent5V()
         {
             int status = 0;
-            double retVal = GetUserCurrent5V(ref status);
+            double retVal = HAL_GetUserCurrent5V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -112,7 +112,7 @@ namespace WPILib
         public static bool GetEnabled5V()
         {
             int status = 0;
-            bool retVal = GetUserActive5V(ref status);
+            bool retVal = HAL_GetUserActive5V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -124,7 +124,7 @@ namespace WPILib
         public static int GetFaultCount5V()
         {
             int status = 0;
-            int retVal = GetUserCurrentFaults5V(ref status);
+            int retVal = HAL_GetUserCurrentFaults5V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -136,7 +136,7 @@ namespace WPILib
         public static double GetVoltage6V()
         {
             int status = 0;
-            double retVal = GetUserVoltage6V(ref status);
+            double retVal = HAL_GetUserVoltage6V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -148,7 +148,7 @@ namespace WPILib
         public static double GetCurrent6V()
         {
             int status = 0;
-            double retVal = GetUserCurrent6V(ref status);
+            double retVal = HAL_GetUserCurrent6V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -160,7 +160,7 @@ namespace WPILib
         public static bool GetEnabled6V()
         {
             int status = 0;
-            bool retVal = GetUserActive6V(ref status);
+            bool retVal = HAL_GetUserActive6V(ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -172,7 +172,7 @@ namespace WPILib
         public static int GetFaultCount6V()
         {
             int status = 0;
-            int retVal = GetUserCurrentFaults6V(ref status);
+            int retVal = HAL_GetUserCurrentFaults6V(ref status);
             CheckStatus(status);
             return retVal;
         }

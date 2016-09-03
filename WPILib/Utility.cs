@@ -95,7 +95,7 @@ namespace WPILib
                     status == HALErrors.RESOURCE_IS_ALLOCATED ||
                     status == HALErrors.RESOURCE_OUT_OF_RANGE)
                 {
-                    throw new AllocationException(status, $" Code : {status}. {HAL_GetErrorMessage(status)} \n Minimum: {min}, Maximum: {max}, Requested {requested} \n at {memberName} path:{filePath} line:{lineNumber}");
+                    throw new AllocationException($" Code : {status}. {HAL_GetErrorMessage(status)} \n Minimum: {min}, Maximum: {max}, Requested {requested} \n at {memberName} path:{filePath} line:{lineNumber}", status);
                 }
                 if (status == HALErrors.HAL_HANDLE_ERROR)
                 {

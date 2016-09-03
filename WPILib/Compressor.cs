@@ -3,7 +3,8 @@ using NetworkTables.Tables;
 using WPILib.LiveWindow;
 using static HAL.Base.HALCompressor;
 using static WPILib.Utility;
-using HALCompressor = HAL.Base.HALCompressor;
+using static HAL.Base.HALSolenoid;
+using static HAL.Base.HALPorts;
 
 namespace WPILib
 {
@@ -20,7 +21,8 @@ namespace WPILib
     /// thereby stopping the compressor from operating.</remarks>
     public class Compressor : SensorBase, ILiveWindowSendable
     {
-        private IntPtr m_pcm; 
+        private int m_compressorHandle;
+        private int m_module;
 
         /// <summary>
         /// Create an instance of the <see cref="Compressor"/> class
@@ -41,11 +43,15 @@ namespace WPILib
 
         private void InitCompressor(int module)
         {
-            if (!CheckCompressorModule((byte) module))
+            m_module = module;
+            int status = 0;
+            m_compressorHandle = HAL_InitializeCompressor(module, ref status);
+            if (status != 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(module), "Compressor module out of range");
+                CheckStatusRange(status, 0, HAL_GetNumPCMModules(), module);
+                return;
             }
-            m_pcm = InitializeCompressor((byte) module);
+            ClosedLoopControl = true;
         }
 
         /// <summary>
@@ -78,7 +84,7 @@ namespace WPILib
         public bool Enabled()
         {
             int status = 0;
-            bool on = GetCompressor(m_pcm, ref status);
+            bool on = HAL_GetCompressor(m_compressorHandle, ref status);
             CheckStatus(status);
             return on;
         }
@@ -89,7 +95,7 @@ namespace WPILib
         public bool GetPressureSwitchValue()
         {
             int status = 0;
-            bool on = GetPressureSwitch(m_pcm, ref status);
+            bool on = HAL_GetCompressorPressureSwitch(m_compressorHandle, ref status);
             CheckStatus(status);
             return on;
         }
@@ -98,10 +104,10 @@ namespace WPILib
         /// Gets the Current being drawed by the compressor.
         /// </summary>
         /// <returns></returns>
-        public float GetCompressorCurrent()
+        public double GetCompressorCurrent()
         {
             int status = 0;
-            float current = HALCompressor.GetCompressorCurrent(m_pcm, ref status);
+            double current = HAL_GetCompressorCurrent(m_compressorHandle, ref status);
             CheckStatus(status);
             return current;
         }
@@ -114,13 +120,13 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetClosedLoopControl(m_pcm, value, ref status);
+                HAL_SetCompressorClosedLoopControl(m_compressorHandle, value, ref status);
                 CheckStatus(status);
             }
             get
             {
                 int status = 0;
-                bool on = GetClosedLoopControl(m_pcm, ref status);
+                bool on = HAL_GetCompressorClosedLoopControl(m_compressorHandle, ref status);
                 CheckStatus(status);
                 return on;
             }
@@ -133,7 +139,7 @@ namespace WPILib
         public bool GetCompressorCurrentTooHighStickyFault()
         {
             int status = 0;
-            bool retVal = HALCompressor.GetCompressorCurrentTooHighStickyFault(m_pcm, ref status);
+            bool retVal = HAL_GetCompressorCurrentTooHighStickyFault(m_compressorHandle, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -145,7 +151,7 @@ namespace WPILib
         public bool GetCompressorCurrentTooHighFault()
         {
             int status = 0;
-            bool retVal = HALCompressor.GetCompressorCurrentTooHighFault(m_pcm, ref status);
+            bool retVal = HAL_GetCompressorCurrentTooHighFault(m_compressorHandle, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -157,7 +163,7 @@ namespace WPILib
         public bool GetCompressorShortedStickyFault()
         {
             int status = 0;
-            bool retVal = HALCompressor.GetCompressorShortedStickyFault(m_pcm, ref status);
+            bool retVal = HAL_GetCompressorShortedStickyFault(m_compressorHandle, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -169,7 +175,7 @@ namespace WPILib
         public bool GetCompressorShortedFault()
         {
             int status = 0;
-            bool retVal = HALCompressor.GetCompressorShortedFault(m_pcm, ref status);
+            bool retVal = HAL_GetCompressorShortedFault(m_compressorHandle, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -181,7 +187,7 @@ namespace WPILib
         public bool GetCompressorNotConnectedStickyFault()
         {
             int status = 0;
-            bool retVal = HALCompressor.GetCompressorNotConnectedStickyFault(m_pcm, ref status);
+            bool retVal = HAL_GetCompressorNotConnectedStickyFault(m_compressorHandle, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -193,7 +199,7 @@ namespace WPILib
         public bool GetCompressorNotConnectedFault()
         {
             int status = 0;
-            bool retVal = HALCompressor.GetCompressorNotConnectedFault(m_pcm, ref status);
+            bool retVal = HAL_GetCompressorNotConnectedFault(m_compressorHandle, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -211,7 +217,7 @@ namespace WPILib
         public void ClearAllPCMStickyFaults()
         {
             int status = 0;
-            HALCompressor.ClearAllPCMStickyFaults(m_pcm, ref status);
+            HAL_ClearAllPCMStickyFaults(m_module, ref status);
             CheckStatus(status);
         }
 

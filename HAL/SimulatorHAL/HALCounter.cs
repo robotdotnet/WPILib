@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
-
+/*
 // ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
 {
@@ -128,3 +128,4 @@ namespace HAL.SimulatorHAL
     }
 }
 
+    */

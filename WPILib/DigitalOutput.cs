@@ -3,9 +3,11 @@ using HAL.Base;
 using NetworkTables;
 using NetworkTables.Tables;
 using WPILib.LiveWindow;
-using static HAL.Base.HALDigital;
+using static HAL.Base.HALPorts;
 using static WPILib.Utility;
-using HALDigital = HAL.Base.HALDigital;
+using static HAL.Base.HAL;
+using static HAL.Base.HALDIO;
+using static HAL.Base.HALPWM;
 
 namespace WPILib
 {
@@ -14,14 +16,11 @@ namespace WPILib
     /// </summary>
     public class DigitalOutput : DigitalSource, ILiveWindowSendable, ITableListener
     {
-        private static readonly IntPtr s_invalidPwmGenerator = (IntPtr) ~0; 
+        private const int InvalidPwmGenerator = HALInvalidHandle;
 
-        private IntPtr m_pwmGenerator = s_invalidPwmGenerator;
+        private int m_pwmGenerator = InvalidPwmGenerator;
 
-        /// <summary>
-        /// Gets the PWM Generator index for the PWM generator.
-        /// </summary>
-        public int PwmGeneratorChannel => m_pwmGenerator.ToInt32();
+        private int m_halHandle = HALInvalidHandle;
 
         /// <summary>
         /// Create an instance of a digital output.
@@ -29,21 +28,33 @@ namespace WPILib
         /// <param name="channel">The DIO channel to use for the digital output. 0-9 are on-board, 10-25 are on the MXP</param>
         public DigitalOutput(int channel)
         {
-            InitDigitalPort(channel, false);
+            CheckDigitalChannel(channel);
+
+            Channel = channel;
+
+            int status = 0;
+            m_halHandle = HAL_InitializeDIOPort(HAL_GetPort(channel), false, ref status);
+            CheckStatusRange(status, 0, HAL_GetNumDigitalPins(), channel);
 
             HAL.Base.HAL.Report(ResourceType.kResourceType_DigitalOutput, (byte)channel);
         }
+
+        /// <inheritdoc/>
+        public override int PortHandleForRouting => m_halHandle;
+        /// <inheritdoc/>
+        public override AnalogTriggerType AnalogTriggerTypeForRouting => 0;
 
         /// <summary>
         /// Free the resources associated with a digital output
         /// </summary>
         public override void Dispose()
         {
-            if (m_pwmGenerator != s_invalidPwmGenerator)
+            if (m_pwmGenerator != InvalidPwmGenerator)
             {
                 DisablePWM();
             }
-
+            HAL_FreeDIOPort(m_halHandle);
+            m_halHandle = HALInvalidHandle;
             base.Dispose();
         }
 
@@ -54,14 +65,17 @@ namespace WPILib
         public virtual void Set(bool value)
         {
             int status = 0;
-            SetDIO(Port, (short)(value ? 1 : 0), ref status);
+            HAL_SetDIO(m_halHandle, value, ref status);
             CheckStatus(status);
         }
+
+        /// <inheritdoc/>
+        public override bool AnalogTrigger => false;
 
         /// <summary>
         /// Get the GPIO channel number that this object represents.
         /// </summary>
-        public new int Channel => base.Channel;
+        public override int Channel { get; }
 
         /// <summary>
         /// Write a pulse to the digital output.
@@ -71,7 +85,7 @@ namespace WPILib
         public void Pulse(float pulseLength)
         {
             int status = 0;
-            HALDigital.Pulse(Port, pulseLength, ref status);
+            HAL_Pulse(m_halHandle, pulseLength, ref status);
             CheckStatus(status);
         }
 
@@ -84,8 +98,8 @@ namespace WPILib
         public void Pulse(int pulseLength)
         {
             int status = 0;
-            float convertedPulse = (float)(pulseLength / 1.0e9 * (GetLoopTiming(ref status) * 25));
-            HALDigital.Pulse(Port, convertedPulse, ref status);
+            float convertedPulse = (float)(pulseLength / 1.0e9 * (HAL_GetLoopTiming(ref status) * 25));
+            HAL_Pulse(m_halHandle, convertedPulse, ref status);
             CheckStatus(status);
         }
 
@@ -97,7 +111,7 @@ namespace WPILib
             get
             {
                 int status = 0;
-                bool value = IsPulsing(Port, ref status);
+                bool value = HAL_IsPulsing(m_halHandle, ref status);
                 CheckStatus(status);
                 return value;
             }
@@ -112,7 +126,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetPWMRate(value, ref status);
+                HAL_SetDigitalPWMRate(value, ref status);
                 CheckStatus(status);
             }
         }
@@ -128,14 +142,14 @@ namespace WPILib
         /// <param name="initialDutyCycle">The duty cycle to start generating. [0..1]</param>
         public void EnablePWM(double initialDutyCycle)
         {
-            if (m_pwmGenerator != s_invalidPwmGenerator)
+            if (m_pwmGenerator != InvalidPwmGenerator)
                 return;
             int status = 0;
-            m_pwmGenerator = AllocatePWM(ref status);
+            m_pwmGenerator = HAL_AllocateDigitalPWM(ref status);
+            CheckStatusForceThrow(status);
+            HAL_SetDigitalPWMDutyCycle(m_pwmGenerator, initialDutyCycle, ref status);
             CheckStatus(status);
-            SetPWMDutyCycle(m_pwmGenerator, initialDutyCycle, ref status);
-            CheckStatus(status);
-            SetPWMOutputChannel(m_pwmGenerator, (uint)base.Channel, ref status);
+            HAL_SetDigitalPWMOutputChannel(m_pwmGenerator, Channel, ref status);
             CheckStatus(status);
         }
 
@@ -144,14 +158,14 @@ namespace WPILib
         /// </summary>
         public void DisablePWM()
         {
-            if (m_pwmGenerator == s_invalidPwmGenerator)
+            if (m_pwmGenerator == InvalidPwmGenerator)
                 return;
             int status = 0;
-            SetPWMOutputChannel(m_pwmGenerator, (uint)DigitalChannels, ref status);
+            HAL_SetDigitalPWMOutputChannel(m_pwmGenerator, HAL_GetNumDigitalPins(), ref status);
             CheckStatus(status);
-            FreePWM(m_pwmGenerator, ref status);
+            HAL_FreeDigitalPWM(m_pwmGenerator, ref status);
             CheckStatus(status);
-            m_pwmGenerator = IntPtr.Zero;
+            m_pwmGenerator = HALInvalidHandle;
         }
 
         /// <summary>
@@ -162,10 +176,10 @@ namespace WPILib
         /// <param name="value">The duty-cycle to change to. [0..1]</param>
         public void UpdateDutyCycle(double value)
         {
-            if (m_pwmGenerator == s_invalidPwmGenerator)
+            if (m_pwmGenerator == InvalidPwmGenerator)
                 return;
             int status = 0;
-            SetPWMDutyCycle(m_pwmGenerator, value, ref status);
+            HAL_SetDigitalPWMDutyCycle(m_pwmGenerator, value, ref status);
             CheckStatus(status);
         }
 

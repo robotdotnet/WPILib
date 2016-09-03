@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
 
+/*
 // ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
 {
@@ -28,7 +29,7 @@ namespace HAL.SimulatorHAL
                     if (string.IsNullOrEmpty(loadedPath)) throw new FileNotFoundException("Stream not found");
                     library = LoaderUtilities.LoadLibrary(loadedPath, type);
                     if (library == IntPtr.Zero) throw new BadImageFormatException($"Library file {loadedPath} could not be loaded successfully.");
-                    */
+                    
                     s_library = IntPtr.Zero;
                     ILibraryLoader loader = null;
                     // ReSharper disable ExpressionIsAlwaysNull
@@ -133,3 +134,4 @@ namespace HAL.SimulatorHAL
     }
 }
 
+    */

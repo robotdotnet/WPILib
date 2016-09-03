@@ -4,7 +4,9 @@ using NetworkTables.Tables;
 using WPILib.Exceptions;
 using WPILib.LiveWindow;
 using static WPILib.Utility;
-using HALAnalog = HAL.Base.HALAnalog;
+using static HAL.Base.HALAnalogOutput;
+using static HAL.Base.HAL;
+using static HAL.Base.HALPorts;
 
 namespace WPILib
 {
@@ -13,9 +15,7 @@ namespace WPILib
     /// </summary>
     public class AnalogOutput : SensorBase, ILiveWindowSendable
     {
-        private static readonly Resource s_channels = new Resource(AnalogOutputChannels);
-        private IntPtr m_port;
-        private int m_channel;
+        private int m_halHandle;
 
         /// <summary>
         /// Construct an analog output on a specified MXP channel.
@@ -23,23 +23,19 @@ namespace WPILib
         /// <param name="channel">The channel number to represent. [0..1] on MXP.</param>
         public AnalogOutput(int channel)
         {
-            m_channel = channel;
 
-            if (!HALAnalog.CheckAnalogOutputChannel((uint)channel))
-            {
-                throw new AllocationException("Analog output channel " + m_channel
-                        + " cannot be allocated. Channel is not present.");
-            }
-
-            s_channels.Allocate(channel, "Analog output channel " + m_channel +" is already allocated");
-
-            IntPtr portPointer = HAL.Base.HAL.GetPort((byte) channel);
+            CheckAnalogOutputChannel(channel);
 
             int status = 0;
-            m_port = HALAnalog.InitializeAnalogOutputPort(portPointer, ref status);
-            CheckStatus(status);
+            m_halHandle = HAL_InitializeAnalogOutputPort(HAL_GetPort(channel), ref status);
+            if (status != 0)
+            {
+                CheckStatusRange(status, 0, HAL_GetNumAnalogOutputs(), channel);
+                m_halHandle = HALInvalidHandle;
+                return;
+            }
             LiveWindow.LiveWindow.AddSensor("AnalogOutput", channel, this);
-            HAL.Base.HAL.Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
+            Report(ResourceType.kResourceType_AnalogOutput, (byte) channel, 1);
         }
 
         /// <summary>
@@ -47,10 +43,8 @@ namespace WPILib
         /// </summary>
         public override void Dispose()
         {
-            HALAnalog.FreeAnalogOutputPort(m_port);
-            m_port = IntPtr.Zero;
-            s_channels.Deallocate(m_channel);
-            m_channel = 0;
+            HAL_FreeAnalogOutputPort(m_halHandle);
+            m_halHandle = HALInvalidHandle;
         }
 
         /// <summary>
@@ -60,7 +54,7 @@ namespace WPILib
         public virtual void SetVoltage(double voltage)
         {
             int status = 0;
-            HALAnalog.SetAnalogOutput(m_port, voltage, ref status);
+            HAL_SetAnalogOutput(m_halHandle, voltage, ref status);
             CheckStatus(status);
         }
 
@@ -72,7 +66,7 @@ namespace WPILib
         {
             int status = 0;
 
-            double voltage = HALAnalog.GetAnalogOutput(m_port, ref status);
+            double voltage = HAL_GetAnalogOutput(m_halHandle, ref status);
             CheckStatus(status);
             return voltage;
         }

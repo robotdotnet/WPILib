@@ -3,7 +3,8 @@ using HAL.Base;
 using WPILib.Exceptions;
 using static WPILib.Utility;
 using static HAL.Base.HAL;
-using static HAL.Base.HALDigital;
+using static HAL.Base.HALI2C;
+using HAL = HAL.Base.HAL;
 
 namespace WPILib
 {
@@ -37,8 +38,8 @@ namespace WPILib
             m_port = port;
             m_deviceAddress = deviceAddress;
             int status = 0;
-            I2CInitialize((byte)port, ref status);
-            CheckStatus(status);
+            HAL_InitializeI2C((byte)port, ref status);
+            CheckStatusForceThrow(status);
             Report(ResourceType.kResourceType_I2C, (byte)deviceAddress);
         }
 
@@ -63,7 +64,7 @@ namespace WPILib
                 }
                 byte[] receiveBuffer = new byte[receiveSize];
                 bool aborted = true;
-                aborted = I2CTransaction((byte)m_port, (byte)m_deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
+                aborted = HAL_TransactionI2C((byte)m_port, (byte)m_deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
                 if (receiveSize > 0 && dataRecieved != null)
                     Array.Copy(receiveBuffer, dataRecieved, Math.Min(receiveSize, dataRecieved.Length));
                 return aborted;
@@ -95,7 +96,7 @@ namespace WPILib
                 byte[] buffer = new byte[2];
                 buffer[0] = (byte)registerAddress;
                 buffer[1] = (byte)data;
-                return I2CWrite((byte)m_port, (byte)m_deviceAddress, buffer, (byte)buffer.Length) < 0;
+                return HAL_WriteI2C((byte)m_port, (byte)m_deviceAddress, buffer, (byte)buffer.Length) < 0;
             }
         }
 
@@ -111,7 +112,7 @@ namespace WPILib
         {
             lock (m_synchronizeRoot)
             {
-                return I2CWrite((byte)m_port, (byte)m_deviceAddress, data, (byte)data.Length) < 0;
+                return HAL_WriteI2C((byte)m_port, (byte)m_deviceAddress, data, (byte)data.Length) < 0;
             }
         }
 
@@ -152,7 +153,7 @@ namespace WPILib
             }
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             byte[] received = new byte[count];
-            int retVal = I2CRead((byte)m_port, (byte)m_deviceAddress, received, (byte)count);
+            int retVal = HAL_ReadI2C((byte)m_port, (byte)m_deviceAddress, received, (byte)count);
             Array.Copy(received, buffer, Math.Min(buffer.Length, count));
             return retVal < 0;
         }
@@ -224,7 +225,7 @@ namespace WPILib
             }
             lock (m_synchronizeRoot)
             {
-                return I2CWrite((byte) m_port, (byte) m_deviceAddress, newData, (byte) newData.Length) < 0;
+                return HAL_WriteI2C((byte) m_port, (byte) m_deviceAddress, newData, (byte) newData.Length) < 0;
             }
         }
 
@@ -247,11 +248,11 @@ namespace WPILib
                 }
                 if (register.Length == 0)
                 {
-                    return I2CRead((byte) m_port, (byte) m_deviceAddress, returnData, bytesToRead) < 0;
+                    return HAL_ReadI2C((byte) m_port, (byte) m_deviceAddress, returnData, bytesToRead) < 0;
                 }
                 else
                 {
-                    return I2CTransaction((byte) m_port, (byte) m_deviceAddress, register, (byte) register.Length, returnData,
+                    return HAL_TransactionI2C((byte) m_port, (byte) m_deviceAddress, register, (byte) register.Length, returnData,
                         bytesToRead) < 0;
                 }
             }

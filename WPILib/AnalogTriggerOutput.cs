@@ -1,7 +1,7 @@
 ﻿using System;
 using HAL.Base;
 using static WPILib.Utility;
-using HALAnalog = HAL.Base.HALAnalog;
+using static HAL.Base.HALAnalogTrigger;
 
 namespace WPILib
 {
@@ -61,37 +61,24 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Destructor
-        /// </summary>
-        public override void Dispose()
-        {
-        }
-
-        /// <summary>
         /// Get the state of the analog trigger output
         /// </summary>
         /// <returns></returns>
         public bool Get()
         {
             int status = 0;
-            bool value = HALAnalog.GetAnalogTriggerOutput(m_trigger.Port, m_outputType, ref status);
+            bool value = HAL_GetAnalogTriggerOutput(m_trigger.HALHandle, (HALAnalogTriggerType)m_outputType, ref status);
             CheckStatus(status);
             return value;
         }
 
-        /// <summary>
-        /// Get the channel routing number.
-        /// </summary>
-        public override int ChannelForRouting => (m_trigger.Index << 2) + (int)m_outputType;
-
-        /// <summary>
-        /// Get the module routing number.
-        /// </summary>
-        public override byte ModuleForRouting => (byte)(m_trigger.Index >> 2);
-
-        /// <summary>
-        /// Is this an analog trigger?
-        /// </summary>
-        public override bool AnalogTriggerForRouting => true;
+        /// <inheritdoc/>
+        public override int PortHandleForRouting => m_trigger.HALHandle;
+        /// <inheritdoc/>
+        public override AnalogTriggerType AnalogTriggerTypeForRouting => m_outputType;
+        /// <inheritdoc/>
+        public override bool AnalogTrigger => true;
+        /// <inheritdoc/>
+        public override int Channel => m_trigger.Index;
     }
 }

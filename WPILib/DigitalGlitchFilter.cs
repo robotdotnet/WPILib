@@ -1,5 +1,5 @@
 ﻿using System;
-using static HAL.Base.HALDigital;
+using static HAL.Base.HALDIO;
 using static WPILib.Utility;
 using static HAL.Base.HAL;
 using HAL.Base;
@@ -12,8 +12,6 @@ namespace WPILib
     public class DigitalGlitchFilter : SensorBase
     {
         private int m_channelIndex = -1;
-
-        private static object s_lockObject = new object();
 
         private static readonly Resource s_allocated = new Resource(3);
 
@@ -42,9 +40,9 @@ namespace WPILib
             if (input != null)
             {
                 int status = 0;
-                SetFilterSelect(input.Port, channelIndex, ref status);
+                HAL_SetFilterSelect(input.PortHandleForRouting, channelIndex, ref status);
                 CheckStatus(status);
-                int selected = GetFilterSelect(input.Port, ref status);
+                int selected = HAL_GetFilterSelect(input.PortHandleForRouting, ref status);
                 CheckStatus(status);
                 if (selected != channelIndex)
                     throw new InvalidOperationException($"SetFilterSelect for {channelIndex} failed -> {selected}");
@@ -118,7 +116,7 @@ namespace WPILib
         public void SetPeriodCycles(uint fpgaCycles)
         {
             int status = 0;
-            SetFilterPeriod(m_channelIndex, fpgaCycles, ref status);
+            HAL_SetFilterPeriod(m_channelIndex, fpgaCycles, ref status);
             CheckStatus(status);
         }
 
@@ -138,10 +136,10 @@ namespace WPILib
         /// through this glitch filter.
         /// </summary>
         /// <returns>The number of FPGA cycles.</returns>
-        public uint GetPeriodCycles()
+        public long GetPeriodCycles()
         {
             int status = 0;
-            uint retVal = GetFilterPeriod(m_channelIndex, ref status);
+            long retVal = HAL_GetFilterPeriod(m_channelIndex, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -151,11 +149,11 @@ namespace WPILib
         /// through this glitch filter
         /// </summary>
         /// <returns>The number of nanoseconds.</returns>
-        public ulong GetPeriodNanoSeconds()
+        public long GetPeriodNanoSeconds()
         {
-            uint fpgaCycles = GetPeriodCycles();
+            long fpgaCycles = GetPeriodCycles();
 
-            return fpgaCycles * 1000ul / (SystemClockTicksPerMicrosecond /4);
+            return fpgaCycles * 1000L / (SystemClockTicksPerMicrosecond /4);
         }
     }
 }
