@@ -7,6 +7,7 @@ using static HAL.Base.HAL;
 using static HAL.Base.HALSemaphore;
 using static HAL.Base.HAL.DriverStationConstants;
 using static WPILib.Utility;
+using static HAL.Base.HALDriverStation;
 using HALPower = HAL.Base.HALPower;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -54,12 +55,13 @@ namespace WPILib
         //Pointers to the semaphores to the HAL and FPGA
         private readonly object m_dataSem;
 
-        private readonly IntPtr m_packetDataAvailableMutex;
-        private readonly IntPtr m_packetDataAvailableSem;
-
         //New Control Data Fast Semaphore Lock
-        private readonly object m_newControlDataLock = new object();
-        private bool m_newControlData = false;
+        private readonly object m_newControlDataMutex = new object();
+        private readonly object m_joystickMutex = new object();
+
+        private readonly object m_controlWordMutex = new object();
+        private HALControlWord m_controlWordCache;
+        private DateTime m_lastControlWordUpdate;
 
         //Driver station thread keep alive
         private bool m_threadKeepAlive = true;
@@ -69,6 +71,8 @@ namespace WPILib
         private bool m_userInAutonomous;
         private bool m_userInTeleop;
         private bool m_userInTest;
+        private bool m_updatedControlLoopData;
+        private bool m_newControlData;
 
         //Thread lock objects
         private readonly ReaderWriterLockSlim m_readWriteLock;
@@ -118,9 +122,9 @@ namespace WPILib
             m_dataSem = new object();
 
 
-            m_packetDataAvailableMutex = InitializeMutexNormal();
-            m_packetDataAvailableSem = InitializeMultiWait();
-            HALSetNewDataSem(m_packetDataAvailableSem);
+            m_controlWordCache = new HALControlWord();
+
+            m_lastControlWordUpdate = DateTime.MinValue;
 
 
             //Starts the driver station thread in the background.
@@ -145,7 +149,7 @@ namespace WPILib
             while (m_threadKeepAlive)
             {
                 //Wait for new DS data, grab the newest data, and return the semaphore.
-                TakeMultiWait(m_packetDataAvailableSem, m_packetDataAvailableMutex);
+                HAL_WaitForDSData();
                 GetData();
                 try
                 {
@@ -167,13 +171,13 @@ namespace WPILib
 
                 //Report our program state.
                 if (m_userInDisabled)
-                    HALNetworkCommunicationObserveUserProgramDisabled();
+                    HAL_ObserveUserProgramDisabled();
                 if (m_userInAutonomous)
-                    HALNetworkCommunicationObserveUserProgramAutonomous();
+                    HAL_ObserveUserProgramAutonomous();
                 if (m_userInTeleop)
-                    HALNetworkCommunicationObserveUserProgramTeleop();
+                    HAL_ObserveUserProgramAutonomous();
                 if (m_userInTest)
-                    HALNetworkCommunicationObserveUserProgramTest();
+                    HAL_ObserveUserProgramTest();
             }
         }
 
@@ -183,14 +187,13 @@ namespace WPILib
         /// <param name="timeout">The timeout in ms</param>
         public void WaitForData(int timeout = Timeout.Infinite)
         {
-            try
+            lock (m_dataSem)
             {
-                Monitor.Enter(m_dataSem);
-                Monitor.Wait(m_dataSem, timeout);
-            }
-            finally
-            {
-                Monitor.Exit(m_dataSem);
+                while (!m_updatedControlLoopData)
+                {
+                    Monitor.Wait(m_dataSem, timeout);
+                }
+                m_updatedControlLoopData = false;
             }
         }
 
@@ -201,11 +204,14 @@ namespace WPILib
         {
             for (byte stick = 0; stick < JoystickPorts; stick++)
             {
-                HALGetJoystickAxes(stick, ref m_joystickAxesCache[stick]);
-                HALGetJoystickPOVs(stick, ref m_joystickPOVsCache[stick]);
-                HALGetJoystickButtons(stick, ref m_joystickButtonsCache[stick]);
-                HALGetJoystickDescriptor(stick, ref m_joystickDescriptorsCache[stick]);
+                HAL_GetJoystickAxes(stick, ref m_joystickAxesCache[stick]);
+                HAL_GetJoystickPOVs(stick, ref m_joystickPOVsCache[stick]);
+                HAL_GetJoystickButtons(stick, ref m_joystickButtonsCache[stick]);
+                HAL_GetJoystickDescriptor(stick, ref m_joystickDescriptorsCache[stick]);
             }
+
+            UpdateControlWord(true);
+
             bool lockEntered = false;
             try
             {
@@ -233,7 +239,7 @@ namespace WPILib
             {
                 if (lockEntered) m_readWriteLock.ExitWriteLock();
             }
-            lock (m_newControlDataLock)
+            lock (m_newControlDataMutex)
             {
                 m_newControlData = true;
             }
@@ -246,7 +252,7 @@ namespace WPILib
         public double GetBatteryVoltage()
         {
             int status = 0;
-            double voltage = HALPower.GetVinVoltage(ref status);
+            double voltage = HALPower.HAL_GetVinVoltage(ref status);
             CheckStatus(status);
             return voltage;
         }
@@ -327,16 +333,7 @@ namespace WPILib
                     return 0.0;
                 }
 
-                int value = m_joystickAxes[stick].axes[axis];
-
-                if (value < 0)
-                {
-                    return value / 128.0d;
-                }
-                else
-                {
-                    return value / 127.0d;
-                }
+                return m_joystickAxes[stick].axes[axis];
             }
             finally
             {
@@ -641,8 +638,11 @@ namespace WPILib
         {
             get
             {
-                HALControlWord controlWord = GetControlWord();
-                return controlWord.GetEnabled() && controlWord.GetDSAttached();
+                lock (m_controlWordMutex)
+                {
+                    UpdateControlWord(false);
+                    return m_controlWordCache.GetEnabled() && m_controlWordCache.GetDSAttached();
+                }
             }
         }
 
@@ -659,8 +659,11 @@ namespace WPILib
         {
             get
             {
-                HALControlWord controlWord = GetControlWord();
-                return controlWord.GetAutonomous();
+                lock (m_controlWordMutex)
+                {
+                    UpdateControlWord(false);
+                    return m_controlWordCache.GetAutonomous();
+                }
             }
         }
 
@@ -672,8 +675,11 @@ namespace WPILib
         {
             get
             {
-                HALControlWord controlWord = GetControlWord();
-                return controlWord.GetTest();
+                lock (m_controlWordMutex)
+                {
+                    UpdateControlWord(false);
+                    return m_controlWordCache.GetTest();
+                }
             }
         }
 
@@ -688,8 +694,11 @@ namespace WPILib
         {
             get
             {
-                HALControlWord controlWord = GetControlWord();
-                return !(controlWord.GetAutonomous() || controlWord.GetTest());
+                lock (m_controlWordMutex)
+                {
+                    UpdateControlWord(false);
+                    return !m_controlWordCache.GetAutonomous() && !m_controlWordCache.GetTest();
+                }
             }
         }
 
@@ -703,7 +712,7 @@ namespace WPILib
             get
             {
                 int status = 0;
-                bool retVal = HALGetSystemActive(ref status);
+                bool retVal = HAL_GetSystemActive(ref status);
                 CheckStatus(status);
                 return retVal;
             }
@@ -717,7 +726,7 @@ namespace WPILib
             get
             {
                 int status = 0;
-                bool retval = HALGetBrownedOut(ref status);
+                bool retval = HAL_GetBrownedOut(ref status);
                 CheckStatus(status);
                 return retval;
             }
@@ -731,7 +740,7 @@ namespace WPILib
         {
             get
             {
-                lock (m_newControlDataLock)
+                lock (m_newControlDataMutex)
                 {
                     bool result = m_newControlData;
                     m_newControlData = false;
@@ -746,9 +755,9 @@ namespace WPILib
         /// <returns>The current alliance</returns>
         public Alliance GetAlliance()
         {
-            HALAllianceStationID allianceStationID = new HALAllianceStationID();
-
-            HALGetAllianceStation(ref allianceStationID);
+            int status = 0;
+            HALAllianceStationID allianceStationID = HAL_GetAllianceStation(ref status);
+            if (status != 0) return Alliance.Invalid;
 
             switch (allianceStationID)
             {
@@ -773,8 +782,9 @@ namespace WPILib
         /// <returns>The driver station number (1, 2 or 3)</returns>
         public int GetLocation()
         {
-            HALAllianceStationID allianceStationID = new HALAllianceStationID();
-            HALGetAllianceStation(ref allianceStationID);
+            int status = 0;
+            HALAllianceStationID allianceStationID = HAL_GetAllianceStation(ref status);
+            if (status != 0) return 0;
 
             switch (allianceStationID)
             {
@@ -798,12 +808,45 @@ namespace WPILib
         /// <summary>
         /// Gets if the FMS is attached.
         /// </summary>
-        public bool FMSAttached => GetControlWord().GetFMSAttached();
+        public bool FMSAttached
+        {
+            get
+            {
+                lock (m_controlWordMutex)
+                {
+                    UpdateControlWord(false);
+                    return !m_controlWordCache.GetFMSAttached();
+                }
+            }
+        }
 
         /// <summary>
         /// Gets if the DS is attached.
         /// </summary>
-        public bool DSAtached => GetControlWord().GetDSAttached();
+        public bool DSAtached
+        {
+            get
+            {
+                lock (m_controlWordMutex)
+                {
+                    UpdateControlWord(false);
+                    return !m_controlWordCache.GetDSAttached();
+                }
+            }
+        }
+
+        private void UpdateControlWord(bool force)
+        {
+            DateTime now = DateTime.UtcNow;
+            lock (m_controlWordMutex)
+            {
+                if (now - m_lastControlWordUpdate > TimeSpan.FromMilliseconds(50) || force)
+                {
+                    HAL_GetControlWord(ref m_controlWordCache);
+                    m_lastControlWordUpdate = now;
+                } 
+            }
+        }
 
         /// <summary>
         /// Get the approximate match time.
@@ -819,9 +862,10 @@ namespace WPILib
         /// <returns>The time remaining in the current match period in seconds.</returns>
         public double GetMatchTime()
         {
-            float temp = 0;
-            HALGetMatchTime(ref temp);
-            return temp;
+            int status = 0;
+            double time = HAL_GetMatchTime(ref status);
+            if (status != 0) return 0.0;
+            return time;
         }
 
         public static void ReportWarning(string error, bool printTrace, int errorCode = 1, [CallerMemberName] string memberName = "",
@@ -871,7 +915,7 @@ namespace WPILib
                 trace = stackTrace + "\n";
             }
 
-            HALSendError(isError, code, false, error, locString, trace, true);
+            HAL_SendError(isError, code, false, error, locString, trace, true);
         }
 
         /// <summary>

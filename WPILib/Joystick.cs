@@ -1,5 +1,6 @@
 ﻿using System;
 using HAL.Base;
+using static HAL.Base.HALDriverStation;
 
 namespace WPILib
 {
@@ -338,7 +339,7 @@ namespace WPILib
                 m_leftRumble = (ushort)(value * 65535);
             else
                 m_rightRumble = (ushort)(value * 65535);
-            HAL.Base.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL_SetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         /// <summary>
@@ -349,7 +350,7 @@ namespace WPILib
         public void SetOutput(int outputNumber, bool value)
         {
             m_outputs = (m_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            HAL.Base.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL_SetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         /// <summary>
@@ -359,7 +360,7 @@ namespace WPILib
         public void SetOutputs(int value)
         {
             m_outputs = value;
-            HAL.Base.HAL.HALSetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            HAL_SetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
         }
 
         ///<inheritdoc/>
