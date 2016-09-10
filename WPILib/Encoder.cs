@@ -482,13 +482,12 @@ namespace WPILib
         /// <param name="type">The state that will cause the encoder to reset.</param>
         public void SetIndexSource(int channel, IndexingType type = IndexingType.ResetOnRisingEdge)
         {
-            int status = 0;
+            if (m_allocatedI) 
+                throw new AllocationException("Digital Input for Indexing already allocated");
 
-            bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
-            bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
-
-            HAL_SetEncoderIndexSource(m_encoder, (uint)channel, false, activeHigh, edgeSensitive, ref status);
-            CheckStatus(status);
+            IndexSource = new DigitalInput(channel);
+            m_allocatedI = true;
+            SetIndexSource(IndexSource, type);
         }
 
         /// <summary>
@@ -500,11 +499,8 @@ namespace WPILib
         {
             int status = 0;
 
-            bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
-            bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
-
-            SetEncoderIndexSource(m_encoder, (uint)source.ChannelForRouting,
-                source.AnalogTriggerForRouting, activeHigh, edgeSensitive, ref status);
+            HAL_SetEncoderIndexSource(m_encoder, source.PortHandleForRouting,
+                (HALAnalogTriggerType) source.AnalogTriggerTypeForRouting, (HALEncoderIndexingType) type, ref status);
             CheckStatus(status);
         }
 
@@ -527,7 +523,8 @@ namespace WPILib
             {
                 Table.PutNumber("Speed", GetRate());
                 Table.PutNumber("Distance", GetDistance());
-                Table.PutNumber("Distance per Tick", DistancePerPulse);
+                int status = 0;
+                Table.PutNumber("Distance per Tick", HAL_GetEncoderDistancePerPulse(m_encoder, ref status));
             }
         }
 
