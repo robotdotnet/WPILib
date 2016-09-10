@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
+using HAL.NativeLoader;
 using static HAL.Simulator.SimData;
 
 // ReSharper disable RedundantAssignment

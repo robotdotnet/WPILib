@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
+using HAL.NativeLoader;
 using HAL.Simulator;
 using HAL.Simulator.Data;
 using HAL.SimulatorHAL.Handles;

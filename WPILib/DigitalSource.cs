@@ -1,5 +1,4 @@
 ﻿using System;
-using static HAL.Base.HALDigital;
 using static WPILib.Utility;
 
 namespace WPILib

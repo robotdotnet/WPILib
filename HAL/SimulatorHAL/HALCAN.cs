@@ -1,5 +1,6 @@
 using System;
 using HAL.Base;
+using HAL.NativeLoader;
 
 // ReSharper disable RedundantAssignment
 // ReSharper disable InconsistentNaming

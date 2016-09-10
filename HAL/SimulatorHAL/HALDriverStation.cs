@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
+using HAL.NativeLoader;
 
 // ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
@@ -9,9 +10,9 @@ namespace HAL.SimulatorHAL
     {
         internal static void Initialize(IntPtr library, ILibraryLoader loader)
         {
-            Base.HALDriverStation.HAL_SetErrorData = HAL_SetErrorData;
-            Base.HALDriverStation.HAL_SendError = HAL_SendError;
-            Base.HALDriverStation.HAL_GetControlWord = HAL_GetControlWord;
+            //Base.HALDriverStation.HAL_SetErrorData = HAL_SetErrorData;
+            //Base.HALDriverStation.HAL_SendError = HAL_SendError;
+            //Base.HALDriverStation.HAL_GetControlWord = HAL_GetControlWord;
             Base.HALDriverStation.HAL_GetAllianceStation = HAL_GetAllianceStation;
             Base.HALDriverStation.HAL_GetJoystickAxes = HAL_GetJoystickAxes;
             Base.HALDriverStation.HAL_GetJoystickPOVs = HAL_GetJoystickPOVs;

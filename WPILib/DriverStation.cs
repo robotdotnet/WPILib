@@ -4,7 +4,6 @@ using System.Threading;
 using HAL.Base;
 using static WPILib.Timer;
 using static HAL.Base.HAL;
-using static HAL.Base.HALSemaphore;
 using static HAL.Base.HAL.DriverStationConstants;
 using static WPILib.Utility;
 using static HAL.Base.HALDriverStation;

@@ -1,5 +1,6 @@
 using System;
 using HAL.Base;
+using HAL.NativeLoader;
 using static HAL.Simulator.SimData;
 
 // ReSharper disable CheckNamespace

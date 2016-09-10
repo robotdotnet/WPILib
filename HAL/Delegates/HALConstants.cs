@@ -1,5 +1,5 @@
-using System;
-using System.Runtime.InteropServices;
+using HAL.NativeLoader;
+
 // ReSharper disable CheckNamespace
 namespace HAL.Base
 {
@@ -7,11 +7,18 @@ namespace HAL.Base
     {
         static HALConstants()
         {
-            HAL.Initialize();
+            NativeDelegateInitializer.SetupNativeDelegates<HALConstants>(LibraryLoaderHolder.NativeLoader);
+        }
+
+        /// <summary>
+        /// Use this to force load the definitions in the file
+        /// </summary>
+        public static void Ping()
+        {
         }
 
         public delegate int HAL_GetSystemClockTicksPerMicrosecondDelegate();
-        public static HAL_GetSystemClockTicksPerMicrosecondDelegate HAL_GetSystemClockTicksPerMicrosecond;
+        [NativeDelegate] public static HAL_GetSystemClockTicksPerMicrosecondDelegate HAL_GetSystemClockTicksPerMicrosecond;
     }
 }
 

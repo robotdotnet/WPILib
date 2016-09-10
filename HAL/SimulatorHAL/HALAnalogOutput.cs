@@ -1,5 +1,6 @@
 using System;
 using HAL.Base;
+using HAL.NativeLoader;
 using HAL.SimulatorHAL.Handles;
 using static HAL.Base.HALErrors;
 using static HAL.Base.HAL;

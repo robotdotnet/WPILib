@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using HAL.Base;
+using HAL.NativeLoader;
 
 // ReSharper disable CheckNamespace
 namespace HAL.SimulatorHAL
