@@ -59,6 +59,6 @@ namespace WPILib
         /// <summary>
         /// Disables the PWM output.
         /// </summary>
-        public void Disable() => SetRaw(PwmDisabled);
+        public void Disable() => SetDisabled();
     }
 }

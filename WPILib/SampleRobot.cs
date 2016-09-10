@@ -2,6 +2,7 @@
 using System.Threading;
 using HAL.Base;
 using static HAL.Base.HAL;
+using static HAL.Base.HALDriverStation;
 
 namespace WPILib
 {
@@ -121,7 +122,7 @@ namespace WPILib
             RobotInit();
 
             // Tell the DS that the robot is ready to be enabled.
-            HALNetworkCommunicationObserveUserProgramStarting();
+            HAL_ObserveUserProgramStarting();
 
             RobotMain();
 

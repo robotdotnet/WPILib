@@ -59,7 +59,7 @@ namespace RobotCode.Tests
             Assert.That(data.IsError, Is.True);
             Assert.That(data.ErrorCode, Is.EqualTo(10));
             Assert.That(data.IsLVCode, Is.False);
-            Assert.That(data.Details, Is.EqualTo(HAL.Base.HAL.GetHALErrorMessage(data.ErrorCode)));
+            Assert.That(data.Details, Is.EqualTo(HAL.Base.HAL.HAL_GetErrorMessage(data.ErrorCode)));
             Console.WriteLine(data.Location);
             var split = data.Location.Split('\n');
             Assert.That(split.Length, Is.EqualTo(3));

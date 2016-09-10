@@ -51,7 +51,7 @@ namespace WPILib
         {
             m_table = NetworkTable.GetTable(TableName);
             m_table.AddTableListenerEx(this, NotifyFlags.NotifyNew | NotifyFlags.NotifyImmediate);
-            HAL.Base.HAL.Report(ResourceType.kResourceType_Preferences, (byte)0);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Preferences, 0);
         }
 
         /// <summary>

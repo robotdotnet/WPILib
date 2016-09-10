@@ -2,9 +2,6 @@
 using HAL.Base;
 using WPILib.Exceptions;
 using static HAL.Base.HAL;
-using System.Text;
-using System;
-using HAL = HAL.Base.HAL;
 
 namespace WPILib
 {

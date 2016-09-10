@@ -41,7 +41,7 @@ namespace WPILib
         {
             int status = 0;
             m_counter = HAL_InitializeCounter((HALCounterMode)mode, ref m_index, ref status);
-            CheckStatus(status);
+            CheckStatusForceThrow(status);
 
             m_allocatedUpSource = false;
             m_allocatedDownSource = false;
@@ -126,12 +126,12 @@ namespace WPILib
             if (encodingType == EncodingType.K1X)
             {
                 SetUpSourceEdge(true, false);
-                SetCounterAverageSize(m_counter, 1, ref status);
+                HAL_SetCounterAverageSize(m_counter, 1, ref status);
             }
             else
             {
                 SetUpSourceEdge(true, true);
-                SetCounterAverageSize(m_counter, 2, ref status);
+                HAL_SetCounterAverageSize(m_counter, 2, ref status);
             }
             CheckStatus(status);
             SetDownSourceEdge(inverted, true);
@@ -164,12 +164,12 @@ namespace WPILib
             ClearDownSource();
 
             int status = 0;
-            FreeCounter(m_counter, ref status);
+            HAL_FreeCounter(m_counter, ref status);
             CheckStatus(status);
 
             m_upSource = null;
             m_downSource = null;
-            m_counter = IntPtr.Zero;
+            m_counter = 0;
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace WPILib
             }
             m_upSource = source;
             int status = 0;
-            SetCounterUpSource(m_counter, (uint)source.ChannelForRouting, source.AnalogTriggerForRouting, ref status);
+            HAL_SetCounterUpSource(m_counter, source.PortHandleForRouting, (HALAnalogTriggerType)source.AnalogTriggerTypeForRouting, ref status);
             CheckStatus(status);
         }
 
@@ -227,7 +227,7 @@ namespace WPILib
             if (m_upSource == null)
                 throw new Exception("Up Source must be set before setting the edge!");
             int status = 0;
-            SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            HAL_SetCounterUpSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
             CheckStatus(status);
         }
 
@@ -244,7 +244,7 @@ namespace WPILib
             m_upSource = null;
 
             int status = 0;
-            ClearCounterUpSource(m_counter, ref status);
+            HAL_ClearCounterUpSource(m_counter, ref status);
             CheckStatus(status);
         }
 
@@ -272,7 +272,7 @@ namespace WPILib
             }
             m_downSource = source;
             int status = 0;
-            SetCounterDownSource(m_counter, (uint)source.ChannelForRouting, source.AnalogTriggerForRouting, ref status);
+            HAL_SetCounterDownSource(m_counter, source.PortHandleForRouting, (HALAnalogTriggerType)source.AnalogTriggerTypeForRouting, ref status);
             CheckStatus(status);
         }
 
@@ -299,7 +299,7 @@ namespace WPILib
             if (m_downSource == null)
                 throw new Exception("Up Source must be set before setting the edge!");
             int status = 0;
-            SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
+            HAL_SetCounterDownSourceEdge(m_counter, risingEdge, fallingEdge, ref status);
             CheckStatus(status);
         }
 
@@ -316,7 +316,7 @@ namespace WPILib
             m_downSource = null;
 
             int status = 0;
-            ClearCounterDownSource(m_counter, ref status);
+            HAL_ClearCounterDownSource(m_counter, ref status);
             CheckStatus(status);
         }
 
@@ -327,7 +327,7 @@ namespace WPILib
         public void SetUpDownCounterMode()
         {
             int status = 0;
-            SetCounterUpDownMode(m_counter, ref status);
+            HAL_SetCounterUpDownMode(m_counter, ref status);
             CheckStatus(status);
         }
 
@@ -339,7 +339,7 @@ namespace WPILib
         public void SetExternalDirectionMode()
         {
             int status = 0;
-            SetCounterExternalDirectionMode(m_counter, ref status);
+            HAL_SetCounterExternalDirectionMode(m_counter, ref status);
             CheckStatus(status);
         }
 
@@ -351,7 +351,7 @@ namespace WPILib
         public void SetSemiPeriodMode(bool highSemiPeriod)
         {
             int status = 0;
-            SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
+            HAL_SetCounterSemiPeriodMode(m_counter, highSemiPeriod, ref status);
             CheckStatus(status);
         }
 
@@ -363,7 +363,7 @@ namespace WPILib
         public void SetPulseLengthMode(double threshold)
         {
             int status = 0;
-            SetCounterPulseLengthMode(m_counter, threshold, ref status);
+            HAL_SetCounterPulseLengthMode(m_counter, threshold, ref status);
             CheckStatus(status);
         }
 
@@ -371,7 +371,7 @@ namespace WPILib
         public virtual int Get()
         {
             int status = 0;
-            int value = GetCounter(m_counter, ref status);
+            int value = HAL_GetCounter(m_counter, ref status);
             CheckStatus(status);
             return value;
         }
@@ -386,7 +386,7 @@ namespace WPILib
         public virtual void Reset()
         {
             int status = 0;
-            ResetCounter(m_counter, ref status);
+            HAL_ResetCounter(m_counter, ref status);
             CheckStatus(status);
         }
 
@@ -396,7 +396,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetCounterMaxPeriod(m_counter, value, ref status);
+                HAL_SetCounterMaxPeriod(m_counter, value, ref status);
                 CheckStatus(status);
             }
         }
@@ -419,7 +419,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetCounterUpdateWhenEmpty(m_counter, value, ref status);
+                HAL_SetCounterUpdateWhenEmpty(m_counter, value, ref status);
                 CheckStatus(status);
             }
         }
@@ -428,7 +428,7 @@ namespace WPILib
         public bool GetStopped()
         {
             int status = 0;
-            bool value = GetCounterStopped(m_counter, ref status);
+            bool value = HAL_GetCounterStopped(m_counter, ref status);
             CheckStatus(status);
             return value;
         }
@@ -437,7 +437,7 @@ namespace WPILib
         public bool GetDirection()
         {
             int status = 0;
-            bool value = GetCounterDirection(m_counter, ref status);
+            bool value = HAL_GetCounterDirection(m_counter, ref status);
             CheckStatus(status);
             return value;
         }
@@ -449,7 +449,7 @@ namespace WPILib
         public void SetReverseDirection(bool direction)
         {
             int status = 0;
-            SetCounterReverseDirection(m_counter, direction, ref status);
+            HAL_SetCounterReverseDirection(m_counter, direction, ref status);
             CheckStatus(status);
         }
 
@@ -457,7 +457,7 @@ namespace WPILib
         public virtual double GetPeriod()
         {
             int status = 0;
-            double value = GetCounterPeriod(m_counter, ref status);
+            double value = HAL_GetCounterPeriod(m_counter, ref status);
             CheckStatus(status);
             return value;
         }
@@ -476,7 +476,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SetCounterSamplesToAverage(m_counter, value, ref status);
+                HAL_SetCounterSamplesToAverage(m_counter, value, ref status);
                 if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
                 {
                     throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
@@ -486,7 +486,7 @@ namespace WPILib
             get
             {
                 int status = 0;
-                int value = GetCounterSamplesToAverage(m_counter, ref status);
+                int value = HAL_GetCounterSamplesToAverage(m_counter, ref status);
                 CheckStatus(status);
                 return value;
             }

@@ -1,4 +1,5 @@
 ﻿using HAL.Base;
+using static HAL.Base.HALDriverStation;
 using static HAL.Base.HAL;
 using static System.Console;
 
@@ -61,7 +62,7 @@ namespace WPILib
             RobotInit();
 
             // Tell the DS that the robot is ready to be enabled.
-            HALNetworkCommunicationObserveUserProgramStarting();
+            HAL_ObserveUserProgramStarting();
 
             LiveWindow.LiveWindow.SetEnabled(false);
             while (true)
@@ -84,7 +85,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramDisabled();
+                        HAL_ObserveUserProgramDisabled();
                         DisabledPeriodic();
                     }
                 }
@@ -103,7 +104,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramTest();
+                        HAL_ObserveUserProgramDisabled();
                         TestPeriodic();
                     }
                 }
@@ -125,7 +126,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramAutonomous();
+                        HAL_ObserveUserProgramAutonomous();
                         AutonomousPeriodic();
                     }
                 }
@@ -144,7 +145,7 @@ namespace WPILib
                     }
                     if (NextPeriodReady)
                     {
-                        HALNetworkCommunicationObserveUserProgramTeleop();
+                        HAL_ObserveUserProgramTeleop();
                         TeleopPeriodic();
                     }
                 }

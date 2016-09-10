@@ -19,7 +19,8 @@ namespace WPILib
         {
             m_module = module;
             CheckPDPModule(m_module);
-            InitializePDP(m_module);
+            int status = 0;
+            HAL_InitializePDP(m_module, ref status);
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace WPILib
         public double GetVoltage()
         {
             int status = 0;
-            double value = GetPDPVoltage((byte)m_module, ref status);
+            double value = HAL_GetPDPVoltage((byte)m_module, ref status);
             return value;
         }
         
@@ -46,7 +47,7 @@ namespace WPILib
         public double GetTemperature()
         {
             int status = 0;
-            double value = GetPDPTemperature((byte)m_module, ref status);
+            double value = HAL_GetPDPTemperature((byte)m_module, ref status);
             return value;
         }
 
@@ -58,8 +59,8 @@ namespace WPILib
         public double GetCurrent(int channel)
         {
             int status = 0;
-            double value = GetPDPChannelCurrent((byte)m_module, (byte)channel, ref status);
             CheckPDPChannel(channel);
+            double value = HAL_GetPDPChannelCurrent((byte)m_module, (byte)channel, ref status);
             return value;
         }
 
@@ -70,7 +71,7 @@ namespace WPILib
         public double GetTotalCurrent()
         {
             int status = 0;
-            double value = GetPDPTotalCurrent((byte)m_module, ref status);
+            double value = HAL_GetPDPTotalCurrent((byte)m_module, ref status);
             return value;
         }
 
@@ -81,7 +82,7 @@ namespace WPILib
         public double GetTotalPower()
         {
             int status = 0;
-            double value = GetPDPTotalPower((byte)m_module, ref status);
+            double value = HAL_GetPDPTotalPower((byte)m_module, ref status);
             return value;
         }
 
@@ -92,7 +93,7 @@ namespace WPILib
         public double GetTotalEnergy()
         {
             int status = 0;
-            double value = GetPDPTotalEnergy((byte)m_module, ref status);
+            double value = HAL_GetPDPTotalEnergy((byte)m_module, ref status);
             return value;
         }
 
@@ -102,7 +103,7 @@ namespace WPILib
         public void ResetTotalEnergy()
         {
             int status = 0;
-            ResetPDPTotalEnergy((byte)m_module, ref status);
+            HAL_ResetPDPTotalEnergy((byte)m_module, ref status);
         }
 
 
@@ -112,7 +113,7 @@ namespace WPILib
         public void ClearStickyFaults()
         {
             int status = 0;
-            ClearPDPStickyFaults((byte)m_module, ref status);
+            HAL_ClearPDPStickyFaults((byte)m_module, ref status);
         }
 
         ///<inheritdoc />
