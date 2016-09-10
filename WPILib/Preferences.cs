@@ -42,7 +42,7 @@ namespace WPILib
         private readonly NetworkTable m_table;
 
         /// <inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
         {
             m_table.SetPersistent(key);
         }

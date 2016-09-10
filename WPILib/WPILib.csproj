@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WPILib</RootNamespace>
     <AssemblyName>WPILib</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -46,8 +46,8 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NetworkTables, Version=2016.0.2.17, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.2016.0.2.17\lib\net45\NetworkTables.dll</HintPath>
+    <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.Core.3.0.0-beta-0054\lib\net451\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -73,7 +73,6 @@
     <Compile Include="Buttons\JoystickButton.cs" />
     <Compile Include="Buttons\NetworkButton.cs" />
     <Compile Include="Buttons\Trigger.cs" />
-    <Compile Include="CameraServer.cs" />
     <Compile Include="CANJaguar.cs" />
     <Compile Include="CAN\CANInvalidBufferException.cs" />
     <Compile Include="CAN\CANJaguarVersionException.cs" />
@@ -171,7 +170,6 @@
     <Compile Include="SensorBase.cs" />
     <Compile Include="Victor.cs" />
     <Compile Include="VictorSP.cs" />
-    <Compile Include="Vision\USBCamera.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL\HAL.csproj">

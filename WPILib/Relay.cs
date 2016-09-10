@@ -293,9 +293,9 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, NetworkTables.Value value, NotifyFlags flags)
         {
-            string val = ((string)value);
+            string val = value.GetString();
             if (val.Equals("Off"))
             {
                 Set(Value.Off);

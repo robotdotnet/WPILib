@@ -308,9 +308,9 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public virtual void ValueChanged(ITable table, string key, object value, NotifyFlags flags)
+        public virtual void ValueChanged(ITable table, string key, Value value, NotifyFlags flags)
         {
-            SetSpeed((double)value);
+            SetSpeed(value.GetDouble());
         }
         ///<inheritdoc/>
         public virtual void StopLiveWindowMode()

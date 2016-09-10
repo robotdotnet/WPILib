@@ -215,11 +215,12 @@ namespace WPILib
         }
 
         /// <inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, NetworkTables.Value value, NotifyFlags flags)
         {
-            if (value.ToString().Equals("Reverse"))
+            string valString = value.GetString();
+            if (valString.Equals("Reverse"))
                 Set(Value.Reverse);
-            else if (value.ToString().Equals("Forward"))
+            else if (valString.Equals("Forward"))
                 Set(Value.Forward);
             else
                 Set(Value.Off);

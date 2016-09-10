@@ -224,9 +224,9 @@ namespace WPILib
         public void StopLiveWindowMode() => Table?.RemoveTableListener(this);
 
         /// <inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
         {
-            Set((bool)value);
+            Set(value.GetBoolean());
         }
     }
 }

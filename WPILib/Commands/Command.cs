@@ -547,9 +547,9 @@ namespace WPILib.Commands
         public virtual string SmartDashboardType => "Command";
 
         /// <inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
         {
-            if ((bool)value)
+            if (value.GetBoolean())
             {
                 Start();
             }

@@ -114,9 +114,9 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public override void ValueChanged(ITable table, string key, object value, NotifyFlags flags)
+        public override void ValueChanged(ITable table, string key, Value value, NotifyFlags flags)
         {
-            Set((double)value);
+            Set(value.GetDouble());
         }
     }
 }

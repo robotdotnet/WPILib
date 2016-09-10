@@ -2091,21 +2091,21 @@ namespace WPILib
         public string SmartDashboardType => "CANSpeedController";
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
         {
             switch (key)
             {
                 case "Enabled":
-                    if ((bool)value)
+                    if (value.GetBoolean())
                         Enable();
                     else
                         Disable();
                     break;
                 case "Value":
-                    Set((double)value);
+                    Set(value.GetDouble());
                     break;
                 case "Mode":
-                    MotorControlMode = (ControlMode)(int)(double)value;
+                    MotorControlMode = (ControlMode)(int)value.GetDouble();
                     break;
             }
             if (MotorControlMode.IsPID())
@@ -2113,16 +2113,16 @@ namespace WPILib
                 switch (key)
                 {
                     case "p":
-                        P = (double)value;
+                        P = value.GetDouble();
                         break;
                     case "i":
-                        I = (double)value;
+                        I = value.GetDouble();
                         break;
                     case "d":
-                        D = (double)value;
+                        D = value.GetDouble();
                         break;
                     case "f":
-                        F = (double)value;
+                        F = value.GetDouble();
                         break;
                 }
             }
