@@ -19,72 +19,72 @@ namespace HAL.Base
         }
 
         /*
-        public delegate int HAL_SetErrorDataDelegate([HALAllowNonBlittable]string errors, int wait_ms);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_SetErrorDataDelegate([HALAllowNonBlittable]string errors, int wait_ms);
         [NativeDelegate] public static HAL_SetErrorDataDelegate HAL_SetErrorData;
         */
         /*
-        public delegate int HAL_SendErrorDelegate([MarshalAs(UnmanagedType.I4)]bool isError, int errorCode, [MarshalAs(UnmanagedType.I4)]bool isLVCode, [HALAllowNonBlittable]string details, [HALAllowNonBlittable]string location, [HALAllowNonBlittable]string callStack, [MarshalAs(UnmanagedType.I4)]bool printMsg);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_SendErrorDelegate([MarshalAs(UnmanagedType.Bool)]bool isError, int errorCode, [MarshalAs(UnmanagedType.Bool)]bool isLVCode, [HALAllowNonBlittable]string details, [HALAllowNonBlittable]string location, [HALAllowNonBlittable]string callStack, [MarshalAs(UnmanagedType.Bool)]bool printMsg);
         [NativeDelegate] public static HAL_SendErrorDelegate HAL_SendError;
         */
         /*
-        public delegate int HAL_GetControlWordDelegate(ref HALControlWord controlWord);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetControlWordDelegate(ref HALControlWord controlWord);
         [NativeDelegate] public static HAL_GetControlWordDelegate HAL_GetControlWord;
         */
 
-        public delegate HALAllianceStationID HAL_GetAllianceStationDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate HALAllianceStationID HAL_GetAllianceStationDelegate(ref int status);
         [NativeDelegate] public static HAL_GetAllianceStationDelegate HAL_GetAllianceStation;
 
-        public delegate int HAL_GetJoystickAxesDelegate(int joystickNum, ref HALJoystickAxes axes);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickAxesDelegate(int joystickNum, ref HALJoystickAxes axes);
         [NativeDelegate] public static HAL_GetJoystickAxesDelegate HAL_GetJoystickAxes;
 
-        public delegate int HAL_GetJoystickPOVsDelegate(int joystickNum, ref HALJoystickPOVs povs);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickPOVsDelegate(int joystickNum, ref HALJoystickPOVs povs);
         [NativeDelegate] public static HAL_GetJoystickPOVsDelegate HAL_GetJoystickPOVs;
 
-        public delegate int HAL_GetJoystickButtonsDelegate(int joystickNum, ref HALJoystickButtons buttons);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickButtonsDelegate(int joystickNum, ref HALJoystickButtons buttons);
         [NativeDelegate] public static HAL_GetJoystickButtonsDelegate HAL_GetJoystickButtons;
 
-        public delegate int HAL_GetJoystickDescriptorDelegate(int joystickNum, ref HALJoystickDescriptor desc);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickDescriptorDelegate(int joystickNum, ref HALJoystickDescriptor desc);
         [NativeDelegate] public static HAL_GetJoystickDescriptorDelegate HAL_GetJoystickDescriptor;
 
         [return: MarshalAs(UnmanagedType.I4)]
-        public delegate bool HAL_GetJoystickIsXboxDelegate(int joystickNum);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetJoystickIsXboxDelegate(int joystickNum);
         [NativeDelegate] public static HAL_GetJoystickIsXboxDelegate HAL_GetJoystickIsXbox;
 
-        public delegate int HAL_GetJoystickTypeDelegate(int joystickNum);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickTypeDelegate(int joystickNum);
         [NativeDelegate] public static HAL_GetJoystickTypeDelegate HAL_GetJoystickType;
 
         [HALAllowNonBlittable]
-        public delegate string HAL_GetJoystickNameDelegate(int joystickNum);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate string HAL_GetJoystickNameDelegate(int joystickNum);
         [NativeDelegate] public static HAL_GetJoystickNameDelegate HAL_GetJoystickName;
 
-        public delegate int HAL_GetJoystickAxisTypeDelegate(int joystickNum, int axis);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickAxisTypeDelegate(int joystickNum, int axis);
         [NativeDelegate] public static HAL_GetJoystickAxisTypeDelegate HAL_GetJoystickAxisType;
 
-        public delegate int HAL_SetJoystickOutputsDelegate(int joystickNum, long outputs, int leftRumble, int rightRumble);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_SetJoystickOutputsDelegate(int joystickNum, long outputs, int leftRumble, int rightRumble);
         [NativeDelegate] public static HAL_SetJoystickOutputsDelegate HAL_SetJoystickOutputs;
 
-        public delegate double HAL_GetMatchTimeDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate double HAL_GetMatchTimeDelegate(ref int status);
         [NativeDelegate] public static HAL_GetMatchTimeDelegate HAL_GetMatchTime;
 
-        public delegate void HAL_WaitForDSDataDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_WaitForDSDataDelegate();
         [NativeDelegate] public static HAL_WaitForDSDataDelegate HAL_WaitForDSData;
 
-        public delegate void HAL_InitializeDriverStationDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_InitializeDriverStationDelegate();
         [NativeDelegate] public static HAL_InitializeDriverStationDelegate HAL_InitializeDriverStation;
 
-        public delegate void HAL_ObserveUserProgramStartingDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_ObserveUserProgramStartingDelegate();
         [NativeDelegate] public static HAL_ObserveUserProgramStartingDelegate HAL_ObserveUserProgramStarting;
 
-        public delegate void HAL_ObserveUserProgramDisabledDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_ObserveUserProgramDisabledDelegate();
         [NativeDelegate] public static HAL_ObserveUserProgramDisabledDelegate HAL_ObserveUserProgramDisabled;
 
-        public delegate void HAL_ObserveUserProgramAutonomousDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_ObserveUserProgramAutonomousDelegate();
         [NativeDelegate] public static HAL_ObserveUserProgramAutonomousDelegate HAL_ObserveUserProgramAutonomous;
 
-        public delegate void HAL_ObserveUserProgramTeleopDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_ObserveUserProgramTeleopDelegate();
         [NativeDelegate] public static HAL_ObserveUserProgramTeleopDelegate HAL_ObserveUserProgramTeleop;
 
-        public delegate void HAL_ObserveUserProgramTestDelegate();
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_ObserveUserProgramTestDelegate();
         [NativeDelegate] public static HAL_ObserveUserProgramTestDelegate HAL_ObserveUserProgramTest;
 
 

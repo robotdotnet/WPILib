@@ -27,7 +27,7 @@ namespace HAL.Base
 
         /*
         [HALAllowNonBlittable]
-        public delegate long HAL_ReportDelegate(int resource, int instanceNumber, int context, [HALAllowNonBlittable]string feature = null);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate long HAL_ReportDelegate(int resource, int instanceNumber, int context, [HALAllowNonBlittable]string feature = null);
         public static HAL_ReportDelegate HAL_Report;
         */
         /*
@@ -36,41 +36,41 @@ namespace HAL.Base
         private static HAL_GetErrorMessageDelegate HAL_GetErrorMessageNative;
         */
 
-        public delegate int HAL_GetPortDelegate(int pin);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetPortDelegate(int pin);
         [NativeDelegate] public static HAL_GetPortDelegate HAL_GetPort;
 
-        public delegate int HAL_GetPortWithModuleDelegate(int module, int pin);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetPortWithModuleDelegate(int module, int pin);
         [NativeDelegate]
         public static HAL_GetPortWithModuleDelegate HAL_GetPortWithModule;
 
-        public delegate int HAL_GetFPGAVersionDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetFPGAVersionDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetFPGAVersionDelegate HAL_GetFPGAVersion;
 
-        public delegate long HAL_GetFPGARevisionDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate long HAL_GetFPGARevisionDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetFPGARevisionDelegate HAL_GetFPGARevision;
 
-        public delegate ulong HAL_GetFPGATimeDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate ulong HAL_GetFPGATimeDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetFPGATimeDelegate HAL_GetFPGATime;
 
         [return: MarshalAs(UnmanagedType.I4)]
-        public delegate bool HAL_GetFPGAButtonDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetFPGAButtonDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetFPGAButtonDelegate HAL_GetFPGAButton;
 
         [return: MarshalAs(UnmanagedType.I4)]
-        public delegate bool HAL_GetSystemActiveDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetSystemActiveDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetSystemActiveDelegate HAL_GetSystemActive;
 
         [return: MarshalAs(UnmanagedType.I4)]
-        public delegate bool HAL_GetBrownedOutDelegate(ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetBrownedOutDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetBrownedOutDelegate HAL_GetBrownedOut;
 
-        public delegate int HAL_InitializeDelegate(int mode);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_InitializeDelegate(int mode);
         [NativeDelegate]
         public static HAL_InitializeDelegate HAL_Initialize;
 
