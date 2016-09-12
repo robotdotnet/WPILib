@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL.Simulator.Data;
-using HAL.SimulatorHAL;
-using static HAL.SimulatorHAL.HALPorts;
+using static HAL.Base.HALPorts;
 
 
 namespace HAL.Simulator
@@ -300,32 +299,32 @@ namespace HAL.Simulator
 
         static SimData()
         {
-            for (int i = 0; i < kNumAccumulators; i++)
+            for (int i = 0; i < HAL_GetNumAccumulators(); i++)
             {
                 AnalogGyro.Add(new HALSimAnalogGyroData(i));
             }
 
-            for (int i = 0; i < kNumAnalogOutputs; i++)
+            for (int i = 0; i < HAL_GetNumAnalogOutputs(); i++)
             {
                 AnalogOut.Add(new HALSimAnalogOutData(i));
             }
 
-            for (int i = 0; i < kNumAnalogInputs; i++)
+            for (int i = 0; i < HAL_GetNumAnalogInputs(); i++)
             {
                 AnalogIn.Add(new HALSimAnalogInData(i));
             }
 
-            for (int i = 0; i < kNumAnalogTriggers; i++)
+            for (int i = 0; i < HAL_GetNumAnalogTriggers(); i++)
             {
                 AnalogTrigger.Add(new AnalogTriggerData());
             }
 
-            for (int i = 0; i < kNumDigitalPins; i++)
+            for (int i = 0; i < HAL_GetNumDigitalPins(); i++)
             {
                 DIO.Add(new HALSimDIOData(i));
             }
 
-            for (int i = 0; i < kNumDigitalPWMOutputs; i++)
+            for (int i = 0; i < HAL_GetNumDigitalPWMOutputs(); i++)
             {
                 DigitalPWM.Add(new HALSimDigitalPWMData(i));
             }
@@ -335,7 +334,7 @@ namespace HAL.Simulator
                 //DigitalGlitchFilter.Add(new DigitalGlitchFilterData());
             }
 
-            for (int i = 0; i < kNumPWMPins; i++)
+            for (int i = 0; i < HAL_GetNumPWMPins(); i++)
             {
                 PWM.Add(new HALSimPWMData(i));
             }

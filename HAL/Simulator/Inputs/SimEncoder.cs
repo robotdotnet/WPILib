@@ -15,6 +15,19 @@ namespace HAL.Simulator.Inputs
 
     public class SimEncoder : IServoFeedback
     {
+        public void SetPosition(double value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetRate(double rate)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    /*
+    public class SimEncoder : IServoFeedback
+    {
         internal EncoderData EncoderData { get; private set; } = null;
 
         public bool IsEncoder { get; private set; } = true;
@@ -38,7 +51,7 @@ namespace HAL.Simulator.Inputs
             for (int i = 0; i < 4; i++)
             {
                 var encoder = SimData.Encoder[i];
-                if (!encoder.Initialized)
+                if (!encoder.GetInitialized())
                     continue;
                 if (encoder.Config != null)
                 {
@@ -109,4 +122,5 @@ namespace HAL.Simulator.Inputs
             EncoderData.Period = output;
         }
     }
+    */
 }

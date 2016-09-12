@@ -7,7 +7,7 @@ namespace HAL.Simulator.Outputs
     /// </summary>
     public class SimPWMController : ISimSpeedController
     {
-        readonly PWMData PWMData = null;
+        readonly HALSimPWMData PWMData = null;
 
         /// <summary>
         /// Creates a new PWM Speed controller for the Sim to use.
@@ -21,7 +21,8 @@ namespace HAL.Simulator.Outputs
         /// <inheritdoc/>
         public double Get()
         {
-            return PWMData.Value;
+            // TODO Fix this, We need to grab the right value
+            return PWMData.GetSpeed();
         }
     }
 }
