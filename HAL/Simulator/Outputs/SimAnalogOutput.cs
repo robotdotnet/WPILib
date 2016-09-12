@@ -7,7 +7,7 @@ namespace HAL.Simulator.Outputs
     /// </summary>
     public class SimAnalogOutput
     {
-        readonly AnalogOutData m_analogOutData;
+        readonly HALSimAnalogOutData m_analogOutData;
 
         /// <summary>
         /// Creates a new Sim Analog Output reader.
@@ -24,7 +24,7 @@ namespace HAL.Simulator.Outputs
         /// <returns>The voltage commanded by the robot.</returns>
         public double Get()
         {
-            return m_analogOutData.Voltage;
+            return m_analogOutData.GetVoltage();
         }
     }
 }
