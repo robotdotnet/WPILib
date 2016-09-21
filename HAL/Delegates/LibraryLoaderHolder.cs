@@ -54,8 +54,8 @@ namespace HAL.Base
                     string[] commandArgs = Environment.GetCommandLineArgs();
                     foreach (var commandArg in commandArgs)
                     {
-                        //search for a line with the prefix "-ntcore:"
-                        if (commandArg.ToLower().Contains("-ntcore:"))
+                        //search for a line with the prefix "-wpilib:"
+                        if (commandArg.ToLower().Contains("-wpilib:"))
                         {
                             //Split line to get the library.
                             int splitLoc = commandArg.IndexOf(':');

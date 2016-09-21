@@ -7,6 +7,7 @@ using HAL.Simulator.Data;
 
 namespace HAL.Simulator.Outputs
 {
+    /*
     /// <summary>
     /// Class for interfacing with Solenoids in the simulator.
     /// </summary>
@@ -33,4 +34,5 @@ namespace HAL.Simulator.Outputs
             return m_solenoidData.Value;
         }
     }
+    */
 }

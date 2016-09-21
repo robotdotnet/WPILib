@@ -81,7 +81,7 @@ namespace HAL.Simulator
             {
             }
         }
-
+        /*
         /// <summary>
         /// Waits for the robot program to say it has started. In the 2 primary robot bases, this is called when RobotInit returns.
         /// </summary>
@@ -97,5 +97,6 @@ namespace HAL.Simulator
                 Thread.Sleep(500);
             }
         }
+        */
     }
 }

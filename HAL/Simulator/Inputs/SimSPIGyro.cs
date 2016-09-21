@@ -3,6 +3,7 @@ using HAL.Simulator.Data;
 
 namespace HAL.Simulator.Inputs
 {
+    /*
     /// <summary>
     /// The SPI ports available to the simulator
     /// </summary>
@@ -39,4 +40,5 @@ namespace HAL.Simulator.Inputs
             data.AccumulatorCount = BitConverter.ToUInt32(BitConverter.GetBytes((float)rate), 0);
         }
     }
+    */
 }

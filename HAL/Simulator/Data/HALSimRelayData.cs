@@ -24,46 +24,82 @@ namespace HAL.Simulator.Data
         internal static HALSIM_ResetRelayDataDelegate HALSIM_ResetRelayData;
         public void ResetData()
         {
-            m_initializedCallbacks.Clear();
+            m_initializedForwardCallbacks.Clear();
+            m_initializedReverseCallbacks.Clear();
             m_forwardCallbacks.Clear();
             m_reverseCallbacks.Clear();
             HALSIM_ResetRelayData(Index);
         }
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate int HALSIM_RegisterRelayInitializedCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
+        internal delegate int HALSIM_RegisterRelayInitializedForwardCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
-        internal static HALSIM_RegisterRelayInitializedCallbackDelegate HALSIM_RegisterRelayInitializedCallback;
+        internal static HALSIM_RegisterRelayInitializedForwardCallbackDelegate HALSIM_RegisterRelayInitializedForwardCallback;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void HALSIM_CancelRelayInitializedCallbackDelegate(int index, int uid);
+        internal delegate void HALSIM_CancelRelayInitializedForwardCallbackDelegate(int index, int uid);
         [NativeDelegate]
-        internal static HALSIM_CancelRelayInitializedCallbackDelegate HALSIM_CancelRelayInitializedCallback;
+        internal static HALSIM_CancelRelayInitializedForwardCallbackDelegate HALSIM_CancelRelayInitializedForwardCallback;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate bool HALSIM_GetRelayInitializedDelegate(int index);
+        internal delegate bool HALSIM_GetRelayInitializedForwardDelegate(int index);
         [NativeDelegate]
-        internal static HALSIM_GetRelayInitializedDelegate HALSIM_GetRelayInitialized;
-        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRelayInitializedCallback(NotifyCallback callback, bool initialNotify)
+        internal static HALSIM_GetRelayInitializedForwardDelegate HALSIM_GetRelayInitializedForward;
+        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedForwardCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
+        public int RegisterRelayInitializedForwardCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
                 callback?.Invoke(varName, ref value);
             };
-            int uid = HALSIM_RegisterRelayInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
-            if (!m_initializedCallbacks.TryAdd(uid, modCallback))
+            int uid = HALSIM_RegisterRelayInitializedForwardCallback(Index, modCallback, IntPtr.Zero, initialNotify);
+            if (!m_initializedForwardCallbacks.TryAdd(uid, modCallback))
             {
-                HALSIM_CancelRelayInitializedCallback(Index, uid);
+                HALSIM_CancelRelayInitializedForwardCallback(Index, uid);
                 throw new ArgumentException("Key cannot be added multiple times to the dictionary");
             }
             return uid;
         }
-        public void CancelRelayInitializedCallback(int uid)
+        public void CancelRelayInitializedForwardCallback(int uid)
         {
-            HALSIM_CancelRelayInitializedCallback(Index, uid);
+            HALSIM_CancelRelayInitializedForwardCallback(Index, uid);
             HAL_NotifyCallback cb = null;
-            m_initializedCallbacks.TryRemove(uid, out cb);
+            m_initializedForwardCallbacks.TryRemove(uid, out cb);
         }
-        public bool GetInitialized() => HALSIM_GetRelayInitialized(Index);
+        public bool GetInitializedForward() => HALSIM_GetRelayInitializedForward(Index);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate int HALSIM_RegisterRelayInitializedReverseCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
+        [NativeDelegate]
+        internal static HALSIM_RegisterRelayInitializedReverseCallbackDelegate HALSIM_RegisterRelayInitializedReverseCallback;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_CancelRelayInitializedReverseCallbackDelegate(int index, int uid);
+        [NativeDelegate]
+        internal static HALSIM_CancelRelayInitializedReverseCallbackDelegate HALSIM_CancelRelayInitializedReverseCallback;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate bool HALSIM_GetRelayInitializedReverseDelegate(int index);
+        [NativeDelegate]
+        internal static HALSIM_GetRelayInitializedReverseDelegate HALSIM_GetRelayInitializedReverse;
+        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedReverseCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
+        public int RegisterRelayInitializedReverseCallback(NotifyCallback callback, bool initialNotify)
+        {
+            HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
+            {
+                string varName = ReadUTF8String(namePtr);
+                callback?.Invoke(varName, ref value);
+            };
+            int uid = HALSIM_RegisterRelayInitializedReverseCallback(Index, modCallback, IntPtr.Zero, initialNotify);
+            if (!m_initializedReverseCallbacks.TryAdd(uid, modCallback))
+            {
+                HALSIM_CancelRelayInitializedReverseCallback(Index, uid);
+                throw new ArgumentException("Key cannot be added multiple times to the dictionary");
+            }
+            return uid;
+        }
+        public void CancelRelayInitializedReverseCallback(int uid)
+        {
+            HALSIM_CancelRelayInitializedReverseCallback(Index, uid);
+            HAL_NotifyCallback cb = null;
+            m_initializedReverseCallbacks.TryRemove(uid, out cb);
+        }
+        public bool GetInitializedReverse() => HALSIM_GetRelayInitializedReverse(Index);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterRelayForwardCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]

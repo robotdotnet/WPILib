@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using HAL.Base;
 using HAL.NativeLoader;
 using static HAL.Base.HAL;
+
 namespace HAL.Simulator.Data
 {
     public class HALSimAccelerometerData

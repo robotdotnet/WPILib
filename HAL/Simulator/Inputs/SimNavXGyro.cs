@@ -2,6 +2,7 @@
 
 namespace HAL.Simulator.Inputs
 {
+    /*
     public class SimNavXGyro : IServoFeedback
     {
         private readonly NavXData data = SimData.NavXData;
@@ -16,4 +17,5 @@ namespace HAL.Simulator.Inputs
             data.GyroRateYaw = rate;
         }
     }
+    */
 }

@@ -63,7 +63,7 @@ namespace WPILib.Extras.NavX
 
         public void ZeroYaw()
         {
-            SimData.NavXData.GyroAngleYaw = 0;
+            //SimData.NavXData.GyroAngleYaw = 0;
         }
 
 
@@ -136,7 +136,7 @@ namespace WPILib.Extras.NavX
 
         private void GetCurrentData()
         {
-
+/*
             ahrspos_update.op_status = 4;
             ahrspos_update.selftest_status = 135;
             ahrspos_update.cal_status = 6;
@@ -191,6 +191,7 @@ namespace WPILib.Extras.NavX
 
             byte_count += 108;
             update_count++;
+            */
         }
 
         private const float DevUnitsMax = 32768.0f;
