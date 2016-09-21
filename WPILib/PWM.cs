@@ -60,7 +60,7 @@ namespace WPILib
 
             int status = 0;
             m_handle = HAL_InitializePWMPort(HAL_GetPort(channel), ref status);
-            CheckStatusRange(status, 0, HAL_GetNumPWMPins(), channel);
+            CheckStatusRange(status, 0, HAL_GetNumPWMChannels(), channel);
 
             SetDisabled();
 

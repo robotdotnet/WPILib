@@ -70,7 +70,7 @@ namespace HAL.Base
                         }
                     }
 
-                    const string resourceRoot = "FRC.NetworkTables.Core.NativeLibraries.";
+                    const string resourceRoot = "HAL.AthenaHAL.Native.";
 
                     if (s_useCommandLineFile)
                     {
@@ -81,7 +81,7 @@ namespace HAL.Base
                     {
                         s_nativeLoader = new NativeLibraryLoader();
                         // RoboRIO
-                        s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(), resourceRoot + "roborio.libntcore.so");
+                        s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(), resourceRoot + "roborio.libhalathena.so");
                         s_libraryLocation = s_nativeLoader.LibraryLocation;
                     }
                     else
@@ -91,6 +91,7 @@ namespace HAL.Base
                             resourceRoot + "x86.ntcore.dll");
                         s_nativeLoader.AddLibraryLocation(OsType.Windows64,
                             resourceRoot + "amd64.ntcore.dll");
+                        /*
                         s_nativeLoader.AddLibraryLocation(OsType.Linux32,
                             resourceRoot + "x86.libntcore.so");
                         s_nativeLoader.AddLibraryLocation(OsType.Linux64,
@@ -99,6 +100,8 @@ namespace HAL.Base
                             resourceRoot + "x86.libntcore.dylib");
                         s_nativeLoader.AddLibraryLocation(OsType.MacOs64,
                             resourceRoot + "amd64.libntcore.dylib");
+
+    */
 
                         s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>();
                         s_libraryLocation = s_nativeLoader.LibraryLocation;

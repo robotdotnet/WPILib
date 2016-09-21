@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimRoboRioData
     {
+        public static void Ping() { }
+
         static HALSimRoboRioData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimRoboRioData>(LibraryLoaderHolder.NativeLoader);

@@ -16,6 +16,8 @@ namespace HAL.Simulator.Data
 
     public class HALSimAnalogTriggerData
     {
+        public static void Ping() { }
+
         static HALSimAnalogTriggerData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimAnalogTriggerData>(LibraryLoaderHolder.NativeLoader);

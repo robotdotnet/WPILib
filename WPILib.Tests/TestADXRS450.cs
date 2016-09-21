@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace WPILib.Tests
 {
+    /*
     [TestFixture(SPI.Port.MXP)]
     [TestFixture(SPI.Port.OnboardCS0)]
     [TestFixture(SPI.Port.OnboardCS1)]
@@ -23,7 +24,7 @@ namespace WPILib.Tests
             started = true;
         }
 
-        private SPIAccumulatorData GetData()
+        private HALSim GetData()
         {
             return SimData.SPIAccumulator[m_port];
         }
@@ -84,4 +85,5 @@ namespace WPILib.Tests
             Assert.That(m_gyro.SmartDashboardType, Is.EqualTo("Gyro"));
         }
     }
+    */
 }

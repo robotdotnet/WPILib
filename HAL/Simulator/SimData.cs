@@ -11,6 +11,23 @@ namespace HAL.Simulator
     /// </summary>
     public class SimData
     {
+        public static void PingAll()
+        {
+            HALSimAccelerometerData.Ping();
+            HALSimAnalogGyroData.Ping();
+            HALSimAnalogInData.Ping();
+            HALSimAnalogOutData.Ping();
+            HALSimAnalogTriggerData.Ping();
+            HALSimDigitalPWMData.Ping();
+            HALSimDIOData.Ping();
+            HALSimEncoderData.Ping();
+            HALSimPCMData.Ping();
+            HALSimPWMData.Ping();
+            HALSimRelayData.Ping();
+            HALSimRoboRioData.Ping();
+            HALSimSPIAccelerometerData.Ping();
+        }
+
         /// <summary>
         /// Gets the accelerometer data.
         /// </summary>
@@ -28,6 +45,10 @@ namespace HAL.Simulator
         /// The analog out data.
         /// </value>
         public static List<HALSimAnalogOutData> AnalogOut { get; } = new List<HALSimAnalogOutData>();
+
+        public static List<HALSimPCMData> PCM { get; } = new List<HALSimPCMData>();
+        
+        public static List<HALSimPDPData> PDP { get; } = new List<HALSimPDPData>();
 
         /// <summary>
         /// Gets the analog in dada.
@@ -292,6 +313,16 @@ namespace HAL.Simulator
         */
         static SimData()
         {
+            for (int i = 0; i < HAL_GetNumPCMModules(); i++)
+            {
+                PCM.Add(new HALSimPCMData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumPDPModules(); i++)
+            {
+                PDP.Add(new HALSimPDPData(i));
+            }
+
             for (int i = 0; i < HAL_GetNumAccumulators(); i++)
             {
                 AnalogGyro.Add(new HALSimAnalogGyroData(i));
@@ -312,7 +343,7 @@ namespace HAL.Simulator
                 AnalogTrigger.Add(new HALSimAnalogTriggerData(i));
             }
 
-            for (int i = 0; i < HAL_GetNumDigitalPins(); i++)
+            for (int i = 0; i < HAL_GetNumDigitalChannels(); i++)
             {
                 DIO.Add(new HALSimDIOData(i));
             }
@@ -327,7 +358,7 @@ namespace HAL.Simulator
                 //DigitalGlitchFilter.Add(new DigitalGlitchFilterData());
             }
 
-            for (int i = 0; i < HAL_GetNumPWMPins(); i++)
+            for (int i = 0; i < HAL_GetNumPWMChannels(); i++)
             {
                 PWM.Add(new HALSimPWMData(i));
             }
@@ -369,6 +400,15 @@ namespace HAL.Simulator
         /// <param name="resetDS">If true, resets the DS data sempahore.</param>
         public static void ResetHALData(bool resetDS)
         {
+            foreach (var halSimPCMData in PCM)
+            {
+                halSimPCMData.ResetData();
+            }
+
+            foreach (var halSimPDPData in PDP)
+            {
+                halSimPDPData.ResetData();
+            }
             Accelerometer.ResetData();
             foreach (var analogGyroData in AnalogGyro)
             {

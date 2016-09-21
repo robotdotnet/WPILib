@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimDIOData
     {
+        public static void Ping() { }
+
         static HALSimDIOData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimDIOData>(LibraryLoaderHolder.NativeLoader);

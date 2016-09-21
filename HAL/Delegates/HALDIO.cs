@@ -42,22 +42,22 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetDIODelegate(int dio_port_handle, [MarshalAs(UnmanagedType.Bool)]bool value, ref int status);
         [NativeDelegate] public static HAL_SetDIODelegate HAL_SetDIO;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetDIODelegate(int dio_port_handle, ref int status);
         [NativeDelegate] public static HAL_GetDIODelegate HAL_GetDIO;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetDIODirectionDelegate(int dio_port_handle, ref int status);
         [NativeDelegate] public static HAL_GetDIODirectionDelegate HAL_GetDIODirection;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_PulseDelegate(int dio_port_handle, double pulseLength, ref int status);
         [NativeDelegate] public static HAL_PulseDelegate HAL_Pulse;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_IsPulsingDelegate(int dio_port_handle, ref int status);
         [NativeDelegate] public static HAL_IsPulsingDelegate HAL_IsPulsing;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_IsAnyPulsingDelegate(ref int status);
         [NativeDelegate] public static HAL_IsAnyPulsingDelegate HAL_IsAnyPulsing;
 

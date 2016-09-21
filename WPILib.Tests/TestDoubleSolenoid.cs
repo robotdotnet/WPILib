@@ -27,11 +27,6 @@ namespace WPILib.Tests
             return new DoubleSolenoid(m_module, 0,1);
         }
 
-        private IReadOnlyList<SolenoidData> GetSolenoids()
-        {
-            return SimData.GetPCM(m_module).Solenoids;
-        }
-
         [Test]
         public void TestDoubleSolenoidCreateDefaultModule()
         {

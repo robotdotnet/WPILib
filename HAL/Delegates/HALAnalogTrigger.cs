@@ -6,6 +6,8 @@ namespace HAL.Base
 {
     public partial class HALAnalogTrigger
     {
+        public static void Ping() { }
+
         static HALAnalogTrigger()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALAnalogTrigger>(LibraryLoaderHolder.NativeLoader);
@@ -29,15 +31,15 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetAnalogTriggerFilteredDelegate(int analog_trigger_handle, [MarshalAs(UnmanagedType.Bool)]bool useFilteredValue, ref int status);
         [NativeDelegate] public static HAL_SetAnalogTriggerFilteredDelegate HAL_SetAnalogTriggerFiltered;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetAnalogTriggerInWindowDelegate(int analog_trigger_handle, ref int status);
         [NativeDelegate] public static HAL_GetAnalogTriggerInWindowDelegate HAL_GetAnalogTriggerInWindow;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetAnalogTriggerTriggerStateDelegate(int analog_trigger_handle, ref int status);
         [NativeDelegate] public static HAL_GetAnalogTriggerTriggerStateDelegate HAL_GetAnalogTriggerTriggerState;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetAnalogTriggerOutputDelegate(int analog_trigger_handle, HALAnalogTriggerType type, ref int status);
         [NativeDelegate] public static HAL_GetAnalogTriggerOutputDelegate HAL_GetAnalogTriggerOutput;
     }

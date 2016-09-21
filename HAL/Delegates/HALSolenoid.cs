@@ -24,15 +24,15 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_FreeSolenoidPortDelegate(int solenoid_port_handle);
         [NativeDelegate] public static HAL_FreeSolenoidPortDelegate HAL_FreeSolenoidPort;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckSolenoidModuleDelegate(int module);
         [NativeDelegate] public static HAL_CheckSolenoidModuleDelegate HAL_CheckSolenoidModule;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckSolenoidPinDelegate(int pin);
         [NativeDelegate] public static HAL_CheckSolenoidPinDelegate HAL_CheckSolenoidPin;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetSolenoidDelegate(int solenoid_port_handle, ref int status);
         [NativeDelegate] public static HAL_GetSolenoidDelegate HAL_GetSolenoid;
 
@@ -45,11 +45,11 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetPCMSolenoidBlackListDelegate(int module, ref int status);
         [NativeDelegate] public static HAL_GetPCMSolenoidBlackListDelegate HAL_GetPCMSolenoidBlackList;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetPCMSolenoidVoltageStickyFaultDelegate(int module, ref int status);
         [NativeDelegate] public static HAL_GetPCMSolenoidVoltageStickyFaultDelegate HAL_GetPCMSolenoidVoltageStickyFault;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetPCMSolenoidVoltageFaultDelegate(int module, ref int status);
         [NativeDelegate] public static HAL_GetPCMSolenoidVoltageFaultDelegate HAL_GetPCMSolenoidVoltageFault;
 

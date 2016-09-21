@@ -39,11 +39,11 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumPWMHeadersDelegate();
         [NativeDelegate] public static HAL_GetNumPWMHeadersDelegate HAL_GetNumPWMHeaders;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumDigitalPinsDelegate();
-        [NativeDelegate] public static HAL_GetNumDigitalPinsDelegate HAL_GetNumDigitalPins;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumDigitalChannelsDelegate();
+        [NativeDelegate] public static HAL_GetNumDigitalChannelsDelegate HAL_GetNumDigitalChannels;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumPWMPinsDelegate();
-        [NativeDelegate] public static HAL_GetNumPWMPinsDelegate HAL_GetNumPWMPins;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumPWMChannelsDelegate();
+        [NativeDelegate] public static HAL_GetNumPWMChannelsDelegate HAL_GetNumPWMChannels;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumDigitalPWMOutputsDelegate();
         [NativeDelegate] public static HAL_GetNumDigitalPWMOutputsDelegate HAL_GetNumDigitalPWMOutputs;
@@ -54,8 +54,8 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumInterruptsDelegate();
         [NativeDelegate] public static HAL_GetNumInterruptsDelegate HAL_GetNumInterrupts;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumRelayPinsDelegate();
-        [NativeDelegate] public static HAL_GetNumRelayPinsDelegate HAL_GetNumRelayPins;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumRelayChannelsDelegate();
+        [NativeDelegate] public static HAL_GetNumRelayChannelsDelegate HAL_GetNumRelayChannels;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumRelayHeadersDelegate();
         [NativeDelegate] public static HAL_GetNumRelayHeadersDelegate HAL_GetNumRelayHeaders;
@@ -63,8 +63,8 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumPCMModulesDelegate();
         [NativeDelegate] public static HAL_GetNumPCMModulesDelegate HAL_GetNumPCMModules;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumSolenoidPinsDelegate();
-        [NativeDelegate] public static HAL_GetNumSolenoidPinsDelegate HAL_GetNumSolenoidPins;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumSolenoidChannelsDelegate();
+        [NativeDelegate] public static HAL_GetNumSolenoidChannelsDelegate HAL_GetNumSolenoidChannels;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumPDPModulesDelegate();
         [NativeDelegate] public static HAL_GetNumPDPModulesDelegate HAL_GetNumPDPModules;

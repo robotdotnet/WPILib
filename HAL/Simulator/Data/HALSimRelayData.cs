@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimRelayData
     {
+        public static void Ping() { }
+
         static HALSimRelayData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimRelayData>(LibraryLoaderHolder.NativeLoader);

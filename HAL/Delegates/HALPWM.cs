@@ -24,7 +24,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_FreePWMPortDelegate(int pwm_port_handle, ref int status);
         [NativeDelegate] public static HAL_FreePWMPortDelegate HAL_FreePWMPort;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckPWMChannelDelegate(int pin);
         [NativeDelegate] public static HAL_CheckPWMChannelDelegate HAL_CheckPWMChannel;
 
@@ -40,7 +40,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetPWMEliminateDeadbandDelegate(int pwm_port_handle, [MarshalAs(UnmanagedType.Bool)]bool eliminateDeadband, ref int status);
         [NativeDelegate] public static HAL_SetPWMEliminateDeadbandDelegate HAL_SetPWMEliminateDeadband;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetPWMEliminateDeadbandDelegate(int pwm_port_handle, ref int status);
         [NativeDelegate] public static HAL_GetPWMEliminateDeadbandDelegate HAL_GetPWMEliminateDeadband;
 

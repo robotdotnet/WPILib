@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimAnalogOutData
     {
+        public static void Ping() { }
+
         static HALSimAnalogOutData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimAnalogOutData>(LibraryLoaderHolder.NativeLoader);

@@ -21,7 +21,7 @@ namespace WPILib
 
         private readonly object m_handlerMutex = new object();
 
-        private readonly Action<ulong, int> process;
+        private readonly HAL_NotifierProcess process;
 
         /// <summary>
         /// Notify is called by the HAL Layer. We simply need to pass it through to

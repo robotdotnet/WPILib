@@ -21,7 +21,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_InitializePDPDelegate(int module, ref int status);
         [NativeDelegate] public static HAL_InitializePDPDelegate HAL_InitializePDP;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckPDPModuleDelegate(int module);
         [NativeDelegate] public static HAL_CheckPDPModuleDelegate HAL_CheckPDPModule;
 

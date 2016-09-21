@@ -6,6 +6,8 @@ namespace HAL.Base
 {
     public partial class HALAnalogGyro
     {
+        public static void Ping() { }
+
         static HALAnalogGyro()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALAnalogGyro>(LibraryLoaderHolder.NativeLoader);

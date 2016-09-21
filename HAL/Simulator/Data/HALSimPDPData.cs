@@ -11,6 +11,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimPDPData
     {
+        public static void Ping() { }
+
         static HALSimPDPData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimPDPData>(LibraryLoaderHolder.NativeLoader);

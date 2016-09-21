@@ -5,6 +5,8 @@ namespace HAL.Base
 {
     public partial class HALCAN
     {
+        public static void Ping() { }
+
         static HALCAN()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALCAN>(LibraryLoaderHolder.NativeLoader);

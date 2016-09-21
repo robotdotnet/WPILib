@@ -30,7 +30,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate double HAL_GetUserCurrent6VDelegate(ref int status);
         [NativeDelegate] public static HAL_GetUserCurrent6VDelegate HAL_GetUserCurrent6V;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetUserActive6VDelegate(ref int status);
         [NativeDelegate] public static HAL_GetUserActive6VDelegate HAL_GetUserActive6V;
 
@@ -43,7 +43,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate double HAL_GetUserCurrent5VDelegate(ref int status);
         [NativeDelegate] public static HAL_GetUserCurrent5VDelegate HAL_GetUserCurrent5V;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetUserActive5VDelegate(ref int status);
         [NativeDelegate] public static HAL_GetUserActive5VDelegate HAL_GetUserActive5V;
 
@@ -56,7 +56,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate double HAL_GetUserCurrent3V3Delegate(ref int status);
         [NativeDelegate] public static HAL_GetUserCurrent3V3Delegate HAL_GetUserCurrent3V3;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetUserActive3V3Delegate(ref int status);
         [NativeDelegate] public static HAL_GetUserActive3V3Delegate HAL_GetUserActive3V3;
 

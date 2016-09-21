@@ -43,7 +43,7 @@ namespace WPILib
             Interrupt = 0;
         }
 
-        private Action<uint, IntPtr> m_function;
+        private HALInterrupts.HAL_InterruptHandlerFunction m_function;
         private object m_param;
 
         /// <summary>

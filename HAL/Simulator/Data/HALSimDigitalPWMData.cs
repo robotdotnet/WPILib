@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimDigitalPWMData
     {
+        public static void Ping() { }
+
         static HALSimDigitalPWMData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimDigitalPWMData>(LibraryLoaderHolder.NativeLoader);

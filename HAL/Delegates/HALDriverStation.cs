@@ -46,7 +46,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetJoystickDescriptorDelegate(int joystickNum, ref HALJoystickDescriptor desc);
         [NativeDelegate] public static HAL_GetJoystickDescriptorDelegate HAL_GetJoystickDescriptor;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetJoystickIsXboxDelegate(int joystickNum);
         [NativeDelegate] public static HAL_GetJoystickIsXboxDelegate HAL_GetJoystickIsXbox;
 

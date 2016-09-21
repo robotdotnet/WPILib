@@ -34,7 +34,7 @@ namespace WPILib
 
             int status = 0;
             m_halHandle = HAL_InitializeDIOPort(HAL_GetPort(channel), false, ref status);
-            CheckStatusRange(status, 0, HAL_GetNumDigitalPins(), channel);
+            CheckStatusRange(status, 0, HAL_GetNumDigitalChannels(), channel);
 
             HAL.Base.HAL.Report(ResourceType.kResourceType_DigitalOutput, (byte)channel);
         }
@@ -161,7 +161,7 @@ namespace WPILib
             if (m_pwmGenerator == InvalidPwmGenerator)
                 return;
             int status = 0;
-            HAL_SetDigitalPWMOutputChannel(m_pwmGenerator, HAL_GetNumDigitalPins(), ref status);
+            HAL_SetDigitalPWMOutputChannel(m_pwmGenerator, HAL_GetNumDigitalChannels(), ref status);
             CheckStatus(status);
             HAL_FreeDigitalPWM(m_pwmGenerator, ref status);
             CheckStatus(status);

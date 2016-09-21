@@ -8,6 +8,8 @@ namespace HAL.Base
 {
     public partial class HALCanTalonSRX
     {
+        public static void Ping() { }
+
         static HALCanTalonSRX()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALCanTalonSRX>(LibraryLoaderHolder.NativeLoader);

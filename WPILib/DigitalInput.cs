@@ -27,7 +27,7 @@ namespace WPILib
 
             int status = 0;
             m_halHandle = HAL_InitializeDIOPort(HAL_GetPort(channel), true, ref status);
-            CheckStatusRange(status, 0, HAL_GetNumDigitalPins(), channel);
+            CheckStatusRange(status, 0, HAL_GetNumDigitalChannels(), channel);
 
             Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
             LiveWindow.LiveWindow.AddSensor("DigitalInput", channel, this);

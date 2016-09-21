@@ -6,12 +6,14 @@ namespace HAL.Base
 {
     public partial class HALAnalogAccumulator
     {
+        public static void Ping() { }
+
         static HALAnalogAccumulator()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALAnalogAccumulator>(LibraryLoaderHolder.NativeLoader);
         }
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_IsAccumulatorChannelDelegate(int analog_port_handle, ref int status);
         [NativeDelegate]
         public static HAL_IsAccumulatorChannelDelegate HAL_IsAccumulatorChannel;

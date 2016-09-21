@@ -6,6 +6,8 @@ namespace HAL.Base
 {
     public partial class HALAccelerometer
     {
+        public static void Ping() { }
+
         static HALAccelerometer()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALAccelerometer>(LibraryLoaderHolder.NativeLoader);

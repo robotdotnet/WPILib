@@ -11,6 +11,7 @@ using WPILib.Interfaces;
 
 namespace WPILib.Tests
 {
+    /*
     [TestFixture(SPI.Port.MXP)]
     [TestFixture(SPI.Port.OnboardCS0)]
     [TestFixture(SPI.Port.OnboardCS1)]
@@ -165,4 +166,5 @@ namespace WPILib.Tests
             Assert.That(m_accel.Table, Is.EqualTo(table));
         }
     }
+    */
 }

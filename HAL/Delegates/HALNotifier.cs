@@ -19,7 +19,10 @@ namespace HAL.Base
         {
         }
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_InitializeNotifierDelegate(Action<ulong, int> process, IntPtr param, ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void HAL_NotifierProcess(ulong time, int handle);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_InitializeNotifierDelegate(HAL_NotifierProcess process, IntPtr param, ref int status);
         [NativeDelegate] public static HAL_InitializeNotifierDelegate HAL_InitializeNotifier;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_CleanNotifierDelegate(int notifier_handle, ref int status);

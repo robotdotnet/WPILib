@@ -157,7 +157,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="AthenaHAL\Native\libHALAthena.so" />
+    <EmbeddedResource Include="AthenaHAL\Native\amd64\ntcore.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AthenaHAL\Native\roborio\libHALAthena.so" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AthenaHAL\Native\x86\ntcore.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -50,12 +50,12 @@ namespace HAL.Base
         [NativeDelegate]
         public static HAL_SetEncoderMaxPeriodDelegate HAL_SetEncoderMaxPeriod;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetEncoderStoppedDelegate(int encoder_handle, ref int status);
         [NativeDelegate]
         public static HAL_GetEncoderStoppedDelegate HAL_GetEncoderStopped;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetEncoderDirectionDelegate(int encoder_handle, ref int status);
         [NativeDelegate]
         public static HAL_GetEncoderDirectionDelegate HAL_GetEncoderDirection;

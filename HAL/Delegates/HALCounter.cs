@@ -78,11 +78,11 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetCounterUpdateWhenEmptyDelegate(int counter_handle, [MarshalAs(UnmanagedType.Bool)]bool enabled, ref int status);
         [NativeDelegate] public static HAL_SetCounterUpdateWhenEmptyDelegate HAL_SetCounterUpdateWhenEmpty;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetCounterStoppedDelegate(int counter_handle, ref int status);
         [NativeDelegate] public static HAL_GetCounterStoppedDelegate HAL_GetCounterStopped;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetCounterDirectionDelegate(int counter_handle, ref int status);
         [NativeDelegate] public static HAL_GetCounterDirectionDelegate HAL_GetCounterDirection;
 

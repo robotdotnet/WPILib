@@ -18,6 +18,31 @@ namespace HAL.Base
             NativeDelegateInitializer.SetupNativeDelegates<HAL>(LibraryLoaderHolder.NativeLoader);
         }
 
+        public static void PingAll()
+        {
+            HALAccelerometer.Ping();
+            HALAnalogAccumulator.Ping();
+            HALAnalogGyro.Ping();
+            HALAnalogInput.Ping();
+            HALAnalogOutput.Ping();
+            HALAnalogTrigger.Ping();
+            HALCompressor.Ping();
+            HALConstants.Ping();
+            HALDIO.Ping();
+            HALEncoder.Ping();
+            HALI2C.Ping();
+            HALInterrupts.Ping();
+            HALNotifier.Ping();
+            HALPDP.Ping();
+            HALPorts.Ping();
+            HALPower.Ping();
+            HALPWM.Ping();
+            HALRelay.Ping();
+            HALSerialPort.Ping();
+            HALSolenoid.Ping();
+            HALSPI.Ping();
+        }
+
         /// <summary>
         /// Use this to force load the definitions in the file
         /// </summary>
@@ -55,17 +80,17 @@ namespace HAL.Base
         [NativeDelegate]
         public static HAL_GetFPGATimeDelegate HAL_GetFPGATime;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetFPGAButtonDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetFPGAButtonDelegate HAL_GetFPGAButton;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetSystemActiveDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetSystemActiveDelegate HAL_GetSystemActive;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetBrownedOutDelegate(ref int status);
         [NativeDelegate]
         public static HAL_GetBrownedOutDelegate HAL_GetBrownedOut;

@@ -74,7 +74,7 @@ namespace WPILib
             int status = 0;
             m_forwardHandle = HAL_InitializeSolenoidPort(HAL_GetPortWithModule(moduleNumber, forwardChannel),
                 ref status);
-            CheckStatusRange(status, 0, HAL_GetNumSolenoidPins(), forwardChannel);
+            CheckStatusRange(status, 0, HAL_GetNumSolenoidChannels(), forwardChannel);
 
             m_reverseHandle = HAL_InitializeSolenoidPort(HAL_GetPortWithModule(moduleNumber, reverseChannel), ref status);
 
@@ -84,7 +84,7 @@ namespace WPILib
                 m_forwardHandle = 0;
                 m_reverseChannel = 0;
 
-                CheckStatusRange(status, 0, HAL_GetNumSolenoidPins(), reverseChannel);
+                CheckStatusRange(status, 0, HAL_GetNumSolenoidChannels(), reverseChannel);
             }
 
             m_forwardMask = (byte)(1 << m_forwardChannel);

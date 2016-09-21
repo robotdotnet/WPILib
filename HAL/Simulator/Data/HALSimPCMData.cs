@@ -11,6 +11,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimPCMData
     {
+        public static void Ping() { }
+
         static HALSimPCMData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimPCMData>(LibraryLoaderHolder.NativeLoader);
@@ -19,7 +21,7 @@ namespace HAL.Simulator.Data
         public HALSimPCMData(int index)
         {
             Index = index;
-            for (int i = 0; i < HAL_GetNumSolenoidPins(); i++)
+            for (int i = 0; i < HAL_GetNumSolenoidChannels(); i++)
             {
                 m_solenoidInitializedCallbacks.Add(new ConcurrentDictionary<int, HAL_NotifyCallback>());
                 m_solenoidOutputCallbacks.Add(new ConcurrentDictionary<int, HAL_NotifyCallback>());

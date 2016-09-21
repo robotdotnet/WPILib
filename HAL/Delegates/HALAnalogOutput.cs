@@ -6,6 +6,8 @@ namespace HAL.Base
 {
     public partial class HALAnalogOutput
     {
+        public static void Ping() { }
+
         static HALAnalogOutput()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALAnalogOutput>(LibraryLoaderHolder.NativeLoader);
@@ -23,7 +25,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate double HAL_GetAnalogOutputDelegate(int analog_output_handle, ref int status);
         [NativeDelegate] public static HAL_GetAnalogOutputDelegate HAL_GetAnalogOutput;
 
-        [return: MarshalAs(UnmanagedType.I4)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckAnalogOutputChannelDelegate(int pin);
         [NativeDelegate] public static HAL_CheckAnalogOutputChannelDelegate HAL_CheckAnalogOutputChannel;
     }

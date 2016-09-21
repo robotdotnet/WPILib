@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimAnalogGyroData
     {
+        public static void Ping() { }
+
         static HALSimAnalogGyroData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimAnalogGyroData>(LibraryLoaderHolder.NativeLoader);

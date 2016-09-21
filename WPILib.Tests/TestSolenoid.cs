@@ -25,9 +25,9 @@ namespace WPILib.Tests
             return new Solenoid(m_module, 0);
         }
 
-        private IReadOnlyList<SolenoidData> GetSolenoids()
+        private HALSimPCMData GetSolenoids()
         {
-            return SimData.GetPCM(m_module).Solenoids;
+            return SimData.PCM[m_module];
         }
 
         [Test]
@@ -35,9 +35,9 @@ namespace WPILib.Tests
         {
             using (Solenoid s = new Solenoid(0))
             {
-                Assert.IsTrue(SimData.GetPCM(0).Solenoids[0].Initialized);
+                Assert.IsTrue(SimData.PCM[0].GetSolenoidInitialized(0));
             }
-            Assert.That(SimData.GetPCM(0).Solenoids[0].Initialized, Is.False);
+            Assert.That(SimData.PCM[0].GetSolenoidInitialized(0), Is.False);
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                Assert.IsTrue(GetSolenoids()[0].Initialized);
+                Assert.IsTrue(GetSolenoids().GetSolenoidInitialized(0));
             }
         }
 
@@ -118,10 +118,10 @@ namespace WPILib.Tests
             using (Solenoid s = NewSolenoid())
             {
                 s.Set(true);
-                Assert.IsTrue(GetSolenoids()[0].Value);
+                Assert.IsTrue(GetSolenoids().GetSolenoidOutput(0));
 
                 s.Set(false);
-                Assert.IsFalse(GetSolenoids()[0].Value);
+                Assert.IsFalse(GetSolenoids().GetSolenoidOutput(0));
             }
         }
 
@@ -130,10 +130,10 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                GetSolenoids()[0].Value = true;
+                s.Set(true);
                 Assert.IsTrue(s.Get());
 
-                GetSolenoids()[0].Value = false;
+                s.Set(false);
                 Assert.IsFalse(s.Get());
             }
         }

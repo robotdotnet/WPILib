@@ -19,6 +19,9 @@ namespace HAL.Base
         {
         }
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void HAL_InterruptHandlerFunction(uint id, IntPtr param);
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_InitializeInterruptsDelegate([MarshalAs(UnmanagedType.Bool)]bool watcher, ref int status);
         [NativeDelegate] public static HAL_InitializeInterruptsDelegate HAL_InitializeInterrupts;
 
@@ -43,7 +46,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_RequestInterruptsDelegate(int interrupt_handle, int digitalSourceHandle, HALAnalogTriggerType analogTriggerType, ref int status);
         [NativeDelegate] public static HAL_RequestInterruptsDelegate HAL_RequestInterrupts;
 
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_AttachInterruptHandlerDelegate(int interrupt_handle, Action<uint, IntPtr> handler, IntPtr param, ref int status);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_AttachInterruptHandlerDelegate(int interrupt_handle, HAL_InterruptHandlerFunction handler, IntPtr param, ref int status);
         [NativeDelegate] public static HAL_AttachInterruptHandlerDelegate HAL_AttachInterruptHandler;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetInterruptUpSourceEdgeDelegate(int interrupt_handle, [MarshalAs(UnmanagedType.Bool)]bool risingEdge, [MarshalAs(UnmanagedType.Bool)]bool fallingEdge, ref int status);

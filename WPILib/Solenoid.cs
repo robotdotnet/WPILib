@@ -47,7 +47,7 @@ namespace WPILib
             int status = 0;
             m_solenoidHandle = HAL_InitializeSolenoidPort(HAL_GetPortWithModule(moduleNumber, channel), ref status);
 
-            CheckStatusRange(status, 0, HAL_GetNumSolenoidPins(), channel);
+            CheckStatusRange(status, 0, HAL_GetNumSolenoidChannels(), channel);
 
             LiveWindow.LiveWindow.AddActuator("Solenoid", moduleNumber, channel, this);
             Report(ResourceType.kResourceType_Solenoid, channel, moduleNumber);

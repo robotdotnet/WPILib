@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimAnalogInData
     {
+        public static void Ping() { }
+
         static HALSimAnalogInData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimAnalogInData>(LibraryLoaderHolder.NativeLoader);
@@ -31,8 +33,8 @@ namespace HAL.Simulator.Data
             m_accumulatorInitializedCallbacks.Clear();
             m_accumulatorValueCallbacks.Clear();
             m_accumulatorCountCallbacks.Clear();
-            m_accumlatorCenterCallbacks.Clear();
-            m_accumlatorDeadbandCallbacks.Clear();
+            m_accumulatorCenterCallbacks.Clear();
+            m_accumulatorDeadbandCallbacks.Clear();
             HALSIM_ResetAnalogInData(Index);
         }
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -296,74 +298,74 @@ namespace HAL.Simulator.Data
         public long GetAccumulatorCount() => HALSIM_GetAnalogInAccumulatorCount(Index);
         public void SetAccumulatorCount(long accumulatorCount) => HALSIM_SetAnalogInAccumulatorCount(Index, accumulatorCount);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate int HALSIM_RegisterAnalogInAccumlatorCenterCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
+        internal delegate int HALSIM_RegisterAnalogInAccumulatorCenterCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
-        internal static HALSIM_RegisterAnalogInAccumlatorCenterCallbackDelegate HALSIM_RegisterAnalogInAccumlatorCenterCallback;
+        internal static HALSIM_RegisterAnalogInAccumulatorCenterCallbackDelegate HALSIM_RegisterAnalogInAccumulatorCenterCallback;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void HALSIM_CancelAnalogInAccumlatorCenterCallbackDelegate(int index, int uid);
+        internal delegate void HALSIM_CancelAnalogInAccumulatorCenterCallbackDelegate(int index, int uid);
         [NativeDelegate]
-        internal static HALSIM_CancelAnalogInAccumlatorCenterCallbackDelegate HALSIM_CancelAnalogInAccumlatorCenterCallback;
+        internal static HALSIM_CancelAnalogInAccumulatorCenterCallbackDelegate HALSIM_CancelAnalogInAccumulatorCenterCallback;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate int HALSIM_GetAnalogInAccumlatorCenterDelegate(int index);
+        internal delegate int HALSIM_GetAnalogInAccumulatorCenterDelegate(int index);
         [NativeDelegate]
-        internal static HALSIM_GetAnalogInAccumlatorCenterDelegate HALSIM_GetAnalogInAccumlatorCenter;
-        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumlatorCenterCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumlatorCenterCallback(NotifyCallback callback, bool initialNotify)
+        internal static HALSIM_GetAnalogInAccumulatorCenterDelegate HALSIM_GetAnalogInAccumulatorCenter;
+        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorCenterCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
+        public int RegisterAnalogInAccumulatorCenterCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
                 callback?.Invoke(varName, ref value);
             };
-            int uid = HALSIM_RegisterAnalogInAccumlatorCenterCallback(Index, modCallback, IntPtr.Zero, initialNotify);
-            if (!m_accumlatorCenterCallbacks.TryAdd(uid, modCallback))
+            int uid = HALSIM_RegisterAnalogInAccumulatorCenterCallback(Index, modCallback, IntPtr.Zero, initialNotify);
+            if (!m_accumulatorCenterCallbacks.TryAdd(uid, modCallback))
             {
-                HALSIM_CancelAnalogInAccumlatorCenterCallback(Index, uid);
+                HALSIM_CancelAnalogInAccumulatorCenterCallback(Index, uid);
                 throw new ArgumentException("Key cannot be added multiple times to the dictionary");
             }
             return uid;
         }
-        public void CancelAnalogInAccumlatorCenterCallback(int uid)
+        public void CancelAnalogInAccumulatorCenterCallback(int uid)
         {
-            HALSIM_CancelAnalogInAccumlatorCenterCallback(Index, uid);
+            HALSIM_CancelAnalogInAccumulatorCenterCallback(Index, uid);
             HAL_NotifyCallback cb = null;
-            m_accumlatorCenterCallbacks.TryRemove(uid, out cb);
+            m_accumulatorCenterCallbacks.TryRemove(uid, out cb);
         }
-        public int GetAccumlatorCenter() => HALSIM_GetAnalogInAccumlatorCenter(Index);
+        public int GetAccumulatorCenter() => HALSIM_GetAnalogInAccumulatorCenter(Index);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate int HALSIM_RegisterAnalogInAccumlatorDeadbandCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
+        internal delegate int HALSIM_RegisterAnalogInAccumulatorDeadbandCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
-        internal static HALSIM_RegisterAnalogInAccumlatorDeadbandCallbackDelegate HALSIM_RegisterAnalogInAccumlatorDeadbandCallback;
+        internal static HALSIM_RegisterAnalogInAccumulatorDeadbandCallbackDelegate HALSIM_RegisterAnalogInAccumulatorDeadbandCallback;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate void HALSIM_CancelAnalogInAccumlatorDeadbandCallbackDelegate(int index, int uid);
+        internal delegate void HALSIM_CancelAnalogInAccumulatorDeadbandCallbackDelegate(int index, int uid);
         [NativeDelegate]
-        internal static HALSIM_CancelAnalogInAccumlatorDeadbandCallbackDelegate HALSIM_CancelAnalogInAccumlatorDeadbandCallback;
+        internal static HALSIM_CancelAnalogInAccumulatorDeadbandCallbackDelegate HALSIM_CancelAnalogInAccumulatorDeadbandCallback;
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        internal delegate int HALSIM_GetAnalogInAccumlatorDeadbandDelegate(int index);
+        internal delegate int HALSIM_GetAnalogInAccumulatorDeadbandDelegate(int index);
         [NativeDelegate]
-        internal static HALSIM_GetAnalogInAccumlatorDeadbandDelegate HALSIM_GetAnalogInAccumlatorDeadband;
-        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumlatorDeadbandCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumlatorDeadbandCallback(NotifyCallback callback, bool initialNotify)
+        internal static HALSIM_GetAnalogInAccumulatorDeadbandDelegate HALSIM_GetAnalogInAccumulatorDeadband;
+        private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorDeadbandCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
+        public int RegisterAnalogInAccumulatorDeadbandCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
                 callback?.Invoke(varName, ref value);
             };
-            int uid = HALSIM_RegisterAnalogInAccumlatorDeadbandCallback(Index, modCallback, IntPtr.Zero, initialNotify);
-            if (!m_accumlatorDeadbandCallbacks.TryAdd(uid, modCallback))
+            int uid = HALSIM_RegisterAnalogInAccumulatorDeadbandCallback(Index, modCallback, IntPtr.Zero, initialNotify);
+            if (!m_accumulatorDeadbandCallbacks.TryAdd(uid, modCallback))
             {
-                HALSIM_CancelAnalogInAccumlatorDeadbandCallback(Index, uid);
+                HALSIM_CancelAnalogInAccumulatorDeadbandCallback(Index, uid);
                 throw new ArgumentException("Key cannot be added multiple times to the dictionary");
             }
             return uid;
         }
-        public void CancelAnalogInAccumlatorDeadbandCallback(int uid)
+        public void CancelAnalogInAccumulatorDeadbandCallback(int uid)
         {
-            HALSIM_CancelAnalogInAccumlatorDeadbandCallback(Index, uid);
+            HALSIM_CancelAnalogInAccumulatorDeadbandCallback(Index, uid);
             HAL_NotifyCallback cb = null;
-            m_accumlatorDeadbandCallbacks.TryRemove(uid, out cb);
+            m_accumulatorDeadbandCallbacks.TryRemove(uid, out cb);
         }
-        public int GetAccumlatorDeadband() => HALSIM_GetAnalogInAccumlatorDeadband(Index);
+        public int GetAccumulatorDeadband() => HALSIM_GetAnalogInAccumulatorDeadband(Index);
     }
 }

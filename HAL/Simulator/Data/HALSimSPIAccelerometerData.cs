@@ -9,6 +9,8 @@ namespace HAL.Simulator.Data
 {
     public class HALSimSPIAccelerometerData
     {
+        public static void Ping() { }
+
         static HALSimSPIAccelerometerData()
         {
             NativeDelegateInitializer.SetupNativeDelegates<HALSimSPIAccelerometerData>(LibraryLoaderHolder.NativeLoader);
