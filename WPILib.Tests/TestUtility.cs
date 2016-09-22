@@ -46,6 +46,7 @@ namespace RobotCode.Tests
     [TestFixture]
     public class TestUtilityStatus : TestBase
     {
+        /*
         [Test]
         public void TestCheckStatusReportingError()
         {
@@ -67,7 +68,9 @@ namespace RobotCode.Tests
             Assert.That(split[1].StartsWith("Caller: RobotCode.Tests.TestUtilityStatus.TestCheckStatusReportingError"));
             Assert.That(data.StackTrace, Is.Not.Null.Or.Empty);
         }
+        */
     }
+    
 }
 
 

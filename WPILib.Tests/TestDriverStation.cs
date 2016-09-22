@@ -41,6 +41,8 @@ namespace WPILib.Tests
 
             var ct = global::HAL.Base.HAL.GetControlWord();
 
+           // var controlWord = HALDriverStation.HAL_GetControlWord()
+
             Assert.IsTrue(ct.GetEnabled());
             Assert.IsTrue(ct.GetAutonomous());
             Assert.IsTrue(ct.GetTest());
@@ -115,7 +117,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.Test);
         }
-
+/*
         [Test]
         public void TestSysActive()
         {
@@ -147,6 +149,7 @@ namespace WPILib.Tests
             Assert.IsFalse(DriverStation.Instance.BrownedOut);
 
         }
+        */
 
         [Test]
         [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red1)]
@@ -174,7 +177,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.AreEqual(returnStation, DriverStation.Instance.GetLocation());
         }
-
+        /*
         [Test]
         public void TestGetAllianceDefault()
         {
@@ -202,6 +205,7 @@ namespace WPILib.Tests
 
             global::HAL.Base.HAL.HALGetAllianceStation = HAL.SimulatorHAL.HAL.HALGetAllianceStation;
         }
+        */
 
         [Test]
         [TestCase(true)]
@@ -222,7 +226,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.AreEqual(attached, DriverStation.Instance.DSAtached);
         }
-
+        /*
         [Test]
         public void TestGetMatchTime()
         {
@@ -236,6 +240,7 @@ namespace WPILib.Tests
 
             global::HAL.Base.HAL.HALGetMatchTime = HAL.SimulatorHAL.HAL.HALGetMatchTime;
         }
+        */
 
         [Test]
         public void TestJoystickButtons([Range(0,32)] int numButtons)

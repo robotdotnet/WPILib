@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NetworkTables;
-using NetworkTables.Native;
 using NetworkTables.Tables;
 
 namespace WPILib.Tests
@@ -85,11 +84,6 @@ namespace WPILib.Tests
         public void Delete(string key)
         {
             
-        }
-
-        public object GetValue(string key)
-        {
-            return null;
         }
 
         public bool PutValue(string key, object value)
@@ -237,44 +231,88 @@ namespace WPILib.Tests
             
         }
 
-        public object GetValue(string key, object defaultValue)
+
+        public Value GetValue(string key, Value defaultValue)
         {
-            return null;
+            return new Value();
         }
 
-        public void AddTableListenerEx(Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
+        public Value GetValue(string key)
         {
-            
+            return new Value();
         }
 
-        public void AddTableListenerEx(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
+        public bool PutValue(string key, Value value)
         {
-            
+            return true;
         }
 
-        public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool localNotify)
+        public void AddTableListenerEx(Action<ITable, string, Value, NotifyFlags> listenerDelegate, NotifyFlags flags)
         {
-            
         }
 
-        public void AddTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify = false)
+        public void AddTableListenerEx(string key, Action<ITable, string, Value, NotifyFlags> listenerDelegate, NotifyFlags flags)
         {
-            
         }
 
-        public void AddTableListener(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify)
+        public void AddSubTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate, bool localNotify)
         {
-            
         }
 
-        public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
+        public void AddTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate, bool immediateNotify = false)
         {
-            
         }
 
-        public void RemoveTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
+        public void AddTableListener(string key, Action<ITable, string, Value, NotifyFlags> listenerDelegate, bool immediateNotify)
         {
-            
+        }
+
+        public void AddSubTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate)
+        {
+        }
+
+        public void RemoveTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate)
+        {
+        }
+
+        public bool SetDefaultValue(string key, Value defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultNumber(string key, double defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultBoolean(string key, bool defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultString(string key, string defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultRaw(string key, byte[] defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultBooleanArray(string key, bool[] defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultNumberArray(string key, double[] defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultStringArray(string key, string[] defaultValue)
+        {
+            return true;
         }
     }
 }
