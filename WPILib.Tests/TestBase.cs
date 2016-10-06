@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using HAL.Simulator;
 using HAL = HAL.Base.HAL;
 
@@ -12,14 +13,18 @@ namespace WPILib.Tests
         {
             if (!initialized)
             {
-                global::HAL.Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
+                    global::HAL.Base.HAL.Initialize();
+                    global::HAL.Base.HALDriverStation.HAL_ObserveUserProgramStarting();
 
+                ;
                 LiveWindow.LiveWindow.SetEnabled(false);
 
-                DriverStationHelper.StartDSLoop();
+                var instance = DriverStation.Instance;
 
-                DriverStationHelper.SetRobotMode(DriverStationHelper.RobotMode.Teleop);
-                DriverStationHelper.SetEnabledState(DriverStationHelper.EnabledState.Enabled);
+                //DriverStationHelper.StartDSLoop();
+
+                //DriverStationHelper.SetRobotMode(DriverStationHelper.RobotMode.Teleop);
+                //DriverStationHelper.SetEnabledState(DriverStationHelper.EnabledState.Enabled);
                 
                 Thread.Sleep(500);
             }

@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace WPILib.Tests
 {
-    [TestFixture]
+    [TestFixture, Ignore("Not finished in sim")]
     public class TestNotifier : TestBase
     {
 

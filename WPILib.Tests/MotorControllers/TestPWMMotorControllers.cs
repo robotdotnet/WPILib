@@ -27,6 +27,7 @@ namespace WPILib.Tests.MotorControllers
         {
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
+                /*
                 ControllerType controllerType = ControllerType.None;
                 if (m_type == typeof(Jaguar))
                 {
@@ -57,6 +58,7 @@ namespace WPILib.Tests.MotorControllers
                     controllerType = ControllerType.SD540;
                 }
                 Assert.AreEqual(SimData.PWM[2].Type, controllerType);
+                */
             }
         }
 
@@ -85,7 +87,7 @@ namespace WPILib.Tests.MotorControllers
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
                 t.Set(range);
-                Assert.That(SimData.PWM[2].Value, Is.EqualTo(range).Within(.01));
+                Assert.That(SimData.PWM[2].GetSpeed(), Is.EqualTo(range).Within(.01));
             }
         }
 
@@ -106,7 +108,7 @@ namespace WPILib.Tests.MotorControllers
             using (PWMSpeedController t = (PWMSpeedController)Activator.CreateInstance(m_type, 2))
             {
                 t.PidWrite(range);
-                Assert.That(SimData.PWM[2].Value, Is.EqualTo(range).Within(.01));
+                Assert.That(SimData.PWM[2].GetSpeed(), Is.EqualTo(range).Within(.01));
             }
         }
 

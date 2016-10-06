@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using HAL.NativeLoader;
 
@@ -8,7 +9,16 @@ namespace HAL.Base
     {
         static HALDriverStation()
         {
-            NativeDelegateInitializer.SetupNativeDelegates<HALDriverStation>(LibraryLoaderHolder.NativeLoader);
+            try
+            {
+                NativeDelegateInitializer.SetupNativeDelegates<HALDriverStation>(LibraryLoaderHolder.NativeLoader);
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+           
         }
 
         /// <summary>

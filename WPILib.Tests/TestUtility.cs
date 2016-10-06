@@ -13,7 +13,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetFPGAVersion()
         {
-            Assert.AreEqual(2015, Utility.GetFPGAVersion());
+            Assert.AreEqual(2018, Utility.GetFPGAVersion());
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetUserButton()
         {
-            SimData.RoboRioData.FPGAButton = true;
+            SimData.RoboRioData.SetFPGAButton(true);
             Assert.IsTrue(Utility.GetUserButton());
         }
     }

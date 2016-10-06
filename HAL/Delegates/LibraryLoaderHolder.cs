@@ -88,9 +88,9 @@ namespace HAL.Base
                     {
                         s_nativeLoader = new NativeLibraryLoader();
                         s_nativeLoader.AddLibraryLocation(OsType.Windows32,
-                            resourceRoot + "x86.ntcore.dll");
+                            resourceRoot + "x86.mockhal.dll");
                         s_nativeLoader.AddLibraryLocation(OsType.Windows64,
-                            resourceRoot + "amd64.ntcore.dll");
+                            resourceRoot + "amd64.mockhal.dll");
                         /*
                         s_nativeLoader.AddLibraryLocation(OsType.Linux32,
                             resourceRoot + "x86.libntcore.so");

@@ -155,15 +155,12 @@
     <Compile Include="Simulator\SimHooks.cs" />
     <Compile Include="Simulator\TalonSRXEventArgs.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="AthenaHAL\Native\amd64\ntcore.dll" />
+    <EmbeddedResource Include="AthenaHAL\Native\amd64\mockhal.dll" />
+    <EmbeddedResource Include="AthenaHAL\Native\x86\mockhal.dll" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AthenaHAL\Native\roborio\libHALAthena.so" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="AthenaHAL\Native\x86\ntcore.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

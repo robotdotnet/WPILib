@@ -29,6 +29,7 @@ namespace HAL.Base
             HALCompressor.Ping();
             HALConstants.Ping();
             HALDIO.Ping();
+            HALDriverStation.Ping();
             HALEncoder.Ping();
             HALI2C.Ping();
             HALInterrupts.Ping();
