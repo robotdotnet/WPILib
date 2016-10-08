@@ -51,6 +51,14 @@
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WPILib.Extras\WPILib.Extras.csproj">
+      <Project>{c2e50521-7046-463e-86c9-cf567f8e62bd}</Project>
+      <Name>WPILib.Extras</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WPILib\WPILib.csproj">
+      <Project>{cadad4a2-d72a-4906-a4f0-2fa2884f3349}</Project>
+      <Name>WPILib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

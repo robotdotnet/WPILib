@@ -153,6 +153,7 @@ namespace WPILib
                 try
                 {
                     Monitor.Enter(m_dataSem);
+                    m_updatedControlLoopData = true;
                     Monitor.PulseAll(m_dataSem);
                 }
                 finally
