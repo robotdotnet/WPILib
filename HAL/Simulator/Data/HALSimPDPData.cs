@@ -39,6 +39,8 @@ namespace HAL.Simulator.Data
             m_initializedCallbacks.Clear();
             m_temperatureCallbacks.Clear();
             m_voltageCallbacks.Clear();
+            bool x = HALSIM_GetPDPInitialized(Index);
+            ;
             HALSIM_ResetPDPData(Index);
         }
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

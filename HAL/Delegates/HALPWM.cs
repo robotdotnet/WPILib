@@ -25,7 +25,7 @@ namespace HAL.Base
         [NativeDelegate] public static HAL_FreePWMPortDelegate HAL_FreePWMPort;
 
         [return: MarshalAs(UnmanagedType.Bool)]
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckPWMChannelDelegate(int pin);
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckPWMChannelDelegate(int channel);
         [NativeDelegate] public static HAL_CheckPWMChannelDelegate HAL_CheckPWMChannel;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetPWMConfigDelegate(int pwm_port_handle, double maxPwm, double deadbandMaxPwm, double centerPwm, double deadbandMinPwm, double minPwm, ref int status);

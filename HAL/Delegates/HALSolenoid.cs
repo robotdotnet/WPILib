@@ -8,7 +8,7 @@ namespace HAL.Base
     {
         static HALSolenoid()
         {
-            NativeDelegateInitializer.SetupNativeDelegates<HALSerialPort>(LibraryLoaderHolder.NativeLoader);
+            NativeDelegateInitializer.SetupNativeDelegates<HALSolenoid>(LibraryLoaderHolder.NativeLoader);
         }
 
         /// <summary>
@@ -29,8 +29,8 @@ namespace HAL.Base
         [NativeDelegate] public static HAL_CheckSolenoidModuleDelegate HAL_CheckSolenoidModule;
 
         [return: MarshalAs(UnmanagedType.Bool)]
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckSolenoidPinDelegate(int pin);
-        [NativeDelegate] public static HAL_CheckSolenoidPinDelegate HAL_CheckSolenoidPin;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckSolenoidChannelDelegate(int channel);
+        [NativeDelegate] public static HAL_CheckSolenoidChannelDelegate HAL_CheckSolenoidChannel;
 
         [return: MarshalAs(UnmanagedType.Bool)]
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_GetSolenoidDelegate(int solenoid_port_handle, ref int status);

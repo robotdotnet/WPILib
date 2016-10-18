@@ -70,7 +70,14 @@ namespace WPILib
         public static void CheckStatus(int status, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
-            if (status < 0)
+            if (status == 0) return;
+            if (status == HALErrors.NO_AVAILABLE_RESOURCES ||
+                status == HALErrors.RESOURCE_IS_ALLOCATED ||
+                status == HALErrors.RESOURCE_OUT_OF_RANGE)
+            {
+                throw new AllocationException($" Code : {status}. {HAL_GetErrorMessage(status)}");
+            }
+            else if (status < 0)
             {
                 throw new UncleanStatusException(status, $" Code : {status}. {HAL_GetErrorMessage(status)} \n at {memberName} path:{filePath} line:{lineNumber}");
             }
