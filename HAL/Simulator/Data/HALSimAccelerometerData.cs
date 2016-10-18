@@ -45,8 +45,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetAccelerometerActiveDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAccelerometerActiveDelegate HALSIM_GetAccelerometerActive;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAccelerometerActiveDelegate(int index, bool active);
+        [NativeDelegate]
+        internal static HALSIM_SetAccelerometerActiveDelegate HALSIM_SetAccelerometerActive;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_activeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccelerometerActiveCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterActiveCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -61,13 +65,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAccelerometerActiveCallback(int uid)
+        public void CancelActiveCallback(int uid)
         {
             HALSIM_CancelAccelerometerActiveCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_activeCallbacks.TryRemove(uid, out cb);
         }
         public bool GetActive() => HALSIM_GetAccelerometerActive(Index);
+        public void SetActive(bool active) => HALSIM_SetAccelerometerActive(Index, active);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAccelerometerRangeCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -80,8 +85,12 @@ namespace HAL.Simulator.Data
         internal delegate HALAccelerometerRange HALSIM_GetAccelerometerRangeDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAccelerometerRangeDelegate HALSIM_GetAccelerometerRange;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAccelerometerRangeDelegate(int index, HALAccelerometerRange range);
+        [NativeDelegate]
+        internal static HALSIM_SetAccelerometerRangeDelegate HALSIM_SetAccelerometerRange;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_rangeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccelerometerRangeCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterRangeCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -96,13 +105,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAccelerometerRangeCallback(int uid)
+        public void CancelRangeCallback(int uid)
         {
             HALSIM_CancelAccelerometerRangeCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_rangeCallbacks.TryRemove(uid, out cb);
         }
         public HALAccelerometerRange GetRange() => HALSIM_GetAccelerometerRange(Index);
+        public void SetRange(HALAccelerometerRange range) => HALSIM_SetAccelerometerRange(Index, range);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAccelerometerXCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -120,7 +130,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAccelerometerXDelegate HALSIM_SetAccelerometerX;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_xCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccelerometerXCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterXCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -135,7 +145,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAccelerometerXCallback(int uid)
+        public void CancelXCallback(int uid)
         {
             HALSIM_CancelAccelerometerXCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -160,7 +170,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAccelerometerYDelegate HALSIM_SetAccelerometerY;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_yCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccelerometerYCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterYCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -175,7 +185,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAccelerometerYCallback(int uid)
+        public void CancelYCallback(int uid)
         {
             HALSIM_CancelAccelerometerYCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -200,7 +210,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAccelerometerZDelegate HALSIM_SetAccelerometerZ;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_zCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccelerometerZCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterZCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -215,7 +225,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAccelerometerZCallback(int uid)
+        public void CancelZCallback(int uid)
         {
             HALSIM_CancelAccelerometerZCallback(Index, uid);
             HAL_NotifyCallback cb = null;

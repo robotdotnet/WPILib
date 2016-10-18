@@ -60,7 +60,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioFPGAButtonDelegate HALSIM_SetRoboRioFPGAButton;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_fPGAButtonCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioFPGAButtonCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterFPGAButtonCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -75,7 +75,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioFPGAButtonCallback(int uid)
+        public void CancelFPGAButtonCallback(int uid)
         {
             HALSIM_CancelRoboRioFPGAButtonCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -100,7 +100,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioVInVoltageDelegate HALSIM_SetRoboRioVInVoltage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_vInVoltageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioVInVoltageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVInVoltageCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -115,7 +115,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioVInVoltageCallback(int uid)
+        public void CancelVInVoltageCallback(int uid)
         {
             HALSIM_CancelRoboRioVInVoltageCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -140,7 +140,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioVInCurrentDelegate HALSIM_SetRoboRioVInCurrent;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_vInCurrentCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioVInCurrentCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVInCurrentCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -155,7 +155,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioVInCurrentCallback(int uid)
+        public void CancelVInCurrentCallback(int uid)
         {
             HALSIM_CancelRoboRioVInCurrentCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -180,7 +180,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserVoltage6VDelegate HALSIM_SetRoboRioUserVoltage6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userVoltage6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserVoltage6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserVoltage6VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -195,7 +195,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserVoltage6VCallback(int uid)
+        public void CancelUserVoltage6VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserVoltage6VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -220,7 +220,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserCurrent6VDelegate HALSIM_SetRoboRioUserCurrent6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userCurrent6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserCurrent6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserCurrent6VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -235,7 +235,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserCurrent6VCallback(int uid)
+        public void CancelUserCurrent6VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserCurrent6VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -260,7 +260,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserActive6VDelegate HALSIM_SetRoboRioUserActive6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userActive6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserActive6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserActive6VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -275,7 +275,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserActive6VCallback(int uid)
+        public void CancelUserActive6VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserActive6VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -300,7 +300,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserVoltage5VDelegate HALSIM_SetRoboRioUserVoltage5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userVoltage5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserVoltage5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserVoltage5VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -315,7 +315,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserVoltage5VCallback(int uid)
+        public void CancelUserVoltage5VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserVoltage5VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -340,7 +340,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserCurrent5VDelegate HALSIM_SetRoboRioUserCurrent5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userCurrent5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserCurrent5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserCurrent5VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -355,7 +355,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserCurrent5VCallback(int uid)
+        public void CancelUserCurrent5VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserCurrent5VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -380,7 +380,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserActive5VDelegate HALSIM_SetRoboRioUserActive5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userActive5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserActive5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserActive5VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -395,7 +395,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserActive5VCallback(int uid)
+        public void CancelUserActive5VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserActive5VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -420,7 +420,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserVoltage3V3Delegate HALSIM_SetRoboRioUserVoltage3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userVoltage3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserVoltage3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserVoltage3V3Callback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -435,7 +435,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserVoltage3V3Callback(int uid)
+        public void CancelUserVoltage3V3Callback(int uid)
         {
             HALSIM_CancelRoboRioUserVoltage3V3Callback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -460,7 +460,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserCurrent3V3Delegate HALSIM_SetRoboRioUserCurrent3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userCurrent3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserCurrent3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserCurrent3V3Callback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -475,7 +475,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserCurrent3V3Callback(int uid)
+        public void CancelUserCurrent3V3Callback(int uid)
         {
             HALSIM_CancelRoboRioUserCurrent3V3Callback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -500,7 +500,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserActive3V3Delegate HALSIM_SetRoboRioUserActive3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userActive3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserActive3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserActive3V3Callback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -515,7 +515,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserActive3V3Callback(int uid)
+        public void CancelUserActive3V3Callback(int uid)
         {
             HALSIM_CancelRoboRioUserActive3V3Callback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -540,7 +540,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserFaults6VDelegate HALSIM_SetRoboRioUserFaults6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userFaults6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserFaults6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserFaults6VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -555,7 +555,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserFaults6VCallback(int uid)
+        public void CancelUserFaults6VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserFaults6VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -580,7 +580,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserFaults5VDelegate HALSIM_SetRoboRioUserFaults5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userFaults5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserFaults5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserFaults5VCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -595,7 +595,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserFaults5VCallback(int uid)
+        public void CancelUserFaults5VCallback(int uid)
         {
             HALSIM_CancelRoboRioUserFaults5VCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -620,7 +620,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserFaults3V3Delegate HALSIM_SetRoboRioUserFaults3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userFaults3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRoboRioUserFaults3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserFaults3V3Callback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -635,7 +635,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelRoboRioUserFaults3V3Callback(int uid)
+        public void CancelUserFaults3V3Callback(int uid)
         {
             HALSIM_CancelRoboRioUserFaults3V3Callback(Index, uid);
             HAL_NotifyCallback cb = null;

@@ -78,7 +78,7 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            SimData.AnalogIn[0].RegisterAnalogInVoltageCallback(mockDelegate, false);
+            SimData.AnalogIn[0].RegisterVoltageCallback(mockDelegate, false);
 
             SimData.AnalogIn[0].SetVoltage(1.25);
 
@@ -166,11 +166,11 @@ namespace WPILib.Tests
 
             SimData.ResetHALData(false);
 
-            int uid = SimData.AnalogIn[0].RegisterAnalogInVoltageCallback(mockDelegate, false);
+            int uid = SimData.AnalogIn[0].RegisterVoltageCallback(mockDelegate, false);
 
             SimData.AnalogIn[0].SetVoltage(1.25);
 
-            SimData.AnalogIn[0].CancelAnalogInVoltageCallback(uid);
+            SimData.AnalogIn[0].CancelVoltageCallback(uid);
 
             SimData.AnalogIn[0].SetVoltage(13.84);
 

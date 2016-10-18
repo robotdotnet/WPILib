@@ -46,8 +46,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPWMInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetPWMInitializedDelegate HALSIM_GetPWMInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPWMInitializedDelegate(int index, bool initialized);
+        [NativeDelegate]
+        internal static HALSIM_SetPWMInitializedDelegate HALSIM_SetPWMInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPWMInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -62,13 +66,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPWMInitializedCallback(int uid)
+        public void CancelInitializedCallback(int uid)
         {
             HALSIM_CancelPWMInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_initializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetInitialized() => HALSIM_GetPWMInitialized(Index);
+        public void SetInitialized(bool initialized) => HALSIM_SetPWMInitialized(Index, initialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPWMRawValueCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -86,7 +91,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPWMRawValueDelegate HALSIM_SetPWMRawValue;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_rawValueCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPWMRawValueCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterRawValueCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -101,7 +106,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPWMRawValueCallback(int uid)
+        public void CancelRawValueCallback(int uid)
         {
             HALSIM_CancelPWMRawValueCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -126,7 +131,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPWMSpeedDelegate HALSIM_SetPWMSpeed;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_speedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPWMSpeedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterSpeedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -141,7 +146,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPWMSpeedCallback(int uid)
+        public void CancelSpeedCallback(int uid)
         {
             HALSIM_CancelPWMSpeedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -166,7 +171,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPWMPositionDelegate HALSIM_SetPWMPosition;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_positionCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPWMPositionCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPositionCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -181,7 +186,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPWMPositionCallback(int uid)
+        public void CancelPositionCallback(int uid)
         {
             HALSIM_CancelPWMPositionCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -201,8 +206,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetPWMPeriodScaleDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetPWMPeriodScaleDelegate HALSIM_GetPWMPeriodScale;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPWMPeriodScaleDelegate(int index, int periodScale);
+        [NativeDelegate]
+        internal static HALSIM_SetPWMPeriodScaleDelegate HALSIM_SetPWMPeriodScale;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_periodScaleCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPWMPeriodScaleCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPeriodScaleCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -217,13 +226,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPWMPeriodScaleCallback(int uid)
+        public void CancelPeriodScaleCallback(int uid)
         {
             HALSIM_CancelPWMPeriodScaleCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_periodScaleCallbacks.TryRemove(uid, out cb);
         }
         public int GetPeriodScale() => HALSIM_GetPWMPeriodScale(Index);
+        public void SetPeriodScale(int periodScale) => HALSIM_SetPWMPeriodScale(Index, periodScale);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPWMZeroLatchCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -236,8 +246,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPWMZeroLatchDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetPWMZeroLatchDelegate HALSIM_GetPWMZeroLatch;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPWMZeroLatchDelegate(int index, bool zeroLatch);
+        [NativeDelegate]
+        internal static HALSIM_SetPWMZeroLatchDelegate HALSIM_SetPWMZeroLatch;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_zeroLatchCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPWMZeroLatchCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterZeroLatchCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -252,12 +266,13 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPWMZeroLatchCallback(int uid)
+        public void CancelZeroLatchCallback(int uid)
         {
             HALSIM_CancelPWMZeroLatchCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_zeroLatchCallbacks.TryRemove(uid, out cb);
         }
         public bool GetZeroLatch() => HALSIM_GetPWMZeroLatch(Index);
+        public void SetZeroLatch(bool zeroLatch) => HALSIM_SetPWMZeroLatch(Index, zeroLatch);
     }
 }

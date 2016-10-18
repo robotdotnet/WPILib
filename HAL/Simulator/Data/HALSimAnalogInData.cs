@@ -49,8 +49,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetAnalogInInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogInInitializedDelegate HALSIM_GetAnalogInInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogInInitializedDelegate(int index, bool initialized);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogInInitializedDelegate HALSIM_SetAnalogInInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -65,13 +69,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInInitializedCallback(int uid)
+        public void CancelInitializedCallback(int uid)
         {
             HALSIM_CancelAnalogInInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_initializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetInitialized() => HALSIM_GetAnalogInInitialized(Index);
+        public void SetInitialized(bool initialized) => HALSIM_SetAnalogInInitialized(Index, initialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAnalogInAverageBitsCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -84,8 +89,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetAnalogInAverageBitsDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogInAverageBitsDelegate HALSIM_GetAnalogInAverageBits;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogInAverageBitsDelegate(int index, int averageBits);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogInAverageBitsDelegate HALSIM_SetAnalogInAverageBits;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_averageBitsCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAverageBitsCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAverageBitsCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -100,13 +109,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInAverageBitsCallback(int uid)
+        public void CancelAverageBitsCallback(int uid)
         {
             HALSIM_CancelAnalogInAverageBitsCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_averageBitsCallbacks.TryRemove(uid, out cb);
         }
         public int GetAverageBits() => HALSIM_GetAnalogInAverageBits(Index);
+        public void SetAverageBits(int averageBits) => HALSIM_SetAnalogInAverageBits(Index, averageBits);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAnalogInOversampleBitsCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -119,8 +129,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetAnalogInOversampleBitsDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogInOversampleBitsDelegate HALSIM_GetAnalogInOversampleBits;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogInOversampleBitsDelegate(int index, int oversampleBits);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogInOversampleBitsDelegate HALSIM_SetAnalogInOversampleBits;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_oversampleBitsCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInOversampleBitsCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterOversampleBitsCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -135,13 +149,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInOversampleBitsCallback(int uid)
+        public void CancelOversampleBitsCallback(int uid)
         {
             HALSIM_CancelAnalogInOversampleBitsCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_oversampleBitsCallbacks.TryRemove(uid, out cb);
         }
         public int GetOversampleBits() => HALSIM_GetAnalogInOversampleBits(Index);
+        public void SetOversampleBits(int oversampleBits) => HALSIM_SetAnalogInOversampleBits(Index, oversampleBits);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAnalogInVoltageCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -159,7 +174,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInVoltageDelegate HALSIM_SetAnalogInVoltage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_voltageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInVoltageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVoltageCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -174,7 +189,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInVoltageCallback(int uid)
+        public void CancelVoltageCallback(int uid)
         {
             HALSIM_CancelAnalogInVoltageCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -194,8 +209,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetAnalogInAccumulatorInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogInAccumulatorInitializedDelegate HALSIM_GetAnalogInAccumulatorInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogInAccumulatorInitializedDelegate(int index, bool accumulatorInitialized);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogInAccumulatorInitializedDelegate HALSIM_SetAnalogInAccumulatorInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorInitializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumulatorInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -210,13 +229,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInAccumulatorInitializedCallback(int uid)
+        public void CancelAccumulatorInitializedCallback(int uid)
         {
             HALSIM_CancelAnalogInAccumulatorInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_accumulatorInitializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetAccumulatorInitialized() => HALSIM_GetAnalogInAccumulatorInitialized(Index);
+        public void SetAccumulatorInitialized(bool accumulatorInitialized) => HALSIM_SetAnalogInAccumulatorInitialized(Index, accumulatorInitialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAnalogInAccumulatorValueCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -234,7 +254,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorValueDelegate HALSIM_SetAnalogInAccumulatorValue;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorValueCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumulatorValueCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorValueCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -249,7 +269,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInAccumulatorValueCallback(int uid)
+        public void CancelAccumulatorValueCallback(int uid)
         {
             HALSIM_CancelAnalogInAccumulatorValueCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -274,7 +294,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorCountDelegate HALSIM_SetAnalogInAccumulatorCount;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorCountCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumulatorCountCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorCountCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -289,7 +309,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInAccumulatorCountCallback(int uid)
+        public void CancelAccumulatorCountCallback(int uid)
         {
             HALSIM_CancelAnalogInAccumulatorCountCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -309,8 +329,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetAnalogInAccumulatorCenterDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogInAccumulatorCenterDelegate HALSIM_GetAnalogInAccumulatorCenter;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogInAccumulatorCenterDelegate(int index, int accumulatorCenter);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogInAccumulatorCenterDelegate HALSIM_SetAnalogInAccumulatorCenter;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorCenterCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumulatorCenterCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorCenterCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -325,13 +349,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInAccumulatorCenterCallback(int uid)
+        public void CancelAccumulatorCenterCallback(int uid)
         {
             HALSIM_CancelAnalogInAccumulatorCenterCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_accumulatorCenterCallbacks.TryRemove(uid, out cb);
         }
         public int GetAccumulatorCenter() => HALSIM_GetAnalogInAccumulatorCenter(Index);
+        public void SetAccumulatorCenter(int accumulatorCenter) => HALSIM_SetAnalogInAccumulatorCenter(Index, accumulatorCenter);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterAnalogInAccumulatorDeadbandCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -344,8 +369,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetAnalogInAccumulatorDeadbandDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogInAccumulatorDeadbandDelegate HALSIM_GetAnalogInAccumulatorDeadband;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogInAccumulatorDeadbandDelegate(int index, int accumulatorDeadband);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogInAccumulatorDeadbandDelegate HALSIM_SetAnalogInAccumulatorDeadband;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorDeadbandCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogInAccumulatorDeadbandCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorDeadbandCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -360,12 +389,13 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogInAccumulatorDeadbandCallback(int uid)
+        public void CancelAccumulatorDeadbandCallback(int uid)
         {
             HALSIM_CancelAnalogInAccumulatorDeadbandCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_accumulatorDeadbandCallbacks.TryRemove(uid, out cb);
         }
         public int GetAccumulatorDeadband() => HALSIM_GetAnalogInAccumulatorDeadband(Index);
+        public void SetAccumulatorDeadband(int accumulatorDeadband) => HALSIM_SetAnalogInAccumulatorDeadband(Index, accumulatorDeadband);
     }
 }

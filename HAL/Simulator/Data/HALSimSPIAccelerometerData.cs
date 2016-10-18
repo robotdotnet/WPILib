@@ -45,8 +45,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetSPIAccelerometerActiveDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetSPIAccelerometerActiveDelegate HALSIM_GetSPIAccelerometerActive;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetSPIAccelerometerActiveDelegate(int index, bool active);
+        [NativeDelegate]
+        internal static HALSIM_SetSPIAccelerometerActiveDelegate HALSIM_SetSPIAccelerometerActive;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_activeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterSPIAccelerometerActiveCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterActiveCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -61,13 +65,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelSPIAccelerometerActiveCallback(int uid)
+        public void CancelActiveCallback(int uid)
         {
             HALSIM_CancelSPIAccelerometerActiveCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_activeCallbacks.TryRemove(uid, out cb);
         }
         public bool GetActive() => HALSIM_GetSPIAccelerometerActive(Index);
+        public void SetActive(bool active) => HALSIM_SetSPIAccelerometerActive(Index, active);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterSPIAccelerometerRangeCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -80,8 +85,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetSPIAccelerometerRangeDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetSPIAccelerometerRangeDelegate HALSIM_GetSPIAccelerometerRange;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetSPIAccelerometerRangeDelegate(int index, int range);
+        [NativeDelegate]
+        internal static HALSIM_SetSPIAccelerometerRangeDelegate HALSIM_SetSPIAccelerometerRange;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_rangeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterSPIAccelerometerRangeCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterRangeCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -96,13 +105,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelSPIAccelerometerRangeCallback(int uid)
+        public void CancelRangeCallback(int uid)
         {
             HALSIM_CancelSPIAccelerometerRangeCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_rangeCallbacks.TryRemove(uid, out cb);
         }
         public int GetRange() => HALSIM_GetSPIAccelerometerRange(Index);
+        public void SetRange(int range) => HALSIM_SetSPIAccelerometerRange(Index, range);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterSPIAccelerometerXCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -120,7 +130,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerXDelegate HALSIM_SetSPIAccelerometerX;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_xCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterSPIAccelerometerXCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterXCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -135,7 +145,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelSPIAccelerometerXCallback(int uid)
+        public void CancelXCallback(int uid)
         {
             HALSIM_CancelSPIAccelerometerXCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -160,7 +170,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerYDelegate HALSIM_SetSPIAccelerometerY;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_yCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterSPIAccelerometerYCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterYCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -175,7 +185,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelSPIAccelerometerYCallback(int uid)
+        public void CancelYCallback(int uid)
         {
             HALSIM_CancelSPIAccelerometerYCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -200,7 +210,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerZDelegate HALSIM_SetSPIAccelerometerZ;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_zCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterSPIAccelerometerZCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterZCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -215,7 +225,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelSPIAccelerometerZCallback(int uid)
+        public void CancelZCallback(int uid)
         {
             HALSIM_CancelSPIAccelerometerZCallback(Index, uid);
             HAL_NotifyCallback cb = null;

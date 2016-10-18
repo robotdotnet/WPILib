@@ -61,6 +61,10 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPCMSolenoidInitializedDelegate(int index, int channel);
         [NativeDelegate]
         internal static HALSIM_GetPCMSolenoidInitializedDelegate HALSIM_GetPCMSolenoidInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPCMSolenoidInitializedDelegate(int index, int channel, bool solenoidInitialized);
+        [NativeDelegate]
+        internal static HALSIM_SetPCMSolenoidInitializedDelegate HALSIM_SetPCMSolenoidInitialized;
         private readonly List<ConcurrentDictionary<int, HAL_NotifyCallback>> m_solenoidInitializedCallbacks = new List<ConcurrentDictionary<int, HAL_NotifyCallback>>();
         public int RegisterPCMSolenoidInitializedCallback(int channel, NotifyCallback callback, bool initialNotify)
         {
@@ -84,6 +88,7 @@ namespace HAL.Simulator.Data
             m_solenoidInitializedCallbacks[channel].TryRemove(uid, out cb);
         }
         public bool GetSolenoidInitialized(int channel) => HALSIM_GetPCMSolenoidInitialized(Index, channel);
+        public void SetSolenoidInitialized(int channel, bool solenoidInitialized) => HALSIM_SetPCMSolenoidInitialized(Index, channel, solenoidInitialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPCMSolenoidOutputCallbackDelegate(int index, int channel, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -96,6 +101,10 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPCMSolenoidOutputDelegate(int index, int channel);
         [NativeDelegate]
         internal static HALSIM_GetPCMSolenoidOutputDelegate HALSIM_GetPCMSolenoidOutput;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPCMSolenoidOutputDelegate(int index, int channel, bool solenoidOutput);
+        [NativeDelegate]
+        internal static HALSIM_SetPCMSolenoidOutputDelegate HALSIM_SetPCMSolenoidOutput;
         private readonly List<ConcurrentDictionary<int, HAL_NotifyCallback>> m_solenoidOutputCallbacks = new List<ConcurrentDictionary<int, HAL_NotifyCallback>>();
         public int RegisterPCMSolenoidOutputCallback(int channel, NotifyCallback callback, bool initialNotify)
         {
@@ -119,6 +128,7 @@ namespace HAL.Simulator.Data
             m_solenoidOutputCallbacks[channel].TryRemove(uid, out cb);
         }
         public bool GetSolenoidOutput(int channel) => HALSIM_GetPCMSolenoidOutput(Index, channel);
+        public void SetSolenoidOutput(int channel, bool solenoidOutput) => HALSIM_SetPCMSolenoidOutput(Index, channel, solenoidOutput);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPCMCompressorInitializedCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -131,8 +141,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPCMCompressorInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetPCMCompressorInitializedDelegate HALSIM_GetPCMCompressorInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPCMCompressorInitializedDelegate(int index, bool compressorInitialized);
+        [NativeDelegate]
+        internal static HALSIM_SetPCMCompressorInitializedDelegate HALSIM_SetPCMCompressorInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_compressorInitializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPCMCompressorInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCompressorInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -147,13 +161,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMCompressorInitializedCallback(int uid)
+        public void CancelCompressorInitializedCallback(int uid)
         {
             HALSIM_CancelPCMCompressorInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_compressorInitializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetCompressorInitialized() => HALSIM_GetPCMCompressorInitialized(Index);
+        public void SetCompressorInitialized(bool compressorInitialized) => HALSIM_SetPCMCompressorInitialized(Index, compressorInitialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPCMCompressorOnCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -171,7 +186,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMCompressorOnDelegate HALSIM_SetPCMCompressorOn;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_compressorOnCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPCMCompressorOnCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCompressorOnCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -186,7 +201,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMCompressorOnCallback(int uid)
+        public void CancelCompressorOnCallback(int uid)
         {
             HALSIM_CancelPCMCompressorOnCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -206,8 +221,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPCMClosedLoopEnabledDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetPCMClosedLoopEnabledDelegate HALSIM_GetPCMClosedLoopEnabled;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPCMClosedLoopEnabledDelegate(int index, bool closedLoopEnabled);
+        [NativeDelegate]
+        internal static HALSIM_SetPCMClosedLoopEnabledDelegate HALSIM_SetPCMClosedLoopEnabled;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_closedLoopEnabledCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPCMClosedLoopEnabledCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterClosedLoopEnabledCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -222,13 +241,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMClosedLoopEnabledCallback(int uid)
+        public void CancelClosedLoopEnabledCallback(int uid)
         {
             HALSIM_CancelPCMClosedLoopEnabledCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_closedLoopEnabledCallbacks.TryRemove(uid, out cb);
         }
         public bool GetClosedLoopEnabled() => HALSIM_GetPCMClosedLoopEnabled(Index);
+        public void SetClosedLoopEnabled(bool closedLoopEnabled) => HALSIM_SetPCMClosedLoopEnabled(Index, closedLoopEnabled);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPCMPressureSwitchCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -246,7 +266,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMPressureSwitchDelegate HALSIM_SetPCMPressureSwitch;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_pressureSwitchCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPCMPressureSwitchCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPressureSwitchCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -261,7 +281,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMPressureSwitchCallback(int uid)
+        public void CancelPressureSwitchCallback(int uid)
         {
             HALSIM_CancelPCMPressureSwitchCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -286,7 +306,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMCompressorCurrentDelegate HALSIM_SetPCMCompressorCurrent;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_compressorCurrentCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPCMCompressorCurrentCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCompressorCurrentCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -301,7 +321,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMCompressorCurrentCallback(int uid)
+        public void CancelCompressorCurrentCallback(int uid)
         {
             HALSIM_CancelPCMCompressorCurrentCallback(Index, uid);
             HAL_NotifyCallback cb = null;

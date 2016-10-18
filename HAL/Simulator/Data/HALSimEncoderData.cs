@@ -48,8 +48,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetEncoderInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetEncoderInitializedDelegate HALSIM_GetEncoderInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetEncoderInitializedDelegate(int index, bool initialized);
+        [NativeDelegate]
+        internal static HALSIM_SetEncoderInitializedDelegate HALSIM_SetEncoderInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -64,13 +68,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderInitializedCallback(int uid)
+        public void CancelInitializedCallback(int uid)
         {
             HALSIM_CancelEncoderInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_initializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetInitialized() => HALSIM_GetEncoderInitialized(Index);
+        public void SetInitialized(bool initialized) => HALSIM_SetEncoderInitialized(Index, initialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterEncoderCountCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -88,7 +93,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderCountDelegate HALSIM_SetEncoderCount;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_countCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderCountCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCountCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -103,7 +108,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderCountCallback(int uid)
+        public void CancelCountCallback(int uid)
         {
             HALSIM_CancelEncoderCountCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -128,7 +133,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderPeriodDelegate HALSIM_SetEncoderPeriod;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_periodCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderPeriodCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPeriodCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -143,7 +148,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderPeriodCallback(int uid)
+        public void CancelPeriodCallback(int uid)
         {
             HALSIM_CancelEncoderPeriodCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -163,8 +168,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetEncoderResetDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetEncoderResetDelegate HALSIM_GetEncoderReset;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetEncoderResetDelegate(int index, bool reset);
+        [NativeDelegate]
+        internal static HALSIM_SetEncoderResetDelegate HALSIM_SetEncoderReset;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_resetCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderResetCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterResetCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -179,13 +188,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderResetCallback(int uid)
+        public void CancelResetCallback(int uid)
         {
             HALSIM_CancelEncoderResetCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_resetCallbacks.TryRemove(uid, out cb);
         }
         public bool GetReset() => HALSIM_GetEncoderReset(Index);
+        public void SetReset(bool reset) => HALSIM_SetEncoderReset(Index, reset);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterEncoderMaxPeriodCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -198,8 +208,12 @@ namespace HAL.Simulator.Data
         internal delegate double HALSIM_GetEncoderMaxPeriodDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetEncoderMaxPeriodDelegate HALSIM_GetEncoderMaxPeriod;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetEncoderMaxPeriodDelegate(int index, double maxPeriod);
+        [NativeDelegate]
+        internal static HALSIM_SetEncoderMaxPeriodDelegate HALSIM_SetEncoderMaxPeriod;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_maxPeriodCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderMaxPeriodCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterMaxPeriodCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -214,13 +228,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderMaxPeriodCallback(int uid)
+        public void CancelMaxPeriodCallback(int uid)
         {
             HALSIM_CancelEncoderMaxPeriodCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_maxPeriodCallbacks.TryRemove(uid, out cb);
         }
         public double GetMaxPeriod() => HALSIM_GetEncoderMaxPeriod(Index);
+        public void SetMaxPeriod(double maxPeriod) => HALSIM_SetEncoderMaxPeriod(Index, maxPeriod);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterEncoderDirectionCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -238,7 +253,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderDirectionDelegate HALSIM_SetEncoderDirection;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_directionCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderDirectionCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterDirectionCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -253,7 +268,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderDirectionCallback(int uid)
+        public void CancelDirectionCallback(int uid)
         {
             HALSIM_CancelEncoderDirectionCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -273,8 +288,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetEncoderReverseDirectionDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetEncoderReverseDirectionDelegate HALSIM_GetEncoderReverseDirection;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetEncoderReverseDirectionDelegate(int index, bool reverseDirection);
+        [NativeDelegate]
+        internal static HALSIM_SetEncoderReverseDirectionDelegate HALSIM_SetEncoderReverseDirection;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_reverseDirectionCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderReverseDirectionCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterReverseDirectionCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -289,13 +308,14 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderReverseDirectionCallback(int uid)
+        public void CancelReverseDirectionCallback(int uid)
         {
             HALSIM_CancelEncoderReverseDirectionCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_reverseDirectionCallbacks.TryRemove(uid, out cb);
         }
         public bool GetReverseDirection() => HALSIM_GetEncoderReverseDirection(Index);
+        public void SetReverseDirection(bool reverseDirection) => HALSIM_SetEncoderReverseDirection(Index, reverseDirection);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterEncoderSamplesToAverageCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]
@@ -308,8 +328,12 @@ namespace HAL.Simulator.Data
         internal delegate int HALSIM_GetEncoderSamplesToAverageDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetEncoderSamplesToAverageDelegate HALSIM_GetEncoderSamplesToAverage;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetEncoderSamplesToAverageDelegate(int index, int samplesToAverage);
+        [NativeDelegate]
+        internal static HALSIM_SetEncoderSamplesToAverageDelegate HALSIM_SetEncoderSamplesToAverage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_samplesToAverageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterEncoderSamplesToAverageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterSamplesToAverageCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -324,12 +348,13 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelEncoderSamplesToAverageCallback(int uid)
+        public void CancelSamplesToAverageCallback(int uid)
         {
             HALSIM_CancelEncoderSamplesToAverageCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_samplesToAverageCallbacks.TryRemove(uid, out cb);
         }
         public int GetSamplesToAverage() => HALSIM_GetEncoderSamplesToAverage(Index);
+        public void SetSamplesToAverage(int samplesToAverage) => HALSIM_SetEncoderSamplesToAverage(Index, samplesToAverage);
     }
 }

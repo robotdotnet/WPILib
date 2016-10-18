@@ -53,6 +53,10 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetPDPInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetPDPInitializedDelegate HALSIM_GetPDPInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetPDPInitializedDelegate(int index, bool initialized);
+        [NativeDelegate]
+        internal static HALSIM_SetPDPInitializedDelegate HALSIM_SetPDPInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
         public int RegisterPDPInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
@@ -76,6 +80,7 @@ namespace HAL.Simulator.Data
             m_initializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetInitialized() => HALSIM_GetPDPInitialized(Index);
+        public void SetInitialized(bool initialized) => HALSIM_SetPDPInitialized(Index, initialized);
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         internal delegate int HALSIM_RegisterPDPTemperatureCallbackDelegate(int index, HAL_NotifyCallback callback, IntPtr param, bool initialNotify);
         [NativeDelegate]

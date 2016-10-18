@@ -48,7 +48,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogGyroAngleDelegate HALSIM_SetAnalogGyroAngle;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_angleCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogGyroAngleCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAngleCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -63,7 +63,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogGyroAngleCallback(int uid)
+        public void CancelAngleCallback(int uid)
         {
             HALSIM_CancelAnalogGyroAngleCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -88,7 +88,7 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogGyroRateDelegate HALSIM_SetAnalogGyroRate;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_rateCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogGyroRateCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterRateCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -103,7 +103,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogGyroRateCallback(int uid)
+        public void CancelRateCallback(int uid)
         {
             HALSIM_CancelAnalogGyroRateCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -123,8 +123,12 @@ namespace HAL.Simulator.Data
         internal delegate bool HALSIM_GetAnalogGyroInitializedDelegate(int index);
         [NativeDelegate]
         internal static HALSIM_GetAnalogGyroInitializedDelegate HALSIM_GetAnalogGyroInitialized;
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        internal delegate void HALSIM_SetAnalogGyroInitializedDelegate(int index, bool initialized);
+        [NativeDelegate]
+        internal static HALSIM_SetAnalogGyroInitializedDelegate HALSIM_SetAnalogGyroInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAnalogGyroInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
@@ -139,12 +143,13 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelAnalogGyroInitializedCallback(int uid)
+        public void CancelInitializedCallback(int uid)
         {
             HALSIM_CancelAnalogGyroInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
             m_initializedCallbacks.TryRemove(uid, out cb);
         }
         public bool GetInitialized() => HALSIM_GetAnalogGyroInitialized(Index);
+        public void SetInitialized(bool initialized) => HALSIM_SetAnalogGyroInitialized(Index, initialized);
     }
 }
