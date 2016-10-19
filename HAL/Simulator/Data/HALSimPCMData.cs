@@ -66,12 +66,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMSolenoidInitializedDelegate HALSIM_SetPCMSolenoidInitialized;
         private readonly List<ConcurrentDictionary<int, HAL_NotifyCallback>> m_solenoidInitializedCallbacks = new List<ConcurrentDictionary<int, HAL_NotifyCallback>>();
-        public int RegisterPCMSolenoidInitializedCallback(int channel, NotifyCallback callback, bool initialNotify)
+        public int RegisterSolenoidInitializedCallback(int channel, NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMSolenoidInitializedCallback(Index, channel, modCallback, IntPtr.Zero, initialNotify);
             if (!m_solenoidInitializedCallbacks[channel].TryAdd(uid, modCallback))
@@ -81,7 +81,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMSolenoidInitializedCallback(int channel, int uid)
+        public void CancelSolenoidInitializedCallback(int channel, int uid)
         {
             HALSIM_CancelPCMSolenoidInitializedCallback(Index, channel, uid);
             HAL_NotifyCallback cb = null;
@@ -106,12 +106,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMSolenoidOutputDelegate HALSIM_SetPCMSolenoidOutput;
         private readonly List<ConcurrentDictionary<int, HAL_NotifyCallback>> m_solenoidOutputCallbacks = new List<ConcurrentDictionary<int, HAL_NotifyCallback>>();
-        public int RegisterPCMSolenoidOutputCallback(int channel, NotifyCallback callback, bool initialNotify)
+        public int RegisterSolenoidOutputCallback(int channel, NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMSolenoidOutputCallback(Index, channel, modCallback, IntPtr.Zero, initialNotify);
             if (!m_solenoidOutputCallbacks[channel].TryAdd(uid, modCallback))
@@ -121,7 +121,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPCMSolenoidOutputCallback(int channel, int uid)
+        public void CancelSolenoidOutputCallback(int channel, int uid)
         {
             HALSIM_CancelPCMSolenoidOutputCallback(Index, channel, uid);
             HAL_NotifyCallback cb = null;
@@ -146,12 +146,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMCompressorInitializedDelegate HALSIM_SetPCMCompressorInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_compressorInitializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterCompressorInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCompressorInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMCompressorInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_compressorInitializedCallbacks.TryAdd(uid, modCallback))
@@ -186,12 +186,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMCompressorOnDelegate HALSIM_SetPCMCompressorOn;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_compressorOnCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterCompressorOnCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCompressorOnCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMCompressorOnCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_compressorOnCallbacks.TryAdd(uid, modCallback))
@@ -226,12 +226,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMClosedLoopEnabledDelegate HALSIM_SetPCMClosedLoopEnabled;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_closedLoopEnabledCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterClosedLoopEnabledCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterClosedLoopEnabledCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMClosedLoopEnabledCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_closedLoopEnabledCallbacks.TryAdd(uid, modCallback))
@@ -266,12 +266,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMPressureSwitchDelegate HALSIM_SetPCMPressureSwitch;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_pressureSwitchCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPressureSwitchCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPressureSwitchCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMPressureSwitchCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_pressureSwitchCallbacks.TryAdd(uid, modCallback))
@@ -306,12 +306,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPCMCompressorCurrentDelegate HALSIM_SetPCMCompressorCurrent;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_compressorCurrentCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterCompressorCurrentCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCompressorCurrentCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPCMCompressorCurrentCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_compressorCurrentCallbacks.TryAdd(uid, modCallback))

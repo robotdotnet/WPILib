@@ -60,12 +60,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioFPGAButtonDelegate HALSIM_SetRoboRioFPGAButton;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_fPGAButtonCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterFPGAButtonCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterFPGAButtonCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioFPGAButtonCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_fPGAButtonCallbacks.TryAdd(uid, modCallback))
@@ -100,12 +100,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioVInVoltageDelegate HALSIM_SetRoboRioVInVoltage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_vInVoltageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterVInVoltageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVInVoltageCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioVInVoltageCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_vInVoltageCallbacks.TryAdd(uid, modCallback))
@@ -140,12 +140,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioVInCurrentDelegate HALSIM_SetRoboRioVInCurrent;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_vInCurrentCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterVInCurrentCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVInCurrentCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioVInCurrentCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_vInCurrentCallbacks.TryAdd(uid, modCallback))
@@ -180,12 +180,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserVoltage6VDelegate HALSIM_SetRoboRioUserVoltage6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userVoltage6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserVoltage6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserVoltage6VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserVoltage6VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userVoltage6VCallbacks.TryAdd(uid, modCallback))
@@ -220,12 +220,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserCurrent6VDelegate HALSIM_SetRoboRioUserCurrent6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userCurrent6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserCurrent6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserCurrent6VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserCurrent6VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userCurrent6VCallbacks.TryAdd(uid, modCallback))
@@ -260,12 +260,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserActive6VDelegate HALSIM_SetRoboRioUserActive6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userActive6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserActive6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserActive6VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserActive6VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userActive6VCallbacks.TryAdd(uid, modCallback))
@@ -300,12 +300,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserVoltage5VDelegate HALSIM_SetRoboRioUserVoltage5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userVoltage5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserVoltage5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserVoltage5VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserVoltage5VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userVoltage5VCallbacks.TryAdd(uid, modCallback))
@@ -340,12 +340,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserCurrent5VDelegate HALSIM_SetRoboRioUserCurrent5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userCurrent5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserCurrent5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserCurrent5VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserCurrent5VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userCurrent5VCallbacks.TryAdd(uid, modCallback))
@@ -380,12 +380,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserActive5VDelegate HALSIM_SetRoboRioUserActive5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userActive5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserActive5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserActive5VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserActive5VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userActive5VCallbacks.TryAdd(uid, modCallback))
@@ -420,12 +420,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserVoltage3V3Delegate HALSIM_SetRoboRioUserVoltage3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userVoltage3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserVoltage3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserVoltage3V3Callback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserVoltage3V3Callback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userVoltage3V3Callbacks.TryAdd(uid, modCallback))
@@ -460,12 +460,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserCurrent3V3Delegate HALSIM_SetRoboRioUserCurrent3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userCurrent3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserCurrent3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserCurrent3V3Callback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserCurrent3V3Callback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userCurrent3V3Callbacks.TryAdd(uid, modCallback))
@@ -500,12 +500,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserActive3V3Delegate HALSIM_SetRoboRioUserActive3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userActive3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserActive3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserActive3V3Callback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserActive3V3Callback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userActive3V3Callbacks.TryAdd(uid, modCallback))
@@ -540,12 +540,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserFaults6VDelegate HALSIM_SetRoboRioUserFaults6V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userFaults6VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserFaults6VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserFaults6VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserFaults6VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userFaults6VCallbacks.TryAdd(uid, modCallback))
@@ -580,12 +580,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserFaults5VDelegate HALSIM_SetRoboRioUserFaults5V;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userFaults5VCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserFaults5VCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserFaults5VCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserFaults5VCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userFaults5VCallbacks.TryAdd(uid, modCallback))
@@ -620,12 +620,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRoboRioUserFaults3V3Delegate HALSIM_SetRoboRioUserFaults3V3;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_userFaults3V3Callbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterUserFaults3V3Callback(NotifyCallback callback, bool initialNotify)
+        public int RegisterUserFaults3V3Callback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRoboRioUserFaults3V3Callback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_userFaults3V3Callbacks.TryAdd(uid, modCallback))

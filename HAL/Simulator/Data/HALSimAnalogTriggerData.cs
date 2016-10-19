@@ -56,12 +56,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogTriggerInitializedDelegate HALSIM_SetAnalogTriggerInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogTriggerInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))
@@ -96,12 +96,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogTriggerTriggerLowerBoundDelegate HALSIM_SetAnalogTriggerTriggerLowerBound;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_triggerLowerBoundCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterTriggerLowerBoundCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterTriggerLowerBoundCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogTriggerTriggerLowerBoundCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_triggerLowerBoundCallbacks.TryAdd(uid, modCallback))
@@ -136,12 +136,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogTriggerTriggerUpperBoundDelegate HALSIM_SetAnalogTriggerTriggerUpperBound;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_triggerUpperBoundCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterTriggerUpperBoundCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterTriggerUpperBoundCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogTriggerTriggerUpperBoundCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_triggerUpperBoundCallbacks.TryAdd(uid, modCallback))
@@ -176,12 +176,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogTriggerTriggerModeDelegate HALSIM_SetAnalogTriggerTriggerMode;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_triggerModeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterTriggerModeCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterTriggerModeCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogTriggerTriggerModeCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_triggerModeCallbacks.TryAdd(uid, modCallback))

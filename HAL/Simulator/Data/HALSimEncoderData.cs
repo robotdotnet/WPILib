@@ -53,12 +53,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderInitializedDelegate HALSIM_SetEncoderInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))
@@ -93,12 +93,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderCountDelegate HALSIM_SetEncoderCount;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_countCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterCountCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterCountCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderCountCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_countCallbacks.TryAdd(uid, modCallback))
@@ -133,12 +133,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderPeriodDelegate HALSIM_SetEncoderPeriod;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_periodCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPeriodCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPeriodCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderPeriodCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_periodCallbacks.TryAdd(uid, modCallback))
@@ -173,12 +173,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderResetDelegate HALSIM_SetEncoderReset;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_resetCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterResetCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterResetCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderResetCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_resetCallbacks.TryAdd(uid, modCallback))
@@ -213,12 +213,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderMaxPeriodDelegate HALSIM_SetEncoderMaxPeriod;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_maxPeriodCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterMaxPeriodCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterMaxPeriodCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderMaxPeriodCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_maxPeriodCallbacks.TryAdd(uid, modCallback))
@@ -253,12 +253,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderDirectionDelegate HALSIM_SetEncoderDirection;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_directionCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterDirectionCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterDirectionCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderDirectionCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_directionCallbacks.TryAdd(uid, modCallback))
@@ -293,12 +293,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderReverseDirectionDelegate HALSIM_SetEncoderReverseDirection;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_reverseDirectionCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterReverseDirectionCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterReverseDirectionCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderReverseDirectionCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_reverseDirectionCallbacks.TryAdd(uid, modCallback))
@@ -333,12 +333,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetEncoderSamplesToAverageDelegate HALSIM_SetEncoderSamplesToAverage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_samplesToAverageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterSamplesToAverageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterSamplesToAverageCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterEncoderSamplesToAverageCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_samplesToAverageCallbacks.TryAdd(uid, modCallback))

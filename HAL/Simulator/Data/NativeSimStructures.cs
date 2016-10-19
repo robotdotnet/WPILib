@@ -10,7 +10,7 @@ namespace HAL.Simulator.Data
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
     public delegate void HAL_NotifyCallback(IntPtr name, IntPtr param, ref HAL_Value value);
 
-    public delegate void NotifyCallback(string name, ref HAL_Value value);
+    public delegate void NotifyCallback(string name, HAL_Value value);
 
     public enum HAL_Type : int
     {

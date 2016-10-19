@@ -50,12 +50,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerActiveDelegate HALSIM_SetSPIAccelerometerActive;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_activeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterActiveCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterActiveCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterSPIAccelerometerActiveCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_activeCallbacks.TryAdd(uid, modCallback))
@@ -90,12 +90,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerRangeDelegate HALSIM_SetSPIAccelerometerRange;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_rangeCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRangeCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterRangeCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterSPIAccelerometerRangeCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_rangeCallbacks.TryAdd(uid, modCallback))
@@ -130,12 +130,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerXDelegate HALSIM_SetSPIAccelerometerX;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_xCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterXCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterXCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterSPIAccelerometerXCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_xCallbacks.TryAdd(uid, modCallback))
@@ -170,12 +170,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerYDelegate HALSIM_SetSPIAccelerometerY;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_yCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterYCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterYCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterSPIAccelerometerYCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_yCallbacks.TryAdd(uid, modCallback))
@@ -210,12 +210,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetSPIAccelerometerZDelegate HALSIM_SetSPIAccelerometerZ;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_zCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterZCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterZCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterSPIAccelerometerZCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_zCallbacks.TryAdd(uid, modCallback))

@@ -54,12 +54,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInInitializedDelegate HALSIM_SetAnalogInInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))
@@ -94,12 +94,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAverageBitsDelegate HALSIM_SetAnalogInAverageBits;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_averageBitsCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAverageBitsCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAverageBitsCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInAverageBitsCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_averageBitsCallbacks.TryAdd(uid, modCallback))
@@ -134,12 +134,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInOversampleBitsDelegate HALSIM_SetAnalogInOversampleBits;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_oversampleBitsCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterOversampleBitsCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterOversampleBitsCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInOversampleBitsCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_oversampleBitsCallbacks.TryAdd(uid, modCallback))
@@ -174,12 +174,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInVoltageDelegate HALSIM_SetAnalogInVoltage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_voltageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterVoltageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVoltageCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInVoltageCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_voltageCallbacks.TryAdd(uid, modCallback))
@@ -214,12 +214,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorInitializedDelegate HALSIM_SetAnalogInAccumulatorInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorInitializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccumulatorInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInAccumulatorInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_accumulatorInitializedCallbacks.TryAdd(uid, modCallback))
@@ -254,12 +254,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorValueDelegate HALSIM_SetAnalogInAccumulatorValue;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorValueCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccumulatorValueCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorValueCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInAccumulatorValueCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_accumulatorValueCallbacks.TryAdd(uid, modCallback))
@@ -294,12 +294,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorCountDelegate HALSIM_SetAnalogInAccumulatorCount;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorCountCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccumulatorCountCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorCountCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInAccumulatorCountCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_accumulatorCountCallbacks.TryAdd(uid, modCallback))
@@ -334,12 +334,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorCenterDelegate HALSIM_SetAnalogInAccumulatorCenter;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorCenterCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccumulatorCenterCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorCenterCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInAccumulatorCenterCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_accumulatorCenterCallbacks.TryAdd(uid, modCallback))
@@ -374,12 +374,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogInAccumulatorDeadbandDelegate HALSIM_SetAnalogInAccumulatorDeadband;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_accumulatorDeadbandCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAccumulatorDeadbandCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAccumulatorDeadbandCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogInAccumulatorDeadbandCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_accumulatorDeadbandCallbacks.TryAdd(uid, modCallback))

@@ -69,7 +69,7 @@ namespace WPILib.Tests
             int count = 0;
             string key = null;
             dynamic value = -5;
-            NotifyCallback mockDelegate = (string name, ref HAL_Value halValue) =>
+            NotifyCallback mockDelegate = (string name, HAL_Value halValue) =>
             {
                 count++;
                 key = name;
@@ -157,7 +157,7 @@ namespace WPILib.Tests
             int count = 0;
             string key = null;
             dynamic value = -5;
-            NotifyCallback mockDelegate = (string name, ref HAL_Value halValue) =>
+            NotifyCallback mockDelegate = (string name, HAL_Value halValue) =>
             {
                 count++;
                 key = name;

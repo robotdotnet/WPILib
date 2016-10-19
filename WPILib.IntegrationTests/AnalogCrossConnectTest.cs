@@ -89,7 +89,7 @@ namespace WPILib.IntegrationTests
             trigger.Dispose();
         }
 
-        [Test]
+        [Test, Ignore("Counters are not implemented")]
         public void TestAnalogTriggerCounter()
         {
             AnalogTrigger trigger = new AnalogTrigger(s_analogIo.GetInput());
@@ -110,7 +110,7 @@ namespace WPILib.IntegrationTests
             trigger.Dispose();
         }
 
-        [Test]
+        [Test, Ignore("Need to add this error")]
         public void TestExceptionOnInvalidAccumulatorPort()
         {
             Assert.Throws<UncleanStatusException>(() => s_analogIo.GetInput().GetAccumulatorCount());

@@ -13,8 +13,8 @@ namespace WPILib.IntegrationTests.Test
         {
             if (!s_initialized)
             {
-
-                HAL.Base.HAL.HALNetworkCommunicationObserveUserProgramStarting();
+                HAL.Base.HAL.Initialize();
+                HAL.Base.HALDriverStation.HAL_ObserveUserProgramStarting();
 
                 LiveWindow.LiveWindow.SetEnabled(false);
                 Console.WriteLine("Started coms");
@@ -34,9 +34,9 @@ namespace WPILib.IntegrationTests.Test
                     SimJumpers.AttachRelay(0, 19, 18);
                     SimJumpers.AttachAio(2, 0);
 
-                    SimData.Accelerometer.X = 0.0;
-                    SimData.Accelerometer.Y = 0.0;
-                    SimData.Accelerometer.Z = 1.0;
+                    SimData.Accelerometer.SetX(0.0);
+                    SimData.Accelerometer.SetY(0.0);
+                    SimData.Accelerometer.SetZ(1.0);
                     return;
                 }
 

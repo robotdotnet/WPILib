@@ -48,12 +48,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogGyroAngleDelegate HALSIM_SetAnalogGyroAngle;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_angleCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterAngleCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterAngleCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogGyroAngleCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_angleCallbacks.TryAdd(uid, modCallback))
@@ -88,12 +88,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogGyroRateDelegate HALSIM_SetAnalogGyroRate;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_rateCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterRateCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterRateCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogGyroRateCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_rateCallbacks.TryAdd(uid, modCallback))
@@ -128,12 +128,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetAnalogGyroInitializedDelegate HALSIM_SetAnalogGyroInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterAnalogGyroInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))

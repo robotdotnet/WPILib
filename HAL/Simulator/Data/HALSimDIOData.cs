@@ -50,12 +50,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDIOInitializedDelegate HALSIM_SetDIOInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDIOInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))
@@ -90,12 +90,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDIOValueDelegate HALSIM_SetDIOValue;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_valueCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterValueCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterValueCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDIOValueCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_valueCallbacks.TryAdd(uid, modCallback))
@@ -130,12 +130,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDIOPulseLengthDelegate HALSIM_SetDIOPulseLength;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_pulseLengthCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPulseLengthCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPulseLengthCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDIOPulseLengthCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_pulseLengthCallbacks.TryAdd(uid, modCallback))
@@ -170,12 +170,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDIOIsInputDelegate HALSIM_SetDIOIsInput;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_isInputCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterIsInputCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterIsInputCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDIOIsInputCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_isInputCallbacks.TryAdd(uid, modCallback))
@@ -210,12 +210,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDIOFilterIndexDelegate HALSIM_SetDIOFilterIndex;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_filterIndexCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterFilterIndexCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterFilterIndexCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDIOFilterIndexCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_filterIndexCallbacks.TryAdd(uid, modCallback))

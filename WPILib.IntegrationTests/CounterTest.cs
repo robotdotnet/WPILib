@@ -8,6 +8,7 @@ namespace WPILib.IntegrationTests
     [TestFixture(TestBench.DioCrossConnectA2, TestBench.DioCrossConnectA1)]
     [TestFixture(TestBench.DioCrossConnectB1, TestBench.DioCrossConnectB2)]
     [TestFixture(TestBench.DioCrossConnectB2, TestBench.DioCrossConnectB1)]
+    [Ignore("Counters not currently enabled in sim")]
     public class CounterTest : AbstractComsSetup
     {
         private static FakeCounterFixture s_counter;

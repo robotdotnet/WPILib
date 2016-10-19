@@ -48,12 +48,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDigitalPWMInitializedDelegate HALSIM_SetDigitalPWMInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDigitalPWMInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))
@@ -88,12 +88,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDigitalPWMDutyCycleDelegate HALSIM_SetDigitalPWMDutyCycle;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_dutyCycleCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterDutyCycleCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterDutyCycleCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDigitalPWMDutyCycleCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_dutyCycleCallbacks.TryAdd(uid, modCallback))
@@ -128,12 +128,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetDigitalPWMPinDelegate HALSIM_SetDigitalPWMPin;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_pinCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPinCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterPinCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterDigitalPWMPinCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_pinCallbacks.TryAdd(uid, modCallback))

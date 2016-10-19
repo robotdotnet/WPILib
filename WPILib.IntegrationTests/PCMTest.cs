@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HAL.Simulator;
+using HAL.Simulator.Data;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
 
@@ -24,7 +25,9 @@ namespace WPILib.IntegrationTests
 
         private static DigitalInput fakeSolenoid1, fakeSolenoid2;
 
-        private static Action<string, dynamic> pressureSwitchCallback = null;
+        private static NotifyCallback pressureSwitchCallback = null;
+
+        private static int callbackId;
 
         [TestFixtureSetUp]
         public static void SetUpBeforeClass()
@@ -40,6 +43,7 @@ namespace WPILib.IntegrationTests
 
             if (RobotBase.IsSimulation)
             {
+                /*
                 pressureSwitchCallback = (s, o) =>
                 {
                     var comp = SimData.GetPCM(0).Compressor;
@@ -48,7 +52,15 @@ namespace WPILib.IntegrationTests
                     double voltage = o ? CompressorOffVoltage : CompressorOnVoltage;
                     SimData.AnalogIn[1].Voltage = voltage;
                 };
-                SimData.DIO[11].Register("Value", pressureSwitchCallback);
+                */
+                pressureSwitchCallback = (string name, HAL_Value value) =>
+                {
+                    SimData.PCM[0].SetPressureSwitch(value.GetBoolean());
+                    SimData.PCM[0].SetCompressorOn(value.GetBoolean());
+                    double voltage = value.GetBoolean() ? CompressorOffVoltage : CompressorOnVoltage;
+                    SimData.AnalogIn[1].SetVoltage(voltage);
+                };
+                callbackId = SimData.DIO[11].RegisterValueCallback(pressureSwitchCallback, false);
             }
         }
 
@@ -65,7 +77,7 @@ namespace WPILib.IntegrationTests
 
             if (RobotBase.IsSimulation)
             {
-                SimData.DIO[11].Cancel("Value", pressureSwitchCallback);
+                SimData.DIO[11].CancelValueCallback(callbackId);
             }
         }
 
@@ -101,22 +113,24 @@ namespace WPILib.IntegrationTests
             using (Solenoid solenoid1 = new Solenoid(0))
             using (Solenoid solenoid2 = new Solenoid(1))
             {
-                Action<string, dynamic> solenoid1Callback = null;
-                Action<string, dynamic> solenoid2Callback = null;
+                NotifyCallback solenoid1Callback = null;
+                NotifyCallback solenoid2Callback = null;
+                int callback1Id = -1;
+                int callback2Id = -1;
 
                 if (RobotBase.IsSimulation)
                 {
-                    solenoid1Callback = (s, o) =>
+                    solenoid1Callback = (string s, HAL_Value val) =>
                     {
-                        SimData.DIO[12].Value = !o;
+                        SimData.DIO[12].SetValue(!val.GetBoolean());
                     };
-                    SimData.GetPCM(0).Solenoids[0].Register("Value", solenoid1Callback);
+                    callback1Id = SimData.PCM[0].RegisterSolenoidOutputCallback(0,solenoid1Callback , false);
 
                     solenoid2Callback = (s, o) =>
                     {
-                        SimData.DIO[13].Value = !o;
+                        SimData.DIO[13].SetValue(!o.GetBoolean());
                     };
-                    SimData.GetPCM(0).Solenoids[1].Register("Value", solenoid2Callback);
+                    callback2Id = SimData.PCM[0].RegisterSolenoidOutputCallback(1, solenoid2Callback);
                 }
 
                 solenoid1.Set(false);
@@ -161,8 +175,8 @@ namespace WPILib.IntegrationTests
 
                 if (RobotBase.IsSimulation)
                 {
-                    SimData.GetPCM(0).Solenoids[0].Cancel("Value", solenoid1Callback);
-                    SimData.GetPCM(0).Solenoids[1].Cancel("Value", solenoid2Callback);
+                    SimData.PCM[0].CancelSolenoidOutputCallback(0, callback1Id);
+                    SimData.PCM[0].CancelSolenoidOutputCallback(1, callback2Id);
                 }
             }
 
@@ -173,22 +187,25 @@ namespace WPILib.IntegrationTests
         {
             using (DoubleSolenoid solenoid = new DoubleSolenoid(0, 1))
             {
-                Action<string, dynamic> solenoid1Callback = null;
-                Action<string, dynamic> solenoid2Callback = null;
+                NotifyCallback solenoid1Callback = null;
+                NotifyCallback solenoid2Callback = null;
+
+                int callback1Id = -1;
+                int callback2Id = -1;
 
                 if (RobotBase.IsSimulation)
                 {
                     solenoid1Callback = (s, o) =>
                     {
-                        SimData.DIO[12].Value = !o;
+                        SimData.DIO[12].SetValue(!o.GetBoolean());
                     };
-                    SimData.GetPCM(0).Solenoids[0].Register("Value", solenoid1Callback);
+                    callback1Id = SimData.PCM[0].RegisterSolenoidOutputCallback(0, solenoid1Callback);
 
                     solenoid2Callback = (s, o) =>
                     {
-                        SimData.DIO[13].Value = !o;
+                        SimData.DIO[13].SetValue(!o.GetBoolean());
                     };
-                    SimData.GetPCM(0).Solenoids[1].Register("Value", solenoid2Callback);
+                    callback2Id = SimData.PCM[0].RegisterSolenoidOutputCallback(1, solenoid2Callback);
                 }
 
                 solenoid.Set(DoubleSolenoid.Value.Off);
@@ -211,8 +228,8 @@ namespace WPILib.IntegrationTests
 
                 if (RobotBase.IsSimulation)
                 {
-                    SimData.GetPCM(0).Solenoids[0].Cancel("Value", solenoid1Callback);
-                    SimData.GetPCM(0).Solenoids[1].Cancel("Value", solenoid2Callback);
+                    SimData.PCM[0].CancelSolenoidOutputCallback(0, callback1Id);
+                    SimData.PCM[0].CancelSolenoidOutputCallback(1, callback2Id);
                 }
             }
         }

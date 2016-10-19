@@ -60,12 +60,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPDPInitializedDelegate HALSIM_SetPDPInitialized;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPDPInitializedCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPDPInitializedCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedCallbacks.TryAdd(uid, modCallback))
@@ -75,7 +75,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPDPInitializedCallback(int uid)
+        public void CancelInitializedCallback(int uid)
         {
             HALSIM_CancelPDPInitializedCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -100,12 +100,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPDPTemperatureDelegate HALSIM_SetPDPTemperature;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_temperatureCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPDPTemperatureCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterTemperatureCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPDPTemperatureCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_temperatureCallbacks.TryAdd(uid, modCallback))
@@ -115,7 +115,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPDPTemperatureCallback(int uid)
+        public void CancelTemperatureCallback(int uid)
         {
             HALSIM_CancelPDPTemperatureCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -140,12 +140,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPDPVoltageDelegate HALSIM_SetPDPVoltage;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_voltageCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterPDPVoltageCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterVoltageCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPDPVoltageCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_voltageCallbacks.TryAdd(uid, modCallback))
@@ -155,7 +155,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPDPVoltageCallback(int uid)
+        public void CancelVoltageCallback(int uid)
         {
             HALSIM_CancelPDPVoltageCallback(Index, uid);
             HAL_NotifyCallback cb = null;
@@ -180,12 +180,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetPDPCurrentDelegate HALSIM_SetPDPCurrent;
         private readonly List<ConcurrentDictionary<int, HAL_NotifyCallback>> m_currentCallbacks = new List<ConcurrentDictionary<int, HAL_NotifyCallback>>();
-        public int RegisterPDPCurrentCallback(int channel, NotifyCallback callback, bool initialNotify)
+        public int RegisterCurrentCallback(int channel, NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterPDPCurrentCallback(Index, channel, modCallback, IntPtr.Zero, initialNotify);
             if (!m_currentCallbacks[channel].TryAdd(uid, modCallback))
@@ -195,7 +195,7 @@ namespace HAL.Simulator.Data
             }
             return uid;
         }
-        public void CancelPDPCurrentCallback(int channel, int uid)
+        public void CancelCurrentCallback(int channel, int uid)
         {
             HALSIM_CancelPDPCurrentCallback(Index, channel, uid);
             HAL_NotifyCallback cb = null;

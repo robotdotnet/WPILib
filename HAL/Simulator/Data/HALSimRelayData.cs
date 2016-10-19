@@ -49,12 +49,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRelayInitializedForwardDelegate HALSIM_SetRelayInitializedForward;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedForwardCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedForwardCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedForwardCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRelayInitializedForwardCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedForwardCallbacks.TryAdd(uid, modCallback))
@@ -89,12 +89,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRelayInitializedReverseDelegate HALSIM_SetRelayInitializedReverse;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_initializedReverseCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterInitializedReverseCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterInitializedReverseCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRelayInitializedReverseCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_initializedReverseCallbacks.TryAdd(uid, modCallback))
@@ -129,12 +129,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRelayForwardDelegate HALSIM_SetRelayForward;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_forwardCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterForwardCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterForwardCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRelayForwardCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_forwardCallbacks.TryAdd(uid, modCallback))
@@ -169,12 +169,12 @@ namespace HAL.Simulator.Data
         [NativeDelegate]
         internal static HALSIM_SetRelayReverseDelegate HALSIM_SetRelayReverse;
         private readonly ConcurrentDictionary<int, HAL_NotifyCallback> m_reverseCallbacks = new ConcurrentDictionary<int, HAL_NotifyCallback>();
-        public int RegisterReverseCallback(NotifyCallback callback, bool initialNotify)
+        public int RegisterReverseCallback(NotifyCallback callback, bool initialNotify = false)
         {
             HAL_NotifyCallback modCallback = (IntPtr namePtr, IntPtr param, ref HAL_Value value) =>
             {
                 string varName = ReadUTF8String(namePtr);
-                callback?.Invoke(varName, ref value);
+                callback?.Invoke(varName, value);
             };
             int uid = HALSIM_RegisterRelayReverseCallback(Index, modCallback, IntPtr.Zero, initialNotify);
             if (!m_reverseCallbacks.TryAdd(uid, modCallback))
