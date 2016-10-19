@@ -42,7 +42,7 @@ namespace WPILib
 
         /// Gets if the robot is in simulation
         //TODO: Fix ME (THAD)
-        public static bool IsSimulation => true;
+        public static bool IsSimulation => false;
 
         /// Gets if the robot is running on a RoboRIO
         public static bool IsReal => !IsSimulation;

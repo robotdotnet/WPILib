@@ -57,7 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.3.0.0-beta-0060\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
+      <HintPath>..\packages\FRC.NetworkTables.Core.3.0.0-beta-0100\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

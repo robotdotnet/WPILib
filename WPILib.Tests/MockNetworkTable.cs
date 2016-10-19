@@ -136,6 +136,11 @@ namespace WPILib.Tests
             return false;
         }
 
+        public bool PutBooleanArray(string key, IList<bool> value)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool PutBooleanArray(string key, bool[] value)
         {
             return false;
@@ -144,6 +149,16 @@ namespace WPILib.Tests
         public bool[] GetBooleanArray(string key)
         {
             return null;
+        }
+
+        public bool[] GetBooleanArray(string key, IList<bool> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutNumberArray(string key, IList<double> value)
+        {
+            throw new NotImplementedException();
         }
 
         public bool[] GetBooleanArray(string key, bool[] defaultValue)
@@ -161,6 +176,16 @@ namespace WPILib.Tests
             return null;
         }
 
+        public double[] GetNumberArray(string key, IList<double> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutStringArray(string key, IList<string> value)
+        {
+            throw new NotImplementedException();
+        }
+
         public double[] GetNumberArray(string key, double[] defaultValue)
         {
             return null;
@@ -176,6 +201,16 @@ namespace WPILib.Tests
             return null;
         }
 
+        public string[] GetStringArray(string key, IList<string> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutRaw(string key, IList<byte> value)
+        {
+            throw new NotImplementedException();
+        }
+
         public string[] GetStringArray(string key, string[] defaultValue)
         {
             return null;
@@ -189,6 +224,11 @@ namespace WPILib.Tests
         public byte[] GetRaw(string key)
         {
             return null;
+        }
+
+        public byte[] GetRaw(string key, IList<byte> defaultValue)
+        {
+            throw new NotImplementedException();
         }
 
         public byte[] GetRaw(string key, byte[] defaultValue)
@@ -293,6 +333,26 @@ namespace WPILib.Tests
         public bool SetDefaultString(string key, string defaultValue)
         {
             return true;
+        }
+
+        public bool SetDefaultRaw(string key, IList<byte> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultBooleanArray(string key, IList<bool> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultNumberArray(string key, IList<double> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultStringArray(string key, IList<string> defaultValue)
+        {
+            throw new NotImplementedException();
         }
 
         public bool SetDefaultRaw(string key, byte[] defaultValue)

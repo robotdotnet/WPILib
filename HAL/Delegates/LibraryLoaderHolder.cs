@@ -72,7 +72,7 @@ namespace HAL.Base
 
                     const string resourceRoot = "HAL.AthenaHAL.Native.";
 
-#if TRUE
+#if FALSE
                     s_useCommandLineFile = true;
                     s_libraryLocation = IntPtr.Size == 8 ?
                         @"C:\Users\thadh\Documents\GitHub\ThadHouse\MockHalTesting\native\build\binaries\mockhalSharedLibrary\x64\mockhal.dll" :
