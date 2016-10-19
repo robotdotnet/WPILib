@@ -18,6 +18,7 @@ build:
 
 test_script:
 - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:".\WPILib.Tests\Output\WPILib.Tests.dll --framework=net-4.5 " -filter:"+[WPILib*]* -[HAL*]* -[WPILib.T*]* -[WPILib.IntegrationT*]* -[NIVision*]*" -output:coverage.xml -mergeoutput -returntargetcode
+- .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:".\WPILib.IntegrationTests\Output\WPILib.IntegrationTests.dll --framework=net-4.5 " -filter:"+[WPILib*]* -[HAL*]* -[WPILib.T*]* -[WPILib.IntegrationT*]* -[NIVision*]*" -output:coverageIntegration.xml
 
 - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
 - pip install codecov
