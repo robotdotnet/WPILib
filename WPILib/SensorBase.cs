@@ -12,7 +12,7 @@ namespace WPILib
         /// The number of clock ticks per microsecond from the FPGA
         public const int SystemClockTicksPerMicrosecond = 40;
         /// The number of Digital Channels found on the RoboRIO
-        public const int DigitalChannels = 26;
+        public const int DigitalChannels = 31;
         /// The number of Analog Inputs found on the RoboRIO
         public const int AnalogInputChannels = 8;
         /// The number of Analog Outputs found on the RoboRIO

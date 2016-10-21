@@ -48,16 +48,16 @@ namespace HAL.NativeLoader
             dlclose(NativeLibraryHandle);
         }
 
-        [DllImport("libdl-2.20.so")]
+        [DllImport("libdl.so.2")]
         private static extern IntPtr dlopen(string fileName, int flags);
 
-        [DllImport("libdl-2.20.so")]
+        [DllImport("libdl.so.2")]
         private static extern IntPtr dlsym(IntPtr handle, string symbol);
 
-        [DllImport("libdl-2.20.so")]
+        [DllImport("libdl.so.2")]
         private static extern IntPtr dlerror();
 
-        [DllImport("libdl-2.20.so")]
+        [DllImport("libdl.so.2")]
         private static extern int dlclose(IntPtr handle);
     }
 }

@@ -79,39 +79,56 @@ namespace HAL.Base
                         @"C:\Users\thadh\Documents\GitHub\ThadHouse\MockHalTesting\native\build\binaries\mockhalSharedLibrary\x86\mockhal.dll";
 #endif
 
-                    if (s_useCommandLineFile)
+                    
+                    if (File.Exists("/usr/local/frc/bin/frcRunRobot.sh"))
                     {
+
                         s_nativeLoader = new NativeLibraryLoader();
-                        s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(s_libraryLocation, true);
-                    }
-                    else if (File.Exists("/usr/local/frc/bin/frcRunRobot.sh"))
-                    {
-                        s_nativeLoader = new NativeLibraryLoader();
-                        // RoboRIO
-                        s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(), resourceRoot + "roborio.libHALAthena.so");
-                        s_libraryLocation = s_nativeLoader.LibraryLocation;
+                        if (s_useCommandLineFile)
+                        {
+                            Console.WriteLine(s_libraryLocation);
+                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(), s_libraryLocation, true);
+                        }
+                        else
+                        {
+                            // RoboRIO
+                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(),
+                                resourceRoot + "roborio.libHALAthena.so");
+                            s_libraryLocation = s_nativeLoader.LibraryLocation;
+                        }
                     }
                     else
                     {
+                        
                         s_nativeLoader = new NativeLibraryLoader();
-                        s_nativeLoader.AddLibraryLocation(OsType.Windows32,
-                            resourceRoot + "x86.mockhal.dll");
-                        s_nativeLoader.AddLibraryLocation(OsType.Windows64,
-                            resourceRoot + "amd64.mockhal.dll");
-                        /*
-                        s_nativeLoader.AddLibraryLocation(OsType.Linux32,
-                            resourceRoot + "x86.libntcore.so");
-                        s_nativeLoader.AddLibraryLocation(OsType.Linux64,
-                            resourceRoot + "amd64.libntcore.so");
-                        s_nativeLoader.AddLibraryLocation(OsType.MacOs32,
-                            resourceRoot + "x86.libntcore.dylib");
-                        s_nativeLoader.AddLibraryLocation(OsType.MacOs64,
-                            resourceRoot + "amd64.libntcore.dylib");
+                        if (s_useCommandLineFile)
+                        {
+                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(s_libraryLocation, true);
+                        }
+                        else
+                        {
+                            s_nativeLoader.AddLibraryLocation(OsType.Windows32,
+                                resourceRoot + "x86.mockhal.dll");
+                            s_nativeLoader.AddLibraryLocation(OsType.Windows64,
+                                resourceRoot + "amd64.mockhal.dll");
+                            /*
+                            s_nativeLoader.AddLibraryLocation(OsType.Linux32,
+                                resourceRoot + "x86.libntcore.so");
+                            s_nativeLoader.AddLibraryLocation(OsType.Linux64,
+                                resourceRoot + "amd64.libntcore.so");
+                            s_nativeLoader.AddLibraryLocation(OsType.MacOs32,
+                                resourceRoot + "x86.libntcore.dylib");
+                            s_nativeLoader.AddLibraryLocation(OsType.MacOs64,
+                                resourceRoot + "amd64.libntcore.dylib");
+    
+        */
+        
 
-    */
-
-                        s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>();
-                        s_libraryLocation = s_nativeLoader.LibraryLocation;
+                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>();
+                            s_libraryLocation = s_nativeLoader.LibraryLocation;
+                            
+                        }
+                        
                     }
                 }
                 catch (Exception e)
