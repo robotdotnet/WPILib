@@ -65,6 +65,9 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetPortDelegate(int pin);
         [NativeDelegate] public static HAL_GetPortDelegate HAL_GetPort;
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate HALRuntimeType HAL_GetRuntimeTypeDelegate();
+        [NativeDelegate] public static HAL_GetRuntimeTypeDelegate HAL_GetRuntimeType;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetPortWithModuleDelegate(int module, int pin);
         [NativeDelegate]
         public static HAL_GetPortWithModuleDelegate HAL_GetPortWithModule;

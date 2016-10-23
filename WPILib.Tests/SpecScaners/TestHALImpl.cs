@@ -191,6 +191,7 @@ namespace WPILib.Tests.SpecScaners
                 "HALAnalogTriggerType",
                 "HALEncoderEncodingType",
                 "HALEncoderIndexingType",
+                "HALRuntimeType",
                 "Mode",
 
                 //Also allow any structs known to be blittable

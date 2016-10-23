@@ -10,6 +10,22 @@ namespace HAL.Base
 {
 
     #region HAL
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum HALRuntimeType
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        HALAthena,
+        /// <summary>
+        /// 
+        /// </summary>
+        HALMock
+    }
+
     /// <summary>
     /// 
     /// </summary>

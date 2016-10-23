@@ -41,8 +41,7 @@ namespace WPILib
         }
 
         /// Gets if the robot is in simulation
-        //TODO: Fix ME (THAD)
-        public static bool IsSimulation => false;
+        public static bool IsSimulation => HAL_GetRuntimeType() == HALRuntimeType.HALMock;
 
         /// Gets if the robot is running on a RoboRIO
         public static bool IsReal => !IsSimulation;
