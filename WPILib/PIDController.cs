@@ -751,7 +751,7 @@ namespace WPILib
         public string SmartDashboardType => "PIDController";
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
         {
             if (key == ("p") || key == ("i") || key == ("d") || key == ("f"))
             {
@@ -761,14 +761,16 @@ namespace WPILib
             }
             else if (key == ("setpoint"))
             {
-                if (Setpoint != (double)value)
-                    Setpoint = (double)value;
+                double val = value.GetDouble();
+                if (Setpoint != val)
+                    Setpoint = val;
             }
             else if (key == ("enabled"))
             {
-                if (Enabled != (bool)value)
+                bool val = value.GetBoolean();
+                if (Enabled != val)
                 {
-                    if ((bool)value)
+                    if (val)
                     {
                         Enable();
                     }

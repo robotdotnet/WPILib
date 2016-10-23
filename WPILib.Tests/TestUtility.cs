@@ -13,7 +13,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetFPGAVersion()
         {
-            Assert.AreEqual(2015, Utility.GetFPGAVersion());
+            Assert.AreEqual(2018, Utility.GetFPGAVersion());
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetUserButton()
         {
-            SimData.RoboRioData.FPGAButton = true;
+            SimData.RoboRioData.SetFPGAButton(true);
             Assert.IsTrue(Utility.GetUserButton());
         }
     }
@@ -46,6 +46,7 @@ namespace RobotCode.Tests
     [TestFixture]
     public class TestUtilityStatus : TestBase
     {
+        /*
         [Test]
         public void TestCheckStatusReportingError()
         {
@@ -59,7 +60,7 @@ namespace RobotCode.Tests
             Assert.That(data.IsError, Is.True);
             Assert.That(data.ErrorCode, Is.EqualTo(10));
             Assert.That(data.IsLVCode, Is.False);
-            Assert.That(data.Details, Is.EqualTo(HAL.Base.HAL.GetHALErrorMessage(data.ErrorCode)));
+            Assert.That(data.Details, Is.EqualTo(HAL.Base.HAL.HAL_GetErrorMessage(data.ErrorCode)));
             Console.WriteLine(data.Location);
             var split = data.Location.Split('\n');
             Assert.That(split.Length, Is.EqualTo(3));
@@ -67,7 +68,9 @@ namespace RobotCode.Tests
             Assert.That(split[1].StartsWith("Caller: RobotCode.Tests.TestUtilityStatus.TestCheckStatusReportingError"));
             Assert.That(data.StackTrace, Is.Not.Null.Or.Empty);
         }
+        */
     }
+    
 }
 
 

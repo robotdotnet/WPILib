@@ -5,6 +5,7 @@ using NetworkTables.Tables;
 using WPILib.LiveWindow;
 using static HAL.Base.HAL;
 using static HAL.Base.HALSolenoid;
+using static HAL.Base.HALPorts;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -18,32 +19,8 @@ namespace WPILib
     public class Solenoid : SolenoidBase, ILiveWindowSendable, ITableListener
     {
         private readonly int m_channel;//The channel to control.
-        private IntPtr m_solenoidPort;
+        private int m_solenoidHandle = 0;
         private readonly object m_lockObject = new object();
-
-        /// <summary>
-        /// Common function to implement constructor behavior.
-        /// </summary>
-        private void InitSolenoid()
-        {
-            lock (m_lockObject)
-            {
-                CheckSolenoidModule(ModuleNumber);
-                CheckSolenoidChannel(m_channel);
-
-                //Check to see if it is already allocated
-                Allocated.Allocate(ModuleNumber*SolenoidChannels + m_channel,
-                    "Solenoid channel " + m_channel + " on module " + ModuleNumber + " is already allocated");
-
-                int status = 0;
-
-                IntPtr port = GetPortWithModule((byte)ModuleNumber, (byte)m_channel);
-                m_solenoidPort = InitializeSolenoidPort(port, ref status);
-                CheckStatus(status);
-                LiveWindow.LiveWindow.AddActuator("Solenoid", ModuleNumber, m_channel, this);
-                Report(ResourceType.kResourceType_Solenoid, (byte)m_channel, (byte)ModuleNumber);
-            }
-        }
 
         /// <summary>
         /// Constructor using the default PCM ID (0)
@@ -63,19 +40,26 @@ namespace WPILib
             : base(moduleNumber)
         {
             m_channel = channel;
-            InitSolenoid();
+
+            CheckSolenoidChannel(channel);
+            CheckSolenoidModule(moduleNumber);
+
+            int status = 0;
+            m_solenoidHandle = HAL_InitializeSolenoidPort(HAL_GetPortWithModule(moduleNumber, channel), ref status);
+
+            CheckStatusRange(status, 0, HAL_GetNumSolenoidChannels(), channel);
+
+            LiveWindow.LiveWindow.AddActuator("Solenoid", moduleNumber, channel, this);
+            Report(ResourceType.kResourceType_Solenoid, channel, moduleNumber);
         }
 
         ///<inheritdoc/>
         public override void Dispose()
         {
-            lock (m_lockObject)
-            {
-                Allocated.Deallocate(ModuleNumber * SolenoidChannels + m_channel);
-                FreeSolenoidPort(m_solenoidPort);
-                m_solenoidPort = IntPtr.Zero;
-                base.Dispose();
-            }
+            HAL_FreeSolenoidPort(m_solenoidHandle);
+            m_solenoidHandle = 0;
+            Table?.RemoveTableListener(this);
+            base.Dispose();
         }
 
         /// <summary>
@@ -85,7 +69,7 @@ namespace WPILib
         public virtual void Set(bool on)
         {
             int status = 0;
-            SetSolenoid(m_solenoidPort, on, ref status);
+            HAL_SetSolenoid(m_solenoidHandle, on, ref status);
             CheckStatus(status);
         }
 
@@ -96,7 +80,7 @@ namespace WPILib
         public virtual bool Get()
         {
             int status = 0;
-            bool value = GetSolenoid(m_solenoidPort, ref status);
+            bool value = HAL_GetSolenoid(m_solenoidHandle, ref status);
             CheckStatus(status);
             return value;
         }
@@ -149,9 +133,9 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, Value value, NotifyFlags flags)
         {
-            Set((bool)value);
+            Set(value.GetBoolean());
         }
     }
 }

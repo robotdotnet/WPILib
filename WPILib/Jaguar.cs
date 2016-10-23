@@ -24,7 +24,7 @@ namespace WPILib
              */
             SetBounds(2.31, 1.55, 1.507, 1.454, .697);
             PeriodMultiplier = PeriodMultiplier.K1X;
-            SetRaw(CenterPwm);
+            SetDisabled();
             SetZeroLatch();
 
             HAL.Base.HAL.Report(ResourceType.kResourceType_Jaguar, (byte)Channel);

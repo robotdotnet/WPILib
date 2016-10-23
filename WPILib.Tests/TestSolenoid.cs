@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables;
 using NUnit.Framework;
 using WPILib.Exceptions;
 using NetworkTables.Tables;
@@ -25,9 +26,9 @@ namespace WPILib.Tests
             return new Solenoid(m_module, 0);
         }
 
-        private IReadOnlyList<SolenoidData> GetSolenoids()
+        private HALSimPCMData GetSolenoids()
         {
-            return SimData.GetPCM(m_module).Solenoids;
+            return SimData.PCM[m_module];
         }
 
         [Test]
@@ -35,9 +36,9 @@ namespace WPILib.Tests
         {
             using (Solenoid s = new Solenoid(0))
             {
-                Assert.IsTrue(SimData.GetPCM(0).Solenoids[0].Initialized);
+                Assert.IsTrue(SimData.PCM[0].GetSolenoidInitialized(0));
             }
-            Assert.That(SimData.GetPCM(0).Solenoids[0].Initialized, Is.False);
+            Assert.That(SimData.PCM[0].GetSolenoidInitialized(0), Is.False);
         }
 
         [Test]
@@ -63,7 +64,7 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                Assert.IsTrue(GetSolenoids()[0].Initialized);
+                Assert.IsTrue(GetSolenoids().GetSolenoidInitialized(0));
             }
         }
 
@@ -72,10 +73,10 @@ namespace WPILib.Tests
         {
             using (Solenoid ds = NewSolenoid())
             {
-                Assert.Throws(typeof (AllocationException), () =>
-                {
-                    var p = NewSolenoid();
-                });
+                Assert.Throws(typeof(AllocationException), () =>
+               {
+                   var p = NewSolenoid();
+               });
             }
         }
 
@@ -118,10 +119,10 @@ namespace WPILib.Tests
             using (Solenoid s = NewSolenoid())
             {
                 s.Set(true);
-                Assert.IsTrue(GetSolenoids()[0].Value);
+                Assert.IsTrue(GetSolenoids().GetSolenoidOutput(0));
 
                 s.Set(false);
-                Assert.IsFalse(GetSolenoids()[0].Value);
+                Assert.IsFalse(GetSolenoids().GetSolenoidOutput(0));
             }
         }
 
@@ -130,10 +131,10 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                GetSolenoids()[0].Value = true;
+                s.Set(true);
                 Assert.IsTrue(s.Get());
 
-                GetSolenoids()[0].Value = false;
+                s.Set(false);
                 Assert.IsFalse(s.Get());
             }
         }
@@ -143,14 +144,14 @@ namespace WPILib.Tests
         {
             using (Solenoid s = NewSolenoid())
             {
-                GetSolenoids()[0].Value = true;
-                GetSolenoids()[1].Value = true;
-                GetSolenoids()[2].Value = false;
-                GetSolenoids()[3].Value = false;
-                GetSolenoids()[4].Value = false;
-                GetSolenoids()[5].Value = true;
-                GetSolenoids()[6].Value = false;
-                GetSolenoids()[7].Value = false;
+                GetSolenoids().SetSolenoidOutput(0, true);
+                GetSolenoids().SetSolenoidOutput(1, true);
+                GetSolenoids().SetSolenoidOutput(2, false);
+                GetSolenoids().SetSolenoidOutput(3, false);
+                GetSolenoids().SetSolenoidOutput(4, false);
+                GetSolenoids().SetSolenoidOutput(5, true);
+                GetSolenoids().SetSolenoidOutput(6, false);
+                GetSolenoids().SetSolenoidOutput(7, false);
 
                 byte allSolenoids = s.GetAll();
 
@@ -292,9 +293,9 @@ namespace WPILib.Tests
             {
                 s.Set(false);
                 Assert.That(s.Get, Is.False);
-                s.ValueChanged(null, null, true, NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, Value.MakeBoolean(true), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.True);
-                s.ValueChanged(null, null, false, NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, Value.MakeBoolean(false), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.False);
             }
         }

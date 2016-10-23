@@ -7,7 +7,7 @@ namespace HAL.Simulator.Outputs
     /// </summary>
     public class SimRelay
     {
-        readonly RelayData RelayData = null;
+        readonly HALSimRelayData RelayData = null;
 
         /// <summary>
         /// Creates a new Relay to use with the simulator.
@@ -24,7 +24,7 @@ namespace HAL.Simulator.Outputs
         /// <returns>True if forward is set.</returns>
         public bool GetForward()
         {
-            return RelayData.Forward;
+            return RelayData.GetForward();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace HAL.Simulator.Outputs
         /// <returns>True if reverse is set.</returns>
         public bool GetReverse()
         {
-            return RelayData.Reverse;
+            return RelayData.GetReverse();
         }
     }
 }

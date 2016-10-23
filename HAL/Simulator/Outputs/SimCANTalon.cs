@@ -2,6 +2,7 @@
 
 namespace HAL.Simulator.Outputs
 {
+    /*
     /// <summary>
     /// Class for interfacing with a CAN Talon from the simulator.
     /// </summary>
@@ -29,4 +30,5 @@ namespace HAL.Simulator.Outputs
             return Data.PercentVBusValue;
         }
     }
+    */
 }

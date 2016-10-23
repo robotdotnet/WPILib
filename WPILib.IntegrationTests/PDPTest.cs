@@ -12,6 +12,7 @@ namespace WPILib.IntegrationTests
     [TestFixture(typeof(TalonMotorFixture), 0.0)]
     [TestFixture(typeof(VictorMotorFixture), 0.0)]
     [TestFixture(typeof(JaguarMotorFixture), 0.0)]
+    [Ignore("PDP still needs work")]
     public class PDPTest : AbstractComsSetup
     {
         private static PowerDistributionPanel pdp;

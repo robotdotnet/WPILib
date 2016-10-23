@@ -2,7 +2,9 @@
 using NetworkTables.Tables;
 using WPILib.LiveWindow;
 using static WPILib.Utility;
-using HALDigital = HAL.Base.HALDigital;
+using static HAL.Base.HAL;
+using static HAL.Base.HALPorts;
+using static HAL.Base.HALDIO;
 
 namespace WPILib
 {
@@ -11,16 +13,38 @@ namespace WPILib
     /// </summary>
     public class DigitalInput : DigitalSource, ILiveWindowSendable
     {
+        private int m_halHandle = HALInvalidHandle;
+
         /// <summary>
         /// Create an instance of a Digital Input
         /// </summary>
         /// <param name="channel">The DIO channel for the digital input 0-9 are on-board, 10-25 are on the MXP</param>
         public DigitalInput(int channel)
         {
-            InitDigitalPort(channel, true);
+            CheckDigitalChannel(channel);
 
-            HAL.Base.HAL.Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
+            Channel = channel;
+
+            int status = 0;
+            m_halHandle = HAL_InitializeDIOPort(HAL_GetPort(channel), true, ref status);
+            CheckStatusRange(status, 0, HAL_GetNumDigitalChannels(), channel);
+
+            Report(ResourceType.kResourceType_DigitalInput, (byte)channel);
             LiveWindow.LiveWindow.AddSensor("DigitalInput", channel, this);
+        }
+
+        /// <inheritdoc/>
+        public override int PortHandleForRouting => m_halHandle;
+        /// <inheritdoc/>
+        public override AnalogTriggerType AnalogTriggerTypeForRouting => 0;
+
+        /// <inheritdoc/>
+        public override void Dispose()
+        {
+            base.Dispose();
+
+            HAL_FreeDIOPort(m_halHandle);
+            m_halHandle = 0;
         }
 
         /// <summary>
@@ -30,15 +54,18 @@ namespace WPILib
         public virtual bool Get()
         {
             int status = 0;
-            bool value = HALDigital.GetDIO(Port, ref status);
+            bool value = HAL_GetDIO(m_halHandle, ref status);
             CheckStatus(status);
             return value;
         }
 
+        /// <inheritdoc/>
+        public override bool AnalogTrigger => false;
+
         /// <summary>
         /// Get the channel of the digital input.
         /// </summary>
-        public new int Channel => base.Channel;
+        public override int Channel { get; } = 0;
 
         /// <summary>
         /// Initialize a table for this sendable object.

@@ -1,6 +1,6 @@
 ﻿using System;
 using NetworkTables;
-using NetworkTables.Native.Exceptions;
+using NetworkTables.Exceptions;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
 

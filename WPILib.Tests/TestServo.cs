@@ -1,5 +1,6 @@
 ﻿using HAL.Simulator;
 using HAL.Simulator.Data;
+using NetworkTables;
 using NetworkTables.Tables;
 using NUnit.Framework;
 // ReSharper disable UnusedVariable
@@ -22,7 +23,7 @@ namespace WPILib.Tests
         {
             using (Servo s = NewServo())
             {
-                Assert.AreEqual(SimData.PWM[2].Type, ControllerType.Servo);
+                Assert.That(SimData.PWM[2].GetInitialized());
             }
         }
         [Test]
@@ -106,7 +107,7 @@ namespace WPILib.Tests
                 });
                 Assert.That(s.Table, Is.EqualTo(table));
             }
-            
+
         }
 
         [Test]
@@ -140,9 +141,9 @@ namespace WPILib.Tests
             {
                 s.SetAngle(80.0);
                 Assert.That(s.GetAngle, Is.EqualTo(80.0).Within(0.1));
-                s.ValueChanged(null, null, .56, NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, Value.MakeDouble(.56), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.EqualTo(.56).Within(0.01));
-                s.ValueChanged(null, null, -.58, NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, Value.MakeDouble(-.58), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.EqualTo(0.0).Within(0.01));
             }
         }

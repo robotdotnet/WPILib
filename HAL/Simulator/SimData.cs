@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using HAL.Simulator.Data;
+using static HAL.Base.HALPorts;
+
 
 namespace HAL.Simulator
 {
@@ -9,29 +11,44 @@ namespace HAL.Simulator
     /// </summary>
     public class SimData
     {
+        public static void PingAll()
+        {
+            HALSimAccelerometerData.Ping();
+            HALSimAnalogGyroData.Ping();
+            HALSimAnalogInData.Ping();
+            HALSimAnalogOutData.Ping();
+            HALSimAnalogTriggerData.Ping();
+            HALSimDigitalPWMData.Ping();
+            HALSimDIOData.Ping();
+            HALSimEncoderData.Ping();
+            HALSimPCMData.Ping();
+            HALSimPWMData.Ping();
+            HALSimRelayData.Ping();
+            HALSimRoboRioData.Ping();
+            HALSimSPIAccelerometerData.Ping();
+        }
+
         /// <summary>
         /// Gets the accelerometer data.
         /// </summary>
         /// <value>
         /// The accelerometer.
         /// </value>
-        public static AccelerometerData Accelerometer { get; } = new AccelerometerData();
-        /// <summary>
-        /// Gets the global data.
-        /// </summary>
-        /// <value>
-        /// The global data.
-        /// </value>
-        public static GlobalData GlobalData { get; } = new GlobalData();
+        public static HALSimAccelerometerData Accelerometer { get; } = new HALSimAccelerometerData(0);
 
-        public static NavXData NavXData { get; } = new NavXData();
+        public static List<HALSimAnalogGyroData> AnalogGyro { get; } = new List<HALSimAnalogGyroData>();
+
         /// <summary>
         /// Gets the analog out data.
         /// </summary>
         /// <value>
         /// The analog out data.
         /// </value>
-        public static List<AnalogOutData> AnalogOut { get; } = new List<AnalogOutData>();
+        public static List<HALSimAnalogOutData> AnalogOut { get; } = new List<HALSimAnalogOutData>();
+
+        public static List<HALSimPCMData> PCM { get; } = new List<HALSimPCMData>();
+        
+        public static List<HALSimPDPData> PDP { get; } = new List<HALSimPDPData>();
 
         /// <summary>
         /// Gets the analog in dada.
@@ -39,14 +56,14 @@ namespace HAL.Simulator
         /// <value>
         /// The analog in data.
         /// </value>
-        public static List<AnalogInData> AnalogIn { get; } = new List<AnalogInData>();
+        public static List<HALSimAnalogInData> AnalogIn { get; } = new List<HALSimAnalogInData>();
         /// <summary>
         /// Gets the analog trigger.
         /// </summary>
         /// <value>
         /// The analog trigger.
         /// </value>
-        public static List<AnalogTriggerData> AnalogTrigger { get; } = new List<AnalogTriggerData>();
+        public static List<HALSimAnalogTriggerData> AnalogTrigger { get; } = new List<HALSimAnalogTriggerData>();
 
         /// <summary>
         /// Gets the dio.
@@ -54,23 +71,16 @@ namespace HAL.Simulator
         /// <value>
         /// The dio.
         /// </value>
-        public static List<DIOData> DIO { get; } = new List<DIOData>();
+        public static List<HALSimDIOData> DIO { get; } = new List<HALSimDIOData>();
 
-        public static List<DigitalGlitchFilterData> DigitalGlitchFilter { get; } = new List<DigitalGlitchFilterData>(); 
+       // public static List<DigitalGlitchFilterData> DigitalGlitchFilter { get; } = new List<DigitalGlitchFilterData>(); 
 
         /// <summary>
         /// </summary>
         /// <value>
         /// The PWM.
         /// </value>
-        public static List<PWMData> PWM { get; } = new List<PWMData>();
-
-        /// <summary>
-        /// </summary>
-        /// <value>
-        /// The MXP.
-        /// </value>
-        public static List<MXPData> MXP { get; } = new List<MXPData>();
+        public static List<HALSimPWMData> PWM { get; } = new List<HALSimPWMData>();
 
         /// <summary>
         /// Gets the digital PWM.
@@ -78,7 +88,7 @@ namespace HAL.Simulator
         /// <value>
         /// The digital PWM.
         /// </value>
-        public static List<DigitalPWMData> DigitalPWM { get; } = new List<DigitalPWMData>();
+        public static List<HALSimDigitalPWMData> DigitalPWM { get; } = new List<HALSimDigitalPWMData>();
 
         /// <summary>
         /// Gets the relay.
@@ -86,7 +96,7 @@ namespace HAL.Simulator
         /// <value>
         /// The relay.
         /// </value>
-        public static List<RelayData> Relay { get; } = new List<RelayData>();
+        public static List<HALSimRelayData> Relay { get; } = new List<HALSimRelayData>();
 
         /// <summary>
         /// Gets the counter.
@@ -94,20 +104,20 @@ namespace HAL.Simulator
         /// <value>
         /// The counter.
         /// </value>
-        public static List<CounterData> Counter { get; } = new List<CounterData>();
+        //public static List<CounterData> Counter { get; } = new List<CounterData>();
         /// <summary>
         /// Gets the encoder.
         /// </summary>
         /// <value>
         /// The encoder.
         /// </value>
-        public static List<EncoderData> Encoder { get; } = new List<EncoderData>();
+        public static List<HALSimEncoderData> Encoder { get; } = new List<HALSimEncoderData>();
 
-        public static List<SPIAccelerometerData> SPIAccelerometer { get; } = new List<SPIAccelerometerData>();
+        public static List<HALSimSPIAccelerometerData> SPIAccelerometer { get; } = new List<HALSimSPIAccelerometerData>();
 
-        public static List<SPIAccumulatorData> SPIAccumulator { get; } = new List<SPIAccumulatorData>();
+        //public static List<SPIAccumulatorData> SPIAccumulator { get; } = new List<SPIAccumulatorData>();
 
-        private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
+        //private static readonly Dictionary<int, PCMData> s_pcm = new Dictionary<int, PCMData>();
 
         /// <summary>
         /// Gets the robo rio data.
@@ -115,10 +125,10 @@ namespace HAL.Simulator
         /// <value>
         /// The robo rio data.
         /// </value>
-        public static RoboRioData RoboRioData { get; } = new RoboRioData();
-        private static readonly Dictionary<int, PDPData> s_pdp = new Dictionary<int, PDPData>();
+        public static HALSimRoboRioData RoboRioData { get; } = new HALSimRoboRioData(0);
+        //private static readonly Dictionary<int, PDPData> s_pdp = new Dictionary<int, PDPData>();
 
-        private static readonly Dictionary<int, CanTalonData> s_canTalon = new Dictionary<int, CanTalonData>();
+        //private static readonly Dictionary<int, CanTalonData> s_canTalon = new Dictionary<int, CanTalonData>();
 
         /// <summary>
         /// Gets the driver station.
@@ -136,8 +146,8 @@ namespace HAL.Simulator
         /// </value>
         public static NotifyDict<byte, dynamic> Reports { get; } = new NotifyDict<byte, dynamic>();
 
-        public static List<ErrorData> ErrorList { get; } = new List<ErrorData>();
-
+        //public static List<ErrorData> ErrorList { get; } = new List<ErrorData>();
+        /*
         /// <summary>
         /// Gets the can talon.
         /// </summary>
@@ -300,75 +310,86 @@ namespace HAL.Simulator
         /// </summary>
         public static event EventHandler OnPDPAdded;
 
+        */
         static SimData()
         {
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < HAL_GetNumPCMModules(); i++)
             {
-                AnalogOut.Add(new AnalogOutData());
+                PCM.Add(new HALSimPCMData(i));
             }
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < HAL_GetNumPDPModules(); i++)
             {
-                AnalogIn.Add(new AnalogInData());
+                PDP.Add(new HALSimPDPData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumAccumulators(); i++)
+            {
+                AnalogGyro.Add(new HALSimAnalogGyroData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumAnalogOutputs(); i++)
+            {
+                AnalogOut.Add(new HALSimAnalogOutData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumAnalogInputs(); i++)
+            {
+                AnalogIn.Add(new HALSimAnalogInData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumAnalogTriggers(); i++)
+            {
+                AnalogTrigger.Add(new HALSimAnalogTriggerData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumDigitalChannels(); i++)
+            {
+                DIO.Add(new HALSimDIOData(i));
+            }
+
+            for (int i = 0; i < HAL_GetNumDigitalPWMOutputs(); i++)
+            {
+                DigitalPWM.Add(new HALSimDigitalPWMData(i));
             }
 
             for (int i = 0; i < 4; i++)
             {
-                AnalogTrigger.Add(new AnalogTriggerData());
+                //DigitalGlitchFilter.Add(new DigitalGlitchFilterData());
             }
 
-            for (int i = 0; i < 26; i++)
+            for (int i = 0; i < HAL_GetNumPWMChannels(); i++)
             {
-                DIO.Add(new DIOData());
-            }
-
-            for (int i = 0; i < 6; i++)
-            {
-                DigitalPWM.Add(new DigitalPWMData());
+                PWM.Add(new HALSimPWMData(i));
             }
 
             for (int i = 0; i < 4; i++)
             {
-                DigitalGlitchFilter.Add(new DigitalGlitchFilterData());
+                Relay.Add(new HALSimRelayData(i));
             }
-
-            for (int i = 0; i < 20; i++)
+            
+            for (int i = 0; i < 8; i++)
             {
-                PWM.Add(new PWMData());
-            }
-
-            for (int i = 0; i < 16; i++)
-            {
-                MXP.Add(new MXPData());
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                Relay.Add(new RelayData());
+                //Counter.Add(new CounterData());
             }
 
             for (int i = 0; i < 8; i++)
             {
-                Counter.Add(new CounterData());
-            }
-
-            for (int i = 0; i < 8; i++)
-            {
-                Encoder.Add(new EncoderData());
+                Encoder.Add(new HALSimEncoderData(i));
             }
 
             for (int i = 0; i < 5; i++)
             {
-                SPIAccelerometer.Add(new SPIAccelerometerData());
+                SPIAccelerometer.Add(new HALSimSPIAccelerometerData(i));
             }
 
             for (int i = 0; i < 5; i++)
             {
-                SPIAccumulator.Add(new SPIAccumulatorData());
+                //SPIAccumulator.Add(new SPIAccumulatorData());
             }
 
-            InitializePDP(0);
-            ErrorList.Clear();
+            //InitializePDP(0);
+            //ErrorList.Clear();
         }
 
         internal static IntPtr s_halNewDataSem = IntPtr.Zero;
@@ -379,7 +400,20 @@ namespace HAL.Simulator
         /// <param name="resetDS">If true, resets the DS data sempahore.</param>
         public static void ResetHALData(bool resetDS)
         {
+            foreach (var halSimPCMData in PCM)
+            {
+                halSimPCMData.ResetData();
+            }
+
+            foreach (var halSimPDPData in PDP)
+            {
+                halSimPDPData.ResetData();
+            }
             Accelerometer.ResetData();
+            foreach (var analogGyroData in AnalogGyro)
+            {
+                analogGyroData.ResetData();
+            }
             foreach (var analogInData in AnalogIn)
             {
                 analogInData.ResetData();
@@ -400,10 +434,6 @@ namespace HAL.Simulator
             {
                 pwmData.ResetData();
             }
-            foreach (var mxpData in MXP)
-            {
-                mxpData.ResetData();
-            }
             foreach (var relayData in Relay)
             {
                 relayData.ResetData();
@@ -412,20 +442,23 @@ namespace HAL.Simulator
             {
                 digitalPWMData.ResetData();
             }
+            /*
             foreach (var digitalGlitchFilterData in DigitalGlitchFilter)
             {
                 digitalGlitchFilterData.ResetData();
             }
+            
             foreach (var counterData in Counter)
             {
                 counterData.ResetData();
             }
+            */
             foreach (var encoderData in Encoder)
             {
                 encoderData.ResetData();
             }
             RoboRioData.ResetData();
-
+            /*
             foreach (var pdpData in s_pdp.Values)
             {
                 pdpData.ResetData();
@@ -435,12 +468,13 @@ namespace HAL.Simulator
             {
                 pcmData.ResetData();
             }
+            */
 
             foreach (var spiAccelerometerData in SPIAccelerometer)
             {
                 spiAccelerometerData.ResetData();
             }
-            ErrorList.Clear();
+            //ErrorList.Clear();
             DriverStation.ResetData();
             SimHooks.RestartTiming();
 

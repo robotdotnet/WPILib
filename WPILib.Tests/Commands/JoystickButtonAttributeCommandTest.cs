@@ -28,7 +28,7 @@ namespace WPILib.Tests.Commands
             s_commandStarted = false;
         }
 
-        [Test]
+        [Test, Ignore("Buttons not supported")]
         public void WhenPressed()
         {
             using (var robot = new AttributedRobot())

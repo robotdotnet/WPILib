@@ -7,7 +7,7 @@ namespace WPILib.Tests.Commands
     [TestFixture]
     public class CommandTimeoutTest : AbstractCommandTest
     {
-        [Test]
+        [Test, Ignore("Waiting for Timestamps in sim to work")]
         public void TestTwoSecondTimeout()
         {
             ASubsystem subsystem = new ASubsystem();

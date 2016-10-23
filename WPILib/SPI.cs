@@ -2,7 +2,7 @@
 using HAL.Base;
 using static WPILib.Utility;
 using static HAL.Base.HAL;
-using static HAL.Base.HALDigital;
+using static HAL.Base.HALSPI;
 
 namespace WPILib
 {
@@ -31,9 +31,9 @@ namespace WPILib
         private static byte s_devices = 0;
 
         private readonly Port m_port;
-        private int m_bitOrder;
-        private int m_clockPolarity;
-        private int m_dataOnTrailing;
+        private bool m_bitOrder;
+        private bool m_clockPolarity;
+        private bool m_dataOnTrailing;
 
         /// <summary>
         /// Creates a new SPI class.
@@ -44,8 +44,8 @@ namespace WPILib
             int status = 0;
             m_port = port;
             ++s_devices;
-            SpiInitialize((byte)port, ref status);
-            CheckStatus(status);
+            HAL_InitializeSPI((byte)port, ref status);
+            CheckStatusForceThrow(status);
             Report(ResourceType.kResourceType_SPI, s_devices);
         }
 
@@ -53,7 +53,7 @@ namespace WPILib
         public override void Dispose()
         {
             base.Dispose();
-            SpiClose((byte)m_port);
+            HAL_CloseSPI((byte)m_port);
         }
 
         /// <summary>
@@ -63,12 +63,12 @@ namespace WPILib
         /// <param name="hz">Rate in Hz.</param>
         public void SetClockRate(int hz)
         {
-            SpiSetSpeed((byte)m_port, (uint)hz);
+            HAL_SetSPISpeed((byte)m_port, hz);
         }
 
         private void UpdateOpts()
         {
-            SpiSetOpts((byte)m_port, m_bitOrder, m_dataOnTrailing, m_clockPolarity);
+            HAL_SetSPIOpts((byte)m_port, m_bitOrder, m_dataOnTrailing, m_clockPolarity);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace WPILib
         /// </summary>
         public void SetMSBFirst()
         {
-            m_bitOrder = 1;
+            m_bitOrder = true;
             UpdateOpts();
         }
 
@@ -85,7 +85,7 @@ namespace WPILib
         /// </summary>
         public void SetLSBFirst()
         {
-            m_bitOrder = 0;
+            m_bitOrder = false;
             UpdateOpts();
         }
 
@@ -94,7 +94,7 @@ namespace WPILib
         /// </summary>
         public void SetClockActiveLow()
         {
-            m_clockPolarity = 1;
+            m_clockPolarity = true;
             UpdateOpts();
         }
 
@@ -103,7 +103,7 @@ namespace WPILib
         /// </summary>
         public void SetClockActiveHigh()
         {
-            m_clockPolarity = 0;
+            m_clockPolarity = false;
             UpdateOpts();
         }
 
@@ -112,7 +112,7 @@ namespace WPILib
         /// </summary>
         public void SetSampleDataOnFalling()
         {
-            m_dataOnTrailing = 1;
+            m_dataOnTrailing = true;
             UpdateOpts();
         }
 
@@ -121,7 +121,7 @@ namespace WPILib
         /// </summary>
         public void SetSampleDataOnRising()
         {
-            m_dataOnTrailing = 0;
+            m_dataOnTrailing = false;
             UpdateOpts();
         }
 
@@ -131,7 +131,7 @@ namespace WPILib
         public void SetChipSelectActiveHigh()
         {
             int status = 0;
-            SpiSetChipSelectActiveHigh((byte)m_port, ref status);
+            HAL_SetSPIChipSelectActiveHigh((byte)m_port, ref status);
             CheckStatus(status);
         }
 
@@ -141,7 +141,7 @@ namespace WPILib
         public void SetChipSelectActiveLow()
         {
             int status = 0;
-            SpiSetChipSelectActiveLow((byte)m_port, ref status);
+            HAL_SetSPIChipSelectActiveLow((byte)m_port, ref status);
             CheckStatus(status);
         }
 
@@ -157,7 +157,7 @@ namespace WPILib
         {
             byte[] sendBuffer = new byte[size];
             Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
-            return SpiWrite((byte)m_port, sendBuffer, (byte)size);
+            return HAL_WriteSPI((byte)m_port, sendBuffer, (byte)size);
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace WPILib
             int retVal = 0;
             byte[] receivedBuffer = new byte[size];
             byte[] sendBuffer = new byte[size];
-            retVal = initiate ? SpiTransaction((byte)m_port, sendBuffer, receivedBuffer, (byte)size) : SpiRead((byte)m_port, receivedBuffer, (byte)size);
+            retVal = initiate ? HAL_TransactionSPI((byte)m_port, sendBuffer, receivedBuffer, (byte)size) : HAL_ReadSPI((byte)m_port, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(size, dataReceived.Length));
             return retVal;
         }
@@ -195,7 +195,7 @@ namespace WPILib
             byte[] sendBuffer = new byte[size];
             Array.Copy(dataToSend, sendBuffer, Math.Min(dataToSend.Length, size));
             byte[] receivedBuffer = new byte[size];
-            retVal = SpiTransaction((byte)m_port, sendBuffer, receivedBuffer, (byte)size);
+            retVal = HAL_TransactionSPI((byte)m_port, sendBuffer, receivedBuffer, (byte)size);
             Array.Copy(receivedBuffer, dataReceived, Math.Min(receivedBuffer.Length, dataReceived.Length));
             return retVal;
         }
@@ -213,11 +213,11 @@ namespace WPILib
         /// <param name="dataSize">Size (int bits) of data field</param>
         /// <param name="isSigned">Is data field signed?</param>
         /// <param name="bigEndian">Is device big endian?</param>
-        public void InitAccumulator(double period, uint cmd, int xferSize, uint validMask, uint validValue,
+        public void InitAccumulator(double period, int cmd, int xferSize, int validMask, int validValue,
             int dataShift, int dataSize, bool isSigned, bool bigEndian)
         {
             int status = 0;
-            SpiInitAccumulator((byte)m_port, (uint)(period * 1.0e6), cmd, (byte)xferSize, validMask,
+            HAL_InitSPIAccumulator((byte)m_port, (int)(period * 1.0e6), cmd, (byte)xferSize, validMask,
                 validValue, (byte)dataShift, (byte)dataSize, isSigned, bigEndian, ref status);
             CheckStatus(status);
         }
@@ -228,7 +228,7 @@ namespace WPILib
         public void FreeAccumulator()
         {
             int status = 0;
-            SpiFreeAccumulator((byte)m_port, ref status);
+            HAL_FreeSPIAccumulator((byte)m_port, ref status);
             CheckStatus(status);
         }
 
@@ -238,7 +238,7 @@ namespace WPILib
         public void ResetAccumulator()
         {
             int status = 0;
-            SpiResetAccumulator((byte)m_port, ref status);
+            HAL_ResetSPIAccumulator((byte)m_port, ref status);
             CheckStatus(status);
         }
 
@@ -255,7 +255,7 @@ namespace WPILib
         public void SetAccumulatorCenter(int center)
         {
             int status = 0;
-            SpiSetAccumulatorCenter((byte)m_port, center, ref status);
+            HAL_SetSPIAccumulatorCenter((byte)m_port, center, ref status);
             CheckStatus(status);
         }
 
@@ -266,7 +266,7 @@ namespace WPILib
         public void SetAccumulatorDeadband(int deadband)
         {
             int status = 0;
-            SpiSetAccumulatorDeadband((byte)m_port, deadband, ref status);
+            HAL_SetSPIAccumulatorDeadband((byte)m_port, deadband, ref status);
             CheckStatus(status);
         }
 
@@ -277,7 +277,7 @@ namespace WPILib
         public int GetAccumulatorLastValue()
         {
             int status = 0;
-            int retVal = SpiGetAccumulatorLastValue((byte)m_port, ref status);
+            int retVal = HAL_GetSPIAccumulatorLastValue((byte)m_port, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -289,7 +289,7 @@ namespace WPILib
         public long GetAccumulatorValue()
         {
             int status = 0;
-            long retVal = SpiGetAccumulatorValue((byte)m_port, ref status);
+            long retVal = HAL_GetSPIAccumulatorValue((byte)m_port, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -298,10 +298,10 @@ namespace WPILib
         /// Read the number of accumulated values.
         /// </summary>
         /// <returns>The number of times samples from the channel were accumulated.</returns>
-        public uint GetAccumulatorCount()
+        public long GetAccumulatorCount()
         {
             int status = 0;
-            uint retVal = SpiGetAccumulatorCount((byte)m_port, ref status);
+            long retVal = HAL_GetSPIAccumulatorCount((byte)m_port, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -313,7 +313,7 @@ namespace WPILib
         public double GetAccumulatorAverage()
         {
             int status = 0;
-            double retVal = SpiGetAccumulatorAverage((byte)m_port, ref status);
+            double retVal = HAL_GetSPIAccumulatorAverage((byte)m_port, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -323,10 +323,10 @@ namespace WPILib
         /// </summary>
         /// <param name="value">The 64 bit accumulated output</param>
         /// <param name="count">The number of accumulation cycles</param>
-        public void GetAccumulatorOutput(ref long value, ref uint count)
+        public void GetAccumulatorOutput(ref long value, ref long count)
         {
             int status = 0;
-            SpiGetAccumulatorOutput((byte)m_port, ref value, ref count, ref status);
+            HAL_GetSPIAccumulatorOutput((byte)m_port, ref value, ref count, ref status);
             CheckStatus(status);
         }
     }

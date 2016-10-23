@@ -2,6 +2,9 @@
 using HAL.Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
+using static HAL.Base.HAL;
+using static HAL.Base.HALAnalogGyro;
+using static WPILib.Utility;
 
 namespace WPILib
 {
@@ -17,48 +20,49 @@ namespace WPILib
     /// determine the default offset.This is subtracted from each sample to
     /// determine the heading.
     /// </remarks>
-    public class AnalogGyro : GyroBase, IPIDSource, ILiveWindowSendable
+    public class AnalogGyro : GyroBase
     {
-        private static readonly int kOversampleBits = 10;
-        private static readonly int kAverageBits = 0;
-        private static readonly double kSamplesPerSecond = 50.0;
-        private static readonly double kCalibrationSampleTime = 5.0;
-        private static readonly double kDefaultVoltsPerDegreePerSecond = 0.007;
+        private const double DefaultVoltsPerDegreePerSecond = 0.007;
 
         /// <summary>
         /// The <see cref="WPILib.AnalogInput"/> that this gyro uses.
         /// </summary>
         protected AnalogInput AnalogInput;
-        private double m_offset;
-        private int m_center;
-        readonly bool m_channelAllocated = false;
+
+        private int m_gyroHandle = 0;
+        private readonly bool m_channelAllocated = false;
+
+        /// <summary>
+        /// Initialize they gyro. Calibration is handled by <see cref="Calibrate"/>.
+        /// </summary>
+        public void InitGyro()
+        {
+            int status = 0;
+            if (m_gyroHandle == 0)
+            {
+                m_gyroHandle = HAL_InitializeAnalogGyro(AnalogInput.m_halHandle, ref status);
+                CheckStatus(status);
+            }
+
+            HAL_SetupAnalogGyro(m_gyroHandle, ref status);
+            CheckStatusForceThrow(status);
+
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Gyro, AnalogInput.Channel);
+            LiveWindow.LiveWindow.AddSensor("AnalogGyro", AnalogInput.Channel, this);
+        }
 
         /// <inheritdoc/>
         public override void Calibrate()
         {
-            AnalogInput.InitAccumulator();
-            AnalogInput.ResetAccumulator();
-
             if (RobotBase.IsSimulation)
             {
                 //In simulation, we do not have to do anything here.
                 return;
             }
 
-            Timer.Delay(kCalibrationSampleTime);
+            int status = 0;
+            HAL_CalibrateAnalogGyro(m_gyroHandle, ref status);
 
-            long value = 0;
-            uint count = 0;
-            AnalogInput.GetAccumulatorOutput(ref value, ref count);
-
-            m_center = (int)((double)value / (double)count + .5);
-
-            m_offset = ((double)value / (double)count)
-                    - m_center;
-
-
-            AnalogInput.AccumulatorCenter = m_center;
-            AnalogInput.ResetAccumulator();
         }
 
         /// <summary>
@@ -67,16 +71,17 @@ namespace WPILib
         /// <param name="channel">The channel the gyro is on (Must be an accumulator channel). [0..1] on RIO.</param>
         public AnalogGyro(int channel)
         {
-            AnalogInput aIn = new AnalogInput(channel);
+            AnalogInput = new AnalogInput(channel);
             try
             {
-                CreateGyro(aIn);
+                InitGyro();
             }
-            catch 
+            catch
             {
-                aIn.Dispose();
+                AnalogInput.Dispose();
                 throw;
             }
+            Calibrate();
             m_channelAllocated = true;
         }
 
@@ -86,41 +91,22 @@ namespace WPILib
         /// <param name="channel">The analog input this gyro is attached to.</param>
         public AnalogGyro(AnalogInput channel)
         {
-            CreateGyro(channel);
-        }
-
-        private void CreateGyro(AnalogInput channel)
-        {
+            if (channel == null)
+                throw new ArgumentNullException(nameof(channel), "Analog input must not be null");
             AnalogInput = channel;
-            if (AnalogInput == null)
-            {
-                throw new ArgumentNullException(nameof(channel), "AnalogInput supplied to Gyro constructor is null");
-            }
-            if (!AnalogInput.IsAccumulatorChannel)
-            {
-                throw new ArgumentOutOfRangeException(nameof(channel), "Channel must be an accumulator channel");
-            }
-            Sensitivity = kDefaultVoltsPerDegreePerSecond;
-            AnalogInput.AverageBits = kAverageBits;
-            AnalogInput.OversampleBits = kOversampleBits;
-            double sampleRate = kSamplesPerSecond
-                    * (1 << (kAverageBits + kOversampleBits));
-            AnalogInput.GlobalSampleRate = sampleRate;
-            Timer.Delay(0.1);
-
-            Deadband = 0.0;
-
-            PIDSourceType = PIDSourceType.Displacement;
-
-
-            HAL.Base.HAL.Report(ResourceType.kResourceType_Gyro, (byte)AnalogInput.Channel);
-            LiveWindow.LiveWindow.AddSensor("AnalogGyro", AnalogInput.Channel, this);
-
+            InitGyro();
             Calibrate();
         }
 
+        // TODO: Add offset and center taking constructors
+
         ///<inheritdoc/>
-        public override void Reset() => AnalogInput?.ResetAccumulator();
+        public override void Reset()
+        {
+            int status = 0;
+            HAL_ResetAnalogGyro(m_gyroHandle, ref status);
+            CheckStatus(status);
+        }
 
         ///<inheritdoc/>
         public override void Dispose()
@@ -129,6 +115,8 @@ namespace WPILib
             {
                 AnalogInput.Dispose();
             }
+            HAL_FreeAnalogGyro(m_gyroHandle);
+            m_gyroHandle = HALInvalidHandle;
             AnalogInput = null;
             base.Dispose();
         }
@@ -136,65 +124,76 @@ namespace WPILib
         ///<inheritdoc/>
         public override double GetAngle()
         {
-            if (AnalogInput == null)
+            if (m_gyroHandle == HALInvalidHandle)
             {
                 return 0.0;
             }
             else
             {
-                if (RobotBase.IsSimulation)
-                {
-                    //Use our simulator hack.
-                    return BitConverter.Int64BitsToDouble(AnalogInput.GetAccumulatorValue());
-                }
-                long rawValue = 0;
-                uint count = 0;
-                AnalogInput.GetAccumulatorOutput(ref rawValue, ref count);
-
-                long value = rawValue - (long)(count * m_offset);
-
-                double scaledValue = value
-                                     * 1e-9
-                                     * AnalogInput.LSBWeight
-                                     * (1 << AnalogInput.AverageBits)
-                                     / (AnalogInput.GlobalSampleRate * Sensitivity);
-
-                return scaledValue;
+                int status = 0;
+                double retVal = HAL_GetAnalogGyroAngle(m_gyroHandle, ref status);
+                CheckStatus(status);
+                return retVal;
             }
         }
 
         ///<inheritdoc/>
         public override double GetRate()
         {
-            if (AnalogInput == null)
+            if (m_gyroHandle == HALInvalidHandle)
             {
                 return 0.0;
             }
             else
             {
-                if (RobotBase.IsSimulation)
-                {
-                    //Use our simulator hack
-                    return BitConverter.ToSingle(BitConverter.GetBytes(AnalogInput.GetAccumulatorCount()), 0);
-                }
-                return (AnalogInput.GetAverageValue() - (m_center + m_offset))
-                       * 1e-9
-                       * AnalogInput.LSBWeight
-                       / ((1 << AnalogInput.OversampleBits) * Sensitivity);
+                int status = 0;
+                double retVal = HAL_GetAnalogGyroRate(m_gyroHandle, ref status);
+                CheckStatus(status);
+                return retVal;
+            }
+        }
+
+        public double Offset
+        {
+            get
+            {
+                int status = 0;
+                double retVal = HAL_GetAnalogGyroOffset(m_gyroHandle, ref status);
+                CheckStatus(status);
+                return retVal;
+            }
+        }
+
+        public int Center
+        {
+            get
+            {
+                int status = 0;
+                int retVal = HAL_GetAnalogGyroCenter(m_gyroHandle, ref status);
+                CheckStatus(status);
+                return retVal;
             }
         }
 
         /// <summary>
         /// Gets or sets the sensitivity of the gyroscope.
         /// </summary>
-        public double Sensitivity { get; set; }
-
-        private double Deadband
+        public double Sensitivity
         {
             set
             {
-                int deadband = (int)(value * 1e9 / AnalogInput.LSBWeight * (1 << AnalogInput.OversampleBits));
-                AnalogInput.AccumulatorDeadband = deadband;
+                int status = 0;
+                HAL_SetAnalogGyroVoltsPerDegreePerSecond(m_gyroHandle, value, ref status);
+            }
+        }
+
+        internal double Deadband
+        {
+            set
+            {
+                int status = 0;
+                HAL_SetAnalogGyroDeadband(m_gyroHandle, value, ref status);
+                CheckStatus(status);
             }
         }
     }

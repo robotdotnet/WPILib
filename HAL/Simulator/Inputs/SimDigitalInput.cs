@@ -4,7 +4,7 @@ namespace HAL.Simulator.Inputs
 {
     public class SimDigitalInput
     {
-        readonly DIOData DIOData = null;
+        readonly HALSimDIOData DIOData = null;
 
         public SimDigitalInput(int pin)
         {
@@ -13,9 +13,9 @@ namespace HAL.Simulator.Inputs
 
         public void Set(bool value)
         {
-            DIOData.Value = value;
+            DIOData.SetValue(value);
         }
 
-        public bool GetInput() => DIOData.Value;
+        public bool GetInput() => DIOData.GetValue();
     }
 }

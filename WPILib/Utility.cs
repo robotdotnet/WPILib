@@ -2,8 +2,6 @@
 using HAL.Base;
 using WPILib.Exceptions;
 using static HAL.Base.HAL;
-using System.Text;
-using System;
 
 namespace WPILib
 {
@@ -18,7 +16,7 @@ namespace WPILib
         public static int GetFPGAVersion()
         {
             int status = 0;
-            int value = HAL.Base.HAL.GetFPGAVersion(ref status);
+            int value = HAL.Base.HAL.HAL_GetFPGAVersion(ref status);
             CheckStatus(status);
             return value;
         }
@@ -31,7 +29,7 @@ namespace WPILib
         public static long GetFPGARevision()
         {
             int status = 0;
-            uint value = HAL.Base.HAL.GetFPGARevision(ref status);
+            long value = HAL.Base.HAL.HAL_GetFPGARevision(ref status);
             CheckStatus(status);
             return value;
         }
@@ -42,7 +40,7 @@ namespace WPILib
         public static ulong GetFPGATime()
         {
             int status = 0;
-            ulong value = HAL.Base.HAL.GetFPGATime(ref status);
+            ulong value = HAL.Base.HAL.HAL_GetFPGATime(ref status);
             CheckStatus(status);
             return value;
         }
@@ -54,7 +52,7 @@ namespace WPILib
         public static bool GetUserButton()
         {
             int status = 0;
-            bool value = GetFPGAButton(ref status);
+            bool value = HAL_GetFPGAButton(ref status);
             CheckStatus(status);
             return value;
         }
@@ -68,28 +66,65 @@ namespace WPILib
         /// <param name="memberName"></param>
         /// <param name="filePath"></param>
         /// <param name="lineNumber"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void CheckStatus(int status, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
-            //TODO: Use Caller attributes
-            if (status < 0)
+            if (status == 0) return;
+            if (status == HALErrors.NO_AVAILABLE_RESOURCES ||
+                status == HALErrors.RESOURCE_IS_ALLOCATED ||
+                status == HALErrors.RESOURCE_OUT_OF_RANGE)
             {
-                throw new UncleanStatusException(status, $" Code : {status}. {GetHALErrorMessage(status)}");
+                throw new AllocationException($" Code : {status}. {HAL_GetErrorMessage(status)}");
+            }
+            else if (status < 0)
+            {
+                throw new UncleanStatusException(status, $" Code : {status}. {HAL_GetErrorMessage(status)} \n at {memberName} path:{filePath} line:{lineNumber}");
             }
             else if (status > 0)
             {
                 //Pass the caller members along.
-                DriverStation.ReportError(GetHALErrorMessage(status), true, status, memberName, filePath, lineNumber);
+                DriverStation.ReportError(HAL_GetErrorMessage(status), true, status, memberName, filePath, lineNumber);
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void CheckStatusRange(int status, int min, int max, int requested,
+            [CallerMemberName] string memberName = "", [CallerFilePath] string filePath = "",
+            [CallerLineNumber] int lineNumber = 0)
+        {
+            if (status != 0)
+            {
+                if (status == HALErrors.NO_AVAILABLE_RESOURCES ||
+                    status == HALErrors.RESOURCE_IS_ALLOCATED ||
+                    status == HALErrors.RESOURCE_OUT_OF_RANGE)
+                {
+                    throw new AllocationException($" Code : {status}. {HAL_GetErrorMessage(status)} \n Minimum: {min}, Maximum: {max}, Requested {requested} \n at {memberName} path:{filePath} line:{lineNumber}", status);
+                }
+                if (status == HALErrors.HAL_HANDLE_ERROR)
+                {
+                    throw new HalHandleException(
+                        $" Code : {status}. {HAL_GetErrorMessage(status)} \n at {memberName} path:{filePath} line:{lineNumber}");
+                }
+                throw new UncleanStatusException(status, $" Code : {status}. {HAL_GetErrorMessage(status)} \n at {memberName} path:{filePath} line:{lineNumber}");
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void CheckStatusForceThrow(int status, [CallerMemberName] string memberName = "", 
+            [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
+        {
+            CheckStatusRange(status, 0, 0, 0, memberName, filePath, lineNumber);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static bool CheckCTRStatus(CTR_Code status, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
             if (status != CTR_Code.CTR_OKAY)
             {
                 //Pass the caller memebers along
-                DriverStation.ReportError(GetHALErrorMessage((int)status), true, (int) status, memberName, filePath, lineNumber);
+                DriverStation.ReportError(HAL_GetErrorMessage((int)status), true, (int) status, memberName, filePath, lineNumber);
             }
             return status == CTR_Code.CTR_OKAY;
         }

@@ -56,8 +56,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.Forward);
-                Assert.AreEqual(true, SimData.Relay[0].Forward);
-                Assert.AreEqual(false, SimData.Relay[0].Reverse);
+                Assert.AreEqual(true, SimData.Relay[0].GetForward());
+                Assert.AreEqual(false, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -67,8 +67,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.Reverse);
-                Assert.AreEqual(false, SimData.Relay[0].Forward);
-                Assert.AreEqual(true, SimData.Relay[0].Reverse);
+                Assert.AreEqual(false, SimData.Relay[0].GetForward());
+                Assert.AreEqual(true, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -78,8 +78,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.On);
-                Assert.AreEqual(true, SimData.Relay[0].Forward);
-                Assert.AreEqual(true, SimData.Relay[0].Reverse);
+                Assert.AreEqual(true, SimData.Relay[0].GetForward());
+                Assert.AreEqual(true, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -89,8 +89,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Both);
                 relay.Set(Relay.Value.Off);
-                Assert.AreEqual(false, SimData.Relay[0].Forward);
-                Assert.AreEqual(false, SimData.Relay[0].Reverse);
+                Assert.AreEqual(false, SimData.Relay[0].GetForward());
+                Assert.AreEqual(false, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
         }
@@ -107,8 +107,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Forward);
                 relay.Set(Relay.Value.Forward);
-                Assert.AreEqual(true, SimData.Relay[0].Forward);
-                Assert.AreEqual(false, SimData.Relay[0].Reverse);
+                Assert.AreEqual(true, SimData.Relay[0].GetForward());
+                Assert.AreEqual(false, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -129,8 +129,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Forward);
                 relay.Set(Relay.Value.On);
-                Assert.AreEqual(true, SimData.Relay[0].Forward);
-                Assert.AreEqual(false, SimData.Relay[0].Reverse);
+                Assert.AreEqual(true, SimData.Relay[0].GetForward());
+                Assert.AreEqual(false, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -139,8 +139,8 @@ namespace WPILib.Tests
             {
                 Relay relay = new Relay(0, Relay.Direction.Forward);
                 relay.Set(Relay.Value.Off);
-                Assert.AreEqual(false, SimData.Relay[0].Forward);
-                Assert.AreEqual(false, SimData.Relay[0].Reverse);
+                Assert.AreEqual(false, SimData.Relay[0].GetForward());
+                Assert.AreEqual(false, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
         }
@@ -166,8 +166,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 relay.Set(Relay.Value.Reverse);
-                Assert.AreEqual(false, SimData.Relay[0].Forward);
-                Assert.AreEqual(true, SimData.Relay[0].Reverse);
+                Assert.AreEqual(false, SimData.Relay[0].GetForward());
+                Assert.AreEqual(true, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -177,8 +177,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 relay.Set(Relay.Value.On);
-                Assert.AreEqual(false, SimData.Relay[0].Forward);
-                Assert.AreEqual(true, SimData.Relay[0].Reverse);
+                Assert.AreEqual(false, SimData.Relay[0].GetForward());
+                Assert.AreEqual(true, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
 
@@ -188,8 +188,8 @@ namespace WPILib.Tests
 
                 Relay relay = new Relay(0, Relay.Direction.Reverse);
                 relay.Set(Relay.Value.Off);
-                Assert.AreEqual(false, SimData.Relay[0].Forward);
-                Assert.AreEqual(false, SimData.Relay[0].Reverse);
+                Assert.AreEqual(false, SimData.Relay[0].GetForward());
+                Assert.AreEqual(false, SimData.Relay[0].GetReverse());
                 relay.Dispose();
             }
         }

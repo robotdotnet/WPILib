@@ -9,7 +9,7 @@ namespace WPILib.Tests
 {
     [TestFixture]
     public class TestInterrupt : TestBase
-    { 
+    {
 
         public DigitalInput NewInput()
         {
@@ -50,7 +50,10 @@ namespace WPILib.Tests
                 input.RequestInterrupts();
             }
             DigitalInput in9 = new DigitalInput(NumInterrupts);
-            Assert.Throws<AllocationException>(() => in9.RequestInterrupts());
+            Assert.Throws<AllocationException>(() =>
+            {
+                in9.RequestInterrupts();
+            });
             in9.Dispose();
 
             foreach (var input in inputs)
@@ -99,7 +102,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    SimData.DIO[0].Value = true;
+                    SimData.DIO[0].SetValue(true);
                 });
 
                 t.Start();
@@ -121,7 +124,7 @@ namespace WPILib.Tests
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    SimData.DIO[0].Value = true;
+                    SimData.DIO[0].SetValue(true);
                 });
 
                 t.Start();
@@ -139,12 +142,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, true);
-                SimData.DIO[0].Value = true;
+                SimData.DIO[0].SetValue(true);
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    SimData.DIO[0].Value = false;
+                    SimData.DIO[0].SetValue(false);
                 });
 
                 t.Start();
@@ -162,12 +165,12 @@ namespace WPILib.Tests
             {
                 d.RequestInterrupts();
                 d.SetUpSourceEdge(false, false);
-                SimData.DIO[0].Value = true;
+                SimData.DIO[0].SetValue(true);
 
                 Thread t = new Thread(() =>
                 {
                     Thread.Sleep(100);
-                    SimData.DIO[0].Value = false;
+                    SimData.DIO[0].SetValue(false);
                 });
 
                 t.Start();
@@ -189,12 +192,12 @@ namespace WPILib.Tests
                     count++;
                 };
 
-                SimData.DIO[0].Value = false;
+                SimData.DIO[0].SetValue(false);
 
                 d.RequestInterrupts(mockDelegate);
                 d.EnableInterrupts();
 
-                SimData.DIO[0].Value = true;
+                SimData.DIO[0].SetValue(true);
 
                 Thread.Sleep(50);
 
@@ -215,12 +218,12 @@ namespace WPILib.Tests
                     obj = o;
                 };
 
-                SimData.DIO[0].Value = false;
+                SimData.DIO[0].SetValue(false);
 
                 d.RequestInterrupts(mockDelegate, this);
                 d.EnableInterrupts();
 
-                SimData.DIO[0].Value = true;
+                SimData.DIO[0].SetValue(true);
 
                 Thread.Sleep(50);
 

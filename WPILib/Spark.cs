@@ -22,7 +22,7 @@ namespace WPILib
         {
             SetBounds(2.003, 1.55, 1.50, 1.46, .999);
             PeriodMultiplier = PeriodMultiplier.K1X;
-            SetRaw(CenterPwm);
+            SetDisabled();
             SetZeroLatch();
 
             LiveWindow.LiveWindow.AddActuator(nameof(Spark), Channel, this);

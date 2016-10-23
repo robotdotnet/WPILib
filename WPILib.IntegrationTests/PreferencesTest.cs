@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using NetworkTables;
-using NetworkTables.Native;
 using NUnit.Framework;
 using WPILib.IntegrationTests.Test;
 

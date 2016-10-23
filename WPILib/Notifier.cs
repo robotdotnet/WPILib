@@ -12,7 +12,7 @@ namespace WPILib
     public class Notifier : IDisposable
     {
         private readonly object m_processMutex = new object();
-        private readonly IntPtr m_notifier;
+        private readonly int m_notifier;
         private readonly Action<object> m_handler;
         private readonly object m_param;
         private double m_expirationTime = 0;
@@ -21,7 +21,7 @@ namespace WPILib
 
         private readonly object m_handlerMutex = new object();
 
-        private readonly Action<ulong, IntPtr> process;
+        private readonly HAL_NotifierProcess process;
 
         /// <summary>
         /// Notify is called by the HAL Layer. We simply need to pass it through to
@@ -29,8 +29,10 @@ namespace WPILib
         /// </summary>
         /// <param name="currentTimeInt">Current FPGA Time</param>
         /// <param name="param">Param passed to the notifier</param>
-        private void Notify(ulong currentTimeInt, IntPtr param)
+        private void Notify(ulong currentTimeInt, int param)
         {
+            // TODO: Use parameter to solve race
+
             bool processMutexEntered = false;
             bool handlerMutexEntered = false;
             object tempProcessMutex = m_processMutex;
@@ -85,8 +87,8 @@ namespace WPILib
             process = Notify;
 
             int status = 0;
-            m_notifier = InitializeNotifier(process, IntPtr.Zero, ref status);
-            CheckStatus(status);
+            m_notifier = HAL_InitializeNotifier(process, IntPtr.Zero, ref status);
+            CheckStatusForceThrow(status);
         }
 
         /// <summary>
@@ -108,8 +110,8 @@ namespace WPILib
             process = Notify;
 
             int status = 0;
-            m_notifier = InitializeNotifier(process, IntPtr.Zero, ref status);
-            CheckStatus(status);
+            m_notifier = HAL_InitializeNotifier(process, IntPtr.Zero, ref status);
+            CheckStatusForceThrow(status);
         }
 
         /// <summary>
@@ -118,7 +120,7 @@ namespace WPILib
         public void Dispose()
         {
             int status = 0;
-            CleanNotifier(m_notifier, ref status);
+            HAL_CleanNotifier(m_notifier, ref status);
             CheckStatus(status);
 
             lock (m_handlerMutex) { }
@@ -130,7 +132,7 @@ namespace WPILib
         private void UpdateAlarm()
         {
             int status = 0;
-            UpdateNotifierAlarm(m_notifier, (ulong)(m_expirationTime * 1e6), ref status);
+            HAL_UpdateNotifierAlarm(m_notifier, (ulong)(m_expirationTime * 1e6), ref status);
             CheckStatus(status);
         }
 
@@ -179,7 +181,7 @@ namespace WPILib
         public void Stop()
         {
             int status = 0;
-            StopNotifierAlarm(m_notifier, ref status);
+            HAL_StopNotifierAlarm(m_notifier, ref status);
             CheckStatus(status);
             
             lock(m_handlerMutex) { }

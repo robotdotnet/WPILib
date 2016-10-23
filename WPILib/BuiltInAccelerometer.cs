@@ -5,6 +5,7 @@ using WPILib.Interfaces;
 using WPILib.LiveWindow;
 using AccelerometerRange = WPILib.Interfaces.AccelerometerRange;
 using HALAccelerometer = HAL.Base.HALAccelerometer;
+using static HAL.Base.HALAccelerometer;
 
 namespace WPILib
 {
@@ -20,7 +21,7 @@ namespace WPILib
         public BuiltInAccelerometer(AccelerometerRange range = AccelerometerRange.k8G)
         {
             AccelerometerRange = range;
-            HAL.Base.HAL.Report(ResourceType.kResourceType_Accelerometer, (byte)0, 0, "Built-in accelerometer");
+            HAL.Base.HAL.Report(ResourceType.kResourceType_Accelerometer, 0, 0, "Built-in accelerometer");
             LiveWindow.LiveWindow.AddSensor("BuiltInAccel", 0, this);
         }
 
@@ -29,33 +30,33 @@ namespace WPILib
         {
             set
             {
-                HALAccelerometer.SetAccelerometerActive(false);
+                HAL_SetAccelerometerActive(false);
 
                 switch (value)
                 {
                     case AccelerometerRange.k2G:
-                        HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_2G);
+                        HAL_SetAccelerometerRange(HALAccelerometerRange.Range_2G);
                         break;
                     case AccelerometerRange.k4G:
-                        HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_4G);
+                        HAL_SetAccelerometerRange(HALAccelerometerRange.Range_4G);
                         break;
                     case AccelerometerRange.k8G:
-                        HALAccelerometer.SetAccelerometerRange(HALAccelerometerRange.Range_8G);
+                        HAL_SetAccelerometerRange(HALAccelerometerRange.Range_8G);
                         break;
                     default:
                     case AccelerometerRange.k16G:
                         throw new ArgumentOutOfRangeException(nameof(value), "16G range not supported (use k2G, k4G, or k8G)");
                 }
 
-                HALAccelerometer.SetAccelerometerActive(true);
+                HAL_SetAccelerometerActive(true);
             }
         }
         /// <inheritdoc/>
-        public virtual double GetX() => HALAccelerometer.GetAccelerometerX();
+        public virtual double GetX() => HAL_GetAccelerometerX();
         /// <inheritdoc/>
-        public virtual double GetY() => HALAccelerometer.GetAccelerometerY();
+        public virtual double GetY() => HAL_GetAccelerometerY();
         /// <inheritdoc/>
-        public virtual double GetZ() => HALAccelerometer.GetAccelerometerZ();
+        public virtual double GetZ() => HAL_GetAccelerometerZ();
 
         /// <inheritdoc/>
         public virtual AllAxes GetAllAxes()

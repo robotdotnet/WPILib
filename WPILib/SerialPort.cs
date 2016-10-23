@@ -98,16 +98,16 @@ namespace WPILib
         {
             int status = 0;
             m_port = (byte)port;
-            SerialInitializePort(m_port, ref status);
-            CheckStatus(status);
-            SerialSetBaudRate(m_port, (uint) baudRate, ref status);
-            CheckStatus(status);
-            SerialSetDataBits(m_port, (byte)dataBits, ref status);
-            CheckStatus(status);
-            SerialSetParity(m_port, (byte)parity, ref status);
-            CheckStatus(status);
-            SerialSetStopBits(m_port, (byte)stopBits, ref status);
-            CheckStatus(status);
+            HAL_InitializeSerialPort(m_port, ref status);
+            CheckStatusForceThrow(status);
+            HAL_SetSerialBaudRate(m_port, baudRate, ref status);
+            CheckStatusForceThrow(status);
+            HAL_SetSerialDataBits(m_port, (byte)dataBits, ref status);
+            CheckStatusForceThrow(status);
+            HAL_SetSerialParity(m_port, (byte)parity, ref status);
+            CheckStatusForceThrow(status);
+            HAL_SetSerialStopBits(m_port, (byte)stopBits, ref status);
+            CheckStatusForceThrow(status);
 
             //Set the default read buffer size to 1 to return bytes immediately
             ReadBufferSize = 1;
@@ -120,7 +120,7 @@ namespace WPILib
 
             DisableTermination();
 
-            Report(ResourceType.kResourceType_SerialPort, (byte) 0);
+            Report(ResourceType.kResourceType_SerialPort,0);
 
         }
 
@@ -128,7 +128,7 @@ namespace WPILib
         public void Dispose()
         {
             int status = 0;
-            SerialClose(m_port, ref status);
+            HAL_CloseSerial(m_port, ref status);
             CheckStatus(status);
         }
 
@@ -141,7 +141,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SerialSetFlowControl(m_port, (byte) value, ref status);
+                HAL_SetSerialFlowControl(m_port, (byte) value, ref status);
                 CheckStatus(status);
             }
         }
@@ -156,7 +156,7 @@ namespace WPILib
         public void EnableTermination(char terminator)
         {
             int status = 0;
-            SerialEnableTermination(m_port, (byte) terminator, ref status);
+            HAL_EnableSerialTermination(m_port, (byte) terminator, ref status);
             CheckStatus(status);
         }
 
@@ -177,7 +177,7 @@ namespace WPILib
         public void DisableTermination()
         {
             int status = 0;
-            SerialDisableTermination(m_port, ref status);
+            HAL_DisableSerialTermination(m_port, ref status);
             CheckStatus(status);
         }
 
@@ -189,7 +189,7 @@ namespace WPILib
         {
                 int retVal = 0;
                 int status = 0;
-                retVal = SerialGetBytesReceived(m_port, ref status);
+                retVal = HAL_GetSerialBytesReceived(m_port, ref status);
                 CheckStatus(status);
                 return retVal;
         }
@@ -231,7 +231,7 @@ namespace WPILib
         {
             int status = 0;
             byte[] data = new byte[count];
-            int gotten = (int)SerialRead(m_port, data, count, ref status);
+            int gotten = (int)HAL_ReadSerial(m_port, data, count, ref status);
             CheckStatus(status);
             byte[] retVal = new byte[gotten];
             for (int i = 0; i < gotten; i++)
@@ -250,7 +250,7 @@ namespace WPILib
         public int Write(byte[] buffer, int count)
         {
             int status = 0;
-            int retVal = (int)SerialWrite(m_port, buffer, count, ref status);
+            int retVal = (int)HAL_WriteSerial(m_port, buffer, count, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -277,7 +277,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SerialSetTimeout(m_port, (float) value, ref status);
+                HAL_SetSerialTimeout(m_port, (float) value, ref status);
                 CheckStatus(status);
             }
         }
@@ -295,7 +295,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SerialSetReadBufferSize(m_port, (uint) value, ref status);
+                HAL_SetSerialReadBufferSize(m_port, value, ref status);
                 CheckStatus(status);
             }
         }
@@ -309,7 +309,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SerialSetWriteBufferSize(m_port, (uint) value, ref status);
+                HAL_SetSerialWriteBufferSize(m_port, value, ref status);
                 CheckStatus(status);
             }
         }
@@ -327,7 +327,7 @@ namespace WPILib
             set
             {
                 int status = 0;
-                SerialSetWriteMode(m_port, (byte) value, ref status);
+                HAL_SetSerialWriteMode(m_port, (byte) value, ref status);
                 CheckStatus(status);
             }
         }
@@ -340,7 +340,7 @@ namespace WPILib
         public void Flush()
         {
             int status = 0;
-            SerialFlush(m_port, ref status);
+            HAL_FlushSerial(m_port, ref status);
             CheckStatus(status);
         }
 
@@ -352,7 +352,7 @@ namespace WPILib
         public void Reset()
         {
             int status = 0;
-            SerialClear(m_port, ref status);
+            HAL_ClearSerial(m_port, ref status);
             CheckStatus(status);
         }
     }

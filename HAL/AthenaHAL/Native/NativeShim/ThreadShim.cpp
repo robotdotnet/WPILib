@@ -1,13 +1,13 @@
-#include "HAL/Notifier.hpp"
-#include "HAL/Interrupts.hpp"
-#include <iostream>
-#include "errno.h"
 #include <stdint.h>
 #include <atomic>
-#include <cstdlib>
 #include <condition_variable>
+#include <cstdlib>
+#include <iostream>
 #include <mutex>
 #include <thread>
+#include "HAL/Interrupts.h"
+#include "HAL/Notifier.h"
+#include "errno.h"
 
 class SafeThread {
  public:
@@ -108,75 +108,79 @@ class NotifierThreadJNI : public SafeThread {
   void Main();
 
   bool m_notify = false;
-  void* m_func = nullptr;
-  void (*process)(uint64_t, void*);
+  HAL_NotifierHandle m_handle = HAL_kInvalidHandle;
+  void (*process)(uint64_t, HAL_NotifierHandle);
   uint64_t m_currentTime;
 };
 
 class NotifierShim : public SafeThreadOwner<NotifierThreadJNI> {
  public:
-  void SetFunc(void (*process)(uint64_t, void*));
+  void SetFunc(void (*process)(uint64_t, HAL_NotifierHandle));
 
-  void Notify(uint64_t currentTime) {
+  void Notify(uint64_t currentTime, HAL_NotifierHandle handle) {
     auto thr = GetThread();
     if (!thr) return;
     thr->m_currentTime = currentTime;
+    thr->m_handle = handle;
     thr->m_notify = true;
     thr->m_cond.notify_one();
   }
 };
 
-void NotifierShim::SetFunc(void (*process)(uint64_t, void*)) {
+void NotifierShim::SetFunc(void (*process)(uint64_t, HAL_NotifierHandle)) {
   auto thr = GetThread();
   if (!thr) return;
   thr->process = process;
 }
 
 void NotifierThreadJNI::Main() {
-
   std::unique_lock<std::mutex> lock(m_mutex);
   while (m_active) {
     m_cond.wait(lock, [&] { return !m_active || m_notify; });
     if (!m_active) break;
     m_notify = false;
     uint64_t currentTime = m_currentTime;
+    HAL_NotifierHandle handle = m_handle;
     lock.unlock();  // don't hold mutex during callback execution
-	process(currentTime, nullptr);
+    process(currentTime, handle);
     lock.lock();
   }
 }
 
-void notifierHandler(uint64_t currentTimeInt, void* param) {
-  ((NotifierShim*)param)->Notify(currentTimeInt);
+void notifierHandler(uint64_t currentTimeInt, HAL_NotifierHandle handle) {
+  int32_t status = 0;
+  auto notifierPointer = HAL_GetNotifierParam(handle, &status);
+  if (notifierPointer == nullptr) return;
+  NotifierShim* shim = static_cast<NotifierShim*>(notifierPointer);
+  shim->Notify(currentTimeInt, handle);
 }
 extern "C" {
 
-void* initializeNotifierShim(void (*process)(uint64_t, void*), void *param, int32_t *status)
-{
-	NotifierShim* notify = new NotifierShim;
-	notify->Start();
-	notify->SetFunc(process);
-	
-	void *notifierPtr = initializeNotifier(notifierHandler, notify, status);
-	
-	if (!notifierPtr || *status != 0)
-	{
-		delete notify;
-	}
-	
-	return notifierPtr;
+HAL_NotifierHandle HAL_InitializeNotifierShim(void (*process)(uint64_t, HAL_NotifierHandle),
+                                         void* param, int32_t* status) {
+  NotifierShim* notify = new NotifierShim;
+  notify->Start();
+  notify->SetFunc(process);
+
+  auto notifierHandle = HAL_InitializeNotifier(notifierHandler, notify, status);
+
+  if (notifierHandle == HAL_kInvalidHandle || *status != 0) {
+    delete notify;
+    return HAL_kInvalidHandle;
+  }
+
+  return notifierHandle;
 }
 
-void cleanNotifierShim(void* notifier_pointer, int32_t *status)
-{
-	NotifierShim* notify = (NotifierShim*)getNotifierParam(notifier_pointer, status);
-	cleanNotifier(notifier_pointer, status);
-	delete notify;
+void HAL_CleanNotifierShim(HAL_NotifierHandle notifier_handle, int32_t* status) {
+  NotifierShim* notify =
+      (NotifierShim*)HAL_GetNotifierParam(notifier_handle, status);
+  HAL_CleanNotifier(notifier_handle, status);
+  delete notify;
+}
 }
 
-}
-
-//Interrupt Fixes
+// Interrupt Fixes
 class InterruptThreadJNI : public SafeThread {
  public:
   void Main();
@@ -207,7 +211,6 @@ void InterruptShim::SetFunc(InterruptHandlerFunction mid) {
 }
 
 void InterruptThreadJNI::Main() {
-
   std::unique_lock<std::mutex> lock(m_mutex);
   while (m_active) {
     m_cond.wait(lock, [&] { return !m_active || m_notify; });
@@ -226,14 +229,13 @@ void interruptHandler(uint32_t mask, void* param) {
   ((InterruptShim*)param)->Notify(mask);
 }
 
-void attachInterruptHandlerShim(void* interrupt_pointer, InterruptHandlerFunction handler,
-			void* param, int32_t *status)
-{
-	InterruptShim* intr = new InterruptShim;
-	intr->Start();
-	intr->SetFunc(handler);
-	
-	attachInterruptHandler(interrupt_pointer, interruptHandler, intr, status);
-}
+void HAL_AttachInterruptHandlerShim(HAL_InterruptHandle interrupt_handle,
+                                InterruptHandlerFunction handler, void* param,
+                                int32_t* status) {
+  InterruptShim* intr = new InterruptShim;
+  intr->Start();
+  intr->SetFunc(handler);
 
+  HAL_AttachInterruptHandler(interrupt_handle, interruptHandler, intr, status);
+}
 }

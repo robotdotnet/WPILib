@@ -3,6 +3,7 @@ using HAL.Simulator.Data;
 
 namespace HAL.Simulator.Inputs
 {
+    /*
     public class SimCounter : IServoFeedback
     {
         private readonly CounterData m_counterData = null;
@@ -51,4 +52,5 @@ namespace HAL.Simulator.Inputs
             m_counterData.Period = output;
         }
     }
+    */
 }

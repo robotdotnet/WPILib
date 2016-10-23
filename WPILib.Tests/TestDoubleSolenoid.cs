@@ -24,12 +24,12 @@ namespace WPILib.Tests
 
         public DoubleSolenoid NewDoubleSolenoid()
         {
-            return new DoubleSolenoid(m_module, 0,1);
+            return new DoubleSolenoid(m_module, 0, 1);
         }
 
-        private IReadOnlyList<SolenoidData> GetSolenoids()
+        private HALSimPCMData GetSolenoids()
         {
-            return SimData.GetPCM(m_module).Solenoids;
+            return SimData.PCM[m_module];
         }
 
         [Test]
@@ -37,11 +37,11 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid s = new DoubleSolenoid(0, 1))
             {
-                Assert.IsTrue(SimData.GetPCM(0).Solenoids[0].Initialized);
-                Assert.IsTrue(SimData.GetPCM(0).Solenoids[1].Initialized);
+                Assert.IsTrue(SimData.PCM[0].GetSolenoidInitialized(0));
+                Assert.IsTrue(SimData.PCM[0].GetSolenoidInitialized(1));
             }
-            Assert.That(SimData.GetPCM(0).Solenoids[0].Initialized, Is.False);
-            Assert.That(SimData.GetPCM(0).Solenoids[1].Initialized, Is.False);
+            Assert.That(SimData.PCM[0].GetSolenoidInitialized(0), Is.False);
+            Assert.That(SimData.PCM[0].GetSolenoidInitialized(1), Is.False);
         }
 
         [Test]
@@ -67,8 +67,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid s = NewDoubleSolenoid())
             {
-                Assert.IsTrue(GetSolenoids()[0].Initialized);
-                Assert.IsTrue(GetSolenoids()[1].Initialized);
+                Assert.IsTrue(GetSolenoids().GetSolenoidInitialized(0));
+                Assert.IsTrue(GetSolenoids().GetSolenoidInitialized(1));
             }
         }
 
@@ -90,7 +90,7 @@ namespace WPILib.Tests
             List<DoubleSolenoid> solenoids = new List<DoubleSolenoid>();
             for (int i = 0; i < SolenoidChannels; i++)
             {
-                solenoids.Add(new DoubleSolenoid(m_module, i, i+1));
+                solenoids.Add(new DoubleSolenoid(m_module, i, i + 1));
                 i++;
             }
 
@@ -124,8 +124,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Forward);
-                Assert.IsTrue(GetSolenoids()[0].Value);
-                Assert.IsFalse(GetSolenoids()[1].Value);
+                Assert.IsTrue(GetSolenoids().GetSolenoidOutput(0));
+                Assert.IsFalse(GetSolenoids().GetSolenoidOutput(1));
             }
         }
 
@@ -135,8 +135,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Reverse);
-                Assert.IsTrue(GetSolenoids()[1].Value);
-                Assert.IsFalse(GetSolenoids()[0].Value);
+                Assert.IsTrue(GetSolenoids().GetSolenoidOutput(1));
+                Assert.IsFalse(GetSolenoids().GetSolenoidOutput(0));
             }
         }
 
@@ -146,8 +146,8 @@ namespace WPILib.Tests
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
                 ds.Set(DoubleSolenoid.Value.Off);
-                Assert.IsFalse(GetSolenoids()[1].Value);
-                Assert.IsFalse(GetSolenoids()[0].Value);
+                Assert.IsFalse(GetSolenoids().GetSolenoidOutput(1));
+                Assert.IsFalse(GetSolenoids().GetSolenoidOutput(0));
             }
         }
 
@@ -156,8 +156,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                GetSolenoids()[0].Value = true;
-                GetSolenoids()[1].Value = false;
+                GetSolenoids().SetSolenoidOutput(0, true);
+                GetSolenoids().SetSolenoidOutput(1, false);
 
                 Assert.AreEqual(DoubleSolenoid.Value.Forward, ds.Get());
             }
@@ -168,8 +168,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                GetSolenoids()[0].Value = false;
-                GetSolenoids()[1].Value = true;
+                GetSolenoids().SetSolenoidOutput(1, true);
+                GetSolenoids().SetSolenoidOutput(0, false);
 
                 Assert.AreEqual(DoubleSolenoid.Value.Reverse, ds.Get());
             }
@@ -180,8 +180,8 @@ namespace WPILib.Tests
         {
             using (DoubleSolenoid ds = NewDoubleSolenoid())
             {
-                GetSolenoids()[0].Value = false;
-                GetSolenoids()[1].Value = false;
+                GetSolenoids().SetSolenoidOutput(0, false);
+                GetSolenoids().SetSolenoidOutput(1, false);
 
                 Assert.AreEqual(DoubleSolenoid.Value.Off, ds.Get());
             }
@@ -265,11 +265,11 @@ namespace WPILib.Tests
             {
                 s.Set(DoubleSolenoid.Value.Forward);
                 Assert.That(s.Get(), Is.EqualTo(Value.Forward));
-                s.ValueChanged(null, null, "Reverse", NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, NetworkTables.Value.MakeString("Reverse"), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.EqualTo(Value.Reverse));
-                s.ValueChanged(null, null, "Garbage", NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, NetworkTables.Value.MakeString("Garbage"), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.EqualTo(Value.Off));
-                s.ValueChanged(null, null, "Forward", NetworkTables.NotifyFlags.NotifyLocal);
+                s.ValueChanged(null, null, NetworkTables.Value.MakeString("Forward"), NetworkTables.NotifyFlags.NotifyLocal);
                 Assert.That(s.Get, Is.EqualTo(Value.Forward));
             }
         }

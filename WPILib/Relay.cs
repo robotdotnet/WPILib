@@ -6,7 +6,9 @@ using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
 using static WPILib.Utility;
-using HALDigital = HAL.Base.HALDigital;
+using static HAL.Base.HAL;
+using static HAL.Base.HALRelay;
+using static HAL.Base.HALPorts;
 
 namespace WPILib
 {
@@ -51,29 +53,31 @@ namespace WPILib
         }
 
         private readonly int m_channel;
-        private IntPtr m_port;
+        private int m_forwardHandle = 0;
+        private int m_reverseHandle = 0;
 
         private Direction m_direction;
-        private static readonly Resource s_relayChannels = new Resource(RelayChannels * 2);
 
         private MotorSafetyHelper m_safetyHelper;
 
         private void InitRelay()
         {
             CheckRelayChannel(m_channel);
+
+            int status = 0;
+            int portHandle = HAL_GetPort(m_channel);
             if (m_direction == Direction.Both || m_direction == Direction.Forward)
             {
-                s_relayChannels.Allocate(m_channel * 2, "Relay channel " + m_channel + " is already allocated");
-                HAL.Base.HAL.Report(ResourceType.kResourceType_Relay, (byte)m_channel);
+                m_forwardHandle = HAL_InitializeRelayPort(portHandle, true, ref status);
+                CheckStatusRange(status, 0, HAL_GetNumRelayHeaders(), m_channel);
+                Report(ResourceType.kResourceType_Relay, m_channel);
             }
             if (m_direction == Direction.Both || m_direction == Direction.Reverse)
             {
-                s_relayChannels.Allocate(m_channel * 2 + 1, "Relay channel " + m_channel + " is already allocated");
-                HAL.Base.HAL.Report(ResourceType.kResourceType_Relay, (byte)(m_channel + 128));
+                m_reverseHandle = HAL_InitializeRelayPort(portHandle, false, ref status);
+                CheckStatusRange(status, 0, HAL_GetNumRelayHeaders(), m_channel);
+                Report(ResourceType.kResourceType_Relay, m_channel + 128);
             }
-            int status = 0;
-            m_port = HALDigital.InitializeDigitalPort(HAL.Base.HAL.GetPort((byte)m_channel), ref status);
-            CheckStatus(status);
 
             m_safetyHelper = new MotorSafetyHelper(this);
             m_safetyHelper.SafetyEnabled = false;
@@ -107,25 +111,15 @@ namespace WPILib
         ///<inheritdoc/>
         public override void Dispose()
         {
-            if (m_direction == Direction.Both || m_direction == Direction.Forward)
-            {
-                s_relayChannels.Deallocate(m_channel * 2);
-            }
-            if (m_direction == Direction.Both || m_direction == Direction.Reverse)
-            {
-                s_relayChannels.Deallocate(m_channel * 2 + 1);
-            }
-
             int status = 0;
+            HAL_SetRelay(m_forwardHandle, false, ref status);
+            // Ignore status
+            HAL_SetRelay(m_reverseHandle, false, ref status);
 
-            HALDigital.SetRelayForward(m_port, false, ref status);
-            CheckStatus(status);
-            HALDigital.SetRelayReverse(m_port, false, ref status);
-            CheckStatus(status);
-            HALDigital.FreeDIO(m_port, ref status);
-            CheckStatus(status);
-            HALDigital.FreeDigitalPort(m_port);
-            m_port = IntPtr.Zero;
+            HAL_FreeRelayPort(m_forwardHandle);
+            HAL_FreeRelayPort(m_reverseHandle);
+            m_forwardHandle = 0;
+            m_reverseHandle = 0;
         }
 
         /// <summary>
@@ -141,24 +135,24 @@ namespace WPILib
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Forward)
                     {
-                        HALDigital.SetRelayForward(m_port, false, ref status);
+                        HAL_SetRelay(m_forwardHandle, false, ref status);
                     }
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Reverse)
                     {
-                        HALDigital.SetRelayReverse(m_port, false, ref status);
+                        HAL_SetRelay(m_reverseHandle, false, ref status);
                     }
                     break;
                 case Value.On:
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Forward)
                     {
-                        HALDigital.SetRelayForward(m_port, true, ref status);
+                        HAL_SetRelay(m_forwardHandle, true, ref status);
                     }
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Reverse)
                     {
-                        HALDigital.SetRelayReverse(m_port, true, ref status);
+                        HAL_SetRelay(m_reverseHandle, true, ref status);
                     }
                     break;
                 case Value.Forward:
@@ -168,11 +162,11 @@ namespace WPILib
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Forward)
                     {
-                        HALDigital.SetRelayForward(m_port, true, ref status);
+                        HAL_SetRelay(m_forwardHandle, true, ref status);
                     }
                     if (m_direction == Direction.Both)
                     {
-                        HALDigital.SetRelayReverse(m_port, false, ref status);
+                        HAL_SetRelay(m_reverseHandle, false, ref status);
                     }
                     break;
                 case Value.Reverse:
@@ -181,12 +175,12 @@ namespace WPILib
                             "A relay configured for forward cannot be set to reverse");
                     if (m_direction == Direction.Both)
                     {
-                        HALDigital.SetRelayForward(m_port, false, ref status);
+                        HAL_SetRelay(m_forwardHandle, false, ref status);
                     }
                     if (m_direction == Direction.Both
                         || m_direction == Direction.Reverse)
                     {
-                        HALDigital.SetRelayReverse(m_port, true, ref status);
+                        HAL_SetRelay(m_reverseHandle, true, ref status);
                     }
                     break;
             }
@@ -201,9 +195,9 @@ namespace WPILib
         {
             int status = 0;
 
-            if (HALDigital.GetRelayForward(m_port, ref status))
+            if (HAL_GetRelay(m_forwardHandle, ref status))
             {
-                if (HALDigital.GetRelayReverse(m_port, ref status))
+                if (HAL_GetRelay(m_reverseHandle, ref status))
                 {
                     return Value.On;
                 }
@@ -221,7 +215,7 @@ namespace WPILib
             }
             else
             {
-                if (HALDigital.GetRelayReverse(m_port, ref status))
+                if (HAL_GetRelay(m_reverseHandle, ref status))
                 {
                     if (m_direction == Direction.Reverse)
                     {
@@ -299,9 +293,9 @@ namespace WPILib
         }
 
         ///<inheritdoc/>
-        public void ValueChanged(ITable source, string key, object value, NotifyFlags flags)
+        public void ValueChanged(ITable source, string key, NetworkTables.Value value, NotifyFlags flags)
         {
-            string val = ((string)value);
+            string val = value.GetString();
             if (val.Equals("Off"))
             {
                 Set(Value.Off);

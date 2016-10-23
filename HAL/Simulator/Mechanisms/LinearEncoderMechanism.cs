@@ -76,7 +76,7 @@ namespace HAL.Simulator.Mechanisms
             };
 
             Action<dynamic, dynamic> handler = null;
-
+            /*
             handler = (k, v) =>
             {
                 m_offset = CurrentMeters;
@@ -87,7 +87,7 @@ namespace HAL.Simulator.Mechanisms
             ((SimEncoder)m_output).EncoderData.Register("Reset", handler);
 
 
-
+    */
 
         }
     }

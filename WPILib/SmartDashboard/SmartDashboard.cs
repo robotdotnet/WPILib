@@ -19,7 +19,7 @@ namespace WPILib.SmartDashboard
 
         static SmartDashboard()
         {
-            HAL.Base.HAL.Report(ResourceType.kResourceType_SmartDashboard, (byte)0);
+            HAL.Base.HAL.Report(ResourceType.kResourceType_SmartDashboard, 0);
         }
 
         /// <summary>

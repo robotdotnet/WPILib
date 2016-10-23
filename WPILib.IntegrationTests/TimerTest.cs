@@ -10,7 +10,7 @@ namespace WPILib.IntegrationTests
         private static readonly long TIMER_TOLERANCE = (long)(2.5 * 1000);
         private static readonly long TIMER_RUNTIME = 5 * 1000000;
 
-        [Test]
+        [Test, Ignore("Timing not working in sim")]
         public void DelayTest()
         {
             Console.WriteLine("Starting Delay");

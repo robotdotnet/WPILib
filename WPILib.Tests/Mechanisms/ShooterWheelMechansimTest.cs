@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace WPILib.Tests.Mechanisms
 {
-    [TestFixture]
+    [TestFixture, Ignore("Not fixed in sim")]
     public class ShooterWheelMechansimTest : TestBase
     {
         [Test]
@@ -20,7 +20,7 @@ namespace WPILib.Tests.Mechanisms
             using (Counter c = new Counter(0))
             {
                 ISimSpeedController s = new SimPWMController(0);
-                IServoFeedback f = new SimCounter(0);
+                //IServoFeedback f = new SimCounter(0);
                 DCMotor motor = DCMotor.MakeCIM();
 
                 double inertia = 0.005;

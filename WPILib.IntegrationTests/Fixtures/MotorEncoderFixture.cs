@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using HAL.Simulator;
+using HAL.Simulator.Data;
 using WPILib.IntegrationTests.Test;
 using WPILib.Interfaces;
 
@@ -9,22 +10,23 @@ namespace WPILib.IntegrationTests.Fixtures
 {
     public class TalonMotorFixture : MotorEncoderFixture
     {
-        private Action<string, dynamic> currentCallback = null;
+        private NotifyCallback currentCallback = null;
+        private int callbackId;
         private double freeCurrent = 2;
 
         public TalonMotorFixture() : base()
         {
             currentCallback = (s, o) =>
             {
-                double current = freeCurrent * o;
-                SimData.GetPDP(0).Current[TestBench.TalonPdpChannel] = current;
+                double current = freeCurrent * o.GetDouble();
+                SimData.PDP[0].SetCurrent(TestBench.TalonPdpChannel, current);
             };
-            SimData.PWM[TestBench.TalonChannel].Register("Value", currentCallback);
+            callbackId = SimData.PWM[TestBench.TalonChannel].RegisterSpeedCallback(currentCallback);
         }
 
         public override bool Teardown()
         {
-            SimData.PWM[TestBench.TalonChannel].Cancel("Value", currentCallback);
+            SimData.PWM[TestBench.TalonChannel].CancelSpeedCallback(callbackId);
             return base.Teardown();
         }
 
@@ -51,22 +53,23 @@ namespace WPILib.IntegrationTests.Fixtures
 
     public class VictorMotorFixture : MotorEncoderFixture
     {
-        private Action<string, dynamic> currentCallback = null;
+        private NotifyCallback currentCallback = null;
+        private int callbackId;
         private double freeCurrent = 2;
 
         public VictorMotorFixture() : base()
         {
             currentCallback = (s, o) =>
             {
-                double current = freeCurrent * o;
-                SimData.GetPDP(0).Current[TestBench.VictorPdpChannel] = current;
+                double current = freeCurrent * o.GetDouble();
+                SimData.PDP[0].SetCurrent(TestBench.VictorPdpChannel, current);
             };
-            SimData.PWM[TestBench.VictorChannel].Register("Value", currentCallback);
+            callbackId = SimData.PWM[TestBench.VictorChannel].RegisterSpeedCallback(currentCallback);
         }
 
         public override bool Teardown()
         {
-            SimData.PWM[TestBench.VictorChannel].Cancel("Value", currentCallback);
+            SimData.PWM[TestBench.VictorChannel].CancelSpeedCallback(callbackId);
             return base.Teardown();
         }
 
@@ -93,22 +96,23 @@ namespace WPILib.IntegrationTests.Fixtures
 
     public class JaguarMotorFixture : MotorEncoderFixture
     {
-        private Action<string, dynamic> currentCallback = null;
+        private NotifyCallback currentCallback = null;
+        private int callbackId;
         private double freeCurrent = 2;
 
         public JaguarMotorFixture() : base()
         {
             currentCallback = (s, o) =>
             {
-                double current = freeCurrent * o;
-                SimData.GetPDP(0).Current[TestBench.JaguarPdpChannel] = current;
+                double current = freeCurrent * o.GetDouble();
+                SimData.PDP[0].SetCurrent(TestBench.JaguarPdpChannel, current);
             };
-            SimData.PWM[TestBench.JaguarChannel].Register("Value", currentCallback);
+            callbackId = SimData.PWM[TestBench.JaguarChannel].RegisterSpeedCallback(currentCallback);
         }
 
         public override bool Teardown()
         {
-            SimData.PWM[TestBench.JaguarChannel].Cancel("Value", currentCallback);
+            SimData.PWM[TestBench.JaguarChannel].CancelSpeedCallback(callbackId);
             return base.Teardown();
         }
 

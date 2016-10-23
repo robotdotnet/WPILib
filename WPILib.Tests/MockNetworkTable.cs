@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NetworkTables;
-using NetworkTables.Native;
 using NetworkTables.Tables;
 
 namespace WPILib.Tests
@@ -87,11 +86,6 @@ namespace WPILib.Tests
             
         }
 
-        public object GetValue(string key)
-        {
-            return null;
-        }
-
         public bool PutValue(string key, object value)
         {
             return false;
@@ -142,6 +136,11 @@ namespace WPILib.Tests
             return false;
         }
 
+        public bool PutBooleanArray(string key, IList<bool> value)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool PutBooleanArray(string key, bool[] value)
         {
             return false;
@@ -150,6 +149,16 @@ namespace WPILib.Tests
         public bool[] GetBooleanArray(string key)
         {
             return null;
+        }
+
+        public bool[] GetBooleanArray(string key, IList<bool> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutNumberArray(string key, IList<double> value)
+        {
+            throw new NotImplementedException();
         }
 
         public bool[] GetBooleanArray(string key, bool[] defaultValue)
@@ -167,6 +176,16 @@ namespace WPILib.Tests
             return null;
         }
 
+        public double[] GetNumberArray(string key, IList<double> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutStringArray(string key, IList<string> value)
+        {
+            throw new NotImplementedException();
+        }
+
         public double[] GetNumberArray(string key, double[] defaultValue)
         {
             return null;
@@ -182,6 +201,16 @@ namespace WPILib.Tests
             return null;
         }
 
+        public string[] GetStringArray(string key, IList<string> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool PutRaw(string key, IList<byte> value)
+        {
+            throw new NotImplementedException();
+        }
+
         public string[] GetStringArray(string key, string[] defaultValue)
         {
             return null;
@@ -195,6 +224,11 @@ namespace WPILib.Tests
         public byte[] GetRaw(string key)
         {
             return null;
+        }
+
+        public byte[] GetRaw(string key, IList<byte> defaultValue)
+        {
+            throw new NotImplementedException();
         }
 
         public byte[] GetRaw(string key, byte[] defaultValue)
@@ -237,44 +271,108 @@ namespace WPILib.Tests
             
         }
 
-        public object GetValue(string key, object defaultValue)
+
+        public Value GetValue(string key, Value defaultValue)
         {
-            return null;
+            return new Value();
         }
 
-        public void AddTableListenerEx(Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
+        public Value GetValue(string key)
         {
-            
+            return new Value();
         }
 
-        public void AddTableListenerEx(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, NotifyFlags flags)
+        public bool PutValue(string key, Value value)
         {
-            
+            return true;
         }
 
-        public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool localNotify)
+        public void AddTableListenerEx(Action<ITable, string, Value, NotifyFlags> listenerDelegate, NotifyFlags flags)
         {
-            
         }
 
-        public void AddTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify = false)
+        public void AddTableListenerEx(string key, Action<ITable, string, Value, NotifyFlags> listenerDelegate, NotifyFlags flags)
         {
-            
         }
 
-        public void AddTableListener(string key, Action<ITable, string, object, NotifyFlags> listenerDelegate, bool immediateNotify)
+        public void AddSubTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate, bool localNotify)
         {
-            
         }
 
-        public void AddSubTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
+        public void AddTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate, bool immediateNotify = false)
         {
-            
         }
 
-        public void RemoveTableListener(Action<ITable, string, object, NotifyFlags> listenerDelegate)
+        public void AddTableListener(string key, Action<ITable, string, Value, NotifyFlags> listenerDelegate, bool immediateNotify)
         {
-            
+        }
+
+        public void AddSubTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate)
+        {
+        }
+
+        public void RemoveTableListener(Action<ITable, string, Value, NotifyFlags> listenerDelegate)
+        {
+        }
+
+        public bool SetDefaultValue(string key, Value defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultNumber(string key, double defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultBoolean(string key, bool defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultString(string key, string defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultRaw(string key, IList<byte> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultBooleanArray(string key, IList<bool> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultNumberArray(string key, IList<double> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultStringArray(string key, IList<string> defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool SetDefaultRaw(string key, byte[] defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultBooleanArray(string key, bool[] defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultNumberArray(string key, double[] defaultValue)
+        {
+            return true;
+        }
+
+        public bool SetDefaultStringArray(string key, string[] defaultValue)
+        {
+            return true;
         }
     }
 }

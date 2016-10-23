@@ -34,7 +34,7 @@ namespace HAL.Simulator.Mechanisms
             double startRotations, bool invertInput)
         {
             m_input = input;
-            m_output = output;
+            //m_output = output;
             m_model = model;
             m_invert = invertInput;
 
@@ -85,7 +85,7 @@ namespace HAL.Simulator.Mechanisms
                     homeInput.Set(!rising);
                 }
             };
-
+            /*
             Action<dynamic, dynamic> handler = null;
                 handler = (k, v) =>
                 {
@@ -97,7 +97,7 @@ namespace HAL.Simulator.Mechanisms
                 ((SimEncoder) m_output).EncoderData.Register("Reset", handler);
             
 
-
+    */
         }
     }
 }

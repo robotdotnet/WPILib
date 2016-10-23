@@ -41,7 +41,7 @@ namespace WPILib
         }
 
         /// Gets if the robot is in simulation
-        public static bool IsSimulation => HALType == HALTypes.Simulation;
+        public static bool IsSimulation => HAL_GetRuntimeType() == HALRuntimeType.HALMock;
 
         /// Gets if the robot is running on a RoboRIO
         public static bool IsReal => !IsSimulation;
@@ -134,7 +134,8 @@ namespace WPILib
             }
 
             //Write to the version file.
-            if (HALType == HALTypes.RoboRIO)
+            // TODO: FIX ME (THAD) Need to know if sim or not
+            if (true)
             {
                 string file = "/tmp/frc_versions/FRC_Lib_Version.ini";
                 try

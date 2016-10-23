@@ -1,8 +1,5 @@
-﻿using System;
-using static WPILib.Utility;
-using static HAL.Base.HAL;
+﻿using static WPILib.Utility;
 using static HAL.Base.HALSolenoid;
-using HALSolenoid = HAL.Base.HALSolenoid;
 
 namespace WPILib
 {
@@ -12,16 +9,11 @@ namespace WPILib
     /// </summary>
     public abstract class SolenoidBase : SensorBase
     {
-        private IntPtr m_port;
         /// <summary>
         /// The module number for the solenoid.
         /// </summary>
         protected readonly int ModuleNumber;
-        /// <summary>
-        /// The allocated resources for the solenoid.
-        /// </summary>
-        protected static readonly Resource Allocated = new Resource(63 * SolenoidChannels);
-        private readonly object m_lockObject = new object();
+
 
         /// <summary>
         /// Creates a new <see cref="SolenoidBase"/>.
@@ -29,21 +21,7 @@ namespace WPILib
         /// <param name="moduleNumber">The PCM CAN ID</param>
         protected SolenoidBase(int moduleNumber)
         {
-            lock (m_lockObject)
-            {
-                ModuleNumber = moduleNumber;
-                int status = 0;
-                m_port = InitializeSolenoidPort(GetPortWithModule((byte) ModuleNumber, 0), ref status);
-                CheckStatus(status);
-            }
-        }
-
-        /// <inheritdoc/>
-        public override void Dispose()
-        {
-            FreeSolenoidPort(m_port);
-            m_port = IntPtr.Zero;
-            base.Dispose();
+            ModuleNumber = moduleNumber;
         }
 
         /// <summary>
@@ -53,7 +31,7 @@ namespace WPILib
         public byte GetAll()
         {
             int status = 0;
-            byte retVal = HALSolenoid.GetAllSolenoids(m_port, ref status);
+            byte retVal = (byte)HAL_GetAllSolenoids(ModuleNumber, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -69,7 +47,7 @@ namespace WPILib
         public byte GetPCMSolenoidBlackList()
         {
             int status = 0;
-            byte retVal = (byte)HALSolenoid.GetPCMSolenoidBlackList(m_port, ref status);
+            byte retVal = (byte)HAL_GetPCMSolenoidBlackList(ModuleNumber, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -81,7 +59,7 @@ namespace WPILib
         public bool GetPCMSolenoidVoltageStickyFault()
         {
             int status = 0;
-            bool retVal = HALSolenoid.GetPCMSolenoidVoltageStickyFault(m_port, ref status);
+            bool retVal = HAL_GetPCMSolenoidVoltageStickyFault(ModuleNumber, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -93,7 +71,7 @@ namespace WPILib
         public bool GetPCMSolenoidVoltageFault()
         {
             int status = 0;
-            bool retVal = HALSolenoid.GetPCMSolenoidVoltageFault(m_port, ref status);
+            bool retVal = HAL_GetPCMSolenoidVoltageFault(ModuleNumber, ref status);
             CheckStatus(status);
             return retVal;
         }
@@ -111,7 +89,7 @@ namespace WPILib
         public void ClearAllPCMStickyFaults()
         {
             int status = 0;
-            ClearAllPCMStickyFaults_sol(m_port, ref status);
+            HAL_ClearAllPCMStickyFaults(ModuleNumber, ref status);
             CheckStatus(status);
         }
     }

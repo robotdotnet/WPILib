@@ -10,6 +10,22 @@ namespace HAL.Base
 {
 
     #region HAL
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public enum HALRuntimeType
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        HALAthena,
+        /// <summary>
+        /// 
+        /// </summary>
+        HALMock
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -68,20 +84,20 @@ namespace HAL.Base
     [StructLayout(LayoutKind.Sequential)]
     public struct HALJoystickAxesArray
     {
-        public short axes0;
-        public short axes1;
-        public short axes2;
-        public short axes3;
-        public short axes4;
-        public short axes5;
-        public short axes6;
-        public short axes7;
-        public short axes8;
-        public short axes9;
-        public short axes10;
-        public short axes11;
+        public float axes0;
+        public float axes1;
+        public float axes2;
+        public float axes3;
+        public float axes4;
+        public float axes5;
+        public float axes6;
+        public float axes7;
+        public float axes8;
+        public float axes9;
+        public float axes10;
+        public float axes11;
 
-        public short this[int i]
+        public float this[int i]
         {
             get
             {
@@ -2055,7 +2071,7 @@ namespace HAL.Base
     #endregion
 
     #region Analog
-    public enum AnalogTriggerType
+    public enum HALAnalogTriggerType
     {
         /// kInWindow -> 0
         InWindow = 0,
@@ -2091,7 +2107,7 @@ namespace HAL.Base
     #endregion
 
     #region Digital
-    public enum Mode
+    public enum HALCounterMode
     {
         /// kTwoPulse -> 0
         TwoPulse = 0,
@@ -2105,6 +2121,22 @@ namespace HAL.Base
         /// kExternalDirection -> 3
         ExternalDirection = 3,
     }
+
+    public enum HALEncoderIndexingType
+    {
+        kResetWhileHigh,
+        kResetWhileLow,
+        kResetOnFallingEdge,
+        kResetOnRisingEdge
+    };
+
+    public enum HALEncoderEncodingType
+    {
+        Encoder_k1X,
+        Encoder_k2X,
+        Encoder_k4X
+    }
+}
     #endregion
 
     #region CAN
@@ -2193,4 +2225,3 @@ namespace HAL.Base
 
 
     #endregion
-}

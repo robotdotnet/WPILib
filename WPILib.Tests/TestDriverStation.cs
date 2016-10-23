@@ -8,7 +8,7 @@ using static HAL.Simulator.DriverStationHelper;
 
 namespace WPILib.Tests
 {
-
+    /*
     [TestFixture]
     public class TestDriverStation : TestBase
     {
@@ -41,6 +41,8 @@ namespace WPILib.Tests
 
             var ct = global::HAL.Base.HAL.GetControlWord();
 
+           // var controlWord = HALDriverStation.HAL_GetControlWord()
+
             Assert.IsTrue(ct.GetEnabled());
             Assert.IsTrue(ct.GetAutonomous());
             Assert.IsTrue(ct.GetTest());
@@ -72,7 +74,7 @@ namespace WPILib.Tests
         [Test]
         public void TestGetBatteryVoltage()
         {
-            SimData.RoboRioData.VInVoltage = 7.928f;
+            SimData.RoboRioData = 7.928f;
             Assert.AreEqual(7.928, DriverStation.Instance.GetBatteryVoltage(), 0.0001);
         }
 
@@ -115,7 +117,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.IsTrue(DriverStation.Instance.Test);
         }
-
+/*
         [Test]
         public void TestSysActive()
         {
@@ -147,34 +149,47 @@ namespace WPILib.Tests
             Assert.IsFalse(DriverStation.Instance.BrownedOut);
 
         }
+        *
 
-        [Test]
-        [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red1)]
-        [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red2)]
-        [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red3)]
-        [TestCase(DriverStation.Alliance.Blue, HALAllianceStationID.HALAllianceStationID_blue1)]
-        [TestCase(DriverStation.Alliance.Blue, HALAllianceStationID.HALAllianceStationID_blue2)]
-        [TestCase(DriverStation.Alliance.Blue, HALAllianceStationID.HALAllianceStationID_blue3)]
-        public void TestGetAlliance(DriverStation.Alliance returnAlliance, HALAllianceStationID station)
-        {
-            SetAllianceStation(station);
-            UpdateData();
-            Assert.AreEqual(returnAlliance, DriverStation.Instance.GetAlliance());
-        }
+    [Test]
+    [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red1)]
+    [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red2)]
+    [TestCase(DriverStation.Alliance.Red, HALAllianceStationID.HALAllianceStationID_red3)]
+    [TestCase(DriverStation.Alliance.Blue, HALAllianceStationID.HALAllianceStationID_blue1)]
+    [TestCase(DriverStation.Alliance.Blue, HALAllianceStationID.HALAllianceStationID_blue2)]
+    [TestCase(DriverStation.Alliance.Blue, HALAllianceStationID.HALAllianceStationID_blue3)]
+    public
+void TestGetAlliance(DriverStation.Alliance returnAlliance, HALAllianceStationID station)
+{
+    SetAllianceStation(station );
+    UpdateData();
+    Assert.AreEqual
+(
+    returnAlliance
+,
+    DriverStation.Instance.GetAlliance
+());
+}
 
-        [TestCase(1, HALAllianceStationID.HALAllianceStationID_red1)]
-        [TestCase(2, HALAllianceStationID.HALAllianceStationID_red2)]
-        [TestCase(3, HALAllianceStationID.HALAllianceStationID_red3)]
-        [TestCase(1, HALAllianceStationID.HALAllianceStationID_blue1)]
-        [TestCase(2, HALAllianceStationID.HALAllianceStationID_blue2)]
-        [TestCase(3, HALAllianceStationID.HALAllianceStationID_blue3)]
-        public void TestGetStation(int returnStation, HALAllianceStationID station)
-        {
-            SetAllianceStation(station);
-            UpdateData();
-            Assert.AreEqual(returnStation, DriverStation.Instance.GetLocation());
-        }
-
+    [TestCase(1, HALAllianceStationID.HALAllianceStationID_red1)]
+    [TestCase(2, HALAllianceStationID.HALAllianceStationID_red2)]
+    [TestCase(3, HALAllianceStationID.HALAllianceStationID_red3)]
+    [TestCase(1, HALAllianceStationID.HALAllianceStationID_blue1)]
+    [TestCase(2, HALAllianceStationID.HALAllianceStationID_blue2)]
+    [TestCase(3, HALAllianceStationID.HALAllianceStationID_blue3)]
+    public
+void TestGetStation(int returnStation, HALAllianceStationID station)
+{
+    SetAllianceStation(station );
+    UpdateData();
+    Assert.AreEqual
+(
+    returnStation
+,
+    DriverStation.Instance.GetLocation
+());
+}
+    /*
         [Test]
         public void TestGetAllianceDefault()
         {
@@ -202,6 +217,7 @@ namespace WPILib.Tests
 
             global::HAL.Base.HAL.HALGetAllianceStation = HAL.SimulatorHAL.HAL.HALGetAllianceStation;
         }
+        *
 
         [Test]
         [TestCase(true)]
@@ -222,7 +238,7 @@ namespace WPILib.Tests
             UpdateData();
             Assert.AreEqual(attached, DriverStation.Instance.DSAtached);
         }
-
+        /*
         [Test]
         public void TestGetMatchTime()
         {
@@ -236,6 +252,7 @@ namespace WPILib.Tests
 
             global::HAL.Base.HAL.HALGetMatchTime = HAL.SimulatorHAL.HAL.HALGetMatchTime;
         }
+        *
 
         [Test]
         public void TestJoystickButtons([Range(0,32)] int numButtons)
@@ -338,5 +355,4 @@ namespace WPILib.Tests
         
     }
     */
-    }
 }

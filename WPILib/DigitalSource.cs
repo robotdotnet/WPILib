@@ -1,5 +1,4 @@
 ﻿using System;
-using static HAL.Base.HALDigital;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -15,66 +14,13 @@ namespace WPILib
     public abstract class DigitalSource : InterruptableSensorBase
     {
         /// <summary>
-        /// A collection of the Digital Sources.
+        /// Is this an Analog Trigger
         /// </summary>
-        protected static readonly Resource Channels = new Resource(DigitalChannels);
-        /// <summary>
-        /// The Port this source is attached to.
-        /// </summary>
-        protected internal IntPtr Port;
-        /// <summary>
-        /// The channel this source is connected to
-        /// </summary>
-        protected int Channel;
+        public abstract bool AnalogTrigger { get; }
 
         /// <summary>
-        /// Base Initialization function for all Ports.
+        /// Get the Channel for this source
         /// </summary>
-        /// <param name="channel">The channel the port is connected too</param>
-        /// <param name="input">True if port is input, false if output</param>
-        protected void InitDigitalPort(int channel, bool input)
-        {
-            Channel = channel;
-
-            CheckDigitalChannel(channel);
-
-            Channels.Allocate(channel, "Digital input " + channel + " is already allocated");
-
-            IntPtr portPointer = HAL.Base.HAL.GetPort((byte)channel);
-            int status = 0;
-            Port = InitializeDigitalPort(portPointer, ref status);
-            AllocateDIO(Port, input, ref status);
-            CheckStatus(status);
-        }
-
-        /// <summary>
-        /// Destructor
-        /// </summary>
-        public override void Dispose()
-        {
-            Channels.Deallocate(Channel);
-            int status = 0;
-            FreeDIO(Port, ref status);
-            CheckStatus(status);
-            FreeDigitalPort(Port);
-            Port = IntPtr.Zero;
-            Channel = 0;
-            base.Dispose();
-        }
-
-        /// <summary>
-        /// Get the channel routing number.
-        /// </summary>
-        public override int ChannelForRouting => Channel;
-
-        /// <summary>
-        /// Get the module routing number.
-        /// </summary>
-        public override byte ModuleForRouting => 0;
-
-        /// <summary>
-        /// Is this an analog trigger.
-        /// </summary>
-        public override bool AnalogTriggerForRouting => false;
+        public abstract int Channel { get; }
     }
 }

@@ -7,7 +7,7 @@ namespace HAL.Simulator.Outputs
     /// </summary>
     public class SimDigitalOutput
     {
-        readonly DIOData DIOData = null;
+        readonly HALSimDIOData DIOData = null;
 
         /// <summary>
         /// Creates a new Sim Digital Output reader.
@@ -24,7 +24,7 @@ namespace HAL.Simulator.Outputs
         /// <returns>The current value of the output.</returns>
         public bool Get()
         {
-            return DIOData.Value;
+            return DIOData.GetValue();
         }
     }
 }

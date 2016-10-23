@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HAL</RootNamespace>
     <AssemblyName>HAL</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -60,98 +60,71 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AthenaHAL\HAL.cs" />
-    <Compile Include="AthenaHAL\HALAccelerometer.cs" />
-    <Compile Include="AthenaHAL\HALAnalog.cs" />
-    <Compile Include="AthenaHAL\HALCAN.cs" />
-    <Compile Include="AthenaHAL\HALCANTalonSRX.cs" />
-    <Compile Include="AthenaHAL\HALCompressor.cs" />
-    <Compile Include="AthenaHAL\HALDigital.cs" />
-    <Compile Include="AthenaHAL\HALInterrupts.cs" />
-    <Compile Include="AthenaHAL\HALNotifier.cs" />
-    <Compile Include="AthenaHAL\HALPDP.cs" />
-    <Compile Include="AthenaHAL\HALPower.cs" />
-    <Compile Include="AthenaHAL\HALSemaphore.cs" />
-    <Compile Include="AthenaHAL\HALSerialPort.cs" />
-    <Compile Include="AthenaHAL\HALSolenoid.cs" />
-    <Compile Include="Base\LibraryLoader.cs" />
-    <Compile Include="Delegates\HALAccelerometerGenerated.cs" />
-    <Compile Include="Delegates\HALAnalogGenerated.cs" />
-    <Compile Include="Delegates\HALCANGenerated.cs" />
-    <Compile Include="Delegates\HALCanTalonSRXGenerated.cs" />
-    <Compile Include="Delegates\HALCompressorGenerated.cs" />
-    <Compile Include="Delegates\HALDigitalGenerated.cs" />
-    <Compile Include="Delegates\HALGenerated.cs" />
-    <Compile Include="Delegates\HALInterruptsGenerated.cs" />
-    <Compile Include="Delegates\HALNotifierGenerated.cs" />
-    <Compile Include="Delegates\HALPDPGenerated.cs" />
-    <Compile Include="Delegates\HALPowerGenerated.cs" />
-    <Compile Include="Delegates\HALSemaphoreGenerated.cs" />
-    <Compile Include="Delegates\HALSerialPortGenerated.cs" />
-    <Compile Include="Delegates\HALSolenoidGenerated.cs" />
+    <Compile Include="Delegates\LibraryLoaderHolder.cs" />
+    <Compile Include="NativeLoader\ILibraryInformation.cs" />
+    <Compile Include="NativeLoader\ILibraryLoader.cs" />
+    <Compile Include="NativeLoader\LinuxLibraryLoader.cs" />
+    <Compile Include="NativeLoader\MacOsLibraryLoader.cs" />
+    <Compile Include="NativeLoader\NativeDelegateAttribute.cs" />
+    <Compile Include="NativeLoader\NativeDelegateInitializer.cs" />
+    <Compile Include="NativeLoader\NativeLibraryLoader.cs" />
+    <Compile Include="NativeLoader\OsType.cs" />
+    <Compile Include="NativeLoader\RoboRioLibraryLoader.cs" />
+    <Compile Include="NativeLoader\Uname.cs" />
+    <Compile Include="NativeLoader\WindowsLibraryLoader.cs" />
     <Compile Include="Base\HAL.cs" />
-    <Compile Include="Base\HALAccelerometer.cs" />
-    <Compile Include="Base\HALAnalog.cs" />
     <Compile Include="Base\HALCAN.cs" />
     <Compile Include="Base\HALCANTalonSRX.cs" />
-    <Compile Include="Base\HALCompressor.cs" />
-    <Compile Include="Base\HALDigital.cs" />
     <Compile Include="Base\HALErrors.cs" />
-    <Compile Include="Base\HALInterrupts.cs" />
-    <Compile Include="Base\HALNotifier.cs" />
-    <Compile Include="Base\HALPDP.cs" />
-    <Compile Include="Base\HALPower.cs" />
-    <Compile Include="Base\HALSemaphore.cs" />
-    <Compile Include="Base\HALSerialPort.cs" />
-    <Compile Include="Base\HALSolenoid.cs" />
     <Compile Include="Base\HALStructures.cs" />
     <Compile Include="Base\HALUsageReporter.cs" />
-    <Compile Include="SimulatorHAL\NotifierAlarm.cs" />
-    <Compile Include="Simulator\Data\ErrorData.cs" />
-    <Compile Include="Simulator\Data\NavXData.cs" />
+    <Compile Include="Delegates\HAL.cs" />
+    <Compile Include="Delegates\HALAccelerometer.cs" />
+    <Compile Include="Delegates\HALAnalogAccumulator.cs" />
+    <Compile Include="Delegates\HALAnalogGyro.cs" />
+    <Compile Include="Delegates\HALAnalogInput.cs" />
+    <Compile Include="Delegates\HALAnalogOutput.cs" />
+    <Compile Include="Delegates\HALAnalogTrigger.cs" />
+    <Compile Include="Delegates\HALCAN.cs" />
+    <Compile Include="Delegates\HALCanTalonSRX.cs" />
+    <Compile Include="Delegates\HALCompressor.cs" />
+    <Compile Include="Delegates\HALConstants.cs" />
+    <Compile Include="Delegates\HALCounter.cs" />
+    <Compile Include="Delegates\HALDIO.cs" />
+    <Compile Include="Delegates\HALDriverStation.cs" />
+    <Compile Include="Delegates\HALEncoder.cs" />
+    <Compile Include="Delegates\HALI2C.cs" />
+    <Compile Include="Delegates\HALInterrupts.cs" />
+    <Compile Include="Delegates\HALNotifier.cs" />
+    <Compile Include="Delegates\HALPDP.cs" />
+    <Compile Include="Delegates\HALPorts.cs" />
+    <Compile Include="Delegates\HALPower.cs" />
+    <Compile Include="Delegates\HALPWM.cs" />
+    <Compile Include="Delegates\HALRelay.cs" />
+    <Compile Include="Delegates\HALSerialPort.cs" />
+    <Compile Include="Delegates\HALSolenoid.cs" />
+    <Compile Include="Delegates\HALSPI.cs" />
+    <Compile Include="Simulator\Data\DataBase.cs" />
+    <Compile Include="Simulator\Data\DriverStationData.cs" />
+    <Compile Include="Simulator\Data\HALSimAccelerometerData.cs" />
+    <Compile Include="Simulator\Data\HALSimAnalogGyroData.cs" />
+    <Compile Include="Simulator\Data\HALSimAnalogInData.cs" />
+    <Compile Include="Simulator\Data\HALSimAnalogOutData.cs" />
+    <Compile Include="Simulator\Data\HALSimAnalogTriggerData.cs" />
+    <Compile Include="Simulator\Data\HALSimDigitalPWMData.cs" />
+    <Compile Include="Simulator\Data\HALSimDIOData.cs" />
+    <Compile Include="Simulator\Data\HALSimEncoderData.cs" />
+    <Compile Include="Simulator\Data\HALSimPCMData.cs" />
+    <Compile Include="Simulator\Data\HALSimPDPData.cs" />
+    <Compile Include="Simulator\Data\HALSimPWMData.cs" />
+    <Compile Include="Simulator\Data\HALSimRelayData.cs" />
+    <Compile Include="Simulator\Data\HALSimRoboRioData.cs" />
+    <Compile Include="Simulator\Data\HALSimSPIAccelerometerData.cs" />
+    <Compile Include="Simulator\Data\NativeSimStructures.cs" />
+    <Compile Include="Simulator\Data\NotifyDataBase.cs" />
     <Compile Include="Simulator\Inputs\SimNavXGyro.cs" />
     <Compile Include="Simulator\ISimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimulatorHAL\HAL.cs" />
-    <Compile Include="SimulatorHAL\HALAccelerometer.cs" />
-    <Compile Include="SimulatorHAL\HALAnalog.cs" />
-    <Compile Include="SimulatorHAL\HALCAN.cs" />
-    <Compile Include="SimulatorHAL\HALCANTalonSRX.cs" />
-    <Compile Include="SimulatorHAL\HALCompressor.cs" />
-    <Compile Include="SimulatorHAL\HALDigital.cs" />
-    <Compile Include="SimulatorHAL\HALErrorConstants.cs" />
-    <Compile Include="SimulatorHAL\HALInterrupts.cs" />
-    <Compile Include="SimulatorHAL\HALNotifier.cs" />
-    <Compile Include="SimulatorHAL\HALPDP.cs" />
-    <Compile Include="SimulatorHAL\HALPower.cs" />
-    <Compile Include="SimulatorHAL\HALSemaphore.cs" />
-    <Compile Include="SimulatorHAL\HALSerialPort.cs" />
-    <Compile Include="SimulatorHAL\HALSolenoid.cs" />
-    <Compile Include="SimulatorHAL\HALStructures.cs" />
-    <Compile Include="SimulatorHAL\LoaderUtilities.cs" />
-    <Compile Include="SimulatorHAL\PortConverters.cs" />
-    <Compile Include="SimulatorHAL\PWMHelpers.cs" />
-    <Compile Include="Simulator\Data\AccelerometerData.cs" />
-    <Compile Include="Simulator\Data\AnalogInData.cs" />
-    <Compile Include="Simulator\Data\AnalogOutData.cs" />
-    <Compile Include="Simulator\Data\AnalogTriggerData.cs" />
-    <Compile Include="Simulator\Data\CanTalonData.cs" />
-    <Compile Include="Simulator\Data\CounterData.cs" />
-    <Compile Include="Simulator\Data\DataBase.cs" />
-    <Compile Include="Simulator\Data\DigitalPWMData.cs" />
-    <Compile Include="Simulator\Data\DIOData.cs" />
-    <Compile Include="Simulator\Data\DriverStationData.cs" />
-    <Compile Include="Simulator\Data\EncoderData.cs" />
-    <Compile Include="Simulator\Data\GlobalData.cs" />
-    <Compile Include="Simulator\Data\MXPData.cs" />
-    <Compile Include="Simulator\Data\NotifyDataBase.cs" />
-    <Compile Include="Simulator\Data\PCMData.cs" />
-    <Compile Include="Simulator\Data\PDPData.cs" />
-    <Compile Include="Simulator\Data\PWMData.cs" />
-    <Compile Include="Simulator\Data\RelayData.cs" />
-    <Compile Include="Simulator\Data\RoboRIOData.cs" />
-    <Compile Include="Simulator\Data\SPIAccelerometerData.cs" />
-    <Compile Include="Simulator\Data\SPIAccumulatorData.cs" />
     <Compile Include="Simulator\DriverStationHelper.cs" />
     <Compile Include="Simulator\Extensions\NumericExtensions.cs" />
     <Compile Include="Simulator\Inputs\IServoFeedback.cs" />
@@ -182,9 +155,12 @@
     <Compile Include="Simulator\SimHooks.cs" />
     <Compile Include="Simulator\TalonSRXEventArgs.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="AthenaHAL\Native\libHALAthena.so" />
+    <EmbeddedResource Include="AthenaHAL\Native\amd64\mockhal.dll" />
+    <EmbeddedResource Include="AthenaHAL\Native\x86\mockhal.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AthenaHAL\Native\roborio\libHALAthena.so" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

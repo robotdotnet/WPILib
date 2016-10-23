@@ -5,7 +5,7 @@ using WPILib.Exceptions;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
 using static HAL.Base.HAL;
-using static HAL.Base.HALDigital;
+using static HAL.Base.HALEncoder;
 using static WPILib.Utility;
 
 namespace WPILib
@@ -62,50 +62,26 @@ namespace WPILib
         /// </summary>
         protected DigitalSource IndexSource = null;
 
-        private IntPtr m_encoder;
-        private int m_index;
+        private int m_encoder;
 
-        private Counter m_counter;
-        private readonly EncodingType m_encodingType = EncodingType.K4X;
-        private int m_encodingScale;
         private bool m_allocatedA;
         private bool m_allocatedB;
         private bool m_allocatedI;
         private PIDSourceType m_pidSource;
 
-        private void InitEncoder(bool reverseDirection)
+        private void InitEncoder(bool reverseDirection, EncodingType encodingType)
         {
-            switch (m_encodingType)
-            {
-                case EncodingType.K4X:
-                    m_encodingScale = 4;
-                    int status = 0;
-                    m_encoder = InitializeEncoder(ASource.ModuleForRouting,
-                        (uint)ASource.ChannelForRouting,
-                        ASource.AnalogTriggerForRouting, BSource.ModuleForRouting,
-                        (uint)BSource.ChannelForRouting,
-                        BSource.AnalogTriggerForRouting, reverseDirection, ref m_index, ref status);
-                    CheckStatus(status);
-                    m_counter = null;
-                    MaxPeriod = 0.5;
-                    break;
-                case EncodingType.K2X:
-                    m_encodingScale = 2;
-                    m_counter = new Counter(m_encodingType, ASource, BSource, reverseDirection);
-                    m_index = m_counter.FPGAIndex;
-                    break;
-                case EncodingType.K1X:
-                    m_encodingScale = 1;
-                    m_counter = new Counter(m_encodingType, ASource, BSource, reverseDirection);
-                    m_index = m_counter.FPGAIndex;
-                    break;
-            }
-            DistancePerPulse = 1.0;
+            int status = 0;
+            m_encoder = HAL_InitializeEncoder(ASource.PortHandleForRouting,
+                (HALAnalogTriggerType)ASource.AnalogTriggerTypeForRouting, BSource.PortHandleForRouting,
+                (HALAnalogTriggerType)BSource.AnalogTriggerTypeForRouting, reverseDirection,
+                (HALEncoderEncodingType)encodingType, ref status);
+            CheckStatusForceThrow(status);
 
             m_pidSource = PIDSourceType.Displacement;
 
-            LiveWindow.LiveWindow.AddSensor("Encoder", ASource.ChannelForRouting, this);
-            Report(ResourceType.kResourceType_Encoder, (byte)m_index, (byte)m_encodingType);
+            LiveWindow.LiveWindow.AddSensor("Encoder", FPGAIndex, this);
+            Report(ResourceType.kResourceType_Encoder, FPGAIndex, (byte)encodingType);
         }
 
         /// <summary>
@@ -122,7 +98,7 @@ namespace WPILib
             m_allocatedI = false;
             ASource = new DigitalInput(aChannel);
             BSource = new DigitalInput(bChannel);
-            InitEncoder(reverseDirection);
+            InitEncoder(reverseDirection, EncodingType.K4X);
         }
 
         /// <summary>
@@ -144,10 +120,9 @@ namespace WPILib
             m_allocatedA = true;
             m_allocatedB = true;
             m_allocatedI = false;
-            m_encodingType = encodingType;
             ASource = new DigitalInput(aChannel);
             BSource = new DigitalInput(bChannel);
-            InitEncoder(reverseDirection);
+            InitEncoder(reverseDirection, encodingType);
         }
 
         /// <summary>
@@ -167,7 +142,7 @@ namespace WPILib
             ASource = new DigitalInput(aChannel);
             BSource = new DigitalInput(bChannel);
             IndexSource = new DigitalInput(indexChannel);
-            InitEncoder(reverseDirection);
+            InitEncoder(reverseDirection, EncodingType.K4X);
             SetIndexSource(indexChannel);
         }
 
@@ -184,12 +159,12 @@ namespace WPILib
             m_allocatedB = false;
             m_allocatedI = false;
             if (aSource == null)
-                throw new ArgumentNullException(nameof(aSource),"Digital Source A was null");
+                throw new ArgumentNullException(nameof(aSource), "Digital Source A was null");
             ASource = aSource;
             if (bSource == null)
                 throw new ArgumentNullException(nameof(bSource), "Digital Source B was null");
             BSource = bSource;
-            InitEncoder(reverseDirection);
+            InitEncoder(reverseDirection, EncodingType.K4X);
         }
 
         /// <summary>
@@ -212,15 +187,14 @@ namespace WPILib
             m_allocatedA = false;
             m_allocatedB = false;
             m_allocatedI = false;
-            m_encodingType = encodingType;
             if (aSource == null)
                 throw new ArgumentNullException(nameof(aSource), "Digital Source A was null");
             ASource = aSource;
             if (bSource == null)
-                throw new ArgumentNullException(nameof(bSource),"Digital Source B was null");
+                throw new ArgumentNullException(nameof(bSource), "Digital Source B was null");
             ASource = aSource;
             BSource = bSource;
-            InitEncoder(reverseDirection);
+            InitEncoder(reverseDirection, encodingType);
         }
 
         /// <summary>
@@ -245,19 +219,39 @@ namespace WPILib
             ASource = aSource;
             BSource = bSource;
             IndexSource = indexSource;
-            InitEncoder(reverseDirection);
+            InitEncoder(reverseDirection, EncodingType.K4X);
             SetIndexSource(indexSource);
         }
 
         /// <summary>
         /// Gets the encoder's FPGA Index.
         /// </summary>
-        public int FPGAIndex => m_index;
+        public int FPGAIndex
+        {
+            get
+            {
+                int status = 0;
+                int val = HAL_GetEncoderFPGAIndex(m_encoder, ref status);
+                CheckStatus(status);
+                return val;
+            }
+        }
+
 
         /// <summary>
         /// Gets the encoder's Encoding Scale, which is used to divide raw edge counts to spec'd counts.
         /// </summary>
-        public int EncodingScale => m_encodingScale;
+        public int EncodingScale
+        {
+            get
+            {
+                int status = 0;
+                int val = HAL_GetEncoderEncodingScale(m_encoder, ref status);
+                CheckStatus(status);
+                return val;
+            }
+        }
+
 
         /// <inheritdoc/>
         public override void Dispose()
@@ -281,17 +275,9 @@ namespace WPILib
             ASource = null;
             BSource = null;
             IndexSource = null;
-            if (m_counter != null)
-            {
-                m_counter.Dispose();
-                m_counter = null;
-            }
-            else
-            {
-                int status = 0;
-                FreeEncoder(m_encoder, ref status);
-                CheckStatus(status);
-            }
+            int status = 0;
+            HAL_FreeEncoder(m_encoder, ref status);
+            CheckStatus(status);
         }
 
         /// <summary>
@@ -301,50 +287,35 @@ namespace WPILib
         /// <returns>The raw count from the encoder</returns>
         public virtual int GetRaw()
         {
-            int value;
-            if (m_counter != null)
-            {
-                value = m_counter.Get();
-            }
-            else
-            {
-                int status = 0;
-                value = GetEncoder(m_encoder, ref status);
-                CheckStatus(status);
-            }
+            int status = 0;
+            int value = HAL_GetEncoderRaw(m_encoder, ref status);
+            CheckStatus(status);
             return value;
         }
 
         /// <inheritdoc/>
-        public virtual int Get() => (int)(GetRaw() * DecodingScaleFactor);
+        public virtual int Get()
+        {
+            int status = 0;
+            int value = HAL_GetEncoder(m_encoder, ref status);
+            CheckStatus(status);
+            return value;
+        }
 
         /// <inheritdoc/>
         public virtual void Reset()
         {
-            if (m_counter != null)
-                m_counter.Reset();
-            else
-            {
-                int status = 0;
-                ResetEncoder(m_encoder, ref status);
-                CheckStatus(status);
-            }
+            int status = 0;
+            HAL_ResetEncoder(m_encoder, ref status);
+            CheckStatus(status);
         }
 
         /// <inheritdoc/>
         public virtual double GetPeriod()
         {
-            double measuredPeriod;
-            if (m_counter != null)
-            {
-                measuredPeriod = m_counter.GetPeriod() / DecodingScaleFactor;
-            }
-            else
-            {
-                int status = 0;
-                measuredPeriod = GetEncoderPeriod(m_encoder, ref status);
-                CheckStatus(status);
-            }
+            int status = 0;
+            double measuredPeriod = HAL_GetEncoderPeriod(m_encoder, ref status);
+            CheckStatus(status);
             return measuredPeriod;
         }
 
@@ -354,66 +325,38 @@ namespace WPILib
         {
             set
             {
-                if (m_counter != null)
-                {
-                    m_counter.MaxPeriod = value * DecodingScaleFactor;
-                }
-                else
-                {
-                    int status = 0;
-                    SetEncoderMaxPeriod(m_encoder, value, ref status);
-                    CheckStatus(status);
-                }
+                int status = 0;
+                HAL_SetEncoderMaxPeriod(m_encoder, value, ref status);
+                CheckStatus(status);
             }
         }
 
         /// <inheritdoc/>
         public bool GetStopped()
         {
-            if (m_counter != null)
-            {
-                return m_counter.GetStopped();
-            }
-            else
-            {
-                int status = 0;
-                bool value = GetEncoderStopped(m_encoder, ref status);
-                CheckStatus(status);
-                return value;
-            }
+            int status = 0;
+            bool value = HAL_GetEncoderStopped(m_encoder, ref status);
+            CheckStatus(status);
+            return value;
         }
 
         /// <inheritdoc/>
         public bool GetDirection()
         {
-            if (m_counter != null)
-            {
-                return m_counter.GetDirection();
-            }
-            else
-            {
-                int status = 0;
-                bool value = GetEncoderDirection(m_encoder, ref status);
-                CheckStatus(status);
-                return value;
-            }
+            int status = 0;
+            bool value = HAL_GetEncoderDirection(m_encoder, ref status);
+            CheckStatus(status);
+            return value;
         }
 
         private double DecodingScaleFactor
         {
             get
             {
-                switch (m_encodingType)
-                {
-                    case EncodingType.K4X:
-                        return 0.25;
-                    case EncodingType.K2X:
-                        return 0.5;
-                    case EncodingType.K1X:
-                        return 1.0;
-                    default:
-                        return 0.0;
-                }
+                int status = 0;
+                double value = HAL_GetEncoderDecodingScaleFactor(m_encoder, ref status);
+                CheckStatus(status);
+                return value;
             }
         }
 
@@ -421,20 +364,37 @@ namespace WPILib
         /// Gets the distance the robot has driven since the last reset.
         /// </summary>
         /// <returns>Distance driven since the last reset scaled by the <see cref="DistancePerPulse"/></returns>
-        public virtual double GetDistance() => GetRaw() * DecodingScaleFactor * DistancePerPulse;
+        public virtual double GetDistance()
+        {
+            int status = 0;
+            double value = HAL_GetEncoderDistance(m_encoder, ref status);
+            CheckStatus(status);
+            return value;
+        }
 
         /// <summary>
         /// Gets the current rate of the encoder in distance per second.
         /// </summary>
         /// <returns>The current rate of the encoder scaled by the <see cref="DistancePerPulse"/></returns>
-        public virtual double GetRate() => DistancePerPulse / GetPeriod();
+        public virtual double GetRate()
+        {
+            int status = 0;
+            double value = HAL_GetEncoderRate(m_encoder, ref status);
+            CheckStatus(status);
+            return value;
+        }
 
         /// <summary>
         /// Sets the minimum rate of the device before the hardware reports it stopped.
         /// </summary>
         public double MinRate
         {
-            set { MaxPeriod = DistancePerPulse / value; }
+            set
+            {
+                int status = 0;
+                HAL_SetEncoderMinRate(m_encoder, value, ref status);
+                CheckStatus(status);
+            }
         }
 
         /// <summary>
@@ -446,7 +406,15 @@ namespace WPILib
         /// for the decoding type. Set this value based on the encoders rated Pulses Per Revolution and factor 
         /// in gearing reductions following the encoder shaft.
         /// </remarks>
-        public double DistancePerPulse { get; set; }
+        public double DistancePerPulse
+        {
+            set
+            {
+                int status = 0;
+                HAL_SetEncoderDistancePerPulse(m_encoder, value, ref status);
+                CheckStatus(status);
+            }
+        }
 
         /// <summary>
         /// Sets the direction sensing for this encoder.
@@ -454,16 +422,9 @@ namespace WPILib
         /// <param name="direction">True if direction should be reversed, otherwise false.</param>
         public void SetReverseDirection(bool direction)
         {
-            if (m_counter != null)
-            {
-                m_counter.SetReverseDirection(direction);
-            }
-            else
-            {
-                int status = 0;
-                SetEncoderReverseDirection(m_encoder, direction, ref status);
-                CheckStatus(status);
-            }
+            int status = 0;
+            HAL_SetEncoderReverseDirection(m_encoder, direction, ref status);
+            CheckStatus(status);
         }
 
         /// <summary>
@@ -473,40 +434,16 @@ namespace WPILib
         {
             set
             {
-                switch (m_encodingType)
-                {
-                    case EncodingType.K4X:
-                        int status = 0;
-                        SetEncoderSamplesToAverage(m_encoder, (uint)value, ref status);
-                        if (status == HALErrors.PARAMETER_OUT_OF_RANGE)
-                        {
-                            throw new BoundaryException(BoundaryException.GetMessage(value, 1, 127));
-                        }
-                        CheckStatus(status);
-                        break;
-                    case EncodingType.K2X:
-                        m_counter.SamplesToAverage = value;
-                        break;
-                    case EncodingType.K1X:
-                        m_counter.SamplesToAverage = value;
-                        break;
-                }
+                int status = 0;
+                HAL_SetEncoderSamplesToAverage(m_encoder, value, ref status);
+                CheckStatus(status);
             }
             get
             {
-                switch (m_encodingType)
-                {
-                    case EncodingType.K4X:
-                        int status = 0;
-                        int value = (int)GetEncoderSamplesToAverage(m_encoder, ref status);
-                        CheckStatus(status);
-                        return value;
-                    case EncodingType.K2X:
-                        return m_counter.SamplesToAverage;
-                    case EncodingType.K1X:
-                        return m_counter.SamplesToAverage;
-                }
-                return 1;
+                int status = 0;
+                int val = HAL_GetEncoderSamplesToAverage(m_encoder, ref status);
+                CheckStatus(status);
+                return val;
             }
         }
 
@@ -545,13 +482,12 @@ namespace WPILib
         /// <param name="type">The state that will cause the encoder to reset.</param>
         public void SetIndexSource(int channel, IndexingType type = IndexingType.ResetOnRisingEdge)
         {
-            int status = 0;
+            if (m_allocatedI) 
+                throw new AllocationException("Digital Input for Indexing already allocated");
 
-            bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
-            bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
-
-            SetEncoderIndexSource(m_encoder, (uint)channel, false, activeHigh, edgeSensitive, ref status);
-            CheckStatus(status);
+            IndexSource = new DigitalInput(channel);
+            m_allocatedI = true;
+            SetIndexSource(IndexSource, type);
         }
 
         /// <summary>
@@ -563,11 +499,8 @@ namespace WPILib
         {
             int status = 0;
 
-            bool activeHigh = (type == IndexingType.ResetWhileHigh) || (type == IndexingType.ResetOnRisingEdge);
-            bool edgeSensitive = (type == IndexingType.ResetOnFallingEdge) || (type == IndexingType.ResetOnRisingEdge);
-
-            SetEncoderIndexSource(m_encoder, (uint)source.ChannelForRouting,
-                source.AnalogTriggerForRouting, activeHigh, edgeSensitive, ref status);
+            HAL_SetEncoderIndexSource(m_encoder, source.PortHandleForRouting,
+                (HALAnalogTriggerType) source.AnalogTriggerTypeForRouting, (HALEncoderIndexingType) type, ref status);
             CheckStatus(status);
         }
 
@@ -590,7 +523,8 @@ namespace WPILib
             {
                 Table.PutNumber("Speed", GetRate());
                 Table.PutNumber("Distance", GetDistance());
-                Table.PutNumber("Distance per Tick", DistancePerPulse);
+                int status = 0;
+                Table.PutNumber("Distance per Tick", HAL_GetEncoderDistancePerPulse(m_encoder, ref status));
             }
         }
 
