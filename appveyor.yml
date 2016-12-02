@@ -13,25 +13,20 @@ build_script:
 - ps: ./assemble.ps1 -build
 
 test_script:
-- .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:".\WPILib.Tests\Output\WPILib.Tests.dll --framework=net-4.5 " -filter:"+[WPILib*]* -[HAL*]* -[WPILib.T*]* -[WPILib.IntegrationT*]* -[NIVision*]*" -output:coverage.xml -mergeoutput -returntargetcode
-- .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:".\WPILib.IntegrationTests\Output\WPILib.IntegrationTests.dll --framework=net-4.5 " -filter:"+[WPILib*]* -[HAL*]* -[WPILib.T*]* -[WPILib.IntegrationT*]* -[NIVision*]*" -output:coverageIntegration.xml
-
-- "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
-- pip install codecov
-- codecov -f "coverage.xml"
-
-on_success:
 - ps: >-
+
+    ./assemble.ps1 -test
     
     If (($env:APPVEYOR_REPO_BRANCH -eq "master") -and (!$env:APPVEYOR_PULL_REQUEST_NUMBER)) {
 
-    ./nuget install EWSoftware.SHFB -Version 2016.4.9 -o sbpackages
+    /nuget install EWSoftware.SHFB -Version 2016.4.9 -o sbpackages
 
     ./nuget install EWSoftware.SHFB.NETFramework -Version 4.6 -o sbpackages
 
      & 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe' Sandcastle\SandcastleXmlOnly.shfbproj /property:Configuration=Release
 
     ./assemble.ps1 -pack
+
 
     }
 deploy:
