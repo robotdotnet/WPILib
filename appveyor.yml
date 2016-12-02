@@ -19,7 +19,7 @@ test_script:
     
     If (($env:APPVEYOR_REPO_BRANCH -eq "master") -and (!$env:APPVEYOR_PULL_REQUEST_NUMBER)) {
 
-    /nuget install EWSoftware.SHFB -Version 2016.4.9 -o sbpackages
+    ./nuget install EWSoftware.SHFB -Version 2016.4.9 -o sbpackages
 
     ./nuget install EWSoftware.SHFB.NETFramework -Version 4.6 -o sbpackages
 
