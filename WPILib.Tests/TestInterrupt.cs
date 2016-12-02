@@ -7,7 +7,7 @@ using WPILib.Exceptions;
 
 namespace WPILib.Tests
 {
-    [TestFixture]
+    [TestFixture, Ignore("Need a new test library built")]
     public class TestInterrupt : TestBase
     {
 

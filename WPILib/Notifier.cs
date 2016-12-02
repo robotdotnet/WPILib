@@ -32,7 +32,6 @@ namespace WPILib
         private void Notify(ulong currentTimeInt, int param)
         {
             // TODO: Use parameter to solve race
-
             bool processMutexEntered = false;
             bool handlerMutexEntered = false;
             object tempProcessMutex = m_processMutex;

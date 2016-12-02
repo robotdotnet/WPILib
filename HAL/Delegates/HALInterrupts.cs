@@ -47,7 +47,7 @@ namespace HAL.Base
         [NativeDelegate] public static HAL_RequestInterruptsDelegate HAL_RequestInterrupts;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_AttachInterruptHandlerDelegate(int interrupt_handle, HAL_InterruptHandlerFunction handler, IntPtr param, ref int status);
-        [NativeDelegate] public static HAL_AttachInterruptHandlerDelegate HAL_AttachInterruptHandler;
+        [NativeDelegate("HAL_AttachInterruptHandlerThreaded")] public static HAL_AttachInterruptHandlerDelegate HAL_AttachInterruptHandler;
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetInterruptUpSourceEdgeDelegate(int interrupt_handle, [MarshalAs(UnmanagedType.Bool)]bool risingEdge, [MarshalAs(UnmanagedType.Bool)]bool fallingEdge, ref int status);
         [NativeDelegate] public static HAL_SetInterruptUpSourceEdgeDelegate HAL_SetInterruptUpSourceEdge;

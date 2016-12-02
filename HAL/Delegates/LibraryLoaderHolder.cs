@@ -92,8 +92,7 @@ namespace HAL.Base
                         else
                         {
                             // RoboRIO
-                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(),
-                                resourceRoot + "roborio.libHALAthena.so");
+                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(new RoboRioLibraryLoader(), "libHALAthena.so", true);
                             s_libraryLocation = s_nativeLoader.LibraryLocation;
                         }
                     }

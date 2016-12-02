@@ -18,6 +18,8 @@ bld/
 [Oo]bj/
 sbpackages/
 
+wpinative/
+
 _build/
 _static/
 _templates/

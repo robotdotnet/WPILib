@@ -14,8 +14,6 @@ namespace HAL.NativeLoader
         /// <inheritdoc/>
         void ILibraryLoader.LoadLibrary(string filename)
         {
-            if (!File.Exists(filename))
-                throw new FileNotFoundException("The file requested to be loaded could not be found");
             IntPtr dl = dlopen(filename, 2);
             if (dl != IntPtr.Zero)
             {

@@ -3,65 +3,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using HAL.Base;
 using HAL.Simulator;
 using WPILib;
 using WPILib.SmartDashboard;
 using HAL = HAL.Base.HAL;
+using CameraServer;
+using OpenCvSharp;
 
 namespace LoadTester
 {
     public class Class1 : IterativeRobot
     {
-        //private Joystick joystick;
-        //private Servo servo;
+        Notifier notifier1;
 
-        //private AnalogGyro gyro;
-
-        //private int handle;
-
-        private DigitalInput[] input;
+        Thread thread;
         public override void RobotInit()
         {
-            //input = new DigitalInput(0);
-            //gyro = new AnalogGyro(0);
-            //joystick = new Joystick(0);
-            //servo = new Servo(0);
-            //int status = 0;
-            //handle = HALDIO.HAL_InitializeDIOPort(global::HAL.Base.HAL.HAL_GetPort(0), true, ref status);
-            //Console.WriteLine(status);
-            input = new DigitalInput[5];
 
-            for (int i = 26; i < 31; i++)
+            thread = new Thread(() =>
             {
-                input[i - 26] = new DigitalInput(i);
-            }
+                USBCamera camera = new USBCamera("Cam1", 0);
+                camera.SetVideoMode(PixelFormat.MJPEG, 640, 480, 30);
+
+                MJPEGServer mjpegServer = new MJPEGServer("httpserver", 8080);
+                mjpegServer.Source = camera;
+
+                CvSink cvSink = new CvSink("cvsink");
+                cvSink.Source = camera;
+
+                CvSource cvSource = new CvSource("CvSource", PixelFormat.MJPEG, 320, 240, 30);
+
+                MJPEGServer cvMjpegServer = new MJPEGServer("cvhttpserver", 8081);
+                cvMjpegServer.Source = cvSource;
+
+                Mat test = new Mat();
+                Mat shrink = new Mat();
+                Mat flip = new Mat();
+            });
+
+            thread.Start();
+
+            notifier1 = new Notifier(() =>
+            {
+                //Console.WriteLine("Notifier 1 called");
+            });
+
+            notifier1.StartPeriodic(0.01);
         }
 
         public override void DisabledPeriodic()
         {
-             List<bool> res = new List<bool>();
-            foreach (DigitalInput digitalInput in input)
-            {
-                res.Add(digitalInput.Get());
-            }
-            SmartDashboard.PutBooleanArray("Array", res.ToArray());
         }
 
         public override void TeleopPeriodic()
         {
-            /*
-            //SmartDashboard.PutNumber("Gyro", gyro.GetAngle());
-            if (joystick.GetRawButton(1))
-            {
-                //servo.SetAngle(160);
-            }
-            else
-            {
-                //servo.SetAngle(20);
-            }
-            */
         }
 
         public static void Main(string[] args)
