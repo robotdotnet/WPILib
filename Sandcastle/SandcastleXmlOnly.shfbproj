@@ -30,7 +30,8 @@
       <DocumentationSource sourceFile="..\WPILib\WPILib.csproj" />
 <DocumentationSource sourceFile="..\WPILib.Extras\WPILib.Extras.csproj" />
 <DocumentationSource sourceFile="..\HAL\HAL.csproj" />
-<DocumentationSource sourceFile="..\WPILib\Output\NetworkTables.xml" /></DocumentationSources>
+<DocumentationSource sourceFile="..\WPILib\Output\NetworkTables.xml" />
+<DocumentationSource sourceFile="..\WPILib\Output\CameraServer.xml" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
     <IndentHtml>False</IndentHtml>
@@ -92,7 +93,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <!-- NOTE: Update the version number in the path (YYYY.M.D.R) to match the package version -->
-    <SHFBROOT Condition=" '$(SHFBROOT)' == '' ">$(MSBuildThisFileDirectory)..\sbpackages\EWSoftware.SHFB.2015.10.10.0\Tools\</SHFBROOT>
+    <SHFBROOT Condition=" '$(SHFBROOT)' == '' ">$(MSBuildThisFileDirectory)..\sbpackages\EWSoftware.SHFB.2016.9.17.0\Tools\</SHFBROOT>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Content" />
