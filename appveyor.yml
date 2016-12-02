@@ -1,20 +1,16 @@
-version: 2017.0.0.{build}
-skip_tags: true
+version: '{branch}-{build}'
 os: Visual Studio 2015
 configuration: AppVeyor
-assembly_info:
-  patch: true
-  file: '**\AssemblyInfo.*'
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}'
+pull_requests:
+  do_not_increment_build_number: true
+skip_branch_with_pr: true
+branches:  		
+  only:		
+  - master
 nuget:
   disable_publish_on_pr: true
-before_build:
-- cmd: nuget restore
-build:
-  project: robotdotnet-wpilib.sln
-  verbosity: minimal
+build_script:
+- ps: ./assemble.ps1 -build
 
 test_script:
 - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:user -target:nunit3-console.exe -targetargs:".\WPILib.Tests\Output\WPILib.Tests.dll --framework=net-4.5 " -filter:"+[WPILib*]* -[HAL*]* -[WPILib.T*]* -[WPILib.IntegrationT*]* -[NIVision*]*" -output:coverage.xml -mergeoutput -returntargetcode
@@ -35,10 +31,13 @@ on_success:
 
      & 'C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe' Sandcastle\SandcastleXmlOnly.shfbproj /property:Configuration=Release
 
-    ./nuget pack "$env:APPVEYOR_BUILD_FOLDER\WPILib\WPILib.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects
-
-    ./nuget pack "$env:APPVEYOR_BUILD_FOLDER\WPILib.Extras\WPILib.Extras.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects
-
-    Get-ChildItem .\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+    ./assemble.ps1 -pack
 
     }
+deploy:
+- provider: NuGet
+  api_key:
+    secure: f4XB8xaNhhhgmXZrsv5Yh+JjxgnAXOfBJtbUgPB623n4Z2t/gXcC7fCUg36DK69k
+  on:
+    branch: master
+    appveyor_repo_tag: true

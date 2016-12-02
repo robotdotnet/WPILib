@@ -20,6 +20,8 @@ sbpackages/
 
 wpinative/
 
+.gradle/
+
 _build/
 _static/
 _templates/
