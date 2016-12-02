@@ -30,7 +30,7 @@
       <DocumentationSource sourceFile="..\WPILib\WPILib.csproj" />
 <DocumentationSource sourceFile="..\WPILib.Extras\WPILib.Extras.csproj" />
 <DocumentationSource sourceFile="..\HAL\HAL.csproj" />
-<DocumentationSource sourceFile="..\WPILib\Output\NetworkTables.xml" />
+<DocumentationSource sourceFile="..\WPILib\Output\FRC.NetworkTables.Core.xml" />
 <DocumentationSource sourceFile="..\WPILib\Output\CameraServer.xml" /></DocumentationSources>
     <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
     <HelpFileFormat>Website</HelpFileFormat>
