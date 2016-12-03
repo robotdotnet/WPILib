@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,19 +11,20 @@ using HAL.Simulator;
 using WPILib;
 using WPILib.SmartDashboard;
 using HAL = HAL.Base.HAL;
-using CameraServer;
 using OpenCvSharp;
+
 
 namespace LoadTester
 {
     public class Class1 : IterativeRobot
     {
+
         Notifier notifier1;
 
         Thread thread;
         public override void RobotInit()
         {
-
+            /*
             thread = new Thread(() =>
             {
                 USBCamera camera = new USBCamera("Cam1", 0);
@@ -45,6 +47,9 @@ namespace LoadTester
             });
 
             thread.Start();
+            */
+
+            CameraServer.Instance.StartAutomaticCapture();
 
             notifier1 = new Notifier(() =>
             {
