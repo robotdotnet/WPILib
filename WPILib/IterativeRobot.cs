@@ -67,7 +67,8 @@ namespace WPILib
             LiveWindow.LiveWindow.SetEnabled(false);
             while (true)
             {
-                //Console.WriteLine("RobotLoop");
+                // Wait for new data to arrive
+                m_ds.WaitForData();
                 // Call the appropriate function depending upon the current robot mode
                 if (IsDisabled)
                 {
@@ -83,11 +84,8 @@ namespace WPILib
                         m_teleopInitialized = false;
                         m_testInitialized = false;
                     }
-                    if (NextPeriodReady)
-                    {
-                        HAL_ObserveUserProgramDisabled();
-                        DisabledPeriodic();
-                    }
+                    HAL_ObserveUserProgramDisabled();
+                    DisabledPeriodic();
                 }
                 else if (IsTest)
                 {
@@ -102,11 +100,8 @@ namespace WPILib
                         m_teleopInitialized = false;
                         m_disabledInitialized = false;
                     }
-                    if (NextPeriodReady)
-                    {
-                        HAL_ObserveUserProgramDisabled();
-                        TestPeriodic();
-                    }
+                    HAL_ObserveUserProgramDisabled();
+                    TestPeriodic();
                 }
                 else if (IsAutonomous)
                 {
@@ -124,11 +119,8 @@ namespace WPILib
                         m_teleopInitialized = false;
                         m_disabledInitialized = false;
                     }
-                    if (NextPeriodReady)
-                    {
-                        HAL_ObserveUserProgramAutonomous();
-                        AutonomousPeriodic();
-                    }
+                    HAL_ObserveUserProgramAutonomous();
+                    AutonomousPeriodic();
                 }
                 else
                 {
@@ -143,18 +135,12 @@ namespace WPILib
                         m_autonomousInitialized = false;
                         m_disabledInitialized = false;
                     }
-                    if (NextPeriodReady)
-                    {
-                        HAL_ObserveUserProgramTeleop();
-                        TeleopPeriodic();
-                    }
+                    HAL_ObserveUserProgramTeleop();
+                    TeleopPeriodic();
                 }
-                m_ds.WaitForData();
             }
             // ReSharper disable once FunctionNeverReturns
         }
-
-        private bool NextPeriodReady => m_ds.NewControlData;
 
         /// <summary>
         /// Robot-wide initialization code should go here.
@@ -261,6 +247,21 @@ namespace WPILib
                 WriteLine($"Default {nameof(IterativeRobot)}.{nameof(TestPeriodic)} method... Overload me!");
                 m_tmpFirstRun = false;
             }
+        }
+
+        private bool m_rpFirstFun = true;
+
+        /// <summary>
+        /// Periodic code for all modes should go here.
+        /// </summary>
+        public virtual void RobotPeriodic()
+        {
+            if (m_rpFirstFun)
+            {
+                WriteLine($"Default {nameof(IterativeRobot)}.{nameof(RobotPeriodic)} method... Overload me!");
+                m_rpFirstFun = false;
+            }
+            Timer.Delay(0.001);
         }
     }
 }
