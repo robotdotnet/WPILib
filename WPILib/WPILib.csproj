@@ -100,7 +100,6 @@
     <Compile Include="Filters\LinearDigitalFilter.cs" />
     <Compile Include="GyroBase.cs" />
     <Compile Include="Interfaces\ICANSpeedController.cs" />
-    <Compile Include="CANTalon.cs" />
     <Compile Include="CAN\CANExceptionFactory.cs" />
     <Compile Include="CAN\CANMessageNotFoundException.cs" />
     <Compile Include="Commands\Command.cs" />
