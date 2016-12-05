@@ -47,9 +47,9 @@ namespace WPILib
         {
             switch (NativeMethods.GetSourceKind(source))
             {
-                case SourceKind.USB:
-                    return $"usb:{NativeMethods.GetUSBCameraPath(source)}";
-                case SourceKind.HTTP:
+                case SourceKind.Usb:
+                    return $"Usb:{NativeMethods.GetUsbCameraPath(source)}";
+                case SourceKind.Http:
                     return "ip:";
                 case SourceKind.CV:
                     return "cv:";
@@ -60,7 +60,7 @@ namespace WPILib
 
         private static string MakeStreamValue(string address, int port)
         {
-            return $"mjpeg:http://{address}:{port.ToString()}/?action=stream";
+            return $"Mjpeg:Http://{address}:{port.ToString()}/?action=stream";
         }
 
         private ITable GetSourceTable(int source)
@@ -79,7 +79,7 @@ namespace WPILib
             {
                 foreach (VideoSink i in m_sinks.Values)
                 {
-                    if (i.Kind != SinkKind.MJPEG) continue;
+                    if (i.Kind != SinkKind.Mjpeg) continue;
                     int sink = i.Handle;
 
                     int source = NativeMethods.GetSinkSource(sink);
@@ -87,10 +87,10 @@ namespace WPILib
                     m_tables.TryGetValue(source, out table);
                     if (table == null) continue;
 
-                    int port = NativeMethods.GetMJPEGServerPort(sink);
+                    int port = NativeMethods.GetMjpegServerPort(sink);
 
                     List<string> values = new List<string>(m_addresses.Count + 1);
-                    string listenAddress = NativeMethods.GetMJPEGServerListenAddress(sink);
+                    string listenAddress = NativeMethods.GetMjpegServerListenAddress(sink);
                     if (!string.IsNullOrEmpty(listenAddress))
                     {
                         values.Add(MakeStreamValue(listenAddress, port));
@@ -229,28 +229,28 @@ namespace WPILib
             }, NotifyFlags.NotifyImmediate | NotifyFlags.NotifyUpdate);
         }
 
-        public USBCamera StartAutomaticCapture()
+        public UsbCamera StartAutomaticCapture()
         {
             return StartAutomaticCapture(0);
         }
 
-        public USBCamera StartAutomaticCapture(int dev)
+        public UsbCamera StartAutomaticCapture(int dev)
         {
-            USBCamera camera = new USBCamera($"USB Camera {dev.ToString()}", dev);
+            UsbCamera camera = new UsbCamera($"Usb Camera {dev.ToString()}", dev);
             StartAutomaticCapture(camera);
             return camera;
         }
 
-        public USBCamera StartAutomaticCapture(string name, int dev)
+        public UsbCamera StartAutomaticCapture(string name, int dev)
         {
-            USBCamera camera = new USBCamera(name, dev);
+            UsbCamera camera = new UsbCamera(name, dev);
             StartAutomaticCapture(camera);
             return camera;
         }
 
-        public USBCamera StartAutomaticCapture(string name, string path)
+        public UsbCamera StartAutomaticCapture(string name, string path)
         {
-            USBCamera camera = new USBCamera(name, path);
+            UsbCamera camera = new UsbCamera(name, path);
             StartAutomaticCapture(camera);
             return camera;
         }
@@ -307,12 +307,12 @@ namespace WPILib
 
         public CvSource PutVideo(string name, int width, int height)
         {
-            CvSource source = new CvSource(name, PixelFormat.MJPEG, width, height, 30);
+            CvSource source = new CvSource(name, PixelFormat.Mjpeg, width, height, 30);
             StartAutomaticCapture(source);
             return source;
         }
 
-        public MJPEGServer AddServer(string name)
+        public MjpegServer AddServer(string name)
         {
             int port;
             lock (m_lockObject)
@@ -323,9 +323,9 @@ namespace WPILib
             return AddServer(name, port);
         }
 
-        public MJPEGServer AddServer(string name, int port)
+        public MjpegServer AddServer(string name, int port)
         {
-            MJPEGServer server = new MJPEGServer(name, port);
+            MjpegServer server = new MjpegServer(name, port);
             AddServer(server);
             return server;
         }

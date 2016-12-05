@@ -33,16 +33,20 @@
     <StartupObject>LoadTester.Class1</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CameraServer, Version=0.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.CameraServer.0.9.2-beta1\lib\CameraServer.dll</HintPath>
+    <Reference Include="FRC.CameraServer, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.CameraServer.0.9.3-beta1\lib\net45\FRC.CameraServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.NetworkTables.Core.3.0.0-beta-0114\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.CameraServer.0.9.2-beta1\lib\OpenCvSharp.dll</HintPath>
+    <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.OpenCvSharp.0.9.3-beta3\lib\net45\FRC.OpenCvSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FRC.OpenCvSharp.DesktopLibraries, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.OpenCvSharp.DesktopLibraries.0.9.3-beta3\lib\net45\FRC.OpenCvSharp.DesktopLibraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

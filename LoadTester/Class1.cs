@@ -12,7 +12,7 @@ using WPILib;
 using WPILib.SmartDashboard;
 using HAL = HAL.Base.HAL;
 using OpenCvSharp;
-
+using CSCore;
 
 namespace LoadTester
 {
@@ -24,21 +24,21 @@ namespace LoadTester
         Thread thread;
         public override void RobotInit()
         {
-            /*
+            
             thread = new Thread(() =>
             {
-                USBCamera camera = new USBCamera("Cam1", 0);
-                camera.SetVideoMode(PixelFormat.MJPEG, 640, 480, 30);
+                UsbCamera camera = new UsbCamera("Cam1", 0);
+                camera.SetVideoMode(PixelFormat.Mjpeg, 640, 480, 30);
 
-                MJPEGServer mjpegServer = new MJPEGServer("httpserver", 8080);
-                mjpegServer.Source = camera;
+                MjpegServer MjpegServer = new MjpegServer("httpserver", 8080);
+                MjpegServer.Source = camera;
 
                 CvSink cvSink = new CvSink("cvsink");
                 cvSink.Source = camera;
 
-                CvSource cvSource = new CvSource("CvSource", PixelFormat.MJPEG, 320, 240, 30);
+                CvSource cvSource = new CvSource("CvSource", PixelFormat.Mjpeg, 320, 240, 30);
 
-                MJPEGServer cvMjpegServer = new MJPEGServer("cvhttpserver", 8081);
+                MjpegServer cvMjpegServer = new MjpegServer("cvhttpserver", 8081);
                 cvMjpegServer.Source = cvSource;
 
                 Mat test = new Mat();
@@ -47,9 +47,9 @@ namespace LoadTester
             });
 
             thread.Start();
-            */
+            
 
-            CameraServer.Instance.StartAutomaticCapture();
+            //CameraServer.Instance.StartAutomaticCapture();
 
             notifier1 = new Notifier(() =>
             {
