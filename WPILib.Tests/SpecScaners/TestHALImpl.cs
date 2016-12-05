@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using FRC.HAL.DesktopLibraries;
 using HAL;
 using HAL.Base;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -18,7 +19,7 @@ namespace WPILib.Tests.SpecScaners
     public class TestHALImpl
     {
         [Test]
-        //[Ignore("Ignoring until we get a good reliable drop")]
+        [Ignore("Ignoring until we get a good reliable drop")]
         public void TestHALRoboRioMapsToNativeAssemblySymbols()
         {
             var halRoboRioSymbols = NetProjects.GetHALRoboRioNativeSymbols();

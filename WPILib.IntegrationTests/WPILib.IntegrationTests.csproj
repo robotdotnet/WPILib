@@ -56,8 +56,16 @@
       <HintPath>..\packages\FRC.NetworkTables.Core.3.0.1-beta1\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FRC.NetworkTables.Core.DesktopLibraries, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.Core.DesktopLibraries.3.0.1-beta1\lib\net45\FRC.NetworkTables.Core.DesktopLibraries.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.OpenCvSharp.0.9.3-beta3\lib\net45\FRC.OpenCvSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FRC.OpenCvSharp.DesktopLibraries, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.OpenCvSharp.DesktopLibraries.0.9.3-beta3\lib\net45\FRC.OpenCvSharp.DesktopLibraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
