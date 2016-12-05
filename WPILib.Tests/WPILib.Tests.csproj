@@ -61,7 +61,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.3.0.0-beta-0114\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
+      <HintPath>..\packages\FRC.NetworkTables.Core.3.0.1-beta1\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -161,6 +161,10 @@
     <Compile Include="TestWPITimer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FRC.HAL.DesktopLibraries\FRC.HAL.DesktopLibraries.csproj">
+      <Project>{cf756d0f-8115-4836-82ba-de160d168797}</Project>
+      <Name>FRC.HAL.DesktopLibraries</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HAL\HAL.csproj">
       <Project>{bfce384e-ca2a-4604-af76-777da91dafee}</Project>
       <Name>HAL</Name>

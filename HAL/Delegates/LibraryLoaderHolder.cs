@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using HAL.NativeLoader;
+using System.Reflection;
 
 namespace HAL.Base
 {
@@ -70,7 +71,7 @@ namespace HAL.Base
                         }
                     }
 
-                    const string resourceRoot = "HAL.AthenaHAL.Native.";
+                    const string resourceRoot = "FRC.HAL.DesktopLibraries.Libraries.";
 
 #if FALSE
                     s_useCommandLineFile = true;
@@ -98,34 +99,45 @@ namespace HAL.Base
                     }
                     else
                     {
-                        
                         s_nativeLoader = new NativeLibraryLoader();
+                        s_nativeLoader.AddLibraryLocation(OsType.Windows32,
+                            resourceRoot + "x86.mockhal.dll");
+                        s_nativeLoader.AddLibraryLocation(OsType.Windows64,
+                            resourceRoot + "amd64.mockhal.dll");
+                        /*
+                    NativeLoader.AddLibraryLocation(OsType.Linux32,
+                        resourceRoot + "x86.libcscore.so");
+                    NativeLoader.AddLibraryLocation(OsType.Linux64,
+                        resourceRoot + "amd64.libcscore.so");
+                    NativeLoader.AddLibraryLocation(OsType.MacOs32,
+                        resourceRoot + "x86.libcscore.dylib");
+                    NativeLoader.AddLibraryLocation(OsType.MacOs64,
+                        resourceRoot + "amd64.libcscore.dylib");
+                        */
+
                         if (s_useCommandLineFile)
                         {
-                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>(s_libraryLocation, true);
+                            s_nativeLoader.LoadNativeLibrary<LibraryLoaderHolder>(s_libraryLocation, true);
                         }
                         else
                         {
-                            s_nativeLoader.AddLibraryLocation(OsType.Windows32,
-                                resourceRoot + "x86.mockhal.dll");
-                            s_nativeLoader.AddLibraryLocation(OsType.Windows64,
-                                resourceRoot + "amd64.mockhal.dll");
-                            /*
-                            s_nativeLoader.AddLibraryLocation(OsType.Linux32,
-                                resourceRoot + "x86.libntcore.so");
-                            s_nativeLoader.AddLibraryLocation(OsType.Linux64,
-                                resourceRoot + "amd64.libntcore.so");
-                            s_nativeLoader.AddLibraryLocation(OsType.MacOs32,
-                                resourceRoot + "x86.libntcore.dylib");
-                            s_nativeLoader.AddLibraryLocation(OsType.MacOs64,
-                                resourceRoot + "amd64.libntcore.dylib");
-    
-        */
-        
+                            // Load Reflection type from Native Libraries
+                            AssemblyName name = new AssemblyName("FRC.HAL.DesktopLibraries");
+                            Assembly asm;
+                            try
+                            {
+                                asm = Assembly.Load(name);
+                            }
+                            catch (Exception)
+                            {
+                                Console.WriteLine("Failed to load desktop libraries. Please ensure that the FRC.HAL.DesktopLibraries is installed and referenced by your project");
+                                throw;
+                            }
 
-                            s_nativeLoader.LoadNativeLibrary<NativeLibraryLoader>();
+                            Type type = asm.GetType("FRC.HAL.DesktopLibraries.Natives");
+
+                            s_nativeLoader.LoadNativeLibraryFromReflectedAssembly(type);
                             s_libraryLocation = s_nativeLoader.LibraryLocation;
-                            
                         }
                         
                     }

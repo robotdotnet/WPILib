@@ -98,7 +98,7 @@ namespace HAL.Base
         [NativeDelegate] public static HAL_ObserveUserProgramTestDelegate HAL_ObserveUserProgramTest;
 
 
-
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int NativeHALSetErrorDataDelegate(byte[] errors, int errorsLength, int waitMs);
         [NativeDelegate("HAL_SetErrorData")]
         private static NativeHALSetErrorDataDelegate NativeHALSetErrorData;
@@ -109,7 +109,7 @@ namespace HAL.Base
             byte[] errorB = HAL.CreateUTF8String(errors, out len);
             return NativeHALSetErrorData(errorB, len, waitMs);
         }
-
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int NativeHALSendErrorDelegate(int isError, int errorCode, int isLVCode,
             byte[] details, byte[] location, byte[] callStack, int printMsg);
         [NativeDelegate("HAL_SendError")]
@@ -124,7 +124,7 @@ namespace HAL.Base
             byte[] stack = HAL.CreateUTF8String(callStack, out len);
             return NativeHALSendError(isError ? 1 : 0, errorCode, isLVCode ? 1 : 0, det, loc, stack, printMsg ? 1 : 0);
         }
-
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int NativeHALGetControlWordDelegate(ref uint data);
 
         [NativeDelegate("HAL_GetControlWord")]

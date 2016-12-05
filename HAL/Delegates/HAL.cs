@@ -102,11 +102,11 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_InitializeDelegate(int mode);
         [NativeDelegate]
         public static HAL_InitializeDelegate HAL_Initialize;
-
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate long NativeHALReportDelegate(int resource, int instanceNumber, int context, byte[] feature);
         [NativeDelegate("HAL_Report")]
         private static NativeHALReportDelegate NativeHALReport;
-
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate IntPtr NativeGetHALErrorMessageDelegate(int code);
         [NativeDelegate("HAL_GetErrorMessage")]
         private static NativeGetHALErrorMessageDelegate NativeHALGetErrorMessage;

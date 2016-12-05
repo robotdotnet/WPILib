@@ -154,10 +154,6 @@
     <Compile Include="Simulator\TalonSRXEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AthenaHAL\Native\amd64\mockhal.dll" />
-    <EmbeddedResource Include="AthenaHAL\Native\x86\mockhal.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
     <None Include="wpinative\libcscore.so" />
     <None Include="wpinative\libHALAthena.so" />

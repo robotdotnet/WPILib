@@ -25,6 +25,7 @@ namespace LoadTester
         public override void RobotInit()
         {
             
+            
             thread = new Thread(() =>
             {
                 UsbCamera camera = new UsbCamera("Cam1", 0);
@@ -48,15 +49,18 @@ namespace LoadTester
 
             thread.Start();
             
+            
 
             //CameraServer.Instance.StartAutomaticCapture();
-
+            
+            
             notifier1 = new Notifier(() =>
             {
                 //Console.WriteLine("Notifier 1 called");
             });
 
             notifier1.StartPeriodic(0.01);
+            
         }
 
         public override void DisabledPeriodic()
@@ -71,6 +75,7 @@ namespace LoadTester
         {
 
             RobotBase.Main(null, typeof(Class1));
+            ;
         }
     }
 }

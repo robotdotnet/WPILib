@@ -79,6 +79,8 @@ if ($pack) {
 
   ./nuget pack "$startPath\WPILib.Extras\WPILib.Extras.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects -Version "$version$type$buildNumber"
 
+  ./nuget pack "$startPath\FRC.HAL.DesktopLibraries\FRC.HAL.DesktopLibraries.csproj" -Properties "Configuration=Release;Platform=AnyCPU" -Symbols -IncludeReferencedProjects -Version "$version$type$buildNumber"
+
   If (Test-Path Env:APPVEYOR_BUILD_FOLDER) {
     Get-ChildItem .\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
   }
