@@ -25,6 +25,12 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate bool HAL_CheckPDPModuleDelegate(int module);
         [NativeDelegate] public static HAL_CheckPDPModuleDelegate HAL_CheckPDPModule;
 
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate bool HAL_CheckPDPChannelDelegate(int module);
+        [NativeDelegate]
+        public static HAL_CheckPDPChannelDelegate HAL_CheckPDPChannel;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate double HAL_GetPDPTemperatureDelegate(int module, ref int status);
         [NativeDelegate] public static HAL_GetPDPTemperatureDelegate HAL_GetPDPTemperature;
 

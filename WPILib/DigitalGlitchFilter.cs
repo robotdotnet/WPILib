@@ -127,7 +127,7 @@ namespace WPILib
         /// <param name="nanoSeconds"></param>
         public void SetPeriodNanoSeconds(ulong nanoSeconds)
         {
-            uint fpgaCycles = (uint) (nanoSeconds * SystemClockTicksPerMicrosecond / 4 / 1000);
+            uint fpgaCycles = (uint) (nanoSeconds * (ulong)SystemClockTicksPerMicrosecond / 4 / 1000);
             SetPeriodCycles(fpgaCycles);
         }
 

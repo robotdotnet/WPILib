@@ -21,6 +21,12 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_InitializeDIOPortDelegate(int port_handle, [MarshalAs(UnmanagedType.Bool)]bool input, ref int status);
         [NativeDelegate] public static HAL_InitializeDIOPortDelegate HAL_InitializeDIOPort;
 
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate bool HAL_CheckDIOChannelChannel(int channel);
+        [NativeDelegate]
+        public static HAL_CheckDIOChannelChannel HAL_CheckDIOChannel;
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_FreeDIOPortDelegate(int dio_port_handle);
         [NativeDelegate] public static HAL_FreeDIOPortDelegate HAL_FreeDIOPort;
 

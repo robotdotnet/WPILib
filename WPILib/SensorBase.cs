@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using HAL.Base;
 
 namespace WPILib
 {
@@ -10,25 +12,26 @@ namespace WPILib
     public abstract class SensorBase : IDisposable
     {
         /// The number of clock ticks per microsecond from the FPGA
-        public const int SystemClockTicksPerMicrosecond = 40;
+        public static readonly int SystemClockTicksPerMicrosecond = HALConstants.HAL_GetSystemClockTicksPerMicrosecond();
+
         /// The number of Digital Channels found on the RoboRIO
-        public const int DigitalChannels = 31;
+        public static readonly int DigitalChannels = HALPorts.HAL_GetNumDigitalChannels();
         /// The number of Analog Inputs found on the RoboRIO
-        public const int AnalogInputChannels = 8;
+        public static readonly int AnalogInputChannels = HALPorts.HAL_GetNumAnalogInputs();
         /// The number of Analog Outputs found on the RoboRIO
-        public const int AnalogOutputChannels = 2;
+        public static readonly int AnalogOutputChannels = HALPorts.HAL_GetNumAnalogOutputs();
         /// The number of Solenoid Channels found on each PCM
-        public const int SolenoidChannels = 8;
+        public static readonly int SolenoidChannels = HALPorts.HAL_GetNumSolenoidChannels();
         /// The number of PCM Modules allowed on the CAN Bus
-        public const int SolenoidModules = 63;
+        public static readonly int PCMModules = HALPorts.HAL_GetNumPCMModules();
         /// Then number of PWM Channels found the RoboRIO
-        public const int PwmChannels = 20;
+        public static readonly int PwmChannels = HALPorts.HAL_GetNumPWMChannels();
         /// The number of Relay Channels found on the RoboRIO
-        public const int RelayChannels = 4;
+        public static readonly int RelayChannels = HALPorts.HAL_GetNumRelayHeaders();
         /// The number of Channels found on each PDP
-        public const int PDPChannels = 16;
+        public static readonly int PDPChannels = HALPorts.HAL_GetNumPDPChannels();
         /// The number of PDP Modules allowed on the CAN Bus
-        public const int PDPModules = 63;
+        public static readonly int PDPModules = HALPorts.HAL_GetNumPDPModules();
 
         private static int s_defaultSolenoidModule = 0;
 
@@ -38,9 +41,14 @@ namespace WPILib
         /// <param name="moduleNumber">The module number to check.</param>
         protected static void CheckSolenoidModule(int moduleNumber)
         {
-            if (moduleNumber < 0 || moduleNumber >= SolenoidModules)
+            if (HALSolenoid.HAL_CheckSolenoidModule(moduleNumber))
             {
-                throw new ArgumentOutOfRangeException(nameof(moduleNumber), "Requested Solenoid Module is out of range");
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested solenoid module is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(PCMModules);
+                buf.Append(", Requested: ");
+                buf.Append(moduleNumber);
+                throw new ArgumentOutOfRangeException(nameof(moduleNumber), buf.ToString());
             }
         }
 
@@ -51,8 +59,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckDigitalChannel(int channel)
         {
-            if (channel < 0 || channel >= DigitalChannels)
+            if (!HALDIO.HAL_CheckDIOChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested DIO channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(DigitalChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested digital channel number is out of range.");
             }
         }
@@ -64,8 +77,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckRelayChannel(int channel)
         {
-            if (channel < 0 || channel >= RelayChannels)
+            if (!HALRelay.HAL_CheckRelayChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested relay channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(RelayChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested relay channel number is out of range.");
             }
         }
@@ -77,8 +95,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckPwmChannel(int channel)
         {
-            if (channel < 0 || channel >= PwmChannels)
+            if (!HALPWM.HAL_CheckPWMChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested PWM channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(PwmChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested PWM channel number is out of range.");
             }
         }
@@ -90,8 +113,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckAnalogInputChannel(int channel)
         {
-            if (channel < 0 || channel >= AnalogInputChannels)
+            if (!HALAnalogInput.HAL_CheckAnalogInputChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested analog input channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(AnalogInputChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested analog input channel number is out of range.");
             }
         }
@@ -103,8 +131,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckAnalogOutputChannel(int channel)
         {
-            if (channel < 0 || channel >= AnalogOutputChannels)
+            if (!HALAnalogOutput.HAL_CheckAnalogOutputChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested analog output channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(AnalogOutputChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested analog output channel number is out of range.");
             }
         }
@@ -116,8 +149,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckSolenoidChannel(int channel)
         {
-            if (channel < 0 || channel >= SolenoidChannels)
+            if (!HALSolenoid.HAL_CheckSolenoidChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested solenoid channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(SolenoidChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested solenoid channel number is out of range.");
             }
         }
@@ -129,8 +167,13 @@ namespace WPILib
         /// <param name="channel">The channel number to check.</param>
         protected static void CheckPDPChannel(int channel)
         {
-            if (channel < 0 || channel >= PDPChannels)
+            if (!HALPDP.HAL_CheckPDPChannel(channel))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested PDP channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(PDPChannels);
+                buf.Append(", Requested: ");
+                buf.Append(channel);
                 throw new ArgumentOutOfRangeException(nameof(channel), "Requested PDP channel number is out of range.");
             }
         }
@@ -142,8 +185,13 @@ namespace WPILib
         /// <param name="module">The CAN ID to check</param>
         protected static void CheckPDPModule(int module)
         {
-            if (module < 0 || module >= PDPModules)
+            if (!HALPDP.HAL_CheckPDPModule(module))
             {
+                StringBuilder buf = new StringBuilder();
+                buf.Append("Requested PDP module is out of range. Minimumm: 0, Maximum: ");
+                buf.Append(PDPModules);
+                buf.Append(", Requested: ");
+                buf.Append(module);
                 throw new ArgumentOutOfRangeException(nameof(module), "Requested PDP module number is out of range.");
             }
 
