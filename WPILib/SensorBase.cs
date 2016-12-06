@@ -41,7 +41,7 @@ namespace WPILib
         /// <param name="moduleNumber">The module number to check.</param>
         protected static void CheckSolenoidModule(int moduleNumber)
         {
-            if (HALSolenoid.HAL_CheckSolenoidModule(moduleNumber))
+            if (!HALSolenoid.HAL_CheckSolenoidModule(moduleNumber))
             {
                 StringBuilder buf = new StringBuilder();
                 buf.Append("Requested solenoid module is out of range. Minimumm: 0, Maximum: ");
