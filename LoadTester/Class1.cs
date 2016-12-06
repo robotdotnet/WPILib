@@ -13,68 +13,86 @@ using WPILib.SmartDashboard;
 using HAL = HAL.Base.HAL;
 using OpenCvSharp;
 using CSCore;
+using System.IO;
 
 namespace LoadTester
 {
-    public class Class1 : IterativeRobot
+    public class MyRobot : IterativeRobot
     {
+        Joystick joystick;
+        Servo servo;
+        AnalogGyro gyro;
 
-        Notifier notifier1;
-
-        Thread thread;
         public override void RobotInit()
         {
-            
-            
-            thread = new Thread(() =>
+
+            Thread thread = new Thread(() =>
             {
-                UsbCamera camera = new UsbCamera("Cam1", 0);
-                camera.SetVideoMode(PixelFormat.Mjpeg, 640, 480, 30);
+                UsbCamera camera = CameraServer.Instance.StartAutomaticCapture();
+                camera.SetResolution(320, 240);
 
-                MjpegServer MjpegServer = new MjpegServer("httpserver", 8080);
-                MjpegServer.Source = camera;
 
-                CvSink cvSink = new CvSink("cvsink");
-                cvSink.Source = camera;
+                CvSink cvSink = CameraServer.Instance.GetVideo();
+                CvSource outputStream = CameraServer.Instance.PutVideo("Flip", 320, 240);
 
-                CvSource cvSource = new CvSource("CvSource", PixelFormat.Mjpeg, 320, 240, 30);
-
-                MjpegServer cvMjpegServer = new MjpegServer("cvhttpserver", 8081);
-                cvMjpegServer.Source = cvSource;
-
-                Mat test = new Mat();
-                Mat shrink = new Mat();
+                Mat source = new Mat();
                 Mat flip = new Mat();
+                Mat output = new Mat();
+
+                while (true)
+                {
+                    cvSink.GrabFrame(source);
+                    Cv2.CvtColor(source, flip, ColorConversionCodes.BGR2GRAY);
+                    Cv2.Flip(flip, output, FlipMode.X);
+                    outputStream.PutFrame(output);
+                }
             });
 
             thread.Start();
-            
-            
 
-            //CameraServer.Instance.StartAutomaticCapture();
-            
-            
-            notifier1 = new Notifier(() =>
-            {
-                //Console.WriteLine("Notifier 1 called");
-            });
+            servo = new Servo(0);
 
-            notifier1.StartPeriodic(0.01);
-            
+            joystick = new Joystick(0);
+            gyro = new AnalogGyro(0);
         }
 
+        int count = 0;
+
+        public override void DisabledInit()
+        {
+            
+        }
         public override void DisabledPeriodic()
         {
+            SmartDashboard.PutNumber("DisabledCount", count++);
         }
 
         public override void TeleopPeriodic()
         {
+            if (joystick.GetRawButton(1))
+            {
+                servo.Set(0.0);
+            }
+            else if (joystick.GetRawButton(2))
+            {
+                servo.Set(1.0);
+            }
+
+            else
+            {
+                servo.Set(0.5);
+            }
+        }
+
+        public override void RobotPeriodic()
+        {
+            //Console.WriteLine("Getting Gyro");
+            SmartDashboard.PutNumber("Gyro", gyro.GetAngle());
         }
 
         public static void Main(string[] args)
         {
-
-            RobotBase.Main(null, typeof(Class1));
+            RobotBase.Main(null, typeof(MyRobot));
             ;
         }
     }

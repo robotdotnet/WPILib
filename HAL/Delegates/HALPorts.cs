@@ -71,9 +71,6 @@ namespace HAL.Base
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumPDPChannelsDelegate();
         [NativeDelegate] public static HAL_GetNumPDPChannelsDelegate HAL_GetNumPDPChannels;
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate int HAL_GetNumCanTalonsDelegate();
-        [NativeDelegate] public static HAL_GetNumCanTalonsDelegate HAL_GetNumCanTalons;
     }
 }
 

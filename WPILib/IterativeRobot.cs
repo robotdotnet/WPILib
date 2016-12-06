@@ -138,6 +138,7 @@ namespace WPILib
                     HAL_ObserveUserProgramTeleop();
                     TeleopPeriodic();
                 }
+                RobotPeriodic();
             }
             // ReSharper disable once FunctionNeverReturns
         }

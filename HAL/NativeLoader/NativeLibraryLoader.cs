@@ -104,7 +104,7 @@ namespace HAL.NativeLoader
                     break;
                 case OsType.MacOs32:
                 case OsType.MacOs64:
-                    LibraryLoader = new LinuxLibraryLoader();
+                    LibraryLoader = new MacOsLibraryLoader();
                     break;
             }
 
@@ -138,7 +138,7 @@ namespace HAL.NativeLoader
                     break;
                 case OsType.MacOs32:
                 case OsType.MacOs64:
-                    LibraryLoader = new LinuxLibraryLoader();
+                    LibraryLoader = new MacOsLibraryLoader();
                     break;
             }
 
@@ -167,7 +167,7 @@ namespace HAL.NativeLoader
                     break;
                 case OsType.MacOs32:
                 case OsType.MacOs64:
-                    LibraryLoader = new LinuxLibraryLoader();
+                    LibraryLoader = new MacOsLibraryLoader();
                     break;
             }
 

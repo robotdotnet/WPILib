@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>LoadTester.Class1</StartupObject>
+    <StartupObject>LoadTester.MyRobot</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FRC.CameraServer, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">

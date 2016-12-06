@@ -45,13 +45,15 @@ namespace WPILib
 
         private static string MakeSourceValue(int source)
         {
-            switch (NativeMethods.GetSourceKind(source))
+            var c = NativeMethods.GetSourceKind(source);
+            Console.WriteLine(c);
+            switch (c)
             {
                 case SourceKind.Usb:
-                    return $"Usb:{NativeMethods.GetUsbCameraPath(source)}";
+                    return $"usb:{NativeMethods.GetUsbCameraPath(source)}";
                 case SourceKind.Http:
                     return "ip:";
-                case SourceKind.CV:
+                case (SourceKind)4:
                     return "cv:";
                 default:
                     return "unknown:";
@@ -60,7 +62,7 @@ namespace WPILib
 
         private static string MakeStreamValue(string address, int port)
         {
-            return $"Mjpeg:Http://{address}:{port.ToString()}/?action=stream";
+            return $"MJPEG:HTTP://{address}:{port.ToString()}/?action=stream";
         }
 
         private ITable GetSourceTable(int source)
@@ -236,7 +238,7 @@ namespace WPILib
 
         public UsbCamera StartAutomaticCapture(int dev)
         {
-            UsbCamera camera = new UsbCamera($"Usb Camera {dev.ToString()}", dev);
+            UsbCamera camera = new UsbCamera($"USB Camera {dev.ToString()}", dev);
             StartAutomaticCapture(camera);
             return camera;
         }
