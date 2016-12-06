@@ -98,6 +98,7 @@
     <Compile Include="Exceptions\UncleanStatusException.cs" />
     <Compile Include="Filters\Filter.cs" />
     <Compile Include="Filters\LinearDigitalFilter.cs" />
+    <Compile Include="GamepadBase.cs" />
     <Compile Include="GyroBase.cs" />
     <Compile Include="Interfaces\ICANSpeedController.cs" />
     <Compile Include="CAN\CANExceptionFactory.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Interfaces\IPIDOutput.cs" />
     <Compile Include="Interfaces\IPIDSource.cs" />
     <Compile Include="Interfaces\IPotentiometer.cs" />
+    <Compile Include="JoystickBase.cs" />
     <Compile Include="PWMSpeedController.cs" />
     <Compile Include="SD540.cs" />
     <Compile Include="SmartDashboard\SendableChooser.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="SensorBase.cs" />
     <Compile Include="Victor.cs" />
     <Compile Include="VictorSP.cs" />
+    <Compile Include="XboxController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HAL\HAL.csproj">

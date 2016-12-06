@@ -102,7 +102,6 @@
     <Compile Include="NavX\RegisterIO_SPI.cs" />
     <Compile Include="NavX\SerialIO.cs" />
     <Compile Include="NavX\SimulatorIO.cs" />
-    <Compile Include="XboxController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ namespace WPILib
     /// for each joystick and the mapping of ports to hardware buttons depends on the code
     /// in the driver stations.
     /// </remarks>
-    public class Joystick : GenericHID, IEquatable<Joystick>
+    public class Joystick : JoystickBase, IEquatable<Joystick>
     {
         /// <summary>
         /// Axes enum for Joysticks
@@ -65,41 +65,17 @@ namespace WPILib
             NumButton,
         }
 
-        /// <summary>
-        /// Rumble Type enum for Joysticks
-        /// </summary>
-        public enum RumbleType
-        {
-            /// <summary>
-            /// Left Rumble
-            /// </summary>
-            LeftRumble = 0,
-            /// <summary>
-            /// Right Rumble
-            /// </summary>
-            RightRumble = 1,
-        }
-
-
-        private const byte DefaultXAxis = 0;
-        private const byte DefaultYAxis = 1;
-        private const byte DefaultZAxis = 2;
-        private const byte DefaultTwistAxis = 2;
-        private const byte DefaultThrottleAxis = 3;
-        private const byte DefaultTriggerButton = 1;
-        private const byte DefaultTopButton = 2;
-
-        /// <summary>
-        /// Gets the port the joystick is attached to on the Driver Station.
-        /// </summary>
-        public int Port { get; }
+        public const byte DefaultXAxis = 0;
+        public const byte DefaultYAxis = 1;
+        public const byte DefaultZAxis = 2;
+        public const byte DefaultTwistAxis = 2;
+        public const byte DefaultThrottleAxis = 3;
+        public const byte DefaultTriggerButton = 1;
+        public const byte DefaultTopButton = 2;
 
         private readonly DriverStation m_ds;
-        private readonly byte[] m_axes;
-        private readonly byte[] m_buttons;
-        private int m_outputs;
-        private ushort m_leftRumble;
-        private ushort m_rightRumble;
+        private readonly int[] m_axes;
+        private readonly int[] m_buttons;
 
         /// <summary>
         /// Constructs an instance of a joystick with the specified index.
@@ -132,51 +108,49 @@ namespace WPILib
         /// <param name="port">The port on the Driver Station the joystick is connected to [0..5]</param>
         /// <param name="numAxisTypes">The number of axis types in the enum</param>
         /// <param name="numButtonTypes">The number of button types in the enum</param>
-        protected Joystick(int port, int numAxisTypes, int numButtonTypes)
+        public Joystick(int port, int numAxisTypes, int numButtonTypes) : base(port)
         {
             m_ds = DriverStation.Instance;
-            m_axes = new byte[numAxisTypes];
-            m_buttons = new byte[numButtonTypes];
-            Port = port;
+            m_axes = new int[numAxisTypes];
+            m_buttons = new int[numButtonTypes];
         }
 
+        public int GetAxisChannel(AxisType axis)
+        {
+            return m_axes[(int)axis];
+        }
 
-        /// <inheritdoc/>
-        public override double GetX(Hand hand)
+        public void SetAxisChannel(AxisType axis, int channel)
+        {
+            m_axes[(int)axis] = channel;
+        }
+
+        public override double GetX(JoystickHand hand)
         {
             return GetRawAxis(m_axes[(int)AxisType.X]);
         }
-        /// <inheritdoc/>
-        public override double GetY(Hand hand)
+
+        public override double GetY(JoystickHand hand)
         {
             return GetRawAxis(m_axes[(int)AxisType.Y]);
         }
-        /// <inheritdoc/>
-        public override double GetZ(Hand hand)
+
+        public override double GetZ(JoystickHand hand)
         {
             return GetRawAxis(m_axes[(int)AxisType.Z]);
         }
-        /// <inheritdoc/>
-        public override double GetTwist() => GetRawAxis(m_axes[(int) AxisType.Twist]);
-        /// <inheritdoc/>
-        public override double GetThrottle() => GetRawAxis(m_axes[(int) AxisType.Throttle]);
-        
-        /// <summary>
-        /// Get the value of the axis
-        /// </summary>
-        /// <param name="axis">The axis to read, starting at 0.</param>
-        /// <returns>The value of the axis [-1.0..1.0]</returns>
-        public override double GetRawAxis(int axis)
+
+        public override double GetTwist()
         {
-            return m_ds.GetStickAxis(Port, axis);
+            return GetRawAxis(m_axes[(int)AxisType.Twist]);
         }
 
-        /// <summary>
-        /// Return the axis determined by the argument.
-        /// </summary>
-        /// <param name="axis">The axis to read</param>
-        /// <returns>The value of the axis</returns>
-        public double GetAxis(AxisType axis)
+        public override double GetThrottle()
+        {
+            return GetRawAxis(m_axes[(int)AxisType.Throttle]);
+        }
+
+        public virtual double GetAxis(AxisType axis)
         {
             switch (axis)
             {
@@ -195,62 +169,16 @@ namespace WPILib
             }
         }
 
-        /// <summary>
-        /// Return the number of axis on the current joystick.
-        /// </summary>
-        public int AxisCount => m_ds.GetStickAxisCount(Port);
-
-        /// <inheritdoc/>
-        public override bool GetTrigger(Hand hand)
+        public override bool GetTrigger(JoystickHand hand)
         {
             return GetRawButton(m_buttons[(int)ButtonType.Trigger]);
         }
-        /// <inheritdoc/>
-        public override bool GetTop(Hand hand)
+
+        public override bool GetTop(JoystickHand hand)
         {
             return GetRawButton(m_buttons[(int)ButtonType.Top]);
         }
-        /// <inheritdoc/>
-        public override bool GetBumper(Hand hand)
-        {
-            return false;
-        }
 
-        /// <summary>
-        /// Get the button value (starting at 1).
-        /// </summary>
-        /// <param name="button">The button number to be read (starting at 1).</param>
-        /// <returns>The state of the button.</returns>
-        public override bool GetRawButton(int button)
-        {
-            return m_ds.GetStickButton(Port, (byte)button);
-        }
-
-        /// <summary>
-        /// Gets the number of buttons on this joystick.
-        /// </summary>
-        public int ButtonCount => m_ds.GetStickButtonCount(Port);
-
-        /// <summary>
-        /// Get the state of a POV on the joystick.
-        /// </summary>
-        /// <param name="pov">The index of the POV to read (starting at 0).</param>
-        /// <returns>The angle of the POV in degrees, or -1 if not pressed.</returns>
-        public override int GetPOV(int pov)
-        {
-            return m_ds.GetStickPOV(Port, pov);
-        }
-
-        /// <summary>
-        /// Gets the number of POVs on this joystick.
-        /// </summary>
-        public int POVCount => m_ds.GetStickPOVCount(Port);
-
-        /// <summary>
-        /// Get buttons based on an enumberated type.
-        /// </summary>
-        /// <param name="button">The type of the button to read</param>
-        /// <returns>The state of the button.</returns>
         public bool GetButton(ButtonType button)
         {
             switch (button)
@@ -264,104 +192,39 @@ namespace WPILib
             }
         }
 
-        /// <summary>
-        /// Gets the magnitude of the direction vector formed by the joystick's
-        /// current position relative to it's origin.
-        /// </summary>
-        /// <returns>The magnitude of the direction vector.</returns>
-        public double GetMagnitude() => Math.Sqrt(Math.Pow(GetX(), 2) + Math.Pow(GetY(), 2));
-
-        /// <summary>
-        /// Gets the direction of the vector formed by the joystick and its origin in radians.
-        /// </summary>
-        /// <returns>The direction of the vector in radians</returns>
-        public double GetDirectionRadians() => Math.Atan2(GetX(), -GetY());
-
-        /// <summary>
-        /// Gets the direction of the vector formed by the joystick and its orign in degrees.
-        /// </summary>
-        /// <returns>The direction of the vector in degrees.</returns>
-        public double GetDirectionDegrees() => RadianToDegree(GetDirectionRadians());
-
-        private static double RadianToDegree(double angle) => angle * (180.0 / Math.PI);
-
-        /// <summary>
-        /// Gets the channel currently associated with the specified axis.
-        /// </summary>
-        /// <param name="axis">The axis to look up the channel for.</param>
-        /// <returns>The channel for the axis.</returns>
-        public int GetAxisChannel(AxisType axis)
+        public virtual double GetMagnitude()
         {
-            return m_axes[(int)axis];
+            double x = GetX();
+            double y = GetY();
+            return Math.Sqrt(x * x + y * y);
         }
 
-        /// <summary>
-        /// Set the channel associated with the specified axis.
-        /// </summary>
-        /// <param name="axis">The axis to set the channel for.</param>
-        /// <param name="channel">The channel to set the axis to.</param>
-        public void SetAxisChannel(AxisType axis, int channel)
+        public virtual double GetDirectionRadians()
         {
-            m_axes[(int)axis] = (byte)channel;
+            return Math.Atan2(GetX(), GetY());
         }
 
-        /// <summary>
-        /// Gets if the joystick is an Xbox controller.
-        /// </summary>
-        /// <returns></returns>
-        public bool IsXbox => m_ds.GetJoystickIsXbox(Port);
-
-        /// <summary>
-        /// Gets the HID type of the current joystick.
-        /// </summary>
-        public int JoystickType => m_ds.GetJoystickType(Port);
-
-        /// <summary>
-        /// Gets the name of the current joystick.
-        /// </summary>
-        public string Name => m_ds.GetJoystickName(Port);
-
-        /// <summary>
-        /// Sets the rumble output for the joystick. 
-        /// </summary>
-        /// <remarks>
-        /// The DS currently supports 2 rumble values, left rumble and right rumble.
-        /// </remarks>
-        /// <param name="type">Which rumble value to set.</param>
-        /// <param name="value">The normalized value (0 to 1) to set the rumble to.</param>
-        public void SetRumble(RumbleType type, float value)
+        public virtual double GetDirectionDegrees()
         {
-            if (value < 0)
-                value = 0;
-            else if (value > 1)
-                value = 1;
-            if (type == RumbleType.LeftRumble)
-                m_leftRumble = (ushort)(value * 65535);
-            else
-                m_rightRumble = (ushort)(value * 65535);
-            HAL_SetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            return (180.0 / Math.Acos(-1)) * GetDirectionRadians();
         }
 
-        /// <summary>
-        /// Sets a single HID output value for the joystick.
-        /// </summary>
-        /// <param name="outputNumber">The index of the output to set [1..32]</param>
-        /// <param name="value">The value to set the output to.</param>
-        public void SetOutput(int outputNumber, bool value)
+        public int GetAxisType(int axis)
         {
-            m_outputs = (m_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            HAL_SetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            return m_ds.GetJoystickAxisType(Port, axis);
         }
 
-        /// <summary>
-        /// Sets all HID output values for the joystick.
-        /// </summary>
-        /// <param name="value">The 32 bit output value (1 bit for each output)</param>
-        public void SetOutputs(int value)
+        public int GetAxisCount()
         {
-            m_outputs = value;
-            HAL_SetJoystickOutputs((byte)Port, (uint)m_outputs, m_leftRumble, m_rightRumble);
+            return m_ds.GetStickAxisCount(Port);
         }
+
+        public int GetButtonCount()
+        {
+            return m_ds.GetStickButtonCount(Port);
+        }
+
+
 
         ///<inheritdoc/>
         public bool Equals(Joystick other)

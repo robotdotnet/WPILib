@@ -51,34 +51,32 @@ namespace WPILib
         private HALJoystickDescriptor[] m_joystickDescriptorsCache = new HALJoystickDescriptor[JoystickPorts];
         // ReSharper restore InconsistentNaming
 
-        //Pointers to the semaphores to the HAL and FPGA
-        private readonly object m_dataSem;
+        // Internal Driver Station thread
+        private Thread m_dsThread;
+        private volatile bool m_isRunning = false;
 
-        //New Control Data Fast Semaphore Lock
-        private readonly object m_newControlDataMutex = new object();
-        private readonly object m_joystickMutex = new object();
+        // WPILib WaitForData control variables
+        private bool m_waitForDataPredicate = false;
+        //std::condition_variable_any m_waitForDataCond;
+        private readonly object m_waitForDataMutex = new object();
 
+        private int m_newControlData = 0;
+
+        private readonly object m_joystickDataMutex = new object();
+
+        // Robot state status variables
+        private bool m_userInDisabled = false;
+        private bool m_userInAutonomous = false;
+        private bool m_userInTeleop = false;
+        private bool m_userInTest = false;
+
+        HALControlWord m_controlWordCache;
+        DateTime m_lastControlWordUpdate;
         private readonly object m_controlWordMutex = new object();
-        private HALControlWord m_controlWordCache;
-        private DateTime m_lastControlWordUpdate;
 
-        //Driver station thread keep alive
-        private bool m_threadKeepAlive = true;
-
-        //User mode states
-        private bool m_userInDisabled;
-        private bool m_userInAutonomous;
-        private bool m_userInTeleop;
-        private bool m_userInTest;
-        private bool m_updatedControlLoopData;
-        private bool m_newControlData;
-
-        //Thread lock objects
-        private readonly ReaderWriterLockSlim m_readWriteLock;
-
-        //Reporting interval time limiters
         private const double JoystickUnpluggedMessageInterval = 1.0;
-        private double m_nextMessageTime;
+
+        private double m_nextMessageTime = 0;
 
         //The singleton instance of the driver station
         private static DriverStation s_instance;
@@ -114,13 +112,6 @@ namespace WPILib
                 m_joystickDescriptorsCache[i].name.byte0 = 0;
             }
 
-            m_readWriteLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-
-
-            //Initializes the HAL semaphores
-            m_dataSem = new object();
-
-
             m_controlWordCache = new HALControlWord();
 
             m_lastControlWordUpdate = DateTime.MinValue;
@@ -138,27 +129,28 @@ namespace WPILib
         /// <summary>
         /// Stops the driver station thread
         /// </summary>
-        public void Release() => m_threadKeepAlive = false;
+        public void Release() => m_isRunning = false;
 
         //The DS loop thread
         private void Task()
         {
+            m_isRunning = true;
             //The safety counter is used in order to implement motor safety
             int safetyCounter = 0;
-            while (m_threadKeepAlive)
+            while (m_isRunning)
             {
                 //Wait for new DS data, grab the newest data, and return the semaphore.
                 HAL_WaitForDSData();
                 GetData();
-                try
+
+                // notify IsNewControlData variables
+                Interlocked.Exchange(ref m_newControlData, 1);
+
+                // notify WaitForData block
+                lock (m_waitForDataMutex)
                 {
-                    Monitor.Enter(m_dataSem);
-                    m_updatedControlLoopData = true;
-                    Monitor.PulseAll(m_dataSem);
-                }
-                finally
-                {
-                    Monitor.Exit(m_dataSem);
+                    m_waitForDataPredicate = true;
+                    Monitor.PulseAll(m_waitForDataMutex);
                 }
 
 
@@ -184,17 +176,50 @@ namespace WPILib
         /// <summary>
         /// Wait for new data from the driver station.
         /// </summary>
-        /// <param name="timeout">The timeout in ms</param>
-        public void WaitForData(int timeout = Timeout.Infinite)
+        /// <param name="timeout">The timeout in seconds</param>
+        public bool WaitForData(double timeout = 0)
         {
-            lock (m_dataSem)
-            {
-                while (!m_updatedControlLoopData)
+            ulong startTime = Utility.GetFPGATime();
+            ulong timeoutMicros = (ulong)(timeout * 1000000);
+
+            lock (m_waitForDataMutex)
+                try
                 {
-                    Monitor.Wait(m_dataSem, timeout);
+                    while (!m_waitForDataPredicate)
+                    {
+                        if (timeout > 0)
+                        {
+                            ulong now = Utility.GetFPGATime();
+                            if (now < startTime + timeoutMicros)
+                            {
+                                // We still have time to wait
+                                bool signaled = Monitor.Wait(m_waitForDataMutex, (int)((startTime + timeoutMicros - now) / 1000));
+                                if (!signaled)
+                                {
+                                    // Return false if a timeout happened
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                // Time has elapsed.
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            Monitor.Wait(m_waitForDataMutex);
+                        }
+                    }
+                    m_waitForDataPredicate = false;
+                    // Return true if we have received a proper signal
+                    return true;
                 }
-                m_updatedControlLoopData = false;
-            }
+                catch (ThreadInterruptedException ex)
+                {
+                    // return false on a thread interrupt
+                    return false;
+                }
         }
 
         /// <summary>
@@ -210,13 +235,11 @@ namespace WPILib
                 HAL_GetJoystickDescriptor(stick, ref m_joystickDescriptorsCache[stick]);
             }
 
-            UpdateControlWord(true);
+            HALControlWord controlWord;
+            UpdateControlWord(true, out controlWord);
 
-            bool lockEntered = false;
-            try
-            {
-                m_readWriteLock.EnterWriteLock();
-                lockEntered = true;
+            lock (m_joystickDataMutex)
+            { 
 
                 HALJoystickAxes[] currentAxes = m_joystickAxes;
                 m_joystickAxes = m_joystickAxesCache;
@@ -234,14 +257,6 @@ namespace WPILib
                 HALJoystickDescriptor[] currentDescriptor = m_joystickDescriptors;
                 m_joystickDescriptors = m_joystickDescriptorsCache;
                 m_joystickDescriptorsCache = currentDescriptor;
-            }
-            finally
-            {
-                if (lockEntered) m_readWriteLock.ExitWriteLock();
-            }
-            lock (m_newControlDataMutex)
-            {
-                m_newControlData = true;
             }
         }
 
@@ -309,17 +324,14 @@ namespace WPILib
                     $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
 
-
-
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
 
                 if (axis > m_joystickAxes[stick].count)
                 {
-                    m_readWriteLock.ExitReadLock();
+                    Monitor.Exit(m_joystickDataMutex);
                     lockEntered = false;
 
                     if (axis >= MaxJoystickAxes)
@@ -337,7 +349,7 @@ namespace WPILib
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
 
         }
@@ -360,13 +372,12 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
                 return m_joystickAxes[stick].count;
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
 
         }
@@ -396,12 +407,11 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
 
                 if (pov >= m_joystickPOVs[stick].count)
                 {
-                    m_readWriteLock.ExitReadLock();
+                    Monitor.Exit(m_joystickDataMutex);
                     lockEntered = false;
                     ReportJoystickUnpluggedWarning("Joystick POV " + pov + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
@@ -412,7 +422,7 @@ namespace WPILib
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
 
         }
@@ -434,14 +444,13 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
 
                 return m_joystickPOVs[stick].count;
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
 
         }
@@ -464,13 +473,12 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
                 return (int)m_joystickButtons[stick].buttons;
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
 
         }
@@ -483,7 +491,7 @@ namespace WPILib
         /// <returns>The state of the joystick button.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown if the stick is out of range.</exception>
-        public bool GetStickButton(int stick, byte button)
+        public bool GetStickButton(int stick, int button)
         {
             if (stick < 0 || stick >= JoystickPorts)
             {
@@ -499,12 +507,11 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
 
                 if (button > m_joystickButtons[stick].count)
                 {
-                    m_readWriteLock.ExitReadLock();
+                    Monitor.Exit(m_joystickDataMutex);
                     lockEntered = false;
                     ReportJoystickUnpluggedWarning("Joystick Button " + button + " on port " + stick +
                                                  " not available, check if controller is plugged in\n");
@@ -516,7 +523,7 @@ namespace WPILib
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
         }
 
@@ -538,13 +545,12 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
                 return m_joystickButtons[stick].count;
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
         }
 
@@ -565,13 +571,12 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
                 return m_joystickDescriptors[stick].isXbox != 0;
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
 
         }
@@ -593,13 +598,12 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
                 return m_joystickDescriptors[stick].type;
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
         }
 
@@ -621,13 +625,57 @@ namespace WPILib
             bool lockEntered = false;
             try
             {
-                m_readWriteLock.EnterReadLock();
-                lockEntered = true;
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
                 return m_joystickDescriptors[stick].name.ToString();
             }
             finally
             {
-                if (lockEntered) m_readWriteLock.ExitReadLock();
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
+            }
+        }
+
+        /// <summary>
+        /// Gets the type of the axis on a given joystick port and axis
+        /// </summary>
+        /// <param name="stick">The joystick port number</param>
+        /// <param name="axis">The joystick axis number</param>
+        /// <returns>The joystick axis type</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown if the stick is out of range.</exception>
+        public int GetJoystickAxisType(int stick, int axis)
+        {
+            if (stick >= JoystickPorts)
+            {
+                throw new ArgumentOutOfRangeException(nameof(stick),
+                    $"Joystick Index is out of range, should be 0-{JoystickPorts}");
+            }
+
+            bool lockEntered = false;
+            try
+            {
+                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
+
+                if (axis > m_joystickAxes[stick].count)
+                {
+                    Monitor.Exit(m_joystickDataMutex);
+                    lockEntered = false;
+
+                    if (axis >= MaxJoystickAxes)
+                        throw new ArgumentOutOfRangeException(nameof(axis),
+                            $"Joystick axis is out of range, should be between 0 and {m_joystickAxes[stick].count}");
+                    else
+                    {
+                        ReportJoystickUnpluggedWarning("Joystick axis " + axis + " on port " + stick +
+                                                     " not available, check if controller is plugged in\n");
+                    }
+                    return -1;
+                }
+
+                return m_joystickDescriptors[stick].axisTypes[axis];
+            }
+            finally
+            {
+                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
             }
         }
 
@@ -638,11 +686,9 @@ namespace WPILib
         {
             get
             {
-                lock (m_controlWordMutex)
-                {
-                    UpdateControlWord(false);
-                    return m_controlWordCache.GetEnabled() && m_controlWordCache.GetDSAttached();
-                }
+                HALControlWord word;
+                UpdateControlWord(false, out word);
+                return word.GetEnabled() && word.GetDSAttached();
             }
         }
 
@@ -659,11 +705,9 @@ namespace WPILib
         {
             get
             {
-                lock (m_controlWordMutex)
-                {
-                    UpdateControlWord(false);
-                    return m_controlWordCache.GetAutonomous();
-                }
+                HALControlWord word;
+                UpdateControlWord(false, out word);
+                return word.GetAutonomous();
             }
         }
 
@@ -675,11 +719,9 @@ namespace WPILib
         {
             get
             {
-                lock (m_controlWordMutex)
-                {
-                    UpdateControlWord(false);
-                    return m_controlWordCache.GetTest();
-                }
+                HALControlWord word;
+                UpdateControlWord(false, out word);
+                return word.GetTest();
             }
         }
 
@@ -694,11 +736,9 @@ namespace WPILib
         {
             get
             {
-                lock (m_controlWordMutex)
-                {
-                    UpdateControlWord(false);
-                    return !m_controlWordCache.GetAutonomous() && !m_controlWordCache.GetTest();
-                }
+                HALControlWord word;
+                UpdateControlWord(false, out word);
+                return !word.GetAutonomous() && !word.GetTest();
             }
         }
 
@@ -740,12 +780,7 @@ namespace WPILib
         {
             get
             {
-                lock (m_newControlDataMutex)
-                {
-                    bool result = m_newControlData;
-                    m_newControlData = false;
-                    return result;
-                }
+                return Interlocked.Exchange(ref m_newControlData, 0) != 0;
             }
         }
 
@@ -812,11 +847,9 @@ namespace WPILib
         {
             get
             {
-                lock (m_controlWordMutex)
-                {
-                    UpdateControlWord(false);
-                    return !m_controlWordCache.GetFMSAttached();
-                }
+                HALControlWord word;
+                UpdateControlWord(false, out word);
+                return word.GetFMSAttached();
             }
         }
 
@@ -827,15 +860,13 @@ namespace WPILib
         {
             get
             {
-                lock (m_controlWordMutex)
-                {
-                    UpdateControlWord(false);
-                    return !m_controlWordCache.GetDSAttached();
-                }
+                HALControlWord word;
+                UpdateControlWord(false, out word);
+                return word.GetDSAttached();
             }
         }
 
-        private void UpdateControlWord(bool force)
+        private void UpdateControlWord(bool force, out HALControlWord controlWord)
         {
             DateTime now = DateTime.UtcNow;
             lock (m_controlWordMutex)
@@ -844,7 +875,8 @@ namespace WPILib
                 {
                     HAL_GetControlWord(ref m_controlWordCache);
                     m_lastControlWordUpdate = now;
-                } 
+                }
+                controlWord = m_controlWordCache;
             }
         }
 
