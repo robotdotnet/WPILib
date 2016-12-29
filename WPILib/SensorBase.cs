@@ -44,7 +44,7 @@ namespace WPILib
             if (!HALSolenoid.HAL_CheckSolenoidModule(moduleNumber))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested solenoid module is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested solenoid module is out of range. Minimum: 0, Maximum: ");
                 buf.Append(PCMModules);
                 buf.Append(", Requested: ");
                 buf.Append(moduleNumber);
@@ -62,7 +62,7 @@ namespace WPILib
             if (!HALDIO.HAL_CheckDIOChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested DIO channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested DIO channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(DigitalChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -80,7 +80,7 @@ namespace WPILib
             if (!HALRelay.HAL_CheckRelayChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested relay channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested relay channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(RelayChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -98,7 +98,7 @@ namespace WPILib
             if (!HALPWM.HAL_CheckPWMChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested PWM channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested PWM channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(PwmChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -116,7 +116,7 @@ namespace WPILib
             if (!HALAnalogInput.HAL_CheckAnalogInputChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested analog input channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested analog input channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(AnalogInputChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -134,7 +134,7 @@ namespace WPILib
             if (!HALAnalogOutput.HAL_CheckAnalogOutputChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested analog output channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested analog output channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(AnalogOutputChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -152,7 +152,7 @@ namespace WPILib
             if (!HALSolenoid.HAL_CheckSolenoidChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested solenoid channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested solenoid channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(SolenoidChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -170,7 +170,7 @@ namespace WPILib
             if (!HALPDP.HAL_CheckPDPChannel(channel))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested PDP channel is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested PDP channel is out of range. Minimum: 0, Maximum: ");
                 buf.Append(PDPChannels);
                 buf.Append(", Requested: ");
                 buf.Append(channel);
@@ -188,7 +188,7 @@ namespace WPILib
             if (!HALPDP.HAL_CheckPDPModule(module))
             {
                 StringBuilder buf = new StringBuilder();
-                buf.Append("Requested PDP module is out of range. Minimumm: 0, Maximum: ");
+                buf.Append("Requested PDP module is out of range. Minimum: 0, Maximum: ");
                 buf.Append(PDPModules);
                 buf.Append(", Requested: ");
                 buf.Append(module);
