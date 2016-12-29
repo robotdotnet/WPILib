@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Delegates\HALThreads.cs" />
     <Compile Include="Delegates\LibraryLoaderHolder.cs" />
     <Compile Include="Base\HAL.cs" />
     <Compile Include="Base\HALCAN.cs" />

@@ -170,6 +170,7 @@
     <Compile Include="SPI.cs" />
     <Compile Include="Talon.cs" />
     <Compile Include="TalonSRX.cs" />
+    <Compile Include="Threads.cs" />
     <Compile Include="Timer.cs" />
     <Compile Include="Ultrasonic.cs" />
     <Compile Include="Utility.cs" />
