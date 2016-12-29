@@ -47,7 +47,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FRC.CameraServer, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.CameraServer.0.9.3-beta1\lib\net45\FRC.CameraServer.dll</HintPath>
+      <HintPath>..\packages\FRC.CameraServer.0.9.3-ci-0020\lib\net45\FRC.CameraServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -55,7 +55,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.OpenCvSharp.0.9.3-beta3\lib\net45\FRC.OpenCvSharp.dll</HintPath>
+      <HintPath>..\packages\FRC.OpenCvSharp.0.9.4-beta1\lib\net45\FRC.OpenCvSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

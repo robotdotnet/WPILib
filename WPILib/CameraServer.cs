@@ -52,9 +52,10 @@ namespace WPILib
                 case SourceKind.Usb:
                     return $"usb:{NativeMethods.GetUsbCameraPath(source)}";
                 case SourceKind.Http:
-                    return "ip:";
-                case (SourceKind)4:
-                    return "cv:";
+                    var urls = NativeMethods.GetHttpCameraUrls(source);
+                    return urls.Count > 0 ? $"ip: {urls[0]}" : "ip:";
+                case SourceKind.CV:
+                    return "usb:";
                 default:
                     return "unknown:";
             }
@@ -75,39 +76,91 @@ namespace WPILib
             }
         }
 
+        private List<string> GetSinkStreamValues(int sink)
+        {
+            // Ignore all but mjpeg server
+            if (NativeMethods.GetSinkKind(sink) != SinkKind.Mjpeg)
+            {
+                return new List<string>();
+            }
+
+            int port = NativeMethods.GetMjpegServerPort(sink);
+
+            lock (m_lockObject)
+            {
+                List<string> values = new List<string>(m_addresses.Count + 1);
+                string listenAddress = NativeMethods.GetMjpegServerListenAddress(sink);
+                if (!string.IsNullOrWhiteSpace(listenAddress))
+                {
+                    values.Add(MakeStreamValue(listenAddress, port));
+                }
+                else
+                {
+                    values.Add(MakeStreamValue($"{NativeMethods.GetHostName()}.local", port));
+                    foreach (var address in m_addresses)
+                    {
+                        if (address == "127.0.0.1")
+                        {
+                            continue;
+                        }
+                        values.Add(MakeStreamValue(address, port));
+                    }
+                }
+                return values;
+            }
+        }
+
+        private static List<string> GetSourceStreamValues(int source)
+        {
+            // ignore all but httpcamera
+            if (NativeMethods.GetSourceKind(source) != SourceKind.Http)
+            {
+                return new List<string>();
+            }
+
+            List<string> values = NativeMethods.GetHttpCameraUrls(source);
+            for (int i = 0; i < values.Count; i++)
+            {
+                values[i] = $"mjpeg:{values[i]}";
+            }
+            return values;
+        }
+
         private void UpdateStreamValues()
         {
             lock (m_lockObject)
             {
                 foreach (VideoSink i in m_sinks.Values)
                 {
-                    if (i.Kind != SinkKind.Mjpeg) continue;
                     int sink = i.Handle;
 
                     int source = NativeMethods.GetSinkSource(sink);
                     ITable table;
                     m_tables.TryGetValue(source, out table);
-                    if (table == null) continue;
-
-                    int port = NativeMethods.GetMjpegServerPort(sink);
-
-                    List<string> values = new List<string>(m_addresses.Count + 1);
-                    string listenAddress = NativeMethods.GetMjpegServerListenAddress(sink);
-                    if (!string.IsNullOrEmpty(listenAddress))
+                    if (table != null)
                     {
-                        values.Add(MakeStreamValue(listenAddress, port));
-                    }
-                    else
-                    {
-                        values.Add(MakeStreamValue($"{NativeMethods.GetHostName()}.local", port));
-                        foreach (string address in m_addresses)
+                        var values = GetSinkStreamValues(sink);
+                        if (values.Count > 0)
                         {
-                            if (address == "127.0.0.1") continue; // Ignore localhost
-                            values.Add(MakeStreamValue(address, port));
+                            table.PutStringArray("streams", values);
                         }
                     }
+                }
 
-                    table.PutStringArray("streams", values);
+                foreach (var i in m_sources.Values)
+                {
+                    int source = i.Handle;
+
+                    ITable table;
+                    m_tables.TryGetValue(source, out table);
+                    if (table != null)
+                    {
+                        var values = GetSourceStreamValues(source);
+                        if (values.Count > 0)
+                        {
+                            table.PutStringArray("streams", values);
+                        }
+                    }
                 }
             }
         }
@@ -138,7 +191,7 @@ namespace WPILib
                             table.PutString("description",
                                   NativeMethods.GetSourceDescription(vidEvent.SourceHandle));
                             table.PutBoolean("connected", NativeMethods.IsSourceConnected(vidEvent.SourceHandle));
-                            table.PutStringArray("streams", new string[0]);
+                            table.PutStringArray("streams", GetSourceStreamValues(vidEvent.SourceHandle));
                             break;
                         }
                     case EventKind.SourceDestroyed:
@@ -262,6 +315,30 @@ namespace WPILib
             AddCamera(camera);
             VideoSink server = AddServer($"serve_{camera.Name}");
             server.Source = camera;
+        }
+
+        public AxisCamera AddAxisCamera(string host)
+        {
+            return AddAxisCamera("Axis Camera", host);
+        }
+
+        public AxisCamera AddAxisCamera(IList<string> hosts)
+        {
+            return AddAxisCamera("Axis Camera", hosts);
+        }
+
+        public AxisCamera AddAxisCamera(string name, string host)
+        {
+            AxisCamera camera = new AxisCamera(name, host);
+            AddCamera(camera);
+            return camera;
+        }
+
+        public AxisCamera AddAxisCamera(string name, IList<string> hosts)
+        {
+            AxisCamera camera = new AxisCamera(name, hosts);
+            AddCamera(camera);
+            return camera;
         }
 
         public CvSink GetVideo()
