@@ -201,3 +201,6 @@ GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
 buildLocal.bat
+
+.project
+.settings/
