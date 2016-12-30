@@ -176,7 +176,7 @@ namespace WPILib
 
             }
 
-            FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageId, null, 0,
+            FRC_NetworkCommunication_CANSessionMux_sendMessage2((uint)messageId, null, 0,
                 CAN_SEND_PERIOD_STOP_REPEATING, ref status);
         }
 
@@ -1034,7 +1034,7 @@ namespace WPILib
                         trustedData[j + 2] = data[j];
                     }
 
-                    FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageId, trustedData, (byte)(dataSize + 2), period, ref status);
+                    FRC_NetworkCommunication_CANSessionMux_sendMessage2((uint)messageId, trustedData, (byte)(dataSize + 2), period, ref status);
                     if (status < 0)
                     {
                         CANExceptionFactory.CheckStatus(status, messageId);
@@ -1044,7 +1044,7 @@ namespace WPILib
                 }
             }
 
-            FRC_NetworkCommunication_CANSessionMux_sendMessage((uint)messageId, data, (byte)dataSize, period, ref status);
+            FRC_NetworkCommunication_CANSessionMux_sendMessage2((uint)messageId, data, (byte)dataSize, period, ref status);
 
             if (status < 0)
             {
@@ -1114,7 +1114,7 @@ namespace WPILib
             uint timeStamp = 0;
             int status = 0;
 
-            FRC_NetworkCommunication_CANSessionMux_receiveMessage(ref messageIdu, (uint)messageMask, data, ref dataSize, ref timeStamp, ref status);
+            FRC_NetworkCommunication_CANSessionMux_receiveMessage2(ref messageIdu, (uint)messageMask, data, ref dataSize, ref timeStamp, ref status);
 
             if (status < 0)
             {
