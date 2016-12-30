@@ -23,6 +23,14 @@ namespace WPILib
             MXP = 1,
             /// USB
             USB = 2,
+            /// <summary>
+            /// 
+            /// </summary>
+            USB1 = 2,
+            /// <summary>
+            /// 
+            /// </summary>
+            USB2 = 3,
         }
 
         /// <summary>
