@@ -119,7 +119,7 @@ namespace WPILib.SmartDashboard
             return s_table.GetNumber(key, defaultValue);
         }
 
-        /// <inheritdoc cref="ITable.PutBooleanArray(string, bool[])"/>
+        /// <inheritdoc cref="ITable.PutBooleanArray(string, IList{bool})"/>
         public static void PutBooleanArray(string key, bool[] value)
         {
             s_table.PutBooleanArray(key, value);

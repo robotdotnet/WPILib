@@ -10,7 +10,7 @@ namespace WPILib.Tests.Commands
         private InternalButton m_button1;
         private InternalButton m_button2;
 
-        [TestFixtureTearDown]
+        [OneTimeSetUp]
         public static void TearDownAfterClass()
         {
 

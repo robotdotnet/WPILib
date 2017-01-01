@@ -4,7 +4,7 @@
     /// An interface for PID loops.
     /// </summary>
     /// <remarks>
-    /// Used for either devices that contain PID functionality (i.e. <see cref="CANTalon"/>)
+    /// Used for either devices that contain PID functionality (i.e. CANTalon)
     /// or software PID implementations (i.e. <see cref="PIDController"/>).
     /// </remarks>
     public interface IPIDInterface: IController
