@@ -11,13 +11,23 @@ using NetworkTables;
 
 namespace WPILib
 {
+    /// <summary>
+    /// Singleton class for creating and keeping camera servers,
+    /// and publishing information to NetworkTables
+    /// </summary>
     public class CameraServer
     {
+        /// <summary>
+        /// The initial port used to create streams
+        /// </summary>
         public const int BasePort = 1181;
 
         private const string PublishName = "/CameraPublisher";
         private static CameraServer server;
 
+        /// <summary>
+        /// Gets the CameraServer instance
+        /// </summary>
         public static CameraServer Instance
         {
             get
@@ -45,9 +55,7 @@ namespace WPILib
 
         private static string MakeSourceValue(int source)
         {
-            var c = NativeMethods.GetSourceKind(source);
-            Console.WriteLine(c);
-            switch (c)
+            switch (NativeMethods.GetSourceKind(source))
             {
                 case SourceKind.Usb:
                     return $"usb:{NativeMethods.GetUsbCameraPath(source)}";
@@ -284,11 +292,40 @@ namespace WPILib
             }, NotifyFlags.NotifyImmediate | NotifyFlags.NotifyUpdate);
         }
 
+        /// <summary>
+        /// Start automatically capturing images to send to the dashboard.
+        /// </summary>
+        /// <remarks>
+        /// You should call this method to see a camera feed on the dashboard.
+        /// If you also want to perform vision processing on the roboRIO, use
+        /// <see cref="GetVideo()"/> to get access to the camera images
+        /// 
+        /// <para>
+        /// This overload calls <see cref="StartAutomaticCapture(int)"/> with device 0,
+        /// creating a camera named "USB Camera 0"
+        /// </para>
+        /// </remarks>
+        /// <returns>The <see cref="UsbCamera"/> object that was created to stream from</returns>
         public UsbCamera StartAutomaticCapture()
         {
             return StartAutomaticCapture(0);
         }
 
+        /// <summary>
+        /// Start automatically capturing images to send to the dashboard.
+        /// </summary>
+        /// <remarks>
+        /// You should call this method to see a camera feed on the dashboard.
+        /// If you also want to perform vision processing on the roboRIO, use
+        /// <see cref="GetVideo()"/> to get access to the camera images
+        /// 
+        /// <para>
+        /// This overload calls <see cref="StartAutomaticCapture(string, int)"/> with device 0,
+        /// creating a camera named "USB Camera {dev}"
+        /// </para>
+        /// </remarks>
+        /// <param name="dev">The device number for the camera interface</param>
+        /// <returns>The <see cref="UsbCamera"/> object that was created to stream from</returns>
         public UsbCamera StartAutomaticCapture(int dev)
         {
             UsbCamera camera = new UsbCamera($"USB Camera {dev.ToString()}", dev);
@@ -296,6 +333,17 @@ namespace WPILib
             return camera;
         }
 
+        /// <summary>
+        /// Start automatically capturing images to send to the dashboard.
+        /// </summary>
+        /// <remarks>
+        /// You should call this method to see a camera feed on the dashboard.
+        /// If you also want to perform vision processing on the roboRIO, use
+        /// <see cref="GetVideo()"/> to get access to the camera images
+        /// </remarks>
+        /// <param name="name">The name to give the camera</param>
+        /// <param name="dev">The device number for the camera interface</param>
+        /// <returns>The <see cref="UsbCamera"/> object that was created to stream from</returns>
         public UsbCamera StartAutomaticCapture(string name, int dev)
         {
             UsbCamera camera = new UsbCamera(name, dev);
@@ -303,6 +351,17 @@ namespace WPILib
             return camera;
         }
 
+        /// <summary>
+        /// Start automatically capturing images to send to the dashboard.
+        /// </summary>
+        /// <remarks>
+        /// You should call this method to see a camera feed on the dashboard.
+        /// If you also want to perform vision processing on the roboRIO, use
+        /// <see cref="GetVideo()"/> to get access to the camera images
+        /// </remarks>
+        /// <param name="name">The name to give the camera</param>
+        /// <param name="path">The device path (e.g. "/dev/video0") of the camera</param>
+        /// <returns>The <see cref="UsbCamera"/> object that was created to stream from</returns>
         public UsbCamera StartAutomaticCapture(string name, string path)
         {
             UsbCamera camera = new UsbCamera(name, path);
@@ -310,6 +369,16 @@ namespace WPILib
             return camera;
         }
 
+        /// <summary>
+        /// Start automatically capturing images from an existing camera to send to 
+        /// the dashboard.
+        /// </summary>
+        /// <remarks>
+        /// You should call this method to see a camera feed on the dashboard.
+        /// If you also want to perform vision processing on the roboRIO, use
+        /// <see cref="GetVideo()"/> to get access to the camera images
+        /// </remarks>
+        /// <param name="camera">The camera to stream from.</param>
         public void StartAutomaticCapture(VideoSource camera)
         {
             AddCamera(camera);
@@ -317,16 +386,40 @@ namespace WPILib
             server.Source = camera;
         }
 
+        /// <summary>
+        /// Adds an Axis IP Camera
+        /// </summary>
+        /// <remarks>
+        /// This overload calls <see cref="AddAxisCamera(string, string)"/> with
+        /// the name "Axis Camera"
+        /// </remarks>
+        /// <param name="host">The Camera host IP or DNS name (e.g. "10.x.y.11")</param>
+        /// <returns>The AxisCamera created to stream from</returns>
         public AxisCamera AddAxisCamera(string host)
         {
             return AddAxisCamera("Axis Camera", host);
         }
 
+        /// <summary>
+        /// Adds an Axis IP Camera.
+        /// </summary>
+        /// <remarks>
+        /// This overload calls <see cref="AddAxisCamera(string, IList{string})"/> with the
+        /// name "Axis Camera"
+        /// </remarks>
+        /// <param name="hosts">List of Camera host IPs/DNS names</param>
+        /// <returns>The AxisCamera created to stream from</returns>
         public AxisCamera AddAxisCamera(IList<string> hosts)
         {
             return AddAxisCamera("Axis Camera", hosts);
         }
 
+        /// <summary>
+        /// Adds an Axis IP Camera.
+        /// </summary>
+        /// <param name="name">The name to give the camera</param>
+        /// <param name="host">The Camera host IP or DNS name (e.g. "10.x.y.11")</param>
+        /// <returns>The AxisCamera created to stream from</returns>
         public AxisCamera AddAxisCamera(string name, string host)
         {
             AxisCamera camera = new AxisCamera(name, host);
@@ -334,6 +427,12 @@ namespace WPILib
             return camera;
         }
 
+        /// <summary>
+        /// Adds an Axis IP Camera.
+        /// </summary>
+        /// <param name="name">The name to give the camera</param>
+        /// <param name="hosts">List of Camera host IPs/DNS names</param>
+        /// <returns>The AxisCamera created to stream from</returns>
         public AxisCamera AddAxisCamera(string name, IList<string> hosts)
         {
             AxisCamera camera = new AxisCamera(name, hosts);
@@ -341,6 +440,15 @@ namespace WPILib
             return camera;
         }
 
+        /// <summary>
+        /// Get OpenCV access to the primary camera feed.
+        /// </summary>
+        /// <remarks>
+        /// This allows you to get images from the camera for image processing on the roboRIO.
+        /// <para>This is only valid to call after a camera feed has been added with
+        /// <see cref="StartAutomaticCapture()"/> or <see cref="AddServer(string)"/>.</para>
+        /// </remarks>
+        /// <returns>The <see cref="CvSink"/> to get frames from.</returns>
         public CvSink GetVideo()
         {
             VideoSource source;
@@ -359,6 +467,15 @@ namespace WPILib
             return GetVideo(source);
         }
 
+        /// <summary>
+        /// Get OpenCV access to the specified camera.
+        /// </summary>
+        /// <remarks>
+        /// This allows you to get images from the camera for image processing on the roboRIO.
+        /// </remarks>
+        /// <param name="camera">The camera to get OpenCV access from 
+        /// (e.g. as returned by <see cref="StartAutomaticCapture()"/>.</param>
+        /// <returns>The <see cref="CvSink"/> to get frames from.</returns>
         public CvSink GetVideo(VideoSource camera)
         {
             string name = $"opencv_{camera.Name}";
@@ -384,6 +501,38 @@ namespace WPILib
             return newSink;
         }
 
+        /// <summary>
+        /// Get OpenCV access to the specified camera
+        /// </summary>
+        /// <remarks>
+        /// This allows you to get images from the camera for image processing on the roboRIO.
+        /// </remarks>
+        /// <param name="name">The camera name to get OpenCV access from.</param>
+        /// <returns>The <see cref="CvSink"/> to get frames from.</returns>
+        public CvSink GetVideo(string name)
+        {
+            VideoSource source;
+            lock (m_lockObject)
+            {
+                m_sources.TryGetValue(name, out source);
+                if (source == null)
+                {
+                    throw new VideoException($"could not find camera {name}");
+                }
+            }
+            return GetVideo(source);
+        }
+
+        /// <summary>
+        /// Create an MJPEG stream with OpenCV input. 
+        /// </summary>
+        /// <remarks>
+        /// This can be called to pass custom annotated images to the dashboard.
+        /// </remarks>
+        /// <param name="name">The name to give the stream</param>
+        /// <param name="width">The width of the image being sent</param>
+        /// <param name="height">The height of the image being sent</param>
+        /// <returns>The <see cref="CvSource"/> to put frames into.</returns>
         public CvSource PutVideo(string name, int width, int height)
         {
             CvSource source = new CvSource(name, PixelFormat.Mjpeg, width, height, 30);
@@ -391,6 +540,11 @@ namespace WPILib
             return source;
         }
 
+        /// <summary>
+        /// Adds an MJPEG server at the next available port.
+        /// </summary>
+        /// <param name="name">The server name</param>
+        /// <returns>The created <see cref="MjpegServer"/></returns>
         public MjpegServer AddServer(string name)
         {
             int port;
@@ -402,6 +556,12 @@ namespace WPILib
             return AddServer(name, port);
         }
 
+        /// <summary>
+        /// Adds an MJPEG server
+        /// </summary>
+        /// <param name="name">The server name</param>
+        /// <param name="port">The server port</param>
+        /// <returns>The created <see cref="MjpegServer"/></returns>
         public MjpegServer AddServer(string name, int port)
         {
             MjpegServer server = new MjpegServer(name, port);
@@ -409,6 +569,10 @@ namespace WPILib
             return server;
         }
 
+        /// <summary>
+        /// Adds an already created server.
+        /// </summary>
+        /// <param name="server">The server to add</param>
         public void AddServer(VideoSink server)
         {
             lock (m_lockObject)
@@ -417,6 +581,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Removes a server by name
+        /// </summary>
+        /// <param name="name">The server name</param>
         public void RemoveServer(string name)
         {
             lock (m_lockObject)
@@ -425,6 +593,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Adds an already created camera.
+        /// </summary>
+        /// <param name="camera">The camera to add</param>
         public void AddCamera(VideoSource camera)
         {
             string name = camera.Name;
@@ -438,6 +610,10 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Removes a camera by name
+        /// </summary>
+        /// <param name="name">The camera name</param>
         public void RemoveCamera(string name)
         {
             lock (m_lockObject)
