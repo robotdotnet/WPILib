@@ -14,6 +14,7 @@ using HAL = HAL.Base.HAL;
 using OpenCvSharp;
 using CSCore;
 using System.IO;
+using CTRE;
 
 namespace LoadTester
 {
@@ -22,10 +23,13 @@ namespace LoadTester
         Joystick joystick;
         Servo servo;
         AnalogGyro gyro;
+        private CANTalon talon;
 
         public override void RobotInit()
         {
-
+            talon = new CANTalon(1);
+            talon.Set(1.0);
+            Console.WriteLine("Successfully Created Talon SRX");
             Thread thread = new Thread(() =>
             {
                 UsbCamera camera = CameraServer.Instance.StartAutomaticCapture();
@@ -93,7 +97,27 @@ namespace LoadTester
         public static void Main(string[] args)
         {
             RobotBase.Main(null, typeof(MyRobot));
-            ;
+            /*
+            GripPipeline pipeline;
+            pipeline = new GripPipeline((v) =>
+            {
+                Mat last = v.lastImage;
+                Cv2.DrawContours(last, v.filterContoursOutput, -1, Scalar.Green, 3);
+                Cv2.ImShow("Hello!", last);
+                Cv2.WaitKey(1);
+                ;
+            });
+
+            VideoCapture cap = new VideoCapture(0);
+            Mat mat = new Mat();
+            while (true)
+            {
+                cap.Read(mat);
+                pipeline.process(mat);
+
+                
+            }
+            */
         }
     }
 }
