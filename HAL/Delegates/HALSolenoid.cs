@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
- using HAL.NativeLoader;
+ using NativeLibraryUtilities;
 
 // ReSharper disable CheckNamespace
 namespace HAL.Base

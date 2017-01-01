@@ -2,7 +2,7 @@
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using HAL.Base;
-using HAL.NativeLoader;
+using NativeLibraryUtilities;
 using static HAL.Base.HAL;
 
 namespace HAL.Simulator.Data

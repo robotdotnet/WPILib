@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using HAL.NativeLoader;
 using System.Reflection;
+using NativeLibraryUtilities;
 
 namespace HAL.Base
 {

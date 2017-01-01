@@ -52,6 +52,10 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NativeLibraryUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NativeLibraryUtilities.1.0.0-rc3\lib\net45\NativeLibraryUtilities.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,17 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Delegates\LibraryLoaderHolder.cs" />
-    <Compile Include="NativeLoader\ILibraryInformation.cs" />
-    <Compile Include="NativeLoader\ILibraryLoader.cs" />
-    <Compile Include="NativeLoader\LinuxLibraryLoader.cs" />
-    <Compile Include="NativeLoader\MacOsLibraryLoader.cs" />
-    <Compile Include="NativeLoader\NativeDelegateAttribute.cs" />
-    <Compile Include="NativeLoader\NativeDelegateInitializer.cs" />
-    <Compile Include="NativeLoader\NativeLibraryLoader.cs" />
-    <Compile Include="NativeLoader\OsType.cs" />
-    <Compile Include="NativeLoader\RoboRioLibraryLoader.cs" />
-    <Compile Include="NativeLoader\Uname.cs" />
-    <Compile Include="NativeLoader\WindowsLibraryLoader.cs" />
     <Compile Include="Base\HAL.cs" />
     <Compile Include="Base\HALCAN.cs" />
     <Compile Include="Base\HALErrors.cs" />

@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using HAL.NativeLoader;
+using NativeLibraryUtilities;
 
 namespace HAL.Base
 {
