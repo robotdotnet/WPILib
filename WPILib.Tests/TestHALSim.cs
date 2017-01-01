@@ -11,13 +11,13 @@ namespace WPILib.Tests
     [TestFixture, Ignore("Not finished in sim")]
     public class TestHALSim : TestBase
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public static void TestSetup()
         {
             StopDSLoop();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public static void TestTeardown()
         {
             StartDSLoop();

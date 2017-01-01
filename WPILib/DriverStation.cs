@@ -118,12 +118,12 @@ namespace WPILib
 
 
             //Starts the driver station thread in the background.
-            var thread = new Thread(Task)
+            m_dsThread = new Thread(Task)
             {
                 IsBackground = true,
                 Name = "FRCDriverStation"
             };
-            thread.Start();
+            m_dsThread.Start();
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace WPILib
                     // Return true if we have received a proper signal
                     return true;
                 }
-                catch (ThreadInterruptedException ex)
+                catch (ThreadInterruptedException)
                 {
                     // return false on a thread interrupt
                     return false;
@@ -900,12 +900,30 @@ namespace WPILib
             return time;
         }
 
+        /// <summary>
+        /// Reports a warning to the Driver Station
+        /// </summary>
+        /// <param name="error"></param>
+        /// <param name="printTrace"></param>
+        /// <param name="errorCode"></param>
+        /// <param name="memberName"></param>
+        /// <param name="filePath"></param>
+        /// <param name="lineNumber"></param>
         public static void ReportWarning(string error, bool printTrace, int errorCode = 1, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {
             ReportErrorImpl(false, errorCode, error, printTrace, memberName, filePath, lineNumber);
         }
 
+        /// <summary>
+        /// Reports an error to the Driver Station
+        /// </summary>
+        /// <param name="error"></param>
+        /// <param name="printTrace"></param>
+        /// <param name="errorCode"></param>
+        /// <param name="memberName"></param>
+        /// <param name="filePath"></param>
+        /// <param name="lineNumber"></param>
         public static void ReportError(string error, bool printTrace, int errorCode = 1, [CallerMemberName] string memberName = "",
             [CallerFilePath] string filePath = "", [CallerLineNumber] int lineNumber = 0)
         {

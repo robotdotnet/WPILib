@@ -153,6 +153,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the offset for the AnalogGyro
+        /// </summary>
         public double Offset
         {
             get
@@ -164,6 +167,9 @@ namespace WPILib
             }
         }
 
+        /// <summary>
+        /// Gets the center for the AnalogGyro
+        /// </summary>
         public int Center
         {
             get

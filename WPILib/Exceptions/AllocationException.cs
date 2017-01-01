@@ -7,6 +7,9 @@ namespace WPILib.Exceptions
     /// </summary>
     public class AllocationException : Exception
     {
+        /// <summary>
+        /// Gets the status code of the exception
+        /// </summary>
         public int Status { get; private set; }
 
         /// <summary>

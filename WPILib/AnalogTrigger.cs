@@ -7,11 +7,26 @@ using static WPILib.Utility;
 
 namespace WPILib
 {
+    /// <summary>
+    /// The available types of Analog Triggers
+    /// </summary>
     public enum AnalogTriggerType
     {
+        /// <summary>
+        /// True if the trigger is in range
+        /// </summary>
         InWindow = 0,
+        /// <summary>
+        /// True if the trigger was last above or below the range
+        /// </summary>
         State = 1,
+        /// <summary>
+        /// Wrap around on falling
+        /// </summary>
         RisingPulse = 2,
+        /// <summary>
+        /// Wrap around on rising
+        /// </summary>
         FallingPulse = 3,
     }
 

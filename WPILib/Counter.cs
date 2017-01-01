@@ -21,11 +21,26 @@ namespace WPILib
     /// them to be zeroes before use.</para></remarks>
     public class Counter : SensorBase, ICounterBase, IPIDSource, ILiveWindowSendable
     {
+        /// <summary>
+        /// The allowed counter modes
+        /// </summary>
         public enum Mode
         {
+            /// <summary>
+            /// TwoPulse
+            /// </summary>
             TwoPulse = 0,
+            /// <summary>
+            /// SemiPeriod
+            /// </summary>
             Semiperiod = 1,
+            /// <summary>
+            /// PulseLength
+            /// </summary>
             PulseLength = 2,
+            /// <summary>
+            /// ExternalDirection
+            /// </summary>
             ExternalDirection = 3
         }
 

@@ -145,13 +145,13 @@ namespace WPILib.Interfaces
         SoftPositionLimits = 1,
         /* SRX extensions */
         /// <summary>
-        /// Disable switches and disable soft limits.  Only valid for methods on <see cref="CANTalon"/> objects.
+        /// Disable switches and disable soft limits.  Only valid for methods on CANTalon objects.
         /// </summary>
         SrxDisableSwitchInputs = 2,
     };
 
     /// <summary>
-    /// Interface for CAN Speed Controllers like <see cref="CANTalon"/> and <see cref="CANJaguar"/>
+    /// Interface for CAN Speed Controllers like CANTalon and <see cref="CANJaguar"/>
     /// </summary>
     // ReSharper disable once PossibleInterfaceMemberAmbiguity
     public interface ICANSpeedController : ISpeedController, IPIDInterface, ILiveWindowSendable
