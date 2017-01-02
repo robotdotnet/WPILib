@@ -114,13 +114,10 @@ namespace WPILib.Extras.NavX
             else {
                 curr_data = new byte[IMURegisters.NAVX_REG_QUAT_OFFSET_Z_H + 1 - first_address];
             }
-            long timestamp_low, timestamp_high;
-            long sensor_timestamp;
             if (io_provider.Read(first_address, curr_data))
             {
-                timestamp_low = (long)AHRSProtocol.decodeBinaryUint16(curr_data, IMURegisters.NAVX_REG_TIMESTAMP_L_L - first_address);
-                timestamp_high = (long)AHRSProtocol.decodeBinaryUint16(curr_data, IMURegisters.NAVX_REG_TIMESTAMP_H_L - first_address);
-                sensor_timestamp = (timestamp_high << 16) + timestamp_low;
+                long sensor_timestamp = AHRSProtocol.decodeBinaryUint32(curr_data,
+                    IMURegisters.NAVX_REG_TIMESTAMP_L_L - first_address);
                 ahrspos_update.op_status = curr_data[IMURegisters.NAVX_REG_OP_STATUS - first_address];
                 ahrspos_update.selftest_status = curr_data[IMURegisters.NAVX_REG_SELFTEST_STATUS - first_address];
                 ahrspos_update.cal_status = curr_data[IMURegisters.NAVX_REG_CAL_STATUS];
@@ -136,10 +133,10 @@ namespace WPILib.Extras.NavX
                 ahrspos_update.altitude = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_ALTITUDE_D_L - first_address);
                 ahrspos_update.barometric_pressure = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_PRESSURE_DL - first_address);
                 ahrspos_update.fused_heading = AHRSProtocol.decodeProtocolUnsignedHundredthsFloat(curr_data, IMURegisters.NAVX_REG_FUSED_HEADING_L - first_address);
-                ahrspos_update.quat_w = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_W_L - first_address);
-                ahrspos_update.quat_x = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_X_L - first_address);
-                ahrspos_update.quat_y = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_Y_L - first_address);
-                ahrspos_update.quat_z = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_Z_L - first_address);
+                ahrspos_update.quat_w = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_W_L - first_address) / 32768.0f;
+                ahrspos_update.quat_x = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_X_L - first_address) / 32768.0f;
+                ahrspos_update.quat_y = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_Y_L - first_address) / 32768.0f;
+                ahrspos_update.quat_z = AHRSProtocol.decodeBinaryInt16(curr_data, IMURegisters.NAVX_REG_QUAT_Z_L - first_address) / 32768.0f;
                 if (displacement_registers)
                 {
                     ahrspos_update.vel_x = AHRSProtocol.decodeProtocol1616Float(curr_data, IMURegisters.NAVX_REG_VEL_X_I_L - first_address);
@@ -226,6 +223,7 @@ namespace WPILib.Extras.NavX
         {
             io_provider.Write(IMURegisters.NAVX_REG_INTEGRATION_CTL,
                                        AHRSProtocol.NAVX_INTEGRATION_CTL_RESET_YAW);
+            this.notify_sink.YawResetComplete();
         }
 
 

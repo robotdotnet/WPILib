@@ -11,6 +11,8 @@ namespace WPILib.Extras.NavX
     {
         SPI port;
         int bitrate;
+        private readonly object lockObject = new object();
+        private bool trace = true;
 
         const int DEFAULT_SPI_BITRATE_HZ = 500000;
 
@@ -42,8 +44,14 @@ namespace WPILib.Extras.NavX
             cmd[0] = (byte)(address | (byte)0x80);
             cmd[1] = value;
             cmd[2] = AHRSProtocol.getCRC(cmd, 2);
-            if (port.Write(cmd, cmd.Length) != cmd.Length)
+            bool write_ok;
+            lock (lockObject)
             {
+                write_ok = (port.Write(cmd, cmd.Length) == cmd.Length);
+            }
+            if (!write_ok)
+            {
+                if (trace) Console.WriteLine("navX-MXP SPI Read: Write error");
                 return false; // WRITE ERROR
             }
             return true;
@@ -55,23 +63,28 @@ namespace WPILib.Extras.NavX
             cmd[0] = first_address;
             cmd[1] = (byte)buffer.Length;
             cmd[2] = AHRSProtocol.getCRC(cmd, 2);
-            if (port.Write(cmd, cmd.Length) != cmd.Length)
+            lock (lockObject)
             {
-                return false; // WRITE ERROR
+                if (port.Write(cmd, cmd.Length) != cmd.Length)
+                {
+                    return false; // WRITE ERROR
+                }
+                // delay 200 us /* TODO:  What is min. granularity of delay()? */
+                Timer.Delay(0.001);
+                byte[] received_data = new byte[buffer.Length + 1];
+                if (port.Read(true, received_data, received_data.Length) != received_data.Length)
+                {
+                    if (trace) Console.WriteLine("navX-MXP SPI Read:  Read error");
+                    return false; // READ ERROR
+                }
+                byte crc = AHRSProtocol.getCRC(received_data, received_data.Length - 1);
+                if (crc != received_data[received_data.Length - 1])
+                {
+                    if (trace) Console.WriteLine("navX-MXP SPI Read:  CRC error");
+                    return false; // CRC ERROR
+                }
+                Array.Copy(received_data, 0, buffer, 0, received_data.Length - 1);
             }
-            // delay 200 us /* TODO:  What is min. granularity of delay()? */
-            Timer.Delay(0.001);
-            byte[] received_data = new byte[buffer.Length + 1];
-            if (port.Read(true, received_data, received_data.Length) != received_data.Length)
-            {
-                return false; // READ ERROR
-            }
-            byte crc = AHRSProtocol.getCRC(received_data, received_data.Length - 1);
-            if (crc != received_data[received_data.Length - 1])
-            {
-                return false; // CRC ERROR
-            }
-            Array.Copy(received_data, 0, buffer, 0, received_data.Length - 1);
             return true;
         }
     public bool Shutdown()

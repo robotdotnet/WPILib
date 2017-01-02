@@ -8,81 +8,135 @@ namespace WPILib.Extras.NavX
 {
     class ContinuousAngleTracker
     {
-        private float m_lastAngle;
-        private double m_lastRate;
-        private int m_zeroCrossingCount;
+        private readonly object lockObject = new object();
+        private bool fFirstUse;
+        private double gyro_prevVal;
+        private int ctrRollOver;
+        float curr_yaw_angle;
+        float last_yaw_angle;
+        double angleAdjust;
 
         public ContinuousAngleTracker()
         {
-            m_lastAngle = 0.0f;
-            m_zeroCrossingCount = 0;
-            m_lastRate = 0;
+            Init();
+            angleAdjust = 0.0f;
+        }
+
+        private void Init()
+        {
+            gyro_prevVal = 0.0;
+            ctrRollOver = 0;
+            fFirstUse = true;
+            last_yaw_angle = 0.0f;
+            curr_yaw_angle = 0.0f;
         }
 
         public void NextAngle(float newAngle)
         {
-
-            int angleLastDirection;
-            float adjustedLastAngle = (m_lastAngle < 0.0f) ? m_lastAngle + 360.0f : m_lastAngle;
-            float adjustedCurrAngle = (newAngle < 0.0f) ? newAngle + 360.0f : newAngle;
-            float deltaAngle = adjustedCurrAngle - adjustedLastAngle;
-            this.m_lastRate = deltaAngle;
-
-            angleLastDirection = 0;
-            if (adjustedCurrAngle < adjustedLastAngle)
-            {
-                if (deltaAngle < -180.0f)
-                {
-                    angleLastDirection = -1;
-                }
-                else {
-                    angleLastDirection = 1;
-                }
+            lock(lockObject){
+                last_yaw_angle = curr_yaw_angle;
+                curr_yaw_angle = newAngle;
             }
-            else if (adjustedCurrAngle > adjustedLastAngle)
-            {
-                if (deltaAngle > 180.0f)
-                {
-                    angleLastDirection = -1;
-                }
-                else {
-                    angleLastDirection = 1;
-                }
-            }
+        }
 
-            if (angleLastDirection < 0)
-            {
-                if ((adjustedCurrAngle < 0.0f) && (adjustedLastAngle >= 0.0f))
-                {
-                    m_zeroCrossingCount--;
-                }
+        /* Invoked (internally) whenever yaw reset occurs. */
+        public void Reset()
+        {
+            lock(lockObject){
+                Init();
             }
-            else if (angleLastDirection > 0)
-            {
-                if ((adjustedCurrAngle >= 0.0f) && (adjustedLastAngle < 0.0f))
-                {
-                    m_zeroCrossingCount++;
-                }
-            }
-            m_lastAngle = newAngle;
-
         }
 
         public double GetAngle()
         {
-            double accumulatedAngle = (double)m_zeroCrossingCount * 360.0f;
-            double currAngle = (double)m_lastAngle;
-            if (currAngle < 0.0f)
-            {
-                currAngle += 360.0f;
+            // First case
+            // Old reading: +150 degrees
+            // New reading: +170 degrees
+            // Difference:  (170 - 150) = +20 degrees
+
+            // Second case
+            // Old reading: -20 degrees
+            // New reading: -50 degrees
+            // Difference : (-50 - -20) = -30 degrees 
+
+            // Third case
+            // Old reading: +179 degrees
+            // New reading: -179 degrees
+            // Difference:  (-179 - 179) = -358 degrees
+
+            // Fourth case
+            // Old reading: -179  degrees
+            // New reading: +179 degrees
+            // Difference:  (+179 - -179) = +358 degrees
+
+            double difference;
+            double gyroVal;
+            double yawVal;
+
+            lock(lockObject) {
+                yawVal = curr_yaw_angle;
+
+                // Has gyro_prevVal been previously set?
+                // If not, return do not calculate, return current value
+                if (!fFirstUse)
+                {
+                    // Determine count for rollover counter
+                    difference = yawVal - gyro_prevVal;
+
+                    /* Clockwise past +180 degrees
+                     * If difference > 180*, increment rollover counter */
+                    if (difference < -180.0)
+                    {
+                        ctrRollOver++;
+
+                        /* Counter-clockwise past -180 degrees:
+                         * If difference > 180*, decrement rollover counter */
+                    }
+                    else if (difference > 180.0)
+                    {
+                        ctrRollOver--;
+                    }
+                }
+
+                // Mark gyro_prevVal as being used
+                fFirstUse = false;
+
+                // Calculate value to return back to calling function
+                // e.g. +720 degrees or -360 degrees
+                gyroVal = yawVal + (360.0 * ctrRollOver);
+                gyro_prevVal = yawVal;
+
+                return gyroVal + angleAdjust;
             }
-            accumulatedAngle += currAngle;
-            return accumulatedAngle;
+        }
+
+        public void SetAngleAdjustment(double adjustment)
+        {
+            angleAdjust = adjustment;
+        }
+
+        public double GetAngleAdjustment()
+        {
+            return angleAdjust;
         }
 
         public double GetRate()
         {
-            return m_lastRate;
+            float difference;
+            lock(lockObject) {
+                difference = curr_yaw_angle - last_yaw_angle;
+            }
+            if (difference > 180.0f)
+            {
+                /* Clockwise past +180 degrees */
+                difference = 360.0f - difference;
+            }
+            else if (difference < -180.0f)
+            {
+                /* Counter-clockwise past -180 degrees */
+                difference = 360.0f + difference;
+            }
+            return difference;
         }
     }
 }

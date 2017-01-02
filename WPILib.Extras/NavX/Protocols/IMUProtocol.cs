@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WPILib.Extras.NavX.Protocols
 {
-    internal class IMUProtocol
+    public class IMUProtocol
     {
         public const byte PACKET_START_CHAR = (byte)'!';
         const int PROTOCOL_FLOAT_LENGTH = 7;

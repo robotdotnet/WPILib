@@ -97,6 +97,7 @@
     <Compile Include="NavX\Protocols\AHRSProtocol.cs" />
     <Compile Include="NavX\Protocols\IMUProtocol.cs" />
     <Compile Include="NavX\Protocols\IMURegisters.cs" />
+    <Compile Include="NavX\Quaternion.cs" />
     <Compile Include="NavX\RegisterIO.cs" />
     <Compile Include="NavX\RegisterIO_I2C.cs" />
     <Compile Include="NavX\RegisterIO_SPI.cs" />

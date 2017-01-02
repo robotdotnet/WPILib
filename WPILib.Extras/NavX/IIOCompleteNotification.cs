@@ -26,5 +26,6 @@ namespace WPILib.Extras.NavX
         void SetRawData(IMUProtocol.GyroUpdate rawDataUpdate);
         void SetBoardID(AHRSProtocol.BoardID boardId);
         void SetBoardState(BoardState boardState);
+        void YawResetComplete();
     }
 }

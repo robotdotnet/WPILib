@@ -232,7 +232,8 @@ namespace WPILib.Extras.NavX
 
                     if (!m_stop && (remainder_bytes == 0) && (serial_port.GetBytesReceived() < 1))
                     {
-                        Timer.Delay(1.0 / update_rate_hz);
+                        double update_rate = 1.0 / ((double)((int)(this.update_rate_hz & 0xFF)));
+                        Timer.Delay(update_rate);
                     }
 
                     int packets_received = 0;
@@ -363,6 +364,10 @@ namespace WPILib.Extras.NavX
                                             SmartDashboard.SmartDashboard.PutNumber("navX Integration Control Response Count", integration_response_receive_count);
                                         }
                                         i += packet_length;
+                                        if ((integration_control.action & AHRSProtocol.NAVX_INTEGRATION_CTL_RESET_YAW) != 0)
+                                        {
+                                            this.notify_sink.YawResetComplete();
+                                        }
                                     }
                                     else {
                                         /* Even though a start-of-packet indicator was found, the  */
@@ -543,7 +548,8 @@ namespace WPILib.Extras.NavX
                             // If no bytes remain in the buffer, and not awaiting a response, sleep a bit
                             if (stream_response_received && (serial_port.GetBytesReceived() == 0))
                             {
-                                Timer.Delay(1.0 / update_rate_hz);
+                                double update_rate = 1.0 / ((double)((int)(this.update_rate_hz & 0xFF)));
+                                Timer.Delay(update_rate);
                             }
                         }
 

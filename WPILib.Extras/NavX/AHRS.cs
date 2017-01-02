@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using NetworkTables.Tables;
 using WPILib.Extras.NavX.Protocols;
@@ -98,6 +99,7 @@ namespace WPILib.Extras.NavX
 
         const byte NavxDefaultUpdateRateHz = 50;
         const int YawHistoryLength = 10;
+        const float QuaternionHistorySeconds = 5.0f;
         const short DefaultAccelFsrG = 2;
         const short DefaultGyroFsrDps = 2000;
 
@@ -120,10 +122,10 @@ namespace WPILib.Extras.NavX
         volatile bool m_altitudeValid;
         volatile bool m_isMagnetometerCalibrated;
         volatile bool m_magneticDisturbance;
-        volatile short m_quaternionW;
-        volatile short m_quaternionX;
-        volatile short m_quaternionY;
-        volatile short m_quaternionZ;
+        volatile float m_quaternionW;
+        volatile float m_quaternionX;
+        volatile float m_quaternionY;
+        volatile float m_quaternionZ;
 
         /* Integrated Data */
         float[] m_velocity = new float[3];
@@ -168,6 +170,10 @@ namespace WPILib.Extras.NavX
         BoardCapabilities m_boardCapabilities;
         IoCompleteNotification m_ioCompleteSink;
         IoThread m_ioThread;
+
+        private Action<long, long, AHRSProtocol.AHRSUpdateBase, object>[] callbacks;
+        private object[] callbackContexts;
+        private const int MaxNumCallbacks = 3;
 
         /***********************************************************/
         /* Public Interface Implementation                         */
@@ -365,10 +371,12 @@ namespace WPILib.Extras.NavX
             if (m_boardCapabilities.IsBoardYawResetSupported())
             {
                 m_io.ZeroYaw();
+                // Notification differed
             }
             else
             {
                 m_yawOffsetTracker.SetOffset();
+                m_ioCompleteSink.YawResetComplete();
             }
         }
 
@@ -417,8 +425,27 @@ namespace WPILib.Extras.NavX
             return m_io.GetByteCount();
         }
 
+        public int GetActualUpdateRate()
+        {
+            byte actualUpdateRate = GetActualUpdateRateInternal((byte)GetRequestedUpdateRate());
+            return (int) (actualUpdateRate & 0xff);
+        }
+
+        private byte GetActualUpdateRateInternal(byte updateRate)
+        {
+            const int NavxMotionProcessorUpdateRateHz = 200;
+            int intUpdateRate = (int) (updateRate & 0xFF);
+            int realizedUpdateRate = NavxMotionProcessorUpdateRateHz/(NavxMotionProcessorUpdateRateHz/intUpdateRate);
+            return (byte) realizedUpdateRate;
+        }
+
+        public int GetRequestedUpdateRate()
+        {
+            return (int) (this.m_updateRateHz & 0xff);
+        }
+
         /// <summary>
-        /// Returns teh count of valid updates which have been received 
+        /// Returns the count of valid updates which have been received 
         /// from the sensor.
         /// </summary>
         /// <remarks>This count should increase at the same
@@ -613,7 +640,7 @@ namespace WPILib.Extras.NavX
         /// <returns>The imaginary portion (W) of the quanterion.</returns>
         public float GetQuaternionW()
         {
-            return ((float)m_quaternionW / 16384.0f);
+            return m_quaternionW;
         }
 
         /// <summary>
@@ -632,7 +659,7 @@ namespace WPILib.Extras.NavX
         /// <returns>The real portion (X) of the quanterion.</returns>
         public float GetQuaternionX()
         {
-            return ((float)m_quaternionX / 16384.0f);
+            return m_quaternionX;
         }
 
         /// <summary>
@@ -651,7 +678,7 @@ namespace WPILib.Extras.NavX
         /// <returns>The real portion (Y) of the quanterion.</returns>
         public float GetQuaternionY()
         {
-            return ((float)m_quaternionY / 16384.0f);
+            return m_quaternionY;
         }
 
         /// <summary>
@@ -670,7 +697,7 @@ namespace WPILib.Extras.NavX
         /// <returns>The real portion (Z) of the quanterion.</returns>
         public float GetQuaternionZ()
         {
-            return ((float)m_quaternionZ / 16384.0f);
+            return m_quaternionZ;
         }
 
         /// <summary>
@@ -798,6 +825,37 @@ namespace WPILib.Extras.NavX
             return (m_boardCapabilities.IsDisplacementSupported() ? m_displacement[2] : 0.0f);
         }
 
+        public bool RegisterCallback(Action<long, long, AHRSProtocol.AHRSUpdateBase, object> callback, object callbackContext)
+        {
+            bool registered = false;
+            for (int i = 0; i < callbacks.Length; i++)
+            {
+                if (callbacks[i] == null)
+                {
+                    callbacks[i] = callback;
+                    callbackContexts[i] = callbackContext;
+                    registered = true;
+                    break;
+                }
+            }
+            return registered;
+        }
+
+        public bool DeregisterCallback(Action<long, long, AHRSProtocol.AHRSUpdateBase, object> callback)
+        {
+            bool deregisted = false;
+            for (int i = 0; i < callbacks.Length; i++)
+            {
+                if (callbacks[i] == callback)
+                {
+                    callbacks[i] = null;
+                    deregisted = true;
+                    break;
+                }
+            }
+            return deregisted;
+        }
+
         /***********************************************************/
         /* Internal Implementation                                  */
         /***********************************************************/
@@ -811,6 +869,8 @@ namespace WPILib.Extras.NavX
             m_integrator = new InertialDataIntegrator();
             m_yawOffsetTracker = new OffsetTracker(YawHistoryLength);
             m_yawAngleTracker = new ContinuousAngleTracker();
+            callbacks = new Action<long, long, AHRSProtocol.AHRSUpdateBase, object>[MaxNumCallbacks];
+            callbackContexts = new object[MaxNumCallbacks];
         }
 
         /***********************************************************/
@@ -872,6 +932,16 @@ namespace WPILib.Extras.NavX
         public double GetRate()
         {
             return m_yawAngleTracker.GetRate();
+        }
+
+        public void SetAngleAdjustment(double adjustment)
+        {
+            m_yawAngleTracker.SetAngleAdjustment(adjustment);
+        }
+
+        public double GetAngleAdjustment()
+        {
+            return m_yawAngleTracker.GetAngleAdjustment();
         }
 
         /// <summary>
@@ -1261,6 +1331,14 @@ namespace WPILib.Extras.NavX
 
                 m_parent.m_yawAngleTracker.NextAngle(m_parent.GetYaw());
 
+                // Notify external data arrival subscribers
+                for (int i = 0; i < m_parent.callbacks.Length; i++)
+                {
+                    var callback = m_parent.callbacks[i];
+                    long timeStamp = (long) (Timer.GetFPGATimestamp()*1000.0);
+                    callback?.Invoke(timeStamp, m_parent.m_lastSensorTimestamp, ahrsUpdate, m_parent.callbackContexts[i]);
+                }
+
             }
 
 
@@ -1347,6 +1425,14 @@ namespace WPILib.Extras.NavX
 
                 m_parent.m_yawAngleTracker.NextAngle(m_parent.GetYaw());
 
+                // Notify external data arrival subscribers
+                for (int i = 0; i < m_parent.callbacks.Length; i++)
+                {
+                    var callback = m_parent.callbacks[i];
+                    long timeStamp = (long)(Timer.GetFPGATimestamp() * 1000.0);
+                    callback?.Invoke(timeStamp, m_parent.m_lastSensorTimestamp, ahrsUpdate, m_parent.callbackContexts[i]);
+                }
+
             }
 
 
@@ -1370,6 +1456,11 @@ namespace WPILib.Extras.NavX
                 m_parent.m_sensorStatus = boardState.SensorStatus;
                 m_parent.m_calStatus = boardState.CalStatus;
                 m_parent.m_selftestStatus = boardState.SelftestStatus;
+            }
+
+            public void YawResetComplete()
+            {
+                m_parent.m_yawAngleTracker.Reset();
             }
         };
 

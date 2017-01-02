@@ -1,6 +1,6 @@
 ﻿namespace WPILib.Extras.NavX.Protocols
 {
-    internal class AHRSProtocol : IMUProtocol
+    public class AHRSProtocol : IMUProtocol
     {
         /* NAVX_CAL_STATUS */
 
@@ -192,7 +192,7 @@
         const int INTEGRATION_CONTROL_CMD_MESSAGE_LENGTH = 13;
 
         /* Integration Control Response Packet */
-        public const byte MSGID_INTEGRATION_CONTROL_RESP = (byte)'i';
+        public const byte MSGID_INTEGRATION_CONTROL_RESP = (byte)'j';
         const int INTEGRATION_CONTROL_RESP_ACTION_INDEX = 4;
         const int INTEGRATION_CONTROL_RESP_PARAMETER_INDEX = 5;
         const int INTEGRATION_CONTROL_RESP_MESSAGE_CHECKSUM_INDEX = 9;
@@ -253,7 +253,7 @@
 
         public const int MAX_BINARY_MESSAGE_LENGTH = AHRSPOS_UPDATE_MESSAGE_LENGTH;
 
-        public class AHRSUpdate
+        public class AHRSUpdateBase
         {
             public float yaw;
             public float pitch;
@@ -264,19 +264,11 @@
             public float linear_accel_x;
             public float linear_accel_y;
             public float linear_accel_z;
-            public short cal_mag_x;
-            public short cal_mag_y;
-            public short cal_mag_z;
-            public float mag_field_norm_ratio;
-            public float mag_field_norm_scalar;
             public float mpu_temp;
-            public short raw_mag_x;
-            public short raw_mag_y;
-            public short raw_mag_z;
-            public short quat_w;
-            public short quat_x;
-            public short quat_y;
-            public short quat_z;
+            public float quat_w;
+            public float quat_x;
+            public float quat_y;
+            public float quat_z;
             public float barometric_pressure;
             public float baro_temp;
             public byte op_status;
@@ -285,34 +277,31 @@
             public byte selftest_status;
         }
 
-        public class AHRSPosUpdate
+        public class AHRSUpdate : AHRSUpdateBase
         {
-            public float yaw;
-            public float pitch;
-            public float roll;
-            public float compass_heading;
-            public float altitude;
-            public float fused_heading;
-            public float linear_accel_x;
-            public float linear_accel_y;
-            public float linear_accel_z;
+            public short cal_mag_x;
+            public short cal_mag_y;
+            public short cal_mag_z;
+            public float mag_field_norm_ratio;
+            public float mag_field_norm_scalar;
+            public short raw_mag_x;
+            public short raw_mag_y;
+            public short raw_mag_z;
+        }
+
+        public class AHRSPosUpdate : AHRSUpdateBase
+        {
             public float vel_x;
             public float vel_y;
             public float vel_z;
             public float disp_x;
             public float disp_y;
             public float disp_z;
-            public float mpu_temp;
-            public short quat_w;
-            public short quat_x;
-            public short quat_y;
-            public short quat_z;
-            public float barometric_pressure;
-            public float baro_temp;
-            public byte op_status;
-            public byte sensor_status;
-            public byte cal_status;
-            public byte selftest_status;
+        }
+
+        public class AHRSPosTSUpdate : AHRSPosUpdate
+        {
+            public long timestamp;
         }
 
         public class DataSetResponse
@@ -403,10 +392,10 @@
                 u.raw_mag_x = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_RAW_MAG_X_VALUE_INDEX);
                 u.raw_mag_y = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_RAW_MAG_Y_VALUE_INDEX);
                 u.raw_mag_z = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_RAW_MAG_Z_VALUE_INDEX);
-                u.quat_w = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_W_VALUE_INDEX);
-                u.quat_x = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_X_VALUE_INDEX);
-                u.quat_y = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_Y_VALUE_INDEX);
-                u.quat_z = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_Z_VALUE_INDEX);
+                u.quat_w = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_W_VALUE_INDEX) / 16384.0f;
+                u.quat_x = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_X_VALUE_INDEX) / 16384.0f;
+                u.quat_y = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_Y_VALUE_INDEX) / 16384.0f;
+                u.quat_z = decodeBinaryInt16(buffer, offset + AHRS_UPDATE_QUAT_Z_VALUE_INDEX) / 16384.0f;
                 u.barometric_pressure = decodeProtocol1616Float(buffer, offset + AHRS_UPDATE_BARO_PRESSURE_VALUE_INDEX);
                 u.baro_temp = decodeProtocolSignedHundredthsFloat(buffer, offset + AHRS_UPDATE_BARO_TEMP_VAUE_INDEX);
                 u.op_status = buffer[AHRS_UPDATE_OPSTATUS_VALUE_INDEX];
@@ -453,10 +442,10 @@
                 u.disp_y = decodeProtocol1616Float(buffer, offset + AHRSPOS_UPDATE_DISP_Y_VALUE_INDEX);
                 u.disp_z = decodeProtocol1616Float(buffer, offset + AHRSPOS_UPDATE_DISP_Z_VALUE_INDEX);
                 u.mpu_temp = decodeProtocolSignedHundredthsFloat(buffer, offset + AHRSPOS_UPDATE_MPU_TEMP_VAUE_INDEX);
-                u.quat_w = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_W_VALUE_INDEX);
-                u.quat_x = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_X_VALUE_INDEX);
-                u.quat_y = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_Y_VALUE_INDEX);
-                u.quat_z = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_Z_VALUE_INDEX);
+                u.quat_w = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_W_VALUE_INDEX) / 16384.0f;
+                u.quat_x = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_X_VALUE_INDEX) / 16384.0f;
+                u.quat_y = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_Y_VALUE_INDEX) / 16384.0f;
+                u.quat_z = decodeBinaryInt16(buffer, offset + AHRSPOS_UPDATE_QUAT_Z_VALUE_INDEX) / 16384.0f;
                 u.op_status = buffer[AHRSPOS_UPDATE_OPSTATUS_VALUE_INDEX];
                 u.sensor_status = buffer[AHRSPOS_UPDATE_SENSOR_STATUS_VALUE_INDEX];
                 u.cal_status = buffer[AHRSPOS_UPDATE_CAL_STATUS_VALUE_INDEX];
