@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using HAL.Base;
-using HAL.NativeLoader;
+using NativeLibraryUtilities;
 
 namespace HAL.Base
 {
