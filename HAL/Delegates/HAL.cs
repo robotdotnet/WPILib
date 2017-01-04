@@ -42,6 +42,7 @@ namespace HAL.Base
             HALSerialPort.Ping();
             HALSolenoid.Ping();
             HALSPI.Ping();
+            HALThreads.Ping();
         }
 
         /// <summary>

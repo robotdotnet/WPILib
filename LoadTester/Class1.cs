@@ -25,30 +25,45 @@ namespace LoadTester
 
         public override void RobotInit()
         {
-
-            Thread thread = new Thread(() =>
+            int status = 0;
+            var ret = HALThreads.HAL_SetCurrentThreadPriority(true, 25, ref status);
+            Console.WriteLine(status);
+            Console.WriteLine(ret);
+            Thread cameraThread = new Thread(() =>
             {
+                // Get the USB Camera from the camera server
                 UsbCamera camera = CameraServer.Instance.StartAutomaticCapture();
-                camera.SetResolution(320, 240);
+                camera.SetResolution(640, 480);
 
-
+                // Get a CvSink. This will capture Mats from the Camera
                 CvSink cvSink = CameraServer.Instance.GetVideo();
-                CvSource outputStream = CameraServer.Instance.PutVideo("Flip", 320, 240);
+                // Setup a CvSource. This will send images back to the dashboard
+                CvSource outputStream = CameraServer.Instance.PutVideo("Rectangle", 640, 480);
 
-                Mat source = new Mat();
-                Mat flip = new Mat();
-                Mat output = new Mat();
+                // Mats are very expensive. Let's reuse this Mat.
+
+                Mat mat = new Mat();
 
                 while (true)
                 {
-                    cvSink.GrabFrame(source);
-                    Cv2.CvtColor(source, flip, ColorConversionCodes.BGR2GRAY);
-                    Cv2.Flip(flip, output, FlipMode.X);
-                    outputStream.PutFrame(output);
+                    // Tell the CvSink to grab a frame from the camera and put it
+                    // in the source mat.  If there is an error notify the output.
+                    if (cvSink.GrabFrame(mat) == 0)
+                    {
+                        // Send the output the error.
+                        outputStream.NotifyError(cvSink.GetError());
+                        // skip the rest of the current iteration
+                        continue;
+                    }
+                    // Put a rectangle on the image
+                    Cv2.Rectangle(mat, new Point(100, 100), new Point(400, 400),
+                            new Scalar(255, 255, 255), 5);
+                    // Give the output stream a new image to display
+                    outputStream.PutFrame(mat);
                 }
             });
-
-            thread.Start();
+            cameraThread.IsBackground = true;
+            cameraThread.Start();
 
             servo = new Servo(0);
 
