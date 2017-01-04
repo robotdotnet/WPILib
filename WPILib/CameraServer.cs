@@ -279,7 +279,7 @@ namespace WPILib
                     default:
                         break;
                 }
-            }, 0x7fff, true);
+            }, (EventKind)0x7fff, true);
 
             m_tableListener = NtCore.AddEntryListener(PublishName, (uid, key, value, flags) =>
             {
