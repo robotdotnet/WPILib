@@ -53,7 +53,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NativeLibraryUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NativeLibraryUtilities.1.0.0-rc6\lib\net45\NativeLibraryUtilities.dll</HintPath>
+      <HintPath>..\packages\NativeLibraryUtilities.1.0.0\lib\net45\NativeLibraryUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -153,23 +153,6 @@
     <None Include="wpinative\libHALAthena.so" />
     <None Include="wpinative\libntcore.so" />
     <None Include="wpinative\libOpenCvSharpExtern.so" />
-    <None Include="wpinative\libopencv_calib3d.so.3.1" />
-    <None Include="wpinative\libopencv_core.so.3.1" />
-    <None Include="wpinative\libopencv_features2d.so.3.1" />
-    <None Include="wpinative\libopencv_flann.so.3.1" />
-    <None Include="wpinative\libopencv_highgui.so.3.1" />
-    <None Include="wpinative\libopencv_imgcodecs.so.3.1" />
-    <None Include="wpinative\libopencv_imgproc.so.3.1" />
-    <None Include="wpinative\libopencv_ml.so.3.1" />
-    <None Include="wpinative\libopencv_objdetect.so.3.1" />
-    <None Include="wpinative\libopencv_photo.so.3.1" />
-    <None Include="wpinative\libopencv_shape.so.3.1" />
-    <None Include="wpinative\libopencv_stitching.so.3.1" />
-    <None Include="wpinative\libopencv_superres.so.3.1" />
-    <None Include="wpinative\libopencv_video.so.3.1" />
-    <None Include="wpinative\libopencv_videoio.so.3.1" />
-    <None Include="wpinative\libopencv_videostab.so.3.1" />
-    <None Include="wpinative\libwpiutil.so" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -56,24 +56,24 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FRC.CameraServer, Version=0.9.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.CameraServer.0.9.4-rc2\lib\net45\FRC.CameraServer.dll</HintPath>
+    <Reference Include="FRC.CameraServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.CameraServer.1.0.0\lib\net45\FRC.CameraServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.3.1.4-rc3\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
+      <HintPath>..\packages\FRC.NetworkTables.Core.3.1.6\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FRC.NetworkTables.Core.DesktopLibraries, Version=3.1.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.DesktopLibraries.3.1.4-rc3\lib\net45\FRC.NetworkTables.Core.DesktopLibraries.dll</HintPath>
+    <Reference Include="FRC.NetworkTables.Core.DesktopLibraries, Version=3.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.Core.DesktopLibraries.3.1.6\lib\net45\FRC.NetworkTables.Core.DesktopLibraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.OpenCvSharp.0.9.5-rc3\lib\net45\FRC.OpenCvSharp.dll</HintPath>
+      <HintPath>..\packages\FRC.OpenCvSharp.1.0.0\lib\net45\FRC.OpenCvSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FRC.OpenCvSharp.DesktopLibraries, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.OpenCvSharp.DesktopLibraries.0.9.5-rc3\lib\net45\FRC.OpenCvSharp.DesktopLibraries.dll</HintPath>
+    <Reference Include="FRC.OpenCvSharp.DesktopLibraries, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.OpenCvSharp.DesktopLibraries.1.0.0\lib\net45\FRC.OpenCvSharp.DesktopLibraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -86,7 +86,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="NativeLibraryUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NativeLibraryUtilities.1.0.0-rc6\lib\net45\NativeLibraryUtilities.dll</HintPath>
+      <HintPath>..\packages\NativeLibraryUtilities.1.0.0\lib\net45\NativeLibraryUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
@@ -95,11 +95,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Collections.Immutable.1.3.0\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.Metadata.1.4.1\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <HintPath>..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

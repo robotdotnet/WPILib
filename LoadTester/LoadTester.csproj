@@ -33,28 +33,28 @@
     <StartupObject>LoadTester.MyRobot</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FRC.CameraServer, Version=0.9.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.CameraServer.0.9.4-rc2\lib\net45\FRC.CameraServer.dll</HintPath>
+    <Reference Include="FRC.CameraServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.CameraServer.1.0.0\lib\net45\FRC.CameraServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.3.1.4-rc3\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
+      <HintPath>..\packages\FRC.NetworkTables.Core.3.1.6\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FRC.NetworkTables.Core.DesktopLibraries, Version=3.1.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.DesktopLibraries.3.1.4-rc3\lib\net45\FRC.NetworkTables.Core.DesktopLibraries.dll</HintPath>
+    <Reference Include="FRC.NetworkTables.Core.DesktopLibraries, Version=3.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.Core.DesktopLibraries.3.1.6\lib\net45\FRC.NetworkTables.Core.DesktopLibraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.OpenCvSharp.0.9.5-rc3\lib\net45\FRC.OpenCvSharp.dll</HintPath>
+      <HintPath>..\packages\FRC.OpenCvSharp.1.0.0\lib\net45\FRC.OpenCvSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FRC.OpenCvSharp.DesktopLibraries, Version=0.9.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.OpenCvSharp.DesktopLibraries.0.9.5-rc3\lib\net45\FRC.OpenCvSharp.DesktopLibraries.dll</HintPath>
+    <Reference Include="FRC.OpenCvSharp.DesktopLibraries, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.OpenCvSharp.DesktopLibraries.1.0.0\lib\net45\FRC.OpenCvSharp.DesktopLibraries.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NativeLibraryUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NativeLibraryUtilities.1.0.0-rc6\lib\net45\NativeLibraryUtilities.dll</HintPath>
+      <HintPath>..\packages\NativeLibraryUtilities.1.0.0\lib\net45\NativeLibraryUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
