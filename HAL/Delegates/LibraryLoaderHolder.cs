@@ -103,7 +103,7 @@ namespace HAL.Base
                     }
                     else
                     {
-                        s_nativeLoader.LoadNativeLibraryFromReflectedAssembly("FRC.HAL.DesktopLibraries", "FRC.HAL.DesktopLibraries.Natives");
+                        s_nativeLoader.LoadNativeLibraryFromReflectedAssembly("FRC.HAL.DesktopLibraries");
                         s_libraryLocation = s_nativeLoader.LibraryLocation;
                     }
                 }
