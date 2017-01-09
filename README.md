@@ -1,7 +1,7 @@
 # RobotDotNet WPILib
 [![Build status](https://ci.appveyor.com/api/projects/status/owip0u906jj6j574/branch/master?svg=true)](https://ci.appveyor.com/project/robotdotnet/robotdotnet-wpilib/branch/master)   [![codecov.io](https://codecov.io/github/robotdotnet/WPILib/coverage.svg?branch=master)](https://codecov.io/github/robotdotnet/WPILib?branch=master)
 
-This repository contains the source code for a DotNet implentation of the WPILib. 
+This repository contains the source code for a DotNet implementation of the WPILib. 
 
 Documentation
 =============
@@ -22,7 +22,7 @@ Compiling
 
 Compiling the WPILib currently requires Visual Studio 2015+ or Mono 4.0+. This is because the project uses some C# 6.0 features. Since the program compiles down to a .NET 4.5 program, the library however can be used with VS 2013, or Mono 3.
 
-When you build the project in VS, the DLLs can be found in the Output\ folder. To reference this in your project, you first must uninstall the WPILib using the NuGet packet manager. Then reference the files found in the output folder. Note that if you do this you will loose intellisense for any overriden functions, because the intellisense for those is generated during the release process.
+When you build the project in VS, the DLLs can be found in the Output\ folder. To reference this in your project, you first must uninstall the WPILib using the NuGet packet manager. Then reference the files found in the output folder. Note that if you do this you will lose intellisense for any overriden functions, because the intellisense for those is generated during the release process.
 
 If you do find a bug that you need fixed, or a new feature to add, submit a pull request and we would be happy to look at it.
 
