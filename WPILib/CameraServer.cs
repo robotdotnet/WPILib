@@ -71,7 +71,7 @@ namespace WPILib
 
         private static string MakeStreamValue(string address, int port)
         {
-            return $"MJPEG:HTTP://{address}:{port.ToString()}/?action=stream";
+            return $"mjpeg:http://{address}:{port.ToString()}/?action=stream";
         }
 
         private ITable GetSourceTable(int source)
