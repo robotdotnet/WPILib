@@ -6,7 +6,7 @@ namespace WPILib.Commands
     /// A <see cref="PrintCommand"/> is a command which prints out a string when it is initialized, and then immediately finishes.
     /// </summary>
     /// <remarks>It is useful if you want a <see cref="CommandGroup"/> to print out a string when it reaches a certain point.</remarks>
-    public class PrintCommand : Command
+    public class PrintCommand : InstantCommand
     {
         private readonly string m_message;
 
@@ -23,27 +23,6 @@ namespace WPILib.Commands
         protected override void Initialize()
         {
             Console.WriteLine(m_message);
-        }
-
-        ///<inheritdoc/>
-        protected override void Execute()
-        {
-        }
-
-        ///<inheritdoc/>
-        protected override bool IsFinished()
-        {
-            return true;
-        }
-
-        ///<inheritdoc/>
-        protected override void End()
-        {
-        }
-
-        ///<inheritdoc/>
-        protected override void Interrupted()
-        {
         }
     }
 }

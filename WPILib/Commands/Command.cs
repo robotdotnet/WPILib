@@ -102,7 +102,7 @@ namespace WPILib.Commands
         /// <summary>
         /// Returns the name of this command.
         /// </summary><remarks>
-        /// If no name was specified in the constructor, 
+        /// If no name was specified in the constructor,
         /// then the default is the name of the class.
         /// </remarks>
         public string Name { get; }
@@ -235,7 +235,7 @@ namespace WPILib.Commands
         /// The initialize method is called the first time this Command is run after
         /// being started.
         /// </summary>
-        protected abstract void Initialize();
+        protected virtual void Initialize() { }
 
         /// <summary>
         /// A shadow method called before <see cref="Initialize()"/>
@@ -244,12 +244,12 @@ namespace WPILib.Commands
         {
 
         }
-        
+
         /// <summary>
         /// The execute method is called repeatedly until this <see cref="Command"/>
         /// either finishes or is canceled.
         /// </summary>
-        protected abstract void Execute();
+        protected virtual void Execute() { }
 
         /// <summary>
         /// A shadow method called before <see cref="Execute"/>.
@@ -270,12 +270,17 @@ namespace WPILib.Commands
         /// <seealso cref="Command.IsTimedOut()"/>
         protected abstract bool IsFinished();
 
+        protected internal bool _IsFinished()
+        {
+            return IsFinished();
+        }
+
         /// <summary>
         /// Called when the command ended peacefully
         /// </summary>
-        /// <remarks>This is where you may want to wrap up loose ends, 
+        /// <remarks>This is where you may want to wrap up loose ends,
         /// like shutting off a motor that was being used in the command.</remarks>
-        protected abstract void End();
+        protected virtual void End() { }
 
         /// <summary>
         /// A shadow method called before <see cref="End"/>.
@@ -293,7 +298,7 @@ namespace WPILib.Commands
         /// like shutting off a motor that was being used in the command.
         /// Generally, it is useful to call the <see cref="End"/> method
         /// within this method.</remarks>
-        protected abstract void Interrupted();
+        protected virtual void Interrupted() { }
 
         /// <summary>
         /// A shadow method called before <see cref="Interrupted"/>.
@@ -493,6 +498,17 @@ namespace WPILib.Commands
             lock (m_syncRoot)
             {
                 return m_requirements?.Contains(system) ?? false;
+            }
+        }
+
+        /// <summary>
+        /// Removes all requirements from the command
+        /// </summary>
+        protected internal void ClearRequirements()
+        {
+            lock (m_syncRoot)
+            {
+                m_requirements = new HashSet<Subsystem>();
             }
         }
 
