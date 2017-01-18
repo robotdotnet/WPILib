@@ -109,13 +109,16 @@
     <Compile Include="CAN\CANMessageNotFoundException.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandGroup.cs" />
+    <Compile Include="Commands\ConditionalCommand.cs" />
     <Compile Include="Commands\IllegalUseOfCommandException.cs" />
+    <Compile Include="Commands\InstantCommand.cs" />
     <Compile Include="Commands\PIDCommand.cs" />
     <Compile Include="Commands\PIDSubsystem.cs" />
     <Compile Include="Commands\PrintCommand.cs" />
     <Compile Include="Commands\Scheduler.cs" />
     <Compile Include="Commands\StartCommand.cs" />
     <Compile Include="Commands\Subsystem.cs" />
+    <Compile Include="Commands\TimedCommand.cs" />
     <Compile Include="Commands\WaitCommand.cs" />
     <Compile Include="Commands\WaitForChildren.cs" />
     <Compile Include="Commands\WaitUntilCommand.cs" />
