@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CSCore;
@@ -118,7 +119,7 @@ namespace WPILib
             }
         }
 
-        private static List<string> GetSourceStreamValues(int source)
+        private List<string> GetSourceStreamValues(int source)
         {
             // ignore all but httpcamera
             if (NativeMethods.GetSourceKind(source) != SourceKind.Http)
@@ -131,6 +132,23 @@ namespace WPILib
             {
                 values[i] = $"mjpeg:{values[i]}";
             }
+
+            lock (m_lockObject)
+            {
+                foreach (VideoSink i in m_sinks.Values)
+                {
+                    int sink = i.Handle;
+                    int sinkSource = NativeMethods.GetSinkSource(sink);
+                    if (source == sinkSource && NativeMethods.GetSinkKind(sink) == SinkKind.Mjpeg)
+                    {
+                        List<string> finalValues = new List<string>(values);
+                        int port = NativeMethods.GetMjpegServerPort(sink);
+                        finalValues.Add(MakeStreamValue("172.22.11.2", port));
+                        return finalValues;
+                    }
+                }
+            }
+
             return values;
         }
 
@@ -143,10 +161,13 @@ namespace WPILib
                     int sink = i.Handle;
 
                     int source = NativeMethods.GetSinkSource(sink);
+                    if (source == 0) continue;
                     ITable table;
                     m_tables.TryGetValue(source, out table);
                     if (table != null)
                     {
+                        // Don't set stream values if this is a HttpCamera passthrough
+                        if (NativeMethods.GetSourceKind(source) == SourceKind.Http) continue;
                         var values = GetSinkStreamValues(sink);
                         if (values.Count > 0)
                         {
@@ -170,6 +191,156 @@ namespace WPILib
                         }
                     }
                 }
+            }
+        }
+
+        private static string PixelFormatToString(PixelFormat pixelFormat)
+        {
+            switch (pixelFormat)
+            {
+                case PixelFormat.Mjpeg:
+                    return "MJPEG";
+                case PixelFormat.YUYV:
+                    return "YUYV";
+                case PixelFormat.RGB565:
+                    return "RGB565";
+                case PixelFormat.BGR:
+                    return "BGR";
+                case PixelFormat.GRAY:
+                    return "Gray";
+                default:
+                    return "Unknown";
+            }
+        }
+
+        private static PixelFormat PixelFormatFromString(string pixelFormatStr)
+        {
+            switch (pixelFormatStr)
+            {
+                case "MJPEG":
+                case "mjpeg":
+                case "JPEG":
+                case "jpeg":
+                    return PixelFormat.Mjpeg;
+                case "YUYV":
+                case "yuyv":
+                    return PixelFormat.YUYV;
+                case "RGB565":
+                case "rgb565":
+                    return PixelFormat.RGB565;
+                case "BGR":
+                case "bgr":
+                    return PixelFormat.BGR;
+                case "GRAY":
+                case "Gray":
+                case "gray":
+                    return PixelFormat.GRAY;
+                default:
+                    return PixelFormat.Unknown;
+            }
+        }
+
+        private const string ReMode = "(?<width>[0-9]+)\\s*x\\s*(?<height>[0-9]+)\\s+(?<format>.*?)\\s+"
+                                 + "(?<fps>[0-9.]+)\\s*fps";
+
+        private static readonly Regex m_matcher = new Regex(ReMode);
+
+        private static VideoMode VideoModeFromString(string modeStr)
+        {
+            var match = m_matcher.Match(modeStr);
+            if (!match.Success)
+            {
+                return new VideoMode(PixelFormat.Unknown, 0, 0, 0);
+            }
+            PixelFormat format = PixelFormatFromString(match.Groups["format"].Value);
+            int width;
+            int height;
+            double fps;
+            if (!int.TryParse(match.Groups["width"].Value, out width))
+            {
+                return new VideoMode(PixelFormat.Unknown, 0, 0, 0);
+            }
+            if (!int.TryParse(match.Groups["height"].Value, out height))
+            {
+                return new VideoMode(PixelFormat.Unknown, 0, 0, 0);
+            }
+            if (!double.TryParse(match.Groups["fps"].Value, out fps))
+            {
+                return new VideoMode(PixelFormat.Unknown, 0, 0, 0);
+            }
+            return new VideoMode(format, width, height, (int)fps);
+        }
+
+        private static string VideoModeToString(VideoMode mode)
+        {
+            return $"{mode.Width.ToString()}x{mode.Height.ToString()} {PixelFormatToString(mode.PixelFormat)} {mode.FPS.ToString()} fps";
+        }
+
+        private static List<string> GetSourceModeValues(int sourceHandle)
+        {
+            var modes = NativeMethods.EnumerateSourceVideoModes(sourceHandle);
+            List<string> modeStrings = new List<string>(modes.Count);
+            foreach (VideoMode videoMode in modes)
+            {
+                modeStrings.Add(VideoModeToString(videoMode));
+            }
+            return modeStrings;
+        }
+
+        private static void PutSourcePropertyValue(ITable table, VideoEvent evnt, bool isNew)
+        {
+            string name;
+            string infoName;
+            if (evnt.Name.StartsWith("raw_"))
+            {
+                name = $"RawProperty/{evnt.Name.Substring(4)}";
+                infoName = $"RawPropertyInfo/{evnt.Name.Substring(4)}";
+            }
+            else
+            {
+                name = $"Property/{evnt.Name}";
+                infoName = $"PropertyInfo/{evnt.Name}";
+            }
+
+            switch (evnt.PropertyKind)
+            {
+                case PropertyKind.Boolean:
+                    if (isNew)
+                    {
+                        table.SetDefaultBoolean(name, evnt.Value != 0);
+                    }
+                    else
+                    {
+                        table.PutBoolean(name, evnt.Value != 0);
+                    }
+                    break;
+                case PropertyKind.Enum:
+                case PropertyKind.Integer:
+                    if (isNew)
+                    {
+                        table.SetDefaultNumber(name, evnt.Value);
+                        table.PutNumber($"{infoName}/min", NativeMethods.GetPropertyMin(evnt.PropertyHandle));
+                        table.PutNumber($"{infoName}/max", NativeMethods.GetPropertyMax(evnt.PropertyHandle));
+                        table.PutNumber($"{infoName}/step", NativeMethods.GetPropertyStep(evnt.PropertyHandle));
+                        table.PutNumber($"{infoName}/default", NativeMethods.GetPropertyDefault(evnt.PropertyHandle));
+                    }
+                    else
+                    {
+                        table.PutNumber(name, evnt.Value);
+                    }
+                    break;
+                case PropertyKind.String:
+                    if (isNew)
+                    {
+                        table.SetDefaultString(name, evnt.ValueStr);
+                    }
+                    else
+                    {
+                        table.PutString(name, evnt.ValueStr);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -200,6 +371,9 @@ namespace WPILib
                                   NativeMethods.GetSourceDescription(vidEvent.SourceHandle));
                             table.PutBoolean("connected", NativeMethods.IsSourceConnected(vidEvent.SourceHandle));
                             table.PutStringArray("streams", GetSourceStreamValues(vidEvent.SourceHandle));
+                            VideoMode mode = NativeMethods.GetSourceVideoMode(vidEvent.SourceHandle);
+                            table.SetDefaultString("mode", VideoModeToString(mode));
+                            table.PutStringArray("modes", GetSourceModeValues(vidEvent.SourceHandle));
                             break;
                         }
                     case EventKind.SourceDestroyed:
@@ -209,6 +383,7 @@ namespace WPILib
                             {
                                 table.PutString("source", "");
                                 table.PutStringArray("streams", new string[0]);
+                                table.PutStringArray("modes", new string[0]);
                             }
                             break;
                         }
@@ -232,43 +407,55 @@ namespace WPILib
                         }
                     case EventKind.SourceVideoModesUpdated:
                         {
+                            ITable table = GetSourceTable(vidEvent.SourceHandle);
+                            if (table != null)
+                            {
+                                table.PutStringArray("modes", GetSourceModeValues(vidEvent.SourceHandle));
+                            }
                             break;
                         }
                     case EventKind.SourceVideoModeChanged:
                         {
+                            ITable table = GetSourceTable(vidEvent.SourceHandle);
+                            if (table != null)
+                            {
+                                table.PutString("mode", VideoModeToString(vidEvent.Mode));
+                            }
                             break;
                         }
                     case EventKind.SourcePropertyCreated:
                         {
+                            ITable table = GetSourceTable(vidEvent.SourceHandle);
+                            if (table != null)
+                            {
+                                PutSourcePropertyValue(table, vidEvent, true);
+                            }
                             break;
                         }
                     case EventKind.SourcePropertyValueUpdated:
                         {
+                            ITable table = GetSourceTable(vidEvent.SourceHandle);
+                            if (table != null)
+                            {
+                                PutSourcePropertyValue(table, vidEvent, false);
+                            }
                             break;
                         }
                     case EventKind.SourcePropertyChoicesUpdated:
                         {
+                            ITable table = GetSourceTable(vidEvent.SourceHandle);
+                            if (table != null)
+                            {
+                                List<string> choices = NativeMethods.GetEnumPropertyChoices(vidEvent.PropertyHandle);
+                                table.PutStringArray($"PropertyInfo/{vidEvent.Name}/choices", choices);
+                            }
                             break;
                         }
                     case EventKind.SinkSourceChanged:
-                        {
-                            UpdateStreamValues();
-                            break;
-                        }
                     case EventKind.SinkCreated:
-                        {
-                            break;
-                        }
                     case EventKind.SinkDestroyed:
                         {
-                            break;
-                        }
-                    case EventKind.SinkEnabled:
-                        {
-                            break;
-                        }
-                    case EventKind.SinkDisabled:
-                        {
+                            UpdateStreamValues();
                             break;
                         }
                     case EventKind.NetworkInterfacesChanged:
@@ -279,15 +466,64 @@ namespace WPILib
                     default:
                         break;
                 }
-            }, (EventKind)0x7fff, true);
+            }, (EventKind)0x4fff, true);
 
-            m_tableListener = NtCore.AddEntryListener(PublishName, (uid, key, value, flags) =>
+            m_tableListener = NtCore.AddEntryListener($"{PublishName}/", (uid, key, value, flags) =>
             {
-                if (!key.StartsWith($"{PublishName}/"))
+                string relativeKey = key.Substring(PublishName.Length + 1);
+
+                int subKeyIndex = relativeKey.IndexOf('/');
+                if (subKeyIndex == -1) return;
+                string sourceName = relativeKey.Substring(0, subKeyIndex);
+                VideoSource source;
+                if (!m_sources.TryGetValue(sourceName, out source))
                 {
                     return;
                 }
-                string relativeKey = key.Substring(PublishName.Length);
+
+                relativeKey = relativeKey.Substring(subKeyIndex + 1);
+
+                string propName;
+                if (relativeKey == "mode")
+                {
+                    VideoMode mode = VideoModeFromString(value.GetString());
+                    if (mode.PixelFormat == PixelFormat.Unknown || !source.SetVideoMode(mode))
+                    {
+                        NtCore.SetEntryString(key, VideoModeToString(source.GetVideoMode()));
+                    }
+                    return;
+                }
+                else if (relativeKey.StartsWith("Property/"))
+                {
+                    propName = relativeKey.Substring(9);
+                }
+                else if (relativeKey.StartsWith("RawProperty/"))
+                {
+                    propName = relativeKey.Substring(12);
+                }
+                else
+                {
+                    return;
+                }
+
+                VideoProperty prop = source.GetProperty(propName);
+                switch (prop.Kind)
+                {
+                    case PropertyKind.None:
+                        return;
+                    case PropertyKind.Boolean:
+                        prop.Set(value.GetBoolean() ? 1 : 0);
+                        break;
+                    case PropertyKind.Integer:
+                    case PropertyKind.Enum:
+                        prop.Set((int)value.GetDouble());
+                        break;
+                    case PropertyKind.String:
+                        prop.SetString(value.GetString());
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
 
             }, NotifyFlags.NotifyImmediate | NotifyFlags.NotifyUpdate);
         }
@@ -423,7 +659,8 @@ namespace WPILib
         public AxisCamera AddAxisCamera(string name, string host)
         {
             AxisCamera camera = new AxisCamera(name, host);
-            AddCamera(camera);
+            // Create a passthrough server for USB access
+            StartAutomaticCapture(camera);
             return camera;
         }
 
@@ -436,7 +673,8 @@ namespace WPILib
         public AxisCamera AddAxisCamera(string name, IList<string> hosts)
         {
             AxisCamera camera = new AxisCamera(name, hosts);
-            AddCamera(camera);
+            // Create a passthrough server for USB access
+            StartAutomaticCapture(camera);
             return camera;
         }
 
@@ -491,7 +729,7 @@ namespace WPILib
                     {
                         throw new VideoException($"expected OpenCV sink, but got {kind}");
                     }
-                    return (CvSink) sink;
+                    return (CvSink)sink;
                 }
             }
 
