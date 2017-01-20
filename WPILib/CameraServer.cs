@@ -42,6 +42,7 @@ namespace WPILib
             }
         }
 
+        private int m_defaultUsbDevice;
         private string m_primarySourceName;
         private Dictionary<string, VideoSource> m_sources;
         private Dictionary<string, VideoSink> m_sinks;
@@ -346,6 +347,7 @@ namespace WPILib
 
         private CameraServer()
         {
+            m_defaultUsbDevice = 0;
             m_lockObject = new object();
             m_sources = new Dictionary<string, VideoSource>();
             m_sinks = new Dictionary<string, VideoSink>();
@@ -542,14 +544,16 @@ namespace WPILib
         /// <see cref="GetVideo()"/> to get access to the camera images
         /// 
         /// <para>
-        /// This overload calls <see cref="StartAutomaticCapture(int)"/> with device 0,
-        /// creating a camera named "USB Camera 0"
+        /// The first time this overload is called, it calls <see cref="StartAutomaticCapture(int)"/>
+        /// with device 0, creating a camera named "USB Camera 0". Subsequent calls increment the device
+        /// number (e.g. 1, 2, etc).
         /// </para>
         /// </remarks>
         /// <returns>The <see cref="UsbCamera"/> object that was created to stream from</returns>
         public UsbCamera StartAutomaticCapture()
         {
-            return StartAutomaticCapture(0);
+            // returns new value, so subtract 1 to get old value
+            return StartAutomaticCapture(Interlocked.Increment(ref m_defaultUsbDevice) - 1);
         }
 
         /// <summary>
@@ -833,6 +837,41 @@ namespace WPILib
             lock (m_lockObject)
             {
                 m_sinks.Remove(name);
+            }
+        }
+
+        /// <summary>
+        /// Get server for the primary camera feed.
+        /// </summary>
+        /// <remarks>
+        /// This is only valid to call after a camera feed has been added with
+        /// <see cref="StartAutomaticCapture()"/> or <see cref="AddServer(string)"/>.
+        /// </remarks>
+        /// <returns>VideoSink for the primary camera feed.</returns>
+        public VideoSink GetServer()
+        {
+            lock (m_lockObject)
+            {
+                if (m_primarySourceName == null)
+                {
+                    throw new VideoException("no camera available");
+                }
+                return GetServer($"serve_{m_primarySourceName}");
+            }
+        }
+
+        /// <summary>
+        /// Gets a server by name
+        /// </summary>
+        /// <param name="name">Server name</param>
+        /// <returns>VideoSink if it exists, otherwise null</returns>
+        public VideoSink GetServer(string name)
+        {
+            lock (m_lockObject)
+            {
+                VideoSink sink;
+                m_sinks.TryGetValue(name, out sink);
+                return sink;
             }
         }
 
