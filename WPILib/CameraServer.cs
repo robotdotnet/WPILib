@@ -293,8 +293,8 @@ namespace WPILib
             string infoName;
             if (evnt.Name.StartsWith("raw_"))
             {
-                name = $"RawProperty/{evnt.Name.Substring(4)}";
-                infoName = $"RawPropertyInfo/{evnt.Name.Substring(4)}";
+                name = $"RawProperty/{evnt.Name}";
+                infoName = $"RawPropertyInfo/{evnt.Name}";
             }
             else
             {
@@ -371,9 +371,16 @@ namespace WPILib
                                   NativeMethods.GetSourceDescription(vidEvent.SourceHandle));
                             table.PutBoolean("connected", NativeMethods.IsSourceConnected(vidEvent.SourceHandle));
                             table.PutStringArray("streams", GetSourceStreamValues(vidEvent.SourceHandle));
-                            VideoMode mode = NativeMethods.GetSourceVideoMode(vidEvent.SourceHandle);
-                            table.SetDefaultString("mode", VideoModeToString(mode));
-                            table.PutStringArray("modes", GetSourceModeValues(vidEvent.SourceHandle));
+                            try
+                            {
+                                VideoMode mode = NativeMethods.GetSourceVideoMode(vidEvent.SourceHandle);
+                                table.SetDefaultString("mode", VideoModeToString(mode));
+                                table.PutStringArray("modes", GetSourceModeValues(vidEvent.SourceHandle));
+                            }
+                            catch (VideoException)
+                            {
+                                // Do nothing
+                            }
                             break;
                         }
                     case EventKind.SourceDestroyed:
@@ -416,6 +423,7 @@ namespace WPILib
                         }
                     case EventKind.SourceVideoModeChanged:
                         {
+
                             ITable table = GetSourceTable(vidEvent.SourceHandle);
                             if (table != null)
                             {
@@ -486,11 +494,8 @@ namespace WPILib
                 string propName;
                 if (relativeKey == "mode")
                 {
-                    VideoMode mode = VideoModeFromString(value.GetString());
-                    if (mode.PixelFormat == PixelFormat.Unknown || !source.SetVideoMode(mode))
-                    {
-                        NtCore.SetEntryString(key, VideoModeToString(source.GetVideoMode()));
-                    }
+                    // reset to current mode
+                    NtCore.SetEntryString(key, VideoModeToString(source.GetVideoMode()));
                     return;
                 }
                 else if (relativeKey.StartsWith("Property/"))
@@ -512,17 +517,17 @@ namespace WPILib
                     case PropertyKind.None:
                         return;
                     case PropertyKind.Boolean:
-                        prop.Set(value.GetBoolean() ? 1 : 0);
+                        NtCore.SetEntryBoolean(key, prop.Get() != 0);
                         break;
                     case PropertyKind.Integer:
                     case PropertyKind.Enum:
-                        prop.Set((int)value.GetDouble());
+                        NtCore.SetEntryDouble(key, prop.Get());
                         break;
                     case PropertyKind.String:
-                        prop.SetString(value.GetString());
+                        NtCore.SetEntryString(key, prop.GetString());
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        return;
                 }
 
             }, NotifyFlags.NotifyImmediate | NotifyFlags.NotifyUpdate);
