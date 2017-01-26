@@ -151,7 +151,7 @@ namespace WPILib.Interfaces
     };
 
     /// <summary>
-    /// Interface for CAN Speed Controllers like <see cref="CTRE.CANTalon">CANTalon</see> and <see cref="CANJaguar"/>
+    /// Interface for CAN Speed Controllers like @CTRE.CANTalon and <see cref="CANJaguar"/>
     /// </summary>
     // ReSharper disable once PossibleInterfaceMemberAmbiguity
     public interface ICANSpeedController : ISpeedController, IPIDInterface, ILiveWindowSendable

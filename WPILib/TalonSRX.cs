@@ -4,7 +4,7 @@ namespace WPILib
 {
     /// <summary>
     /// Cross the Road Electronics (CTRE) Talon SRX Speed Controller with PWM control</summary>
-    /// <seealso cref="CANTalon"> for CAN control of Talon SRX</seealso>
+    /// <remarks> See @CTRE.CANTalon for CAN contol of Talon SRX </remarks>
     public class TalonSRX : PWMSpeedController
     {
         /// <summary>
@@ -35,7 +35,7 @@ namespace WPILib
         /// <summary>
         /// Creates a new Talon SRX Motor Controller in PWM mode.
         /// </summary>
-        /// <remarks>See <see cref="CANTalon"/> for using a TalonSRX in CAN mode.</remarks>
+        /// <remarks>See @CTRE.CANTalon for using a TalonSRX in CAN mode.</remarks>
         /// <param name="channel">The PWM Channel that the TalonSRX is attached to. 0-9 are on-board, 10-19 are on the MXP port</param>
         public TalonSRX(int channel)
             : base(channel)
