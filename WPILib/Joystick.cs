@@ -197,30 +197,16 @@ namespace WPILib
             return Math.Sqrt(x * x + y * y);
         }
 
-        public virtual double GetDirectionRadians()
-        {
-            return Math.Atan2(GetX(), GetY());
-        }
+        public virtual double GetDirectionRadians() => Math.Atan2(GetX(), GetY());
 
         public virtual double GetDirectionDegrees()
         {
             return (180.0 / Math.Acos(-1)) * GetDirectionRadians();
         }
 
-        public int GetAxisType(int axis)
-        {
-            return m_ds.GetJoystickAxisType(Port, axis);
-        }
-
-        public int GetAxisCount()
-        {
-            return m_ds.GetStickAxisCount(Port);
-        }
-
-        public int GetButtonCount()
-        {
-            return m_ds.GetStickButtonCount(Port);
-        }
+        public int GetAxisType(int axis) => m_ds.GetJoystickAxisType(Port, axis);
+        public int GetAxisCount() => m_ds.GetStickAxisCount(Port);
+        public int GetButtonCount() => m_ds.GetStickButtonCount(Port);
 
 
 

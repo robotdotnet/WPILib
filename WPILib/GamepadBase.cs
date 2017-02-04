@@ -9,19 +9,13 @@
         /// Creates a new Gamepad on the specified port
         /// </summary>
         /// <param name="port">The joystick port</param>
-        protected GamepadBase(int port) : base(port)
-        {
-
-        }
+        protected GamepadBase(int port) : base(port) { }
 
         /// <summary>
         /// Gets if the bumper is pressed
         /// </summary>
         /// <returns>True if the bumper is pressed</returns>
-        public bool GetBumper()
-        {
-            return GetBumper(JoystickHand.Right);
-        }
+        public bool GetBumper() => GetBumper(JoystickHand.Right);
 
         /// <summary>
         /// Gets if the bupper is pressed
