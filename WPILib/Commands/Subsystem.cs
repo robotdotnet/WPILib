@@ -47,7 +47,7 @@ namespace WPILib.Commands
         /// <remarks>By default subsystems have no default command, but if they do,
         /// the default command is set with this method. It is called on all Subsystems
         /// by CommandBase in the users program after all the Subsystems are created.</remarks>
-        protected abstract void InitDefaultCommand();
+        protected virtual void InitDefaultCommand() { }
 
         /// <summary>
         /// Sets the default command.
