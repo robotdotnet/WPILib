@@ -49,7 +49,7 @@ namespace WPILib
         }
 
         /// <summary>
-        /// Puases the thread for a specific time using a SpinLoop
+        /// Pauses the thread for a specific time using a SpinLoop
         /// </summary>
         /// <param name="seconds"></param>
         public static void PreciseDelay(double seconds)

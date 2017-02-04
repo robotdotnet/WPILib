@@ -239,7 +239,7 @@ namespace WPILib
             UpdateControlWord(true, out controlWord);
 
             lock (m_joystickDataMutex)
-            { 
+            {
 
                 HALJoystickAxes[] currentAxes = m_joystickAxes;
                 m_joystickAxes = m_joystickAxesCache;
@@ -856,7 +856,7 @@ namespace WPILib
         /// <summary>
         /// Gets if the DS is attached.
         /// </summary>
-        public bool DSAtached
+        public bool DSAttached
         {
             get
             {
@@ -865,6 +865,11 @@ namespace WPILib
                 return word.GetDSAttached();
             }
         }
+        /// <summary>
+        /// Gets if the DS is attached.
+        /// </summary>
+        [Obsolete("DSAtached is deprecated, use DSAttached instead.")]
+        public bool DSAtached => DSAttached;
 
         private void UpdateControlWord(bool force, out HALControlWord controlWord)
         {

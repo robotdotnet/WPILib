@@ -7,7 +7,7 @@ using WPILib.Interfaces;
 namespace WPILib.SmartDashboard
 {
     /// <summary>
-    /// The <see cref="SendableChooser"/> class is a useful tool for presenting a 
+    /// The <see cref="SendableChooser"/> class is a useful tool for presenting a
     /// selection of options to the <see cref="SmartDashboard"/>.
     /// </summary><remarks>
     /// One use for this is to be able to select between multiple
@@ -19,15 +19,8 @@ namespace WPILib.SmartDashboard
     /// </remarks>
     public class SendableChooser : ISendable
     {
-        private const string Default = "default";
-
-        private const string Selected = "selected";
-
-        private const string Options = "options";
-
         private readonly List<string> m_choices = new List<string>();
         private readonly List<object> m_values = new List<object>();
-        private string m_defaultChoice = null;
         private object m_defaultValue = null;
 
         /// <summary>
@@ -38,7 +31,7 @@ namespace WPILib.SmartDashboard
         }
 
         /// <summary>
-        /// Adds the given object tot the list of options. On the 
+        /// Adds the given object to the list of options. On the
         /// <see cref="SmartDashboard"/> on the desktop, the object will appear as the given name.
         /// </summary>
         /// <param name="name">The name of the option</param>
@@ -126,5 +119,12 @@ namespace WPILib.SmartDashboard
 
         /// <inheritdoc/>
         public string SmartDashboardType => "String Chooser";
+
+
+        private const string Default = "default";
+        private const string Selected = "selected";
+        private const string Options = "options";
+
+        private string m_defaultChoice = null;
     }
 }

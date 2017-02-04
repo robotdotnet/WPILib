@@ -85,8 +85,6 @@ namespace WPILib
             : this(port, (int)AxisType.NumAxis, (int)ButtonType.NumButton)
         {
             m_axes[(int)AxisType.X] = DefaultXAxis;
-
-            m_axes[(int)AxisType.X] = DefaultXAxis;
             m_axes[(int)AxisType.Y] = DefaultYAxis;
             m_axes[(int)AxisType.Z] = DefaultZAxis;
             m_axes[(int)AxisType.Twist] = DefaultTwistAxis;
