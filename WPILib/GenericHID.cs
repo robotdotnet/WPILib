@@ -72,10 +72,7 @@ namespace WPILib
         /// Get the x position of the HID
         /// </summary>
         /// <returns>The x position of the HID</returns>
-        public double GetX()
-        {
-            return GetX(JoystickHand.Right);
-        }
+        public double GetX() => GetX(JoystickHand.Right);
 
         /// <summary>
         /// Get the x position of the HID
@@ -88,10 +85,7 @@ namespace WPILib
         /// Get the y position of the HID
         /// </summary>
         /// <returns>The y position of the HID</returns>
-        public double GetY()
-        {
-            return GetY(JoystickHand.Right);
-        }
+        public double GetY() => GetY(JoystickHand.Right);
 
         /// <summary>
         /// Get the y position of the HID
@@ -105,62 +99,35 @@ namespace WPILib
         /// </summary>
         /// <param name="axis">Index of the axis</param>
         /// <returns>The raw value of the selected axis</returns>
-        public virtual double GetRawAxis(int axis)
-        {
-            return m_ds.GetStickAxis(Port, axis);
-        }
+        public virtual double GetRawAxis(int axis) => m_ds.GetStickAxis(Port, axis);
 
         /// <summary>
         /// Is the given button pressed
         /// </summary>
         /// <param name="button">Which button number</param>
         /// <returns>True if the button is pressed</returns>
-        public bool GetRawButton(int button) 
-        {
-            return m_ds.GetStickButton(Port, button);
-        }
+        public bool GetRawButton(int button) => m_ds.GetStickButton(Port, button);
 
         /// <summary>
         /// Is POV 0 pressed
         /// </summary>
         /// <returns>the POV value</returns>
-        public int GetPOV()
-        {
-            return GetPOV(0);
-        }
+        public int GetPOV() => GetPOV(0);
 
         /// <summary>
         /// Is the given POV pressed
         /// </summary>
         /// <param name="pov">Which POV number</param>
         /// <returns>the POV value</returns>
-        public int GetPOV(int pov)
-        {
-            return m_ds.GetStickPOV(Port, pov);
-        }
+        public int GetPOV(int pov) => m_ds.GetStickPOV(Port, pov);
 
-        public int GetPOVCount()
-        {
-            return m_ds.GetStickPOVCount(Port);
-        }
+        public int GetPOVCount() => m_ds.GetStickPOVCount(Port);
 
-        public HIDType Type
-        {
-            get
-            {
-                return (HIDType)m_ds.GetJoystickType(Port);
-            }
-        }
+        public HIDType Type => (HIDType)m_ds.GetJoystickType(Port);
 
         public int Port { get; }
 
-        public string Name
-        {
-            get
-            {
-                return m_ds.GetJoystickName(Port);
-            }
-        }
+        public string Name => m_ds.GetJoystickName(Port);
 
         private int m_outputs = 0;
         private ushort m_leftRumble = 0;
@@ -182,10 +149,11 @@ namespace WPILib
 
         public void SetRumble(RumbleType type, double value)
         {
-            if(value < 0)
-            value = 0;
-          else if (value > 1)
+            if (value < 0)
+                value = 0;
+            else if (value > 1)
                 value = 1;
+
             if (type == RumbleType.LeftRumble)
             {
                 m_leftRumble = (ushort)(value * 65535);

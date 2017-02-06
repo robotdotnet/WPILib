@@ -1,6 +1,5 @@
-﻿using System;
-using HAL.Base;
-using static HAL.Base.HALDriverStation;
+﻿using HAL.Base;
+using System;
 
 namespace WPILib
 {
@@ -85,8 +84,6 @@ namespace WPILib
             : this(port, (int)AxisType.NumAxis, (int)ButtonType.NumButton)
         {
             m_axes[(int)AxisType.X] = DefaultXAxis;
-
-            m_axes[(int)AxisType.X] = DefaultXAxis;
             m_axes[(int)AxisType.Y] = DefaultYAxis;
             m_axes[(int)AxisType.Z] = DefaultZAxis;
             m_axes[(int)AxisType.Twist] = DefaultTwistAxis;
@@ -115,82 +112,57 @@ namespace WPILib
             m_buttons = new int[numButtonTypes];
         }
 
-        public int GetAxisChannel(AxisType axis)
-        {
-            return m_axes[(int)axis];
-        }
+        public int GetAxisChannel(AxisType axis) => m_axes[(int)axis];
 
         public void SetAxisChannel(AxisType axis, int channel)
         {
             m_axes[(int)axis] = channel;
         }
 
-        public override double GetX(JoystickHand hand)
-        {
-            return GetRawAxis(m_axes[(int)AxisType.X]);
-        }
+        public override double GetX(JoystickHand hand) => this[AxisType.X];
+        public override double GetY(JoystickHand hand) => this[AxisType.Y];
+        public override double GetZ(JoystickHand hand) => this[AxisType.Z];
+        public override double GetTwist() => this[AxisType.Twist];
+        public override double GetThrottle() => this[AxisType.Throttle];
+        public virtual double GetAxis(AxisType axis) => this[axis];
 
-        public override double GetY(JoystickHand hand)
+        public double this[AxisType axis]
         {
-            return GetRawAxis(m_axes[(int)AxisType.Y]);
-        }
-
-        public override double GetZ(JoystickHand hand)
-        {
-            return GetRawAxis(m_axes[(int)AxisType.Z]);
-        }
-
-        public override double GetTwist()
-        {
-            return GetRawAxis(m_axes[(int)AxisType.Twist]);
-        }
-
-        public override double GetThrottle()
-        {
-            return GetRawAxis(m_axes[(int)AxisType.Throttle]);
-        }
-
-        public virtual double GetAxis(AxisType axis)
-        {
-            switch (axis)
+            get
             {
-                case AxisType.X:
-                    return GetX();
-                case AxisType.Y:
-                    return GetY();
-                case AxisType.Z:
-                    return GetZ();
-                case AxisType.Twist:
-                    return GetTwist();
-                case AxisType.Throttle:
-                    return GetThrottle();
-                default:
-                    return 0.0;
+                switch (axis)
+                {
+                    case AxisType.X:
+                    case AxisType.Y:
+                    case AxisType.Z:
+                    case AxisType.Twist:
+                    case AxisType.Throttle:
+                        return GetRawAxis(m_axes[(int)axis]);
+                    default:
+                        return 0.0;
+                }
             }
         }
 
-        public override bool GetTrigger(JoystickHand hand)
-        {
-            return GetRawButton(m_buttons[(int)ButtonType.Trigger]);
-        }
+        public override bool GetTrigger(JoystickHand hand) => this[ButtonType.Trigger];
+        public override bool GetTop(JoystickHand hand) => this[ButtonType.Top];
+        public bool GetButton(ButtonType button) => this[button];
 
-        public override bool GetTop(JoystickHand hand)
+        public bool this[ButtonType button]
         {
-            return GetRawButton(m_buttons[(int)ButtonType.Top]);
-        }
-
-        public bool GetButton(ButtonType button)
-        {
-            switch (button)
+            get
             {
-                case ButtonType.Trigger:
-                    return GetTrigger();
-                case ButtonType.Top:
-                    return GetTop();
-                default:
-                    return false;
+                switch (button)
+                {
+                    case ButtonType.Trigger:
+                    case ButtonType.Top:
+                        return GetRawButton(m_buttons[(int)button]);
+                    default:
+                        return false;
+                }
             }
         }
+
 
         public virtual double GetMagnitude()
         {
@@ -199,30 +171,16 @@ namespace WPILib
             return Math.Sqrt(x * x + y * y);
         }
 
-        public virtual double GetDirectionRadians()
-        {
-            return Math.Atan2(GetX(), GetY());
-        }
+        public virtual double GetDirectionRadians() => Math.Atan2(GetX(), GetY());
 
         public virtual double GetDirectionDegrees()
         {
             return (180.0 / Math.Acos(-1)) * GetDirectionRadians();
         }
 
-        public int GetAxisType(int axis)
-        {
-            return m_ds.GetJoystickAxisType(Port, axis);
-        }
-
-        public int GetAxisCount()
-        {
-            return m_ds.GetStickAxisCount(Port);
-        }
-
-        public int GetButtonCount()
-        {
-            return m_ds.GetStickButtonCount(Port);
-        }
+        public int GetAxisType(int axis) => m_ds.GetJoystickAxisType(Port, axis);
+        public int GetAxisCount() => m_ds.GetStickAxisCount(Port);
+        public int GetButtonCount() => m_ds.GetStickButtonCount(Port);
 
 
 

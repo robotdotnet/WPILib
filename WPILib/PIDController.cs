@@ -429,7 +429,7 @@ namespace WPILib
             }
         }
         /// <summary>
-        /// Gets teh current PID result.
+        /// Gets the current PID result.
         /// </summary>
         /// <remarks>
         /// This is always centered on zero and constrained by the max and min output values.
@@ -473,7 +473,7 @@ namespace WPILib
             lock (m_lockObject)
             {
                 if (minimumInput > maximumInput)
-                    throw new BoundaryException("Lower bound is greatter than upper bound");
+                    throw new BoundaryException("Lower bound is greater than upper bound");
                 m_minimumInput = minimumInput;
                 m_maximumInput = maximumInput;
                 Setpoint = m_setpoint;
@@ -490,7 +490,7 @@ namespace WPILib
             lock (m_lockObject)
             {
                 if (minimumOutput > maximumOutput)
-                    throw new BoundaryException("Lower bound is greatter than upper bound");
+                    throw new BoundaryException("Lower bound is greater than upper bound");
                 m_minimumOutput = minimumOutput;
                 m_maximumOutput = maximumOutput;
                 Setpoint = m_setpoint;

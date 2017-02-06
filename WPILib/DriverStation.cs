@@ -1,15 +1,13 @@
-﻿using System;
-using System.IO;
+﻿using HAL.Base;
+using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using HAL.Base;
-using static WPILib.Timer;
 using static HAL.Base.HAL;
 using static HAL.Base.HAL.DriverStationConstants;
-using static WPILib.Utility;
 using static HAL.Base.HALDriverStation;
+using static WPILib.Timer;
+using static WPILib.Utility;
 using HALPower = HAL.Base.HALPower;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace WPILib
 {
@@ -239,7 +237,7 @@ namespace WPILib
             UpdateControlWord(true, out controlWord);
 
             lock (m_joystickDataMutex)
-            { 
+            {
 
                 HALJoystickAxes[] currentAxes = m_joystickAxes;
                 m_joystickAxes = m_joystickAxesCache;
@@ -369,17 +367,8 @@ namespace WPILib
                     $"Joystick index is out of range, should be 0-{JoystickPorts}");
             }
 
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
+            lock (m_joystickDataMutex)
                 return m_joystickAxes[stick].count;
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
-
         }
 
         /// <summary>
@@ -441,17 +430,9 @@ namespace WPILib
                 throw new ArgumentOutOfRangeException(nameof(stick),
                     $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
 
+            lock (m_joystickDataMutex)
                 return m_joystickPOVs[stick].count;
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
 
         }
 
@@ -464,23 +445,14 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetStickButtons(int stick)
         {
-
             if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new ArgumentOutOfRangeException(nameof(stick),
                     $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
-                return (int)m_joystickButtons[stick].buttons;
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
 
+            lock (m_joystickDataMutex)
+                return (int)m_joystickButtons[stick].buttons;
         }
 
         /// <summary>
@@ -536,22 +508,14 @@ namespace WPILib
         /// Thrown if the stick is out of range.</exception>
         public int GetStickButtonCount(int stick)
         {
-
             if (stick < 0 || stick >= JoystickPorts)
             {
                 throw new ArgumentOutOfRangeException(nameof(stick),
                     $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
+
+            lock (m_joystickDataMutex)
                 return m_joystickButtons[stick].count;
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
         }
 
         /// <summary>
@@ -568,16 +532,8 @@ namespace WPILib
                 throw new ArgumentOutOfRangeException(nameof(stick),
                     $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
+            lock (m_joystickDataMutex)
                 return m_joystickDescriptors[stick].isXbox != 0;
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
 
         }
 
@@ -595,16 +551,8 @@ namespace WPILib
                 throw new ArgumentOutOfRangeException(nameof(stick),
                     $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
+            lock (m_joystickDataMutex)
                 return m_joystickDescriptors[stick].type;
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
         }
 
         /// <summary>
@@ -622,16 +570,8 @@ namespace WPILib
                         $"Joystick Index is out of range, should be 0-{JoystickPorts}");
             }
 
-            bool lockEntered = false;
-            try
-            {
-                Monitor.Enter(m_joystickDataMutex, ref lockEntered);
+            lock (m_joystickDataMutex)
                 return m_joystickDescriptors[stick].name.ToString();
-            }
-            finally
-            {
-                if (lockEntered) Monitor.Exit(m_joystickDataMutex);
-            }
         }
 
         /// <summary>
@@ -856,7 +796,7 @@ namespace WPILib
         /// <summary>
         /// Gets if the DS is attached.
         /// </summary>
-        public bool DSAtached
+        public bool DSAttached
         {
             get
             {
@@ -865,6 +805,11 @@ namespace WPILib
                 return word.GetDSAttached();
             }
         }
+        /// <summary>
+        /// Gets if the DS is attached.
+        /// </summary>
+        [Obsolete("DSAtached is deprecated, use DSAttached instead.")]
+        public bool DSAtached => DSAttached;
 
         private void UpdateControlWord(bool force, out HALControlWord controlWord)
         {

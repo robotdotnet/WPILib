@@ -290,22 +290,8 @@ namespace WPILib
             rightValue = Limit(rightValue);
             if (squaredInputs)
             {
-                if (leftValue >= 0.0)
-                {
-                    leftValue = (leftValue * leftValue);
-                }
-                else
-                {
-                    leftValue = -(leftValue * leftValue);
-                }
-                if (rightValue >= 0.0)
-                {
-                    rightValue = (rightValue * rightValue);
-                }
-                else
-                {
-                    rightValue = -(rightValue * rightValue);
-                }
+                leftValue *= Math.Abs(leftValue);
+                rightValue *= Math.Abs(rightValue);
             }
             SetLeftRightMotorOutputs(leftValue, rightValue);
         }
@@ -372,22 +358,8 @@ namespace WPILib
             if (squaredInputs)
             {
                 // square the inputs (while preserving the sign) to increase fine control while permitting full power
-                if (moveValue >= 0.0)
-                {
-                    moveValue = (moveValue * moveValue);
-                }
-                else
-                {
-                    moveValue = -(moveValue * moveValue);
-                }
-                if (rotateValue >= 0.0)
-                {
-                    rotateValue = (rotateValue * rotateValue);
-                }
-                else
-                {
-                    rotateValue = -(rotateValue * rotateValue);
-                }
+                moveValue *= Math.Abs(moveValue);
+                rotateValue *= Math.Abs(rotateValue);
             }
 
             if (moveValue > 0.0)
