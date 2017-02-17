@@ -4,8 +4,8 @@ using WPILib.Commands;
 namespace WPILib.Extras
 {
     /// <summary>
-    /// A <see cref="ActionCommand"/> will run an <see cref="Action"/> when it is
-    /// initialized and will finish immediately.
+    /// A <see cref="SubsystemCommand"/> depends on the given <see cref="Subsystem"/>.
+    /// It stores a local reference to its <see cref="Subsystem" /> to ease access.
     /// </summary>
     public abstract class SubsystemCommand : Command
     {
