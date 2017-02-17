@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SubsystemCommand.cs" />
     <Compile Include="ActionCommand.cs" />
     <Compile Include="AttributedCommandModel\AttributedRobot.cs" />
     <Compile Include="AttributedCommandModel\ButtonMethod.cs" />

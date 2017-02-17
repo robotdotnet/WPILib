@@ -4,7 +4,7 @@ namespace WPILib.Extras
 {
     /// <summary>
     /// Implements the boilerplate needed to use an <see cref="IterativeRobot"/>
-    /// with the command-based model, by running the scheduler as needed
+    /// with the command-based model, by running the scheduler as needed.
     /// </summary>
     public abstract class CommandRobot : IterativeRobot
     {
