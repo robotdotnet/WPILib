@@ -63,11 +63,10 @@ namespace WPILib
                     Array.Copy(dataToSend, sendBuffer, Math.Min(sendSize, dataToSend.Length));
                 }
                 byte[] receiveBuffer = new byte[receiveSize];
-                bool aborted = true;
-                aborted = HAL_TransactionI2C((byte)m_port, (byte)m_deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize) != 0;
+                int status = HAL_TransactionI2C((byte)m_port, (byte)m_deviceAddress, sendBuffer, (byte)sendSize, receiveBuffer, (byte)receiveSize);
                 if (receiveSize > 0 && dataRecieved != null)
                     Array.Copy(receiveBuffer, dataRecieved, Math.Min(receiveSize, dataRecieved.Length));
-                return aborted;
+                return status < 0;
             }
         }
 
@@ -156,19 +155,6 @@ namespace WPILib
             int retVal = HAL_ReadI2C((byte)m_port, (byte)m_deviceAddress, received, (byte)count);
             Array.Copy(received, buffer, Math.Min(buffer.Length, count));
             return retVal < 0;
-        }
-
-        /// <summary>
-        /// Sends a broadcast write to all devices on the I2C bus.
-        /// </summary>
-        /// <remarks>This is currently not implemented.</remarks>
-        /// <param name="registerAddress">The register to write on all devices on the bus.</param>
-        /// <param name="data">The value to write to the devices.</param>
-        /// /// <returns>True if transfer was aborted, otherwise false.</returns>
-        public bool Broadcast(int registerAddress, int data)
-        {
-            //NOTE: Is also not implemented in the Java implementation of WPILib
-            throw new NotImplementedException();
         }
 
         /// <summary>
