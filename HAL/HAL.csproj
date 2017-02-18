@@ -52,8 +52,8 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NativeLibraryUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NativeLibraryUtilities.1.0.0\lib\net45\NativeLibraryUtilities.dll</HintPath>
+    <Reference Include="NativeLibraryUtilities, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NativeLibraryUtilities.1.0.3\lib\net45\NativeLibraryUtilities.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

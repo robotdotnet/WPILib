@@ -50,6 +50,7 @@ namespace LoadTester
                     // in the source mat.  If there is an error notify the output.
                     if (cvSink.GrabFrame(mat) == 0)
                     {
+                        Console.WriteLine("Timeout");
                         // Send the output the error.
                         outputStream.NotifyError(cvSink.GetError());
                         // skip the rest of the current iteration
