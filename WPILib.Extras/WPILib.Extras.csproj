@@ -80,6 +80,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SubsystemCommand.cs" />
     <Compile Include="ActionCommand.cs" />
     <Compile Include="AttributedCommandModel\AttributedRobot.cs" />
     <Compile Include="AttributedCommandModel\ButtonMethod.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="AttributedCommandModel\RunCommandAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnJoystickAttribute.cs" />
     <Compile Include="AttributedCommandModel\RunCommandOnNetworkKeyAttribute.cs" />
+    <Compile Include="CommandRobot.cs" />
     <Compile Include="LabVIEWRobot.cs" />
     <Compile Include="NavX\AHRS.cs" />
     <Compile Include="NavX\ContinuousAngleTracker.cs" />
