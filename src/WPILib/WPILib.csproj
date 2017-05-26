@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\HAL\HAL.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FRC.CameraServer" Version="1.0.2" />
+    <PackageReference Include="FRC.NetworkTables.Core" Version="3.1.8" />
+    
+  </ItemGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.5;net451</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.5' ">
+      <PackageReference Include="System.ComponentModel.EventBasedAsync" Version="4.3.0" />
+  </ItemGroup>
+</Project>
