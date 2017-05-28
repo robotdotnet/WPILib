@@ -2,6 +2,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WPILib\WPILib.csproj" />
+    <ProjectReference Include="..\HAL\HAL.csproj" >
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
     <Reference Include="System.Data.DataSetExtensions" />    
   </ItemGroup>
 
