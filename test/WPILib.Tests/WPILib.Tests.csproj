@@ -1,9 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\src\FRC.HAL.DesktopLibraries\FRC.HAL.DesktopLibraries.csproj" />
+    <ProjectReference Include="..\..\src\HAL\HAL.csproj" />
     <ProjectReference Include="..\..\src\WPILib\WPILib.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FRC.NetworkTables.Core.DesktopLibraries" Version="3.1.8" />
+    <PackageReference Include="FRC.OpenCvSharp.DesktopLibraries" Version="1.0.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="1.3.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="NUnit" Version="3.6.1" />
