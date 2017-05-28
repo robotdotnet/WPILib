@@ -116,6 +116,8 @@ Task("Pack")
     {
         foreach (var project in GetFiles("./src/**/*.csproj"))
         {
+            if (project.FullPath.Contains("HAL.csproj")) continue;
+            if (project.FullPath.Contains("LoadTester.csproj")) continue;
             var sources = "";
             if (!project.FullPath.Contains("DesktopLibraries")) {
                 sources = "--include-source";
