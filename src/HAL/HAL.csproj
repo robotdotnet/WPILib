@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard1.5;net451</TargetFrameworks>
+    <NoWarn>0649</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="FRC.Utilities" Version="2.0.0-alpha2" />
