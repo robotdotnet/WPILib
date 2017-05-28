@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\HAL\HAL.csproj" />
+    <ProjectReference Include="..\HAL\HAL.csproj" >
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FRC.CameraServer" Version="1.0.2" />
