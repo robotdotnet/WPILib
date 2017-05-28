@@ -15,9 +15,9 @@ namespace WPILib.Tests.MotorControllers
         [Test]
         public void TestAllISpeedControllersHaveSingleParameterConstructor()
         {
-            var instances = from t in typeof(ISpeedController).Assembly.GetTypes()
+            var instances = from t in typeof(ISpeedController).GetTypeInfo().Assembly.GetTypes()
                             where t.GetInterfaces().Contains(typeof(ISpeedController))
-                                    && !t.IsAbstract && !t.IsInterface
+                                    && !t.GetTypeInfo().IsAbstract && !t.GetTypeInfo().IsInterface
                                      //&& t.GetConstructor(new [] { typeof(int)}) != null
                             select t;
 

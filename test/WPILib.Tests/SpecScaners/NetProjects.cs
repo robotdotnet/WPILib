@@ -22,7 +22,7 @@ namespace WPILib.Tests.SpecScaners
         {
             List<string> nativeFunctions = new List<string>();
 
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = typeof(NetProjects).GetTypeInfo().Assembly;
             var ps = Path.DirectorySeparatorChar;
             var path = assembly.CodeBase.Replace("file:///", "").Replace("/", ps.ToString());
             path = Path.GetDirectoryName(path);
@@ -31,7 +31,8 @@ namespace WPILib.Tests.SpecScaners
             foreach (var file in Directory.GetFiles(dir, "*.cs"))
             {
                 if (!file.ToLower().Contains("hal")) continue;
-                using (StreamReader reader = new StreamReader(file))
+                using (FileStream fs = File.OpenRead(file))
+                using (StreamReader reader = new StreamReader(fs))
                 {
                     bool foundInitialize = false;
                     string line;
@@ -63,7 +64,7 @@ namespace WPILib.Tests.SpecScaners
         {
             List<HALDelegateClass> halBaseMethods = new List<HALDelegateClass>();
 
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = typeof(NetProjects).GetTypeInfo().Assembly;
             var ps = Path.DirectorySeparatorChar;
             var path = assembly.CodeBase.Replace("file:///", "").Replace("/", ps.ToString());
             path = Path.GetDirectoryName(path);

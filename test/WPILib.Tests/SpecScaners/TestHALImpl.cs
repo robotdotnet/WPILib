@@ -5,9 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+#if !NETSTANDARD
 using System.Runtime.Serialization;
+#endif
 using System.Text;
-using FRC.HAL.DesktopLibraries;
 using HAL;
 using HAL.Base;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -24,7 +25,7 @@ namespace WPILib.Tests.SpecScaners
         {
             var halRoboRioSymbols = NetProjects.GetHALRoboRioNativeSymbols();
 
-            var assembly = Assembly.GetExecutingAssembly();
+            var assembly = typeof(TestHALImpl).GetTypeInfo().Assembly;
             var ps = Path.DirectorySeparatorChar;
             var path = assembly.CodeBase.Replace("file:///", "").Replace("/", ps.ToString());
             path = Path.GetDirectoryName(path);
@@ -63,13 +64,13 @@ namespace WPILib.Tests.SpecScaners
         public void TestHALBaseMapsToHALSim()
         {
             // Load assembly with HAL Base
-            Assembly halBaseAssembly = typeof(HAL.Base.HAL).Assembly;
+            Assembly halBaseAssembly = typeof(HAL.Base.HAL).GetTypeInfo().Assembly;
 
             List<string> nullTypes = (from type in halBaseAssembly.GetTypes()
                                       where type.Name.ToLower().Contains("hal")
                                       let fields = type.GetFields()
                                       let nullDelegateFields = (from fieldInfo in fields
-                                                                where fieldInfo.FieldType.IsSubclassOf(typeof (MulticastDelegate))
+                                                                where fieldInfo.FieldType.GetTypeInfo().IsSubclassOf(typeof (MulticastDelegate))
                                                                 let x = fieldInfo.GetValue(null) where x == null select fieldInfo.Name).ToList()
                                       from nullDelegateField in nullDelegateFields select type.Name + ": " + nullDelegateField).ToList();
 
@@ -113,13 +114,17 @@ namespace WPILib.Tests.SpecScaners
             {
                 //Check that the elements are value type, and that the element itself is blittable.
                 var elements = type.GetElementType();
-                return elements.IsValueType && IsBlittable(elements);
+                return elements.GetTypeInfo().IsValueType && IsBlittable(elements);
             }
             try
             {
                 //Otherwise try and pin the type. If it pins, it is blittable.
                 //If exception is thrown, it is not blittable, and do not allow.
+#if NETSTANDARD
+                object obj = Activator.CreateInstance(type);
+#else
                 object obj = FormatterServices.GetUninitializedObject(type);
+#endif
                 GCHandle.Alloc(obj, GCHandleType.Pinned).Free();
                 return true;
             }

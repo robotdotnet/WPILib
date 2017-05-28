@@ -3,7 +3,6 @@
   <ItemGroup>
     <ProjectReference Include="..\HAL\HAL.csproj" />
     <ProjectReference Include="..\WPILib\WPILib.csproj" />
-    <ProjectReference Include="..\WPILib.Extras\WPILib.Extras.csproj" />
     <ProjectReference Include="..\FRC.HAL.DesktopLibraries\FRC.HAL.DesktopLibraries.csproj" />
   </ItemGroup>
 

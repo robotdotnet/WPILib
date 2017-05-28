@@ -2,10 +2,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WPILib\WPILib.csproj" />
+    <Reference Include="System.Data.DataSetExtensions" />    
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5;net451</TargetFrameworks>
+    <TargetFramework>net451</TargetFramework>
   </PropertyGroup>
-
 </Project>

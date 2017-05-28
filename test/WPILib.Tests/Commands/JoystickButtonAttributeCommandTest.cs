@@ -1,6 +1,9 @@
-﻿using NUnit.Framework;
+﻿#if !NETSTANDARD
+
+using NUnit.Framework;
 using System.Threading;
 using HAL.Simulator;
+
 using WPILib.Extras.AttributedCommandModel;
 
 // ReSharper disable EmptyConstructor
@@ -48,3 +51,5 @@ namespace WPILib.Tests.Commands
         }
     }
 }
+
+#endif

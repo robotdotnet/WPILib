@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿#if !NETSTANDARD
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Reflection;
 #if !NO_REFLECTION_CONTEXT
@@ -89,3 +90,4 @@ namespace WPILib.Tests.Commands
 #endif
     }
 }
+#endif

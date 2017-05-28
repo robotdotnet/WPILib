@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using NUnit.Framework;
 using WPILib.Commands;
+using System;
 
 namespace WPILib.Tests.Commands
 {
@@ -49,7 +50,7 @@ namespace WPILib.Tests.Commands
             {
                 Thread.Sleep(time);
             }
-            catch (ThreadInterruptedException)
+            catch (Exception)
             {
                 Assert.Fail("Sleep Interrupted!?!?!?!?!");
             }

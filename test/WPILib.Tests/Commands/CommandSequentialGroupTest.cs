@@ -6,7 +6,7 @@ namespace WPILib.Tests.Commands
     [TestFixture]
     public class CommandSequentialGroupTest : AbstractCommandTest
     {
-        [Test, Timeout(20000), Ignore("Waiting for Timestamps in sim to work")]
+        [Test, Ignore("Waiting for Timestamps in sim to work")]
         public void TestThreeCommandOnSubSystem()
         {
             ASubsystem subsystem = new ASubsystem();

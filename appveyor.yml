@@ -1,0 +1,37 @@
+version: '{branch}-{build}'
+pull_requests:
+  do_not_increment_build_number: true
+skip_branch_with_pr: true
+branches:  		
+  only:		
+  - master
+nuget:
+  disable_publish_on_pr: true
+
+build_script:
+- ps: .\build.ps1
+ 
+test: off
+ 
+artifacts:
+# Store NuGet packages
+- path: .\Artifacts\**\*.nupkg
+  name: NuGet
+
+cache:
+  - C:\Users\appveyor\.gradle
+
+deploy:
+- provider: NuGet
+  api_key:
+    secure: f4XB8xaNhhhgmXZrsv5Yh+JjxgnAXOfBJtbUgPB623n4Z2t/gXcC7fCUg36DK69k
+  on:
+    branch: master
+    appveyor_repo_tag: true
+- provider: GitHub
+  auth_token:
+    secure: fwCTagTAptB4QJnTt9RrLEvg3G0cEJxssYNxtYFMBKnqHqbGomBTZvvGjrHtt7l4
+  artifact: /.*\.nupkg/
+  on:
+    branch: master
+    appveyor_repo_tag: true
