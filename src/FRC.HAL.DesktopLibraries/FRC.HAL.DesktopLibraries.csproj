@@ -1,7 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.5;net451</TargetFrameworks>
+    <TargetFrameworks>netstandard1.1;net40</TargetFrameworks>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Include="Libraries\amd64\mockhal.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Libraries\x86\mockhal.dll" />
+  </ItemGroup>
 
 </Project>
