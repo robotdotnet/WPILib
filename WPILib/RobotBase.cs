@@ -134,8 +134,7 @@ namespace WPILib
             }
 
             //Write to the version file.
-            // TODO: FIX ME (THAD) Need to know if sim or not
-            if (true)
+            if (!IsSimulation)
             {
                 string file = "/tmp/frc_versions/FRC_Lib_Version.ini";
                 try
