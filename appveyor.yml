@@ -4,8 +4,8 @@ configuration: AppVeyor
 pull_requests:
   do_not_increment_build_number: true
 skip_branch_with_pr: true
-branches:  		
-  only:		
+branches:
+  only:
   - master
 nuget:
   disable_publish_on_pr: true
@@ -15,8 +15,8 @@ build_script:
 test_script:
 - ps: >-
 
-    ./assemble.ps1 -test
-    
+    ./assemble.ps1 -build
+
     If (($env:APPVEYOR_REPO_BRANCH -eq "master") -and (!$env:APPVEYOR_PULL_REQUEST_NUMBER)) {
 
     ./nuget install EWSoftware.SHFB -Version 2016.9.17 -o sbpackages
