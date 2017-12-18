@@ -4,7 +4,8 @@
 # User-specific files
 *.suo
 *.user
-*.sln.docstates
+*.sln.
+.vs/
 
 # Build results
 [Dd]ebug/

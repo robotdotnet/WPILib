@@ -37,13 +37,8 @@
       <HintPath>..\packages\FRC.CameraServer.1.0.2\lib\net45\FRC.CameraServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FRC.NetworkTables.Core, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.3.1.8\lib\net45\FRC.NetworkTables.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FRC.NetworkTables.Core.DesktopLibraries, Version=3.1.8.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\FRC.NetworkTables.Core.DesktopLibraries.3.1.8\lib\net40\FRC.NetworkTables.Core.DesktopLibraries.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="FRC.NetworkTables, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FRC.NetworkTables.3.1.8\lib\net46\FRC.NetworkTables.dll</HintPath>
     </Reference>
     <Reference Include="FRC.OpenCvSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\FRC.OpenCvSharp.1.0.3\lib\net45\FRC.OpenCvSharp.dll</HintPath>
@@ -56,6 +51,21 @@
     <Reference Include="NativeLibraryUtilities, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NativeLibraryUtilities.1.0.3\lib\net45\NativeLibraryUtilities.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Context, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.AsyncEx.Context.1.1.0\lib\net46\Nito.AsyncEx.Context.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Coordination, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.AsyncEx.Coordination.1.0.2\lib\net46\Nito.AsyncEx.Coordination.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.AsyncEx.Tasks, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.AsyncEx.Tasks.1.1.0\lib\net46\Nito.AsyncEx.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.Collections.Deque, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.Collections.Deque.1.0.0\lib\portable45-net45+win8+wp8+wpa81\Nito.Collections.Deque.dll</HintPath>
+    </Reference>
+    <Reference Include="Nito.Disposables, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nito.Disposables.1.0.0\lib\portable45-net45+win8+wp8+wpa81\Nito.Disposables.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
