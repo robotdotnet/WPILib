@@ -97,7 +97,7 @@ namespace HAL.Base
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_ObserveUserProgramTestDelegate();
         [NativeDelegate] public static HAL_ObserveUserProgramTestDelegate HAL_ObserveUserProgramTest;
 
-
+        /*
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int NativeHALSetErrorDataDelegate(byte[] errors, int errorsLength, int waitMs);
         [NativeDelegate("HAL_SetErrorData")]
@@ -109,6 +109,7 @@ namespace HAL.Base
             byte[] errorB = HAL.CreateUTF8String(errors, out len);
             return NativeHALSetErrorData(errorB, len, waitMs);
         }
+        */
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         private delegate int NativeHALSendErrorDelegate(int isError, int errorCode, int isLVCode,
             byte[] details, byte[] location, byte[] callStack, int printMsg);

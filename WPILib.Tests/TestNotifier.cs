@@ -32,14 +32,12 @@ namespace WPILib.Tests
         public void TestSingleWithObject()
         {
             int count = 0;
-            object obj = null;
-            Action<object> mockDelegate = o =>
+            Action mockDelegate = () =>
             {
                 count++;
-                obj = o;
             };
 
-            using (Notifier nt = new Notifier(mockDelegate, this))
+            using (Notifier nt = new Notifier(mockDelegate))
             {
                 nt.StartSingle(0.25);
 
@@ -47,7 +45,6 @@ namespace WPILib.Tests
             }
 
             Assert.AreEqual(1, count);
-            Assert.AreEqual(this, obj);
         }
         /*
         [Test]

@@ -85,7 +85,7 @@ namespace HAL.Base
                         resourceRoot + "x86.mockhal.dll");
                     s_nativeLoader.AddLibraryLocation(OsType.Windows64,
                         resourceRoot + "amd64.mockhal.dll");
-                    s_nativeLoader.AddLibraryLocation(OsType.roboRIO, "libHALAthena.so");
+                    s_nativeLoader.AddLibraryLocation(OsType.roboRIO, "libwpiHal.so");
                     /*
                 NativeLoader.AddLibraryLocation(OsType.Linux32,
                     resourceRoot + "x86.libcscore.so");

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using HAL.Base;
 using WPILib.Interfaces;
 using WPILib.LiveWindow;
@@ -179,3 +180,4 @@ namespace WPILib
         }
     }
 }
+*/

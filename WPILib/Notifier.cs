@@ -111,7 +111,9 @@ namespace WPILib
 
         public void Stop()
         {
-            HAL_CancelNotifierAlarm(Interlocked.Add(ref m_notifier, 0));
+            int status = 0;
+            HAL_CancelNotifierAlarm(Interlocked.Add(ref m_notifier, 0), ref status);
+
         }
     }
 }

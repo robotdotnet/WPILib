@@ -199,7 +199,7 @@ namespace WPILib
             Array.Copy(receivedBuffer, dataReceived, Math.Min(receivedBuffer.Length, dataReceived.Length));
             return retVal;
         }
-
+        /*
         /// <summary>
         /// Initialize the accumulator.
         /// </summary>
@@ -329,5 +329,6 @@ namespace WPILib
             HAL_GetSPIAccumulatorOutput((byte)m_port, ref value, ref count, ref status);
             CheckStatus(status);
         }
+        */
     }
 }

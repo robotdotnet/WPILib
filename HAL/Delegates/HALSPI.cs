@@ -50,7 +50,7 @@ namespace HAL.Base
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_SetSPIHandleDelegate(int port, int handle);
         [NativeDelegate] public static HAL_SetSPIHandleDelegate HAL_SetSPIHandle;
-
+        /*
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_InitSPIAccumulatorDelegate(int port, int period, int cmd, int xfer_size, int valid_mask, int valid_value, int data_shift, int data_size, [MarshalAs(UnmanagedType.Bool)]bool is_signed, [MarshalAs(UnmanagedType.Bool)]bool big_endian, ref int status);
         [NativeDelegate] public static HAL_InitSPIAccumulatorDelegate HAL_InitSPIAccumulator;
 
@@ -80,6 +80,7 @@ namespace HAL.Base
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)] public delegate void HAL_GetSPIAccumulatorOutputDelegate(int port, ref long value, ref long count, ref int status);
         [NativeDelegate] public static HAL_GetSPIAccumulatorOutputDelegate HAL_GetSPIAccumulatorOutput;
+        */
     }
 }
 
