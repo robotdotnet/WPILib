@@ -78,16 +78,16 @@ namespace Hal
                 return true;
             }
 
-            const string resourceRoot = "FRC.Hal.DesktopLibraries.libraries.";
+            const string resourceRoot = "Hal.DesktopLibraries.libraries.";
 
             nativeLoader.AddLibraryLocation(OsType.Windows32,
-                resourceRoot + "windows.x86.wpiHalJni.dll");
+                resourceRoot + "windows.x86.wpiHaljni.dll");
             nativeLoader.AddLibraryLocation(OsType.Windows64,
-                resourceRoot + "windows.x86_64.wpiHalJni.dll");
+                resourceRoot + "windows.x86_64.wpiHaljni.dll");
             nativeLoader.AddLibraryLocation(OsType.Linux64,
-                resourceRoot + "linux.x86_64.libwpiHalJni.so");
+                resourceRoot + "linux.x86_64.libwpiHaljni.so");
             nativeLoader.AddLibraryLocation(OsType.MacOs64,
-                resourceRoot + "osx.x86_64.libwpiHalJni.dylib");
+                resourceRoot + "osx.x86_64.libwpiHaljni.dylib");
             nativeLoader.AddLibraryLocation(OsType.roboRIO, "wpiHal");
 
             nativeLoader.LoadNativeLibraryFromReflectedAssembly("FRC.Hal.DesktopLibraries");
