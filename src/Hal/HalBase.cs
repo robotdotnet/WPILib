@@ -1,10 +1,11 @@
 ﻿using Hal.Natives;
 using System;
 using System.Runtime.InteropServices;
+using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
-    [HalInterface(typeof(IHalBase))]
+    [NativeInterface(typeof(IHalBase))]
     public static class HalBase
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
@@ -17,7 +18,7 @@ namespace Hal
 
         public static bool HAL_Initialize()
         {
-            if (!HalInitializer.Initialize())
+            if (!NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(HalBase).Assembly, "wpiHal"))
             {
                 return false;
             }

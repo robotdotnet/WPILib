@@ -1,8 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>WPIUtil</RootNamespace>
+    <AssemblyName>FRC.WPIUtil</AssemblyName>
+
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
 
@@ -11,7 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-      <None Include="runtimes\win-x64\native\wpiHal.dll" Link="wpiHal.dll" CopyToOutputDirectory="Always" />
+      <None Include="runtimes\win-x64\native\wpiutil.dll" Link="wpiutil.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reflection.Emit" Version="4.7.0" />
+    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="4.7.0" />
   </ItemGroup>
 
 </Project>

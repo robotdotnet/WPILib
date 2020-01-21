@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.Utilities" Version="3.0.5" />
     <PackageReference Include="System.Memory" Version="4.5.3" />
   </ItemGroup>
 
@@ -20,6 +19,10 @@
 
   <ItemGroup>
       <None Include="runtimes\win-x64\native\wpiHal.dll" Link="wpiHal.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
   </ItemGroup>
   
 

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Hal\Hal.csproj" />
+    <ProjectReference Include="..\src\hal\hal.csproj" />
   </ItemGroup>
 
 </Project>
