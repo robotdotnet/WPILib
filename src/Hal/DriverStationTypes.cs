@@ -91,6 +91,4 @@ namespace Hal
         public uint Buttons => buttons;
         public byte Count => count;
     }
-
-    public unsafe struct 
 }

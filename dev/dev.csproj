@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Hal.DesktopLibraries\Hal.DesktopLibraries.csproj" />
     <ProjectReference Include="..\src\Hal\Hal.csproj" />
   </ItemGroup>
 

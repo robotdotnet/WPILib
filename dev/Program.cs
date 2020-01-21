@@ -1,5 +1,4 @@
 ﻿using Hal;
-using Hal.DesktopLibraries;
 using System;
 
 namespace dev
@@ -8,7 +7,6 @@ namespace dev
     {
         static void Main(string[] args)
         {
-            var names = typeof(Natives).Assembly.GetManifestResourceNames();
 
 
             // Hal.DesktopLibraries.libraries.windows.x86_64.wpiHalJni.dll 

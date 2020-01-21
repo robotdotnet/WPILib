@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <Content Include="runtimes\**" PackagePath="runtimes" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <None Include="runtimes\win-x64\native\wpiHal.dll" Link="wpiHal.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+</Project>

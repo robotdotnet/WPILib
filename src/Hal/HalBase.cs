@@ -1,5 +1,6 @@
 ﻿using Hal.Natives;
 using System;
+using System.Runtime.InteropServices;
 
 namespace Hal
 {
