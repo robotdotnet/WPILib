@@ -7,6 +7,7 @@
     <AssemblyName>FRC.Hal</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>Hal</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

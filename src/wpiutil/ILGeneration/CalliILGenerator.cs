@@ -13,9 +13,9 @@ namespace WPIUtil.ILGeneration
     /// </summary>
     public class CalliILGenerator : IILGenerator
     {
-        private delegate void GetMethodDelegate(ILGenerator generator, OpCode code, CallingConvention convention, Type returnType, Type[] parameterTypes);
+        private delegate void EmitCalliDelegate(ILGenerator generator, OpCode code, CallingConvention convention, Type returnType, Type[] parameterTypes);
 
-        private readonly GetMethodDelegate getMethod;
+        private readonly EmitCalliDelegate emitCalli;
 
         /// <summary>
         /// Construct a new Calli il generator
@@ -24,8 +24,8 @@ namespace WPIUtil.ILGeneration
         {
             var emitMethod = typeof(ILGenerator).GetMethod(nameof(ILGenerator.EmitCalli), new Type[] { typeof(OpCode), typeof(CallingConvention), typeof(Type), typeof(Type[]) });
 
-            var tmp = emitMethod?.CreateDelegate(typeof(GetMethodDelegate)) ?? throw new PlatformNotSupportedException("This platform does not support calli IL Generation");
-            getMethod = (GetMethodDelegate)tmp;
+            var tmp = emitMethod?.CreateDelegate(typeof(EmitCalliDelegate)) ?? throw new PlatformNotSupportedException("This platform does not support calli IL Generation");
+            emitCalli = (EmitCalliDelegate)tmp;
         }
 
         /// <summary>
@@ -36,21 +36,11 @@ namespace WPIUtil.ILGeneration
         /// <param name="parameters"></param>
         /// <param name="nativeFp"></param>
         /// <param name="isInstance"></param>
-        public unsafe void GenerateMethod(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, bool isInstance = false)
+        public unsafe void GenerateMethod(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp)
         {
-            if (isInstance)
+            for (int i = 0; i < parameters.Length; i++)
             {
-                for (int i = 0; i < parameters.Length; i++)
-                {
-                    generator.Emit(OpCodes.Ldarg, i + 1);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < parameters.Length; i++)
-                {
-                    generator.Emit(OpCodes.Ldarg, i);
-                }
+                generator.Emit(OpCodes.Ldarg, i + 1);
             }
             if (sizeof(IntPtr) == 8)
             {
@@ -60,7 +50,75 @@ namespace WPIUtil.ILGeneration
                 generator.Emit(OpCodes.Ldc_I4, (int)nativeFp);
             }
 
-            getMethod(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, parameters);
+            emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, parameters);
+
+            generator.Emit(OpCodes.Ret);
+        }
+
+        public unsafe void GenerateMethodLastParameterStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction)
+        {
+            // Insert hidden last parameter
+            generator.DeclareLocal(typeof(int));
+            generator.Emit(OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Stloc_0);
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                generator.Emit(OpCodes.Ldarg, i + 1);
+            }
+
+            generator.Emit(OpCodes.Ldloca_S, (byte)0);
+
+            if (sizeof(IntPtr) == 8)
+            {
+                generator.Emit(OpCodes.Ldc_I8, (long)nativeFp);
+            }
+            else
+            {
+                generator.Emit(OpCodes.Ldc_I4, (int)nativeFp);
+            }
+
+            var adjustedParameters = new Type[parameters.Length + 1];
+            Array.Copy(parameters, adjustedParameters, parameters.Length);
+            adjustedParameters[adjustedParameters.Length - 1] = typeof(int*);
+
+            emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, adjustedParameters);
+
+            generator.Emit(OpCodes.Ldloc_0);
+            
+
+            
+
+            generator.Emit(OpCodes.Call, checkFunction);
+
+            //generator.EmitCall(OpCodes.Call, checkFunction, null);
+
+            //generator.Emit(OpCodes.Pop);
+
+            generator.Emit(OpCodes.Ret);
+
+            ;
+        }
+
+        public unsafe void GenerateMethodReturnStatusCheck(ILGenerator generator, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction)
+        {
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                generator.Emit(OpCodes.Ldarg, i + 1);
+            }
+
+            if (sizeof(IntPtr) == 8)
+            {
+                generator.Emit(OpCodes.Ldc_I8, (long)nativeFp);
+            }
+            else
+            {
+                generator.Emit(OpCodes.Ldc_I4, (int)nativeFp);
+            }
+
+            emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, typeof(int), parameters);
+
+            generator.EmitCall(OpCodes.Call, checkFunction, null);
 
             generator.Emit(OpCodes.Ret);
         }

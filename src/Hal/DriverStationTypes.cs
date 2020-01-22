@@ -38,57 +38,43 @@ namespace Hal
         Elimination
     }
 
-    public unsafe struct JoystickAxesLowLevel
+    public unsafe struct JoystickAxes
     {
         public short count;
         public fixed short axes[12];
     }
 
-    public unsafe struct JoystickAxes
-    {
-        public short Count { get; }
-        public fixed float Axes[12];
-
-        public JoystickAxes(JoystickAxesLowLevel lowLevel)
-        {
-            Count = lowLevel.count;
-            if (Count > 12) Count = 12;
-            for (int i = 0; i < Count; i++)
-            {
-                Axes[i] = lowLevel.axes[i];
-            }
-        }
-    }
-
-    public unsafe struct JoystickPOVsLowLevel
-    {
-        public short count;
-        public fixed short povs[12];
-
-    }
-
     public unsafe struct JoystickPOVs
     {
-        public short Count { get; }
+        public short Count;
         public fixed short POVs[12];
 
-        public JoystickPOVs(JoystickPOVsLowLevel lowLevel)
-        {
-            Count = lowLevel.count;
-            if (Count > 12) Count = 12;
-            for (int i = 0; i < Count; i++)
-            {
-                POVs[i] = lowLevel.povs[i];
-            }
-        }
     }
 
     public unsafe struct JoystickButtons
     {
-        private uint buttons;
-        private byte count;
+        public uint Buttons;
+        public byte Count;
+    }
 
-        public uint Buttons => buttons;
-        public byte Count => count;
+    public unsafe struct JoystickDescriptor 
+    {
+        public byte IsXbox;
+        public byte Type;
+        public fixed byte Name[256];
+        public byte AxisCount;
+        public fixed byte AxisTypes[12];
+        public byte ButtonCount;
+        public byte PovCount;
+    }
+
+    public unsafe struct MatchInfo
+    {
+        public fixed char EventName[64];
+        public MatchType MatchType;
+        public ushort MatchNumber;
+        public byte ReplayNumber;
+        public fixed byte GameSpecificMessage[64];
+        public ushort GameSpecificMessageSize;
     }
 }

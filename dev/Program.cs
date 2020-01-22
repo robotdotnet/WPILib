@@ -7,11 +7,12 @@ namespace dev
     {
         static void Main(string[] args)
         {
-
-
-            // Hal.DesktopLibraries.libraries.windows.x86_64.wpiHalJni.dll 
-            // Hal.DesktopLibraries.libraries.windows.x86_64.wpiHaljni.dll
             HalBase.HAL_Initialize();
+            var v = HalBase.GetFPGAVersion();
+
+            var pwm = PWM.InitializePort(HalBase.GetPort(0));
+
+            var notifier = Notifier.Initialize();
             Console.WriteLine("Hello World!");
         }
     }

@@ -18,37 +18,63 @@ namespace WPIUtil.ILGeneration
             this.functionPointerLoader = functionPointerLoader;
             this.ilGenerator = ilGenerator;
         }
-        
-        public T? GenerateImplementation<T>() where T : class
+
+        public object?[] GenerateImplementations(Type[] types, MethodInfo statusCheckFunc)
         {
-            return (T?)GenerateImplementation(typeof(T));
-        }
+            if (types.Length == 0) return Array.Empty<object>();
 
-        public object? GenerateImplementation(Type t)
-        {
-            AssemblyBuilder asmBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(t.Name + "Asm"), AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = asmBuilder.DefineDynamicModule(t.Name + "Module");
-            TypeBuilder typeBuilder = moduleBuilder.DefineType("Default" + t.Name);
-            typeBuilder.AddInterfaceImplementation(t);
+            object?[] toRet = new object?[types.Length];
 
-            var methods = t.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+            AssemblyBuilder asmBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(types[0].Name + "Asm"), AssemblyBuilderAccess.Run);
+            ModuleBuilder moduleBuilder = asmBuilder.DefineDynamicModule(types[0].Name + "Module");
+            
 
-            foreach (var method in methods)
+            // Generate a type for containing our action.
+
+            int count = 0;
+            foreach (var t in types)
             {
-                var parameters = method.GetParameters().Select(x => x.ParameterType).ToArray();
-                var methodBuilder = typeBuilder.DefineMethod(method.Name, MethodAttributes.Virtual | MethodAttributes.Public, method.ReturnType, parameters);
-                var nativeCallAttribute = method.GetCustomAttribute<NativeNameAttribute>();
-                string nativeName = method.Name;
-                if (nativeCallAttribute != null && nativeCallAttribute.NativeName != null)
+                TypeBuilder typeBuilder = moduleBuilder.DefineType("Default" + t.Name);
+                typeBuilder.AddInterfaceImplementation(t);
+
+                var methods = t.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+                foreach (var method in methods)
                 {
-                    nativeName = nativeCallAttribute.NativeName;
+                    var parameters = method.GetParameters().Select(x => x.ParameterType).ToArray();
+                    var methodBuilder = typeBuilder.DefineMethod(method.Name, MethodAttributes.Virtual | MethodAttributes.Public, method.ReturnType, parameters);
+                    var nativeCallAttribute = method.GetCustomAttribute<NativeNameAttribute>();
+                    string nativeName = method.Name;
+                    if (nativeCallAttribute != null && nativeCallAttribute.NativeName != null)
+                    {
+                        nativeName = nativeCallAttribute.NativeName;
+                    }
+
+                    // Check to see if function has status check attributes
+                    if (method.GetCustomAttribute<StatusCheckLastParameterAttribute>() != null)
+                    {
+                        ilGenerator.GenerateMethodLastParameterStatusCheck(methodBuilder.GetILGenerator(), methodBuilder.ReturnType, parameters, functionPointerLoader.GetProcAddress(nativeName), statusCheckFunc);
+                    }
+                    else if (method.GetCustomAttribute<StatusCheckReturnValueAttribute>() != null)
+                    {
+                        ilGenerator.GenerateMethodReturnStatusCheck(methodBuilder.GetILGenerator(), parameters, functionPointerLoader.GetProcAddress(nativeName), statusCheckFunc);
+                    }
+                    else
+                    {
+                        ilGenerator.GenerateMethod(methodBuilder.GetILGenerator(), methodBuilder.ReturnType, parameters, functionPointerLoader.GetProcAddress(nativeName));
+                    }
+
+                    
                 }
-                ilGenerator.GenerateMethod(methodBuilder.GetILGenerator(), methodBuilder.ReturnType, parameters, functionPointerLoader.GetProcAddress(nativeName), true);
+
+                var typeInfo = typeBuilder.CreateTypeInfo();
+
+                toRet[count] = typeInfo?.GetConstructor(new Type[0])?.Invoke(null);
+                count++;
             }
 
-            var typeInfo = typeBuilder.CreateTypeInfo();
 
-            return typeInfo?.GetConstructor(new Type[0])?.Invoke(null);
+            return toRet;
         }
     }
 }
