@@ -2,12 +2,6 @@ using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
-    public enum RuntimeType : int
-    {
-        Athena,
-        Mock
-    }
-
     public interface IHalBase
     {
         int HAL_Initialize(int timeout, int mode);

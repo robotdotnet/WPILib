@@ -6,11 +6,22 @@ using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
+    public enum RuntimeType : int
+    {
+        Athena,
+        Mock
+    }
+
+
     [NativeInterface(typeof(IHalBase))]
     public static class HalBase
     {
         public static void StatusCheck(int status)
         {
+            if (status != 0)
+            {
+                throw new InvalidOperationException("TODO, Do Something About This Message");
+            }
             ;
         }
 
@@ -41,6 +52,32 @@ namespace Hal
         public static int GetFPGAVersion()
         {
             return halBase.HAL_GetFPGAVersion();
+        }
+
+        public static ulong GetFPGATimestamp()
+        {
+            return halBase.HAL_GetFPGATime();
+        }
+
+        public static bool HasMain()
+        {
+            return false;
+        }
+
+        public static void ExitMain()
+        {
+
+        }
+
+        public static void RunMain()
+        {
+
+        }
+
+
+        public static RuntimeType GetRuntimeType()
+        {
+            return halBase.HAL_GetRuntimeType();
         }
     }
 }

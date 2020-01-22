@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\hal\hal.csproj" />
+    <ProjectReference Include="..\src\wpilibsharp\wpilibsharp.csproj" />
   </ItemGroup>
 
 </Project>
