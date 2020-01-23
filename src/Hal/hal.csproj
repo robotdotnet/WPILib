@@ -19,6 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="athena\libwpiHal.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="athena\libwpiHal.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
       <None Include="runtimes\win-x64\native\wpiHal.dll" Link="wpiHal.dll" CopyToOutputDirectory="Always" />
   </ItemGroup>
 

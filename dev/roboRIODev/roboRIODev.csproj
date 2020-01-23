@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\hal\hal.csproj" />
+    <ProjectReference Include="..\..\src\wpilibsharp\wpilibsharp.csproj" />
+    <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>
