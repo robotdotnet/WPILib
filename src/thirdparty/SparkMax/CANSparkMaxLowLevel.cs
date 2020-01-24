@@ -138,8 +138,8 @@ namespace REV.SparkMax
         {
             get
             {
-                PeriodicStatus0LowLevel cStatus0;
-                CANSparkMaxDriver.GetPeriodicStatus0(m_sparkMax, &cStatus0);
+                PeriodicStatus0LowLevel cStatus0 = default;
+                //CANSparkMaxDriver.GetPeriodicStatus0(m_sparkMax, &cStatus0);
 
                 return new PeriodicStatus0(cStatus0);
             }

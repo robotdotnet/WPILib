@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace WPILib
 {
-    public abstract class RobotBase
+    public abstract class RobotBase : IDisposable
     {
         private static void RunRobot<Robot>(object m, ref Robot? robot) where Robot : RobotBase, new()
         {
@@ -41,7 +41,6 @@ namespace WPILib
 
             object m = new object();
             Robot? robot = null;
-            bool exited = false;
 
             if (Hal.HalBase.HasMain())
             {
@@ -57,7 +56,6 @@ namespace WPILib
                         lock (m)
                         {
                             robot = null;
-                            exited = true;
                             Monitor.PulseAll(m);
                         }
                         throw;
@@ -68,7 +66,6 @@ namespace WPILib
                     lock (m)
                     {
                         robot = null;
-                        exited = true;
                         Monitor.PulseAll(m);
                     }
                 });
@@ -96,6 +93,8 @@ namespace WPILib
                 RunRobot(m, ref robot);
             }
 
+            robot?.Dispose();
+
             return 0;
         }
 
@@ -122,6 +121,11 @@ namespace WPILib
         public abstract void StartCompetition();
 
         public abstract void EndCompetition();
+
+        public virtual void Dispose()
+        {
+            
+        }
 
         public bool IsReal => Hal.HalBase.GetRuntimeType() == Hal.RuntimeType.Athena;
         public bool IsSimulation => !IsReal;

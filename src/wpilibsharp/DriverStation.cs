@@ -13,7 +13,10 @@ namespace WPILib
     {
         
 
-        private static Lazy<DriverStation> lazyInstance = new Lazy<DriverStation>(LazyThreadSafetyMode.ExecutionAndPublication);
+        private static Lazy<DriverStation> lazyInstance = new Lazy<DriverStation>(() =>
+        {
+            return new DriverStation();
+        },LazyThreadSafetyMode.ExecutionAndPublication);
 
         public static DriverStation Instance => lazyInstance.Value;
 
