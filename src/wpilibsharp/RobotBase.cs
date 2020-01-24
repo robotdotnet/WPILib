@@ -20,7 +20,7 @@ namespace WPILib
 
         private static int RunHALInitialization()
         {
-            if (!Hal.HalBase.HAL_Initialize())
+            if (!Hal.HalBase.Initialize())
             {
                 Console.WriteLine("FATAL ERROR: HAL could not be initialized");
                 return -1;

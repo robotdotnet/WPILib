@@ -33,7 +33,7 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public static bool HAL_Initialize()
+        public static bool Initialize()
         {
             if (!NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(HalBase).Assembly, 
                 "wpiHal", typeof(HalBase).GetMethod(nameof(StatusCheck), BindingFlags.Public | BindingFlags.Static), 
@@ -78,6 +78,11 @@ namespace Hal
         public static RuntimeType GetRuntimeType()
         {
             return halBase.HAL_GetRuntimeType();
+        }
+
+        public static bool GetUserButton()
+        {
+            return halBase.HAL_GetFPGAButton() != 0;
         }
     }
 }
