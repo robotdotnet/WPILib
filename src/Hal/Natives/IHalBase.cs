@@ -2,38 +2,31 @@ using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
-    public interface IHalBase
+    public unsafe interface IHALBase
     {
         int HAL_Initialize(int timeout, int mode);
 
-        unsafe byte* HAL_GetErrorMessage(int code);
+        [StatusCheckLastParameter] ulong HAL_ExpandFPGATime(uint unexpanded_lower);
 
-        [StatusCheckLastParameter]
-        int HAL_GetFPGAVersion();
+        [StatusCheckLastParameter] int HAL_GetBrownedOut();
 
-        [StatusCheckLastParameter]
-        long HAL_GetFPGARevision();
+        byte* HAL_GetErrorMessage(int code);
 
-        RuntimeType HAL_GetRuntimeType();
+        [StatusCheckLastParameter] int HAL_GetFPGAButton();
 
-        [StatusCheckLastParameter]
-        int HAL_GetFPGAButton();
+        [StatusCheckLastParameter] long HAL_GetFPGARevision();
 
-        [StatusCheckLastParameter]
-        int HAL_GetSystemActive();
+        [StatusCheckLastParameter] ulong HAL_GetFPGATime();
 
-        [StatusCheckLastParameter]
-        int HAL_GetBrownedOut();
+        [StatusCheckLastParameter] int HAL_GetFPGAVersion();
 
         int HAL_GetPort(int channel);
 
         int HAL_GetPortWithModule(int module, int channel);
 
-        [StatusCheckLastParameter]
-        ulong HAL_GetFPGATime();
+        RuntimeType HAL_GetRuntimeType();
 
-        [StatusCheckLastParameter]
-        ulong HAL_ExpandFPGATime(uint unexpandedLower);
+        [StatusCheckLastParameter] int HAL_GetSystemActive();
+
     }
 }
-

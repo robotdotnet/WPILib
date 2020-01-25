@@ -1,0 +1,1697 @@
+{
+  "Files": [
+    "Accelerometer.h",
+    "AddressableLED.h",
+    "AddressableLEDTypes.h",
+    "AnalogAccumulator.h",
+    "AnalogGyro.h",
+    "AnalogInput.h",
+    "AnalogOutput.h",
+    "AnalogTrigger.h",
+    "CAN.h",
+    "CANAPI.h",
+    "CANAPITypes.h",
+    "ChipObject.h",
+    "Compressor.h",
+    "Constants.h",
+    "Counter.h",
+    "DIO.h",
+    "DMA.h",
+    "DriverStation.h",
+    "DriverStationTypes.h",
+    "DutyCycle.h",
+    "Encoder.h",
+    "Errors.h",
+    "Extensions.h",
+    "HAL.h",
+    "HALBase.h",
+    "I2C.h",
+    "I2CTypes.h",
+    "Interrupts.h",
+    "Main.h",
+    "Notifier.h",
+    "PDP.h",
+    "Ports.h",
+    "Power.h",
+    "PWM.h",
+    "Relay.h",
+    "SerialPort.h",
+    "SimDevice.h",
+    "Solenoid.h",
+    "SPI.h",
+    "SPITypes.h",
+    "Threads.h",
+    "Types.h",
+    "Value.h"
+  ],
+  "Functions": [
+    {
+      "Name": "HAL_AddDMAAnalogAccumulator",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMAAnalogInput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMAAveragedAnalogInput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMACounter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMACounterPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMADigitalSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMADutyCycle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMAEncoder",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AddDMAEncoderPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AllocateDigitalPWM",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AttachInterruptHandler",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_AttachInterruptHandlerThreaded",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CAN_CloseStreamSession",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CAN_GetCANStatus",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CAN_OpenStreamSession",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CAN_ReadStreamSession",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CAN_ReceiveMessage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CAN_SendMessage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CalibrateAnalogGyro",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CancelNotifierAlarm",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckAnalogInputChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckAnalogModule",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckAnalogOutputChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckCompressorModule",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckDIOChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckPDPChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckPDPModule",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckPWMChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckRelayChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckSolenoidChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CheckSolenoidModule",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CleanAnalogTrigger",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CleanCAN",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CleanInterrupts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CleanNotifier",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CleanPDP",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ClearAllPCMStickyFaults",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ClearCounterDownSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ClearCounterUpSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ClearPDPStickyFaults",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ClearSerial",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CloseI2C",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CloseSPI",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CloseSerial",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ConfigureSPIAutoStall",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CreateSimDevice",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CreateSimValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_CreateSimValueEnum",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_DisableInterrupts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_DisableSerialTermination",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_EnableInterrupts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_EnableSerialTermination",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ExitMain",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ExpandFPGATime",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FireOneShot",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FlushSerial",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ForceSPIAutoRead",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeAddressableLED",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeAnalogGyro",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeAnalogInputPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeAnalogOutputPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeCounter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeDIOPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeDMA",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeDigitalPWM",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeDutyCycle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeEncoder",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeJoystickName",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreePWMPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeRelayPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeSPIAuto",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeSimDevice",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_FreeSolenoidPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAccelerometerX",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAccelerometerY",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAccelerometerZ",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAccumulatorCount",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAccumulatorOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAccumulatorValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAllSolenoids",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAllianceStation",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogAverageBits",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogAverageValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogAverageVoltage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogGyroAngle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogGyroCenter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogGyroOffset",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogGyroRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogLSBWeight",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogOffset",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogOversampleBits",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogSampleRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogTriggerFPGAIndex",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogTriggerInWindow",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogTriggerOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogTriggerTriggerState",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogValueToVolts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogVoltage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetAnalogVoltsToValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetBrownedOut",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressor",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorClosedLoopControl",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorCurrent",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorCurrentTooHighFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorCurrentTooHighStickyFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorNotConnectedFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorNotConnectedStickyFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorPressureSwitch",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorShortedFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCompressorShortedStickyFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetControlWord",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCounter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCounterDirection",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCounterPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCounterSamplesToAverage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCounterStopped",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetCurrentThreadPriority",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDIO",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDIODirection",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMADirectPointer",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleAnalogAccumulator",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleAnalogInputRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleAveragedAnalogInputRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleCounter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleCounterPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleDigitalSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleDutyCycleOutputRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleEncoderPeriodRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleEncoderRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDMASampleTime",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDutyCycleFPGAIndex",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDutyCycleFrequency",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDutyCycleOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDutyCycleOutputRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetDutyCycleOutputScaleFactor",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoder",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderDecodingScaleFactor",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderDirection",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderDistance",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderDistancePerPulse",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderEncodingScale",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderEncodingType",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderFPGAIndex",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderSamplesToAverage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetEncoderStopped",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetErrorMessage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetFPGAButton",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetFPGARevision",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetFPGATime",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetFPGAVersion",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetFilterPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetFilterSelect",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickAxes",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickAxisType",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickButtons",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickDescriptor",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickIsXbox",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickName",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickPOVs",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetJoystickType",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetMatchInfo",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetMatchTime",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumAccumulators",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumAddressableLEDs",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumAnalogInputs",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumAnalogOutputs",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumAnalogTriggers",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumCounters",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumDigitalChannels",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumDigitalHeaders",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumDigitalPWMOutputs",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumDutyCycles",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumEncoders",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumInterrupts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumPCMModules",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumPDPChannels",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumPDPModules",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumPWMChannels",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumPWMHeaders",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumRelayChannels",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumRelayHeaders",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetNumSolenoidChannels",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPCMSolenoidBlackList",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPCMSolenoidVoltageFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPCMSolenoidVoltageStickyFault",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPAllChannelCurrents",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPChannelCurrent",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPTemperature",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPTotalCurrent",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPTotalEnergy",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPTotalPower",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPDPVoltage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMConfigRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMCycleStartTime",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMEliminateDeadband",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMLoopTiming",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMPosition",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPWMSpeed",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetPortWithModule",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetRelay",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetRuntimeType",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSPIAutoDroppedCount",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSPIHandle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSerialBytesReceived",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSerialFD",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSimValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSolenoid",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSystemActive",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetSystemClockTicksPerMicrosecond",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetThreadPriority",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserActive3V3",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserActive5V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserActive6V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserCurrent3V3",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserCurrent5V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserCurrent6V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserCurrentFaults3V3",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserCurrentFaults5V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserCurrentFaults6V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserVoltage3V3",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserVoltage5V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetUserVoltage6V",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetVinCurrent",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_GetVinVoltage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_HasMain",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitAccumulator",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitSPIAuto",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_Initialize",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeAddressableLED",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeAnalogGyro",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeAnalogInputPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeAnalogOutputPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeAnalogTrigger",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeAnalogTriggerDutyCycle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeCAN",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeCompressor",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeCounter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeDIOPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeDMA",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeDriverStation",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeDutyCycle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeEncoder",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeI2C",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeInterrupts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeNotifier",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializePDP",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializePWMPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeRelayPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeSPI",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeSerialPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeSerialPortDirect",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_InitializeSolenoidPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_IsAccumulatorChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_IsAnyPulsing",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_IsNewControlData",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_IsPulsing",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_LatchPWMZero",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_LoadExtensions",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_LoadOneExtension",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_MakeBoolean",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_MakeDouble",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_MakeInt",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_MakeLong",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ObserveUserProgramAutonomous",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ObserveUserProgramDisabled",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ObserveUserProgramStarting",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ObserveUserProgramTeleop",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ObserveUserProgramTest",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_Pulse",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadCANPacketLatest",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadCANPacketNew",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadCANPacketTimeout",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadDMA",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadDMADirect",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadI2C",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadInterruptFallingTimestamp",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadInterruptRisingTimestamp",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadSPI",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadSPIAutoReceivedData",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReadSerial",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ReleaseDSMutex",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_Report",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_RequestInterrupts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ResetAccumulator",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ResetAnalogGyro",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ResetCounter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ResetEncoder",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_ResetPDPTotalEnergy",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_RunMain",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SendError",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAccelerometerActive",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAccelerometerRange",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAccumulatorCenter",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAccumulatorDeadband",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAddressableLEDBitTiming",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAddressableLEDLength",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAddressableLEDOutputPort",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAddressableLEDSyncTime",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAllSolenoids",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogAverageBits",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogGyroDeadband",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogGyroParameters",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogGyroVoltsPerDegreePerSecond",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogInputSimDevice",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogOversampleBits",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogSampleRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogTriggerAveraged",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogTriggerFiltered",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogTriggerLimitsDutyCycle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogTriggerLimitsRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetAnalogTriggerLimitsVoltage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCompressorClosedLoopControl",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterAverageSize",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterDownSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterDownSourceEdge",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterExternalDirectionMode",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterMaxPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterPulseLengthMode",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterReverseDirection",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterSamplesToAverage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterSemiPeriodMode",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterUpDownMode",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterUpSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterUpSourceEdge",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCounterUpdateWhenEmpty",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetCurrentThreadPriority",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDIO",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDIODirection",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDIOSimDevice",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDMAExternalTrigger",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDMAPause",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDMARate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDigitalPWMDutyCycle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDigitalPWMOutputChannel",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDigitalPWMRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetDutyCycleSimDevice",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderDistancePerPulse",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderIndexSource",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderMaxPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderMinRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderReverseDirection",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderSamplesToAverage",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetEncoderSimDevice",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetFilterPeriod",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetFilterSelect",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetInterruptUpSourceEdge",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetJoystickOutputs",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetMain",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetNotifierName",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetOneShotDuration",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMConfig",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMConfigRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMDisabled",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMEliminateDeadband",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMPeriodScale",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMPosition",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMRaw",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetPWMSpeed",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetRelay",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSPIAutoTransmitData",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSPIChipSelectActiveHigh",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSPIChipSelectActiveLow",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSPIHandle",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSPIOpts",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSPISpeed",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialBaudRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialDataBits",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialFlowControl",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialParity",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialReadBufferSize",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialStopBits",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialTimeout",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialWriteBufferSize",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSerialWriteMode",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetShowExtensionsNotFoundMessages",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSimValue",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetSolenoid",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetThreadPriority",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_SetupAnalogGyro",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StartAddressableLEDOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StartDMA",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StartSPIAutoRate",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StartSPIAutoTrigger",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StopAddressableLEDOutput",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StopCANPacketRepeating",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StopDMA",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StopNotifier",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_StopSPIAuto",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_TransactionI2C",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_TransactionSPI",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_UpdateNotifierAlarm",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WaitForCachedControlData",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WaitForCachedControlDataTimeout",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WaitForDSData",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WaitForDSDataTimeout",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WaitForInterrupt",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WaitForNotifierAlarm",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteAddressableLEDData",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteCANPacket",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteCANPacketRepeating",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteCANRTRFrame",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteI2C",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteSPI",
+      "StatusCheck": "LastParameter"
+    },
+    {
+      "Name": "HAL_WriteSerial",
+      "StatusCheck": "LastParameter"
+    }
+  ]
+}
