@@ -16,7 +16,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  int HAL_GetDutyCycleOutputScaleFactor(int dutyCycleHandle);
 
-        [StatusCheckLastParameter]  int HAL_InitializeDutyCycle(int digitalSourceHandle, HAL_AnalogTriggerType triggerType);
+        [StatusCheckLastParameter]  int HAL_InitializeDutyCycle(int digitalSourceHandle, AnalogTriggerType triggerType);
 
          void HAL_SetDutyCycleSimDevice(int handle, int device);
 

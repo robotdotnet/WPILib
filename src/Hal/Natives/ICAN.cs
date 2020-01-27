@@ -10,7 +10,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  void HAL_CAN_OpenStreamSession(uint* sessionHandle, uint messageID, uint messageIDMask, uint maxMessages);
 
-        [StatusCheckLastParameter]  void HAL_CAN_ReadStreamSession(uint sessionHandle,  HAL_CANStreamMessage* messages, uint messagesToRead, uint* messagesRead);
+        [StatusCheckLastParameter]  void HAL_CAN_ReadStreamSession(uint sessionHandle,  CANStreamMessage* messages, uint messagesToRead, uint* messagesRead);
 
         [StatusCheckLastParameter]  void HAL_CAN_ReceiveMessage(uint* messageID, uint messageIDMask, byte* data, byte* dataSize, uint* timeStamp);
 

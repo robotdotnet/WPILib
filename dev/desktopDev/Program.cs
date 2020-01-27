@@ -1,6 +1,8 @@
-﻿using REV.SparkMax.Natives;
+﻿using Hal;
+using REV.SparkMax.Natives;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
@@ -22,9 +24,8 @@ namespace desktopDev
 
         static void Main(string[] args)
         {
-            int retVal = RobotBase.StartRobot<Robot>();
-            Console.WriteLine(retVal);
-            return;
+            var types = typeof(CANAPI).Assembly.GetTypes().Where(x => x.Namespace == "Hal.Natives").Where(x => x.IsInterface);
+            ;
         }
     }
 }

@@ -4,6 +4,8 @@ namespace Hal.Natives
 {
    public unsafe interface ICounter
     {
+        [StatusCheckLastParameter] int HAL_GetCounter(int counterHandle);
+
         [StatusCheckLastParameter]  void HAL_ClearCounterDownSource(int counterHandle);
 
         [StatusCheckLastParameter]  void HAL_ClearCounterUpSource(int counterHandle);
@@ -45,6 +47,8 @@ namespace Hal.Natives
         [StatusCheckLastParameter]  void HAL_SetCounterUpSourceEdge(int counterHandle, int risingEdge, int fallingEdge);
 
         [StatusCheckLastParameter]  void HAL_SetCounterUpdateWhenEmpty(int counterHandle, int enabled);
+
+        [StatusCheckLastParameter] int HAL_GetCounterStopped(int counterHandle);
 
     }
 }

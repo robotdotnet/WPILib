@@ -8,8 +8,6 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  int HAL_InitializeAddressableLED( int outputPort);
 
-        [StatusCheckLastParameter]  int HAL_InitializeAddressableLED( int outputPort);
-
         [StatusCheckLastParameter]  void HAL_SetAddressableLEDBitTiming(int handle, int lowTime0NanoSeconds, int highTime0NanoSeconds, int lowTime1NanoSeconds, int highTime1NanoSeconds);
 
         [StatusCheckLastParameter]  void HAL_SetAddressableLEDLength(int handle, int length);
@@ -22,7 +20,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  void HAL_StopAddressableLEDOutput(int handle);
 
-        [StatusCheckLastParameter]  void HAL_WriteAddressableLEDData(int handle,   HAL_AddressableLEDData* data, int length);
+        [StatusCheckLastParameter]  void HAL_WriteAddressableLEDData(int handle, AddressableLEDData* data, int length);
 
     }
 }

@@ -10,6 +10,8 @@ namespace Hal.Natives
 
          void HAL_FreeDIOPort(int dioPortHandle);
 
+        [StatusCheckLastParameter] void HAL_SetDIO(int dioPortHandle, int value);
+
         [StatusCheckLastParameter]  void HAL_FreeDigitalPWM(int pwmGenerator);
 
         [StatusCheckLastParameter]  int HAL_GetDIO(int dioPortHandle);
@@ -31,8 +33,6 @@ namespace Hal.Natives
          void HAL_SetDIOSimDevice(int handle, int device);
 
         [StatusCheckLastParameter]  void HAL_SetDIODirection(int dioPortHandle, int input);
-
-         void HAL_SetDIOSimDevice(int handle, int device);
 
         [StatusCheckLastParameter]  void HAL_SetDigitalPWMDutyCycle(int pwmGenerator, double dutyCycle);
 

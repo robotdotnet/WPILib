@@ -24,5 +24,9 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  void HAL_SetAnalogTriggerLimitsRaw(int analogTriggerHandle, int lower, int upper);
 
+        [StatusCheckLastParameter] void HAL_SetAnalogTriggerLimitsVoltage(int analogTriggerHandle, double lower, double upper);
+
+        [StatusCheckLastParameter] void HAL_SetAnalogTriggerLimitsDutyCycle(int analogTriggerHandle, double lower, double upper);
+
     }
 }

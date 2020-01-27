@@ -18,7 +18,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  int HAL_GetEncoderEncodingScale(int encoderHandle);
 
-        [StatusCheckLastParameter]  HAL_EncoderEncodingType HAL_GetEncoderEncodingType( int encoderHandle);
+        [StatusCheckLastParameter]  EncoderEncodingType HAL_GetEncoderEncodingType( int encoderHandle);
 
         [StatusCheckLastParameter]  int HAL_GetEncoderFPGAIndex(int encoderHandle);
 
@@ -30,11 +30,11 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  int HAL_GetEncoderSamplesToAverage(int encoderHandle);
 
-        [StatusCheckLastParameter]  int HAL_InitializeEncoder( int digitalSourceHandleA, HAL_AnalogTriggerType analogTriggerTypeA, int digitalSourceHandleB, HAL_AnalogTriggerType analogTriggerTypeB, int reverseDirection, HAL_EncoderEncodingType encodingType);
+        [StatusCheckLastParameter]  int HAL_InitializeEncoder( int digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, int digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType);
 
         [StatusCheckLastParameter]  void HAL_ResetEncoder(int encoderHandle);
 
-        [StatusCheckLastParameter]  void HAL_SetEncoderIndexSource(int encoderHandle, int digitalSourceHandle, HAL_AnalogTriggerType analogTriggerType, HAL_EncoderIndexingType type);
+        [StatusCheckLastParameter]  void HAL_SetEncoderIndexSource(int encoderHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type);
 
         [StatusCheckLastParameter]  void HAL_SetEncoderMaxPeriod(int encoderHandle, double maxPeriod);
 

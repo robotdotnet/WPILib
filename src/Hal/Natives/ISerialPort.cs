@@ -18,9 +18,9 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter]  int HAL_GetSerialFD(int handle);
 
-        [StatusCheckLastParameter]  int HAL_InitializeSerialPort(HAL_SerialPort port);
+        [StatusCheckLastParameter]  int HAL_InitializeSerialPort(SerialPort port);
 
-        [StatusCheckLastParameter]  int HAL_InitializeSerialPortDirect(HAL_SerialPort port,  byte* portName);
+        [StatusCheckLastParameter]  int HAL_InitializeSerialPortDirect(SerialPort port,  byte* portName);
 
         [StatusCheckLastParameter]  int HAL_ReadSerial(int handle, byte* buffer, int count);
 
