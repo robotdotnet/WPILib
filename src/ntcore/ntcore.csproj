@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>FRC.NetworkTables</AssemblyName>
+    <RootNamespace>NetworkTables</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="runtimes\**" PackagePath="runtimes" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="athena\libntcore.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="athena\libntcore.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="runtimes\win-x64\native\ntcore.dll" Link="ntcore.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>

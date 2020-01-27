@@ -72,6 +72,17 @@ namespace WPIUtil
         }
 
         /// <summary>
+        /// Reads a UTF8 string from a native pointer.
+        /// </summary>
+        /// <param name="str">The pointer to read from</param>
+        /// <param name="size">The length of the string</param>
+        /// <returns>The managed string</returns>
+        public static unsafe string ReadUTF8String(byte* str, UIntPtr size)
+        {
+            return Encoding.UTF8.GetString(str, (int)size);
+        }
+
+        /// <summary>
         /// Reads a UTF8 string from a null termincated native pointer
         /// </summary>
         /// <param name="str">The pointer to read from (must be null terminated)</param>
