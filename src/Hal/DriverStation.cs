@@ -12,7 +12,7 @@ namespace Hal
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static IDriverStation driverStation;
+        private static IDriverStation lowLevel;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
@@ -27,150 +27,150 @@ namespace Hal
             fixed (byte* det = detailsStr.Buffer)
             fixed (byte* cs = callStackStr.Buffer)
             {
-                return driverStation.HAL_SendError(isError ? 1 : 0, errorCode, isLVCode ? 1 : 0, det, loc, cs, printMsg ? 1 : 0) != 0;
+                return lowLevel.HAL_SendError(isError ? 1 : 0, errorCode, isLVCode ? 1 : 0, det, loc, cs, printMsg ? 1 : 0) != 0;
             }
         }
 
         public static ControlWord GetControlWord()
         {
             ControlWord cw;
-            driverStation.HAL_GetControlWord(&cw);
+            lowLevel.HAL_GetControlWord(&cw);
             return cw;
         }
 
         public static AllianceStationID GetAllianceStation()
         {
             int status = 0;
-            return driverStation.HAL_GetAllianceStation(&status);
+            return lowLevel.HAL_GetAllianceStation(&status);
         }
 
         public static JoystickAxes GetJoystickAxes(int joystickNum)
         {
             JoystickAxes js;
-            driverStation.HAL_GetJoystickAxes(joystickNum, &js);
+            lowLevel.HAL_GetJoystickAxes(joystickNum, &js);
             return js;
         }
 
         public static JoystickPOVs GetJoystickPOVs(int joystickNum)
         {
             JoystickPOVs povs;
-            driverStation.HAL_GetJoystickPOVs(joystickNum, &povs);
+            lowLevel.HAL_GetJoystickPOVs(joystickNum, &povs);
             return povs;
         }
 
         public static JoystickButtons GetJoystickButtons(int joystickNum)
         {
             JoystickButtons buttons;
-            driverStation.HAL_GetJoystickButtons(joystickNum, &buttons);
+            lowLevel.HAL_GetJoystickButtons(joystickNum, &buttons);
             return buttons;
         }
 
         public static JoystickDescriptor GetJoystickDescriptor(int joystickNum)
         {
             JoystickDescriptor descriptor;
-            driverStation.HAL_GetJoystickDescriptor(joystickNum, &descriptor);
+            lowLevel.HAL_GetJoystickDescriptor(joystickNum, &descriptor);
             return descriptor;
         }
 
         public static bool GetJoystickIsXbox(int joystickNum)
         {
-            return driverStation.HAL_GetJoystickIsXbox(joystickNum) != 0;
+            return lowLevel.HAL_GetJoystickIsXbox(joystickNum) != 0;
         }
 
         public static int GetJoystickType(int joystickNum)
         {
-            return driverStation.HAL_GetJoystickType(joystickNum);
+            return lowLevel.HAL_GetJoystickType(joystickNum);
         }
 
         public static string GetJoystickName(int joystickNum)
         {
-            byte* name = driverStation.HAL_GetJoystickName(joystickNum);
+            byte* name = lowLevel.HAL_GetJoystickName(joystickNum);
             string strName = UTF8String.ReadUTF8String(name);
-            driverStation.HAL_FreeJoystickName(name);
+            lowLevel.HAL_FreeJoystickName(name);
             return strName;
         }
 
         public static int GetJoystickAxisType(int joystickNum, int axis)
         {
-            return driverStation.HAL_GetJoystickAxisType(joystickNum, axis);
+            return lowLevel.HAL_GetJoystickAxisType(joystickNum, axis);
         }
 
         public static void SetJoystickOutputs(int joystickNum, long outputs, int leftRumble, int rightRumble)
         {
-            driverStation.HAL_SetJoystickOutputs(joystickNum, outputs, leftRumble, rightRumble);
+            lowLevel.HAL_SetJoystickOutputs(joystickNum, outputs, leftRumble, rightRumble);
         }
 
         public static double GetMatchTime()
         {
             int status = 0;
-            return driverStation.HAL_GetMatchTime(&status);
+            return lowLevel.HAL_GetMatchTime(&status);
         }
 
         public static MatchInfo GetMatchInfo()
         {
             MatchInfo info;
-            driverStation.HAL_GetMatchInfo(&info);
+            lowLevel.HAL_GetMatchInfo(&info);
             return info;
         }
 
         public static void ReleaseDSMutex()
         {
-            driverStation.HAL_ReleaseDSMutex();
+            lowLevel.HAL_ReleaseDSMutex();
         }
 
         public static void WaitForCachedControlData()
         {
-            driverStation.HAL_WaitForCachedControlData();
+            lowLevel.HAL_WaitForCachedControlData();
         }
 
         public static void WaitForCachedControlData(double timeout)
         {
-            driverStation.HAL_WaitForCachedControlDataTimeout(timeout);
+            lowLevel.HAL_WaitForCachedControlDataTimeout(timeout);
         }
 
         public static bool IsNewControlData()
         {
-            return driverStation.HAL_IsNewControlData() != 0;
+            return lowLevel.HAL_IsNewControlData() != 0;
         }
 
         public static void WaitForDSData()
         {
-            driverStation.HAL_WaitForDSData();
+            lowLevel.HAL_WaitForDSData();
         }
 
         public static void WaitForDSData(double timeout)
         {
-            driverStation.HAL_WaitForDSDataTimeout(timeout);
+            lowLevel.HAL_WaitForDSDataTimeout(timeout);
         }
 
         public static void InitializeDriverStation()
         {
-            driverStation.HAL_InitializeDriverStation();
+            lowLevel.HAL_InitializeDriverStation();
         }
 
         public static void ObserveUserProgramStarting()
         {
-            driverStation.HAL_ObserveUserProgramStarting();
+            lowLevel.HAL_ObserveUserProgramStarting();
         }
 
         public static void ObserveUserProgramDisabled()
         {
-            driverStation.HAL_ObserveUserProgramDisabled();
+            lowLevel.HAL_ObserveUserProgramDisabled();
         }
 
         public static void ObserveUserProgramAutonomous()
         {
-            driverStation.HAL_ObserveUserProgramAutonomous();
+            lowLevel.HAL_ObserveUserProgramAutonomous();
         }
 
         public static void ObserveUserProgramTeleop()
         {
-            driverStation.HAL_ObserveUserProgramTeleop();
+            lowLevel.HAL_ObserveUserProgramTeleop();
         }
 
         public static void ObserveUserProgramTest()
         {
-            driverStation.HAL_ObserveUserProgramTest();
+            lowLevel.HAL_ObserveUserProgramTest();
         }
     }
 }

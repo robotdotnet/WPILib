@@ -1,7 +1,5 @@
 ﻿using Hal.Natives;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -12,19 +10,19 @@ namespace Hal
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static ICANAPI api;
+        private static ICANAPI lowLevel;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         public static int Initialize(CANManufacturer manufacturer, int deviceId, CANDeviceType deviceType)
         {
-            return api.HAL_InitializeCAN(manufacturer, deviceId, deviceType);
+            return lowLevel.HAL_InitializeCAN(manufacturer, deviceId, deviceType);
         }
 
         public static void Clean(int handle)
         {
-            api.HAL_CleanCAN(handle);
+            lowLevel.HAL_CleanCAN(handle);
         }
 
         public unsafe static void WritePacket(int handle, ReadOnlySpan<byte> data, int apiId)
@@ -35,7 +33,7 @@ namespace Hal
             }
             byte* toWrite = stackalloc byte[8];
             data.CopyTo(new Span<byte>(toWrite, 8));
-            api.HAL_WriteCANPacket(handle, toWrite, data.Length, apiId);
+            lowLevel.HAL_WriteCANPacket(handle, toWrite, data.Length, apiId);
         }
 
         public unsafe static void WritePacketRepeating(int handle, ReadOnlySpan<byte> data, int apiId, TimeSpan repeatTime)
@@ -46,7 +44,7 @@ namespace Hal
             }
             byte* toWrite = stackalloc byte[8];
             data.CopyTo(new Span<byte>(toWrite, 8));
-            api.HAL_WriteCANPacketRepeating(handle, toWrite, data.Length, apiId, (int)repeatTime.TotalMilliseconds);
+            lowLevel.HAL_WriteCANPacketRepeating(handle, toWrite, data.Length, apiId, (int)repeatTime.TotalMilliseconds);
         }
 
 

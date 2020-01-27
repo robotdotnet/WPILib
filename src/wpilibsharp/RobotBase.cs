@@ -42,7 +42,7 @@ namespace WPILib
             object m = new object();
             Robot? robot = null;
 
-            if (Hal.HalBase.HasMain())
+            if (Hal.Main.HasMain())
             {
                 Thread thr = new Thread(() =>
                 {
@@ -52,7 +52,7 @@ namespace WPILib
                     }
                     catch
                     {
-                        Hal.HalBase.ExitMain();
+                        Hal.Main.ExitMain();
                         lock (m)
                         {
                             robot = null;
@@ -61,7 +61,7 @@ namespace WPILib
                         throw;
                     }
 
-                    Hal.HalBase.ExitMain();
+                    Hal.Main.ExitMain();
 
                     lock (m)
                     {
@@ -72,7 +72,7 @@ namespace WPILib
                 thr.Name = "Main Robot Thread";
                 thr.Start();
 
-                Hal.HalBase.RunMain();
+                Hal.Main.RunMain();
 
                 robot?.EndCompetition();
 

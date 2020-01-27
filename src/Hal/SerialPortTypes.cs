@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Hal
 {
-    public enum SerialPort
+    public enum SerialPortLocation
     {
         Onboard,
         MXP,

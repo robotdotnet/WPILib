@@ -14,13 +14,13 @@ namespace Hal
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static INotifier notifier;
+        private static INotifier lowLevel;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public static int Initialize()
         {
-            return notifier.HAL_InitializeNotifier();
+            return lowLevel.HAL_InitializeNotifier();
         }
 
         public static void SetName(int notifierHandle, ReadOnlySpan<char> name)
@@ -28,7 +28,7 @@ namespace Hal
             UTF8String str = new UTF8String(name);
             fixed (byte* b = str.Buffer)
             {
-                notifier.HAL_SetNotifierName(notifierHandle, b);
+                lowLevel.HAL_SetNotifierName(notifierHandle, b);
             }
         }
 
@@ -37,39 +37,39 @@ namespace Hal
             UTF8String str = new UTF8String(name);
             fixed(byte* b = str.Buffer)
             {
-                notifier.HAL_SetNotifierName(notifierHandle, b);
+                lowLevel.HAL_SetNotifierName(notifierHandle, b);
             }
         }
 
         public static void Stop(int notifierHandle)
         {
-            notifier.HAL_StopNotifier(notifierHandle);
+            lowLevel.HAL_StopNotifier(notifierHandle);
         }
 
         public static void Clean(int notifierHandle)
         {
-            notifier.HAL_CleanNotifier(notifierHandle);
+            lowLevel.HAL_CleanNotifier(notifierHandle);
         }
 
         public static void UpdateAlarm(int notifierHandle, ulong triggerTime)
         {
-            notifier.HAL_UpdateNotifierAlarm(notifierHandle, triggerTime);
+            lowLevel.HAL_UpdateNotifierAlarm(notifierHandle, triggerTime);
         }
 
         public static void CancelAlarm(int notifierHandle)
         {
-            notifier.HAL_CancelNotifierAlarm(notifierHandle);
+            lowLevel.HAL_CancelNotifierAlarm(notifierHandle);
         }
 
         public static ulong WaitForAlarm(int notifierHandle)
         {
-            return notifier.HAL_WaitForNotifierAlarm(notifierHandle);
+            return lowLevel.HAL_WaitForNotifierAlarm(notifierHandle);
         }
 
         public static ulong WaitForAlarm(int notifierHandle, out int status)
         {
             int statusPtr = 0;
-            var retVal = notifier.HAL_WaitForNotifierAlarm(notifierHandle, &statusPtr);
+            var retVal = lowLevel.HAL_WaitForNotifierAlarm(notifierHandle, &statusPtr);
             status = statusPtr;
             return retVal;
         }
