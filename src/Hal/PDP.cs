@@ -16,67 +16,67 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static int CheckPDPChannel(int channel)
+public static int CheckChannel(int channel)
 {
 return lowLevel.HAL_CheckPDPChannel(channel);
 }
 
-public static int CheckPDPModule(int module)
+public static int CheckModule(int module)
 {
 return lowLevel.HAL_CheckPDPModule(module);
 }
 
-public static void CleanPDP(int handle)
+public static void Clean(int handle)
 {
 lowLevel.HAL_CleanPDP(handle);
 }
 
-public static void ClearPDPStickyFaults(int handle)
+public static void ClearStickyFaults(int handle)
 {
 lowLevel.HAL_ClearPDPStickyFaults(handle);
 }
 
-public static void GetPDPAllChannelCurrents(int handle, double* currents)
+public static void GetAllChannelCurrents(int handle, double* currents)
 {
 lowLevel.HAL_GetPDPAllChannelCurrents(handle, currents);
 }
 
-public static double GetPDPChannelCurrent(int handle, int channel)
+public static double GetChannelCurrent(int handle, int channel)
 {
 return lowLevel.HAL_GetPDPChannelCurrent(handle, channel);
 }
 
-public static double GetPDPTemperature(int handle)
+public static double GetTemperature(int handle)
 {
 return lowLevel.HAL_GetPDPTemperature(handle);
 }
 
-public static double GetPDPTotalCurrent(int handle)
+public static double GetTotalCurrent(int handle)
 {
 return lowLevel.HAL_GetPDPTotalCurrent(handle);
 }
 
-public static double GetPDPTotalEnergy(int handle)
+public static double GetTotalEnergy(int handle)
 {
 return lowLevel.HAL_GetPDPTotalEnergy(handle);
 }
 
-public static double GetPDPTotalPower(int handle)
+public static double GetTotalPower(int handle)
 {
 return lowLevel.HAL_GetPDPTotalPower(handle);
 }
 
-public static double GetPDPVoltage(int handle)
+public static double GetVoltage(int handle)
 {
 return lowLevel.HAL_GetPDPVoltage(handle);
 }
 
-public static int InitializePDP(int module)
+public static int Initialize(int module)
 {
 return lowLevel.HAL_InitializePDP(module);
 }
 
-public static void ResetPDPTotalEnergy(int handle)
+public static void ResetTotalEnergy(int handle)
 {
 lowLevel.HAL_ResetPDPTotalEnergy(handle);
 }

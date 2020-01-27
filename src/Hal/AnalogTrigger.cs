@@ -16,62 +16,62 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static void CleanAnalogTrigger(int analogTriggerHandle)
+public static void Clean(int analogTriggerHandle)
 {
 lowLevel.HAL_CleanAnalogTrigger(analogTriggerHandle);
 }
 
-public static int GetAnalogTriggerFPGAIndex(int analogTriggerHandle)
+public static int GetFPGAIndex(int analogTriggerHandle)
 {
 return lowLevel.HAL_GetAnalogTriggerFPGAIndex(analogTriggerHandle);
 }
 
-public static int GetAnalogTriggerInWindow(int analogTriggerHandle)
+public static int GetInWindow(int analogTriggerHandle)
 {
 return lowLevel.HAL_GetAnalogTriggerInWindow(analogTriggerHandle);
 }
 
-public static int GetAnalogTriggerOutput(int analogTriggerHandle, AnalogTriggerType type)
+public static int GetOutput(int analogTriggerHandle, AnalogTriggerType type)
 {
 return lowLevel.HAL_GetAnalogTriggerOutput(analogTriggerHandle, type);
 }
 
-public static int GetAnalogTriggerTriggerState(int analogTriggerHandle)
+public static int GetTriggerState(int analogTriggerHandle)
 {
 return lowLevel.HAL_GetAnalogTriggerTriggerState(analogTriggerHandle);
 }
 
-public static int InitializeAnalogTrigger(int portHandle)
+public static int Initialize(int portHandle)
 {
 return lowLevel.HAL_InitializeAnalogTrigger(portHandle);
 }
 
-public static int InitializeAnalogTriggerDutyCycle(int dutyCycleHandle)
+public static int InitializeDutyCycle(int dutyCycleHandle)
 {
 return lowLevel.HAL_InitializeAnalogTriggerDutyCycle(dutyCycleHandle);
 }
 
-public static void SetAnalogTriggerAveraged(int analogTriggerHandle, int useAveragedValue)
+public static void SetAveraged(int analogTriggerHandle, int useAveragedValue)
 {
 lowLevel.HAL_SetAnalogTriggerAveraged(analogTriggerHandle, useAveragedValue);
 }
 
-public static void SetAnalogTriggerFiltered(int analogTriggerHandle, int useFilteredValue)
+public static void SetFiltered(int analogTriggerHandle, int useFilteredValue)
 {
 lowLevel.HAL_SetAnalogTriggerFiltered(analogTriggerHandle, useFilteredValue);
 }
 
-public static void SetAnalogTriggerLimitsRaw(int analogTriggerHandle, int lower, int upper)
+public static void SetLimitsRaw(int analogTriggerHandle, int lower, int upper)
 {
 lowLevel.HAL_SetAnalogTriggerLimitsRaw(analogTriggerHandle, lower, upper);
 }
 
-public static void SetAnalogTriggerLimitsVoltage(int analogTriggerHandle, double lower, double upper)
+public static void SetLimitsVoltage(int analogTriggerHandle, double lower, double upper)
 {
 lowLevel.HAL_SetAnalogTriggerLimitsVoltage(analogTriggerHandle, lower, upper);
 }
 
-public static void SetAnalogTriggerLimitsDutyCycle(int analogTriggerHandle, double lower, double upper)
+public static void SetLimitsDutyCycle(int analogTriggerHandle, double lower, double upper)
 {
 lowLevel.HAL_SetAnalogTriggerLimitsDutyCycle(analogTriggerHandle, lower, upper);
 }

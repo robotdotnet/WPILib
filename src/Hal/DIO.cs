@@ -21,17 +21,17 @@ public static int AllocateDigitalPWM()
 return lowLevel.HAL_AllocateDigitalPWM();
 }
 
-public static int CheckDIOChannel(int channel)
+public static int CheckChannel(int channel)
 {
 return lowLevel.HAL_CheckDIOChannel(channel);
 }
 
-public static void FreeDIOPort(int dioPortHandle)
+public static void FreePort(int dioPortHandle)
 {
 lowLevel.HAL_FreeDIOPort(dioPortHandle);
 }
 
-public static void SetDIO(int dioPortHandle, int value)
+public static void Set(int dioPortHandle, int value)
 {
 lowLevel.HAL_SetDIO(dioPortHandle, value);
 }
@@ -41,12 +41,12 @@ public static void FreeDigitalPWM(int pwmGenerator)
 lowLevel.HAL_FreeDigitalPWM(pwmGenerator);
 }
 
-public static int GetDIO(int dioPortHandle)
+public static int Get(int dioPortHandle)
 {
 return lowLevel.HAL_GetDIO(dioPortHandle);
 }
 
-public static int GetDIODirection(int dioPortHandle)
+public static int GetDirection(int dioPortHandle)
 {
 return lowLevel.HAL_GetDIODirection(dioPortHandle);
 }
@@ -61,7 +61,7 @@ public static int GetFilterSelect(int dioPortHandle)
 return lowLevel.HAL_GetFilterSelect(dioPortHandle);
 }
 
-public static int InitializeDIOPort(int portHandle, int input)
+public static int InitializePort(int portHandle, int input)
 {
 return lowLevel.HAL_InitializeDIOPort(portHandle, input);
 }
@@ -81,12 +81,12 @@ public static void Pulse(int dioPortHandle, double pulseLength)
 lowLevel.HAL_Pulse(dioPortHandle, pulseLength);
 }
 
-public static void SetDIOSimDevice(int handle, int device)
+public static void SetSimDevice(int handle, int device)
 {
 lowLevel.HAL_SetDIOSimDevice(handle, device);
 }
 
-public static void SetDIODirection(int dioPortHandle, int input)
+public static void SetDirection(int dioPortHandle, int input)
 {
 lowLevel.HAL_SetDIODirection(dioPortHandle, input);
 }

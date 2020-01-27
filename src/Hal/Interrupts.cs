@@ -26,22 +26,22 @@ public static void AttachInterruptHandlerThreaded(int interruptHandle, IntPtr ha
 lowLevel.HAL_AttachInterruptHandlerThreaded(interruptHandle, handler, param);
 }
 
-public static void* CleanInterrupts(int interruptHandle)
+public static void* Clean(int interruptHandle)
 {
 return lowLevel.HAL_CleanInterrupts(interruptHandle);
 }
 
-public static void DisableInterrupts(int interruptHandle)
+public static void Disable(int interruptHandle)
 {
 lowLevel.HAL_DisableInterrupts(interruptHandle);
 }
 
-public static void EnableInterrupts(int interruptHandle)
+public static void Enable(int interruptHandle)
 {
 lowLevel.HAL_EnableInterrupts(interruptHandle);
 }
 
-public static int InitializeInterrupts(int watcher)
+public static int Initialize(int watcher)
 {
 return lowLevel.HAL_InitializeInterrupts(watcher);
 }
@@ -56,7 +56,7 @@ public static long ReadInterruptRisingTimestamp(int interruptHandle)
 return lowLevel.HAL_ReadInterruptRisingTimestamp(interruptHandle);
 }
 
-public static void RequestInterrupts(int interruptHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType)
+public static void Request(int interruptHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType)
 {
 lowLevel.HAL_RequestInterrupts(interruptHandle, digitalSourceHandle, analogTriggerType);
 }

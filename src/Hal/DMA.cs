@@ -16,142 +16,142 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static void AddDMAAnalogAccumulator(int handle, int aInHandle)
+public static void AddAnalogAccumulator(int handle, int aInHandle)
 {
 lowLevel.HAL_AddDMAAnalogAccumulator(handle, aInHandle);
 }
 
-public static void AddDMAAnalogInput(int handle, int aInHandle)
+public static void AddAnalogInput(int handle, int aInHandle)
 {
 lowLevel.HAL_AddDMAAnalogInput(handle, aInHandle);
 }
 
-public static void AddDMAAveragedAnalogInput(int handle, int aInHandle)
+public static void AddAveragedAnalogInput(int handle, int aInHandle)
 {
 lowLevel.HAL_AddDMAAveragedAnalogInput(handle, aInHandle);
 }
 
-public static void AddDMACounter(int handle, int counterHandle)
+public static void AddCounter(int handle, int counterHandle)
 {
 lowLevel.HAL_AddDMACounter(handle, counterHandle);
 }
 
-public static void AddDMACounterPeriod(int handle, int counterHandle)
+public static void AddCounterPeriod(int handle, int counterHandle)
 {
 lowLevel.HAL_AddDMACounterPeriod(handle, counterHandle);
 }
 
-public static void AddDMADigitalSource(int handle, int digitalSourceHandle)
+public static void AddDigitalSource(int handle, int digitalSourceHandle)
 {
 lowLevel.HAL_AddDMADigitalSource(handle, digitalSourceHandle);
 }
 
-public static void AddDMADutyCycle(int handle, int dutyCycleHandle)
+public static void AddDutyCycle(int handle, int dutyCycleHandle)
 {
 lowLevel.HAL_AddDMADutyCycle(handle, dutyCycleHandle);
 }
 
-public static void AddDMAEncoder(int handle, int encoderHandle)
+public static void AddEncoder(int handle, int encoderHandle)
 {
 lowLevel.HAL_AddDMAEncoder(handle, encoderHandle);
 }
 
-public static void AddDMAEncoderPeriod(int handle, int encoderHandle)
+public static void AddEncoderPeriod(int handle, int encoderHandle)
 {
 lowLevel.HAL_AddDMAEncoderPeriod(handle, encoderHandle);
 }
 
-public static void FreeDMA(int handle)
+public static void Free(int handle)
 {
 lowLevel.HAL_FreeDMA(handle);
 }
 
-public static void* GetDMADirectPointer(int handle)
+public static void* GetDirectPointer(int handle)
 {
 return lowLevel.HAL_GetDMADirectPointer(handle);
 }
 
-public static void GetDMASampleAnalogAccumulator(DMASample* dmaSample, int aInHandle, long* count, long* value)
+public static void GetSampleAnalogAccumulator(DMASample* dmaSample, int aInHandle, long* count, long* value)
 {
 lowLevel.HAL_GetDMASampleAnalogAccumulator(dmaSample, aInHandle, count, value);
 }
 
-public static int GetDMASampleAnalogInputRaw(DMASample* dmaSample, int aInHandle)
+public static int GetSampleAnalogInputRaw(DMASample* dmaSample, int aInHandle)
 {
 return lowLevel.HAL_GetDMASampleAnalogInputRaw(dmaSample, aInHandle);
 }
 
-public static int GetDMASampleAveragedAnalogInputRaw(DMASample* dmaSample, int aInHandle)
+public static int GetSampleAveragedAnalogInputRaw(DMASample* dmaSample, int aInHandle)
 {
 return lowLevel.HAL_GetDMASampleAveragedAnalogInputRaw(dmaSample, aInHandle);
 }
 
-public static int GetDMASampleCounter(DMASample* dmaSample, int counterHandle)
+public static int GetSampleCounter(DMASample* dmaSample, int counterHandle)
 {
 return lowLevel.HAL_GetDMASampleCounter(dmaSample, counterHandle);
 }
 
-public static int GetDMASampleCounterPeriod(DMASample* dmaSample, int counterHandle)
+public static int GetSampleCounterPeriod(DMASample* dmaSample, int counterHandle)
 {
 return lowLevel.HAL_GetDMASampleCounterPeriod(dmaSample, counterHandle);
 }
 
-public static int GetDMASampleDigitalSource(DMASample* dmaSample, int dSourceHandle)
+public static int GetSampleDigitalSource(DMASample* dmaSample, int dSourceHandle)
 {
 return lowLevel.HAL_GetDMASampleDigitalSource(dmaSample, dSourceHandle);
 }
 
-public static int GetDMASampleDutyCycleOutputRaw(DMASample* dmaSample, int dutyCycleHandle)
+public static int GetSampleDutyCycleOutputRaw(DMASample* dmaSample, int dutyCycleHandle)
 {
 return lowLevel.HAL_GetDMASampleDutyCycleOutputRaw(dmaSample, dutyCycleHandle);
 }
 
-public static int GetDMASampleEncoderPeriodRaw(DMASample* dmaSample, int encoderHandle)
+public static int GetSampleEncoderPeriodRaw(DMASample* dmaSample, int encoderHandle)
 {
 return lowLevel.HAL_GetDMASampleEncoderPeriodRaw(dmaSample, encoderHandle);
 }
 
-public static int GetDMASampleEncoderRaw(DMASample* dmaSample, int encoderHandle)
+public static int GetSampleEncoderRaw(DMASample* dmaSample, int encoderHandle)
 {
 return lowLevel.HAL_GetDMASampleEncoderRaw(dmaSample, encoderHandle);
 }
 
-public static ulong GetDMASampleTime(DMASample* dmaSample)
+public static ulong GetSampleTime(DMASample* dmaSample)
 {
 return lowLevel.HAL_GetDMASampleTime(dmaSample);
 }
 
-public static int InitializeDMA()
+public static int Initialize()
 {
 return lowLevel.HAL_InitializeDMA();
 }
 
-public static DMAReadStatus ReadDMADirect(void* dmaPointer, DMASample* dmaSample, int timeoutMs, int* remainingOut)
+public static DMAReadStatus ReadDirect(void* dmaPointer, DMASample* dmaSample, int timeoutMs, int* remainingOut)
 {
 return lowLevel.HAL_ReadDMADirect(dmaPointer, dmaSample, timeoutMs, remainingOut);
 }
 
-public static void SetDMAExternalTrigger(int handle, int digitalSourceHandle, AnalogTriggerType analogTriggerType, int rising, int falling)
+public static void SetExternalTrigger(int handle, int digitalSourceHandle, AnalogTriggerType analogTriggerType, int rising, int falling)
 {
 lowLevel.HAL_SetDMAExternalTrigger(handle, digitalSourceHandle, analogTriggerType, rising, falling);
 }
 
-public static void SetDMAPause(int handle, int pause)
+public static void SetPause(int handle, int pause)
 {
 lowLevel.HAL_SetDMAPause(handle, pause);
 }
 
-public static void SetDMARate(int handle, int cycles)
+public static void SetRate(int handle, int cycles)
 {
 lowLevel.HAL_SetDMARate(handle, cycles);
 }
 
-public static void StartDMA(int handle, int queueDepth)
+public static void Start(int handle, int queueDepth)
 {
 lowLevel.HAL_StartDMA(handle, queueDepth);
 }
 
-public static void StopDMA(int handle)
+public static void Stop(int handle)
 {
 lowLevel.HAL_StopDMA(handle);
 }

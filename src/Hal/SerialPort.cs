@@ -51,12 +51,12 @@ public static int GetSerialFD(int handle)
 return lowLevel.HAL_GetSerialFD(handle);
 }
 
-public static int InitializeSerialPort(SerialPortLocation port)
+public static int Initialize(SerialPortLocation port)
 {
 return lowLevel.HAL_InitializeSerialPort(port);
 }
 
-public static int InitializeSerialPortDirect(SerialPortLocation port, byte* portName)
+public static int InitializeDirect(SerialPortLocation port, byte* portName)
 {
 return lowLevel.HAL_InitializeSerialPortDirect(port, portName);
 }

@@ -16,117 +16,117 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static int GetCounter(int counterHandle)
+public static int Get(int counterHandle)
 {
 return lowLevel.HAL_GetCounter(counterHandle);
 }
 
-public static void ClearCounterDownSource(int counterHandle)
+public static void ClearDownSource(int counterHandle)
 {
 lowLevel.HAL_ClearCounterDownSource(counterHandle);
 }
 
-public static void ClearCounterUpSource(int counterHandle)
+public static void ClearUpSource(int counterHandle)
 {
 lowLevel.HAL_ClearCounterUpSource(counterHandle);
 }
 
-public static void FreeCounter(int counterHandle)
+public static void Free(int counterHandle)
 {
 lowLevel.HAL_FreeCounter(counterHandle);
 }
 
-public static int GetCounterSamplesToAverage(int counterHandle)
+public static int GetSamplesToAverage(int counterHandle)
 {
 return lowLevel.HAL_GetCounterSamplesToAverage(counterHandle);
 }
 
-public static int GetCounterDirection(int counterHandle)
+public static int GetDirection(int counterHandle)
 {
 return lowLevel.HAL_GetCounterDirection(counterHandle);
 }
 
-public static double GetCounterPeriod(int counterHandle)
+public static double GetPeriod(int counterHandle)
 {
 return lowLevel.HAL_GetCounterPeriod(counterHandle);
 }
 
-public static int InitializeCounter(CounterMode mode, int* index)
+public static int Initialize(CounterMode mode, int* index)
 {
 return lowLevel.HAL_InitializeCounter(mode, index);
 }
 
-public static void ResetCounter(int counterHandle)
+public static void Reset(int counterHandle)
 {
 lowLevel.HAL_ResetCounter(counterHandle);
 }
 
-public static void SetCounterAverageSize(int counterHandle, int size)
+public static void SetAverageSize(int counterHandle, int size)
 {
 lowLevel.HAL_SetCounterAverageSize(counterHandle, size);
 }
 
-public static void SetCounterDownSource(int counterHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType)
+public static void SetDownSource(int counterHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType)
 {
 lowLevel.HAL_SetCounterDownSource(counterHandle, digitalSourceHandle, analogTriggerType);
 }
 
-public static void SetCounterDownSourceEdge(int counterHandle, int risingEdge, int fallingEdge)
+public static void SetDownSourceEdge(int counterHandle, int risingEdge, int fallingEdge)
 {
 lowLevel.HAL_SetCounterDownSourceEdge(counterHandle, risingEdge, fallingEdge);
 }
 
-public static void SetCounterExternalDirectionMode(int counterHandle)
+public static void SetExternalDirectionMode(int counterHandle)
 {
 lowLevel.HAL_SetCounterExternalDirectionMode(counterHandle);
 }
 
-public static void SetCounterMaxPeriod(int counterHandle, double maxPeriod)
+public static void SetMaxPeriod(int counterHandle, double maxPeriod)
 {
 lowLevel.HAL_SetCounterMaxPeriod(counterHandle, maxPeriod);
 }
 
-public static void SetCounterPulseLengthMode(int counterHandle, double threshold)
+public static void SetPulseLengthMode(int counterHandle, double threshold)
 {
 lowLevel.HAL_SetCounterPulseLengthMode(counterHandle, threshold);
 }
 
-public static void SetCounterReverseDirection(int counterHandle, int reverseDirection)
+public static void SetReverseDirection(int counterHandle, int reverseDirection)
 {
 lowLevel.HAL_SetCounterReverseDirection(counterHandle, reverseDirection);
 }
 
-public static void SetCounterSamplesToAverage(int counterHandle, int samplesToAverage)
+public static void SetSamplesToAverage(int counterHandle, int samplesToAverage)
 {
 lowLevel.HAL_SetCounterSamplesToAverage(counterHandle, samplesToAverage);
 }
 
-public static void SetCounterSemiPeriodMode(int counterHandle, int highSemiPeriod)
+public static void SetSemiPeriodMode(int counterHandle, int highSemiPeriod)
 {
 lowLevel.HAL_SetCounterSemiPeriodMode(counterHandle, highSemiPeriod);
 }
 
-public static void SetCounterUpDownMode(int counterHandle)
+public static void SetUpDownMode(int counterHandle)
 {
 lowLevel.HAL_SetCounterUpDownMode(counterHandle);
 }
 
-public static void SetCounterUpSource(int counterHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType)
+public static void SetUpSource(int counterHandle, int digitalSourceHandle, AnalogTriggerType analogTriggerType)
 {
 lowLevel.HAL_SetCounterUpSource(counterHandle, digitalSourceHandle, analogTriggerType);
 }
 
-public static void SetCounterUpSourceEdge(int counterHandle, int risingEdge, int fallingEdge)
+public static void SetUpSourceEdge(int counterHandle, int risingEdge, int fallingEdge)
 {
 lowLevel.HAL_SetCounterUpSourceEdge(counterHandle, risingEdge, fallingEdge);
 }
 
-public static void SetCounterUpdateWhenEmpty(int counterHandle, int enabled)
+public static void SetUpdateWhenEmpty(int counterHandle, int enabled)
 {
 lowLevel.HAL_SetCounterUpdateWhenEmpty(counterHandle, enabled);
 }
 
-public static int GetCounterStopped(int counterHandle)
+public static int GetStopped(int counterHandle)
 {
 return lowLevel.HAL_GetCounterStopped(counterHandle);
 }

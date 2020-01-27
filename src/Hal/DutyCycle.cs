@@ -16,42 +16,42 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static void FreeDutyCycle(int dutyCycleHandle)
+public static void Free(int dutyCycleHandle)
 {
 lowLevel.HAL_FreeDutyCycle(dutyCycleHandle);
 }
 
-public static int GetDutyCycleFPGAIndex(int dutyCycleHandle)
+public static int GetFPGAIndex(int dutyCycleHandle)
 {
 return lowLevel.HAL_GetDutyCycleFPGAIndex(dutyCycleHandle);
 }
 
-public static int GetDutyCycleFrequency(int dutyCycleHandle)
+public static int GetFrequency(int dutyCycleHandle)
 {
 return lowLevel.HAL_GetDutyCycleFrequency(dutyCycleHandle);
 }
 
-public static double GetDutyCycleOutput(int dutyCycleHandle)
+public static double GetOutput(int dutyCycleHandle)
 {
 return lowLevel.HAL_GetDutyCycleOutput(dutyCycleHandle);
 }
 
-public static int GetDutyCycleOutputRaw(int dutyCycleHandle)
+public static int GetOutputRaw(int dutyCycleHandle)
 {
 return lowLevel.HAL_GetDutyCycleOutputRaw(dutyCycleHandle);
 }
 
-public static int GetDutyCycleOutputScaleFactor(int dutyCycleHandle)
+public static int GetOutputScaleFactor(int dutyCycleHandle)
 {
 return lowLevel.HAL_GetDutyCycleOutputScaleFactor(dutyCycleHandle);
 }
 
-public static int InitializeDutyCycle(int digitalSourceHandle, AnalogTriggerType triggerType)
+public static int Initialize(int digitalSourceHandle, AnalogTriggerType triggerType)
 {
 return lowLevel.HAL_InitializeDutyCycle(digitalSourceHandle, triggerType);
 }
 
-public static void SetDutyCycleSimDevice(int handle, int device)
+public static void SetSimDevice(int handle, int device)
 {
 lowLevel.HAL_SetDutyCycleSimDevice(handle, device);
 }

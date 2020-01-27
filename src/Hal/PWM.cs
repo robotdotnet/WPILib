@@ -16,92 +16,92 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static int CheckPWMChannel(int channel)
+public static int CheckChannel(int channel)
 {
 return lowLevel.HAL_CheckPWMChannel(channel);
 }
 
-public static void FreePWMPort(int pwmPortHandle)
+public static void FreePort(int pwmPortHandle)
 {
 lowLevel.HAL_FreePWMPort(pwmPortHandle);
 }
 
-public static ulong GetPWMCycleStartTime()
+public static ulong GetCycleStartTime()
 {
 return lowLevel.HAL_GetPWMCycleStartTime();
 }
 
-public static int GetPWMEliminateDeadband(int pwmPortHandle)
+public static int GetEliminateDeadband(int pwmPortHandle)
 {
 return lowLevel.HAL_GetPWMEliminateDeadband(pwmPortHandle);
 }
 
-public static int GetPWMLoopTiming()
+public static int GetLoopTiming()
 {
 return lowLevel.HAL_GetPWMLoopTiming();
 }
 
-public static double GetPWMPosition(int pwmPortHandle)
+public static double GetPosition(int pwmPortHandle)
 {
 return lowLevel.HAL_GetPWMPosition(pwmPortHandle);
 }
 
-public static int GetPWMRaw(int pwmPortHandle)
+public static int GetRaw(int pwmPortHandle)
 {
 return lowLevel.HAL_GetPWMRaw(pwmPortHandle);
 }
 
-public static double GetPWMSpeed(int pwmPortHandle)
+public static double GetSpeed(int pwmPortHandle)
 {
 return lowLevel.HAL_GetPWMSpeed(pwmPortHandle);
 }
 
-public static int InitializePWMPort(int portHandle)
+public static int InitializePort(int portHandle)
 {
 return lowLevel.HAL_InitializePWMPort(portHandle);
 }
 
-public static void LatchPWMZero(int pwmPortHandle)
+public static void LatchZero(int pwmPortHandle)
 {
 lowLevel.HAL_LatchPWMZero(pwmPortHandle);
 }
 
-public static void SetPWMConfig(int pwmPortHandle, double maxPwm, double deadbandMaxPwm, double centerPwm, double deadbandMinPwm, double minPwm)
+public static void SetConfig(int pwmPortHandle, double maxPwm, double deadbandMaxPwm, double centerPwm, double deadbandMinPwm, double minPwm)
 {
 lowLevel.HAL_SetPWMConfig(pwmPortHandle, maxPwm, deadbandMaxPwm, centerPwm, deadbandMinPwm, minPwm);
 }
 
-public static void SetPWMConfigRaw(int pwmPortHandle, int maxPwm, int deadbandMaxPwm, int centerPwm, int deadbandMinPwm, int minPwm)
+public static void SetConfigRaw(int pwmPortHandle, int maxPwm, int deadbandMaxPwm, int centerPwm, int deadbandMinPwm, int minPwm)
 {
 lowLevel.HAL_SetPWMConfigRaw(pwmPortHandle, maxPwm, deadbandMaxPwm, centerPwm, deadbandMinPwm, minPwm);
 }
 
-public static void SetPWMDisabled(int pwmPortHandle)
+public static void SetDisabled(int pwmPortHandle)
 {
 lowLevel.HAL_SetPWMDisabled(pwmPortHandle);
 }
 
-public static void SetPWMEliminateDeadband(int pwmPortHandle, int eliminateDeadband)
+public static void SetEliminateDeadband(int pwmPortHandle, int eliminateDeadband)
 {
 lowLevel.HAL_SetPWMEliminateDeadband(pwmPortHandle, eliminateDeadband);
 }
 
-public static void SetPWMPeriodScale(int pwmPortHandle, int squelchMask)
+public static void SetPeriodScale(int pwmPortHandle, int squelchMask)
 {
 lowLevel.HAL_SetPWMPeriodScale(pwmPortHandle, squelchMask);
 }
 
-public static void SetPWMPosition(int pwmPortHandle, double position)
+public static void SetPosition(int pwmPortHandle, double position)
 {
 lowLevel.HAL_SetPWMPosition(pwmPortHandle, position);
 }
 
-public static void SetPWMRaw(int pwmPortHandle, int value)
+public static void SetRaw(int pwmPortHandle, int value)
 {
 lowLevel.HAL_SetPWMRaw(pwmPortHandle, value);
 }
 
-public static void SetPWMSpeed(int pwmPortHandle, double speed)
+public static void SetSpeed(int pwmPortHandle, double speed)
 {
 lowLevel.HAL_SetPWMSpeed(pwmPortHandle, speed);
 }

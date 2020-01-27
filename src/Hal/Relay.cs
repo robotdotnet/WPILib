@@ -16,27 +16,27 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static int CheckRelayChannel(int channel)
+public static int CheckChannel(int channel)
 {
 return lowLevel.HAL_CheckRelayChannel(channel);
 }
 
-public static void FreeRelayPort(int relayPortHandle)
+public static void FreePort(int relayPortHandle)
 {
 lowLevel.HAL_FreeRelayPort(relayPortHandle);
 }
 
-public static int GetRelay(int relayPortHandle)
+public static int Get(int relayPortHandle)
 {
 return lowLevel.HAL_GetRelay(relayPortHandle);
 }
 
-public static int InitializeRelayPort(int portHandle, int fwd)
+public static int InitializePort(int portHandle, int fwd)
 {
 return lowLevel.HAL_InitializeRelayPort(portHandle, fwd);
 }
 
-public static void SetRelay(int relayPortHandle, int on)
+public static void Set(int relayPortHandle, int on)
 {
 lowLevel.HAL_SetRelay(relayPortHandle, on);
 }

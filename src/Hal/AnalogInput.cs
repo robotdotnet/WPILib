@@ -16,7 +16,7 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static int CheckAnalogInputChannel(int channel)
+public static int CheckChannel(int channel)
 {
 return lowLevel.HAL_CheckAnalogInputChannel(channel);
 }
@@ -26,7 +26,7 @@ public static int CheckAnalogModule(int module)
 return lowLevel.HAL_CheckAnalogModule(module);
 }
 
-public static void FreeAnalogInputPort(int analogPortHandle)
+public static void FreePort(int analogPortHandle)
 {
 lowLevel.HAL_FreeAnalogInputPort(analogPortHandle);
 }
@@ -86,7 +86,7 @@ public static int GetAnalogVoltsToValue(int analogPortHandle, double voltage)
 return lowLevel.HAL_GetAnalogVoltsToValue(analogPortHandle, voltage);
 }
 
-public static int InitializeAnalogInputPort(int portHandle)
+public static int InitializePort(int portHandle)
 {
 return lowLevel.HAL_InitializeAnalogInputPort(portHandle);
 }
@@ -96,7 +96,7 @@ public static void SetAnalogAverageBits(int analogPortHandle, int bits)
 lowLevel.HAL_SetAnalogAverageBits(analogPortHandle, bits);
 }
 
-public static void SetAnalogInputSimDevice(int handle, int device)
+public static void SetSimDevice(int handle, int device)
 {
 lowLevel.HAL_SetAnalogInputSimDevice(handle, device);
 }

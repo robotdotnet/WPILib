@@ -60,7 +60,7 @@ namespace Hal
                     {
                         builder.Append($"public static {method.ReturnType.Name} ");
                     }
-                    builder.Append($"{method.Name.Replace("HAL_", "")}(");
+                    builder.Append($"{method.Name.Replace("HAL_", "").Replace(className, "")}(");
 
                     bool first = true;
 
