@@ -6,6 +6,8 @@
     <RootNamespace>WPILib</RootNamespace>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

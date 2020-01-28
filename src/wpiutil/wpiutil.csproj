@@ -5,10 +5,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RootNamespace>WPIUtil</RootNamespace>
     <AssemblyName>FRC.WPIUtil</AssemblyName>
-
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
 

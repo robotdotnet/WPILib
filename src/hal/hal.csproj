@@ -8,6 +8,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RootNamespace>Hal</RootNamespace>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
