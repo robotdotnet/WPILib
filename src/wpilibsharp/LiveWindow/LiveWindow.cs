@@ -15,7 +15,8 @@ namespace WPILib.LiveWindow
             public bool TelemetryEnabled { get; set; }
         }
 
-        private static readonly int dataHandle = SendableRegistry.DataHandle;
+        private static readonly SendableRegistry registry = SendableRegistry.Instance;
+        private static readonly int dataHandle = registry.DataHandle;
 
         private static readonly NetworkTable liveWindowTable = NetworkTableInstance.Default.GetTable("LiveWindow");
         private static readonly NetworkTable statusTable = liveWindowTable.GetSubTable(".status");
@@ -29,13 +30,13 @@ namespace WPILib.LiveWindow
         private static Action? enabledListener;
         private static Action? disabledListener;
 
-        private static Component getOrAdd(Sendable sendable)
+        private static Component GetOrAdd(Sendable sendable)
         {
-            Component? data = (Component?)SendableRegistry.GetData(sendable, dataHandle);
+            Component? data = (Component?)registry.GetData(sendable, dataHandle);
             if (data == null)
             {
                 data = new Component();
-                SendableRegistry.SetData(sendable, dataHandle, data);
+                registry.SetData(sendable, dataHandle, data);
             }
             return data;
         }

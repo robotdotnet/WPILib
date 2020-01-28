@@ -12,6 +12,28 @@ namespace WPILib.SmartDashboard
         public Action SafeState { set => throw new NotImplementedException(); }
         public Action UpdateTable { set => throw new NotImplementedException(); }
 
+        public NetworkTable Table { get; set; }
+
+        public void TriggerUpdateTable()
+        {
+
+        }
+
+        public void StartListeners()
+        {
+
+        }
+
+        public void StopListeners()
+        {
+
+        }
+
+        public void ClearProperties()
+        {
+
+        }
+
         public void AddBooleanArrayProperty(string key, Func<bool[]> getter, Action<bool[]> setter)
         {
             throw new NotImplementedException();
