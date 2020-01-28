@@ -27,7 +27,7 @@ namespace WPILib
 
         public static void ReportError(string error, string stackTrace)
         {
-            //ReportErrorImpl(true, 1, error, stackTrace);
+            ReportErrorImpl(true, 1, error, stackTrace);
         }
 
         public static void ReportWarning(string error, bool printTrace)
@@ -37,12 +37,27 @@ namespace WPILib
 
         public static void ReportWarning(string error, string stackTrace)
         {
-            //ReportErrorImpl(false, 1, error, stackTrace);
+            ReportErrorImpl(false, 1, error, stackTrace);
         }
 
         private static void ReportErrorImpl(bool isError, int code, string error, bool printTrace)
         {
-            //ReportErrorImpl(isError, code, error, printTrace, System.Environment.StackTrace);
+            ReportErrorImpl(isError, code, error, printTrace, System.Environment.StackTrace, 3);
+        }
+
+        private static void ReportErrorImpl(bool isError, int code, string error, string stackTrace)
+        {
+            ReportErrorImpl(isError, code, error, true, stackTrace, 0);
+        }
+
+        private static void ReportErrorImpl(bool isError, int code, string error, bool printTrace, string stackTrace, int stackTraceFirst)
+        {
+            ReadOnlySpan<char> printedTrace = stackTrace.AsSpan();
+            if (!printTrace)
+            {
+                printedTrace = "".AsSpan();
+            }
+            Hal.DriverStation.SendError(isError, code, false, error.AsSpan(), "".AsSpan(), printedTrace, true);
         }
 
         private bool m_userInDisabled = false;

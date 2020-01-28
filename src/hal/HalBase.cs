@@ -2,6 +2,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using WPIUtil;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -20,7 +21,7 @@ namespace Hal
         {
             if (status != 0)
             {
-                throw new InvalidOperationException("TODO, Do Something About This Message");
+                throw new UncleanStatusException(status);
             }
             ;
         }
@@ -59,9 +60,16 @@ namespace Hal
             return lowLevel.HAL_GetBrownedOut() != 0;
         }
 
-        public static string GetErrorMessage(int code)
+        public static unsafe string GetErrorMessage(int code)
         {
-            return "";
+            try
+            {
+                return UTF8String.ReadUTF8String(lowLevel.HAL_GetErrorMessage(code));
+            }
+            catch
+            {
+                return "Error determining status";
+            }
         }
 
         public static int GetPortWithModule(int module, int channel)

@@ -148,7 +148,6 @@ namespace WPILib
 
             RobotPeriodic();
             m_watchdog.AddEpoch("RobotPeriodic()");
-
             m_watchdog.Disable();
 
             if (m_watchdog.IsExpired)

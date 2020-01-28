@@ -5,7 +5,7 @@ using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
-    [NativeInterface(typeof(IExtensions))]
+    //[NativeInterface(typeof(IExtensions))]
     public unsafe static class Extensions
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

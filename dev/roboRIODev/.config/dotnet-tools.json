@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "isRoot": true,
+  "tools": {
+    "frc.dotnet.cli": {
+      "version": "2020.1.1",
+      "commands": [
+        "frc"
+      ]
+    }
+  }
+}

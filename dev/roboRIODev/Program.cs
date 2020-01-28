@@ -19,7 +19,14 @@ namespace roboRIODev
         public unsafe override void RobotPeriodic()
         {
             int idxLocal = idx;
-            CANAPI.WritePacket(can, new Span<byte>(&idxLocal, 4), 42);
+            try
+            {
+                CANAPI.WritePacket(can, new Span<byte>(&idxLocal, 4), 42);
+            }
+            catch (UncleanStatusException ex)
+            {
+                ;
+            }
 
             var current = Timer.FPGATimestamp;
             var delta = current - lastTime;

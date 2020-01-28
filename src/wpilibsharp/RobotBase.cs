@@ -53,6 +53,7 @@ namespace WPILib
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 DriverStation.ReportError("Unhandled Exception: " + ex.Message, ex.StackTrace);
                 errorOnExit = true;
             }
