@@ -16,7 +16,7 @@ namespace WPILib.SmartDashboard
             public string m_subsystem = "Ungrouped";
             public WeakReference<Sendable>? m_parent;
             public bool m_liveWindow;
-            public object[] m_data;
+            public object[]? m_data;
 
             public Component() { }
 
