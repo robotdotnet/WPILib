@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+    <AssemblyName>FRC.Hal</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RootNamespace>Hal</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Memory" Version="4.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="runtimes\**" PackagePath="runtimes" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="athena\libwpiHal.so" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="athena\libwpiHal.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+      <None Include="runtimes\win-x64\native\wpiHal.dll" Link="wpiHal.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+  
+
+</Project>

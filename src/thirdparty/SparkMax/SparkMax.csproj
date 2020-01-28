@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>REV.SparkMax</RootNamespace>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\hal\hal.csproj" />
+    <ProjectReference Include="..\..\wpilibsharp\wpilibsharp.csproj" />
+    <ProjectReference Include="..\..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>
