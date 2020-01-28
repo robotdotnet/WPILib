@@ -44,7 +44,7 @@ namespace WPIUtil.NativeUtilities
                     // TODO: Proper errors
                     continue;
                 }
-                var fields = type.type.GetFields(BindingFlags.NonPublic | BindingFlags.Static).Where(x => x.FieldType == interfaceType);
+                var fields = type.type.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static).Where(x => x.FieldType == interfaceType);
                 foreach (var field in fields)
                 {
                     field.SetValue(null, loadedInterface);

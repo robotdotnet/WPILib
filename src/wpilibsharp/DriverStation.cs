@@ -27,7 +27,7 @@ namespace WPILib
 
         public static void ReportError(string error, string stackTrace)
         {
-            ReportErrorImpl(true, 1, error, stackTrace);
+            //ReportErrorImpl(true, 1, error, stackTrace);
         }
 
         public static void ReportWarning(string error, bool printTrace)
@@ -37,12 +37,12 @@ namespace WPILib
 
         public static void ReportWarning(string error, string stackTrace)
         {
-            ReportErrorImpl(false, 1, error, stackTrace);
+            //ReportErrorImpl(false, 1, error, stackTrace);
         }
 
         private static void ReportErrorImpl(bool isError, int code, string error, bool printTrace)
         {
-            ReportErrorImpl(isError, code, error, printTrace, System.Environment.StackTrace);
+            //ReportErrorImpl(isError, code, error, printTrace, System.Environment.StackTrace);
         }
 
         private bool m_userInDisabled = false;

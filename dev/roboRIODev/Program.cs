@@ -37,9 +37,9 @@ namespace roboRIODev
 
     class Program
     {
-        static int Main(string[] args)
+        static void Main(string[] args)
         {
-            return RobotBase.StartRobot<Robot>();
+            RobotBase.StartRobot<Robot>();
         }
     }
 }
