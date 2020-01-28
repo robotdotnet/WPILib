@@ -20,19 +20,29 @@ namespace WPILib
 
         public static DriverStation Instance => lazyInstance.Value;
 
-        public static void ReportError(ReadOnlySpan<char> error)
+        public static void ReportError(string error, bool printTrace)
         {
-
+            ReportErrorImpl(true, 1, error, printTrace);
         }
 
-        public static void ReportError(bool isError, int code, ReadOnlySpan<char> error, ReadOnlySpan<char> location, ReadOnlySpan<char> stack)
+        public static void ReportError(string error, string stackTrace)
         {
-
+            ReportErrorImpl(true, 1, error, stackTrace);
         }
 
-        public static void ReportWarning(ReadOnlySpan<char> warning)
+        public static void ReportWarning(string error, bool printTrace)
         {
+            ReportErrorImpl(false, 1, error, printTrace);
+        }
 
+        public static void ReportWarning(string error, string stackTrace)
+        {
+            ReportErrorImpl(false, 1, error, stackTrace);
+        }
+
+        private static void ReportErrorImpl(bool isError, int code, string error, bool printTrace)
+        {
+            ReportErrorImpl(isError, code, error, printTrace, System.Environment.StackTrace);
         }
 
         private bool m_userInDisabled = false;

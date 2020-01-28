@@ -6,7 +6,7 @@ using WPILib;
 
 namespace REV.SparkMax
 {
-    public unsafe class CANSparkMaxLowLevel : ISpeedController, IDisposable
+    public unsafe class CANSparkMaxLowLevel : SpeedController, IDisposable
     {
         public const byte kAPIMajorVersion = 0;
         public const byte kAPIMinorVersion = 0;

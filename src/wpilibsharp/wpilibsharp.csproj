@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\hal\hal.csproj" />
+    <ProjectReference Include="..\ntcore\ntcore.csproj" />
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
   </ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hal;
+using NetworkTables;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -8,15 +10,75 @@ namespace WPILib
 {
     public abstract class RobotBase : IDisposable
     {
-        private static void RunRobot<Robot>(object m, ref Robot? robot) where Robot : RobotBase, new()
+        private static void RunRobot<Robot>() where Robot : RobotBase, new()
         {
-            Robot theRobot = new Robot();
-            lock (m)
+            Console.WriteLine("\n********** Robot program starting **********");
+
+            Robot robot;
+            try
             {
-                robot = theRobot;
+                robot = new Robot();
+            } 
+            catch (Exception ex)
+            {
+                string robotName = typeof(Robot).Name;
+                DriverStation.ReportError(("Unhandled exception instanciating robot "
+                    + robotName + " " + ex.Message), ex.StackTrace);
+                DriverStation.ReportWarning("Robots should not quit, but yours did!", false);
+                DriverStation.ReportError("Could not instanciate robot " + robotName + "!", false);
+                return;
             }
-            theRobot.StartCompetition();
+
+            lock (m_runMutex)
+            {
+                m_robotCopy = robot;
+            }
+
+            if (IsReal)
+            {
+                try
+                {
+                    File.WriteAllText("/tmp/frc_versions/FRC_Lib_Version.ini", $"C# {WPILibVersion}");
+                }
+                catch (Exception ex)
+                {
+                    DriverStation.ReportError("Could not write FRC_Lib_Version.ini: " + ex.Message, ex.StackTrace);
+                }
+            }
+
+            bool errorOnExit = false;
+            try
+            {
+                robot.StartCompetition();
+            }
+            catch (Exception ex)
+            {
+                DriverStation.ReportError("Unhandled Exception: " + ex.Message, ex.StackTrace);
+                errorOnExit = true;
+            }
+            finally
+            {
+                bool suppressExitWarningLocal;
+                lock (m_runMutex)
+                {
+                    suppressExitWarningLocal = suppressExitWarning;
+                }
+
+                if (!suppressExitWarningLocal)
+                {
+                    DriverStation.ReportWarning("Robots should not quit, but yours did!", false);
+                    if (errorOnExit)
+                    {
+                        DriverStation.ReportError("The StartCompetition() method (or methods called by it) should have handled the exception above.", false);
+                    } else
+                    {
+                        DriverStation.ReportError("Unexpected return from StartCompetition() method.", false);
+                    }
+                }
+            }
         }
+
+        private static bool suppressExitWarning = false;
 
         private static int RunHALInitialization()
         {
@@ -26,95 +88,83 @@ namespace WPILib
                 return -1;
             }
 
-            Console.WriteLine("\n********** Robot program starting **********");
+            if (!NetworkTables.Natives.NtCore.Initialize())
+            {
+                Console.WriteLine("FATAL ERROR: NetworkTables could not be initialized");
+                return -1;
+            }
+
+            
 
             return 0;
         }
 
-        public static int StartRobot<Robot>() where Robot : RobotBase, new()
+        private static readonly object m_runMutex = new object();
+        private static RobotBase? m_robotCopy;
+        public static void SuppressExitWarning(bool value)
+        {
+            lock (m_runMutex)
+            {
+                suppressExitWarning = true;
+            }
+        }
+
+        public static void StartRobot<Robot>() where Robot : RobotBase, new()
         {
             int halInit = RunHALInitialization();
             if (halInit != 0)
             {
-                return halInit;
+                throw new InvalidOperationException("Base Robot Functionality Failed to Initialize. Terminating");
             }
 
-            object m = new object();
-            Robot? robot = null;
+            UsageReporting.Report(ResourceType.Language, Instances.Language_DotNet, 0, WPILibVersion);
 
-            if (Hal.Main.HasMain())
+            if (Main.HasMain())
             {
-                Thread thr = new Thread(() =>
+                Thread thread = new Thread(() =>
                 {
-                    try
-                    {
-                        RunRobot(m, ref robot);
-                    }
-                    catch
-                    {
-                        Hal.Main.ExitMain();
-                        lock (m)
-                        {
-                            robot = null;
-                            Monitor.PulseAll(m);
-                        }
-                        throw;
-                    }
-
-                    Hal.Main.ExitMain();
-
-                    lock (m)
-                    {
-                        robot = null;
-                        Monitor.PulseAll(m);
-                    }
-                });
-                thr.Name = "Main Robot Thread";
-                thr.Start();
-
-                Hal.Main.RunMain();
+                    RunRobot<Robot>();
+                    Main.ExitMain();
+                })
+                {
+                    Name = "Robot Main",
+                    IsBackground = true
+                };
+                thread.Start();
+                Main.RunMain();
+                SuppressExitWarning(true);
+                RobotBase? robot;
+                lock (m_runMutex)
+                {
+                    robot = m_robotCopy;
+                }
 
                 robot?.EndCompetition();
-
-                lock (m)
+                if (thread.Join(TimeSpan.FromSeconds(1)))
                 {
-                    if (Monitor.Wait(m, TimeSpan.FromSeconds(1)))
-                    {
-                        thr.Join();
-                    }
-                    else
-                    {
-                        thr.IsBackground = true;
-                    }
+                    robot?.Dispose();
                 }
-            }
-            else
+            } else
             {
-                RunRobot(m, ref robot);
+                RunRobot<Robot>();
             }
 
-            robot?.Dispose();
-
-            return 0;
+            
         }
 
         protected DriverStation m_ds;
 
         protected static int m_threadId;
 
-        public bool IsEnabled => false;
-        public bool IsDisabled => false;
-        public bool IsAutonomous => false;
-        public bool IsOperatorControl => false;
-        public bool IsTest => false;
+        public bool IsEnabled => m_ds.IsEnabled;
+        public bool IsDisabled => m_ds.IsDisabled;
+        public bool IsAutonomous => m_ds.IsAutonomous;
+        public bool IsOperatorControl => m_ds.IsOperatorControl;
+        public bool IsTest => m_ds.IsTest;
 
-        public bool IsNewDataAvailable => false;
+        public bool IsNewDataAvailable => m_ds.IsNewControlData;
 
-        static int GetThreadId()
-        {
-            return 0;
-        }
-
+        public static int MainThreadId => m_threadId;
 
         public static string WPILibVersion => "1234";
 
@@ -127,19 +177,33 @@ namespace WPILib
             
         }
 
-        public bool IsReal => Hal.HalBase.GetRuntimeType() == Hal.RuntimeType.Athena;
-        public bool IsSimulation => !IsReal;
+        public static bool IsReal => Hal.HalBase.GetRuntimeType() == Hal.RuntimeType.Athena;
+        public static bool IsSimulation => !IsReal;
 
         public RobotBase()
         {
             m_threadId = Thread.CurrentThread.ManagedThreadId;
 
+            var inst = NetworkTableInstance.Default;
+            inst.SetNetworkIdentity("Robot");
+
+
             if (IsReal)
             {
-                File.WriteAllText("/tmp/frc_versions/FRC_Lib_Version.ini", $"C# {WPILibVersion}");
+                inst.StartServer("/home/lvuser/networktables.ini");
+            }
+            else
+            {
+                inst.StartServer();
             }
 
+            inst.GetTable("LiveWindow")
+                .GetSubTable(".status")
+                .GetEntry("LW Enabled")
+                .SetBoolean(false);
+
             m_ds = DriverStation.Instance;
+            LiveWindow.LiveWindow.Enabled = false;
 
         }
 

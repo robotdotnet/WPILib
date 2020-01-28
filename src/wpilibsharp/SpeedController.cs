@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WPILib
 {
-    public interface ISpeedController
+    public interface SpeedController
     {
     }
 }

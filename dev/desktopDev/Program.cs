@@ -24,7 +24,8 @@ namespace desktopDev
 
         static void Main(string[] args)
         {
-            
+            RobotBase.StartRobot<Robot>();
+            ;
         }
     }
 }

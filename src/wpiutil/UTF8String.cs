@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WPIUtil
 {
-    public class UTF8String
+    public struct UTF8String
     {
         /// <summary>
         /// The buffer to the string. Do not modify this array. Null terminated
