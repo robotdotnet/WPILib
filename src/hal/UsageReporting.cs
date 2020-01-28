@@ -175,11 +175,11 @@ namespace Hal
         private readonly struct ReportStore
         {
             public ResourceType Resource { get; }
-            public Instances InstanceNumber { get; }
+            public int InstanceNumber { get; }
             public int Context { get; }
             public string Feature { get; }
 
-            public ReportStore(ResourceType resource, Instances instanceNumber, int context, string feature)
+            public ReportStore(ResourceType resource, int instanceNumber, int context, string feature)
             {
                 this.Resource = resource;
                 this.InstanceNumber = instanceNumber;
@@ -206,14 +206,14 @@ namespace Hal
                 if (string.IsNullOrEmpty(r.Feature))
                 {
                     byte empty = 0;
-                    lowLevel.HAL_Report((int)r.Resource, (int)r.InstanceNumber, r.Context, &empty);
+                    lowLevel.HAL_Report((int)r.Resource, r.InstanceNumber, r.Context, &empty);
                 }
                 else
                 {
                     var str = new UTF8String(r.Feature);
                     fixed (byte* buf = str.Buffer)
                     {
-                        lowLevel.HAL_Report((int)r.Resource, (int)r.InstanceNumber, r.Context, buf);
+                        lowLevel.HAL_Report((int)r.Resource, r.InstanceNumber, r.Context, buf);
                     }
                 }
             }
@@ -225,9 +225,34 @@ namespace Hal
             {
                 if (!allowDirectWrite)
                 {
-                    storeList.Add(new ReportStore(resourceType, instanceNumber, context, feature));
+                    storeList.Add(new ReportStore(resourceType, (int)instanceNumber, context, feature));
                     return 0;
                 }                
+            }
+            if (string.IsNullOrEmpty(feature))
+            {
+                byte empty = 0;
+                return lowLevel.HAL_Report((int)resourceType, (int)instanceNumber, context, &empty);
+            }
+            else
+            {
+                var str = new UTF8String(feature);
+                fixed (byte* buf = str.Buffer)
+                {
+                    return lowLevel.HAL_Report((int)resourceType, (int)instanceNumber, context, buf);
+                }
+            }
+        }
+
+        public unsafe static int Report(ResourceType resourceType, int instanceNumber, int context = 0, string feature = "")
+        {
+            lock (storeLock)
+            {
+                if (!allowDirectWrite)
+                {
+                    storeList.Add(new ReportStore(resourceType, instanceNumber, context, feature));
+                    return 0;
+                }
             }
             if (string.IsNullOrEmpty(feature))
             {

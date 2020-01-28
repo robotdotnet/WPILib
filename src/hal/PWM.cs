@@ -81,9 +81,9 @@ public static void SetDisabled(int pwmPortHandle)
 lowLevel.HAL_SetPWMDisabled(pwmPortHandle);
 }
 
-public static void SetEliminateDeadband(int pwmPortHandle, int eliminateDeadband)
+public static void SetEliminateDeadband(int pwmPortHandle, bool eliminateDeadband)
 {
-lowLevel.HAL_SetPWMEliminateDeadband(pwmPortHandle, eliminateDeadband);
+lowLevel.HAL_SetPWMEliminateDeadband(pwmPortHandle, eliminateDeadband ? 1 : 0);
 }
 
 public static void SetPeriodScale(int pwmPortHandle, int squelchMask)
