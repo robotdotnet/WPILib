@@ -2,6 +2,7 @@
 using REV.SparkMax;
 using System;
 using System.Linq;
+using UnitsNet;
 using WPILib;
 
 namespace roboRIODev
@@ -14,10 +15,13 @@ namespace roboRIODev
 
         private int can = CANAPI.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
 
+        private PWMSparkMax sparkMax = new PWMSparkMax(0);
+
 
 
         public unsafe override void RobotPeriodic()
         {
+            sparkMax.SetVoltage(ElectricPotential.FromVolts(5));
             int idxLocal = idx;
             try
             {

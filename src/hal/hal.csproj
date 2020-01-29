@@ -6,7 +6,6 @@
     <LangVersion>8.0</LangVersion>
     <AssemblyName>FRC.Hal</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <RootNamespace>Hal</RootNamespace>
     <DebugType>embedded</DebugType>
   </PropertyGroup>
