@@ -17,14 +17,14 @@ namespace WPILib2.Commands
             SendableRegistry.Instance.SetName(this, $"{Name}: {time.TotalSeconds} seconds");
         }
 
-        public void Initialize()
+        public override void Initialize()
         {
             m_timer.Reset();
             m_timer.Start();
         }
 
-        public bool IsFinished => m_timer.HasPeriodPassed(m_duration);
+        public override bool IsFinished => m_timer.HasPeriodPassed(m_duration);
 
-        public bool RunsWhenDisabled => true;
+        public override bool RunsWhenDisabled => true;
     }
 }

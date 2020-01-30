@@ -13,49 +13,26 @@ namespace WPILib2.Commands
 
     public interface Command
     {
-        public virtual void Initialize()
-        {
+        void Initialize();
 
-        }
+        void Execute();
 
-        public virtual void Execute()
-        {
+        void End(bool interrupted);
 
-        }
+        void Schedule(bool interruptible = true);
 
-        public virtual void End(bool interrupted)
-        {
+        void Cancel();
 
-        }
+        bool IsFinished { get; }
 
-        public virtual void Schedule(bool interruptible)
-        {
-
-        }
-
-        public virtual void Schedule()
-        {
-            Schedule(true);
-        }
-
-        public virtual void Cancel()
-        {
-
-        }
-
-        public virtual bool IsFinished => false;
-
-        public virtual bool IsScheduled => false;
+        bool IsScheduled { get; }
 
         HashSet<Subsystem> Requirements { get; }
 
-        public virtual bool HasRequirement(Subsystem requirement)
-        {
-            return Requirements.Contains(requirement);
-        }
+        bool HasRequirement(Subsystem requirement);
 
-        public virtual bool RunsWhenDisabled => false;
+        public bool RunsWhenDisabled { get; }
 
-        public virtual string Name => GetType().Name;
+        string Name { get; }
     }
 }

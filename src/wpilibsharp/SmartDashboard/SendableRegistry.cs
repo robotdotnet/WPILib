@@ -44,7 +44,8 @@ namespace WPILib.SmartDashboard
         }
 
         private readonly object mutex = new object();
-        private readonly Dictionary<Sendable, Component> components = new Dictionary<Sendable, Component>();
+        private readonly ConditionalWeakTable<Sendable, Component> components = new ConditionalWeakTable<Sendable, Component>();
+        //private readonly Dictionary<Sendable, Component> components = new Dictionary<Sendable, Component>();
         private int nextDataHandle = 0;
 
         private Component GetOrAdd(Sendable sendable)
@@ -190,7 +191,7 @@ namespace WPILib.SmartDashboard
         {
             lock (mutex)
             {
-                return components.ContainsKey(sendable);
+                return components.TryGetValue(sendable, out _);
             }
         }
 
@@ -380,7 +381,10 @@ namespace WPILib.SmartDashboard
             lock (mutex)
             {
                 foreachComponents.Clear();
-                foreachComponents.AddRange(components.Values);
+                foreach (var v in components)
+                {
+                    foreachComponents.Add(v.Value);
+                }
                 foreach (var comp in foreachComponents)
                 {
                     if (comp.Sendable == null) continue;

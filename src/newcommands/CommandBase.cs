@@ -48,7 +48,33 @@ namespace WPILib2.Commands
             });
         }
 
-        public string Name
+        public virtual void Initialize()
+        {
+        }
+
+        public virtual void Execute()
+        {
+        }
+
+        public virtual void End(bool interrupted)
+        {
+
+        }
+
+        public virtual void Schedule(bool interruptible = true)
+        {
+        }
+
+        public virtual void Cancel()
+        {
+        }
+
+        public virtual bool HasRequirement(Subsystem requirement)
+        {
+            return Requirements.Contains(requirement);
+        }
+
+        public virtual string Name
         {
             get => SendableRegistry.Instance.GetName(this) ?? GetType().Name;
             set => SendableRegistry.Instance.SetName(this, value);
@@ -56,7 +82,7 @@ namespace WPILib2.Commands
 
         
         [DisallowNull]
-        public string? Subsystem
+        public virtual string? Subsystem
         {
             get => SendableRegistry.Instance.GetSubsystem(this);
             set
@@ -65,5 +91,11 @@ namespace WPILib2.Commands
                 SendableRegistry.Instance.SetSubsystem(this, value);
             }
         }
+
+        public virtual bool RunsWhenDisabled { get; set; } = false;
+
+        public virtual bool IsFinished { get; set; } = false;
+
+        public virtual bool IsScheduled => false;
     }
 }

@@ -6,5 +6,6 @@ namespace WPILib2.Commands
 {
     public interface Subsystem
     {
+        void Periodic();
     }
 }
