@@ -2,15 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>WPILibSharp.REV.SparkMax</AssemblyName>
-    <RootNamespace>REV.SparkMax</RootNamespace>
-    <LangVersion>8.0</LangVersion>
+    <AssemblyName>WPILibSharp.Oblog</AssemblyName>
+    <RootNamespace>WPILib.Oblog</RootNamespace>
     <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\hal\hal.csproj" />
     <ProjectReference Include="..\..\wpilibsharp\wpilibsharp.csproj" />
     <ProjectReference Include="..\..\wpiutil\wpiutil.csproj" />
   </ItemGroup>
