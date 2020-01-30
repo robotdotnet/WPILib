@@ -17,3 +17,7 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 - script: dotnet test --configuration $(buildConfiguration)
   displayName: 'dotnet test $(buildConfiguration)'
+- script: dotnet pack --configuration $(buildConfiguration)
+  displayName: 'dotnet pack $(buildConfiguration)'
+- publish: $(System.DefaultWorkingDirectory)/nupkg
+  artifact: Packages
