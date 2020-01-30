@@ -34,42 +34,42 @@ namespace WPILib.SmartDashboard
 
         }
 
-        public void AddBooleanArrayProperty(string key, Func<bool[]> getter, Action<bool[]> setter)
+        public void AddBooleanArrayProperty(string key, Func<bool[]>? getter, Action<bool[]>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddBooleanProperty(string key, Func<bool> getter, Action<bool> setter)
+        public void AddBooleanProperty(string key, Func<bool>? getter, Action<bool>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddDoubleArrayProperty(string key, Func<double[]> getter, Action<double[]> setter)
+        public void AddDoubleArrayProperty(string key, Func<double[]>? getter, Action<double[]>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddDoubleProperty(string key, Func<double> getter, Action<double> setter)
+        public void AddDoubleProperty(string key, Func<double>? getter, Action<double>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddRawProperty(string key, Func<byte[]> getter, Action<byte[]> setter)
+        public void AddRawProperty(string key, Func<byte[]>? getter, Action<byte[]>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddStringArrayProperty(string key, Func<string[]> getter, Action<string[]> setter)
+        public void AddStringArrayProperty(string key, Func<string[]>? getter, Action<string[]>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddStringProperty(string key, Func<string> getter, Action<string> setter)
+        public void AddStringProperty(string key, Func<string>? getter, Action<string>? setter)
         {
             throw new NotImplementedException();
         }
 
-        public void AddValueProperty(string key, Func<NetworkTableValue> getter, Action<NetworkTableValue> setter)
+        public void AddValueProperty(string key, Func<NetworkTableValue>? getter, Action<NetworkTableValue>? setter)
         {
             throw new NotImplementedException();
         }
