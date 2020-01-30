@@ -7,13 +7,13 @@ namespace WPILib
 {
     public static class SpeedControllerExtensions
     {
-        public static void SetVoltage(this SpeedController @this, ElectricPotential potential)
+        public static void SetVoltage(this ISpeedController @this, ElectricPotential potential)
         {
             @this.Set(potential / RobotController.BatteryVoltage);
         }
     }
 
-    public interface SpeedController
+    public interface ISpeedController
     {
         void Set(double speed);
 

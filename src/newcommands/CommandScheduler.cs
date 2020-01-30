@@ -17,20 +17,20 @@ namespace WPILib2.Commands
 
         public static CommandScheduler Instance => instance.Value;
 
-        private readonly Dictionary<Command, CommandState> m_scheduledCommands = new Dictionary<Command, CommandState>();
+        private readonly Dictionary<ICommand, CommandState> m_scheduledCommands = new Dictionary<ICommand, CommandState>();
 
-        private readonly Dictionary<Subsystem, Command> m_requirements = new Dictionary<Subsystem, Command>();
+        private readonly Dictionary<ISubsystem, ICommand> m_requirements = new Dictionary<ISubsystem, ICommand>();
 
-        private readonly Dictionary<Subsystem, Command?> m_subsystems = new Dictionary<Subsystem, Command?>();
+        private readonly Dictionary<ISubsystem, ICommand?> m_subsystems = new Dictionary<ISubsystem, ICommand?>();
 
         private readonly HashSet<Action> m_buttons = new HashSet<Action>();
 
         private bool m_disabled;
 
         private bool m_inRunLoop;
-        private readonly Dictionary<Command, bool> m_toSchedule = new Dictionary<Command, bool>();
-        private readonly List<Command> m_toCancel = new List<Command>();
-        private readonly List<Command> m_toRemoveFromRunning = new List<Command>();
+        private readonly Dictionary<ICommand, bool> m_toSchedule = new Dictionary<ICommand, bool>();
+        private readonly List<ICommand> m_toCancel = new List<ICommand>();
+        private readonly List<ICommand> m_toRemoveFromRunning = new List<ICommand>();
 
         internal CommandScheduler()
         {
@@ -64,7 +64,7 @@ namespace WPILib2.Commands
             m_buttons.Clear();
         }
 
-        private void InitCommand(Command command, bool interruptible, HashSet<Subsystem> requirements)
+        private void InitCommand(ICommand command, bool interruptible, HashSet<ISubsystem> requirements)
         {
             command.Initialize();
             var scheduledCommand = new CommandState(interruptible);
@@ -76,7 +76,7 @@ namespace WPILib2.Commands
             }
         }
 
-        private void Schedule(bool interruptible, Command command)
+        private void Schedule(bool interruptible, ICommand command)
         {
             if (m_inRunLoop)
             {
@@ -115,7 +115,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void Schedule(bool interruptible, params Command[] commands)
+        public void Schedule(bool interruptible, params ICommand[] commands)
         {
             foreach (var command in commands)
             {
@@ -123,7 +123,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void Schedule(params Command[] commands)
+        public void Schedule(params ICommand[] commands)
         {
             Schedule(true, commands);
         }
@@ -210,7 +210,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void RegisterSubsystem(params Subsystem[] subsystems)
+        public void RegisterSubsystem(params ISubsystem[] subsystems)
         {
             foreach (var subsystem in subsystems)
             {
@@ -218,7 +218,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void UnregisterSubsystem(params Subsystem[] subsystems)
+        public void UnregisterSubsystem(params ISubsystem[] subsystems)
         {
             foreach (var s in subsystems)
             {
@@ -226,7 +226,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void SetDefaultCommand(Subsystem subsystem, Command defaultCommand)
+        public void SetDefaultCommand(ISubsystem subsystem, ICommand defaultCommand)
         {
             if (!defaultCommand.Requirements.Contains(subsystem))
             {
@@ -241,7 +241,7 @@ namespace WPILib2.Commands
             m_subsystems.Add(subsystem, defaultCommand);
         }
 
-        public Command? GetDefaultCommand(Subsystem subsystem)
+        public ICommand? GetDefaultCommand(ISubsystem subsystem)
         {
             if (m_subsystems.TryGetValue(subsystem, out var command))
             {
@@ -250,7 +250,7 @@ namespace WPILib2.Commands
             return null;
         }
 
-        public void Cancel(params Command[] commands)
+        public void Cancel(params ICommand[] commands)
         {
             if (m_inRunLoop)
             {
@@ -285,7 +285,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public TimeSpan TimeSinceScheduled(Command command)
+        public TimeSpan TimeSinceScheduled(ICommand command)
         {
             if (m_scheduledCommands.TryGetValue(command, out var state))
             {
@@ -294,7 +294,7 @@ namespace WPILib2.Commands
             return Timeout.InfiniteTimeSpan;
         }
 
-        public bool IsScheduled(params Command[] commands)
+        public bool IsScheduled(params ICommand[] commands)
         {
             foreach (var command in commands)
             {
@@ -306,7 +306,7 @@ namespace WPILib2.Commands
             return true;
         }
 
-        public Command? Requiring(Subsystem subsystem)
+        public ICommand? Requiring(ISubsystem subsystem)
         {
             if (m_requirements.TryGetValue(subsystem, out var command))
             {
@@ -325,10 +325,10 @@ namespace WPILib2.Commands
             m_disabled = false;
         }
 
-        public event Action<Command>? OnCommandInitialize;
-        public event Action<Command>? OnCommandExecute;
-        public event Action<Command>? OnCommandInterrupt;
-        public event Action<Command>? OnCommandFinish;
+        public event Action<ICommand>? OnCommandInitialize;
+        public event Action<ICommand>? OnCommandExecute;
+        public event Action<ICommand>? OnCommandInterrupt;
+        public event Action<ICommand>? OnCommandFinish;
 
         public void InitSendable(SendableBuilder builder)
         {
@@ -339,7 +339,7 @@ namespace WPILib2.Commands
 
             builder.UpdateTable = () =>
             {
-                var ids = new Dictionary<double, Command>();
+                var ids = new Dictionary<double, ICommand>();
 
                 foreach (var command in m_scheduledCommands.Keys)
                 {

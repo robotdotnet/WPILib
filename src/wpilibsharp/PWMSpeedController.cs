@@ -5,7 +5,7 @@ using WPILib.SmartDashboard;
 
 namespace WPILib
 {
-    public abstract class PWMSpeedController : PWM, SpeedController
+    public abstract class PWMSpeedController : PWM, ISpeedController
     {
         protected PWMSpeedController(int channel) : base(channel)
         {

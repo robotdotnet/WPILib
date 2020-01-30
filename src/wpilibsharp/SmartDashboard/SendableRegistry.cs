@@ -9,7 +9,7 @@ namespace WPILib.SmartDashboard
 {
     public class SendableRegistry
     {
-        private static Lazy<SendableRegistry> instance = new Lazy<SendableRegistry>(() => new SendableRegistry());
+        private static readonly Lazy<SendableRegistry> instance = new Lazy<SendableRegistry>(() => new SendableRegistry());
         public static SendableRegistry Instance => instance.Value;
 
         private class Component

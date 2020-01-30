@@ -6,12 +6,12 @@ namespace WPILib2.Commands
 {
     public class ParallelRaceGroup : CommandGroupBase
     {
-        public ParallelRaceGroup(params Command[] commands)
+        public ParallelRaceGroup(params ICommand[] commands)
         {
             AddCommands(commands);
         }
 
-        public sealed override void AddCommands(params Command[] commands)
+        public sealed override void AddCommands(params ICommand[] commands)
         {
 
         }

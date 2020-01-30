@@ -5,13 +5,13 @@ namespace WPILib2.Commands
 {
     public static class CommandExtensions
     {
-        public static ParallelRaceGroup WithTimeout(this Command command, TimeSpan time)
+        public static ParallelRaceGroup WithTimeout(this ICommand command, TimeSpan time)
         {
             return new ParallelRaceGroup(command, new WaitCommand(time));
         }
     }
 
-    public interface Command
+    public interface ICommand
     {
         void Initialize();
 
@@ -27,9 +27,9 @@ namespace WPILib2.Commands
 
         bool IsScheduled { get; }
 
-        HashSet<Subsystem> Requirements { get; }
+        HashSet<ISubsystem> Requirements { get; }
 
-        bool HasRequirement(Subsystem requirement);
+        bool HasRequirement(ISubsystem requirement);
 
         public bool RunsWhenDisabled { get; }
 

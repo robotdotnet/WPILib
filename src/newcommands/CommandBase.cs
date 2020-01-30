@@ -6,9 +6,9 @@ using WPILib.SmartDashboard;
 
 namespace WPILib2.Commands
 {
-    public abstract class CommandBase : Sendable, Command
+    public abstract class CommandBase : Sendable, ICommand
     {
-        public HashSet<Subsystem> Requirements { get; protected set; } = new HashSet<Subsystem>();
+        public HashSet<ISubsystem> Requirements { get; protected set; } = new HashSet<ISubsystem>();
 
         protected CommandBase()
         {
@@ -16,7 +16,7 @@ namespace WPILib2.Commands
             SendableRegistry.Instance.Add(this, name);
         }
 
-        public void AddRequirements(params Subsystem[] requirements)
+        public void AddRequirements(params ISubsystem[] requirements)
         {
             foreach (var r in requirements)
             {
@@ -28,9 +28,9 @@ namespace WPILib2.Commands
         {
             builder.SmartDashboardType = "Command";
             builder.AddStringProperty(".name", () => Name, null);
-            builder.AddBooleanProperty("running", () => ((Command)this).IsScheduled, value =>
+            builder.AddBooleanProperty("running", () => ((ICommand)this).IsScheduled, value =>
             {
-                Command c = this;
+                ICommand c = this;
                 if (value)
                 {
                     if (!c.IsScheduled)
@@ -69,7 +69,7 @@ namespace WPILib2.Commands
         {
         }
 
-        public virtual bool HasRequirement(Subsystem requirement)
+        public virtual bool HasRequirement(ISubsystem requirement)
         {
             return Requirements.Contains(requirement);
         }
