@@ -7,7 +7,10 @@
     <AssemblyName>FRC.Hal</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>Hal</RootNamespace>
-    <DebugType>embedded</DebugType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageOutputPath>$(SolutionDir)nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,4 @@
 ﻿using Hal;
-using REV.SparkMax;
 using System;
 using System.Linq;
 using WPILib;

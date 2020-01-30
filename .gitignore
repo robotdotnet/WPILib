@@ -205,3 +205,4 @@ buildLocal.bat
 
 .project
 .settings/
+nupkg/
