@@ -34,6 +34,7 @@ steps:
   inputs:
     command: 'pack'
     versioningScheme: byBuildNumber
+    outputDir: $(System.DefaultWorkingDirectory)/nupkg
     arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet pack $(buildConfiguration)'
 
