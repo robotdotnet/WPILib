@@ -55,3 +55,14 @@ steps:
 
 - publish: $(System.DefaultWorkingDirectory)/nupkg
   artifact: Packages
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . dotnet-format
+  displayName: Install dotnet-format
+
+- script: dotnet-format --check
+  displayName: Check formatting
+  
