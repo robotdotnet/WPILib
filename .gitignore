@@ -206,3 +206,4 @@ buildLocal.bat
 .project
 .settings/
 nupkg/
+reports/
