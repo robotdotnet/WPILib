@@ -35,11 +35,13 @@ namespace WPIUtil.ILGeneration
         /// <param name="returnType"></param>
         /// <param name="parameters"></param>
         /// <param name="nativeFp"></param>
-        public unsafe void GenerateMethod(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp)
+        /// <param name="isStaticMethod"></param>
+        public unsafe void GenerateMethod(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, bool isStaticMethod = false)
         {
+            int offset = isStaticMethod ? 0 : 1;
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + 1);
+                generator.Emit(OpCodes.Ldarg, i + offset);
             }
             if (sizeof(IntPtr) == 8)
             {
@@ -55,16 +57,18 @@ namespace WPIUtil.ILGeneration
             generator.Emit(OpCodes.Ret);
         }
 
-        public unsafe void GenerateMethodLastParameterStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction)
+        public unsafe void GenerateMethodLastParameterStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false)
         {
             // Insert hidden last parameter
             generator.DeclareLocal(typeof(int));
             generator.Emit(OpCodes.Ldc_I4_0);
             generator.Emit(OpCodes.Stloc_0);
 
+            int offset = isStaticMethod ? 0 : 1;
+
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + 1);
+                generator.Emit(OpCodes.Ldarg, i + offset);
             }
 
             generator.Emit(OpCodes.Ldloca_S, (byte)0);
@@ -86,25 +90,17 @@ namespace WPIUtil.ILGeneration
 
             generator.Emit(OpCodes.Ldloc_0);
 
-
-
-
             generator.Emit(OpCodes.Call, checkFunction);
 
-            //generator.EmitCall(OpCodes.Call, checkFunction, null);
-
-            //generator.Emit(OpCodes.Pop);
-
             generator.Emit(OpCodes.Ret);
-
-            ;
         }
 
-        public unsafe void GenerateMethodReturnStatusCheck(ILGenerator generator, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction)
+        public unsafe void GenerateMethodReturnStatusCheck(ILGenerator generator, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false)
         {
+            int offset = isStaticMethod ? 0 : 1;
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + 1);
+                generator.Emit(OpCodes.Ldarg, i + offset);
             }
 
             if (sizeof(IntPtr) == 8)
