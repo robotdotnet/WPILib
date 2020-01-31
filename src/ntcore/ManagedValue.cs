@@ -376,7 +376,7 @@ namespace NetworkTables
                     break;
                 case NtType.Rpc:
                 case NtType.Raw:
-                    var raw  = new byte[(int)v->data.v_raw.len];
+                    var raw = new byte[(int)v->data.v_raw.len];
                     for (int i = 0; i < raw.Length; i++)
                     {
                         raw[i] = v->data.v_raw.str[i];

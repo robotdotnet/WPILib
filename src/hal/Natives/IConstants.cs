@@ -1,10 +1,10 @@
-using WPIUtil.ILGeneration;
+﻿using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
-   public unsafe interface IConstants
+    public unsafe interface IConstants
     {
-         int HAL_GetSystemClockTicksPerMicrosecond();
+        int HAL_GetSystemClockTicksPerMicrosecond();
 
     }
 }

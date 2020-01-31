@@ -1,4 +1,4 @@
-using Hal.Natives;
+﻿using Hal.Natives;
 using System;
 using System.Text;
 using WPIUtil;

@@ -202,7 +202,8 @@ namespace Hal
                 }
                 allowDirectWrite = true;
             }
-            foreach (var r in storeList) {
+            foreach (var r in storeList)
+            {
                 if (string.IsNullOrEmpty(r.Feature))
                 {
                     byte empty = 0;
@@ -227,7 +228,7 @@ namespace Hal
                 {
                     storeList.Add(new ReportStore(resourceType, (int)instanceNumber, context, feature));
                     return 0;
-                }                
+                }
             }
             if (string.IsNullOrEmpty(feature))
             {

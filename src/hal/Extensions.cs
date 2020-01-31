@@ -1,4 +1,4 @@
-
+﻿
 using Hal.Natives;
 using System;
 using WPIUtil.NativeUtilities;
@@ -16,20 +16,20 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static int Load()
-{
-return lowLevel.HAL_LoadExtensions();
-}
+        public static int Load()
+        {
+            return lowLevel.HAL_LoadExtensions();
+        }
 
-public static int LoadOneExtension(byte* library)
-{
-return lowLevel.HAL_LoadOneExtension(library);
-}
+        public static int LoadOneExtension(byte* library)
+        {
+            return lowLevel.HAL_LoadOneExtension(library);
+        }
 
-public static void SetShowNotFoundMessages(int showMessage)
-{
-lowLevel.HAL_SetShowExtensionsNotFoundMessages(showMessage);
-}
+        public static void SetShowNotFoundMessages(int showMessage)
+        {
+            lowLevel.HAL_SetShowExtensionsNotFoundMessages(showMessage);
+        }
 
-}
+    }
 }

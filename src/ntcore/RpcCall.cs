@@ -56,7 +56,8 @@ namespace NetworkTables
         {
             NtEntry handle = Entry.Handle;
             Natives.NtRpcCall call = Handle;
-            token.Register(() => {
+            token.Register(() =>
+            {
                 NtCore.CancelRpcResult(handle, call);
             });
             return Task.Run(() =>

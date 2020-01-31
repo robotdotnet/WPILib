@@ -64,7 +64,7 @@ namespace WPILib.SmartDashboard
             }
             return comp;
         }
-        
+
 
         public struct CallbackData
         {
@@ -418,7 +418,7 @@ namespace WPILib.SmartDashboard
                         if (comp.Data == null)
                         {
                             comp.Data = new object?[dataHandle + 1];
-                        } 
+                        }
                         else if (dataHandle >= comp.Data.Length)
                         {
                             object?[] copy = new object?[dataHandle + 1];

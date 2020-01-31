@@ -1,4 +1,4 @@
-
+﻿
 using Hal.Natives;
 using System;
 using WPIUtil.NativeUtilities;
@@ -16,35 +16,35 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static void _CloseStreamSession(uint sessionHandle)
-{
-lowLevel.HAL_CAN_CloseStreamSession(sessionHandle);
-}
+        public static void _CloseStreamSession(uint sessionHandle)
+        {
+            lowLevel.HAL_CAN_CloseStreamSession(sessionHandle);
+        }
 
-public static void _GetStatus(float* percentBusUtilization, uint* busOffCount, uint* txFullCount, uint* receiveErrorCount, uint* transmitErrorCount)
-{
-lowLevel.HAL_CAN_GetCANStatus(percentBusUtilization, busOffCount, txFullCount, receiveErrorCount, transmitErrorCount);
-}
+        public static void _GetStatus(float* percentBusUtilization, uint* busOffCount, uint* txFullCount, uint* receiveErrorCount, uint* transmitErrorCount)
+        {
+            lowLevel.HAL_CAN_GetCANStatus(percentBusUtilization, busOffCount, txFullCount, receiveErrorCount, transmitErrorCount);
+        }
 
-public static void _OpenStreamSession(uint* sessionHandle, uint messageID, uint messageIDMask, uint maxMessages)
-{
-lowLevel.HAL_CAN_OpenStreamSession(sessionHandle, messageID, messageIDMask, maxMessages);
-}
+        public static void _OpenStreamSession(uint* sessionHandle, uint messageID, uint messageIDMask, uint maxMessages)
+        {
+            lowLevel.HAL_CAN_OpenStreamSession(sessionHandle, messageID, messageIDMask, maxMessages);
+        }
 
-public static void _ReadStreamSession(uint sessionHandle, CANStreamMessage* messages, uint messagesToRead, uint* messagesRead)
-{
-lowLevel.HAL_CAN_ReadStreamSession(sessionHandle, messages, messagesToRead, messagesRead);
-}
+        public static void _ReadStreamSession(uint sessionHandle, CANStreamMessage* messages, uint messagesToRead, uint* messagesRead)
+        {
+            lowLevel.HAL_CAN_ReadStreamSession(sessionHandle, messages, messagesToRead, messagesRead);
+        }
 
-public static void _ReceiveMessage(uint* messageID, uint messageIDMask, byte* data, byte* dataSize, uint* timeStamp)
-{
-lowLevel.HAL_CAN_ReceiveMessage(messageID, messageIDMask, data, dataSize, timeStamp);
-}
+        public static void _ReceiveMessage(uint* messageID, uint messageIDMask, byte* data, byte* dataSize, uint* timeStamp)
+        {
+            lowLevel.HAL_CAN_ReceiveMessage(messageID, messageIDMask, data, dataSize, timeStamp);
+        }
 
-public static void _SendMessage(uint messageID, byte* data, byte dataSize, int periodMs)
-{
-lowLevel.HAL_CAN_SendMessage(messageID, data, dataSize, periodMs);
-}
+        public static void _SendMessage(uint messageID, byte* data, byte dataSize, int periodMs)
+        {
+            lowLevel.HAL_CAN_SendMessage(messageID, data, dataSize, periodMs);
+        }
 
-}
+    }
 }

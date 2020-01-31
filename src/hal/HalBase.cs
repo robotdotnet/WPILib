@@ -36,8 +36,8 @@ namespace Hal
 
         public static bool Initialize()
         {
-            if (!NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(HalBase).Assembly, 
-                "wpiHal", typeof(HalBase).GetMethod(nameof(StatusCheck), BindingFlags.Public | BindingFlags.Static), 
+            if (!NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(HalBase).Assembly,
+                "wpiHal", typeof(HalBase).GetMethod(nameof(StatusCheck), BindingFlags.Public | BindingFlags.Static),
                 out var generator))
             {
                 return false;

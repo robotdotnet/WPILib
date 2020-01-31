@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -45,7 +45,8 @@ namespace WPIUtil.ILGeneration
             if (sizeof(IntPtr) == 8)
             {
                 generator.Emit(OpCodes.Ldc_I8, (long)nativeFp);
-            } else
+            }
+            else
             {
                 generator.Emit(OpCodes.Ldc_I4, (int)nativeFp);
             }
@@ -85,9 +86,9 @@ namespace WPIUtil.ILGeneration
             emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, adjustedParameters);
 
             generator.Emit(OpCodes.Ldloc_0);
-            
 
-            
+
+
 
             generator.Emit(OpCodes.Call, checkFunction);
 

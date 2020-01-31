@@ -88,7 +88,7 @@ namespace WPILib.LiveWindow
                     return liveWindowEnabled;
                 }
             }
-           set
+            set
             {
                 lock (m_lockObject)
                 {
@@ -101,7 +101,8 @@ namespace WPILib.LiveWindow
                         {
                             Console.WriteLine("Starting live window mode.");
                             enabledListener?.Invoke();
-                        } else
+                        }
+                        else
                         {
                             Console.WriteLine("Stopping live window mode.");
                         }

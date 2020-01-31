@@ -12,7 +12,7 @@ namespace WPILib
         private TimeSpan m_expirationTime;
         private TimeSpan m_period;
         private bool m_periodic;
-        
+
 
         public Notifier(Action handler)
         {

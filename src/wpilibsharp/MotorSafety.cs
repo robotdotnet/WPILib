@@ -17,7 +17,7 @@ namespace WPILib
 
         public MotorSafety()
         {
-            lock(m_listMutex)
+            lock (m_listMutex)
             {
                 m_instanceList.Add(this);
             }

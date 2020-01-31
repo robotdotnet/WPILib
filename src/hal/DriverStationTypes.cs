@@ -62,7 +62,7 @@ namespace Hal
         }
     }
 
-    public unsafe struct JoystickDescriptor 
+    public unsafe struct JoystickDescriptor
     {
         public byte IsXbox;
         public byte Type;

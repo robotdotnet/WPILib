@@ -14,12 +14,12 @@ namespace WPILib
 
     public class DriverStation : IDisposable
     {
-        
+
 
         private static readonly Lazy<DriverStation> lazyInstance = new Lazy<DriverStation>(() =>
         {
             return new DriverStation();
-        },LazyThreadSafetyMode.ExecutionAndPublication);
+        }, LazyThreadSafetyMode.ExecutionAndPublication);
 
         public static DriverStation Instance => lazyInstance.Value;
 

@@ -154,7 +154,7 @@ namespace NetworkTables
         {
             HashSet<string> keys = new HashSet<string>();
             int prefixLen = -Path.Length + 1;
-            foreach(var info in Instance.GetEntryInfo(m_pathWithSep, types))
+            foreach (var info in Instance.GetEntryInfo(m_pathWithSep, types))
             {
                 var relativeKey = info.Name.AsSpan().Slice(prefixLen);
                 if (relativeKey.IndexOf(PathSeparator) != -1)
@@ -241,7 +241,7 @@ namespace NetworkTables
             }
         }
 
-        public static bool operator==(NetworkTable lhs, NetworkTable rhs)
+        public static bool operator ==(NetworkTable lhs, NetworkTable rhs)
         {
             return lhs?.Equals(rhs) ?? false;
         }

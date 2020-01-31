@@ -108,7 +108,7 @@ namespace NetworkTables
             if (string.IsNullOrWhiteSpace(key) || key.Equals(""))
             {
                 theKey = "";
-            } 
+            }
             else if (key[0] == NetworkTable.PathSeparator)
             {
                 theKey = key;
@@ -140,7 +140,7 @@ namespace NetworkTables
             return NtCore.GetNetworkMode(Handle);
         }
 
-        public void StartServer(string persistFilename = "networktables.ini", 
+        public void StartServer(string persistFilename = "networktables.ini",
                                 string listenAddress = "", int port = DefaultPort)
         {
             NtCore.StartServer(Handle, persistFilename, listenAddress, port);
@@ -286,12 +286,12 @@ namespace NetworkTables
             return Handle.Get().GetHashCode();
         }
 
-        public static bool operator==(in NetworkTableInstance lhs, in NetworkTableInstance rhs)
+        public static bool operator ==(in NetworkTableInstance lhs, in NetworkTableInstance rhs)
         {
             return lhs.Equals(rhs);
         }
 
-        public static bool operator!=(in NetworkTableInstance lhs, in NetworkTableInstance rhs)
+        public static bool operator !=(in NetworkTableInstance lhs, in NetworkTableInstance rhs)
         {
             return !lhs.Equals(rhs);
         }

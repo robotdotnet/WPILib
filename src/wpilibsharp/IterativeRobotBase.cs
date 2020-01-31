@@ -132,7 +132,8 @@ namespace WPILib
                 Hal.DriverStation.ObserveUserProgramTeleop();
                 TeleopPeriodic();
                 m_watchdog.AddEpoch("TeleopPeriodic()");
-            } else
+            }
+            else
             {
                 if (m_lastMode != Mode.Test)
                 {

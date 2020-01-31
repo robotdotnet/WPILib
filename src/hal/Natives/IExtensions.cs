@@ -1,14 +1,14 @@
-using WPIUtil.ILGeneration;
+﻿using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
-   public unsafe interface IExtensions
+    public unsafe interface IExtensions
     {
-         int HAL_LoadExtensions();
+        int HAL_LoadExtensions();
 
-         int HAL_LoadOneExtension( byte* library);
+        int HAL_LoadOneExtension(byte* library);
 
-         void HAL_SetShowExtensionsNotFoundMessages(int showMessage);
+        void HAL_SetShowExtensionsNotFoundMessages(int showMessage);
 
     }
 }

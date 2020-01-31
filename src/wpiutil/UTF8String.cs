@@ -57,7 +57,7 @@ namespace WPIUtil
                     b[bytes] = 0;
                 }
             }
-            
+
         }
 
         /// <summary>

@@ -253,12 +253,12 @@ namespace NetworkTables
             return Value.Equals(other.Value);
         }
 
-        public static bool operator==(NetworkTableValue lhs, NetworkTableValue rhs)
+        public static bool operator ==(NetworkTableValue lhs, NetworkTableValue rhs)
         {
             return lhs.Equals(rhs);
         }
 
-        public static bool operator!=(NetworkTableValue lhs, NetworkTableValue rhs)
+        public static bool operator !=(NetworkTableValue lhs, NetworkTableValue rhs)
         {
             return !lhs.Equals(rhs);
         }

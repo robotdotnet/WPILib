@@ -16,7 +16,7 @@ namespace WPILib2.Commands
 
         }
 
-      
+
 
         public override void Initialize()
         {

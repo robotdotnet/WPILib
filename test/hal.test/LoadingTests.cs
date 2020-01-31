@@ -1,4 +1,4 @@
-using Hal;
+﻿using Hal;
 using System;
 using Xunit;
 

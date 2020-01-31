@@ -73,7 +73,7 @@ namespace NetworkTables.Natives
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator==(NtHandle lhs, NtHandle rhs)
+        public static bool operator ==(NtHandle lhs, NtHandle rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -85,7 +85,7 @@ namespace NetworkTables.Natives
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool operator!=(NtHandle lhs, NtHandle rhs)
+        public static bool operator !=(NtHandle lhs, NtHandle rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -182,7 +182,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtInst lhs, NtInst rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtInst lhs, NtInst rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -199,7 +200,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtEntry(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtEntry(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -208,7 +210,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -217,7 +220,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtEntry value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtEntry value)
         {
             return value.m_value;
         }
@@ -227,7 +231,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtEntry v)
             {
@@ -241,7 +246,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtEntry other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtEntry other)
         {
             return m_value == other.m_value;
         }
@@ -250,7 +256,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -261,7 +268,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtEntry lhs, NtEntry rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtEntry lhs, NtEntry rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -272,7 +280,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtEntry lhs, NtEntry rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtEntry lhs, NtEntry rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -289,7 +298,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtEntryListener(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtEntryListener(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -298,7 +308,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -307,7 +318,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtEntryListener value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtEntryListener value)
         {
             return value.m_value;
         }
@@ -317,7 +329,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtEntryListener v)
             {
@@ -331,7 +344,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtEntryListener other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtEntryListener other)
         {
             return m_value == other.m_value;
         }
@@ -340,7 +354,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -351,7 +366,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtEntryListener lhs, NtEntryListener rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtEntryListener lhs, NtEntryListener rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -362,7 +378,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtEntryListener lhs, NtEntryListener rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtEntryListener lhs, NtEntryListener rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -379,7 +396,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtEntryListenerPoller(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtEntryListenerPoller(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -388,7 +406,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -397,7 +416,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtEntryListenerPoller value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtEntryListenerPoller value)
         {
             return value.m_value;
         }
@@ -407,7 +427,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtEntryListenerPoller v)
             {
@@ -421,7 +442,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtEntryListenerPoller other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtEntryListenerPoller other)
         {
             return m_value == other.m_value;
         }
@@ -430,7 +452,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -441,7 +464,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtEntryListenerPoller lhs, NtEntryListenerPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtEntryListenerPoller lhs, NtEntryListenerPoller rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -452,7 +476,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtEntryListenerPoller lhs, NtEntryListenerPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtEntryListenerPoller lhs, NtEntryListenerPoller rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -469,7 +494,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtConnectionListener(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtConnectionListener(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -478,7 +504,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -487,7 +514,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtConnectionListener value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtConnectionListener value)
         {
             return value.m_value;
         }
@@ -497,7 +525,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtConnectionListener v)
             {
@@ -511,7 +540,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtConnectionListener other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtConnectionListener other)
         {
             return m_value == other.m_value;
         }
@@ -520,7 +550,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -531,7 +562,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtConnectionListener lhs, NtConnectionListener rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtConnectionListener lhs, NtConnectionListener rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -542,7 +574,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtConnectionListener lhs, NtConnectionListener rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtConnectionListener lhs, NtConnectionListener rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -559,7 +592,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtConnectionListenerPoller(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtConnectionListenerPoller(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -568,7 +602,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -577,7 +612,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtConnectionListenerPoller value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtConnectionListenerPoller value)
         {
             return value.m_value;
         }
@@ -587,7 +623,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtConnectionListenerPoller v)
             {
@@ -601,7 +638,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtConnectionListenerPoller other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtConnectionListenerPoller other)
         {
             return m_value == other.m_value;
         }
@@ -610,7 +648,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -621,7 +660,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtConnectionListenerPoller lhs, NtConnectionListenerPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtConnectionListenerPoller lhs, NtConnectionListenerPoller rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -632,7 +672,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtConnectionListenerPoller lhs, NtConnectionListenerPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtConnectionListenerPoller lhs, NtConnectionListenerPoller rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -649,7 +690,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtLogger(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtLogger(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -658,7 +700,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -667,7 +710,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtLogger value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtLogger value)
         {
             return value.m_value;
         }
@@ -677,7 +721,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtLogger v)
             {
@@ -691,7 +736,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtLogger other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtLogger other)
         {
             return m_value == other.m_value;
         }
@@ -700,7 +746,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -711,7 +758,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtLogger lhs, NtLogger rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtLogger lhs, NtLogger rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -722,7 +770,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtLogger lhs, NtLogger rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtLogger lhs, NtLogger rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -739,7 +788,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtLoggerPoller(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtLoggerPoller(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -748,7 +798,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -757,7 +808,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtLoggerPoller value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtLoggerPoller value)
         {
             return value.m_value;
         }
@@ -767,7 +819,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtLoggerPoller v)
             {
@@ -781,7 +834,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtLoggerPoller other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtLoggerPoller other)
         {
             return m_value == other.m_value;
         }
@@ -790,7 +844,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -801,7 +856,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtLoggerPoller lhs, NtLoggerPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtLoggerPoller lhs, NtLoggerPoller rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -812,7 +868,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtLoggerPoller lhs, NtLoggerPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtLoggerPoller lhs, NtLoggerPoller rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -829,7 +886,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtRpcCall(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtRpcCall(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -838,7 +896,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -847,7 +906,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtRpcCall value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtRpcCall value)
         {
             return value.m_value;
         }
@@ -857,7 +917,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtRpcCall v)
             {
@@ -871,7 +932,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtRpcCall other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtRpcCall other)
         {
             return m_value == other.m_value;
         }
@@ -880,7 +942,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -891,7 +954,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtRpcCall lhs, NtRpcCall rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtRpcCall lhs, NtRpcCall rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -902,7 +966,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtRpcCall lhs, NtRpcCall rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtRpcCall lhs, NtRpcCall rhs)
         {
             return lhs.m_value != rhs.m_value;
         }
@@ -919,7 +984,8 @@ namespace NetworkTables.Natives
         /// Creates a new handle
         /// </summary>
         /// <param name="value">handle value</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public NtRpcCallPoller(int value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public NtRpcCallPoller(int value)
         {
             m_value = new NtHandle(value);
         }
@@ -928,7 +994,8 @@ namespace NetworkTables.Natives
         /// Gets the raw handle value
         /// </summary>
         /// <returns>The raw handle value</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public int Get()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int Get()
         {
             return m_value.Get();
         }
@@ -937,7 +1004,8 @@ namespace NetworkTables.Natives
         /// Converts a handle to a base handle
         /// </summary>
         /// <param name="value">The current handle</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static implicit operator NtHandle(NtRpcCallPoller value)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static implicit operator NtHandle(NtRpcCallPoller value)
         {
             return value.m_value;
         }
@@ -947,7 +1015,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override bool Equals(object obj)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object obj)
         {
             if (obj is NtRpcCallPoller v)
             {
@@ -961,7 +1030,8 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="other">Handle to check</param>
         /// <returns>True if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public bool Equals(NtRpcCallPoller other)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool Equals(NtRpcCallPoller other)
         {
             return m_value == other.m_value;
         }
@@ -970,7 +1040,8 @@ namespace NetworkTables.Natives
         /// Gets Hash Code of Handle
         /// </summary>
         /// <returns>Handle Value as Hash Code</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public override int GetHashCode()
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override int GetHashCode()
         {
             return m_value.GetHashCode();
         }
@@ -981,7 +1052,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator ==(NtRpcCallPoller lhs, NtRpcCallPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator ==(NtRpcCallPoller lhs, NtRpcCallPoller rhs)
         {
             return lhs.m_value == rhs.m_value;
         }
@@ -992,7 +1064,8 @@ namespace NetworkTables.Natives
         /// <param name="lhs">Left Hand Side</param>
         /// <param name="rhs">Right Hand Side</param>
         /// <returns>true if not equal</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)] public static bool operator !=(NtRpcCallPoller lhs, NtRpcCallPoller rhs)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool operator !=(NtRpcCallPoller lhs, NtRpcCallPoller rhs)
         {
             return lhs.m_value != rhs.m_value;
         }

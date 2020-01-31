@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +27,7 @@ namespace WPIUtil.ILGeneration
 
             AssemblyBuilder asmBuilder = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName(types[0].Name + "Asm"), AssemblyBuilderAccess.Run);
             ModuleBuilder moduleBuilder = asmBuilder.DefineDynamicModule(types[0].Name + "Module");
-            
+
 
             // Generate a type for containing our action.
 
@@ -64,7 +64,7 @@ namespace WPIUtil.ILGeneration
                         ilGenerator.GenerateMethod(methodBuilder.GetILGenerator(), methodBuilder.ReturnType, parameters, functionPointerLoader.GetProcAddress(nativeName));
                     }
 
-                    
+
                 }
 
                 var typeInfo = typeBuilder.CreateTypeInfo();

@@ -9,7 +9,7 @@ namespace WPILib
     {
         private const long TicksPerMicrosecond = TimeSpan.TicksPerMillisecond / 1000;
 
-        
+
         public static TimeSpan FPGATimestamp => TimeSpan.FromTicks((long)(Hal.HalBase.GetFPGATimestamp() * TicksPerMicrosecond));
 
         private TimeSpan m_startTime;

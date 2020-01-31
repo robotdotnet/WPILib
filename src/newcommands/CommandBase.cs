@@ -80,7 +80,7 @@ namespace WPILib2.Commands
             set => SendableRegistry.Instance.SetName(this, value);
         }
 
-        
+
         [DisallowNull]
         public virtual string? Subsystem
         {

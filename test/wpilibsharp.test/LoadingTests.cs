@@ -1,4 +1,4 @@
-using Hal;
+﻿using Hal;
 using NetworkTables.Natives;
 using System;
 using Xunit;

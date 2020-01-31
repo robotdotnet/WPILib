@@ -54,7 +54,8 @@ namespace NetworkTables
                     for (int i = 0; i < events.Length; i++)
                     {
                         EntryNotificationDelegate? listener;
-                        lock (m_entryListenerLock) {
+                        lock (m_entryListenerLock)
+                        {
                             m_entryListeners.TryGetValue(events.Pointer[i].listener, out listener);
                         }
                         if (listener != null)
@@ -89,7 +90,8 @@ namespace NetworkTables
         public NtEntryListener AddEntryListener(string prefix, EntryNotificationDelegate listener, NotifyFlags flags)
         {
             var token = m_entryListenerToken.Value;
-            lock (m_entryListenerLock) {
+            lock (m_entryListenerLock)
+            {
                 var handle = NtCore.AddPolledEntryListener(m_entryListenerPoller, prefix, flags);
                 m_entryListeners.Add(handle, listener);
                 return handle;
@@ -99,7 +101,8 @@ namespace NetworkTables
         public NtEntryListener AddEntryListener(in NetworkTableEntry entry, EntryNotificationDelegate listener, NotifyFlags flags)
         {
             var token = m_entryListenerToken.Value;
-            lock (m_entryListenerLock) {
+            lock (m_entryListenerLock)
+            {
                 var handle = NtCore.AddPolledEntryListener(m_entryListenerPoller, entry, flags);
                 m_entryListeners.Add(handle, listener);
                 return handle;
@@ -109,7 +112,8 @@ namespace NetworkTables
         public void RemoveEntryListener(NtEntryListener listener)
         {
             NtCore.RemoveEntryListener(listener);
-            lock (m_entryListenerLock) {
+            lock (m_entryListenerLock)
+            {
                 m_entryListeners.Remove(listener);
             }
         }
@@ -188,7 +192,8 @@ namespace NetworkTables
                     for (int i = 0; i < events.Length; i++)
                     {
                         ConnectionNotificationDelegate? listener;
-                        lock (m_connectionListenerLock) {
+                        lock (m_connectionListenerLock)
+                        {
                             m_connectionListeners.TryGetValue(events.Pointer[i].listener, out listener);
                         }
                         if (listener != null)
@@ -223,7 +228,8 @@ namespace NetworkTables
         public NtConnectionListener AddConnectionListener(ConnectionNotificationDelegate listener, bool immediateNotify)
         {
             var token = m_connectionListenerToken.Value;
-            lock (m_connectionListenerLock) {
+            lock (m_connectionListenerLock)
+            {
                 var handle = NtCore.AddPolledConnectionListener(m_connectionListenerPoller, immediateNotify);
                 m_connectionListeners.Add(handle, listener);
                 return handle;
@@ -233,7 +239,8 @@ namespace NetworkTables
         public void RemoveConnectionListener(NtConnectionListener listener)
         {
             NtCore.RemoveConnectionListener(listener);
-            lock (m_connectionListenerLock) {
+            lock (m_connectionListenerLock)
+            {
                 m_connectionListeners.Remove(listener);
             }
         }
@@ -311,7 +318,8 @@ namespace NetworkTables
                     for (int i = 0; i < events.Length; i++)
                     {
                         RpcAnswerDelegate? listener;
-                        lock (m_rpcCallLock) {
+                        lock (m_rpcCallLock)
+                        {
                             m_rpcCalls.TryGetValue(events.Pointer[i].entry, out listener);
                         }
                         if (listener != null)
@@ -353,8 +361,9 @@ namespace NetworkTables
         public void CreateRpc(in NetworkTableEntry entry, RpcAnswerDelegate callback)
         {
             var token = m_rpcListenerToken.Value;
-            Span<byte> def = stackalloc byte[1]{ 0 };
-            lock (m_rpcCallLock) {
+            Span<byte> def = stackalloc byte[1] { 0 };
+            lock (m_rpcCallLock)
+            {
                 NtCore.CreatePolledRpc(entry.Handle, def, m_rpcListenerPoller);
                 m_rpcCalls.Add(entry.Handle, callback);
             }
@@ -437,7 +446,8 @@ namespace NetworkTables
                     for (int i = 0; i < events.Length; i++)
                     {
                         LogMessageDelegate? listener;
-                        lock (m_loggerListenerLock) {
+                        lock (m_loggerListenerLock)
+                        {
                             m_loggerListeners.TryGetValue(events.Pointer[i].logger, out listener);
                         }
                         if (listener != null)
@@ -472,7 +482,8 @@ namespace NetworkTables
         public NtLogger AddLogger(LogMessageDelegate listener, int minLevel, int maxLevel)
         {
             var token = m_loggerListenerToken.Value;
-            lock (m_loggerListenerLock) {
+            lock (m_loggerListenerLock)
+            {
                 var handle = NtCore.AddPolledLogger(m_loggerListenerPoller, minLevel, maxLevel);
                 m_loggerListeners.Add(handle, listener);
                 return handle;
@@ -482,7 +493,8 @@ namespace NetworkTables
         public void RemoveLogger(NtLogger listener)
         {
             NtCore.RemoveLogger(listener);
-            lock (m_loggerListenerLock) {
+            lock (m_loggerListenerLock)
+            {
                 m_loggerListeners.Remove(listener);
             }
 

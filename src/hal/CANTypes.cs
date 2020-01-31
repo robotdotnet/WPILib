@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Hal
 {
-    public unsafe struct CANStreamMessage 
+    public unsafe struct CANStreamMessage
     {
         public uint MessageId;
         public uint TimeStamp;

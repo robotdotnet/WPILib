@@ -18,7 +18,7 @@ namespace WPILib
             try
             {
                 robot = new Robot();
-            } 
+            }
             catch (Exception ex)
             {
                 string robotName = typeof(Robot).Name;
@@ -71,7 +71,8 @@ namespace WPILib
                     if (errorOnExit)
                     {
                         DriverStation.ReportError("The StartCompetition() method (or methods called by it) should have handled the exception above.", false);
-                    } else
+                    }
+                    else
                     {
                         DriverStation.ReportError("Unexpected return from StartCompetition() method.", false);
                     }
@@ -95,7 +96,7 @@ namespace WPILib
                 return -1;
             }
 
-            
+
 
             return 0;
         }
@@ -145,12 +146,13 @@ namespace WPILib
                 {
                     robot?.Dispose();
                 }
-            } else
+            }
+            else
             {
                 RunRobot<Robot>();
             }
 
-            
+
         }
 
         protected DriverStation m_ds;
@@ -175,7 +177,7 @@ namespace WPILib
 
         public virtual void Dispose()
         {
-            
+
         }
 
         public static bool IsReal => Hal.HalBase.GetRuntimeType() == Hal.RuntimeType.Athena;

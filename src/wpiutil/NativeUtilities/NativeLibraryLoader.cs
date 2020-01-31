@@ -28,7 +28,7 @@ namespace WPIUtil.NativeUtilities
             {
                 fullLibraryName = $"{libraryName}.dll";
                 loader = new WindowsLibraryLoader();
-            } 
+            }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 fullLibraryName = $"lib{libraryName}.dylib";

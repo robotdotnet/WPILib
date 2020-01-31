@@ -95,7 +95,7 @@ namespace CInterfaceGenerator
                                 funcList.Add($"[StatusCheckLastParameter] {functionDef.Slice(0, functionDef.LastIndexOf('(')).ToString()}();");
                             }
 
-                            
+
 
                         }
                         else

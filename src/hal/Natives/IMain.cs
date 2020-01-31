@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
-   public unsafe interface IMain
+    public unsafe interface IMain
     {
         void HAL_SetMain(void* param, IntPtr mainFunc, IntPtr exitFunc);
 

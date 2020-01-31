@@ -1,4 +1,4 @@
-using WPIUtil.ILGeneration;
+﻿using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {

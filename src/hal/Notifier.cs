@@ -35,7 +35,7 @@ namespace Hal
         public static void SetName(int notifierHandle, string name)
         {
             UTF8String str = new UTF8String(name);
-            fixed(byte* b = str.Buffer)
+            fixed (byte* b = str.Buffer)
             {
                 lowLevel.HAL_SetNotifierName(notifierHandle, b);
             }

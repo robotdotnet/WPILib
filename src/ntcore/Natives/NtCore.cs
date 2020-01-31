@@ -534,7 +534,7 @@ namespace NetworkTables.Natives
                     }
                 case NtType.Raw:
                 case NtType.Rpc:
-                    fixed(byte* p = value.Data.VRaw)
+                    fixed (byte* p = value.Data.VRaw)
                     {
                         v.data.v_raw.len = (UIntPtr)value.Data.VRaw.Length;
                         v.data.v_raw.str = p;
@@ -545,7 +545,7 @@ namespace NetworkTables.Natives
                     {
                         var len = value.Data.VBooleanArray.Length;
                         Span<NtBool> dSpan = len <= 256 ? stackalloc NtBool[len == 0 ? 1 : 0] : new NtBool[len];
-                        fixed(NtBool* d = dSpan)
+                        fixed (NtBool* d = dSpan)
                         {
                             v.data.arr_boolean.arr = d;
                             v.data.arr_boolean.len = (UIntPtr)len;
@@ -1131,7 +1131,7 @@ namespace NetworkTables.Natives
 
         public static unsafe NtRpcCall CallRpc(NtEntry entry, Span<byte> @params)
         {
-            fixed (byte* b = @params )
+            fixed (byte* b = @params)
             {
                 return m_ntcore.NT_CallRpc(entry, b, (UIntPtr)@params.Length);
             }
@@ -1305,7 +1305,7 @@ namespace NetworkTables.Natives
                     throw new PersistentException(UTF8String.ReadUTF8String(error));
                 }
 
-            }            
+            }
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -1329,7 +1329,7 @@ namespace NetworkTables.Natives
                 return warns;
 
             }
-            
+
         }
 
         public static unsafe void SaveEntries(NtInst inst, string filename, string prefix)
@@ -1344,7 +1344,7 @@ namespace NetworkTables.Natives
                 {
                     throw new PersistentException(UTF8String.ReadUTF8String(error));
                 }
-            }            
+            }
         }
 
         public static unsafe List<string> LoadEntries(NtInst inst, string filename, string prefix)
@@ -1365,7 +1365,7 @@ namespace NetworkTables.Natives
                     throw new PersistentException(UTF8String.ReadUTF8String(error));
                 }
                 return warns;
-            }            
+            }
         }
 
 

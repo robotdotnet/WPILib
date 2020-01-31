@@ -153,7 +153,7 @@ namespace NetworkTables
 
         public bool SetDefaultValue<T>(T defaultValue)
         {
-            switch(defaultValue)
+            switch (defaultValue)
             {
                 case bool v:
                     return SetDefaultBoolean(v);

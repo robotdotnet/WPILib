@@ -206,7 +206,7 @@ namespace WPILib2.Commands
                 if (!m_requirements.ContainsKey(subsystemCommand.Key) && subsystemCommand.Value != null)
                 {
                     Schedule(subsystemCommand.Value);
-                } 
+                }
             }
         }
 

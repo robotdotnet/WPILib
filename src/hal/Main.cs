@@ -1,4 +1,4 @@
-
+﻿
 using Hal.Natives;
 using System;
 using WPIUtil.NativeUtilities;
@@ -16,25 +16,25 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-public static void Set(void* param, IntPtr mainFunc, IntPtr exitFunc)
-{
-lowLevel.HAL_SetMain(param, mainFunc, exitFunc);
-}
+        public static void Set(void* param, IntPtr mainFunc, IntPtr exitFunc)
+        {
+            lowLevel.HAL_SetMain(param, mainFunc, exitFunc);
+        }
 
-public static bool HasMain()
-{
-return lowLevel.HAL_HasMain() != 0;
-}
+        public static bool HasMain()
+        {
+            return lowLevel.HAL_HasMain() != 0;
+        }
 
-public static void RunMain()
-{
-lowLevel.HAL_RunMain();
-}
+        public static void RunMain()
+        {
+            lowLevel.HAL_RunMain();
+        }
 
-public static void ExitMain()
-{
-lowLevel.HAL_ExitMain();
-}
+        public static void ExitMain()
+        {
+            lowLevel.HAL_ExitMain();
+        }
 
-}
+    }
 }
