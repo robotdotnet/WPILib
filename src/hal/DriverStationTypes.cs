@@ -6,17 +6,17 @@ namespace Hal
 {
     public readonly struct ControlWord
     {
-        private readonly uint word;
-        public bool Enabled => (word & 0b1) != 0;
-        public bool Autonomous => (word & 0b10) != 0;
-        public bool Test => (word & 0b100) != 1;
-        public bool EStop => (word & 0b1000) != 1;
-        public bool FmsAttached => (word & 0b10000) != 1;
-        public bool DsAttached => (word & 0b100000) != 1;
+        public readonly uint Word;
+        public bool Enabled => (Word & 0b1) != 0;
+        public bool Autonomous => (Word & 0b10) != 0;
+        public bool Test => (Word & 0b100) != 1;
+        public bool EStop => (Word & 0b1000) != 1;
+        public bool FmsAttached => (Word & 0b10000) != 1;
+        public bool DsAttached => (Word & 0b100000) != 1;
 
         public ControlWord(uint word)
         {
-            this.word = word;
+            this.Word = word;
         }
     }
 
@@ -40,8 +40,8 @@ namespace Hal
 
     public unsafe struct JoystickAxes
     {
-        public short count;
-        public fixed short axes[12];
+        public short Count;
+        public fixed short Axes[12];
     }
 
     public unsafe struct JoystickPOVs
@@ -55,6 +55,11 @@ namespace Hal
     {
         public uint Buttons;
         public byte Count;
+
+        public bool GetButton(int button)
+        {
+            return (Buttons & 1u << (button - 1)) != 0;
+        }
     }
 
     public unsafe struct JoystickDescriptor 
@@ -70,7 +75,7 @@ namespace Hal
 
     public unsafe struct MatchInfo
     {
-        public fixed char EventName[64];
+        public fixed byte EventName[64];
         public MatchType MatchType;
         public ushort MatchNumber;
         public byte ReplayNumber;

@@ -580,11 +580,33 @@ namespace NetworkTables.Natives
             }
         }
 
+
+        internal static unsafe bool SetEntryStringDirect(NtEntry entry, byte* str, int len)
+        {
+            if (str == null)
+            {
+                throw new ArgumentOutOfRangeException(nameof(str), "String cannot be null");
+            }
+
+            NtValue value = new NtValue
+            {
+                type = NtType.String,
+                last_change = 0
+            };
+
+            value.data.v_string.str = str;
+            value.data.v_string.len = (UIntPtr)len;
+
+
+            return m_ntcore.NT_SetEntryValue(entry, &value).Get();
+        }
+
         internal static unsafe bool SetEntryValue(NtEntry entry, in RefManagedValue value)
         {
             NtValue v = new NtValue
             {
-                type = value.Type
+                type = value.Type,
+                last_change = value.LastChange
             };
 
             switch (value.Type)

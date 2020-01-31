@@ -270,6 +270,11 @@ namespace NetworkTables
             return NtCore.SetEntryValue(Handle, new RefManagedValue(value, 0));
         }
 
+        public unsafe bool SetStringDirect(byte* str, int len)
+        {
+            return NtCore.SetEntryStringDirect(Handle, str, len);
+        }
+
         public bool SetRaw(ReadOnlySpan<byte> value)
         {
             return NtCore.SetEntryValue(Handle, new RefManagedValue(value, 0));

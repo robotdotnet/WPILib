@@ -1,19 +1,22 @@
 ﻿using Hal;
+using NetworkTables;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using UnitsNet;
+using WPIUtil;
 
 namespace WPILib
 {
     public enum Alliance { kRed, kBlue, kInvalid }
     public enum MatchType { kNone, kPractice, kQualification, kElimination }
 
-    public class DriverStation
+    public class DriverStation : IDisposable
     {
         
 
-        private static Lazy<DriverStation> lazyInstance = new Lazy<DriverStation>(() =>
+        private static readonly Lazy<DriverStation> lazyInstance = new Lazy<DriverStation>(() =>
         {
             return new DriverStation();
         },LazyThreadSafetyMode.ExecutionAndPublication);
@@ -60,79 +63,310 @@ namespace WPILib
             Hal.DriverStation.SendError(isError, code, false, error.AsSpan(), "".AsSpan(), printedTrace, true);
         }
 
+        private readonly struct MatchDataSender
+        {
+            public readonly NetworkTable table;
+            public readonly NetworkTableEntry typeMetadata;
+            public readonly NetworkTableEntry gameSpecificMessage;
+            public readonly NetworkTableEntry eventName;
+            public readonly NetworkTableEntry matchNumber;
+            public readonly NetworkTableEntry replayNumber;
+            public readonly NetworkTableEntry matchType;
+            public readonly NetworkTableEntry alliance;
+            public readonly NetworkTableEntry station;
+            public readonly NetworkTableEntry controlWord;
+
+            public MatchDataSender(NetworkTableInstance inst)
+            {
+                table = inst.GetTable("FMSInfo");
+                typeMetadata = table.GetEntry(".type");
+                typeMetadata.ForceSetString("FMSInfo");
+                gameSpecificMessage = table.GetEntry("GameSpecificMessage");
+                gameSpecificMessage.ForceSetString("");
+                eventName = table.GetEntry("EventName");
+                eventName.ForceSetString("");
+                matchNumber = table.GetEntry("MatchNumber");
+                matchNumber.ForceSetDouble(0);
+                replayNumber = table.GetEntry("ReplayNumber");
+                replayNumber.ForceSetDouble(0);
+                matchType = table.GetEntry("MatchType");
+                matchType.ForceSetDouble(0);
+                alliance = table.GetEntry("IsRedAlliance");
+                alliance.ForceSetBoolean(true);
+                station = table.GetEntry("StationNumber");
+                station.ForceSetDouble(1);
+                controlWord = table.GetEntry("FMSControlData");
+                controlWord.ForceSetDouble(0);
+            }
+        }
+
+        private static readonly TimeSpan JoystickUnpluggedMessageInterval = TimeSpan.FromSeconds(1);
+        public static readonly int NumJoystickPorts = 6;
+        public static readonly int MaxJoystickAxes = 12;
+        public static readonly int MaxJoystickPOVs = 12;
+
+
         private bool m_userInDisabled = false;
         private bool m_userInAutonomous = false;
         private bool m_userInTeleop = false;
         private bool m_userInTest = false;
+        private readonly MatchDataSender m_matchDataSender;
 
         private DriverStation()
         {
+            m_waitForDataCounter = 0;
+            m_matchDataSender = new MatchDataSender(NetworkTableInstance.Default);
 
+            m_dsThread = new Thread(Run)
+            {
+                Name = "Driver Station",
+                IsBackground = true
+            };
+            m_dsThread.Start();
+        }
+
+        private void ValidateJoystickPort(int stick)
+        {
+            if (stick < 0 || stick > NumJoystickPorts)
+            {
+                throw new ArgumentOutOfRangeException(nameof(stick), $"Joystick index is out of range, should be 0-5");
+            }
+        }
+
+        private bool ValidateButtonIndexValid(int button)
+        {
+            if (button <= 0)
+            {
+                ReportJoystickUnpluggedError("Button indexes begin at 1 in WPILib for C#");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateAxisIndexValid(int axis)
+        {
+            if (axis < 0 || axis > MaxJoystickAxes)
+            {
+                ReportJoystickUnpluggedError("Joystick axis is out of range");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidatePOVIndexValid(int axis)
+        {
+            if (axis < 0 || axis > MaxJoystickPOVs)
+            {
+                ReportJoystickUnpluggedError("Joystick pov is out of range");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateButtonIsFound(int button, int count, int stick)
+        {
+            if (button >= count)
+            {
+                ReportJoystickUnpluggedWarning("Joystick Button " + button + " on port " + stick
+            + " not available, check if controller is plugged in");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateAxisIsFound(int axis, int count, int stick)
+        {
+            if (axis > count)
+            {
+                ReportJoystickUnpluggedWarning("Joystick axis " + axis + " on port " + stick
+            + " not available, check if controller is plugged in");
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidatePOVIsFound(int pov, int count, int stick)
+        {
+            if (pov > count)
+            {
+                ReportJoystickUnpluggedWarning("Joystick axis " + pov + " on port " + stick
+            + " not available, check if controller is plugged in");
+                return false;
+            }
+            return true;
         }
 
         public bool GetStickButton(int stick, int button)
         {
-            return false;
+            ValidateJoystickPort(stick);
+            if (!ValidateButtonIndexValid(button))
+            {
+                return false;
+            }
+
+            var buttons = Hal.DriverStation.GetJoystickButtons(stick);
+
+            if (!ValidateButtonIsFound(button, buttons.Count, stick))
+            {
+                return false;
+            }
+
+            return buttons.GetButton(button);
         }
 
         public bool GetStickButtonPressed(int stick, int button)
         {
-            return false;
+            ValidateJoystickPort(stick);
+            if (!ValidateButtonIndexValid(button))
+            {
+                return false;
+            }
+
+            var buttons = Hal.DriverStation.GetJoystickButtons(stick);
+
+            if (!ValidateButtonIsFound(button, buttons.Count, stick))
+            {
+                return false;
+            }
+
+            lock (m_buttonEdgeMutex)
+            {
+                if ((m_joystickButtonsPressed[stick] & 1u << (button - 1)) != 0)
+                {
+                    m_joystickButtonsPressed[stick] &= ~(1u << (button - 1));
+                    return true;
+                }
+                return false;
+            }
         }
 
         public bool GetStickButtonReleased(int stick, int button)
         {
-            return false;
+            ValidateJoystickPort(stick);
+            if (!ValidateButtonIndexValid(button))
+            {
+                return false;
+            }
+
+            var buttons = Hal.DriverStation.GetJoystickButtons(stick);
+
+            if (!ValidateButtonIsFound(button, buttons.Count, stick))
+            {
+                return false;
+            }
+
+            lock (m_buttonEdgeMutex)
+            {
+                if ((m_joystickButtonsReleased[stick] & 1u << (button - 1)) != 0)
+                {
+                    m_joystickButtonsReleased[stick] &= ~(1u << (button - 1));
+                    return true;
+                }
+                return false;
+            }
         }
 
         public double GetStickAxis(int stick, int axis)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+            if (!ValidateAxisIndexValid(axis))
+            {
+                return 0.0;
+            }
+
+            var axes = Hal.DriverStation.GetJoystickAxes(stick);
+
+            if (!ValidateAxisIsFound(axis, axes.Count, stick))
+            {
+                return 0.0;
+            }
+
+            unsafe
+            {
+                return axes.Axes[axis];
+            }
         }
 
         public int GetStickPOV(int stick, int pov)
         {
-            return -1;
+            ValidateJoystickPort(stick);
+            if (!ValidatePOVIndexValid(pov))
+            {
+                return -1;
+            }
+
+            var povs = Hal.DriverStation.GetJoystickPOVs(stick);
+
+            if (!ValidateAxisIsFound(pov, povs.Count, stick))
+            {
+                return -1;
+            }
+
+            unsafe
+            {
+                return povs.POVs[pov];
+            }
         }
 
         public uint GetStickButtons(int stick)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickButtons(stick).Buttons;
         }
 
         public int GetStickAxisCount(int stick)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickAxes(stick).Count;
         }
 
         public int GetStickPOVCount(int stick)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickPOVs(stick).Count;
         }
 
         public int GetStickButtonCount(int stick)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickButtons(stick).Count;
         }
 
         public bool GetJoystickIsXbox(int stick)
         {
-            return false;
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickIsXbox(stick);
         }
 
         public int GetJoystickType(int stick)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickType(stick);
         }
 
         public string GetJoystickName(int stick)
         {
-            return "";
+            ValidateJoystickPort(stick);
+
+            return Hal.DriverStation.GetJoystickName(stick);
         }
 
         public int GetJoystickAxisType(int stick, int axis)
         {
-            return 0;
+            ValidateJoystickPort(stick);
+
+            if (!ValidateAxisIndexValid(axis))
+            {
+                return 0;
+            }
+
+            return Hal.DriverStation.GetJoystickAxisType(stick, axis);
         }
 
         public bool IsEnabled => Hal.DriverStation.GetControlWord().Enabled;
@@ -145,29 +379,116 @@ namespace WPILib
         public bool IsNewControlData => Hal.DriverStation.IsNewControlData();
         public bool IsFMSAttached => Hal.DriverStation.GetControlWord().FmsAttached;
 
-        public string GameSpecificMessage => "";
+        public string GameSpecificMessage
+        {
+            get
+            {
+                unsafe
+                {
+                    var matchInfo = Hal.DriverStation.GetMatchInfo();
+                    return UTF8String.ReadUTF8String(matchInfo.GameSpecificMessage, matchInfo.GameSpecificMessageSize);
+                }
+            }
+        }
 
-        public string EventName => "";
+        public string EventName
+        {
+            get
+            {
+                unsafe
+                {
+                    var matchInfo = Hal.DriverStation.GetMatchInfo();
+                    return UTF8String.ReadUTF8String(matchInfo.EventName);
+                }
+            }
+        }
 
-        public MatchType MatchType => MatchType.kNone;
+        public MatchType MatchType => (MatchType)Hal.DriverStation.GetMatchInfo().MatchType;
 
-        public int MatchNumber => 0;
-        public int ReplayNumber => 0;
-        public Alliance Alliance => Alliance.kInvalid;
-        public int Location => 0;
+        public int MatchNumber => Hal.DriverStation.GetMatchInfo().MatchNumber;
+        public int ReplayNumber => Hal.DriverStation.GetMatchInfo().ReplayNumber;
+        public Alliance Alliance
+        {
+            get
+            {
+                var allianceId = Hal.DriverStation.GetAllianceStation();
+                switch (allianceId)
+                {
+                    case AllianceStationID.kRed1:
+                    case AllianceStationID.kRed2:
+                    case AllianceStationID.kRed3:
+                        return Alliance.kRed;
+                    case AllianceStationID.kBlue1:
+                    case AllianceStationID.kBlue2:
+                    case AllianceStationID.kBlue3:
+                        return Alliance.kBlue;
+                    default:
+                        return Alliance.kInvalid;
+                }
+            }
+        }
+        public int Location
+        {
+            get
+            {
+                var allianceId = Hal.DriverStation.GetAllianceStation();
+                switch (allianceId)
+                {
+                    case AllianceStationID.kRed1:
+                    case AllianceStationID.kBlue1:
+                        return 1;
+                    case AllianceStationID.kRed2:
+                    case AllianceStationID.kBlue2:
+                        return 2;
+                    case AllianceStationID.kRed3:
+                    case AllianceStationID.kBlue3:
+                        return 3;
+                    default:
+                        return 0;
+                }
+            }
+        }
 
         public void WaitForData()
         {
-
+            WaitForData(TimeSpan.Zero);
         }
 
-        public bool WaitForData(double timeout)
+
+        public bool WaitForData(TimeSpan timeout)
         {
-            return false;
+            var timeoutTime = Timer.FPGATimestamp + timeout;
+
+            lock (m_waitForDataMutex)
+            {
+                int currentCount = m_waitForDataCounter;
+                while (m_waitForDataCounter == currentCount)
+                {
+                    if (timeout != TimeSpan.Zero)
+                    {
+                        var currentTime = Timer.FPGATimestamp;
+                        if (currentTime >= timeoutTime)
+                        {
+                            return false;
+                        }
+
+                        var timeToWait = timeoutTime - currentTime;
+                        if (!Monitor.Wait(m_waitForDataMutex, timeToWait))
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        Monitor.Wait(m_waitForDataMutex);
+                    }
+                }
+                return true;
+            }
         }
 
-        public double MatchTime => 0;
-        public double BatteryVoltage => 0;
+        public TimeSpan MatchTime => TimeSpan.FromSeconds(Hal.DriverStation.GetMatchTime());
+        public ElectricPotential BatteryVoltage => ElectricPotential.FromVolts(Hal.Power.GetVinVoltage());
 
         public void InDisabled(bool entering)
         {
@@ -191,33 +512,144 @@ namespace WPILib
 
         public void WakeupWaitForData()
         {
-            Hal.DriverStation.ReleaseDSMutex();
+            lock (m_waitForDataMutex)
+            {
+                m_waitForDataCounter++;
+                Monitor.PulseAll(m_waitForDataMutex);
+            }
         }
 
         protected void GetData()
         {
+            lock (m_buttonEdgeMutex)
+            {
+                for (int i = 0; i < NumJoystickPorts; i++)
+                {
+                    var currentButtons = Hal.DriverStation.GetJoystickButtons(i);
 
+                    m_joystickButtonsPressed[i] |= ~m_previousButtonStates[i].Buttons & currentButtons.Buttons;
+
+                    m_joystickButtonsReleased[i] |= m_previousButtonStates[i].Buttons & ~currentButtons.Buttons;
+
+                    m_previousButtonStates[i] = currentButtons;
+                }
+            }
+
+            WakeupWaitForData();
+            SendMatchData();
         }
 
 
-        private void ReportJoystickUnpluggedError(ReadOnlySpan<char> message)
+        private void ReportJoystickUnpluggedError(string message)
         {
-
+            var currentTime = Timer.FPGATimestamp;
+            if (currentTime > m_nextMessageTime)
+            {
+                ReportError(message, false);
+                m_nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
+            }
         }
 
-        private void ReportJoystickUnpluggedWarning(ReadOnlySpan<char> message)
+        private void ReportJoystickUnpluggedWarning(string message)
         {
-
+            var currentTime = Timer.FPGATimestamp;
+            if (currentTime > m_nextMessageTime)
+            {
+                ReportWarning(message, false);
+                m_nextMessageTime = currentTime + JoystickUnpluggedMessageInterval;
+            }
         }
 
         private void Run()
         {
+            m_isRunning = true;
+            int safetyCounter = 0;
+            while (m_isRunning)
+            {
+                Hal.DriverStation.WaitForDSData();
+                GetData();
 
+                if (IsDisabled)
+                {
+                    safetyCounter = 0;
+                }
+
+                if (++safetyCounter >= 4)
+                {
+                    MotorSafety.CheckMotors();
+                    safetyCounter = 0;
+                }
+
+                if (m_userInDisabled) Hal.DriverStation.ObserveUserProgramDisabled();
+                if (m_userInAutonomous) Hal.DriverStation.ObserveUserProgramAutonomous();
+                if (m_userInTeleop) Hal.DriverStation.ObserveUserProgramTeleop();
+                if (m_userInTest) Hal.DriverStation.ObserveUserProgramTest();
+            }
         }
 
-        private void SendMatchData()
+        private unsafe void SendMatchData()
         {
+            var alliance = Hal.DriverStation.GetAllianceStation();
+            bool isRedAlliance;
+            int stationNumber;
+            switch (alliance)
+            {
+                case AllianceStationID.kBlue1:
+                    isRedAlliance = false;
+                    stationNumber = 1;
+                    break;
+                case AllianceStationID.kBlue2:
+                    isRedAlliance = false;
+                    stationNumber = 2;
+                    break;
+                case AllianceStationID.kBlue3:
+                    isRedAlliance = false;
+                    stationNumber = 3;
+                    break;
+                case AllianceStationID.kRed1:
+                    isRedAlliance = true;
+                    stationNumber = 1;
+                    break;
+                case AllianceStationID.kRed2:
+                    isRedAlliance = true;
+                    stationNumber = 2;
+                    break;
+                default:
+                    isRedAlliance = true;
+                    stationNumber = 3;
+                    break;
+            }
 
+            var tmpDataStore = Hal.DriverStation.GetMatchInfo();
+
+            m_matchDataSender.alliance.SetBoolean(isRedAlliance);
+            m_matchDataSender.station.SetDouble(stationNumber);
+            int count = 0;
+            var lenToCheck = tmpDataStore.EventName;
+            while (count < 64)
+            {
+                if (lenToCheck[count] == 0)
+                {
+                    break;
+                }
+                count++;
+            }
+            m_matchDataSender.eventName.SetStringDirect(tmpDataStore.EventName, count);
+            m_matchDataSender.gameSpecificMessage.SetStringDirect(tmpDataStore.GameSpecificMessage, tmpDataStore.GameSpecificMessageSize);
+
+            m_matchDataSender.matchNumber.SetDouble(tmpDataStore.MatchNumber);
+            m_matchDataSender.replayNumber.SetDouble(tmpDataStore.ReplayNumber);
+            m_matchDataSender.matchType.SetDouble((int)tmpDataStore.MatchType);
+
+            var ctlWord = Hal.DriverStation.GetControlWord();
+            m_matchDataSender.controlWord.SetDouble(ctlWord.Word);
+        }
+
+        public void Dispose()
+        {
+            m_isRunning = false;
+            Hal.DriverStation.ReleaseDSMutex();
+            m_dsThread.Join();
         }
 
         private readonly object m_buttonEdgeMutex = new object();
@@ -230,7 +662,7 @@ namespace WPILib
 
         private readonly object m_waitForDataMutex = new object();
         private int m_waitForDataCounter = 0;
-        private double m_nextMessageTime = 0;
+        private TimeSpan m_nextMessageTime = TimeSpan.Zero;
 
 
 

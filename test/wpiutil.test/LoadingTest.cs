@@ -15,7 +15,7 @@ namespace wpiutil.test
         [NativeInterface(typeof(IInterfaceToLoad))]
         private class LoadTest
         {
-            public static IInterfaceToLoad? LoadedInterface;
+            public static IInterfaceToLoad LoadedInterface = null;
         }
 
         internal static void StatusCheck(int status)
