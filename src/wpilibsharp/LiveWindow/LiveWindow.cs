@@ -25,7 +25,7 @@ namespace WPILib.LiveWindow
 
         private static bool startLiveWindow;
         private static bool liveWindowEnabled;
-        private static bool telemetryEnabled;
+        //private static bool telemetryEnabled;
 
         private static Action? enabledListener;
         private static Action? disabledListener;

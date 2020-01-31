@@ -63,6 +63,6 @@ steps:
     arguments: install --tool-path . dotnet-format
   displayName: Install dotnet-format
 
-- script: dotnet-format --check
+- script: dotnet-format --check --dry-run
   displayName: Check formatting
   

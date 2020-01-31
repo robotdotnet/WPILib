@@ -12,7 +12,7 @@ namespace WPILib.SmartDashboard
         public Action SafeState { set => throw new NotImplementedException(); }
         public Action UpdateTable { set => throw new NotImplementedException(); }
 
-        public NetworkTable Table { get; set; }
+        public NetworkTable? Table { get; set; }
 
         public void TriggerUpdateTable()
         {

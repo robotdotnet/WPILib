@@ -35,7 +35,6 @@ namespace WPIUtil.ILGeneration
         /// <param name="returnType"></param>
         /// <param name="parameters"></param>
         /// <param name="nativeFp"></param>
-        /// <param name="isInstance"></param>
         public unsafe void GenerateMethod(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp)
         {
             for (int i = 0; i < parameters.Length; i++)

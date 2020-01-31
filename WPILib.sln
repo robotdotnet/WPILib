@@ -9,37 +9,42 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hal", "src\hal\hal.csproj",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wpiutil", "src\wpiutil\wpiutil.csproj", "{04BD17A4-7745-40BB-9C6D-7DEC01BB5EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wpilibsharp", "src\wpilibsharp\wpilibsharp.csproj", "{10FA8669-37C8-4F81-856C-CCC0EF820159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wpilibsharp", "src\wpilibsharp\wpilibsharp.csproj", "{10FA8669-37C8-4F81-856C-CCC0EF820159}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "dev", "dev", "{E5516BF2-A6BD-4CEA-831A-4C113F02A3DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "roboRIODev", "dev\roboRIODev\roboRIODev.csproj", "{D618500C-A24A-450C-9E36-F9F4B20E2B3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "roboRIODev", "dev\roboRIODev\roboRIODev.csproj", "{D618500C-A24A-450C-9E36-F9F4B20E2B3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "desktopDev", "dev\desktopDev\desktopDev.csproj", "{0B670BC6-99B2-4BC7-8EF8-B659D11841B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "desktopDev", "dev\desktopDev\desktopDev.csproj", "{0B670BC6-99B2-4BC7-8EF8-B659D11841B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "thirdparty", "thirdparty", "{7EC98827-7070-46CC-8E8A-F515DAE5F3EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SparkMax", "src\thirdparty\SparkMax\SparkMax.csproj", "{DD97E725-86EB-42DC-B6C8-F5DE08A8DCBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SparkMax", "src\thirdparty\SparkMax\SparkMax.csproj", "{DD97E725-86EB-42DC-B6C8-F5DE08A8DCBF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{7E70EFD7-E90A-4FA7-9EA7-D793C4014B3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CInterfaceGenerator", "tools\CInterfaceGenerator\CInterfaceGenerator.csproj", "{011B84F0-AEAD-4836-91C9-90A19BF6A608}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CInterfaceGenerator", "tools\CInterfaceGenerator\CInterfaceGenerator.csproj", "{011B84F0-AEAD-4836-91C9-90A19BF6A608}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntcore", "src\ntcore\ntcore.csproj", "{A09C47DD-4CA3-40F1-BB2C-6479863176EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ntcore", "src\ntcore\ntcore.csproj", "{A09C47DD-4CA3-40F1-BB2C-6479863176EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ADF16DA1-E70B-464A-B38C-83728B4D5827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "hal.test", "test\hal.test\hal.test.csproj", "{A6A03B80-C2B3-4B59-BEF1-A3FA12D129FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hal.test", "test\hal.test\hal.test.csproj", "{A6A03B80-C2B3-4B59-BEF1-A3FA12D129FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ntcore.test", "test\ntcore.test\ntcore.test.csproj", "{4926FB0D-EF29-420C-9E4B-0BAC5A1BDE1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ntcore.test", "test\ntcore.test\ntcore.test.csproj", "{4926FB0D-EF29-420C-9E4B-0BAC5A1BDE1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wpilibsharp.test", "test\wpilibsharp.test\wpilibsharp.test.csproj", "{48886335-549D-4837-92F3-5F9546803BF9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wpilibsharp.test", "test\wpilibsharp.test\wpilibsharp.test.csproj", "{48886335-549D-4837-92F3-5F9546803BF9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wpiutil.test", "test\wpiutil.test\wpiutil.test.csproj", "{A8BFA891-E983-42EF-82E6-B5294F278934}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "wpiutil.test", "test\wpiutil.test\wpiutil.test.csproj", "{A8BFA891-E983-42EF-82E6-B5294F278934}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "newcommands", "src\newcommands\newcommands.csproj", "{C9889C72-FDFF-4F51-A382-D88D64972727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "newcommands", "src\newcommands\newcommands.csproj", "{C9889C72-FDFF-4F51-A382-D88D64972727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "oblog", "src\thirdparty\oblog\oblog.csproj", "{5DA16062-FC4F-47E6-8D3D-24E657DC723B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "oblog", "src\thirdparty\oblog\oblog.csproj", "{5DA16062-FC4F-47E6-8D3D-24E657DC723B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{65D265F8-B589-4382-BD89-25E4F36213CD}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
