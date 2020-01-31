@@ -6,6 +6,8 @@
 trigger:
 - master
 
+name: $(BuildDefinitionName)_$(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)
+
 pool:
   vmImage: 'windows-latest'
 
@@ -13,11 +15,27 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    versioningScheme: byBuildNumber
+    arguments: '--configuration $(buildConfigurtion)'
   displayName: 'dotnet build $(buildConfiguration)'
-- script: dotnet test --configuration $(buildConfiguration)
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    publishTestResults: true
+    versioningScheme: byBuildNumber
+    arguments: '--configuration $(buildConfigurtion) --collect "Code coverage"'
   displayName: 'dotnet test $(buildConfiguration)'
-- script: dotnet pack --configuration $(buildConfiguration)
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    versioningScheme: byBuildNumber
+    arguments: '--configuration $(buildConfigurtion)'
   displayName: 'dotnet pack $(buildConfiguration)'
+
 - publish: $(System.DefaultWorkingDirectory)/nupkg
   artifact: Packages
