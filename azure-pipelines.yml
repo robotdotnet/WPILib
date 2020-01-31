@@ -50,6 +50,7 @@ steps:
     versioningScheme: byBuildNumber
     outputDir: $(System.DefaultWorkingDirectory)/nupkg
     arguments: '--configuration $(buildConfiguration)'
+    verbosityPack: 'Normal'
   displayName: 'dotnet pack $(buildConfiguration)'
 
 - publish: $(System.DefaultWorkingDirectory)/nupkg
