@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,9 +25,12 @@ namespace WPIUtil.NativeUtilities
 
         public static void InitializeNativeTypes(Assembly asm, InterfaceGenerator generator, MethodInfo statusCheckFunc)
         {
+            bool isRoboRIO = File.Exists("/usr/local/frc/bin/frcRunRobot.sh");
+
             var types = asm.GetTypes()
-                .Select(x => (type: x, attribute: x.GetCustomAttribute<NativeInterfaceAttribute>(), skipAttribute: x.GetCustomAttribute<SkipAutoLoadAttribute>()))
-                .Where(x => x.skipAttribute == null && x.attribute != null)
+                .Select(x => (type: x, attribute: x.GetCustomAttribute<NativeInterfaceAttribute>(), skipAttribute: x.GetCustomAttribute<SkipOnRoboRIOAttribute>()))
+                .Where(x => x.attribute != null)
+                .Where(x => !isRoboRIO || (isRoboRIO && x.skipAttribute == null))
                 .ToArray();
 
             var typesActual = types.Select(x => x.attribute!.InterfaceType).ToArray();

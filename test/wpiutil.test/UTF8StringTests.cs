@@ -79,9 +79,57 @@ namespace wpiutil.test
         {
             var str = new UTF8String("Hello".AsSpan());
             byte[] expectedBytes = new byte[] {
-                72, 101, 108, 108, 111, 0
+                72, 101, 108, 108, 111, 0 // Hello
             };
             Assert.Equal(expectedBytes, str.Buffer);
+        }
+
+        [Fact]
+        public unsafe void TestReadWorksCorrectly()
+        {
+            byte* testBytes = stackalloc byte[] {
+                72,
+                101,
+                108,
+                108,
+                111,
+                0 // Hello
+            };
+
+            var str = UTF8String.ReadUTF8String(testBytes, 5);
+            Assert.Equal("Hello", str);
+        }
+
+        [Fact]
+        public unsafe void TestReadWorksUIntPtr()
+        {
+            byte* testBytes = stackalloc byte[] {
+                72,
+                101,
+                108,
+                108,
+                111,
+                0 // Hello
+            };
+
+            var str = UTF8String.ReadUTF8String(testBytes, (UIntPtr)5);
+            Assert.Equal("Hello", str);
+        }
+
+        [Fact]
+        public unsafe void TestReadWorksNullTerminator()
+        {
+            byte* testBytes = stackalloc byte[] {
+                72,
+                101,
+                108,
+                108,
+                111,
+                0 // Hello
+            };
+
+            var str = UTF8String.ReadUTF8String(testBytes);
+            Assert.Equal("Hello", str);
         }
     }
 }
