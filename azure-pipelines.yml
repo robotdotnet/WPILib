@@ -19,7 +19,7 @@ steps:
   inputs:
     command: 'build'
     versioningScheme: byBuildNumber
-    arguments: '--configuration $(buildConfigurtion)'
+    arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet build $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
@@ -27,14 +27,14 @@ steps:
     command: 'test'
     publishTestResults: true
     versioningScheme: byBuildNumber
-    arguments: '--configuration $(buildConfigurtion) --collect "Code coverage"'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
   displayName: 'dotnet test $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     versioningScheme: byBuildNumber
-    arguments: '--configuration $(buildConfigurtion)'
+    arguments: '--configuration $(buildConfiguration)'
   displayName: 'dotnet pack $(buildConfiguration)'
 
 - publish: $(System.DefaultWorkingDirectory)/nupkg
