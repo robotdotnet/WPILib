@@ -88,6 +88,10 @@ namespace WPIUtil.ILGeneration
 
             emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, adjustedParameters);
 
+            var retLabel = generator.DefineLabel();
+            generator.Emit(OpCodes.Ldloc_0);
+            generator.Emit(OpCodes.Brfalse_S, retLabel);
+
             generator.Emit(OpCodes.Ldloc_0);
 
             var checkFunctionParameters = checkFunction.GetParameters();
@@ -99,11 +103,14 @@ namespace WPIUtil.ILGeneration
 
             generator.Emit(OpCodes.Call, checkFunction);
 
+            generator.MarkLabel(retLabel);
             generator.Emit(OpCodes.Ret);
         }
 
         public unsafe void GenerateMethodReturnStatusCheck(ILGenerator generator, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false)
         {
+            generator.DeclareLocal(typeof(int));
+
             int offset = isStaticMethod ? 0 : 1;
             for (int i = 0; i < parameters.Length; i++)
             {
@@ -128,8 +135,15 @@ namespace WPIUtil.ILGeneration
                 throw new Exception("Incompatible method for status check");
             }
 
+            var retLabel = generator.DefineLabel();
+            generator.Emit(OpCodes.Stloc_0);
+            generator.Emit(OpCodes.Ldloc_0);
+            generator.Emit(OpCodes.Brfalse_S, retLabel);
+
+            generator.Emit(OpCodes.Ldloc_0);
             generator.EmitCall(OpCodes.Call, checkFunction, null);
 
+            generator.MarkLabel(retLabel);
             generator.Emit(OpCodes.Ret);
         }
 
@@ -164,6 +178,10 @@ namespace WPIUtil.ILGeneration
 
             emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, adjustedParameters);
 
+            var retLabel = generator.DefineLabel();
+            generator.Emit(OpCodes.Ldloc_0);
+            generator.Emit(OpCodes.Brfalse_S, retLabel);
+
             generator.Emit(OpCodes.Ldloc_0);
             generator.Emit(OpCodes.Ldarg, checkParameterNumber + offset);
 
@@ -176,7 +194,9 @@ namespace WPIUtil.ILGeneration
 
             generator.Emit(OpCodes.Call, checkFunction);
 
+            generator.MarkLabel(retLabel);
             generator.Emit(OpCodes.Ret);
+
         }
     }
 }

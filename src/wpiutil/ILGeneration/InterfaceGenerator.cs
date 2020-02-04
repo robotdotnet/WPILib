@@ -117,6 +117,7 @@ namespace WPIUtil.ILGeneration
                 {
                     var parameters = method.GetParameters().Select(x => x.ParameterType).ToArray();
                     var methodBuilder = typeBuilder.DefineMethod(method.Name, MethodAttributes.Virtual | MethodAttributes.Public, method.ReturnType, parameters);
+                    methodBuilder.SetImplementationFlags(MethodImplAttributes.AggressiveInlining);
                     var nativeCallAttribute = method.GetCustomAttribute<NativeNameAttribute>();
                     string nativeName = method.Name;
                     if (nativeCallAttribute != null && nativeCallAttribute.NativeName != null)

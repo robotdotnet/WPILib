@@ -45,8 +45,9 @@ namespace Hal
         }
 
 
-        private static int ThrowRangeCheck(int status, int requested, int min, int max)
+        private static void ThrowRangeCheck(int status, int requested, int min, int max)
         {
+            if (status == 0) return;
             if (status == NoAvailableResourceCode || status == ResourceIsAllocatedCode || status == ResourceOutOfRangeCode)
             {
                 throw new AllocationException(status, requested, min, max);
