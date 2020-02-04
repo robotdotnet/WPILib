@@ -5,6 +5,7 @@ using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IDriverStation
     {
         int HAL_SendError(int isError, int errorCode, int isLVCode, byte* details, byte* location, byte* callStack, int printMsg);

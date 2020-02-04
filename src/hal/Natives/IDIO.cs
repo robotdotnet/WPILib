@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IDIO
     {
         [StatusCheckLastParameter] int HAL_AllocateDigitalPWM();
@@ -22,7 +23,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetFilterSelect(int dioPortHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeDIOPort(int portHandle, int input);
+        [StatusCheckRange(0, typeof(StatusHandling), "DIOStatusCheck")] int HAL_InitializeDIOPort(int portHandle, int input);
 
         [StatusCheckLastParameter] int HAL_IsAnyPulsing();
 

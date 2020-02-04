@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IAnalogGyro
     {
         [StatusCheckLastParameter] void HAL_CalibrateAnalogGyro(int handle);
@@ -16,7 +17,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] double HAL_GetAnalogGyroRate(int handle);
 
-        [StatusCheckLastParameter] int HAL_InitializeAnalogGyro(int handle);
+        [StatusCheckRange(0, typeof(StatusHandling), "AnalogGyroStatusCheck")] int HAL_InitializeAnalogGyro(int analogHandle);
 
         [StatusCheckLastParameter] void HAL_ResetAnalogGyro(int handle);
 

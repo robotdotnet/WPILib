@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IAnalogTrigger
     {
         [StatusCheckLastParameter] void HAL_CleanAnalogTrigger(int analogTriggerHandle);
@@ -14,9 +15,9 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetAnalogTriggerTriggerState(int analogTriggerHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeAnalogTrigger(int portHandle);
+        [StatusCheckRange(0, typeof(StatusHandling), "AnalogTriggerStatusCheck")] int HAL_InitializeAnalogTrigger(int portHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeAnalogTriggerDutyCycle(int dutyCycleHandle);
+        [StatusCheckRange(0, typeof(StatusHandling), "AnalogTriggerDutyCycleStatusCheck")] int HAL_InitializeAnalogTriggerDutyCycle(int dutyCycleHandle);
 
         [StatusCheckLastParameter] void HAL_SetAnalogTriggerAveraged(int analogTriggerHandle, int useAveragedValue);
 

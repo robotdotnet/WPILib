@@ -10,20 +10,18 @@ namespace WPIUtil.NativeUtilities
 {
     public static class NativeInterfaceInitializer
     {
-        public static bool LoadAndInitializeNativeTypes(Assembly asm, string nativeLibraryName, MethodInfo statusCheckFunc, out InterfaceGenerator? generator)
+        public static void LoadAndInitializeNativeTypes(Assembly asm, string nativeLibraryName, out InterfaceGenerator? generator)
         {
             generator = NativeLibraryLoader.LoadNativeLibraryGenerator(nativeLibraryName);
             if (generator == null)
             {
-                return false;
+                throw new Exception("Library Load Exception");
             }
 
-            InitializeNativeTypes(asm, generator, statusCheckFunc);
-
-            return true;
+            InitializeNativeTypes(asm, generator);
         }
 
-        public static void InitializeNativeTypes(Assembly asm, InterfaceGenerator generator, MethodInfo statusCheckFunc)
+        public static void InitializeNativeTypes(Assembly asm, InterfaceGenerator generator)
         {
             bool isRoboRIO = File.Exists("/usr/local/frc/bin/frcRunRobot.sh");
 
@@ -35,7 +33,7 @@ namespace WPIUtil.NativeUtilities
 
             var typesActual = types.Select(x => x.attribute!.InterfaceType).ToArray();
 
-            var interfaces = generator.GenerateImplementations(typesActual, statusCheckFunc);
+            var interfaces = generator.GenerateImplementations(typesActual);
             for (int i = 0; i < types.Length; i++)
             {
                 var type = types[i];

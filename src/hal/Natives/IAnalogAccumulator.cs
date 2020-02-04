@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IAnalogAccumulator
     {
         [StatusCheckLastParameter] long HAL_GetAccumulatorCount(int analogPortHandle);
@@ -10,7 +11,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] long HAL_GetAccumulatorValue(int analogPortHandle);
 
-        [StatusCheckLastParameter] void HAL_InitAccumulator(int analogPortHandle);
+        [StatusCheckRange(0, typeof(StatusHandling), "AccumulatorStatusCheck")] void HAL_InitAccumulator(int analogPortHandle);
 
         [StatusCheckLastParameter] int HAL_IsAccumulatorChannel(int analogPortHandle);
 

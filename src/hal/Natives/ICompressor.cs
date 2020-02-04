@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ICompressor
     {
         int HAL_CheckCompressorModule(int module);
@@ -26,7 +27,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetCompressorShortedStickyFault(int compressorHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeCompressor(int module);
+        [StatusCheckRange(0, typeof(StatusHandling), "CompressorStatusCheck")] int HAL_InitializeCompressor(int module);
 
         [StatusCheckLastParameter] void HAL_SetCompressorClosedLoopControl(int compressorHandle, int value);
 

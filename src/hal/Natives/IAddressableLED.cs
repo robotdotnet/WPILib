@@ -2,11 +2,12 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IAddressableLED
     {
         void HAL_FreeAddressableLED(int handle);
 
-        [StatusCheckLastParameter] int HAL_InitializeAddressableLED(int outputPort);
+        [StatusCheckRange(0, typeof(StatusHandling), "AddressableLEDStatusCheck")] int HAL_InitializeAddressableLED(int outputPort);
 
         [StatusCheckLastParameter] void HAL_SetAddressableLEDBitTiming(int handle, int lowTime0NanoSeconds, int highTime0NanoSeconds, int lowTime1NanoSeconds, int highTime1NanoSeconds);
 

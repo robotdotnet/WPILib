@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IAnalogInput
     {
         int HAL_CheckAnalogInputChannel(int channel);
@@ -32,7 +33,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetAnalogVoltsToValue(int analogPortHandle, double voltage);
 
-        [StatusCheckLastParameter] int HAL_InitializeAnalogInputPort(int portHandle);
+        [StatusCheckRange(0, typeof(StatusHandling), "AnalogInputStatusCheck")] int HAL_InitializeAnalogInputPort(int portHandle);
 
         [StatusCheckLastParameter] void HAL_SetAnalogAverageBits(int analogPortHandle, int bits);
 

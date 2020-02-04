@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ISimDevice
     {
         int HAL_CreateSimDevice(byte* name);

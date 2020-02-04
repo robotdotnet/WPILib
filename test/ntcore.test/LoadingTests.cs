@@ -9,7 +9,7 @@ namespace ntcore.test
         [Fact]
         public void TestNtCoreLoads()
         {
-            Assert.True(NtCore.Initialize());
+            NtCore.Initialize();
         }
     }
 }

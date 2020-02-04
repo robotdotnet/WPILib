@@ -2,11 +2,14 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ICANAPI
     {
         void HAL_CleanCAN(int handle);
 
-        [StatusCheckLastParameter] int HAL_InitializeCAN(CANManufacturer manufacturer, int deviceId, CANDeviceType deviceType);
+        [StatusCheckedBy(typeof(StatusHandling), nameof(StatusHandling.StatusCheckForce))]
+        [StatusCheckLastParameter]
+        int HAL_InitializeCAN(CANManufacturer manufacturer, int deviceId, CANDeviceType deviceType);
 
         [StatusCheckLastParameter] void HAL_ReadCANPacketLatest(int handle, int apiId, byte* data, int* length, ulong* receivedTimestamp);
 

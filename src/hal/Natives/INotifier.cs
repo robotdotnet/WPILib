@@ -2,13 +2,16 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface INotifier
     {
         [StatusCheckLastParameter] void HAL_CancelNotifierAlarm(int notifierHandle);
 
         [StatusCheckLastParameter] void HAL_CleanNotifier(int notifierHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeNotifier();
+        [StatusCheckedBy(typeof(StatusHandling), nameof(StatusHandling.StatusCheckForce))]
+        [StatusCheckLastParameter]
+        int HAL_InitializeNotifier();
 
         [StatusCheckLastParameter] void HAL_SetNotifierName(int notifierHandle, byte* name);
 

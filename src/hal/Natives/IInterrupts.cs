@@ -3,6 +3,7 @@ using WPIUtil.ILGeneration;
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IInterrupts
     {
         [StatusCheckLastParameter] void HAL_AttachInterruptHandler(int interruptHandle, IntPtr handler, void* param);
@@ -15,7 +16,9 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] void HAL_EnableInterrupts(int interruptHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeInterrupts(int watcher);
+        [StatusCheckedBy(typeof(StatusHandling), nameof(StatusHandling.StatusCheckForce))]
+        [StatusCheckLastParameter]
+        int HAL_InitializeInterrupts(int watcher);
 
         [StatusCheckLastParameter] long HAL_ReadInterruptFallingTimestamp(int interruptHandle);
 

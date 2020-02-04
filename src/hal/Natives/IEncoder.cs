@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IEncoder
     {
         [StatusCheckLastParameter] void HAL_FreeEncoder(int encoderHandle);
@@ -30,7 +31,9 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetEncoderSamplesToAverage(int encoderHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeEncoder(int digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, int digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType);
+        [StatusCheckedBy(typeof(StatusHandling), nameof(StatusHandling.StatusCheckForce))]
+        [StatusCheckLastParameter]
+        int HAL_InitializeEncoder(int digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, int digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType);
 
         [StatusCheckLastParameter] void HAL_ResetEncoder(int encoderHandle);
 

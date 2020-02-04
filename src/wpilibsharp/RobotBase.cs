@@ -90,13 +90,7 @@ namespace WPILib
                 return -1;
             }
 
-            if (!NetworkTables.Natives.NtCore.Initialize())
-            {
-                Console.WriteLine("FATAL ERROR: NetworkTables could not be initialized");
-                return -1;
-            }
-
-
+            NetworkTables.Natives.NtCore.Initialize();
 
             return 0;
         }

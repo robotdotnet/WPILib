@@ -11,6 +11,8 @@ namespace desktopDev
         double[] buffer = new double[50];
         int idx = 0;
 
+        private int pwm = Hal.PWM.InitializePort(HalBase.GetPort(42));
+
         private int can = CANAPI.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
 
 

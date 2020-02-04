@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ICAN
     {
         void HAL_CAN_CloseStreamSession(uint sessionHandle);

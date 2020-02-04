@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IPWM
     {
         int HAL_CheckPWMChannel(int channel);
@@ -20,7 +21,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] double HAL_GetPWMSpeed(int pwmPortHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializePWMPort(int portHandle);
+        [StatusCheckRange(0, typeof(StatusHandling), "PWMStatusCheck")] int HAL_InitializePWMPort(int portHandle);
 
         [StatusCheckLastParameter] void HAL_LatchPWMZero(int pwmPortHandle);
 

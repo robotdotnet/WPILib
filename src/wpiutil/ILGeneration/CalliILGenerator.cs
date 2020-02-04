@@ -90,6 +90,13 @@ namespace WPIUtil.ILGeneration
 
             generator.Emit(OpCodes.Ldloc_0);
 
+            var checkFunctionParameters = checkFunction.GetParameters();
+
+            if (checkFunctionParameters.Length != 1 || checkFunctionParameters[0].ParameterType != typeof(int))
+            {
+                throw new Exception("Incompatible method for status check");
+            }
+
             generator.Emit(OpCodes.Call, checkFunction);
 
             generator.Emit(OpCodes.Ret);
@@ -114,7 +121,60 @@ namespace WPIUtil.ILGeneration
 
             emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, typeof(int), parameters);
 
+            var checkFunctionParameters = checkFunction.GetParameters();
+
+            if (checkFunctionParameters.Length != 1 || checkFunctionParameters[0].ParameterType != typeof(int))
+            {
+                throw new Exception("Incompatible method for status check");
+            }
+
             generator.EmitCall(OpCodes.Call, checkFunction, null);
+
+            generator.Emit(OpCodes.Ret);
+        }
+
+        public unsafe void GenerateMethodRangeStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, int checkParameterNumber, bool isStaticMethod = false)
+        {
+            // Insert hidden last parameter
+            generator.DeclareLocal(typeof(int));
+            generator.Emit(OpCodes.Ldc_I4_0);
+            generator.Emit(OpCodes.Stloc_0);
+
+            int offset = isStaticMethod ? 0 : 1;
+
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                generator.Emit(OpCodes.Ldarg, i + offset);
+            }
+
+            generator.Emit(OpCodes.Ldloca_S, (byte)0);
+
+            if (sizeof(IntPtr) == 8)
+            {
+                generator.Emit(OpCodes.Ldc_I8, (long)nativeFp);
+            }
+            else
+            {
+                generator.Emit(OpCodes.Ldc_I4, (int)nativeFp);
+            }
+
+            var adjustedParameters = new Type[parameters.Length + 1];
+            Array.Copy(parameters, adjustedParameters, parameters.Length);
+            adjustedParameters[adjustedParameters.Length - 1] = typeof(int*);
+
+            emitCalli(generator, OpCodes.Calli, CallingConvention.Cdecl, returnType, adjustedParameters);
+
+            generator.Emit(OpCodes.Ldloc_0);
+            generator.Emit(OpCodes.Ldarg, checkParameterNumber + offset);
+
+            var checkFunctionParameters = checkFunction.GetParameters();
+
+            if (checkFunctionParameters.Length != 2 || checkFunctionParameters[0].ParameterType != typeof(int) || checkFunctionParameters[1].ParameterType != parameters[checkParameterNumber])
+            {
+                throw new Exception("Incompatible method for status check");
+            }
+
+            generator.Emit(OpCodes.Call, checkFunction);
 
             generator.Emit(OpCodes.Ret);
         }

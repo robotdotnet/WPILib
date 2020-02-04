@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IDMA
     {
         [StatusCheckLastParameter] void HAL_AddDMAAnalogAccumulator(int handle, int aInHandle);

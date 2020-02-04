@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IPDP
     {
         int HAL_CheckPDPChannel(int channel);
@@ -26,7 +27,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] double HAL_GetPDPVoltage(int handle);
 
-        [StatusCheckLastParameter] int HAL_InitializePDP(int module);
+        [StatusCheckRange(0, typeof(StatusHandling), "PDPStatusCheck")] int HAL_InitializePDP(int module);
 
         [StatusCheckLastParameter] void HAL_ResetPDPTotalEnergy(int handle);
 

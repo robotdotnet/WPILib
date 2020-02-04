@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IPower
     {
         [StatusCheckLastParameter] int HAL_GetUserActive3V3();

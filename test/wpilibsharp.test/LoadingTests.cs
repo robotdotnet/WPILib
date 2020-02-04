@@ -16,7 +16,7 @@ namespace wpilibsharp.test
         [Fact]
         public void TestNtCoreLoads()
         {
-            Assert.True(NtCore.Initialize());
+            NtCore.Initialize();
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ISerialPort
     {
         [StatusCheckLastParameter] void HAL_ClearSerial(int handle);
@@ -18,7 +19,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetSerialFD(int handle);
 
-        [StatusCheckLastParameter] int HAL_InitializeSerialPort(SerialPortLocation port);
+        [StatusCheckRange(0, typeof(StatusHandling), "SerialPortStatusCheck")] int HAL_InitializeSerialPort(SerialPortLocation port);
 
         [StatusCheckLastParameter] int HAL_InitializeSerialPortDirect(SerialPortLocation port, byte* portName);
 

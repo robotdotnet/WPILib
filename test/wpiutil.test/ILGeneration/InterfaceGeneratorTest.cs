@@ -47,7 +47,7 @@ namespace wpiutil.test
 
             var ilGenerator = new CalliILGenerator();
             InterfaceGenerator iGenerator = new InterfaceGenerator(fpLoader, ilGenerator);
-            var impl = (I1Func)iGenerator.GenerateImplementations(new Type[] { typeof(I1Func) }, typeof(InterfaceGeneratorTest).GetMethod(nameof(StatusCheck)))[0];
+            var impl = (I1Func)iGenerator.GenerateImplementations(new Type[] { typeof(I1Func) })[0];
 
             Assert.NotNull(impl);
             int x = 5;

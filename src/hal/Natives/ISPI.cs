@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ISPI
     {
         void HAL_CloseSPI(SPIPort port);
@@ -18,7 +19,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] void HAL_InitSPIAuto(SPIPort port, int bufferSize);
 
-        [StatusCheckLastParameter] void HAL_InitializeSPI(SPIPort port);
+        [StatusCheckRange(0, typeof(StatusHandling), "SPIStatusCheck")] void HAL_InitializeSPI(SPIPort port);
 
         int HAL_ReadSPI(SPIPort port, byte* buffer, int count);
 

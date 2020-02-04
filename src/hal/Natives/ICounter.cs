@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ICounter
     {
         [StatusCheckLastParameter] int HAL_GetCounter(int counterHandle);
@@ -18,7 +19,9 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] double HAL_GetCounterPeriod(int counterHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeCounter(CounterMode mode, int* index);
+        [StatusCheckedBy(typeof(StatusHandling), nameof(StatusHandling.StatusCheckForce))]
+        [StatusCheckLastParameter]
+        int HAL_InitializeCounter(CounterMode mode, int* index);
 
         [StatusCheckLastParameter] void HAL_ResetCounter(int counterHandle);
 

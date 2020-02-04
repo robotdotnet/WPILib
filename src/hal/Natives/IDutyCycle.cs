@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IDutyCycle
     {
         void HAL_FreeDutyCycle(int dutyCycleHandle);

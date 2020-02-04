@@ -13,5 +13,7 @@ namespace WPIUtil.ILGeneration
         void GenerateMethodLastParameterStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false);
 
         void GenerateMethodReturnStatusCheck(ILGenerator generator, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false);
+
+        void GenerateMethodRangeStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, int checkParameterNumber, bool isStaticMethod = false);
     }
 }

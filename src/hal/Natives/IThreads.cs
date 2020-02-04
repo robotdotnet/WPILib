@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IThreads
     {
         [StatusCheckLastParameter] int HAL_GetCurrentThreadPriority(int* isRealTime);

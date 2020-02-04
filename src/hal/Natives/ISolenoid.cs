@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+    [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface ISolenoid
     {
         int HAL_CheckSolenoidChannel(int channel);
@@ -24,7 +25,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] int HAL_GetSolenoid(int solenoidPortHandle);
 
-        [StatusCheckLastParameter] int HAL_InitializeSolenoidPort(int portHandle);
+        [StatusCheckRange(0, typeof(StatusHandling), "SolenoidStatusCheck")] int HAL_InitializeSolenoidPort(int portHandle);
 
         [StatusCheckLastParameter] void HAL_SetAllSolenoids(int module, int state);
 

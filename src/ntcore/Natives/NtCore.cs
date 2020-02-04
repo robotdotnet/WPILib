@@ -39,24 +39,12 @@ namespace NetworkTables.Natives
             }
         }
 
-        public static void StatusCheck(int status)
+        public static void Initialize()
         {
-            if (status != 0)
-            {
-                throw new InvalidOperationException("TODO, Do Something About This Message");
-            }
-    ;
-        }
-
-        public static bool Initialize()
-        {
-            if (!NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(NtCore).Assembly,
-                "ntcore", typeof(NtCore).GetMethod(nameof(StatusCheck), BindingFlags.Public | BindingFlags.Static),
-                out var generator))
-            {
-                return false;
-            }
-            return true;
+            if (m_ntcore != null) return;
+            NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(NtCore).Assembly,
+                "ntcore",
+                out var generator);
         }
 
 

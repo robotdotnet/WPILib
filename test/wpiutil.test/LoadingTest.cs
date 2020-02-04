@@ -26,9 +26,8 @@ namespace wpiutil.test
         [Fact]
         public void TestThatNativeLoadingWorks()
         {
-            Assert.True(NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(LoadingTest).Assembly,
-                "wpiutil", typeof(LoadingTest).GetMethod(nameof(StatusCheck), BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)!,
-                out var generator));
+            NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(LoadingTest).Assembly,
+                "wpiutil", out var generator);
 
             Assert.NotNull(LoadTest.LoadedInterface);
             Assert.NotEqual(0ul, LoadTest.LoadedInterface!.WPI_Now());
