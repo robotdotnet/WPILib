@@ -98,7 +98,7 @@ namespace WPIUtil.ILGeneration
 
             if (checkFunctionParameters.Length != 1 || checkFunctionParameters[0].ParameterType != typeof(int))
             {
-                throw new Exception("Incompatible method for status check");
+                throw new MethodGenerationException("Incompatible method for status check");
             }
 
             generator.Emit(OpCodes.Call, checkFunction);
@@ -132,7 +132,7 @@ namespace WPIUtil.ILGeneration
 
             if (checkFunctionParameters.Length != 1 || checkFunctionParameters[0].ParameterType != typeof(int))
             {
-                throw new Exception("Incompatible method for status check");
+                throw new MethodGenerationException("Incompatible method for status check");
             }
 
             var retLabel = generator.DefineLabel();
@@ -189,7 +189,7 @@ namespace WPIUtil.ILGeneration
 
             if (checkFunctionParameters.Length != 2 || checkFunctionParameters[0].ParameterType != typeof(int) || checkFunctionParameters[1].ParameterType != parameters[checkParameterNumber])
             {
-                throw new Exception("Incompatible method for status check");
+                throw new MethodGenerationException("Incompatible method for status check");
             }
 
             generator.Emit(OpCodes.Call, checkFunction);
