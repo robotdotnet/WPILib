@@ -1,50 +1,69 @@
-﻿
-using Hal.Natives;
-using System;
-using WPIUtil.NativeUtilities;
+﻿using System;
 
 namespace Hal
 {
-    [NativeInterface(typeof(ISimDevice))]
-    public unsafe static class SimDevice
+
+    public readonly struct SimDevice : IDisposable, IEquatable<SimDevice>
     {
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-#pragma warning disable CS0649 // Field is never assigned to
-#pragma warning disable IDE0044 // Add readonly modifier
-        private static ISimDevice lowLevel;
-#pragma warning restore IDE0044 // Add readonly modifier
-#pragma warning restore CS0649 // Field is never assigned to
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-
-        public static int Create(byte* name)
+        public static SimDevice Create(string name)
         {
-            return lowLevel.HAL_CreateSimDevice(name);
+            var handle = SimDeviceLowLevel.Create(name);
+            if (handle <= 0) return new SimDevice();
+            return new SimDevice(handle);
         }
 
-        public static int CreateSimValue(int device, byte* name, int rdonly, Value* initialValue)
+        public static SimDevice Create(string name, int index)
         {
-            return lowLevel.HAL_CreateSimValue(device, name, rdonly, initialValue);
+            return Create($"{name} [{index}]");
         }
 
-        public static int CreateSimValueEnum(int device, byte* name, int rdonly, int numOptions, byte** options, int initialValue)
+        public static SimDevice Create(string name, int index, int channel)
         {
-            return lowLevel.HAL_CreateSimValueEnum(device, name, rdonly, numOptions, options, initialValue);
+            return Create($"{name} [{index}, {channel}]");
         }
 
-        public static void Free(int handle)
+        public int NativeHandle { get; }
+
+        public static bool operator true(SimDevice device)
         {
-            lowLevel.HAL_FreeSimDevice(handle);
+            return device.NativeHandle != 0;
         }
 
-        public static void GetSimValue(int handle, Value* value)
+        public static bool operator false(SimDevice device)
         {
-            lowLevel.HAL_GetSimValue(handle, value);
+            return device.NativeHandle == 0;
         }
 
-        public static void SetSimValue(int handle, Value* value)
+        public SimDevice(int handle)
         {
-            lowLevel.HAL_SetSimValue(handle, value);
+            NativeHandle = handle;
         }
 
+        public void Dispose()
+        {
+            if (NativeHandle != 0)
+            {
+                SimDeviceLowLevel.Free(NativeHandle);
+            }
+        }
+
+        public bool Equals(SimDevice other)
+        {
+            return NativeHandle == other.NativeHandle;
+        }
+
+        public static bool operator ==(SimDevice x, SimDevice y) => x.NativeHandle == y.NativeHandle;
+        public static bool operator !=(SimDevice x, SimDevice y) => x.NativeHandle != y.NativeHandle;
+
+        public override bool Equals(object? other)
+        {
+            if (other is SimDevice otherInst)
+            {
+                return NativeHandle == otherInst.NativeHandle;
+            }
+            return false;
+        }
+
+        public override int GetHashCode() => NativeHandle;
     }
 }

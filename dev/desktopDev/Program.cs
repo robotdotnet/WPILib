@@ -1,6 +1,7 @@
 ﻿using Hal;
 using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using WPILib;
 
 namespace desktopDev
@@ -38,9 +39,39 @@ namespace desktopDev
 
     class Program
     {
+
+        public class HolderMethod
+        {
+            public void doThing()
+            {
+
+            }
+        }
+
+        public class Container
+        {
+            public Action holder;
+
+            public Container(HolderMethod holder)
+            {
+                this.holder = holder.doThing;
+            }
+        }
+
         static void Main(string[] args)
         {
-            RobotBase.StartRobot<Robot>();
+            var map = new ConditionalWeakTable<HolderMethod, Container>();
+
+            var holder = new HolderMethod();
+            map.Add(holder, new Container(holder));
+            //holder = null;
+
+            while (map.Any())
+            {
+                //Console.WriteLine(map.Count());
+                GC.Collect();
+            }
+            //RobotBase.StartRobot<Robot>();
         }
     }
 }

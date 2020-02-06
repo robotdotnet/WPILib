@@ -30,7 +30,7 @@ namespace WPILib.LiveWindow
         private static Action? enabledListener;
         private static Action? disabledListener;
 
-        private static Component GetOrAdd(Sendable sendable)
+        private static Component GetOrAdd(ISendable sendable)
         {
             Component? data = (Component?)registry.GetData(sendable, dataHandle);
             if (data == null)

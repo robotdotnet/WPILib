@@ -32,7 +32,7 @@ namespace WPILib
             SetDisabled();
         }
 
-        public override void InitSendable(SendableBuilder builder)
+        public override void InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Speed Controller";
             builder.Actuator = true;

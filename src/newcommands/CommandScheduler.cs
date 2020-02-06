@@ -11,7 +11,7 @@ using WPILib.SmartDashboard;
 
 namespace WPILib2.Commands
 {
-    public sealed class CommandScheduler : Sendable, IDisposable
+    public sealed class CommandScheduler : ISendable, IDisposable
     {
         private static readonly Lazy<CommandScheduler> instance = new Lazy<CommandScheduler>(() => new CommandScheduler(), LazyThreadSafetyMode.ExecutionAndPublication);
 
@@ -330,7 +330,7 @@ namespace WPILib2.Commands
         public event Action<ICommand>? OnCommandInterrupt;
         public event Action<ICommand>? OnCommandFinish;
 
-        public void InitSendable(SendableBuilder builder)
+        public void InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Scheduler";
             NetworkTableEntry namesEntry = builder.GetEntry("Names");

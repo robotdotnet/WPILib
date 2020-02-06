@@ -21,9 +21,13 @@ namespace Hal
             return lowLevel.HAL_GetAccumulatorCount(analogPortHandle);
         }
 
-        public static void GetAccumulatorOutput(int analogPortHandle, long* value, long* count)
+        public static void GetAccumulatorOutput(int analogPortHandle, out long value, out long count)
         {
-            lowLevel.HAL_GetAccumulatorOutput(analogPortHandle, value, count);
+            long tmpValue = 0;
+            long tmpCount = 0;
+            lowLevel.HAL_GetAccumulatorOutput(analogPortHandle, &tmpValue, &tmpCount);
+            value = tmpValue;
+            count = tmpCount;
         }
 
         public static long GetAccumulatorValue(int analogPortHandle)
@@ -36,9 +40,9 @@ namespace Hal
             lowLevel.HAL_InitAccumulator(analogPortHandle);
         }
 
-        public static int IsAccumulatorChannel(int analogPortHandle)
+        public static bool IsAccumulatorChannel(int analogPortHandle)
         {
-            return lowLevel.HAL_IsAccumulatorChannel(analogPortHandle);
+            return lowLevel.HAL_IsAccumulatorChannel(analogPortHandle) != 0;
         }
 
         public static void ResetAccumulator(int analogPortHandle)

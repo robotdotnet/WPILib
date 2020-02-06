@@ -5,7 +5,7 @@ using System.Text;
 
 namespace WPILib.SmartDashboard
 {
-    public class SendableBuilderImpl : SendableBuilder
+    public class SendableBuilderImpl : ISendableBuilder
     {
         public string SmartDashboardType { set => throw new NotImplementedException(); }
         public bool Actuator { set => throw new NotImplementedException(); }

@@ -61,5 +61,13 @@ namespace Hal
             lowLevel.HAL_WriteAddressableLEDData(handle, data, length);
         }
 
+        public static void WriteData(int handle, ReadOnlySpan<AddressableLEDData> data)
+        {
+            fixed (AddressableLEDData* d = data)
+            {
+                lowLevel.HAL_WriteAddressableLEDData(handle, d, data.Length);
+            }
+        }
+
     }
 }

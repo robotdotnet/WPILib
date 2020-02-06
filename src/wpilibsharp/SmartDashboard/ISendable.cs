@@ -4,8 +4,8 @@ using System.Text;
 
 namespace WPILib.SmartDashboard
 {
-    public interface Sendable
+    public interface ISendable
     {
-        void InitSendable(SendableBuilder builder);
+        void InitSendable(ISendableBuilder builder);
     }
 }

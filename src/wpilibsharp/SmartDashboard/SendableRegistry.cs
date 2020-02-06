@@ -14,11 +14,11 @@ namespace WPILib.SmartDashboard
 
         private class Component
         {
-            public WeakReference<Sendable>? Sendable { get; set; }
+            public WeakReference<ISendable>? Sendable { get; set; }
             public SendableBuilderImpl Builder { get; } = new SendableBuilderImpl();
             public string? Name { get; set; }
             public string Subsystem { get; set; } = "Ungrouped";
-            public WeakReference<Sendable>? Parent { get; set; }
+            public WeakReference<ISendable>? Parent { get; set; }
             public bool LiveWindow { get; set; }
             public object?[]? Data { get; set; }
 
@@ -27,9 +27,9 @@ namespace WPILib.SmartDashboard
 
             }
 
-            public Component(Sendable sendable)
+            public Component(ISendable sendable)
             {
-                Sendable = new WeakReference<Sendable>(sendable);
+                Sendable = new WeakReference<ISendable>(sendable);
             }
 
             public void SetName(string moduleType, int channel)
@@ -44,11 +44,11 @@ namespace WPILib.SmartDashboard
         }
 
         private readonly object mutex = new object();
-        private readonly ConditionalWeakTable<Sendable, Component> components = new ConditionalWeakTable<Sendable, Component>();
+        private readonly ConditionalWeakTable<ISendable, Component> components = new ConditionalWeakTable<ISendable, Component>();
         //private readonly Dictionary<Sendable, Component> components = new Dictionary<Sendable, Component>();
         private int nextDataHandle = 0;
 
-        private Component GetOrAdd(Sendable sendable)
+        private Component GetOrAdd(ISendable sendable)
         {
             if (!components.TryGetValue(sendable, out var comp))
             {
@@ -59,7 +59,7 @@ namespace WPILib.SmartDashboard
             {
                 if (comp.Sendable == null)
                 {
-                    comp.Sendable = new WeakReference<Sendable>(sendable);
+                    comp.Sendable = new WeakReference<ISendable>(sendable);
                 }
             }
             return comp;
@@ -68,13 +68,13 @@ namespace WPILib.SmartDashboard
 
         public struct CallbackData
         {
-            public Sendable Sendable { get; }
+            public ISendable Sendable { get; }
             public string? Name { get; }
             public string Subsystem { get; }
-            public Sendable? Parent { get; }
+            public ISendable? Parent { get; }
             public object? Data { get; set; }
             public SendableBuilderImpl Builder { get; }
-            public CallbackData(Sendable sendable, string? name, string subsystem, Sendable? parent, object? data, SendableBuilderImpl builder)
+            public CallbackData(ISendable sendable, string? name, string subsystem, ISendable? parent, object? data, SendableBuilderImpl builder)
             {
                 Sendable = sendable;
                 Name = name;
@@ -90,7 +90,7 @@ namespace WPILib.SmartDashboard
 
         }
 
-        public void Add(Sendable sendable, string name)
+        public void Add(ISendable sendable, string name)
         {
             lock (mutex)
             {
@@ -99,7 +99,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void Add(Sendable sendable, string moduleType, int channel)
+        public void Add(ISendable sendable, string moduleType, int channel)
         {
             lock (mutex)
             {
@@ -107,7 +107,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void Add(Sendable sendable, string moduleType, int moduleNumber, int channel)
+        public void Add(ISendable sendable, string moduleType, int moduleNumber, int channel)
         {
             lock (mutex)
             {
@@ -115,7 +115,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void Add(Sendable sendable, string subsystem, string name)
+        public void Add(ISendable sendable, string subsystem, string name)
         {
             lock (mutex)
             {
@@ -125,7 +125,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void AddLW(Sendable sendable, string name)
+        public void AddLW(ISendable sendable, string name)
         {
             lock (mutex)
             {
@@ -135,7 +135,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void AddLW(Sendable sendable, string moduleType, int channel)
+        public void AddLW(ISendable sendable, string moduleType, int channel)
         {
             lock (mutex)
             {
@@ -145,7 +145,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void AddLW(Sendable sendable, string moduleType, int moduleNumber, int channel)
+        public void AddLW(ISendable sendable, string moduleType, int moduleNumber, int channel)
         {
             lock (mutex)
             {
@@ -155,7 +155,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void AddLW(Sendable sendable, string subsystem, string name)
+        public void AddLW(ISendable sendable, string subsystem, string name)
         {
             lock (mutex)
             {
@@ -166,7 +166,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void AddChild(Sendable parent, Sendable child)
+        public void AddChild(ISendable parent, ISendable child)
         {
             lock (mutex)
             {
@@ -175,11 +175,11 @@ namespace WPILib.SmartDashboard
                     comp = new Component();
                     components.Add(child, comp);
                 }
-                comp.Parent = new WeakReference<Sendable>(parent);
+                comp.Parent = new WeakReference<ISendable>(parent);
             }
         }
 
-        public bool Remove(Sendable sendable)
+        public bool Remove(ISendable sendable)
         {
             lock (mutex)
             {
@@ -187,7 +187,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public bool Contains(Sendable sendable)
+        public bool Contains(ISendable sendable)
         {
             lock (mutex)
             {
@@ -195,7 +195,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public string? GetName(Sendable sendable)
+        public string? GetName(ISendable sendable)
         {
             lock (mutex)
             {
@@ -207,7 +207,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void SetName(Sendable sendable, string name)
+        public void SetName(ISendable sendable, string name)
         {
             lock (mutex)
             {
@@ -218,7 +218,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void SetName(Sendable sendable, string moduleType, int channel)
+        public void SetName(ISendable sendable, string moduleType, int channel)
         {
             lock (mutex)
             {
@@ -229,7 +229,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void SetName(Sendable sendable, string moduleType, int moduleNumber, int channel)
+        public void SetName(ISendable sendable, string moduleType, int moduleNumber, int channel)
         {
             lock (mutex)
             {
@@ -240,7 +240,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void SetName(Sendable sendable, string subsystem, string name)
+        public void SetName(ISendable sendable, string subsystem, string name)
         {
             lock (mutex)
             {
@@ -252,7 +252,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public string? GetSubsystem(Sendable sendable)
+        public string? GetSubsystem(ISendable sendable)
         {
             lock (mutex)
             {
@@ -264,7 +264,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void SetSubsystem(Sendable sendable, string subsystem)
+        public void SetSubsystem(ISendable sendable, string subsystem)
         {
             lock (mutex)
             {
@@ -286,7 +286,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public object? SetData(Sendable sendable, int handle, object? data)
+        public object? SetData(ISendable sendable, int handle, object? data)
         {
             lock (mutex)
             {
@@ -314,7 +314,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public object? GetData(Sendable sendable, int handle)
+        public object? GetData(ISendable sendable, int handle)
         {
             lock (mutex)
             {
@@ -330,7 +330,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void EnableLiveWindow(Sendable sendable)
+        public void EnableLiveWindow(ISendable sendable)
         {
             lock (mutex)
             {
@@ -341,7 +341,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void DisableLiveWindow(Sendable sendable)
+        public void DisableLiveWindow(ISendable sendable)
         {
             lock (mutex)
             {
@@ -352,7 +352,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void Publish(Sendable sendable, NetworkTable table)
+        public void Publish(ISendable sendable, NetworkTable table)
         {
             lock (mutex)
             {
@@ -365,7 +365,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public void Update(Sendable sendable)
+        public void Update(ISendable sendable)
         {
             if (components.TryGetValue(sendable, out var comp))
             {
@@ -392,7 +392,7 @@ namespace WPILib.SmartDashboard
                     {
                         continue;
                     }
-                    Sendable? parent = null;
+                    ISendable? parent = null;
                     if (comp.Parent != null)
                     {
                         comp.Parent.TryGetTarget(out parent);

@@ -6,7 +6,7 @@ using WPILib.SmartDashboard;
 
 namespace WPILib2.Commands
 {
-    public abstract class CommandBase : Sendable, ICommand
+    public abstract class CommandBase : ISendable, ICommand
     {
         public HashSet<ISubsystem> Requirements { get; protected set; } = new HashSet<ISubsystem>();
 
@@ -24,7 +24,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void InitSendable(SendableBuilder builder)
+        public void InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Command";
             builder.AddStringProperty(".name", () => Name, null);

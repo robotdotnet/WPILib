@@ -1,0 +1,23 @@
+﻿using UnitsNet;
+using WPILib.Interfaces;
+using WPILib.SmartDashboard;
+
+namespace WPILib
+{
+    public abstract class GyroBase : IGyro, ISendable
+    {
+        public abstract Angle Angle { get; }
+        public abstract RotationalSpeed Rate { get; }
+
+        public abstract void Calibrate();
+        public abstract void Dispose();
+
+        public void InitSendable(ISendableBuilder builder)
+        {
+            builder.SmartDashboardType = "Gyro";
+            builder.AddDoubleProperty("Value", () => Angle.Degrees, null);
+        }
+
+        public abstract void Reset();
+    }
+}

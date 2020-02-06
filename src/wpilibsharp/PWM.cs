@@ -6,7 +6,7 @@ using WPILib.SmartDashboard;
 
 namespace WPILib
 {
-    public class PWM : MotorSafety, Sendable, IDisposable
+    public class PWM : MotorSafety, ISendable, IDisposable
     {
         public enum PeriodMultiplierType
         {
@@ -122,7 +122,7 @@ namespace WPILib
             Hal.PWM.LatchZero(m_handle);
         }
 
-        public virtual void InitSendable(SendableBuilder builder)
+        public virtual void InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "PWM";
             builder.Actuator = true;
