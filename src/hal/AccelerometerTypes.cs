@@ -8,6 +8,7 @@ namespace Hal
     {
         k2G,
         k4G,
-        k8G
+        k8G,
+        k16G
     }
 }

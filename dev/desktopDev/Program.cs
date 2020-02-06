@@ -18,7 +18,7 @@ namespace desktopDev
 
 
 
-        public unsafe override void RobotPeriodic()
+        public override unsafe void RobotPeriodic()
         {
             int idxLocal = idx;
             CANAPI.WritePacket(can, new Span<byte>(&idxLocal, 4), 42);

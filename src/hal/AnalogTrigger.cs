@@ -26,19 +26,19 @@ namespace Hal
             return lowLevel.HAL_GetAnalogTriggerFPGAIndex(analogTriggerHandle);
         }
 
-        public static int GetInWindow(int analogTriggerHandle)
+        public static bool GetInWindow(int analogTriggerHandle)
         {
-            return lowLevel.HAL_GetAnalogTriggerInWindow(analogTriggerHandle);
+            return lowLevel.HAL_GetAnalogTriggerInWindow(analogTriggerHandle) != 0;
         }
 
-        public static int GetOutput(int analogTriggerHandle, AnalogTriggerType type)
+        public static bool GetOutput(int analogTriggerHandle, AnalogTriggerType type)
         {
-            return lowLevel.HAL_GetAnalogTriggerOutput(analogTriggerHandle, type);
+            return lowLevel.HAL_GetAnalogTriggerOutput(analogTriggerHandle, type) != 0;
         }
 
-        public static int GetTriggerState(int analogTriggerHandle)
+        public static bool GetTriggerState(int analogTriggerHandle)
         {
-            return lowLevel.HAL_GetAnalogTriggerTriggerState(analogTriggerHandle);
+            return lowLevel.HAL_GetAnalogTriggerTriggerState(analogTriggerHandle) != 0;
         }
 
         public static int Initialize(int portHandle)
@@ -51,14 +51,14 @@ namespace Hal
             return lowLevel.HAL_InitializeAnalogTriggerDutyCycle(dutyCycleHandle);
         }
 
-        public static void SetAveraged(int analogTriggerHandle, int useAveragedValue)
+        public static void SetAveraged(int analogTriggerHandle, bool useAveragedValue)
         {
-            lowLevel.HAL_SetAnalogTriggerAveraged(analogTriggerHandle, useAveragedValue);
+            lowLevel.HAL_SetAnalogTriggerAveraged(analogTriggerHandle, useAveragedValue ? 1 : 0);
         }
 
-        public static void SetFiltered(int analogTriggerHandle, int useFilteredValue)
+        public static void SetFiltered(int analogTriggerHandle, bool useFilteredValue)
         {
-            lowLevel.HAL_SetAnalogTriggerFiltered(analogTriggerHandle, useFilteredValue);
+            lowLevel.HAL_SetAnalogTriggerFiltered(analogTriggerHandle, useFilteredValue ? 1 : 0);
         }
 
         public static void SetLimitsRaw(int analogTriggerHandle, int lower, int upper)

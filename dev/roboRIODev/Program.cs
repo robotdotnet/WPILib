@@ -19,7 +19,7 @@ namespace roboRIODev
 
 
 
-        public unsafe override void RobotPeriodic()
+        public override unsafe void RobotPeriodic()
         {
             sparkMax.SetVoltage(ElectricPotential.FromVolts(5));
             int idxLocal = idx;

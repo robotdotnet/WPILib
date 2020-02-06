@@ -31,9 +31,9 @@ namespace Hal
             return lowLevel.HAL_GetAccelerometerZ();
         }
 
-        public static void SetActive(int active)
+        public static void SetActive(bool active)
         {
-            lowLevel.HAL_SetAccelerometerActive(active);
+            lowLevel.HAL_SetAccelerometerActive(active ? 1 : 0);
         }
 
         public static void SetRange(AccelerometerRange range)

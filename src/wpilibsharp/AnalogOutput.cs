@@ -8,7 +8,7 @@ namespace WPILib
     public class AnalogOutput : ISendable, IDisposable
     {
         private readonly int m_port;
-        private int Channel { get; }
+        public int Channel { get; }
 
         public AnalogOutput(int channel)
         {
