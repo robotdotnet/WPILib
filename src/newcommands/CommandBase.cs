@@ -24,7 +24,7 @@ namespace WPILib2.Commands
             }
         }
 
-        public void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Command";
             builder.AddStringProperty(".name", () => Name, null);

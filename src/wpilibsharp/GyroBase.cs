@@ -12,7 +12,7 @@ namespace WPILib
         public abstract void Calibrate();
         public abstract void Dispose();
 
-        public void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Gyro";
             builder.AddDoubleProperty("Value", () => Angle.Degrees, null);

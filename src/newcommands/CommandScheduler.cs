@@ -330,7 +330,7 @@ namespace WPILib2.Commands
         public event Action<ICommand>? OnCommandInterrupt;
         public event Action<ICommand>? OnCommandFinish;
 
-        public void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Scheduler";
             NetworkTableEntry namesEntry = builder.GetEntry("Names");

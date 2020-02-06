@@ -62,7 +62,7 @@ namespace WPILib
             set => Hal.AnalogInput.SetSimDevice(m_port, value.NativeHandle);
         }
 
-        public void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Analog Input";
             builder.AddDoubleProperty("Value", () => AverageVoltage.Volts, null);

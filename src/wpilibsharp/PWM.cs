@@ -122,7 +122,7 @@ namespace WPILib
             Hal.PWM.LatchZero(m_handle);
         }
 
-        public virtual void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "PWM";
             builder.Actuator = true;

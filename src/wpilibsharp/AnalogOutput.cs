@@ -30,7 +30,7 @@ namespace WPILib
             set => Hal.AnalogOutput.Set(m_port, value.Volts);
         }
 
-        public void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Analog Output";
             builder.AddDoubleProperty("Value", () => Voltage.Volts, (v) => Voltage = ElectricPotential.FromVolts(v));

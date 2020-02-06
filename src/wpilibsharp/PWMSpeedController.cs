@@ -5,7 +5,7 @@ using WPILib.SmartDashboard;
 
 namespace WPILib
 {
-    public abstract class PWMSpeedController : PWM, ISpeedController
+    public abstract class PWMSpeedController : PWM, ISpeedController, ISendable
     {
         protected PWMSpeedController(int channel) : base(channel)
         {
@@ -32,7 +32,7 @@ namespace WPILib
             SetDisabled();
         }
 
-        public override void InitSendable(ISendableBuilder builder)
+        void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Speed Controller";
             builder.Actuator = true;
