@@ -29,9 +29,9 @@ namespace WPILib.Counters
         {
             set
             {
-                    m_countSource = value;
-                    Hal.Counter.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
-                    Hal.Counter.SetUpSourceEdge(m_handle, true, false);
+                m_countSource = value;
+                Hal.Counter.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
+                Hal.Counter.SetUpSourceEdge(m_handle, true, false);
             }
         }
 
@@ -75,7 +75,7 @@ namespace WPILib.Counters
 
         void ISendable.InitSendable(ISendableBuilder builder)
         {
-            
+
         }
     }
 }

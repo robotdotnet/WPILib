@@ -41,7 +41,7 @@ namespace WPILib.Counters
         }
 
         public bool Stopped => Hal.Counter.GetStopped(m_handle);
-        
+
         public int SamplesToAverage
         {
             get => Hal.Counter.GetSamplesToAverage(m_handle);
