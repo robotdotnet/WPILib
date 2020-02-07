@@ -68,7 +68,8 @@ namespace WPILib.Geometry
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Translation, Rotation);
+            return 0;
+            //return HashCode.Combine(Translation, Rotation);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace WPILib
 {
-    public interface DigitalSource
+    public interface IDigitalSource
     {
         bool IsAnalogTrigger { get; }
         int Channel { get; }

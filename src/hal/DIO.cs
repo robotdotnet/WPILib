@@ -31,9 +31,9 @@ namespace Hal
             lowLevel.HAL_FreeDIOPort(dioPortHandle);
         }
 
-        public static void Set(int dioPortHandle, int value)
+        public static void Set(int dioPortHandle, bool value)
         {
-            lowLevel.HAL_SetDIO(dioPortHandle, value);
+            lowLevel.HAL_SetDIO(dioPortHandle, value ? 1 : 0);
         }
 
         public static void FreeDigitalPWM(int pwmGenerator)
@@ -41,14 +41,14 @@ namespace Hal
             lowLevel.HAL_FreeDigitalPWM(pwmGenerator);
         }
 
-        public static int Get(int dioPortHandle)
+        public static bool Get(int dioPortHandle)
         {
-            return lowLevel.HAL_GetDIO(dioPortHandle);
+            return lowLevel.HAL_GetDIO(dioPortHandle) != 0;
         }
 
-        public static int GetDirection(int dioPortHandle)
+        public static bool GetDirection(int dioPortHandle)
         {
-            return lowLevel.HAL_GetDIODirection(dioPortHandle);
+            return lowLevel.HAL_GetDIODirection(dioPortHandle) != 0;
         }
 
         public static long GetFilterPeriod(int filterIndex)
@@ -61,9 +61,9 @@ namespace Hal
             return lowLevel.HAL_GetFilterSelect(dioPortHandle);
         }
 
-        public static int InitializePort(int portHandle, int input)
+        public static int InitializePort(int portHandle, bool input)
         {
-            return lowLevel.HAL_InitializeDIOPort(portHandle, input);
+            return lowLevel.HAL_InitializeDIOPort(portHandle, input ? 1 : 0);
         }
 
         public static int IsAnyPulsing()

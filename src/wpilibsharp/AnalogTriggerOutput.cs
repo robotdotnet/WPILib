@@ -4,7 +4,7 @@ using WPILib.SmartDashboard;
 
 namespace WPILib
 {
-    public class AnalogTriggerOutput : DigitalSource, ISendable
+    public class AnalogTriggerOutput : IDigitalSource, ISendable
     {
         public class AnalogTriggerOutputException : Exception
         {

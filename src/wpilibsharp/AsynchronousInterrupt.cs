@@ -15,7 +15,7 @@ namespace WPILib
         private Thread? m_interruptThread;
         private CancellationTokenSource m_threadRunSource = new CancellationTokenSource();
 
-        public AsynchronousInterrupt(DigitalSource source, Action<bool, bool> callback)
+        public AsynchronousInterrupt(IDigitalSource source, Action<bool, bool> callback)
         {
             m_synchronousInterrupt = new SynchronousInterrupt(source);
             m_callback = callback;
@@ -26,8 +26,8 @@ namespace WPILib
             while (!m_threadRunSource.IsCancellationRequested)
             {
                 var result = m_synchronousInterrupt.WaitForInterrupt();
-                m_callback((result & SynchronousInterrupt.InterruptType.kRisingEdge) != 0,
-                           (result & SynchronousInterrupt.InterruptType.kFallingEdge) != 0);
+                m_callback((result & EdgeConfiguration.kRisingEdge) != 0,
+                           (result & EdgeConfiguration.kFallingEdge) != 0);
             }
 
         }

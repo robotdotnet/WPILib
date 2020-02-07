@@ -41,9 +41,9 @@ namespace Hal
             return lowLevel.HAL_GetCounterSamplesToAverage(counterHandle);
         }
 
-        public static int GetDirection(int counterHandle)
+        public static bool GetDirection(int counterHandle)
         {
-            return lowLevel.HAL_GetCounterDirection(counterHandle);
+            return lowLevel.HAL_GetCounterDirection(counterHandle) != 0;
         }
 
         public static double GetPeriod(int counterHandle)
@@ -51,9 +51,12 @@ namespace Hal
             return lowLevel.HAL_GetCounterPeriod(counterHandle);
         }
 
-        public static int Initialize(CounterMode mode, int* index)
+        public static int Initialize(CounterMode mode, out int index)
         {
-            return lowLevel.HAL_InitializeCounter(mode, index);
+            int idx = 0;
+            var ret = lowLevel.HAL_InitializeCounter(mode, &idx);
+            index = idx;
+            return ret;
         }
 
         public static void Reset(int counterHandle)
@@ -71,9 +74,9 @@ namespace Hal
             lowLevel.HAL_SetCounterDownSource(counterHandle, digitalSourceHandle, analogTriggerType);
         }
 
-        public static void SetDownSourceEdge(int counterHandle, int risingEdge, int fallingEdge)
+        public static void SetDownSourceEdge(int counterHandle, bool risingEdge, bool fallingEdge)
         {
-            lowLevel.HAL_SetCounterDownSourceEdge(counterHandle, risingEdge, fallingEdge);
+            lowLevel.HAL_SetCounterDownSourceEdge(counterHandle, risingEdge ? 1 : 0, fallingEdge ? 1 : 0);
         }
 
         public static void SetExternalDirectionMode(int counterHandle)
@@ -91,9 +94,9 @@ namespace Hal
             lowLevel.HAL_SetCounterPulseLengthMode(counterHandle, threshold);
         }
 
-        public static void SetReverseDirection(int counterHandle, int reverseDirection)
+        public static void SetReverseDirection(int counterHandle, bool reverseDirection)
         {
-            lowLevel.HAL_SetCounterReverseDirection(counterHandle, reverseDirection);
+            lowLevel.HAL_SetCounterReverseDirection(counterHandle, reverseDirection ? 1 : 0);
         }
 
         public static void SetSamplesToAverage(int counterHandle, int samplesToAverage)
@@ -101,9 +104,9 @@ namespace Hal
             lowLevel.HAL_SetCounterSamplesToAverage(counterHandle, samplesToAverage);
         }
 
-        public static void SetSemiPeriodMode(int counterHandle, int highSemiPeriod)
+        public static void SetSemiPeriodMode(int counterHandle, bool highSemiPeriod)
         {
-            lowLevel.HAL_SetCounterSemiPeriodMode(counterHandle, highSemiPeriod);
+            lowLevel.HAL_SetCounterSemiPeriodMode(counterHandle, highSemiPeriod ? 1 : 0);
         }
 
         public static void SetUpDownMode(int counterHandle)
@@ -116,19 +119,19 @@ namespace Hal
             lowLevel.HAL_SetCounterUpSource(counterHandle, digitalSourceHandle, analogTriggerType);
         }
 
-        public static void SetUpSourceEdge(int counterHandle, int risingEdge, int fallingEdge)
+        public static void SetUpSourceEdge(int counterHandle, bool risingEdge, bool fallingEdge)
         {
-            lowLevel.HAL_SetCounterUpSourceEdge(counterHandle, risingEdge, fallingEdge);
+            lowLevel.HAL_SetCounterUpSourceEdge(counterHandle, risingEdge ? 1 : 0, fallingEdge ? 1 : 0);
         }
 
-        public static void SetUpdateWhenEmpty(int counterHandle, int enabled)
+        public static void SetUpdateWhenEmpty(int counterHandle, bool enabled)
         {
-            lowLevel.HAL_SetCounterUpdateWhenEmpty(counterHandle, enabled);
+            lowLevel.HAL_SetCounterUpdateWhenEmpty(counterHandle, enabled ? 1 : 0);
         }
 
-        public static int GetStopped(int counterHandle)
+        public static bool GetStopped(int counterHandle)
         {
-            return lowLevel.HAL_GetCounterStopped(counterHandle);
+            return lowLevel.HAL_GetCounterStopped(counterHandle) != 0;
         }
 
     }

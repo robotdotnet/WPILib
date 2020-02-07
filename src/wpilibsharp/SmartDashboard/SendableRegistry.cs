@@ -376,59 +376,59 @@ namespace WPILib.SmartDashboard
         public delegate void ForeachLiveWindowCallback(ref CallbackData data);
         private readonly List<Component> foreachComponents = new List<Component>();
 
-        public void ForeachLiveWindow(int dataHandle, ForeachLiveWindowCallback callback)
-        {
-            lock (mutex)
-            {
-                foreachComponents.Clear();
-                foreach (var v in components)
-                {
-                    foreachComponents.Add(v.Value);
-                }
-                foreach (var comp in foreachComponents)
-                {
-                    if (comp.Sendable == null) continue;
-                    if (comp.Sendable == null || !comp.LiveWindow || !comp.Sendable.TryGetTarget(out var sendable))
-                    {
-                        continue;
-                    }
-                    ISendable? parent = null;
-                    if (comp.Parent != null)
-                    {
-                        comp.Parent.TryGetTarget(out parent);
-                    }
-                    object? data = null;
-                    if (comp.Data != null && dataHandle < comp.Data.Length)
-                    {
-                        data = comp.Data[dataHandle];
-                    }
+        //public void ForeachLiveWindow(int dataHandle, ForeachLiveWindowCallback callback)
+        //{
+        //    lock (mutex)
+        //    {
+        //        foreachComponents.Clear();
+        //        foreach (var v in components)
+        //        {
+        //            foreachComponents.Add(v.Value);
+        //        }
+        //        foreach (var comp in foreachComponents)
+        //        {
+        //            if (comp.Sendable == null) continue;
+        //            if (comp.Sendable == null || !comp.LiveWindow || !comp.Sendable.TryGetTarget(out var sendable))
+        //            {
+        //                continue;
+        //            }
+        //            ISendable? parent = null;
+        //            if (comp.Parent != null)
+        //            {
+        //                comp.Parent.TryGetTarget(out parent);
+        //            }
+        //            object? data = null;
+        //            if (comp.Data != null && dataHandle < comp.Data.Length)
+        //            {
+        //                data = comp.Data[dataHandle];
+        //            }
 
-                    CallbackData cbData = new CallbackData(sendable, comp.Name, comp.Subsystem, parent, data, comp.Builder);
+        //            CallbackData cbData = new CallbackData(sendable, comp.Name, comp.Subsystem, parent, data, comp.Builder);
 
-                    try
-                    {
-                        callback(ref cbData);
-                    }
-                    catch (Exception ex)
-                    {
-                        DriverStation.ReportError("Unhandled exception calling LiveWindow for " + comp.Name + ": " + ex.Message, false);
-                    }
-                    if (cbData.Data != null)
-                    {
-                        if (comp.Data == null)
-                        {
-                            comp.Data = new object?[dataHandle + 1];
-                        }
-                        else if (dataHandle >= comp.Data.Length)
-                        {
-                            object?[] copy = new object?[dataHandle + 1];
-                            comp.Data.CopyTo(copy.AsSpan());
-                            comp.Data = copy;
-                        }
-                        comp.Data[dataHandle] = cbData.Data;
-                    }
-                }
-            }
-        }
+        //            try
+        //            {
+        //                callback(ref cbData);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                DriverStation.ReportError("Unhandled exception calling LiveWindow for " + comp.Name + ": " + ex.Message, false);
+        //            }
+        //            if (cbData.Data != null)
+        //            {
+        //                if (comp.Data == null)
+        //                {
+        //                    comp.Data = new object?[dataHandle + 1];
+        //                }
+        //                else if (dataHandle >= comp.Data.Length)
+        //                {
+        //                    object?[] copy = new object?[dataHandle + 1];
+        //                    comp.Data.CopyTo(copy.AsSpan());
+        //                    comp.Data = copy;
+        //                }
+        //                comp.Data[dataHandle] = cbData.Data;
+        //            }
+        //        }
+        //    }
+        //}
     }
 }

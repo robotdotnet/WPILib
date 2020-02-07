@@ -50,7 +50,8 @@ namespace WPILib.Geometry
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Angle.Degrees);
+            return 0;
+            //return HashCode.Combine(Angle.Degrees);
         }
 
         public bool Equals(Rotation2d other)

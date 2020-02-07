@@ -88,7 +88,7 @@ namespace WPILib.Geometry
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(X, Y);
+            return 0; // HashCode.Combine(X, Y);
         }
     }
 }

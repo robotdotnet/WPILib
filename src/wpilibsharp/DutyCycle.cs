@@ -9,9 +9,9 @@ namespace WPILib
     {
         internal readonly int m_handle;
 
-        private readonly DigitalSource m_source;
+        private readonly IDigitalSource m_source;
 
-        public DutyCycle(DigitalSource digitalSource)
+        public DutyCycle(IDigitalSource digitalSource)
         {
             m_handle = Hal.DutyCycle.Initialize(digitalSource.PortHandleForRouting, digitalSource.AnalogTriggerTypeForRouting);
 

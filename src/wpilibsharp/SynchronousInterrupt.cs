@@ -7,36 +7,27 @@ namespace WPILib
 {
     public class SynchronousInterrupt : IDisposable
     {
-        [Flags]
-        public enum InterruptType
-        {
-            kNone = 0x0,
-            kRisingEdge = 0x1,
-            kFallingEdge = 0x10,
-            kBoth = kRisingEdge | kFallingEdge
-        }
-
-        private readonly DigitalSource m_source;
+        private readonly IDigitalSource m_source;
 
         private readonly int m_interruptHandle;
 
 
-        public SynchronousInterrupt(DigitalSource source)
+        public SynchronousInterrupt(IDigitalSource source)
         {
             m_source = source;
             m_interruptHandle = Hal.Interrupts.Initialize(false);
             Hal.Interrupts.Request(m_interruptHandle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);
         }
 
-        public InterruptType WaitForInterrupt(bool ignorePrevious = true)
+        public EdgeConfiguration WaitForInterrupt(bool ignorePrevious = true)
         {
             var result = Hal.Interrupts.WaitForInterrupt(m_interruptHandle, 0, ignorePrevious);
-            var rising = ((result & 0xFF) != 0) ? InterruptType.kRisingEdge : InterruptType.kNone;
-            var falling = ((result & 0xFF00) != 0) ? InterruptType.kFallingEdge : InterruptType.kNone;
+            var rising = ((result & 0xFF) != 0) ? EdgeConfiguration.kRisingEdge : EdgeConfiguration.kNone;
+            var falling = ((result & 0xFF00) != 0) ? EdgeConfiguration.kFallingEdge : EdgeConfiguration.kNone;
             return rising | falling;
         }
 
-        public InterruptType WaitForInterrupt(TimeSpan timeout, bool ignorePrevious = true)
+        public EdgeConfiguration WaitForInterrupt(TimeSpan timeout, bool ignorePrevious = true)
         {
             if (timeout == TimeSpan.Zero)
             {
@@ -44,8 +35,8 @@ namespace WPILib
             }
             var result = Hal.Interrupts.WaitForInterrupt(m_interruptHandle, timeout.TotalSeconds, ignorePrevious);
 
-            var rising = ((result & 0xFF) != 0) ? InterruptType.kRisingEdge : InterruptType.kNone;
-            var falling = ((result & 0xFF00) != 0) ? InterruptType.kFallingEdge : InterruptType.kNone;
+            var rising = ((result & 0xFF) != 0) ? EdgeConfiguration.kRisingEdge : EdgeConfiguration.kNone;
+            var falling = ((result & 0xFF00) != 0) ? EdgeConfiguration.kFallingEdge : EdgeConfiguration.kNone;
             return rising | falling;
         }
 

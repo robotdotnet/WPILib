@@ -41,7 +41,7 @@ namespace Hal
     public unsafe struct JoystickAxes
     {
         public short Count;
-        public fixed short Axes[12];
+        public fixed float Axes[12];
     }
 
     public unsafe struct JoystickPOVs
