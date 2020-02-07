@@ -14,7 +14,11 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] void HAL_DisableInterrupts(int interruptHandle);
 
+        void HAL_DisableInterrupts(int interruptHandle, int* status);
+
         [StatusCheckLastParameter] void HAL_EnableInterrupts(int interruptHandle);
+
+        void HAL_EnableInterrupts(int interruptHandle, int* status);
 
         [StatusCheckedBy(typeof(StatusHandling), nameof(StatusHandling.StatusCheckForce))]
         [StatusCheckLastParameter]

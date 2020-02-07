@@ -1,8 +1,13 @@
-﻿namespace WPILib
+﻿using Hal;
+
+namespace WPILib
 {
-    public abstract class DigitalSource : InterruptibleSensorBase
+    public interface DigitalSource
     {
-        public abstract bool IsAnalogTrigger { get; }
-        public abstract int Channel { get; }
+        bool IsAnalogTrigger { get; }
+        int Channel { get; }
+
+        AnalogTriggerType AnalogTriggerTypeForRouting { get; }
+        int PortHandleForRouting { get; }
     }
 }

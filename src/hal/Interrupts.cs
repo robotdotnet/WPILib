@@ -41,9 +41,9 @@ namespace Hal
             lowLevel.HAL_EnableInterrupts(interruptHandle);
         }
 
-        public static int Initialize(int watcher)
+        public static int Initialize(bool watcher)
         {
-            return lowLevel.HAL_InitializeInterrupts(watcher);
+            return lowLevel.HAL_InitializeInterrupts(watcher ? 1 : 0);
         }
 
         public static long ReadInterruptFallingTimestamp(int interruptHandle)
@@ -61,14 +61,14 @@ namespace Hal
             lowLevel.HAL_RequestInterrupts(interruptHandle, digitalSourceHandle, analogTriggerType);
         }
 
-        public static void SetInterruptUpSourceEdge(int interruptHandle, int risingEdge, int fallingEdge)
+        public static void SetInterruptUpSourceEdge(int interruptHandle, bool risingEdge, bool fallingEdge)
         {
-            lowLevel.HAL_SetInterruptUpSourceEdge(interruptHandle, risingEdge, fallingEdge);
+            lowLevel.HAL_SetInterruptUpSourceEdge(interruptHandle, risingEdge ? 1 : 0, fallingEdge ? 1 : 0);
         }
 
-        public static long WaitForInterrupt(int interruptHandle, double timeout, int ignorePrevious)
+        public static long WaitForInterrupt(int interruptHandle, double timeout, bool ignorePrevious)
         {
-            return lowLevel.HAL_WaitForInterrupt(interruptHandle, timeout, ignorePrevious);
+            return lowLevel.HAL_WaitForInterrupt(interruptHandle, timeout, ignorePrevious ? 1 : 0);
         }
 
     }

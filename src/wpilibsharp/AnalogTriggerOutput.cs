@@ -24,13 +24,13 @@ namespace WPILib
 
         public bool Output => Hal.AnalogTrigger.GetOutput(m_trigger.m_port, m_outputType);
 
-        public override bool IsAnalogTrigger => true;
+        public bool IsAnalogTrigger => true;
 
-        public override int Channel => m_trigger.Index;
+        public int Channel => m_trigger.Index;
 
-        public override AnalogTriggerType AnalogTriggerTypeForRouting => throw new NotImplementedException();
+        public AnalogTriggerType AnalogTriggerTypeForRouting => throw new NotImplementedException();
 
-        public override int PortHandleForRouting => m_trigger.m_port;
+        public int PortHandleForRouting => m_trigger.m_port;
 
         void ISendable.InitSendable(ISendableBuilder builder)
         {
