@@ -28,6 +28,10 @@ namespace WPILib
 
         public override int Channel => m_trigger.Index;
 
+        public override AnalogTriggerType AnalogTriggerTypeForRouting => throw new NotImplementedException();
+
+        public override int PortHandleForRouting => m_trigger.m_port;
+
         void ISendable.InitSendable(ISendableBuilder builder)
         {
         }

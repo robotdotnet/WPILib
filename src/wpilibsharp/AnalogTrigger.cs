@@ -34,7 +34,7 @@ namespace WPILib
         {
             m_dutyCycle = dutyCycle;
 
-            m_port = Hal.AnalogTrigger.InitializeDutyCycle(dutyCycle.m_port);
+            m_port = Hal.AnalogTrigger.InitializeDutyCycle(dutyCycle.m_handle);
 
             var index = Index;
 
