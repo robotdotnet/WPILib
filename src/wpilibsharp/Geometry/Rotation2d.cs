@@ -9,6 +9,9 @@ namespace WPILib.Geometry
         public double Cos { get; }
         public double Sin { get; }
 
+
+        public double Tan => Sin / Cos;
+
         public Rotation2d(Angle value)
         {
             Angle = value;
