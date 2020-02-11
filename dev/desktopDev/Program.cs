@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using WPILib;
+using WPILib.SmartDashboard;
 
 namespace desktopDev
 {
@@ -60,6 +61,8 @@ namespace desktopDev
 
         static void Main(string[] args)
         {
+            var i = SendableRegistry.Instance;
+
             var map = new ConditionalWeakTable<HolderMethod, Container>();
 
             var holder = new HolderMethod();

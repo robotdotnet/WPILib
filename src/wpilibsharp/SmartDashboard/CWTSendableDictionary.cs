@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
+
+namespace WPILib.SmartDashboard
+{
+    internal class CWTSendableDictionary : ISendableDictionary
+    {
+        private ConditionalWeakTable<ISendable, SendableRegistry.Component> components = new ConditionalWeakTable<ISendable, SendableRegistry.Component>();
+        private Func<IEnumerator<KeyValuePair<ISendable, SendableRegistry.Component>>> enumeratorGetter;
+
+        public CWTSendableDictionary(MethodInfo getEnumeratorMethod)
+        {
+            enumeratorGetter = (Func<IEnumerator<KeyValuePair<ISendable, SendableRegistry.Component>>>)getEnumeratorMethod.CreateDelegate(typeof(Func<KeyValuePair<ISendable, SendableRegistry.Component>>), components);
+        }
+
+        public void Add(ISendable key, SendableRegistry.Component value)
+        {
+            components.Add(key, value);
+        }
+
+        public IEnumerator<KeyValuePair<ISendable, SendableRegistry.Component>> GetEnumerator()
+        {
+            return enumeratorGetter();
+        }
+
+        public bool Remove(ISendable key)
+        {
+            return components.Remove(key);
+        }
+
+        public bool TryGetValue(ISendable key, out SendableRegistry.Component value)
+        {
+            return components.TryGetValue(key, out value);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+}

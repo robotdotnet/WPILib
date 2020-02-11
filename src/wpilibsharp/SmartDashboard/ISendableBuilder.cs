@@ -8,7 +8,7 @@ namespace WPILib.SmartDashboard
     public interface ISendableBuilder
     {
         string SmartDashboardType { set; }
-        bool Actuator { set; }
+        bool IsActuator { set; }
         Action SafeState { set; }
         Action UpdateTable { set; }
         NetworkTableEntry GetEntry(string key);

@@ -241,14 +241,16 @@ namespace NetworkTables
             }
         }
 
-        public static bool operator ==(NetworkTable lhs, NetworkTable rhs)
+        public static bool operator ==(NetworkTable? lhs, NetworkTable? rhs)
         {
-            return lhs?.Equals(rhs) ?? false;
+            if (lhs == null || rhs == null) return false;
+            return lhs.Equals(rhs);
         }
 
-        public static bool operator !=(NetworkTable lhs, NetworkTable rhs)
+        public static bool operator !=(NetworkTable? lhs, NetworkTable? rhs)
         {
-            return !lhs?.Equals(rhs) ?? true;
+            if (lhs == null || rhs == null) return true;
+            return !lhs.Equals(rhs);
         }
 
     }

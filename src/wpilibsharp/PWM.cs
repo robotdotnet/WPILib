@@ -125,7 +125,7 @@ namespace WPILib
         void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "PWM";
-            builder.Actuator = true;
+            builder.IsActuator = true;
             builder.SafeState = SetDisabled;
             builder.AddDoubleProperty("Value", () => Raw, v => Raw = (int)v);
         }

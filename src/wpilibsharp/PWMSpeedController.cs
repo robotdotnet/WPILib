@@ -35,7 +35,7 @@ namespace WPILib
         void ISendable.InitSendable(ISendableBuilder builder)
         {
             builder.SmartDashboardType = "Speed Controller";
-            builder.Actuator = true;
+            builder.IsActuator = true;
             builder.SafeState = SetDisabled;
             builder.AddDoubleProperty("Value", Get, Set);
         }
