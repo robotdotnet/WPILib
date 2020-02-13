@@ -14,7 +14,7 @@ namespace WPILib.SmartDashboard
 
         public CWTSendableDictionary(MethodInfo getEnumeratorMethod)
         {
-            enumeratorGetter = (Func<IEnumerator<KeyValuePair<ISendable, SendableRegistry.Component>>>)getEnumeratorMethod.CreateDelegate(typeof(Func<KeyValuePair<ISendable, SendableRegistry.Component>>), components);
+            enumeratorGetter = (Func<IEnumerator<KeyValuePair<ISendable, SendableRegistry.Component>>>)getEnumeratorMethod.CreateDelegate(typeof(Func<IEnumerator<KeyValuePair<ISendable, SendableRegistry.Component>>>), components);
         }
 
         public void Add(ISendable key, SendableRegistry.Component value)

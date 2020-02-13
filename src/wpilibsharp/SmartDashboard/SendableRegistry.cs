@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
+[assembly: InternalsVisibleTo("wpilibsharp.test")]
+
 namespace WPILib.SmartDashboard
 {
     public class SendableRegistry
@@ -18,7 +20,7 @@ namespace WPILib.SmartDashboard
         {
             public WeakReference<ISendable>? Sendable { get; set; }
             public SendableBuilderImpl Builder { get; } = new SendableBuilderImpl();
-            public string? Name { get; set; }
+            public string Name { get; set; } = "";
             public string Subsystem { get; set; } = "Ungrouped";
             public WeakReference<ISendable>? Parent { get; set; }
             public bool LiveWindow { get; set; }
@@ -26,7 +28,6 @@ namespace WPILib.SmartDashboard
 
             public Component()
             {
-
             }
 
             public Component(ISendable sendable)
@@ -74,12 +75,12 @@ namespace WPILib.SmartDashboard
         public struct CallbackData
         {
             public ISendable Sendable { get; }
-            public string? Name { get; }
+            public string Name { get; }
             public string Subsystem { get; }
             public ISendable? Parent { get; }
             public object? Data { get; set; }
             public SendableBuilderImpl Builder { get; }
-            public CallbackData(ISendable sendable, string? name, string subsystem, ISendable? parent, object? data, SendableBuilderImpl builder)
+            public CallbackData(ISendable sendable, string name, string subsystem, ISendable? parent, object? data, SendableBuilderImpl builder)
             {
                 Sendable = sendable;
                 Name = name;
@@ -90,7 +91,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        private SendableRegistry()
+        internal SendableRegistry()
         {
             MethodInfo? cwtEnumerable = typeof(ConditionalWeakTable<ISendable, Component>).GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.EndsWith("GetEnumerator"))
@@ -212,7 +213,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public string? GetName(ISendable sendable)
+        public string GetName(ISendable sendable)
         {
             lock (mutex)
             {
@@ -269,7 +270,7 @@ namespace WPILib.SmartDashboard
             }
         }
 
-        public string? GetSubsystem(ISendable sendable)
+        public string GetSubsystem(ISendable sendable)
         {
             lock (mutex)
             {
@@ -305,6 +306,10 @@ namespace WPILib.SmartDashboard
 
         public object? SetData(ISendable sendable, int handle, object? data)
         {
+            if (handle < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(handle), "Handle must be 0 or greater");
+            }
             lock (mutex)
             {
                 if (!components.TryGetValue(sendable, out var comp))
@@ -333,6 +338,10 @@ namespace WPILib.SmartDashboard
 
         public object? GetData(ISendable sendable, int handle)
         {
+            if (handle < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(handle), "Handle must be 0 or greater");
+            }
             lock (mutex)
             {
                 if (!components.TryGetValue(sendable, out var comp))
