@@ -61,10 +61,14 @@ namespace WPIUtil.NativeUtilities
             FreeLibrary(NativeLibraryHandle);
         }
 
-        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
+#pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
+        [DllImport("kernel32", SetLastError = true)]
+#pragma warning restore CA2101 // Specify marshaling for P/Invoke string arguments
         private static extern IntPtr LoadLibrary(string fileName);
 
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+#pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
+        [DllImport("kernel32.dll")]
+#pragma warning restore CA2101 // Specify marshaling for P/Invoke string arguments
         private static extern IntPtr GetProcAddress(IntPtr handle, string procedureName);
 
         [DllImport("kernel32")]
