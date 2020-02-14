@@ -576,7 +576,7 @@ namespace NetworkTables.Natives
         {
             if (str == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(str), "String cannot be null");
+                throw new ArgumentNullException(nameof(str));
             }
 
             NtValue value = new NtValue

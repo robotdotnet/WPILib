@@ -56,7 +56,7 @@ namespace wpiutil.test
             byte[] expectedBytes = new byte[] {
                 72, 101, 108, 108, 111, 0
             };
-            Assert.Equal(expectedBytes, str.Buffer);
+            Assert.Equal(expectedBytes, str.Buffer.ToArray());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace wpiutil.test
             byte[] expectedBytes = new byte[] {
                 72, 101, 108, 108, 111, 0 // Hello
             };
-            Assert.Equal(expectedBytes, str.Buffer);
+            Assert.Equal(expectedBytes, str.Buffer.ToArray());
         }
 
         [Fact]
