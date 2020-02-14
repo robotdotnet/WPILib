@@ -4,6 +4,7 @@ namespace NetworkTables.Natives
 {
     public interface INtCore
     {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
         unsafe NtInst NT_GetDefaultInstance();
         unsafe NtInst NT_CreateInstance();
         unsafe void NT_DestroyInstance(NtInst inst);
@@ -195,27 +196,27 @@ namespace NetworkTables.Natives
 
 
 
-        unsafe void NT_PostRpcResponse(NtEntry entry, NtRpcCall call, byte* result, UIntPtr result_len);
+        unsafe void NT_PostRpcResponse(NtEntry entry, NtRpcCall rpccall, byte* result, UIntPtr result_len);
 
 
 
 
-        unsafe NtRpcCall NT_CallRpc(NtEntry entry, byte* @params, UIntPtr params_len);
+        unsafe NtRpcCall NT_CallRpc(NtEntry entry, byte* callparams, UIntPtr params_len);
 
 
 
 
-        unsafe byte* NT_GetRpcResult(NtEntry entry, NtRpcCall call, UIntPtr* result_len);
+        unsafe byte* NT_GetRpcResult(NtEntry entry, NtRpcCall rpccall, UIntPtr* result_len);
 
 
 
 
-        unsafe byte* NT_GetRpcResultTimeout(NtEntry entry, NtRpcCall call, UIntPtr* result_len, double timeout, NtBool* timed_out);
+        unsafe byte* NT_GetRpcResultTimeout(NtEntry entry, NtRpcCall rpccall, UIntPtr* result_len, double timeout, NtBool* timed_out);
 
 
 
 
-        unsafe void NT_CancelRpcResult(NtEntry entry, NtRpcCall call);
+        unsafe void NT_CancelRpcResult(NtEntry entry, NtRpcCall rpccall);
 
 
 

@@ -11,6 +11,11 @@ namespace NetworkTables
 
         public static string BasenameKey(string key)
         {
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             int slash = key.LastIndexOf(PathSeparator);
             if (slash == -1)
             {
@@ -216,9 +221,10 @@ namespace NetworkTables
             return Instance.LoadEntries(filename, m_pathWithSep);
         }
 
-        public bool Equals(NetworkTable other)
+        public bool Equals(NetworkTable? other)
         {
-            return Path.Equals(other.Path) && Instance.Equals(other.Instance);
+            if (ReferenceEquals(other, null)) return false;
+            return Path.Equals(other.Path, StringComparison.CurrentCulture) && Instance.Equals(other.Instance);
         }
 
         public override bool Equals(object obj)

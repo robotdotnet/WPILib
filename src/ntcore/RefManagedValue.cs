@@ -5,11 +5,19 @@ using WPIUtil;
 
 namespace NetworkTables
 {
+#pragma warning disable CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
+#pragma warning disable CA2231 // Overload operator equals on overriding value type Equals
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly ref struct RefManagedValue
+#pragma warning restore CA1815 // Override equals and operator equals on value types
+#pragma warning restore CA2231 // Overload operator equals on overriding value type Equals
+#pragma warning restore CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
     {
+#pragma warning disable CA1051 // Do not declare visible instance fields
         public readonly NtType Type;
         public readonly ulong LastChange;
         public readonly RefEntryUnion Data;
+#pragma warning restore CA1051 // Do not declare visible instance fields
 
         public override int GetHashCode()
         {
@@ -168,10 +176,14 @@ namespace NetworkTables
     }
 
     [StructLayout(LayoutKind.Explicit)]
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly ref struct RefEntryUnion
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
         [FieldOffset(0)]
+#pragma warning disable CA1051 // Do not declare visible instance fields
         public readonly bool VBoolean;
+
         [FieldOffset(0)]
         public readonly double VDouble;
         [FieldOffset(8)]
@@ -184,6 +196,7 @@ namespace NetworkTables
         public readonly ReadOnlySpan<double> VDoubleArray;
         [FieldOffset(8)]
         public readonly ReadOnlySpan<string> VStringArray;
+#pragma warning restore CA1051 // Do not declare visible instance fields
 
         internal RefEntryUnion(bool v)
         {

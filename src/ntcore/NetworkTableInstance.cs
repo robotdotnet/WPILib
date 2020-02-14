@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace NetworkTables
 {
-    public partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance>
+    public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance>
     {
         public const int DefaultPort = 1735;
         private bool m_owned;
@@ -105,7 +105,7 @@ namespace NetworkTables
         public NetworkTable GetTable(string key)
         {
             string theKey;
-            if (string.IsNullOrWhiteSpace(key) || key.Equals(""))
+            if (string.IsNullOrWhiteSpace(key))
             {
                 theKey = "";
             }
@@ -276,8 +276,9 @@ namespace NetworkTables
             return false;
         }
 
-        public bool Equals(NetworkTableInstance other)
+        public bool Equals(NetworkTableInstance? other)
         {
+            if (ReferenceEquals(other, null)) return false;
             return Handle.Get() == other.Handle.Get();
         }
 
@@ -286,14 +287,14 @@ namespace NetworkTables
             return Handle.Get().GetHashCode();
         }
 
-        public static bool operator ==(in NetworkTableInstance lhs, in NetworkTableInstance rhs)
+        public static bool operator ==(in NetworkTableInstance? lhs, in NetworkTableInstance? rhs)
         {
-            return lhs.Equals(rhs);
+            return lhs?.Equals(rhs) ?? false;
         }
 
-        public static bool operator !=(in NetworkTableInstance lhs, in NetworkTableInstance rhs)
+        public static bool operator !=(in NetworkTableInstance? lhs, in NetworkTableInstance? rhs)
         {
-            return !lhs.Equals(rhs);
+            return !(lhs == rhs);
         }
     }
 }

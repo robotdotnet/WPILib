@@ -9,7 +9,7 @@ namespace NetworkTables
     public readonly struct NetworkTableValue : IEquatable<NetworkTableValue>
     {
         public NtType Type => Value.Type;
-        public readonly ManagedValue Value;
+        public ManagedValue Value { get; }
         public bool IsValid => Type != NtType.Unassigned;
 
         internal NetworkTableValue(in ManagedValue value)

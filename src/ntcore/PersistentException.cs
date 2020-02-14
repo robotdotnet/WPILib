@@ -11,5 +11,13 @@ namespace NetworkTables
         {
 
         }
+
+        public PersistentException()
+        {
+        }
+
+        public PersistentException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

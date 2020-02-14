@@ -5,6 +5,8 @@ using System.Text;
 
 namespace NetworkTables.Natives
 {
+#pragma warning disable CA1815 // Override equals and operator equals on value types
+#pragma warning disable CA1051 // Do not declare visible instance fields
     /// <summary>
     /// NT Bool for interop
     /// </summary>
@@ -43,7 +45,9 @@ namespace NetworkTables.Natives
         /// Converts a bool to an NT Bool
         /// </summary>
         /// <param name="value">bool balue</param>
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtBool(bool value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return new NtBool(value);
         }
@@ -57,6 +61,7 @@ namespace NetworkTables.Natives
         /// <summary>
         /// String Pointer
         /// </summary>
+
         public byte* str;
         /// <summary>
         /// String Length

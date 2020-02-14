@@ -6,13 +6,15 @@ using WPIUtil;
 
 namespace NetworkTables
 {
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly ref struct RefEntryNotification
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
-        public readonly NtEntryListener Listener;
-        public readonly NtEntry EntryHandle;
-        public readonly string Name;
-        public readonly RefNetworkTableValue Value;
-        public readonly NotifyFlags Flags;
+        public readonly NtEntryListener Listener { get; }
+        public readonly NtEntry EntryHandle { get; }
+        public readonly string Name { get; }
+        public readonly RefNetworkTableValue Value { get; }
+        public readonly NotifyFlags Flags { get; }
         public NetworkTableEntry Entry => new NetworkTableEntry(m_instance, EntryHandle);
         private readonly NetworkTableInstance m_instance;
 

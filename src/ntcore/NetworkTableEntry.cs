@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkTables
 {
-    public readonly struct NetworkTableEntry
+    public readonly struct NetworkTableEntry : IEquatable<NetworkTableEntry>
     {
         public const int kPersistent = 0x01;
 
@@ -17,9 +17,9 @@ namespace NetworkTables
 
         public bool IsValid => Handle.Get() != 0;
 
-        public readonly NtEntry Handle;
+        public NtEntry Handle { get; }
 
-        public readonly NetworkTableInstance Instance;
+        public NetworkTableInstance Instance { get; }
 
         public bool Exists() => GetEntryType() != NtType.Unassigned;
 
@@ -422,6 +422,31 @@ namespace NetworkTables
         public void RemoveListener(NtEntryListener listener)
         {
             Instance.RemoveEntryListener(listener);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is NetworkTableEntry entry && Equals(entry);
+        }
+
+        public bool Equals(NetworkTableEntry other)
+        {
+            return Handle.Equals(other.Handle);
+        }
+
+        public override int GetHashCode()
+        {
+            return 1786700523 + Handle.GetHashCode();
+        }
+
+        public static bool operator ==(NetworkTableEntry left, NetworkTableEntry right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(NetworkTableEntry left, NetworkTableEntry right)
+        {
+            return !(left == right);
         }
 
         //TODO : Equals

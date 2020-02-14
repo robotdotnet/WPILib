@@ -94,7 +94,7 @@ namespace NetworkTables.Natives
     /// <summary>
     /// Low Level NT Core Instance Handle
     /// </summary>
-    public readonly struct NtInst
+    public readonly struct NtInst : IEquatable<NtInst>
     {
         private readonly NtHandle m_value;
 
@@ -123,7 +123,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtInst value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -221,7 +223,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtEntry value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -319,7 +323,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtEntryListener value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -417,7 +423,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtEntryListenerPoller value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -515,7 +523,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtConnectionListener value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -613,7 +623,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtConnectionListenerPoller value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -711,7 +723,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtLogger value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -809,7 +823,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtLoggerPoller value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -907,7 +923,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtRpcCall value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }
@@ -1005,7 +1023,9 @@ namespace NetworkTables.Natives
         /// </summary>
         /// <param name="value">The current handle</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator NtHandle(NtRpcCallPoller value)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return value.m_value;
         }

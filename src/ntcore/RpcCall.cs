@@ -1,11 +1,12 @@
 ﻿using NetworkTables.Natives;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace NetworkTables
 {
-    public readonly struct RpcCall : IDisposable
+    public readonly struct RpcCall : IDisposable, IEquatable<RpcCall>
     {
         public RpcCall(NetworkTableEntry entry, NtRpcCall call)
         {
@@ -13,8 +14,8 @@ namespace NetworkTables
             Entry = entry;
         }
 
-        public readonly NtRpcCall Handle;
-        public readonly NetworkTableEntry Entry;
+        public NtRpcCall Handle { get; }
+        public NetworkTableEntry Entry { get; }
 
         public bool IsValid => Handle.Get() != 0;
 
@@ -69,6 +70,35 @@ namespace NetworkTables
         public void CancelResult()
         {
             NtCore.CancelRpcResult(Entry.Handle, Handle);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is RpcCall call && Equals(call);
+        }
+
+        public bool Equals(RpcCall other)
+        {
+            return Handle.Equals(other.Handle) &&
+                   EqualityComparer<NetworkTableEntry>.Default.Equals(Entry, other.Entry);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 121557022;
+            hashCode = hashCode * -1521134295 + Handle.GetHashCode();
+            hashCode = hashCode * -1521134295 + Entry.GetHashCode();
+            return hashCode;
+        }
+
+        public static bool operator ==(RpcCall left, RpcCall right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(RpcCall left, RpcCall right)
+        {
+            return !(left == right);
         }
     }
 }

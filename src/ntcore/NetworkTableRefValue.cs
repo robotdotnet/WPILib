@@ -3,10 +3,12 @@ using System;
 
 namespace NetworkTables
 {
+#pragma warning disable CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
     public readonly ref struct RefNetworkTableValue
+#pragma warning restore CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
     {
         public NtType Type => Value.Type;
-        public readonly RefManagedValue Value;
+        public RefManagedValue Value { get; }
         public bool IsValid => Type != NtType.Unassigned;
 
         internal RefNetworkTableValue(in RefManagedValue value)

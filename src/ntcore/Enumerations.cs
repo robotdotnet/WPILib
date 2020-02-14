@@ -6,7 +6,11 @@ namespace NetworkTables
     /// An enumeration of all types allowed in the NetworkTables.
     /// </summary>
     [Flags]
+#pragma warning disable CA1714 // Flags enums should have plural names
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum NtType : uint
+#pragma warning restore CA1028 // Enum Storage should be Int32
+#pragma warning restore CA1714 // Flags enums should have plural names
     {
         /// <summary>
         /// No type assigned
@@ -19,11 +23,15 @@ namespace NetworkTables
         /// <summary>
         /// Double type
         /// </summary>
+#pragma warning disable CA1720 // Identifier contains type name
         Double = 0x02,
+#pragma warning restore CA1720 // Identifier contains type name
         /// <summary>
         /// String type
         /// </summary>
+#pragma warning disable CA1720 // Identifier contains type name
         String = 0x04,
+#pragma warning restore CA1720 // Identifier contains type name
         /// <summary>
         /// Raw type
         /// </summary>
@@ -50,7 +58,9 @@ namespace NetworkTables
     /// The flags avalible for TableListeners
     /// </summary>
     [Flags]
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum NotifyFlags : uint
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         /// <summary>
         ///  Notify nobody
@@ -86,7 +96,9 @@ namespace NetworkTables
     /// The flags avalible for Entries
     /// </summary>
     [Flags]
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum EntryFlags : uint
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         /// <summary>
         /// No flags
@@ -101,7 +113,9 @@ namespace NetworkTables
     /// <summary>
     /// The log level to use for the NT logger
     /// </summary>
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum LogLevel : uint
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         ///
         Critical = 50,
@@ -123,7 +137,9 @@ namespace NetworkTables
         Debug4 = 6
     }
 
+#pragma warning disable CA1028 // Enum Storage should be Int32
     public enum NetworkMode : uint
+#pragma warning restore CA1028 // Enum Storage should be Int32
     {
         None = 0x00,        /* not running */
         Server = 0x01,      /* running in server mode */

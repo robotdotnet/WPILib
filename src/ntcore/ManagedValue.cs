@@ -7,9 +7,9 @@ namespace NetworkTables
 {
     public readonly struct ManagedValue : IEquatable<ManagedValue>
     {
-        public readonly NtType Type;
-        public readonly ulong LastChange;
-        public readonly EntryUnion Data;
+        public NtType Type { get; }
+        public ulong LastChange { get; }
+        public EntryUnion Data { get; }
 
         public override int GetHashCode()
         {
@@ -91,7 +91,7 @@ namespace NetworkTables
                 case NtType.Double:
                     return Data.VDouble;
                 case NtType.String:
-                    return Data.VString!.ToString();
+                    return Data.VString!;
                 case NtType.Rpc:
                 case NtType.Raw:
                     return Data.VRaw.AsSpan().ToArray();
@@ -175,11 +175,24 @@ namespace NetworkTables
             Type = NtType.StringArray;
             Data = new EntryUnion(v);
         }
+
+        public static bool operator ==(ManagedValue left, ManagedValue right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ManagedValue left, ManagedValue right)
+        {
+            return !(left == right);
+        }
     }
 
     [StructLayout(LayoutKind.Explicit)]
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly struct EntryUnion
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
+#pragma warning disable CA1051 // Do not declare visible instance fields
         [FieldOffset(0)]
         public readonly bool VBoolean;
         [FieldOffset(0)]
@@ -194,6 +207,7 @@ namespace NetworkTables
         public readonly double[]? VDoubleArray;
         [FieldOffset(8)]
         public readonly string[]? VStringArray;
+#pragma warning restore CA1051 // Do not declare visible instance fields
 
         internal EntryUnion(bool v)
         {

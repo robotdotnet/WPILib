@@ -12,6 +12,8 @@ using WPIUtil.NativeUtilities;
 
 namespace NetworkTables.Natives
 {
+#pragma warning disable CA1062 // Validate arguments of public methods
+
     /// <summary>
     /// Raw NT Core access function
     /// </summary>
@@ -29,7 +31,9 @@ namespace NetworkTables.Natives
         private unsafe readonly static char* NullTerminator;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+#pragma warning disable CA1810 // Initialize reference type static fields inline
         static NtCore()
+#pragma warning restore CA1810 // Initialize reference type static fields inline
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
             unsafe
@@ -128,6 +132,7 @@ namespace NetworkTables.Natives
         {
             fixed (char* p = prefix)
             {
+
                 var dLen = Encoding.UTF8.GetByteCount(p, prefix.Length);
                 Span<byte> dSpan = dLen <= 256 ? stackalloc byte[dLen == 0 ? 1 : dLen] : new byte[dLen];
                 fixed (byte* d = dSpan)
