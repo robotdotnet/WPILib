@@ -9,5 +9,13 @@ namespace WPIUtil
         {
 
         }
+
+        public MethodGenerationException()
+        {
+        }
+
+        public MethodGenerationException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

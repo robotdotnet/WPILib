@@ -8,7 +8,9 @@ namespace WPIUtil.NativeUtilities
     /// <summary>
     /// This class handles native libraries on Mac OS
     /// </summary>
-    public class MacOsLibraryLoader : ILibraryLoader
+#pragma warning disable CA1060 // Move pinvokes to native methods class
+    public sealed class MacOsLibraryLoader : ILibraryLoader
+#pragma warning restore CA1060 // Move pinvokes to native methods class
     {
         /// <inheritdoc/>
         public IntPtr NativeLibraryHandle { get; private set; } = IntPtr.Zero;
@@ -60,14 +62,16 @@ namespace WPIUtil.NativeUtilities
 
         void ILibraryLoader.UnloadLibrary()
         {
-            dlclose(NativeLibraryHandle);
+            _ = dlclose(NativeLibraryHandle);
         }
 
+#pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
         [DllImport("dl")]
         private static extern IntPtr dlopen(string fileName, int flags);
 
         [DllImport("dl")]
         private static extern IntPtr dlsym(IntPtr handle, string symbol);
+#pragma warning restore CA2101 // Specify marshaling for P/Invoke string arguments
 
         [DllImport("dl")]
         private static extern IntPtr dlerror();

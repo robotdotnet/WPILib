@@ -35,6 +35,16 @@ namespace WPIUtil.ILGeneration
         /// <param name="isStaticMethod"></param>
         public unsafe void GenerateMethod(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, bool isStaticMethod = false)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (generator == null)
+            {
+                throw new ArgumentNullException(nameof(generator));
+            }
+
             int offset = isStaticMethod ? 0 : 1;
             for (int i = 0; i < parameters.Length; i++)
             {
@@ -56,6 +66,16 @@ namespace WPIUtil.ILGeneration
 
         public unsafe void GenerateMethodLastParameterStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (generator == null)
+            {
+                throw new ArgumentNullException(nameof(generator));
+            }
+
             // Insert hidden last parameter
             generator.DeclareLocal(typeof(int));
             generator.Emit(OpCodes.Ldc_I4_0);
@@ -106,6 +126,16 @@ namespace WPIUtil.ILGeneration
 
         public unsafe void GenerateMethodReturnStatusCheck(ILGenerator generator, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, bool isStaticMethod = false)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (generator == null)
+            {
+                throw new ArgumentNullException(nameof(generator));
+            }
+
             generator.DeclareLocal(typeof(int));
 
             int offset = isStaticMethod ? 0 : 1;
@@ -146,6 +176,16 @@ namespace WPIUtil.ILGeneration
 
         public unsafe void GenerateMethodRangeStatusCheck(ILGenerator generator, Type returnType, Type[] parameters, IntPtr nativeFp, MethodInfo checkFunction, int checkParameterNumber, bool isStaticMethod = false)
         {
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            if (generator == null)
+            {
+                throw new ArgumentNullException(nameof(generator));
+            }
+
             // Insert hidden last parameter
             generator.DeclareLocal(typeof(int));
             generator.Emit(OpCodes.Ldc_I4_0);

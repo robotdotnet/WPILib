@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace WPIUtil
 {
-    public struct UTF8String
+    public struct UTF8String : IEquatable<UTF8String>
     {
+        private readonly byte[] buffer;
+
         /// <summary>
-        /// The buffer to the string. Do not modify this array. Null terminated
+        /// The buffer to the string. Null terminated
         /// </summary>
-        public byte[] Buffer { get; }
+        public ReadOnlySpan<byte> Buffer => buffer;
         /// <summary>
         /// The length of this string, not including the null terminator
         /// </summary>
@@ -26,11 +29,15 @@ namespace WPIUtil
         /// <param name="str"></param>
         public UTF8String(string str)
         {
+            if (str == null)
+            {
+                throw new ArgumentNullException(nameof(str));
+            }
             var encoding = Encoding.UTF8;
             var bytes = encoding.GetByteCount(str);
-            Buffer = new byte[bytes + 1];
-            encoding.GetBytes(str, 0, str.Length, Buffer, 0);
-            Buffer[bytes] = 0;
+            buffer = new byte[bytes + 1];
+            encoding.GetBytes(str, 0, str.Length, buffer, 0);
+            buffer[bytes] = 0;
         }
 
         /// <summary>
@@ -41,7 +48,7 @@ namespace WPIUtil
         {
             if (str.IsEmpty)
             {
-                Buffer = new byte[1] { 0 };
+                buffer = new byte[1] { 0 };
                 return;
             }
 
@@ -49,7 +56,7 @@ namespace WPIUtil
             fixed (char* strP = str)
             {
                 var bytes = encoding.GetByteCount(strP, str.Length);
-                Buffer = new byte[bytes + 1];
+                buffer = new byte[bytes + 1];
                 fixed (byte* b = Buffer)
                 {
                     encoding.GetBytes(strP, str.Length, b, bytes);
@@ -100,6 +107,31 @@ namespace WPIUtil
             }
 
             return ReadUTF8String(str, count);
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is UTF8String @string && Equals(@string);
+        }
+
+        public bool Equals(UTF8String other)
+        {
+            return EqualityComparer<byte[]>.Default.Equals(buffer, other.buffer);
+        }
+
+        public override int GetHashCode()
+        {
+            return 143091379 + EqualityComparer<byte[]>.Default.GetHashCode(buffer);
+        }
+
+        public static bool operator ==(UTF8String left, UTF8String right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(UTF8String left, UTF8String right)
+        {
+            return !(left == right);
         }
     }
 }

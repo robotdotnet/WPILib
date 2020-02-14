@@ -9,7 +9,9 @@ namespace WPIUtil.NativeUtilities
     /// <summary>
     /// This class handles native libraries on Windows
     /// </summary>
-    public class WindowsLibraryLoader : ILibraryLoader
+#pragma warning disable CA1060 // Move pinvokes to native methods class
+    public sealed class WindowsLibraryLoader : ILibraryLoader
+#pragma warning restore CA1060 // Move pinvokes to native methods class
     {
         /// <inheritdoc/>
         public IntPtr NativeLibraryHandle { get; private set; } = IntPtr.Zero;
@@ -59,10 +61,10 @@ namespace WPIUtil.NativeUtilities
             FreeLibrary(NativeLibraryHandle);
         }
 
-        [DllImport("kernel32", SetLastError = true)]
+        [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Unicode)]
         private static extern IntPtr LoadLibrary(string fileName);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
         private static extern IntPtr GetProcAddress(IntPtr handle, string procedureName);
 
         [DllImport("kernel32")]

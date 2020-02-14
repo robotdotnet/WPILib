@@ -17,7 +17,7 @@ namespace WPIUtil.ILGeneration
             this.ilGenerator = ilGenerator;
         }
 
-        private MethodInfo FindStatusCheckRangeMethod(StatusCheckRangeAttribute statusCheckRangeAttribute)
+        private static MethodInfo FindStatusCheckRangeMethod(StatusCheckRangeAttribute statusCheckRangeAttribute)
         {
             MethodInfo? statusCheckMethod = statusCheckRangeAttribute.RangeCheckType.GetMethod(statusCheckRangeAttribute.RangeCheckFunctionName, BindingFlags.Public | BindingFlags.Static);
             if (statusCheckMethod == null)
@@ -32,7 +32,7 @@ namespace WPIUtil.ILGeneration
             return statusCheckMethod;
         }
 
-        private MethodInfo FindStatusCheckMethod(StatusCheckedByAttribute statusCheckedByAttribute)
+        private static MethodInfo FindStatusCheckMethod(StatusCheckedByAttribute statusCheckedByAttribute)
         {
             if (string.IsNullOrEmpty(statusCheckedByAttribute.StatusCheckFunctionName))
             {
@@ -77,7 +77,7 @@ namespace WPIUtil.ILGeneration
             }
         }
 
-        private MethodInfo? FindStatusCheckMethod(Type type)
+        private static MethodInfo? FindStatusCheckMethod(Type type)
         {
             StatusCheckedByAttribute? statusCheckedByAttribute = type.GetCustomAttribute<StatusCheckedByAttribute>();
             if (statusCheckedByAttribute == null)
@@ -90,6 +90,11 @@ namespace WPIUtil.ILGeneration
 
         public object?[] GenerateImplementations(Type[] types)
         {
+            if (types == null)
+            {
+                throw new ArgumentNullException(nameof(types));
+            }
+
             if (types.Length == 0) return Array.Empty<object>();
 
             object?[] toRet = new object?[types.Length];
@@ -166,7 +171,7 @@ namespace WPIUtil.ILGeneration
 
                 var typeInfo = typeBuilder.CreateTypeInfo();
 
-                toRet[count] = typeInfo?.GetConstructor(new Type[0])?.Invoke(null);
+                toRet[count] = typeInfo?.GetConstructor(Array.Empty<Type>())?.Invoke(null);
                 count++;
             }
 

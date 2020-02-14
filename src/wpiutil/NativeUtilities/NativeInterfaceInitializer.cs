@@ -21,6 +21,16 @@ namespace WPIUtil.NativeUtilities
 
         public static void InitializeNativeTypes(Assembly asm, InterfaceGenerator generator)
         {
+            if (asm == null)
+            {
+                throw new ArgumentNullException(nameof(asm));
+            }
+
+            if (generator == null)
+            {
+                throw new ArgumentNullException(nameof(generator));
+            }
+
             bool isRoboRIO = File.Exists("/usr/local/frc/bin/frcRunRobot.sh");
 
             var types = asm.GetTypes()
