@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Hal
 {
@@ -11,11 +9,23 @@ namespace Hal
         public int Max { get; }
 
         public AllocationException(int statusCode, int requested, int min, int max)
-            : base(statusCode, $"Code: {statusCode} Message: {HalBase.GetErrorMessage(statusCode)}: min {min} max {max} requested {requested}")
+            : base(statusCode, $"Code: {statusCode} Message: {HALLowLevel.GetErrorMessage(statusCode)}: min {min} max {max} requested {requested}")
         {
             Requested = requested;
             Min = min;
             Max = max;
+        }
+
+        public AllocationException()
+        {
+        }
+
+        public AllocationException(string message) : base(message)
+        {
+        }
+
+        public AllocationException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }

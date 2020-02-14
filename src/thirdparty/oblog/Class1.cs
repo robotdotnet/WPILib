@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace oblog
+﻿namespace oblog
 {
     public class Class1
     {

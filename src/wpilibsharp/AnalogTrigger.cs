@@ -22,7 +22,7 @@ namespace WPILib
         public AnalogTrigger(AnalogInput analogInput)
         {
             m_analogInput = analogInput;
-            m_port = Hal.AnalogTrigger.Initialize(analogInput.m_port);
+            m_port = Hal.AnalogTriggerLowLevel.Initialize(analogInput.m_port);
 
             var index = Index;
 
@@ -34,7 +34,7 @@ namespace WPILib
         {
             m_dutyCycle = dutyCycle;
 
-            m_port = Hal.AnalogTrigger.InitializeDutyCycle(dutyCycle.m_handle);
+            m_port = Hal.AnalogTriggerLowLevel.InitializeDutyCycle(dutyCycle.m_handle);
 
             var index = Index;
 
@@ -49,7 +49,7 @@ namespace WPILib
                 throw new BoundaryException("Lower bound is greater then upper");
             }
 
-            Hal.AnalogTrigger.SetLimitsRaw(m_port, lower, upper);
+            Hal.AnalogTriggerLowLevel.SetLimitsRaw(m_port, lower, upper);
         }
 
         public void SetLimitsDutyCycle(double lower, double upper)
@@ -59,7 +59,7 @@ namespace WPILib
                 throw new BoundaryException("Lower bound is greater then upper");
             }
 
-            Hal.AnalogTrigger.SetLimitsDutyCycle(m_port, lower, upper);
+            Hal.AnalogTriggerLowLevel.SetLimitsDutyCycle(m_port, lower, upper);
         }
 
         public void SetLimitsVoltage(ElectricPotential lower, ElectricPotential upper)
@@ -69,24 +69,24 @@ namespace WPILib
                 throw new BoundaryException("Lower bound is greater then upper");
             }
 
-            Hal.AnalogTrigger.SetLimitsVoltage(m_port, lower.Volts, upper.Volts);
+            Hal.AnalogTriggerLowLevel.SetLimitsVoltage(m_port, lower.Volts, upper.Volts);
         }
 
         public bool Averaged
         {
-            set => Hal.AnalogTrigger.SetAveraged(m_port, value);
+            set => Hal.AnalogTriggerLowLevel.SetAveraged(m_port, value);
         }
 
         public bool Filtered
         {
-            set => Hal.AnalogTrigger.SetFiltered(m_port, value);
+            set => Hal.AnalogTriggerLowLevel.SetFiltered(m_port, value);
         }
 
-        public int Index => Hal.AnalogTrigger.GetFPGAIndex(m_port);
+        public int Index => Hal.AnalogTriggerLowLevel.GetFPGAIndex(m_port);
 
-        public bool InWindow => Hal.AnalogTrigger.GetInWindow(m_port);
+        public bool InWindow => Hal.AnalogTriggerLowLevel.GetInWindow(m_port);
 
-        public bool TriggerState => Hal.AnalogTrigger.GetTriggerState(m_port);
+        public bool TriggerState => Hal.AnalogTriggerLowLevel.GetTriggerState(m_port);
 
         public AnalogTriggerOutput CreateOutput(AnalogTriggerType type)
         {
@@ -96,7 +96,7 @@ namespace WPILib
         public void Dispose()
         {
             SendableRegistry.Instance.Remove(this);
-            Hal.AnalogTrigger.Clean(m_port);
+            Hal.AnalogTriggerLowLevel.Clean(m_port);
             if (m_ownsAnalog)
             {
                 m_analogInput?.Dispose();

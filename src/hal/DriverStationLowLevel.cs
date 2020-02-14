@@ -1,13 +1,12 @@
 ﻿using Hal.Natives;
 using System;
-using System.Text;
 using WPIUtil;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(IDriverStation))]
-    public static unsafe class DriverStation
+    public static unsafe class DriverStationLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

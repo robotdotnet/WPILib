@@ -12,8 +12,8 @@ namespace WPILib
 
         public AddressableLED(int port)
         {
-            m_pwmHandle = Hal.PWM.InitializePort(Hal.HalBase.GetPort(port));
-            m_handle = Hal.AddressableLED.Initialize(m_pwmHandle);
+            m_pwmHandle = Hal.PWMLowLevel.InitializePort(Hal.HALLowLevel.GetPort(port));
+            m_handle = Hal.AddressableLEDLowLevel.Initialize(m_pwmHandle);
             UsageReporting.Report(ResourceType.AddressableLEDs, port + 1);
         }
 
@@ -21,47 +21,47 @@ namespace WPILib
         {
             if (m_handle != 0)
             {
-                Hal.AddressableLED.Free(m_handle);
+                Hal.AddressableLEDLowLevel.Free(m_handle);
             }
             if (m_pwmHandle != 0)
             {
-                Hal.PWM.FreePort(m_pwmHandle);
+                Hal.PWMLowLevel.FreePort(m_pwmHandle);
             }
         }
 
         public void SetLength(int length)
         {
-            Hal.AddressableLED.SetLength(m_handle, length);
+            Hal.AddressableLEDLowLevel.SetLength(m_handle, length);
         }
 
         public void SetData(ReadOnlySpan<Hal.AddressableLEDData> data)
         {
-            Hal.AddressableLED.WriteData(m_handle, data);
+            Hal.AddressableLEDLowLevel.WriteData(m_handle, data);
         }
 
         public unsafe void SetData(Hal.AddressableLEDData* data, int length)
         {
-            Hal.AddressableLED.WriteData(m_handle, data, length);
+            Hal.AddressableLEDLowLevel.WriteData(m_handle, data, length);
         }
 
         public void SetBitTiming(int lowTime0NanoSeconds, int highTime0NanoSeconds, int lowTime1NanoSeconds, int highTime1NanoSeconds)
         {
-            Hal.AddressableLED.SetBitTiming(m_handle, lowTime0NanoSeconds, highTime0NanoSeconds, lowTime1NanoSeconds, highTime1NanoSeconds);
+            Hal.AddressableLEDLowLevel.SetBitTiming(m_handle, lowTime0NanoSeconds, highTime0NanoSeconds, lowTime1NanoSeconds, highTime1NanoSeconds);
         }
 
         public void SetSyncTime(int syncTimeMicroSeconds)
         {
-            Hal.AddressableLED.SetSyncTime(m_handle, syncTimeMicroSeconds);
+            Hal.AddressableLEDLowLevel.SetSyncTime(m_handle, syncTimeMicroSeconds);
         }
 
         public void Start()
         {
-            Hal.AddressableLED.StartOutput(m_handle);
+            Hal.AddressableLEDLowLevel.StartOutput(m_handle);
         }
 
         public void Stop()
         {
-            Hal.AddressableLED.StopOutput(m_handle);
+            Hal.AddressableLEDLowLevel.StopOutput(m_handle);
         }
     }
 }

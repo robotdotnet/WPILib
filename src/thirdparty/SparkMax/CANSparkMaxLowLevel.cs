@@ -1,8 +1,6 @@
 ﻿using REV.SparkMax.Natives;
 using System;
-using System.Collections.Generic;
 using System.Text;
-using WPILib;
 
 namespace REV.SparkMax
 {

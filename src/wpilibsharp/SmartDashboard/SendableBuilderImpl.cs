@@ -2,7 +2,6 @@
 using NetworkTables.Natives;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics.CodeAnalysis;
 
 namespace WPILib.SmartDashboard

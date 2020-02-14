@@ -1,15 +1,12 @@
 ﻿using Hal.Natives;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPIUtil;
-using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(INotifier))]
-    public static unsafe class Notifier
+    public static unsafe class NotifierLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

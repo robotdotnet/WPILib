@@ -1,12 +1,11 @@
 ﻿
 using Hal.Natives;
-using System;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(ISPI))]
-    public unsafe static class SPI
+    public static unsafe class SPILowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

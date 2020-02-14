@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace NetworkTables
 {
@@ -41,18 +40,6 @@ namespace NetworkTables
         public static bool operator !=(ServerPortPair left, ServerPortPair right)
         {
             return !(left == right);
-        }
-    }
-
-    public readonly ref struct CustomRefStruct
-    {
-        public int A { get; }
-        public Span<int> B { get; }
-
-        public CustomRefStruct(int a, Span<int> b)
-        {
-            A = a;
-            B = b;
         }
     }
 }

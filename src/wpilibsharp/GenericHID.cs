@@ -97,13 +97,13 @@
         {
 
             m_outputs = (m_outputs & ~(1 << (outputNumber - 1))) | ((value ? 1 : 0) << (outputNumber - 1));
-            Hal.DriverStation.SetJoystickOutputs(Port, m_outputs, m_leftRumble, m_rightRumble);
+            Hal.DriverStationLowLevel.SetJoystickOutputs(Port, m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetOutputs(int value)
         {
             m_outputs = value;
-            Hal.DriverStation.SetJoystickOutputs(Port, m_outputs, m_leftRumble, m_rightRumble);
+            Hal.DriverStationLowLevel.SetJoystickOutputs(Port, m_outputs, m_leftRumble, m_rightRumble);
         }
 
         public void SetRumble(RumbleType type, double value)
@@ -124,7 +124,7 @@
             {
                 m_rightRumble = (short)(value * 65535);
             }
-            Hal.DriverStation.SetJoystickOutputs(Port, m_outputs, m_leftRumble, m_rightRumble);
+            Hal.DriverStationLowLevel.SetJoystickOutputs(Port, m_outputs, m_leftRumble, m_rightRumble);
         }
     }
 }

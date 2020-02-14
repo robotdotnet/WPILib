@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.SmartDashboard;
 
 namespace WPILib.Counters
@@ -16,13 +14,13 @@ namespace WPILib.Counters
         {
             m_countSource = countSource;
             m_directionSource = directionSource;
-            m_handle = Hal.Counter.Initialize(Hal.CounterMode.kExternalDirection, out m_index);
+            m_handle = Hal.CounterLowLevel.Initialize(Hal.CounterMode.kExternalDirection, out m_index);
 
-            Hal.Counter.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
-            Hal.Counter.SetUpSourceEdge(m_handle, true, false);
-            Hal.Counter.SetDownSource(m_handle, m_directionSource.PortHandleForRouting, m_directionSource.AnalogTriggerTypeForRouting);
-            Hal.Counter.SetDownSourceEdge(m_handle, false, true);
-            Hal.Counter.Reset(m_handle);
+            Hal.CounterLowLevel.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
+            Hal.CounterLowLevel.SetUpSourceEdge(m_handle, true, false);
+            Hal.CounterLowLevel.SetDownSource(m_handle, m_directionSource.PortHandleForRouting, m_directionSource.AnalogTriggerTypeForRouting);
+            Hal.CounterLowLevel.SetDownSourceEdge(m_handle, false, true);
+            Hal.CounterLowLevel.Reset(m_handle);
         }
 
         public IDigitalSource CountSource
@@ -30,8 +28,8 @@ namespace WPILib.Counters
             set
             {
                 m_countSource = value;
-                Hal.Counter.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
-                Hal.Counter.SetUpSourceEdge(m_handle, true, false);
+                Hal.CounterLowLevel.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
+                Hal.CounterLowLevel.SetUpSourceEdge(m_handle, true, false);
             }
         }
 
@@ -39,7 +37,7 @@ namespace WPILib.Counters
         {
             set
             {
-                Hal.Counter.SetUpSourceEdge(m_handle, (value & EdgeConfiguration.kRisingEdge) != 0, (value & EdgeConfiguration.kFallingEdge) != 0);
+                Hal.CounterLowLevel.SetUpSourceEdge(m_handle, (value & EdgeConfiguration.kRisingEdge) != 0, (value & EdgeConfiguration.kFallingEdge) != 0);
             }
         }
 
@@ -49,28 +47,28 @@ namespace WPILib.Counters
             {
 
                 m_directionSource = value;
-                Hal.Counter.SetDownSource(m_handle, m_directionSource.PortHandleForRouting, m_directionSource.AnalogTriggerTypeForRouting);
+                Hal.CounterLowLevel.SetDownSource(m_handle, m_directionSource.PortHandleForRouting, m_directionSource.AnalogTriggerTypeForRouting);
             }
         }
 
         public void Reset()
         {
-            Hal.Counter.Reset(m_handle);
+            Hal.CounterLowLevel.Reset(m_handle);
         }
 
         public bool ReverseDirection
         {
             set
             {
-                Hal.Counter.SetReverseDirection(m_handle, value);
+                Hal.CounterLowLevel.SetReverseDirection(m_handle, value);
             }
         }
 
-        public int Count => Hal.Counter.Get(m_handle);
+        public int Count => Hal.CounterLowLevel.Get(m_handle);
 
         public void Dispose()
         {
-            Hal.Counter.Free(m_handle);
+            Hal.CounterLowLevel.Free(m_handle);
         }
 
         void ISendable.InitSendable(ISendableBuilder builder)

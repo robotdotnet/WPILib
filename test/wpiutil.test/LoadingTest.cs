@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using WPIUtil.NativeUtilities;
+﻿using WPIUtil.NativeUtilities;
 using Xunit;
 
 namespace wpiutil.test

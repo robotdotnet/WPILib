@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using WPIUtil.ILGeneration;
 
 namespace Hal
 {
+#pragma warning disable CA1801 // unused parameters
+#pragma warning disable IDE0060 // Remove unused parameter
     public static class StatusHandling
     {
         public const int HalHandleErrorCode = -1098;
@@ -26,9 +25,9 @@ namespace Hal
             }
             else if (status > 0)
             {
-                var message = HalBase.GetErrorMessage(status);
+                var message = HALLowLevel.GetErrorMessage(status);
                 var stackTrace = Environment.StackTrace;
-                DriverStation.SendError(true, status, false, message.AsSpan(), "".AsSpan(), stackTrace.AsSpan(), true);
+                DriverStationLowLevel.SendError(true, status, false, message.AsSpan(), "".AsSpan(), stackTrace.AsSpan(), true);
             }
         }
 
@@ -66,14 +65,13 @@ namespace Hal
 
         public static void AddressableLEDStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumAddressableLEDs());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumAddressableLEDs());
         }
 
         public static void AccumulatorStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumAccumulators());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumAccumulators());
         }
-
         public static void AnalogGyroStatusCheck(int status, int portHandle)
         {
             StatusCheckForce(status);
@@ -81,12 +79,12 @@ namespace Hal
 
         public static void AnalogInputStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumAnalogInputs());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumAnalogInputs());
         }
 
         public static void AnalogOutputStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumAnalogOutputs());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumAnalogOutputs());
         }
 
         public static void AnalogTriggerStatusCheck(int status, int handle)
@@ -101,22 +99,22 @@ namespace Hal
 
         public static void DIOStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumDigitalChannels());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumDigitalChannels());
         }
 
         public static void PWMStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumPWMChannels());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumPWMChannels());
         }
 
         public static void CompressorStatusCheck(int status, int module)
         {
-            ThrowRangeCheck(status, module, 0, Ports.GetNumPCMModules());
+            ThrowRangeCheck(status, module, 0, PortsLowLevel.GetNumPCMModules());
         }
 
         public static void SolenoidStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumSolenoidChannels());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumSolenoidChannels());
         }
 
         public static void I2CStatusCheck(int status, I2CPort handle)
@@ -126,12 +124,12 @@ namespace Hal
 
         public static void PDPStatusCheck(int status, int module)
         {
-            ThrowRangeCheck(status, module, 0, Ports.GetNumPDPModules());
+            ThrowRangeCheck(status, module, 0, PortsLowLevel.GetNumPDPModules());
         }
 
         public static void RelayStatusCheck(int status, int portHandle)
         {
-            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, Ports.GetNumRelayChannels());
+            ThrowRangeCheck(status, GetPortHandleChannel(portHandle), 0, PortsLowLevel.GetNumRelayChannels());
         }
 
         public static void SerialPortStatusCheck(int status, SerialPortLocation port)
@@ -143,5 +141,7 @@ namespace Hal
         {
             StatusCheckForce(status);
         }
+#pragma warning restore CA1801 // unused parameters
+#pragma warning restore IDE0060 // Remove unused parameter
     }
 }

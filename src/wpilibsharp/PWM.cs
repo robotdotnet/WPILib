@@ -1,7 +1,5 @@
 ﻿using Hal;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.SmartDashboard;
 
 namespace WPILib
@@ -21,11 +19,11 @@ namespace WPILib
         public PWM(int channel)
         {
             m_channel = channel;
-            m_handle = Hal.PWM.InitializePort(Hal.HalBase.GetPort(channel));
+            m_handle = Hal.PWMLowLevel.InitializePort(Hal.HALLowLevel.GetPort(channel));
 
             SetDisabled();
 
-            Hal.PWM.SetEliminateDeadband(m_handle, false);
+            Hal.PWMLowLevel.SetEliminateDeadband(m_handle, false);
 
             UsageReporting.Report(ResourceType.PWM, channel + 1);
 
@@ -39,7 +37,7 @@ namespace WPILib
             SendableRegistry.Instance.Remove(this);
             if (m_handle == 0) return;
             SetDisabled();
-            Hal.PWM.FreePort(m_handle);
+            Hal.PWMLowLevel.FreePort(m_handle);
             m_handle = 0;
         }
 
@@ -50,7 +48,7 @@ namespace WPILib
 
         public void SetBounds(double max, double deadbandMax, double center, double deadbandMin, double min)
         {
-            Hal.PWM.SetConfig(m_handle, max, deadbandMax, center, deadbandMin, min);
+            Hal.PWMLowLevel.SetConfig(m_handle, max, deadbandMax, center, deadbandMin, min);
         }
 
         public override string Description => $"PWM {Channel.ToString()}";
@@ -61,11 +59,11 @@ namespace WPILib
         {
             get
             {
-                return Hal.PWM.GetPosition(m_handle);
+                return Hal.PWMLowLevel.GetPosition(m_handle);
             }
             set
             {
-                Hal.PWM.SetPosition(m_handle, value);
+                Hal.PWMLowLevel.SetPosition(m_handle, value);
             }
         }
 
@@ -73,11 +71,11 @@ namespace WPILib
         {
             get
             {
-                return Hal.PWM.GetSpeed(m_handle);
+                return Hal.PWMLowLevel.GetSpeed(m_handle);
             }
             set
             {
-                Hal.PWM.SetSpeed(m_handle, value);
+                Hal.PWMLowLevel.SetSpeed(m_handle, value);
             }
         }
 
@@ -85,17 +83,17 @@ namespace WPILib
         {
             get
             {
-                return Hal.PWM.GetRaw(m_handle);
+                return Hal.PWMLowLevel.GetRaw(m_handle);
             }
             set
             {
-                Hal.PWM.SetRaw(m_handle, value);
+                Hal.PWMLowLevel.SetRaw(m_handle, value);
             }
         }
 
         public void SetDisabled()
         {
-            Hal.PWM.SetDisabled(m_handle);
+            Hal.PWMLowLevel.SetDisabled(m_handle);
         }
 
         public PeriodMultiplierType PeriodMultiplier
@@ -105,13 +103,13 @@ namespace WPILib
                 switch (value)
                 {
                     case PeriodMultiplierType.k1X:
-                        Hal.PWM.SetPeriodScale(m_handle, 0);
+                        Hal.PWMLowLevel.SetPeriodScale(m_handle, 0);
                         break;
                     case PeriodMultiplierType.k2X:
-                        Hal.PWM.SetPeriodScale(m_handle, 1);
+                        Hal.PWMLowLevel.SetPeriodScale(m_handle, 1);
                         break;
                     case PeriodMultiplierType.k4X:
-                        Hal.PWM.SetPeriodScale(m_handle, 3);
+                        Hal.PWMLowLevel.SetPeriodScale(m_handle, 3);
                         break;
                 }
             }
@@ -119,7 +117,7 @@ namespace WPILib
 
         public void SetZeroLatch()
         {
-            Hal.PWM.LatchZero(m_handle);
+            Hal.PWMLowLevel.LatchZero(m_handle);
         }
 
         void ISendable.InitSendable(ISendableBuilder builder)

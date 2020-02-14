@@ -1,7 +1,4 @@
 ﻿using NetworkTables.Natives;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPIUtil;
 
 namespace NetworkTables

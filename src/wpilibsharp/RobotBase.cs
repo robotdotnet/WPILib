@@ -1,9 +1,7 @@
 ﻿using Hal;
 using NetworkTables;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading;
 
 namespace WPILib
@@ -84,7 +82,7 @@ namespace WPILib
 
         private static int RunHALInitialization()
         {
-            if (!Hal.HalBase.Initialize())
+            if (!Hal.HALLowLevel.Initialize())
             {
                 Console.WriteLine("FATAL ERROR: HAL could not be initialized");
                 return -1;
@@ -115,19 +113,19 @@ namespace WPILib
 
             UsageReporting.Report(ResourceType.Language, Instances.Language_DotNet, 0, WPILibVersion);
 
-            if (Main.HasMain())
+            if (MainLowLevel.HasMain())
             {
                 Thread thread = new Thread(() =>
                 {
                     RunRobot<Robot>();
-                    Main.ExitMain();
+                    MainLowLevel.ExitMain();
                 })
                 {
                     Name = "Robot Main",
                     IsBackground = true
                 };
                 thread.Start();
-                Main.RunMain();
+                MainLowLevel.RunMain();
                 SuppressExitWarning(true);
                 RobotBase? robot;
                 lock (m_runMutex)
@@ -174,7 +172,7 @@ namespace WPILib
 
         }
 
-        public static bool IsReal => Hal.HalBase.GetRuntimeType() == Hal.RuntimeType.Athena;
+        public static bool IsReal => Hal.HALLowLevel.GetRuntimeType() == Hal.RuntimeType.Athena;
         public static bool IsSimulation => !IsReal;
 
         public RobotBase()

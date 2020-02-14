@@ -1,12 +1,11 @@
 ﻿
 using Hal.Natives;
-using System;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(IPWM))]
-    public unsafe static class PWM
+    public static unsafe class PWMLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Hal
+﻿namespace Hal
 {
     public enum AccelerometerRange
     {

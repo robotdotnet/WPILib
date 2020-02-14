@@ -5,10 +5,15 @@
     <LangVersion>8.0</LangVersion>
     <AssemblyName>FRC.Hal</AssemblyName>
     <RootNamespace>Hal</RootNamespace>
+    <NoWarn>1701;1702;1591;CA1303</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Memory" Version="4.5.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

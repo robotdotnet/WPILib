@@ -2,6 +2,7 @@
 
 namespace Hal.Natives
 {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
     [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IRelay
     {
@@ -13,7 +14,7 @@ namespace Hal.Natives
 
         [StatusCheckRange(0, typeof(StatusHandling), "RelayStatusCheck")] int HAL_InitializeRelayPort(int portHandle, int fwd);
 
-        [StatusCheckLastParameter] void HAL_SetRelay(int relayPortHandle, int on);
+        [StatusCheckLastParameter] void HAL_SetRelay(int relayPortHandle, int setOn);
 
     }
 }

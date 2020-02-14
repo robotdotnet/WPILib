@@ -2,12 +2,15 @@
 
 namespace Hal.Natives
 {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
     [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IAnalogInput
     {
         int HAL_CheckAnalogInputChannel(int channel);
 
+#pragma warning disable CA1716 // Identifiers should not match keywords
         int HAL_CheckAnalogModule(int module);
+#pragma warning restore CA1716 // Identifiers should not match keywords
 
         void HAL_FreeAnalogInputPort(int analogPortHandle);
 

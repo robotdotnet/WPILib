@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitsNet;
 using WPILib.Geometry;
 using Xunit;

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 namespace WPILib
 {
@@ -10,7 +7,7 @@ namespace WPILib
         public const long TicksPerMicrosecond = TimeSpan.TicksPerMillisecond / 1000;
 
 
-        public static TimeSpan FPGATimestamp => TimeSpan.FromTicks((long)(Hal.HalBase.GetFPGATimestamp() * TicksPerMicrosecond));
+        public static TimeSpan FPGATimestamp => TimeSpan.FromTicks((long)(Hal.HALLowLevel.GetFPGATimestamp() * TicksPerMicrosecond));
 
         private TimeSpan m_startTime;
         private TimeSpan m_accumulatedTime;

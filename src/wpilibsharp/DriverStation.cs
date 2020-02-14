@@ -1,8 +1,6 @@
 ﻿using Hal;
 using NetworkTables;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using UnitsNet;
 using WPIUtil;
@@ -60,7 +58,7 @@ namespace WPILib
             {
                 printedTrace = "".AsSpan();
             }
-            Hal.DriverStation.SendError(isError, code, false, error.AsSpan(), "".AsSpan(), printedTrace, true);
+            Hal.DriverStationLowLevel.SendError(isError, code, false, error.AsSpan(), "".AsSpan(), printedTrace, true);
         }
 
         private readonly struct MatchDataSender
@@ -204,7 +202,7 @@ namespace WPILib
                 return false;
             }
 
-            var buttons = Hal.DriverStation.GetJoystickButtons(stick);
+            var buttons = Hal.DriverStationLowLevel.GetJoystickButtons(stick);
 
             if (!ValidateButtonIsFound(button, buttons.Count, stick))
             {
@@ -222,7 +220,7 @@ namespace WPILib
                 return false;
             }
 
-            var buttons = Hal.DriverStation.GetJoystickButtons(stick);
+            var buttons = Hal.DriverStationLowLevel.GetJoystickButtons(stick);
 
             if (!ValidateButtonIsFound(button, buttons.Count, stick))
             {
@@ -248,7 +246,7 @@ namespace WPILib
                 return false;
             }
 
-            var buttons = Hal.DriverStation.GetJoystickButtons(stick);
+            var buttons = Hal.DriverStationLowLevel.GetJoystickButtons(stick);
 
             if (!ValidateButtonIsFound(button, buttons.Count, stick))
             {
@@ -274,7 +272,7 @@ namespace WPILib
                 return 0.0;
             }
 
-            var axes = Hal.DriverStation.GetJoystickAxes(stick);
+            var axes = Hal.DriverStationLowLevel.GetJoystickAxes(stick);
 
             if (!ValidateAxisIsFound(axis, axes.Count, stick))
             {
@@ -295,7 +293,7 @@ namespace WPILib
                 return -1;
             }
 
-            var povs = Hal.DriverStation.GetJoystickPOVs(stick);
+            var povs = Hal.DriverStationLowLevel.GetJoystickPOVs(stick);
 
             if (!ValidateAxisIsFound(pov, povs.Count, stick))
             {
@@ -312,49 +310,49 @@ namespace WPILib
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickButtons(stick).Buttons;
+            return Hal.DriverStationLowLevel.GetJoystickButtons(stick).Buttons;
         }
 
         public int GetStickAxisCount(int stick)
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickAxes(stick).Count;
+            return Hal.DriverStationLowLevel.GetJoystickAxes(stick).Count;
         }
 
         public int GetStickPOVCount(int stick)
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickPOVs(stick).Count;
+            return Hal.DriverStationLowLevel.GetJoystickPOVs(stick).Count;
         }
 
         public int GetStickButtonCount(int stick)
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickButtons(stick).Count;
+            return Hal.DriverStationLowLevel.GetJoystickButtons(stick).Count;
         }
 
         public bool GetJoystickIsXbox(int stick)
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickIsXbox(stick);
+            return Hal.DriverStationLowLevel.GetJoystickIsXbox(stick);
         }
 
         public int GetJoystickType(int stick)
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickType(stick);
+            return Hal.DriverStationLowLevel.GetJoystickType(stick);
         }
 
         public string GetJoystickName(int stick)
         {
             ValidateJoystickPort(stick);
 
-            return Hal.DriverStation.GetJoystickName(stick);
+            return Hal.DriverStationLowLevel.GetJoystickName(stick);
         }
 
         public int GetJoystickAxisType(int stick, int axis)
@@ -366,18 +364,18 @@ namespace WPILib
                 return 0;
             }
 
-            return Hal.DriverStation.GetJoystickAxisType(stick, axis);
+            return Hal.DriverStationLowLevel.GetJoystickAxisType(stick, axis);
         }
 
-        public bool IsEnabled => Hal.DriverStation.GetControlWord().Enabled;
+        public bool IsEnabled => Hal.DriverStationLowLevel.GetControlWord().Enabled;
         public bool IsDisabled => !IsEnabled;
-        public bool IsEStopped => Hal.DriverStation.GetControlWord().EStop;
-        public bool IsAutonomous => Hal.DriverStation.GetControlWord().Autonomous;
-        public bool IsOperatorControl => Hal.DriverStation.GetControlWord().FmsAttached;
-        public bool IsTest => Hal.DriverStation.GetControlWord().Test;
-        public bool IsDSAttached => Hal.DriverStation.GetControlWord().DsAttached;
-        public bool IsNewControlData => Hal.DriverStation.IsNewControlData();
-        public bool IsFMSAttached => Hal.DriverStation.GetControlWord().FmsAttached;
+        public bool IsEStopped => Hal.DriverStationLowLevel.GetControlWord().EStop;
+        public bool IsAutonomous => Hal.DriverStationLowLevel.GetControlWord().Autonomous;
+        public bool IsOperatorControl => Hal.DriverStationLowLevel.GetControlWord().FmsAttached;
+        public bool IsTest => Hal.DriverStationLowLevel.GetControlWord().Test;
+        public bool IsDSAttached => Hal.DriverStationLowLevel.GetControlWord().DsAttached;
+        public bool IsNewControlData => Hal.DriverStationLowLevel.IsNewControlData();
+        public bool IsFMSAttached => Hal.DriverStationLowLevel.GetControlWord().FmsAttached;
 
         public string GameSpecificMessage
         {
@@ -385,7 +383,7 @@ namespace WPILib
             {
                 unsafe
                 {
-                    var matchInfo = Hal.DriverStation.GetMatchInfo();
+                    var matchInfo = Hal.DriverStationLowLevel.GetMatchInfo();
                     return UTF8String.ReadUTF8String(matchInfo.GameSpecificMessage, matchInfo.GameSpecificMessageSize);
                 }
             }
@@ -397,21 +395,21 @@ namespace WPILib
             {
                 unsafe
                 {
-                    var matchInfo = Hal.DriverStation.GetMatchInfo();
+                    var matchInfo = Hal.DriverStationLowLevel.GetMatchInfo();
                     return UTF8String.ReadUTF8String(matchInfo.EventName);
                 }
             }
         }
 
-        public MatchType MatchType => (MatchType)Hal.DriverStation.GetMatchInfo().MatchType;
+        public MatchType MatchType => (MatchType)Hal.DriverStationLowLevel.GetMatchInfo().MatchType;
 
-        public int MatchNumber => Hal.DriverStation.GetMatchInfo().MatchNumber;
-        public int ReplayNumber => Hal.DriverStation.GetMatchInfo().ReplayNumber;
+        public int MatchNumber => Hal.DriverStationLowLevel.GetMatchInfo().MatchNumber;
+        public int ReplayNumber => Hal.DriverStationLowLevel.GetMatchInfo().ReplayNumber;
         public Alliance Alliance
         {
             get
             {
-                var allianceId = Hal.DriverStation.GetAllianceStation();
+                var allianceId = Hal.DriverStationLowLevel.GetAllianceStation();
                 switch (allianceId)
                 {
                     case AllianceStationID.kRed1:
@@ -431,7 +429,7 @@ namespace WPILib
         {
             get
             {
-                var allianceId = Hal.DriverStation.GetAllianceStation();
+                var allianceId = Hal.DriverStationLowLevel.GetAllianceStation();
                 switch (allianceId)
                 {
                     case AllianceStationID.kRed1:
@@ -487,8 +485,8 @@ namespace WPILib
             }
         }
 
-        public TimeSpan MatchTime => TimeSpan.FromSeconds(Hal.DriverStation.GetMatchTime());
-        public ElectricPotential BatteryVoltage => ElectricPotential.FromVolts(Hal.Power.GetVinVoltage());
+        public TimeSpan MatchTime => TimeSpan.FromSeconds(Hal.DriverStationLowLevel.GetMatchTime());
+        public ElectricPotential BatteryVoltage => ElectricPotential.FromVolts(Hal.PowerLowLevel.GetVinVoltage());
 
         public void InDisabled(bool entering)
         {
@@ -525,7 +523,7 @@ namespace WPILib
             {
                 for (int i = 0; i < NumJoystickPorts; i++)
                 {
-                    var currentButtons = Hal.DriverStation.GetJoystickButtons(i);
+                    var currentButtons = Hal.DriverStationLowLevel.GetJoystickButtons(i);
 
                     m_joystickButtonsPressed[i] |= ~m_previousButtonStates[i].Buttons & currentButtons.Buttons;
 
@@ -566,7 +564,7 @@ namespace WPILib
             int safetyCounter = 0;
             while (m_isRunning)
             {
-                Hal.DriverStation.WaitForDSData();
+                Hal.DriverStationLowLevel.WaitForDSData();
                 GetData();
 
                 if (IsDisabled)
@@ -580,16 +578,16 @@ namespace WPILib
                     safetyCounter = 0;
                 }
 
-                if (m_userInDisabled) Hal.DriverStation.ObserveUserProgramDisabled();
-                if (m_userInAutonomous) Hal.DriverStation.ObserveUserProgramAutonomous();
-                if (m_userInTeleop) Hal.DriverStation.ObserveUserProgramTeleop();
-                if (m_userInTest) Hal.DriverStation.ObserveUserProgramTest();
+                if (m_userInDisabled) Hal.DriverStationLowLevel.ObserveUserProgramDisabled();
+                if (m_userInAutonomous) Hal.DriverStationLowLevel.ObserveUserProgramAutonomous();
+                if (m_userInTeleop) Hal.DriverStationLowLevel.ObserveUserProgramTeleop();
+                if (m_userInTest) Hal.DriverStationLowLevel.ObserveUserProgramTest();
             }
         }
 
         private unsafe void SendMatchData()
         {
-            var alliance = Hal.DriverStation.GetAllianceStation();
+            var alliance = Hal.DriverStationLowLevel.GetAllianceStation();
             bool isRedAlliance;
             int stationNumber;
             switch (alliance)
@@ -620,7 +618,7 @@ namespace WPILib
                     break;
             }
 
-            var tmpDataStore = Hal.DriverStation.GetMatchInfo();
+            var tmpDataStore = Hal.DriverStationLowLevel.GetMatchInfo();
 
             m_matchDataSender.alliance.SetBoolean(isRedAlliance);
             m_matchDataSender.station.SetDouble(stationNumber);
@@ -641,14 +639,14 @@ namespace WPILib
             m_matchDataSender.replayNumber.SetDouble(tmpDataStore.ReplayNumber);
             m_matchDataSender.matchType.SetDouble((int)tmpDataStore.MatchType);
 
-            var ctlWord = Hal.DriverStation.GetControlWord();
+            var ctlWord = Hal.DriverStationLowLevel.GetControlWord();
             m_matchDataSender.controlWord.SetDouble(ctlWord.Word);
         }
 
         public void Dispose()
         {
             m_isRunning = false;
-            Hal.DriverStation.ReleaseDSMutex();
+            Hal.DriverStationLowLevel.ReleaseDSMutex();
             m_dsThread.Join();
         }
 

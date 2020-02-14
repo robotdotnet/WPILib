@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WPILib
 {
@@ -103,7 +101,7 @@ namespace WPILib
                     m_lastMode = Mode.Disabled;
                 }
 
-                Hal.DriverStation.ObserveUserProgramDisabled();
+                Hal.DriverStationLowLevel.ObserveUserProgramDisabled();
                 DisabledPeriodic();
                 m_watchdog.AddEpoch("DisabledPeriodic()");
             }
@@ -116,7 +114,7 @@ namespace WPILib
                     m_lastMode = Mode.Autonomous;
                 }
 
-                Hal.DriverStation.ObserveUserProgramAutonomous();
+                Hal.DriverStationLowLevel.ObserveUserProgramAutonomous();
                 AutonomousPeriodic();
                 m_watchdog.AddEpoch("AutonomousPeriodic()");
             }
@@ -129,7 +127,7 @@ namespace WPILib
                     m_lastMode = Mode.Teleop;
                 }
 
-                Hal.DriverStation.ObserveUserProgramTeleop();
+                Hal.DriverStationLowLevel.ObserveUserProgramTeleop();
                 TeleopPeriodic();
                 m_watchdog.AddEpoch("TeleopPeriodic()");
             }
@@ -142,7 +140,7 @@ namespace WPILib
                     m_lastMode = Mode.Autonomous;
                 }
 
-                Hal.DriverStation.ObserveUserProgramAutonomous();
+                Hal.DriverStationLowLevel.ObserveUserProgramAutonomous();
                 TestPeriodic();
                 m_watchdog.AddEpoch("TestPeriodic()");
             }

@@ -1,12 +1,11 @@
 ﻿
 using Hal.Natives;
-using System;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(IDMA))]
-    public unsafe static class DMA
+    public static unsafe class DMALowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

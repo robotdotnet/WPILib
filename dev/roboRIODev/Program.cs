@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using UnitsNet;
-using WPILib;
+﻿using WPILib;
 using WPILib.Counters;
 using WPILib.SmartDashboard;
 

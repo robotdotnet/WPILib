@@ -1,12 +1,11 @@
 ﻿
 using Hal.Natives;
-using System;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(ICounter))]
-    public unsafe static class Counter
+    public static unsafe class CounterLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

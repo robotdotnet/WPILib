@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Hal
 {
-    public readonly struct ControlWord
+    public readonly struct ControlWord : IEquatable<ControlWord>
     {
+#pragma warning disable CA1051 // Do not declare visible instance fields
         public readonly uint Word;
+#pragma warning restore CA1051 // Do not declare visible instance fields
         public bool Enabled => (Word & 0b1) != 0;
         public bool Autonomous => (Word & 0b10) != 0;
         public bool Test => (Word & 0b100) != 1;
@@ -17,6 +17,31 @@ namespace Hal
         public ControlWord(uint word)
         {
             this.Word = word;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is ControlWord word && Equals(word);
+        }
+
+        public bool Equals(ControlWord other)
+        {
+            return Word == other.Word;
+        }
+
+        public override int GetHashCode()
+        {
+            return -1121039451 + Word.GetHashCode();
+        }
+
+        public static bool operator ==(ControlWord left, ControlWord right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ControlWord left, ControlWord right)
+        {
+            return !(left == right);
         }
     }
 
@@ -38,8 +63,11 @@ namespace Hal
         Elimination
     }
 
+#pragma warning disable CA1051 // Do not declare visible instance fields
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public unsafe struct JoystickAxes
     {
+
         public short Count;
         public fixed float Axes[12];
     }
@@ -82,4 +110,6 @@ namespace Hal
         public fixed byte GameSpecificMessage[64];
         public ushort GameSpecificMessageSize;
     }
+#pragma warning restore CA1051 // Do not declare visible instance fields
+#pragma warning restore CA1815 // Override equals and operator equals on value types
 }

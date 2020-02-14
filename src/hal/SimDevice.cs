@@ -24,7 +24,9 @@ namespace Hal
 
         public int NativeHandle { get; }
 
+#pragma warning disable CA2225 // Operator overloads have named alternates
         public static bool operator true(SimDevice device)
+#pragma warning restore CA2225 // Operator overloads have named alternates
         {
             return device.NativeHandle != 0;
         }

@@ -1,7 +1,4 @@
 ﻿using Hal;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WPILib.SmartDashboard;
 
 namespace WPILib

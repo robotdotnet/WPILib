@@ -1,6 +1,5 @@
 ﻿using NetworkTables.Natives;
 using System;
-using System.Collections.Generic;
 using WPIUtil;
 
 namespace NetworkTables

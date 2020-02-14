@@ -9,7 +9,7 @@ using WPIUtil.NativeUtilities;
 namespace Hal
 {
     [NativeInterface(typeof(ISimDevice))]
-    public unsafe static class SimDeviceLowLevel
+    public static unsafe class SimDeviceLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
@@ -41,6 +41,10 @@ namespace Hal
 
         public static int CreateSimValueEnum(int device, string name, int rdonly, string[] options, int initialValue)
         {
+            if (options == null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
             var nameutf = new UTF8String(name);
             byte** optionsPtr = stackalloc byte*[options.Length];
             for (int i = 0; i < options.Length; i++)

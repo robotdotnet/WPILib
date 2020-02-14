@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NetworkTables.Natives
+﻿namespace NetworkTables.Natives
 {
     internal unsafe readonly ref struct PointerSpan<T> where T : unmanaged
     {

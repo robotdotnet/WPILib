@@ -1,39 +1,32 @@
 ﻿
 using Hal.Natives;
-using System;
-using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
-    [NativeInterface(typeof(IMain))]
-    public unsafe static class Main
+    //[NativeInterface(typeof(IExtensions))]
+    public static unsafe class ExtensionsLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static IMain lowLevel;
+        private static IExtensions lowLevel;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public static void Set(void* param, IntPtr mainFunc, IntPtr exitFunc)
+        public static int Load()
         {
-            lowLevel.HAL_SetMain(param, mainFunc, exitFunc);
+            return lowLevel.HAL_LoadExtensions();
         }
 
-        public static bool HasMain()
+        public static int LoadOneExtension(byte* library)
         {
-            return lowLevel.HAL_HasMain() != 0;
+            return lowLevel.HAL_LoadOneExtension(library);
         }
 
-        public static void RunMain()
+        public static void SetShowNotFoundMessages(int showMessage)
         {
-            lowLevel.HAL_RunMain();
-        }
-
-        public static void ExitMain()
-        {
-            lowLevel.HAL_ExitMain();
+            lowLevel.HAL_SetShowExtensionsNotFoundMessages(showMessage);
         }
 
     }

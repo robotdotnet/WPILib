@@ -1,5 +1,4 @@
 ﻿using Hal;
-using System;
 using Xunit;
 
 namespace hal.test
@@ -9,7 +8,7 @@ namespace hal.test
         [Fact]
         public void TestHalLoads()
         {
-            Assert.True(HalBase.Initialize());
+            Assert.True(HALLowLevel.Initialize());
         }
     }
 }

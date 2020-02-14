@@ -51,10 +51,10 @@ namespace CInterfaceGenerator
             foreach (var functionToGenerate in loadedFunctions.Functions)
             {
                 // Enumerate each header file looking for the function
-                foreach (var headerFile in filesToCheck)
+                foreach (var (name, contents) in filesToCheck)
                 {
 
-                    if (headerFile.contents.Contains(functionToGenerate.Name))
+                    if (contents.Contains(functionToGenerate.Name))
                     {
                         if (generatedFunctions.Contains(functionToGenerate.Name))
                         {
@@ -62,7 +62,7 @@ namespace CInterfaceGenerator
                         }
                         generatedFunctions.Add(functionToGenerate.Name);
 
-                        var headerSpan = headerFile.contents.AsSpan();
+                        var headerSpan = contents.AsSpan();
                         var functionStart = headerSpan.IndexOf(functionToGenerate.Name);
                         while (true)
                         {
@@ -75,11 +75,10 @@ namespace CInterfaceGenerator
 
                         functionDef = GetCSharpDef(functionDef.ToString());
 
-                        List<string> funcList;
-                        if (!generatedInterfaces.TryGetValue(Path.GetFileName(headerFile.name), out funcList))
+                        if (!generatedInterfaces.TryGetValue(Path.GetFileName(name), out var funcList))
                         {
                             funcList = new List<string>();
-                            generatedInterfaces.Add(Path.GetFileName(headerFile.name), funcList);
+                            generatedInterfaces.Add(Path.GetFileName(name), funcList);
                         }
 
                         if (functionDef.EndsWith("status)"))

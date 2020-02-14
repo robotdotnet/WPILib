@@ -13,7 +13,7 @@ namespace WPILib
         public AnalogOutput(int channel)
         {
             Channel = channel;
-            m_port = Hal.AnalogOutput.InitializePort(Hal.HalBase.GetPort(channel));
+            m_port = Hal.AnalogOutputLowLevel.InitializePort(Hal.HALLowLevel.GetPort(channel));
             UsageReporting.Report(ResourceType.AnalogOutput, channel + 1);
             SendableRegistry.Instance.AddLW(this, "AnalogOutput", channel);
         }
@@ -21,13 +21,13 @@ namespace WPILib
         public void Dispose()
         {
             SendableRegistry.Instance.Remove(this);
-            Hal.AnalogOutput.FreePort(m_port);
+            Hal.AnalogOutputLowLevel.FreePort(m_port);
         }
 
         public ElectricPotential Voltage
         {
-            get => ElectricPotential.FromVolts(Hal.AnalogOutput.Get(m_port));
-            set => Hal.AnalogOutput.Set(m_port, value.Volts);
+            get => ElectricPotential.FromVolts(Hal.AnalogOutputLowLevel.Get(m_port));
+            set => Hal.AnalogOutputLowLevel.Set(m_port, value.Volts);
         }
 
         void ISendable.InitSendable(ISendableBuilder builder)

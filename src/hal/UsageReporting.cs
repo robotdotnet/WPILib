@@ -1,7 +1,5 @@
 ﻿using Hal.Natives;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using WPIUtil;
 using WPIUtil.NativeUtilities;
 
@@ -9,6 +7,7 @@ namespace Hal
 {
     public enum ResourceType
     {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
         Controller = 0,
         Module = 1,
         Language = 2,
@@ -103,10 +102,14 @@ namespace Hal
         DutyCycle = 91,
         AddressableLEDs = 92,
         FusionVenom = 93,
+#pragma warning restore CA1707 // Identifiers should not contain underscores
     }
 
+#pragma warning disable CA1717 // Only FlagsAttribute enums should have plural names
     public enum Instances
+#pragma warning restore CA1717 // Only FlagsAttribute enums should have plural names
     {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
         Language_LabVIEW = 1,
         Language_CPlusPlus = 2,
         Language_Java = 3,
@@ -159,6 +162,7 @@ namespace Hal
         Odometry_DifferentialDrive = 1,
         Odometry_MecanumDrive = 2,
         Odometry_SwerveDrive = 3,
+#pragma warning restore CA1707 // Identifiers should not contain underscores
     }
 
     [NativeInterface(typeof(IUsageReporting))]

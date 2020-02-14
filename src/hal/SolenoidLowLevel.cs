@@ -1,12 +1,11 @@
 ﻿
 using Hal.Natives;
-using System;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
     [NativeInterface(typeof(ISolenoid))]
-    public unsafe static class Solenoid
+    public static unsafe class SolenoidLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
@@ -31,7 +30,9 @@ namespace Hal
             lowLevel.HAL_ClearAllPCMStickyFaults(module);
         }
 
+#pragma warning disable CA1030 // Use events where appropriate
         public static void FireOneShot(int solenoidPortHandle)
+#pragma warning restore CA1030 // Use events where appropriate
         {
             lowLevel.HAL_FireOneShot(solenoidPortHandle);
         }

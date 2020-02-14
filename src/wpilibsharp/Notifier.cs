@@ -17,7 +17,7 @@ namespace WPILib
         public Notifier(Action handler)
         {
             m_handler = handler;
-            m_notifier = Hal.Notifier.Initialize();
+            m_notifier = Hal.NotifierLowLevel.Initialize();
 
             m_thread = new Thread(() =>
             {
@@ -25,7 +25,7 @@ namespace WPILib
                 {
                     var notifier = m_notifier;
                     if (notifier == 0) break;
-                    var curTime = Hal.Notifier.WaitForAlarm(m_notifier, out var status);
+                    var curTime = Hal.NotifierLowLevel.WaitForAlarm(m_notifier, out var status);
                     if (curTime == 0 || status != 0) break;
 
                     Action handler;
@@ -57,7 +57,7 @@ namespace WPILib
                 {
                     m_thread.Name = value;
                 }
-                Hal.Notifier.SetName(m_notifier, value);
+                Hal.NotifierLowLevel.SetName(m_notifier, value);
             }
         }
 
@@ -95,7 +95,7 @@ namespace WPILib
 
         public void Stop()
         {
-            Hal.Notifier.CancelAlarm(m_notifier);
+            Hal.NotifierLowLevel.CancelAlarm(m_notifier);
         }
 
         private void UpdateAlarm()
@@ -108,16 +108,16 @@ namespace WPILib
             var notifier = m_notifier;
             if (notifier == 0) return;
 
-            Hal.Notifier.UpdateAlarm(notifier, triggerTime);
+            Hal.NotifierLowLevel.UpdateAlarm(notifier, triggerTime);
         }
 
         public void Dispose()
         {
             var handle = Interlocked.Exchange(ref m_notifier, 0);
-            Hal.Notifier.Stop(handle);
+            Hal.NotifierLowLevel.Stop(handle);
             m_thread.Join();
 
-            Hal.Notifier.Clean(handle);
+            Hal.NotifierLowLevel.Clean(handle);
         }
     }
 }

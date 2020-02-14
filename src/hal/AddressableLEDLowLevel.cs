@@ -6,7 +6,7 @@ using WPIUtil.NativeUtilities;
 namespace Hal
 {
     [NativeInterface(typeof(IAddressableLED))]
-    public static unsafe class AddressableLED
+    public static unsafe class AddressableLEDLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WPILib
 {
@@ -12,14 +10,14 @@ namespace WPILib
         {
             RobotInit();
 
-            Hal.DriverStation.ObserveUserProgramStarting();
+            Hal.DriverStationLowLevel.ObserveUserProgramStarting();
 
             m_expirationTime = Timer.FPGATimestamp + m_period;
             UpdateAlarm();
 
             while (true)
             {
-                ulong curTime = Hal.Notifier.WaitForAlarm(m_notifier, out var status);
+                ulong curTime = Hal.NotifierLowLevel.WaitForAlarm(m_notifier, out var status);
                 if (curTime == 0 || status != 0) break;
 
                 m_expirationTime += m_period;
@@ -32,7 +30,7 @@ namespace WPILib
 
         public override void EndCompetition()
         {
-            Hal.Notifier.Stop(m_notifier);
+            Hal.NotifierLowLevel.Stop(m_notifier);
         }
 
         public TimeSpan Period => m_period;
@@ -44,16 +42,16 @@ namespace WPILib
 
         public TimedRobot(TimeSpan period) : base(period)
         {
-            m_notifier = Hal.Notifier.Initialize();
-            Hal.Notifier.SetName(m_notifier, "TimedRobot");
+            m_notifier = Hal.NotifierLowLevel.Initialize();
+            Hal.NotifierLowLevel.SetName(m_notifier, "TimedRobot");
 
             // Report
         }
 
         public override void Dispose()
         {
-            Hal.Notifier.Stop(m_notifier);
-            Hal.Notifier.Clean(m_notifier);
+            Hal.NotifierLowLevel.Stop(m_notifier);
+            Hal.NotifierLowLevel.Clean(m_notifier);
 
             base.Dispose();
         }
@@ -63,7 +61,7 @@ namespace WPILib
 
         private void UpdateAlarm()
         {
-            Hal.Notifier.UpdateAlarm(m_notifier, (ulong)(m_expirationTime.TotalMilliseconds * 1000));
+            Hal.NotifierLowLevel.UpdateAlarm(m_notifier, (ulong)(m_expirationTime.TotalMilliseconds * 1000));
         }
     }
 }

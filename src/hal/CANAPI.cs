@@ -25,7 +25,7 @@ namespace Hal
             lowLevel.HAL_CleanCAN(handle);
         }
 
-        public unsafe static void WritePacket(int handle, ReadOnlySpan<byte> data, int apiId)
+        public static unsafe void WritePacket(int handle, ReadOnlySpan<byte> data, int apiId)
         {
             if (data.Length > 8)
             {
@@ -36,7 +36,7 @@ namespace Hal
             lowLevel.HAL_WriteCANPacket(handle, toWrite, data.Length, apiId);
         }
 
-        public unsafe static void WritePacketRepeating(int handle, ReadOnlySpan<byte> data, int apiId, TimeSpan repeatTime)
+        public static unsafe void WritePacketRepeating(int handle, ReadOnlySpan<byte> data, int apiId, TimeSpan repeatTime)
         {
             if (data.Length > 8)
             {

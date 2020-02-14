@@ -23,9 +23,9 @@ namespace WPILib
                     case AccelerometerRange.k2G:
                     case AccelerometerRange.k4G:
                     case AccelerometerRange.k8G:
-                        Hal.Accelerometer.SetActive(false);
-                        Hal.Accelerometer.SetRange(value);
-                        Hal.Accelerometer.SetActive(true);
+                        Hal.AccelerometerLowLevel.SetActive(false);
+                        Hal.AccelerometerLowLevel.SetRange(value);
+                        Hal.AccelerometerLowLevel.SetActive(true);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException($"{value} range not supported (use k2G, k4G, or k8G");
@@ -33,11 +33,11 @@ namespace WPILib
             }
         }
 
-        public Acceleration X => Acceleration.FromStandardGravity(Hal.Accelerometer.GetX());
+        public Acceleration X => Acceleration.FromStandardGravity(Hal.AccelerometerLowLevel.GetX());
 
-        public Acceleration Y => Acceleration.FromStandardGravity(Hal.Accelerometer.GetY());
+        public Acceleration Y => Acceleration.FromStandardGravity(Hal.AccelerometerLowLevel.GetY());
 
-        public Acceleration Z => Acceleration.FromStandardGravity(Hal.Accelerometer.GetZ());
+        public Acceleration Z => Acceleration.FromStandardGravity(Hal.AccelerometerLowLevel.GetZ());
 
         public void Dispose()
         {

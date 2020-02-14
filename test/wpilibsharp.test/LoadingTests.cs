@@ -1,6 +1,5 @@
 ﻿using Hal;
 using NetworkTables.Natives;
-using System;
 using Xunit;
 
 namespace wpilibsharp.test
@@ -10,7 +9,7 @@ namespace wpilibsharp.test
         [Fact]
         public void TestHalLoads()
         {
-            Assert.True(HalBase.Initialize());
+            Assert.True(HALLowLevel.Initialize());
         }
 
         [Fact]

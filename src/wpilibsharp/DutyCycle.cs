@@ -13,7 +13,7 @@ namespace WPILib
 
         public DutyCycle(IDigitalSource digitalSource)
         {
-            m_handle = Hal.DutyCycle.Initialize(digitalSource.PortHandleForRouting, digitalSource.AnalogTriggerTypeForRouting);
+            m_handle = Hal.DutyCycleLowLevel.Initialize(digitalSource.PortHandleForRouting, digitalSource.AnalogTriggerTypeForRouting);
 
             m_source = digitalSource;
             var index = FPGAIndex;
@@ -23,18 +23,18 @@ namespace WPILib
 
         public void Dispose()
         {
-            Hal.DutyCycle.Free(m_handle);
+            Hal.DutyCycleLowLevel.Free(m_handle);
         }
 
-        public Frequency Frequency => Frequency.FromHertz(Hal.DutyCycle.GetFrequency(m_handle));
+        public Frequency Frequency => Frequency.FromHertz(Hal.DutyCycleLowLevel.GetFrequency(m_handle));
 
-        public double Output => Hal.DutyCycle.GetOutput(m_handle);
+        public double Output => Hal.DutyCycleLowLevel.GetOutput(m_handle);
 
-        public int OutputRaw => Hal.DutyCycle.GetOutputRaw(m_handle);
+        public int OutputRaw => Hal.DutyCycleLowLevel.GetOutputRaw(m_handle);
 
-        public int OutputScaleFactor => Hal.DutyCycle.GetOutputScaleFactor(m_handle);
+        public int OutputScaleFactor => Hal.DutyCycleLowLevel.GetOutputScaleFactor(m_handle);
 
-        public int FPGAIndex => Hal.DutyCycle.GetFPGAIndex(m_handle);
+        public int FPGAIndex => Hal.DutyCycleLowLevel.GetFPGAIndex(m_handle);
 
         public int SourceChannel => m_source.Channel;
 

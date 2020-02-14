@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Hal;
 using WPILib.SmartDashboard;
 
@@ -12,7 +10,7 @@ namespace WPILib
 
         public DigitalInput(int channel)
         {
-            m_handle = Hal.DIO.InitializePort(Hal.HalBase.GetPort(channel), true);
+            m_handle = Hal.DIOLowLevel.InitializePort(Hal.HALLowLevel.GetPort(channel), true);
 
             UsageReporting.Report(ResourceType.DigitalInput, channel + 1);
             SendableRegistry.Instance.AddLW(this, "DigitalInput", channel);
@@ -26,12 +24,12 @@ namespace WPILib
 
         public int PortHandleForRouting => m_handle;
 
-        public bool Output => Hal.DIO.Get(m_handle);
+        public bool Output => Hal.DIOLowLevel.Get(m_handle);
 
         public void Dispose()
         {
             SendableRegistry.Instance.Remove(this);
-            Hal.DIO.FreePort(m_handle);
+            Hal.DIOLowLevel.FreePort(m_handle);
         }
 
         void ISendable.InitSendable(ISendableBuilder builder)

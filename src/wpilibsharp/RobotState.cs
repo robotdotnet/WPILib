@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPILib
+﻿namespace WPILib
 {
     public static class RobotState
     {

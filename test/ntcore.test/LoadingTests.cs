@@ -1,5 +1,4 @@
 ﻿using NetworkTables.Natives;
-using System;
 using Xunit;
 
 namespace ntcore.test

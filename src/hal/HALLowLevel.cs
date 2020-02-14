@@ -1,7 +1,4 @@
 ﻿using Hal.Natives;
-using System;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using WPIUtil;
 using WPIUtil.NativeUtilities;
 
@@ -14,14 +11,14 @@ namespace Hal
     }
 
 
-    [NativeInterface(typeof(IHALBase))]
-    public static class HalBase
+    [NativeInterface(typeof(IHAL))]
+    public static class HALLowLevel
     {
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static IHALBase lowLevel;
+        private static IHAL lowLevel;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
@@ -30,7 +27,7 @@ namespace Hal
         {
             if (lowLevel == null)
             {
-                NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(HalBase).Assembly, "wpiHal", out var generator);
+                NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(HALLowLevel).Assembly, "wpiHal", out var generator);
             }
             return lowLevel!.HAL_Initialize(500, 0) != 0;
         }
@@ -56,7 +53,9 @@ namespace Hal
             {
                 return UTF8String.ReadUTF8String(lowLevel.HAL_GetErrorMessage(code));
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 return "Error determining status";
             }

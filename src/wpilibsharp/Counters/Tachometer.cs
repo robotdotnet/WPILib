@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using UnitsNet;
 using WPILib.SmartDashboard;
 
@@ -15,15 +13,15 @@ namespace WPILib.Counters
         public Tachometer(IDigitalSource source)
         {
             m_source = source;
-            m_handle = Hal.Counter.Initialize(Hal.CounterMode.kTwoPulse, out m_index);
+            m_handle = Hal.CounterLowLevel.Initialize(Hal.CounterMode.kTwoPulse, out m_index);
 
-            Hal.Counter.SetUpSource(m_handle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);
-            Hal.Counter.SetUpSourceEdge(m_handle, true, false);
+            Hal.CounterLowLevel.SetUpSource(m_handle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);
+            Hal.CounterLowLevel.SetUpSourceEdge(m_handle, true, false);
         }
 
-        public TimeSpan Period => TimeSpan.FromSeconds(Hal.Counter.GetPeriod(m_handle));
+        public TimeSpan Period => TimeSpan.FromSeconds(Hal.CounterLowLevel.GetPeriod(m_handle));
 
-        public Frequency Frequency => Frequency.FromHertz(1 / Hal.Counter.GetPeriod(m_handle));
+        public Frequency Frequency => Frequency.FromHertz(1 / Hal.CounterLowLevel.GetPeriod(m_handle));
 
         public int EdgesPerRevolution { get; set; } = 1;
 
@@ -31,7 +29,7 @@ namespace WPILib.Counters
         {
             get
             {
-                var period = Hal.Counter.GetPeriod(m_handle);
+                var period = Hal.CounterLowLevel.GetPeriod(m_handle);
                 if (period == 0)
                 {
                     return RotationalSpeed.MaxValue;
@@ -40,27 +38,27 @@ namespace WPILib.Counters
             }
         }
 
-        public bool Stopped => Hal.Counter.GetStopped(m_handle);
+        public bool Stopped => Hal.CounterLowLevel.GetStopped(m_handle);
 
         public int SamplesToAverage
         {
-            get => Hal.Counter.GetSamplesToAverage(m_handle);
-            set => Hal.Counter.SetSamplesToAverage(m_handle, value);
+            get => Hal.CounterLowLevel.GetSamplesToAverage(m_handle);
+            set => Hal.CounterLowLevel.SetSamplesToAverage(m_handle, value);
         }
 
         public TimeSpan MaxPeriod
         {
-            set => Hal.Counter.SetMaxPeriod(m_handle, value.TotalSeconds);
+            set => Hal.CounterLowLevel.SetMaxPeriod(m_handle, value.TotalSeconds);
         }
 
         public bool UpdateWhenEmpty
         {
-            set => Hal.Counter.SetUpdateWhenEmpty(m_handle, value);
+            set => Hal.CounterLowLevel.SetUpdateWhenEmpty(m_handle, value);
         }
 
         public void Dispose()
         {
-            Hal.Counter.Free(m_handle);
+            Hal.CounterLowLevel.Free(m_handle);
         }
 
         void ISendable.InitSendable(ISendableBuilder builder)

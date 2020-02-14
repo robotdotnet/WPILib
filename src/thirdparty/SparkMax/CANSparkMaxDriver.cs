@@ -1,7 +1,5 @@
 ﻿using REV.SparkMax.Natives;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using WPIUtil.NativeUtilities;
 
 namespace REV.SparkMax

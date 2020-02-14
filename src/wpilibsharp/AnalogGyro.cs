@@ -22,16 +22,16 @@ namespace WPILib
         {
             m_analogInput = input;
 
-            m_gyroHandle = Hal.AnalogGyro.Initialize(input.m_port);
+            m_gyroHandle = Hal.AnalogGyroLowLevel.Initialize(input.m_port);
 
-            Hal.AnalogGyro.Setup(m_gyroHandle);
+            Hal.AnalogGyroLowLevel.Setup(m_gyroHandle);
 
             UsageReporting.Report(ResourceType.Gyro, m_analogInput.Channel + 1);
             SendableRegistry.Instance.AddLW(this, "AnalogGyro", m_analogInput.Channel);
 
             if (center != 0 || offset != 0)
             {
-                Hal.AnalogGyro.SetParameters(m_gyroHandle, DefaultVoltsPerDegreePerSecond, offset, center);
+                Hal.AnalogGyroLowLevel.SetParameters(m_gyroHandle, DefaultVoltsPerDegreePerSecond, offset, center);
                 Reset();
             }
             else
@@ -42,13 +42,13 @@ namespace WPILib
 
         }
 
-        public override Angle Angle => Angle.FromDegrees(Hal.AnalogGyro.GetAngle(m_gyroHandle));
+        public override Angle Angle => Angle.FromDegrees(Hal.AnalogGyroLowLevel.GetAngle(m_gyroHandle));
 
-        public override RotationalSpeed Rate => RotationalSpeed.FromDegreesPerSecond(Hal.AnalogGyro.GetRate(m_gyroHandle));
+        public override RotationalSpeed Rate => RotationalSpeed.FromDegreesPerSecond(Hal.AnalogGyroLowLevel.GetRate(m_gyroHandle));
 
         public override void Calibrate()
         {
-            Hal.AnalogGyro.Calibrate(m_gyroHandle);
+            Hal.AnalogGyroLowLevel.Calibrate(m_gyroHandle);
         }
 
         public override void Dispose()
@@ -59,26 +59,26 @@ namespace WPILib
                 m_analogInput.Dispose();
             }
 
-            Hal.AnalogGyro.Free(m_gyroHandle);
+            Hal.AnalogGyroLowLevel.Free(m_gyroHandle);
         }
 
         public override void Reset()
         {
-            Hal.AnalogGyro.Reset(m_gyroHandle);
+            Hal.AnalogGyroLowLevel.Reset(m_gyroHandle);
         }
 
-        public double Offset => Hal.AnalogGyro.GetOffset(m_gyroHandle);
+        public double Offset => Hal.AnalogGyroLowLevel.GetOffset(m_gyroHandle);
 
-        public int Center => Hal.AnalogGyro.GetCenter(m_gyroHandle);
+        public int Center => Hal.AnalogGyroLowLevel.GetCenter(m_gyroHandle);
 
         public double Sensitivity
         {
-            set => Hal.AnalogGyro.SetVoltsPerDegreePerSecond(m_gyroHandle, value);
+            set => Hal.AnalogGyroLowLevel.SetVoltsPerDegreePerSecond(m_gyroHandle, value);
         }
 
         public ElectricPotential Deadband
         {
-            set => Hal.AnalogGyro.SetDeadband(m_gyroHandle, value.Volts);
+            set => Hal.AnalogGyroLowLevel.SetDeadband(m_gyroHandle, value.Volts);
         }
     }
 }

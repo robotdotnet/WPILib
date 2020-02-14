@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace REV.SparkMax.Natives
+﻿namespace REV.SparkMax.Natives
 {
     public struct PeriodicStatus0LowLevel
     {

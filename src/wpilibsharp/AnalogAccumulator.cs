@@ -31,7 +31,7 @@ namespace WPILib
             m_port = analogInput.m_port;
 
             m_accumulatorOffset = 0;
-            Hal.AnalogAccumulator.InitAccumulator(m_port);
+            Hal.AnalogAccumulatorLowLevel.InitAccumulator(m_port);
         }
 
         public long InitialValue
@@ -41,7 +41,7 @@ namespace WPILib
 
         public void Reset()
         {
-            Hal.AnalogAccumulator.ResetAccumulator(m_port);
+            Hal.AnalogAccumulatorLowLevel.ResetAccumulator(m_port);
 
             // Wait until the next sample, so the next call to getAccumulator*()
             // won't have old values.
@@ -53,23 +53,23 @@ namespace WPILib
 
         public int Center
         {
-            set => Hal.AnalogAccumulator.SetAccumulatorCenter(m_port, value);
+            set => Hal.AnalogAccumulatorLowLevel.SetAccumulatorCenter(m_port, value);
         }
 
         public int Deadband
         {
-            set => Hal.AnalogAccumulator.SetAccumulatorDeadband(m_port, value);
+            set => Hal.AnalogAccumulatorLowLevel.SetAccumulatorDeadband(m_port, value);
         }
 
-        public long Value => Hal.AnalogAccumulator.GetAccumulatorValue(m_port);
+        public long Value => Hal.AnalogAccumulatorLowLevel.GetAccumulatorValue(m_port);
 
-        public long Count => Hal.AnalogAccumulator.GetAccumulatorCount(m_port);
+        public long Count => Hal.AnalogAccumulatorLowLevel.GetAccumulatorCount(m_port);
 
         public AccumulatorOutput Output
         {
             get
             {
-                Hal.AnalogAccumulator.GetAccumulatorOutput(m_port, out var value, out var count);
+                Hal.AnalogAccumulatorLowLevel.GetAccumulatorOutput(m_port, out var value, out var count);
                 return new AccumulatorOutput(count, value + m_accumulatorOffset);
             }
         }
