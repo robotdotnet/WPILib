@@ -5,17 +5,47 @@ using WPILib.SmartDashboard;
 
 namespace WPILib.Shuffleboard
 {
-    public class ShuffleboardLayout : ShuffleboardComponent<ShuffleboardLayout>, IShuffleboardContainer
+    public sealed class ShuffleboardTab : IShuffleboardContainer
     {
         private readonly ContainerHelper m_helper;
 
-        internal ShuffleboardLayout(IShuffleboardContainer parent, string? name, string type)
-          : base(parent, type, name)
+        internal ShuffleboardTab(IShuffleboardRoot root, string title)
         {
             m_helper = new ContainerHelper(this);
+            Root = root;
+            Title = title;
         }
 
+        public string Title { get; }
+
         public List<ShuffleboardComponent> Components => m_helper.Components;
+
+        internal IShuffleboardRoot Root { get; }
+
+        public void BuildInto(NetworkTable parentTable, NetworkTable metaTable)
+        {
+            var tabTable = parentTable.GetSubTable(Title);
+            tabTable.GetEntry(".type").SetString("ShuffleboardTab");
+            foreach (var component in m_helper.Components)
+            {
+                component.BuildInto(tabTable, metaTable.GetSubTable(component.Title));
+            }
+        }
+
+        public ShuffleboardLayout GetLayout(string title, string type)
+        {
+            return m_helper.GetLayout(title, type);
+        }
+
+        public ShuffleboardLayout GetLayout(string title, ILayoutType layoutType)
+        {
+            return m_helper.GetLayout(title, layoutType.LayoutName);
+        }
+
+        public ShuffleboardLayout GetLayout(string title)
+        {
+            return m_helper.GetLayout(title);
+        }
 
         public ComplexWidget Add(string title, ISendable sendable)
         {
@@ -77,32 +107,6 @@ namespace WPILib.Shuffleboard
         public SuppliedValueWidget<string[]> AddStringArray(string title, Func<string[]> valueSupplier)
         {
             return m_helper.AddStringArray(title, valueSupplier);
-        }
-
-        public override void BuildInto(NetworkTable parentTable, NetworkTable metaTable)
-        {
-            BuildMetadata(metaTable);
-            var table = parentTable.GetSubTable(Title);
-            table.GetEntry(".type").SetString("ShuffleboardLayout");
-            foreach (var component in Components)
-            {
-                component.BuildInto(table, metaTable.GetSubTable(component.Title));
-            }
-        }
-
-        public ShuffleboardLayout GetLayout(string title, string type)
-        {
-            return m_helper.GetLayout(title, type);
-        }
-
-        public ShuffleboardLayout GetLayout(string title, ILayoutType layoutType)
-        {
-            return m_helper.GetLayout(title, layoutType.LayoutName);
-        }
-
-        public ShuffleboardLayout GetLayout(string title)
-        {
-            return m_helper.GetLayout(title);
         }
     }
 }
