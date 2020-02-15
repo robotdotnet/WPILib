@@ -6,12 +6,12 @@ namespace WPILib.Oblog
 {
     public interface IComplexWidgetWrapper
     {
-        ISimpleWidgetWrapper WithProperties(Dictionary<string, object> properties);
+        IComplexWidgetWrapper WithProperties(Dictionary<string, object> properties);
 
-        ISimpleWidgetWrapper WithWidget(string widgetType);
+        IComplexWidgetWrapper WithWidget(string widgetType);
 
-        ISimpleWidgetWrapper WithSize(int width, int height);
+        IComplexWidgetWrapper WithSize(int width, int height);
 
-        ISimpleWidgetWrapper WithPosition(int columnIndex, int rowIndex);
+        IComplexWidgetWrapper WithPosition(int columnIndex, int rowIndex);
     }
 }
