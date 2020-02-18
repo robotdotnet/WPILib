@@ -7,6 +7,11 @@
     <NoWarn>1701;1702;1591;CA1303</NoWarn>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\wpilibsharp\wpilibsharp.csproj" />
     <ProjectReference Include="..\..\wpiutil\wpiutil.csproj" />
