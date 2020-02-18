@@ -5,7 +5,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class AnalogOutput : ISendable, IDisposable
+    public sealed class AnalogOutput : ISendable, IDisposable
     {
         private readonly int m_port;
         public int Channel { get; }

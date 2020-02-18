@@ -1,7 +1,9 @@
-﻿namespace WPILib.ShuffleboardNS
+﻿using System;
+
+namespace WPILib.ShuffleboardNS
 {
-    public abstract class ShuffleboardWidget<W>
-        : ShuffleboardComponent<W> where W : ShuffleboardWidget<W>
+    public abstract class ShuffleboardWidget<T>
+        : ShuffleboardComponent<T> where T : ShuffleboardWidget<T>
     {
 
         public ShuffleboardWidget(IShuffleboardContainer parent, string title)
@@ -10,15 +12,20 @@
 
         }
 
-        public W WithWidget(IWidgetType widgetType)
+        public T WithWidget(IWidgetType widgetType)
         {
+            if (widgetType == null)
+            {
+                throw new ArgumentNullException(nameof(widgetType));
+            }
+
             return WithWidget(widgetType.WidgetName);
         }
 
-        public W WithWidget(string widgetType)
+        public T WithWidget(string widgetType)
         {
             Type = widgetType;
-            return (W)this;
+            return (T)this;
         }
     }
 }

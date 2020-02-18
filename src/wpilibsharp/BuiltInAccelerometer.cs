@@ -6,7 +6,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class BuiltInAccelerometer : IAccelerometer, ISendable, IDisposable
+    public sealed class BuiltInAccelerometer : IAccelerometer, ISendable, IDisposable
     {
         public BuiltInAccelerometer(AccelerometerRange range = AccelerometerRange.k8G)
         {

@@ -4,7 +4,9 @@ using System.Threading;
 
 namespace WPILib
 {
-    public class Watchdog : IDisposable, IComparable<Watchdog>
+#pragma warning disable CA1036 // Override methods on comparable types
+    public sealed class Watchdog : IDisposable, IComparable<Watchdog>
+#pragma warning restore CA1036 // Override methods on comparable types
     {
         private static readonly TimeSpan MinPrintPeriod = TimeSpan.FromSeconds(1);
 
@@ -44,6 +46,11 @@ namespace WPILib
 
         public int CompareTo(Watchdog other)
         {
+            if (other == null)
+            {
+                throw new ArgumentNullException(nameof(other));
+            }
+
             return m_expirationTime.CompareTo(other.m_expirationTime);
         }
 

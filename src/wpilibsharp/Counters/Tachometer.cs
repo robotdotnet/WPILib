@@ -4,7 +4,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib.Counters
 {
-    public class Tachometer : IDisposable, ISendable
+    public sealed class Tachometer : IDisposable, ISendable
     {
         private readonly IDigitalSource m_source;
         private readonly int m_handle;
@@ -12,7 +12,7 @@ namespace WPILib.Counters
 
         public Tachometer(IDigitalSource source)
         {
-            m_source = source;
+            m_source = source ?? throw new ArgumentNullException(nameof(source));
             m_handle = Hal.CounterLowLevel.Initialize(Hal.CounterMode.kTwoPulse, out m_index);
 
             Hal.CounterLowLevel.SetUpSource(m_handle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);

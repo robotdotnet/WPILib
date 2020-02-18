@@ -1,13 +1,14 @@
-﻿using Hal;
+﻿using System;
+using Hal;
 using UnitsNet;
 using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class AnalogGyro : GyroBase
+    public sealed class AnalogGyro : GyroBase
     {
-        private static readonly double DefaultVoltsPerDegreePerSecond = 0.007;
-        protected readonly AnalogInput m_analogInput;
+        private const double DefaultVoltsPerDegreePerSecond = 0.007;
+        private readonly AnalogInput m_analogInput;
         private readonly bool m_channelAllocated;
         private readonly int m_gyroHandle;
 
@@ -20,7 +21,7 @@ namespace WPILib
 
         public AnalogGyro(AnalogInput input, int center = 0, double offset = 0)
         {
-            m_analogInput = input;
+            m_analogInput = input ?? throw new ArgumentNullException(nameof(input));
 
             m_gyroHandle = Hal.AnalogGyroLowLevel.Initialize(input.m_port);
 

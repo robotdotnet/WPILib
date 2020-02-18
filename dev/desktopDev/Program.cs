@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using WPILib;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace desktopDev
 {

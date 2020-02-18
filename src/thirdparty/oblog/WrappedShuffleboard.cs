@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using WPILib.Shuffleboard;
+using WPILib.ShuffleboardNS;
 
 namespace WPILib.Oblog
 {
@@ -9,7 +9,7 @@ namespace WPILib.Oblog
     {
         public IShuffleboardContainerWrapper GetTab(string title)
         {
-            return new WrappedShuffleboardContainer(Shuffleboard.Shuffleboard.GetTab(title));
+            return new WrappedShuffleboardContainer(Shuffleboard.GetTab(title));
         }
     }
 }

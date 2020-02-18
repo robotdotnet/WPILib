@@ -3,7 +3,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib.Counters
 {
-    public class ExternalDirectionCounter : ISendable, IDisposable
+    public sealed class ExternalDirectionCounter : ISendable, IDisposable
     {
         private IDigitalSource m_countSource;
         private IDigitalSource m_directionSource;
@@ -12,8 +12,8 @@ namespace WPILib.Counters
 
         public ExternalDirectionCounter(IDigitalSource countSource, IDigitalSource directionSource)
         {
-            m_countSource = countSource;
-            m_directionSource = directionSource;
+            m_countSource = countSource ?? throw new ArgumentNullException(nameof(countSource));
+            m_directionSource = directionSource ?? throw new ArgumentNullException(nameof(directionSource));
             m_handle = Hal.CounterLowLevel.Initialize(Hal.CounterMode.kExternalDirection, out m_index);
 
             Hal.CounterLowLevel.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
@@ -27,7 +27,7 @@ namespace WPILib.Counters
         {
             set
             {
-                m_countSource = value;
+                m_countSource = value ?? throw new ArgumentNullException(nameof(value));
                 Hal.CounterLowLevel.SetUpSource(m_handle, m_countSource.PortHandleForRouting, m_countSource.AnalogTriggerTypeForRouting);
                 Hal.CounterLowLevel.SetUpSourceEdge(m_handle, true, false);
             }
@@ -45,8 +45,7 @@ namespace WPILib.Counters
         {
             set
             {
-
-                m_directionSource = value;
+                m_directionSource = value ?? throw new ArgumentNullException(nameof(value));
                 Hal.CounterLowLevel.SetDownSource(m_handle, m_directionSource.PortHandleForRouting, m_directionSource.AnalogTriggerTypeForRouting);
             }
         }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib2.Commands
 {

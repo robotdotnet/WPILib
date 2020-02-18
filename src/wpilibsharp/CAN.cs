@@ -3,7 +3,7 @@ using Hal;
 
 namespace WPILib
 {
-    public class CAN : IDisposable
+    public sealed class CAN : IDisposable
     {
         public const CANManufacturer TeamManufacturer = CANManufacturer.kTeamUse;
         public const CANDeviceType TeamDeviceType = CANDeviceType.kMiscellaneous;

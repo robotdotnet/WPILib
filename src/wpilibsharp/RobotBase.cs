@@ -7,7 +7,9 @@ using WPILib.LiveWindowNS;
 
 namespace WPILib
 {
+#pragma warning disable CA1063 // Implement IDisposable Correctly
     public abstract class RobotBase : IDisposable
+#pragma warning restore CA1063 // Implement IDisposable Correctly
     {
         private static void RunRobot<Robot>() where Robot : RobotBase, new()
         {
@@ -18,7 +20,9 @@ namespace WPILib
             {
                 robot = new Robot();
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 string robotName = typeof(Robot).Name;
                 DriverStation.ReportError(("Unhandled exception instanciating robot "
@@ -39,7 +43,7 @@ namespace WPILib
                 {
                     File.WriteAllText("/tmp/frc_versions/FRC_Lib_Version.ini", $"C# {WPILibVersion}");
                 }
-                catch (Exception ex)
+                catch (IOException ex)
                 {
                     DriverStation.ReportError("Could not write FRC_Lib_Version.ini: " + ex.Message, ex.StackTrace);
                 }
@@ -50,7 +54,9 @@ namespace WPILib
             {
                 robot.StartCompetition();
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
                 Console.WriteLine(ex);
                 DriverStation.ReportError("Unhandled Exception: " + ex.Message, ex.StackTrace);
@@ -100,11 +106,11 @@ namespace WPILib
         {
             lock (m_runMutex)
             {
-                suppressExitWarning = true;
+                suppressExitWarning = value;
             }
         }
 
-        public static void StartRobot<Robot>() where Robot : RobotBase, new()
+        public static void StartRobot<TRobot>() where TRobot : RobotBase, new()
         {
             int halInit = RunHALInitialization();
             if (halInit != 0)
@@ -118,7 +124,7 @@ namespace WPILib
             {
                 Thread thread = new Thread(() =>
                 {
-                    RunRobot<Robot>();
+                    RunRobot<TRobot>();
                     MainLowLevel.ExitMain();
                 })
                 {
@@ -142,25 +148,25 @@ namespace WPILib
             }
             else
             {
-                RunRobot<Robot>();
+                RunRobot<TRobot>();
             }
 
 
         }
 
-        protected DriverStation m_ds;
+        protected DriverStation DriverStation { get; }
 
-        protected static int m_threadId;
+        protected static int ThreadId { get; set; }
 
-        public bool IsEnabled => m_ds.IsEnabled;
-        public bool IsDisabled => m_ds.IsDisabled;
-        public bool IsAutonomous => m_ds.IsAutonomous;
-        public bool IsOperatorControl => m_ds.IsOperatorControl;
-        public bool IsTest => m_ds.IsTest;
+        public bool IsEnabled => DriverStation.IsEnabled;
+        public bool IsDisabled => DriverStation.IsDisabled;
+        public bool IsAutonomous => DriverStation.IsAutonomous;
+        public bool IsOperatorControl => DriverStation.IsOperatorControl;
+        public bool IsTest => DriverStation.IsTest;
 
-        public bool IsNewDataAvailable => m_ds.IsNewControlData;
+        public bool IsNewDataAvailable => DriverStation.IsNewControlData;
 
-        public static int MainThreadId => m_threadId;
+        public static int MainThreadId => ThreadId;
 
         public static string WPILibVersion => "1234";
 
@@ -168,9 +174,11 @@ namespace WPILib
 
         public abstract void EndCompetition();
 
+#pragma warning disable CA1063 // Implement IDisposable Correctly
         public virtual void Dispose()
+#pragma warning restore CA1063 // Implement IDisposable Correctly
         {
-
+            GC.SuppressFinalize(this);
         }
 
         public static bool IsReal => Hal.HALLowLevel.GetRuntimeType() == Hal.RuntimeType.Athena;
@@ -178,7 +186,7 @@ namespace WPILib
 
         public RobotBase()
         {
-            m_threadId = Thread.CurrentThread.ManagedThreadId;
+            ThreadId = Thread.CurrentThread.ManagedThreadId;
 
             var inst = NetworkTableInstance.Default;
             inst.SetNetworkIdentity("Robot");
@@ -198,7 +206,7 @@ namespace WPILib
                 .GetEntry("LW Enabled")
                 .SetBoolean(false);
 
-            m_ds = DriverStation.Instance;
+            DriverStation = DriverStation.Instance;
             LiveWindow.Enabled = false;
 
         }

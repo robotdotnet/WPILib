@@ -4,7 +4,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class DigitalInput : IDigitalSource, IDisposable, ISendable
+    public sealed class DigitalInput : IDigitalSource, IDisposable, ISendable
     {
         private readonly int m_handle;
 

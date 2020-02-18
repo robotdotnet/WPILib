@@ -9,24 +9,12 @@ namespace WPILib
         private readonly int m_port;
         private long m_accumulatorOffset;
 
-        public readonly struct AccumulatorOutput
-        {
-            public long Count { get; }
-            public long Value { get; }
-
-            public AccumulatorOutput(long count, long value)
-            {
-                Count = count;
-                Value = value;
-            }
-        }
-
         public AnalogAccumulator(AnalogInput analogInput)
         {
-            m_analogInput = analogInput;
+            m_analogInput = analogInput ?? throw new ArgumentNullException(nameof(analogInput));
             if (!analogInput.IsAccumulatorChannel)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Analog Input must be an accumulator channel", nameof(analogInput));
             }
             m_port = analogInput.m_port;
 
@@ -65,12 +53,12 @@ namespace WPILib
 
         public long Count => Hal.AnalogAccumulatorLowLevel.GetAccumulatorCount(m_port);
 
-        public AccumulatorOutput Output
+        public AnalogAccumulatorOutput Output
         {
             get
             {
                 Hal.AnalogAccumulatorLowLevel.GetAccumulatorOutput(m_port, out var value, out var count);
-                return new AccumulatorOutput(count, value + m_accumulatorOffset);
+                return new AnalogAccumulatorOutput(count, value + m_accumulatorOffset);
             }
         }
     }

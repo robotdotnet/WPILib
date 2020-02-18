@@ -34,12 +34,12 @@ namespace WPILib.Geometry
             return Length.FromMeters(Math.Sqrt(combined.SquareMeters));
         }
 
-        public static Translation2d operator *(in Translation2d obj, double scalar)
+        public static Translation2d operator *(in Translation2d other, double scalar)
         {
             throw new NotImplementedException();
         }
 
-        public static Translation2d operator /(in Translation2d obj, double scalar)
+        public static Translation2d operator /(in Translation2d other, double scalar)
         {
             throw new NotImplementedException();
         }
@@ -60,14 +60,14 @@ namespace WPILib.Geometry
             return new Translation2d(left.X - right.X, left.Y - right.Y);
         }
 
-        public static Translation2d operator -(in Translation2d obj)
+        public static Translation2d operator -(in Translation2d other)
         {
             throw new NotImplementedException();
         }
 
         public static bool operator ==(in Translation2d left, in Translation2d right)
         {
-            throw new NotImplementedException();
+            return left.Equals(right);
         }
 
         public static bool operator !=(in Translation2d left, in Translation2d right)

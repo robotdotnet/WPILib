@@ -18,14 +18,14 @@ namespace WPILib.Geometry
             Rotation = rotation;
         }
 
-        public static Transform2d operator *(in Transform2d obj, double scalar)
+        public static Transform2d operator *(in Transform2d other, double scalar)
         {
-            return new Transform2d(obj.Translation * scalar, obj.Rotation * scalar);
+            return new Transform2d(other.Translation * scalar, other.Rotation * scalar);
         }
 
         public static bool operator ==(in Transform2d left, in Transform2d right)
         {
-            throw new NotImplementedException();
+            return left.Equals(right);
         }
 
         public static bool operator !=(in Transform2d left, in Transform2d right)

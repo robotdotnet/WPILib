@@ -12,7 +12,7 @@ namespace WPILib
 
             Hal.DriverStationLowLevel.ObserveUserProgramStarting();
 
-            m_expirationTime = Timer.FPGATimestamp + m_period;
+            m_expirationTime = Timer.FPGATimestamp + base.Period;
             UpdateAlarm();
 
             while (true)
@@ -20,7 +20,7 @@ namespace WPILib
                 ulong curTime = Hal.NotifierLowLevel.WaitForAlarm(m_notifier, out var status);
                 if (curTime == 0 || status != 0) break;
 
-                m_expirationTime += m_period;
+                m_expirationTime += base.Period;
 
                 UpdateAlarm();
 
@@ -32,8 +32,6 @@ namespace WPILib
         {
             Hal.NotifierLowLevel.Stop(m_notifier);
         }
-
-        public TimeSpan Period => m_period;
 
         public TimedRobot() : this(DefaultPeriod)
         {
@@ -48,7 +46,9 @@ namespace WPILib
             // Report
         }
 
+#pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
         public override void Dispose()
+#pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
         {
             Hal.NotifierLowLevel.Stop(m_notifier);
             Hal.NotifierLowLevel.Clean(m_notifier);
@@ -56,7 +56,7 @@ namespace WPILib
             base.Dispose();
         }
 
-        private int m_notifier;
+        private readonly int m_notifier;
         private TimeSpan m_expirationTime;
 
         private void UpdateAlarm()

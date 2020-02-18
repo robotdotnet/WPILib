@@ -1,4 +1,6 @@
-﻿using WPILib.SmartDashboardNS;
+﻿using System;
+using System.Globalization;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
@@ -9,7 +11,7 @@ namespace WPILib
 
         }
 
-        public override string Description => $"PWM {Channel.ToString()}";
+        public override string Description => $"PWM {Channel.ToString(CultureInfo.InvariantCulture)}";
 
         public bool Inverted { get; set; }
 
@@ -29,8 +31,13 @@ namespace WPILib
             SetDisabled();
         }
 
-        void ISendable.InitSendable(ISendableBuilder builder)
+        public override void InitSendable(ISendableBuilder builder)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
             builder.SmartDashboardType = "Speed Controller";
             builder.IsActuator = true;
             builder.SafeState = SetDisabled;

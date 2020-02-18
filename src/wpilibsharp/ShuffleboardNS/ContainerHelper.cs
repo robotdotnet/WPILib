@@ -140,7 +140,7 @@ namespace WPILib.ShuffleboardNS
 
         private static void CheckNtType<T>(T data)
         {
-
+            var _ = data;
         }
 
         private void CheckTitle(string title)

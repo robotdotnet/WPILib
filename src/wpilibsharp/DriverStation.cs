@@ -10,7 +10,8 @@ namespace WPILib
     public enum Alliance { kRed, kBlue, kInvalid }
     public enum MatchType { kNone, kPractice, kQualification, kElimination }
 
-    public class DriverStation : IDisposable
+#pragma warning disable CA1822 // Method could be marked static
+    public sealed class DriverStation : IDisposable
     {
 
 
@@ -53,6 +54,7 @@ namespace WPILib
 
         private static void ReportErrorImpl(bool isError, int code, string error, bool printTrace, string stackTrace, int stackTraceFirst)
         {
+            var _ = stackTraceFirst;
             ReadOnlySpan<char> printedTrace = stackTrace.AsSpan();
             if (!printTrace)
             {
@@ -517,7 +519,7 @@ namespace WPILib
             }
         }
 
-        protected void GetData()
+        private void GetData()
         {
             lock (m_buttonEdgeMutex)
             {
@@ -651,9 +653,9 @@ namespace WPILib
         }
 
         private readonly object m_buttonEdgeMutex = new object();
-        private JoystickButtons[] m_previousButtonStates = new JoystickButtons[6];
-        private uint[] m_joystickButtonsPressed = new uint[6];
-        private uint[] m_joystickButtonsReleased = new uint[6];
+        private readonly JoystickButtons[] m_previousButtonStates = new JoystickButtons[6];
+        private readonly uint[] m_joystickButtonsPressed = new uint[6];
+        private readonly uint[] m_joystickButtonsReleased = new uint[6];
 
         private readonly Thread m_dsThread;
         private bool m_isRunning = false;
@@ -665,4 +667,5 @@ namespace WPILib
 
 
     }
+#pragma warning restore CA1822 // Method could be marked static
 }

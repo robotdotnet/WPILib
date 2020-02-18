@@ -83,7 +83,7 @@ namespace WPILib
 
         public IterativeRobotBase(TimeSpan period)
         {
-            m_period = period;
+            Period = period;
             m_watchdog = new Watchdog(period, PrintLoopOverrunMessage);
         }
 
@@ -155,7 +155,7 @@ namespace WPILib
             }
         }
 
-        protected TimeSpan m_period;
+        public TimeSpan Period { get; protected set; }
 
         private enum Mode
         {
@@ -171,7 +171,7 @@ namespace WPILib
 
         private void PrintLoopOverrunMessage()
         {
-            DriverStation.ReportWarning($"Loop time of {m_period}s overrun\n", false);
+            DriverStation.ReportWarning($"Loop time of {Period}s overrun\n", false);
         }
     }
 }

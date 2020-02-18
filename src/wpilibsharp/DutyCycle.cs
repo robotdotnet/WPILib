@@ -5,7 +5,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class DutyCycle : ISendable, IDisposable
+    public sealed class DutyCycle : ISendable, IDisposable
     {
         internal readonly int m_handle;
 
@@ -13,6 +13,11 @@ namespace WPILib
 
         public DutyCycle(IDigitalSource digitalSource)
         {
+            if (digitalSource == null)
+            {
+                throw new ArgumentNullException(nameof(digitalSource));
+            }
+
             m_handle = Hal.DutyCycleLowLevel.Initialize(digitalSource.PortHandleForRouting, digitalSource.AnalogTriggerTypeForRouting);
 
             m_source = digitalSource;

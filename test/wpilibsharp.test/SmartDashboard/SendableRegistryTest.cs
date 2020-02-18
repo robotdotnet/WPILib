@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 using Xunit;
 
 namespace wpilibsharp.test.SmartDashboard

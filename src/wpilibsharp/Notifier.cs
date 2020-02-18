@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace WPILib
 {
-    public class Notifier : IDisposable
+    public sealed class Notifier : IDisposable
     {
         private readonly Thread m_thread;
         private readonly object m_processMutex = new object();

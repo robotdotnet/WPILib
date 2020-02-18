@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using WPILib;
-using WPILib.LiveWindow;
-using WPILib.SmartDashboard;
+using WPILib.LiveWindowNS;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib2.Commands
 {

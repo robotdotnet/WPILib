@@ -1,6 +1,7 @@
 ﻿using NetworkTables;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -35,19 +36,19 @@ namespace WPILib.SmartDashboardNS
 
             public void SetName(string moduleType, int channel)
             {
-                Name = $"{moduleType} [{channel.ToString()}]";
+                Name = $"{moduleType} [{channel.ToString(CultureInfo.InvariantCulture)}]";
             }
 
             public void SetName(string moduleType, int moduleNumber, int channel)
             {
-                Name = $"{moduleType} [{moduleNumber.ToString()},{channel.ToString()}]";
+                Name = $"{moduleType} [{moduleNumber.ToString(CultureInfo.InvariantCulture)},{channel.ToString(CultureInfo.InvariantCulture)}]";
             }
         }
 
         private readonly object mutex = new object();
 
 
-        private ISendableDictionary components;
+        private readonly ISendableDictionary components;
         //private readonly ConditionalWeakTable<ISendable, Component> components = new ConditionalWeakTable<ISendable, Component>();
         //private readonly Dictionary<Sendable, Component> components = new Dictionary<Sendable, Component>();
         private int nextDataHandle = 0;
@@ -70,7 +71,11 @@ namespace WPILib.SmartDashboardNS
         }
 
 
+#pragma warning disable CA1034 // Nested types should not be visible
+#pragma warning disable CA1815 // Override equals and operator equals on value types
         public struct CallbackData
+#pragma warning restore CA1815 // Override equals and operator equals on value types
+#pragma warning restore CA1034 // Nested types should not be visible
         {
             public ISendable Sendable { get; }
             public string Name { get; }
@@ -92,7 +97,7 @@ namespace WPILib.SmartDashboardNS
         internal SendableRegistry()
         {
             MethodInfo? cwtEnumerable = typeof(ConditionalWeakTable<ISendable, Component>).GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.EndsWith("GetEnumerator"))
+                .Where(x => x.Name.EndsWith("GetEnumerator", StringComparison.CurrentCulture))
                 .Where(x => x.ReturnType == typeof(IEnumerator<KeyValuePair<ISendable, Component>>) && x.GetParameters().Length == 0)
                 .FirstOrDefault();
 
@@ -378,6 +383,16 @@ namespace WPILib.SmartDashboardNS
 
         public void Publish(ISendable sendable, NetworkTable table)
         {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            if (sendable == null)
+            {
+                throw new ArgumentNullException(nameof(sendable));
+            }
+
             lock (mutex)
             {
                 var comp = GetOrAdd(sendable);
@@ -433,7 +448,9 @@ namespace WPILib.SmartDashboardNS
                     {
                         callback(ref cbData);
                     }
+#pragma warning disable CA1031 // Do not catch general exception types
                     catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
                     {
                         DriverStation.ReportError("Unhandled exception calling LiveWindow for " + comp.Name + ": " + ex.Message, false);
                     }

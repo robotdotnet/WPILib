@@ -5,12 +5,12 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class AnalogTrigger : ISendable, IDisposable
+    public sealed class AnalogTrigger : ISendable, IDisposable
     {
-        protected internal readonly int m_port;
-        protected readonly AnalogInput? m_analogInput;
-        protected readonly DutyCycle? m_dutyCycle;
-        protected readonly bool m_ownsAnalog;
+        internal readonly int m_port;
+        private readonly AnalogInput? m_analogInput;
+        private readonly DutyCycle? m_dutyCycle;
+        private readonly bool m_ownsAnalog;
 
         public AnalogTrigger(int channel)
             : this(new AnalogInput(channel))
@@ -21,7 +21,7 @@ namespace WPILib
 
         public AnalogTrigger(AnalogInput analogInput)
         {
-            m_analogInput = analogInput;
+            m_analogInput = analogInput ?? throw new ArgumentNullException(nameof(analogInput));
             m_port = Hal.AnalogTriggerLowLevel.Initialize(analogInput.m_port);
 
             var index = Index;
@@ -32,7 +32,7 @@ namespace WPILib
 
         public AnalogTrigger(DutyCycle dutyCycle)
         {
-            m_dutyCycle = dutyCycle;
+            m_dutyCycle = dutyCycle ?? throw new ArgumentNullException(nameof(dutyCycle));
 
             m_port = Hal.AnalogTriggerLowLevel.InitializeDutyCycle(dutyCycle.m_handle);
 

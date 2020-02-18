@@ -3,7 +3,7 @@ using Hal;
 
 namespace WPILib
 {
-    public class AddressableLED : IDisposable
+    public sealed class AddressableLED : IDisposable
     {
 
 

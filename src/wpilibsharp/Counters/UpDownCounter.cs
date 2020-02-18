@@ -3,7 +3,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib.Counters
 {
-    public class UpDownCounter : ISendable, IDisposable
+    public sealed class UpDownCounter : ISendable, IDisposable
     {
 
         private IDigitalSource? m_upSource;

@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace WPILib
 {
-    public class AsynchronousInterrupt : IDisposable
+    public sealed class AsynchronousInterrupt : IDisposable
     {
         private readonly SynchronousInterrupt m_synchronousInterrupt;
 
@@ -34,9 +34,11 @@ namespace WPILib
             if (m_interruptThread != null) return;
 
             m_threadRunSource = new CancellationTokenSource();
-            m_interruptThread = new Thread(ThreadMain);
-            m_interruptThread.Name = $"Interrupt Thread";
-            m_interruptThread.IsBackground = true;
+            m_interruptThread = new Thread(ThreadMain)
+            {
+                Name = $"Interrupt Thread",
+                IsBackground = true
+            };
             m_interruptThread.Start();
         }
 
@@ -61,6 +63,7 @@ namespace WPILib
         {
             Disable();
             m_synchronousInterrupt.Dispose();
+            m_threadRunSource.Dispose();
         }
     }
 }

@@ -81,6 +81,11 @@ namespace WPILib.ShuffleboardNS
 
         public override void BuildInto(NetworkTable parentTable, NetworkTable metaTable)
         {
+            if (parentTable == null)
+            {
+                throw new ArgumentNullException(nameof(parentTable));
+            }
+
             BuildMetadata(metaTable);
             var table = parentTable.GetSubTable(Title);
             table.GetEntry(".type").SetString("ShuffleboardLayout");
@@ -97,6 +102,11 @@ namespace WPILib.ShuffleboardNS
 
         public ShuffleboardLayout GetLayout(string title, ILayoutType layoutType)
         {
+            if (layoutType == null)
+            {
+                throw new ArgumentNullException(nameof(layoutType));
+            }
+
             return m_helper.GetLayout(title, layoutType.LayoutName);
         }
 

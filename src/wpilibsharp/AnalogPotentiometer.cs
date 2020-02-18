@@ -5,7 +5,7 @@ using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
-    public class AnalogPotentiometer : IPotentiometer, ISendable, IDisposable
+    public sealed class AnalogPotentiometer : IPotentiometer, ISendable, IDisposable
     {
         private readonly AnalogInput m_analogInput;
         private readonly bool m_allocatedChannel;

@@ -4,10 +4,10 @@ namespace WPILib.ShuffleboardNS
 {
     internal sealed class RecordingController
     {
-        private static readonly string kRecordingTableName = "/Shuffleboard/.recording/";
-        private static readonly string kRecordingControlKey = kRecordingTableName + "RecordData";
-        private static readonly string kRecordingFileNameFormatKey = kRecordingTableName + "FileNameFormat";
-        private static readonly string kEventMarkerTableName = kRecordingTableName + "events";
+        private const string RecordingTableName = "/Shuffleboard/.recording/";
+        private const string RecordingControlKey = RecordingTableName + "RecordData";
+        private const string RecordingFileNameFormatKey = RecordingTableName + "FileNameFormat";
+        private const string EventMarkerTableName = RecordingTableName + "events";
 
         private readonly NetworkTableEntry m_recordingControlEntry;
         private readonly NetworkTableEntry m_recordingFileNameFormatEntry;
@@ -15,9 +15,9 @@ namespace WPILib.ShuffleboardNS
 
         internal RecordingController(NetworkTableInstance ntInstance)
         {
-            m_recordingControlEntry = ntInstance.GetEntry(kRecordingControlKey);
-            m_recordingFileNameFormatEntry = ntInstance.GetEntry(kRecordingFileNameFormatKey);
-            m_eventsTable = ntInstance.GetTable(kEventMarkerTableName);
+            m_recordingControlEntry = ntInstance.GetEntry(RecordingControlKey);
+            m_recordingFileNameFormatEntry = ntInstance.GetEntry(RecordingFileNameFormatKey);
+            m_eventsTable = ntInstance.GetTable(EventMarkerTableName);
         }
 
         public void StartRecording()

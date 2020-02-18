@@ -5,7 +5,7 @@ using Hal;
 
 namespace WPILib
 {
-    public class AnalogAccelerometer : ISendable, IDisposable
+    public sealed class AnalogAccelerometer : ISendable, IDisposable
     {
         private readonly AnalogInput m_analogInput;
         private double m_voltsPerG = 1.0;
@@ -21,7 +21,7 @@ namespace WPILib
 
         public AnalogAccelerometer(AnalogInput analogInput)
         {
-            m_analogInput = analogInput;
+            m_analogInput = analogInput ?? throw new ArgumentNullException(nameof(analogInput));
             UsageReporting.Report(ResourceType.Accelerometer, analogInput.Channel + 1);
             SendableRegistry.Instance.AddLW(this, "Accelerometer", analogInput.Channel);
         }

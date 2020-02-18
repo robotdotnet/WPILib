@@ -4,10 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>WPILibSharp</AssemblyName>
     <RootNamespace>WPILib</RootNamespace>
+    <NoWarn>1701;1702;1591;CA1303;CA1044;CA2225</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="UnitsNet" Version="4.44.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

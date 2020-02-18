@@ -6,13 +6,13 @@ using NetworkTables;
 
 namespace WPILib.SmartDashboardNS
 {
-    public class SendableChooser<T> : ISendable, IDisposable
+    public sealed class SendableChooser<T> : ISendable, IDisposable
     {
-        private static readonly string DEFAULT = "default";
-        private static readonly string SELECTED = "selected";
-        private static readonly string ACTIVE = "active";
-        private static readonly string OPTIONS = "options";
-        private static readonly string INSTANCE = "instance";
+        private const string DEFAULT = "default";
+        private const string SELECTED = "selected";
+        private const string ACTIVE = "active";
+        private const string OPTIONS = "options";
+        private const string INSTANCE = "instance";
 
         private readonly Dictionary<string, T> m_map = new Dictionary<string, T>();
         private string m_defaultChoice = "";
@@ -34,15 +34,15 @@ namespace WPILib.SmartDashboardNS
             SendableRegistry.Instance.Remove(this);
         }
 
-        public void AddOption(string name, T obj)
+        public void AddOption(string name, T option)
         {
-            m_map.Add(name, obj);
+            m_map.Add(name, option);
         }
 
-        public void SetDefaultOption(string name, T obj)
+        public void SetDefaultOption(string name, T option)
         {
             m_defaultChoice = name;
-            AddOption(name, obj);
+            AddOption(name, option);
         }
 
         public T Selected

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NetworkTables;
 
 namespace WPILib.ShuffleboardNS
@@ -7,14 +8,9 @@ namespace WPILib.ShuffleboardNS
     {
         private string? m_type;
 
-        protected Dictionary<string, object>? m_properties;
+        //protected Dictionary<string, object>? m_properties;
 
-        protected bool m_metadataDirty = true;
-
-        protected int m_column = -1;
-        protected int m_row = -1;
-        protected int m_width = -1;
-        protected int m_height = -1;
+        protected bool MetadataDirty { get; set; } = true;
 
         protected ShuffleboardComponent(IShuffleboardContainer parent, string title, string? type = null)
         {
@@ -31,13 +27,19 @@ namespace WPILib.ShuffleboardNS
             protected set
             {
                 m_type = value;
-                m_metadataDirty = true;
+                MetadataDirty = true;
             }
         }
 
         public string Title { get; }
 
-        internal Dictionary<string, object>? Properites => m_properties;
+        protected IDictionary<string, object> Properties { get; } = new Dictionary<string, object>();
+
+        protected int Column { get; set; } = -1;
+        protected int Row { get; set; } = -1;
+        protected int Width { get; set; } = -1;
+
+        protected int Height { get; set; } = -1;
 
         public abstract void BuildInto(NetworkTable parentTable, NetworkTable metaTable);
     }
@@ -50,32 +52,46 @@ namespace WPILib.ShuffleboardNS
         }
 
 
-        public T WithProperties(Dictionary<string, object>? properties)
+        public T WithProperties(IDictionary<string, object> properties)
         {
-            m_properties = properties;
-            m_metadataDirty = true;
+            if (properties == null)
+            {
+                throw new ArgumentNullException(nameof(properties));
+            }
+
+            Properties.Clear();
+            foreach (var prop in properties)
+            {
+                Properties.Add(prop.Key, prop.Value);
+            }
+            MetadataDirty = true;
             return (T)this;
         }
 
         public T WithPosition(int columnIndex, int rowIndex)
         {
-            m_column = columnIndex;
-            m_row = rowIndex;
-            m_metadataDirty = true;
+            Column = columnIndex;
+            Row = rowIndex;
+            MetadataDirty = true;
             return (T)this;
         }
 
         public T WithSize(int width, int height)
         {
-            m_width = width;
-            m_height = height;
-            m_metadataDirty = true;
+            Width = width;
+            Height = height;
+            MetadataDirty = true;
             return (T)this;
         }
 
         protected void BuildMetadata(NetworkTable metaTable)
         {
-            if (!m_metadataDirty) return;
+            if (metaTable == null)
+            {
+                throw new ArgumentNullException(nameof(metaTable));
+            }
+
+            if (!MetadataDirty) return;
 
             var preferredComponentEntry = metaTable.GetEntry("PreferredComponent");
 
@@ -90,34 +106,34 @@ namespace WPILib.ShuffleboardNS
 
             var sizeEntry = metaTable.GetEntry("Size");
 
-            if (m_width <= 0 || m_height <= 0)
+            if (Width <= 0 || Height <= 0)
             {
                 sizeEntry.Delete();
             }
             else
             {
-                sizeEntry.SetDoubleArray(stackalloc double[] { m_width, m_height });
+                sizeEntry.SetDoubleArray(stackalloc double[] { Width, Height });
             }
 
             var positionEntry = metaTable.GetEntry("Position");
-            if (m_column < 0 || m_row < 0)
+            if (Column < 0 || Row < 0)
             {
                 positionEntry.Delete();
             }
             else
             {
-                positionEntry.SetDoubleArray(stackalloc double[] { m_column, m_row });
+                positionEntry.SetDoubleArray(stackalloc double[] { Column, Row });
             }
 
-            if (Properites != null)
+            if (Properties != null)
             {
                 var propTable = metaTable.GetSubTable("Properties");
-                foreach (var prop in Properites)
+                foreach (var prop in Properties)
                 {
                     propTable.GetEntry(prop.Key).SetValue(prop.Value);
                 }
             }
-            m_metadataDirty = false;
+            MetadataDirty = false;
         }
 
 

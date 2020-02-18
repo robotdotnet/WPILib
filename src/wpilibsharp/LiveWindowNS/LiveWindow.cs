@@ -105,6 +105,7 @@ namespace WPILib.LiveWindowNS
                         }
                     }
                 }
+                enabledEntry.SetBoolean(value);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿using WPILib;
 using WPILib.Counters;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace roboRIODev
 {

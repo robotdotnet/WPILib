@@ -2,7 +2,7 @@
 
 namespace WPILib
 {
-    public class SynchronousInterrupt : IDisposable
+    public sealed class SynchronousInterrupt : IDisposable
     {
         private readonly IDigitalSource m_source;
 
@@ -11,7 +11,7 @@ namespace WPILib
 
         public SynchronousInterrupt(IDigitalSource source)
         {
-            m_source = source;
+            m_source = source ?? throw new ArgumentNullException(nameof(source));
             m_interruptHandle = Hal.Interrupts.Initialize(false);
             Hal.Interrupts.Request(m_interruptHandle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);
         }
@@ -46,7 +46,9 @@ namespace WPILib
 
         public TimeSpan FallingTimestamp => TimeSpan.FromTicks((long)(Hal.Interrupts.ReadInterruptFallingTimestamp(m_interruptHandle) * Timer.TicksPerMicrosecond));
 
+#pragma warning disable CA1822 // Mark members as static
         public void WakeupWaitingInterrupt()
+#pragma warning restore CA1822 // Mark members as static
         {
 
         }

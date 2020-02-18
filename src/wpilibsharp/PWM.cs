@@ -1,10 +1,13 @@
 ﻿using Hal;
 using System;
+using System.Globalization;
 using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {
+#pragma warning disable CA1063 // Implement IDisposable Correctly
     public class PWM : MotorSafety, ISendable, IDisposable
+#pragma warning restore CA1063 // Implement IDisposable Correctly
     {
         public enum PeriodMultiplierType
         {
@@ -32,13 +35,16 @@ namespace WPILib
             SafetyEnabled = false;
         }
 
-        public void Dispose()
+#pragma warning disable CA1063 // Implement IDisposable Correctly
+        public virtual void Dispose()
+#pragma warning restore CA1063 // Implement IDisposable Correctly
         {
             SendableRegistry.Instance.Remove(this);
             if (m_handle == 0) return;
             SetDisabled();
             Hal.PWMLowLevel.FreePort(m_handle);
             m_handle = 0;
+            GC.SuppressFinalize(this);
         }
 
         public override void StopMotor()
@@ -51,7 +57,7 @@ namespace WPILib
             Hal.PWMLowLevel.SetConfig(m_handle, max, deadbandMax, center, deadbandMin, min);
         }
 
-        public override string Description => $"PWM {Channel.ToString()}";
+        public override string Description => $"PWM {Channel.ToString(CultureInfo.InvariantCulture)}";
 
         public int Channel => m_channel;
 
@@ -120,8 +126,13 @@ namespace WPILib
             Hal.PWMLowLevel.LatchZero(m_handle);
         }
 
-        void ISendable.InitSendable(ISendableBuilder builder)
+        public virtual void InitSendable(ISendableBuilder builder)
         {
+            if (builder == null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
             builder.SmartDashboardType = "PWM";
             builder.IsActuator = true;
             builder.SafeState = SetDisabled;
