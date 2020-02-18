@@ -1,4 +1,4 @@
-﻿using WPILib.SmartDashboard;
+﻿using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {

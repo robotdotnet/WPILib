@@ -2,7 +2,7 @@
 using Hal;
 using UnitsNet;
 using WPILib.Interfaces;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {

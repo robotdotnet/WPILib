@@ -3,6 +3,7 @@ using NetworkTables;
 using System;
 using System.IO;
 using System.Threading;
+using WPILib.LiveWindowNS;
 
 namespace WPILib
 {
@@ -198,7 +199,7 @@ namespace WPILib
                 .SetBoolean(false);
 
             m_ds = DriverStation.Instance;
-            LiveWindow.LiveWindow.Enabled = false;
+            LiveWindow.Enabled = false;
 
         }
 

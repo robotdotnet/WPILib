@@ -1,5 +1,5 @@
 ﻿using Hal;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib
 {

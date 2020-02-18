@@ -1,6 +1,6 @@
 ﻿using UnitsNet;
 using System;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 using Hal;
 
 namespace WPILib

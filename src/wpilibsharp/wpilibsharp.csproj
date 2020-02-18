@@ -16,4 +16,9 @@
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ShuffleboardNS\" />
+    <Folder Include="SmartDashboardNS\" />
+  </ItemGroup>
+
 </Project>

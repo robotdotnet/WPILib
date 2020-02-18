@@ -1,6 +1,6 @@
 ﻿using System;
 using UnitsNet;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib.Counters
 {

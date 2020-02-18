@@ -1,5 +1,5 @@
 ﻿using System;
-using WPILib.SmartDashboard;
+using WPILib.SmartDashboardNS;
 
 namespace WPILib.Counters
 {
