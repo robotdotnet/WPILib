@@ -48,7 +48,7 @@ namespace WPIUtil.ILGeneration
             int offset = isStaticMethod ? 0 : 1;
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + offset);
+                generator.Emit(OpCodes.Ldarg, (short)(i + offset));
             }
             if (sizeof(IntPtr) == 8)
             {
@@ -85,7 +85,7 @@ namespace WPIUtil.ILGeneration
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + offset);
+                generator.Emit(OpCodes.Ldarg, (short)(i + offset));
             }
 
             generator.Emit(OpCodes.Ldloca_S, (byte)0);
@@ -141,7 +141,7 @@ namespace WPIUtil.ILGeneration
             int offset = isStaticMethod ? 0 : 1;
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + offset);
+                generator.Emit(OpCodes.Ldarg, (short)(i + offset));
             }
 
             if (sizeof(IntPtr) == 8)
@@ -195,7 +195,7 @@ namespace WPIUtil.ILGeneration
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                generator.Emit(OpCodes.Ldarg, i + offset);
+                generator.Emit(OpCodes.Ldarg, (short)(i + offset));
             }
 
             generator.Emit(OpCodes.Ldloca_S, (byte)0);
@@ -220,7 +220,7 @@ namespace WPIUtil.ILGeneration
             generator.Emit(OpCodes.Brfalse_S, retLabel);
 
             generator.Emit(OpCodes.Ldloc_0);
-            generator.Emit(OpCodes.Ldarg, checkParameterNumber + offset);
+            generator.Emit(OpCodes.Ldarg, (short)(checkParameterNumber + offset));
 
             var checkFunctionParameters = checkFunction.GetParameters();
 
