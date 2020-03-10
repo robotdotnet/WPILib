@@ -8,6 +8,8 @@ namespace Hal.Natives
     {
         int HAL_SendError(int isError, int errorCode, int isLVCode, byte* details, byte* location, byte* callStack, int printMsg);
 
+        int HAL_SendConsoleLine(byte* line);
+
         void HAL_GetControlWord(ControlWord* controlWord);
 
         AllianceStationID HAL_GetAllianceStation(int* status);

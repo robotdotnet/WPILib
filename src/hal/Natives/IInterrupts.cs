@@ -35,5 +35,7 @@ namespace Hal.Natives
 
         [StatusCheckLastParameter] long HAL_WaitForInterrupt(int interruptHandle, double timeout, int ignorePrevious);
 
+        [StatusCheckLastParameter] void HAL_ReleaseWaitingInterrupt(int inerruptHandle);
+
     }
 }
