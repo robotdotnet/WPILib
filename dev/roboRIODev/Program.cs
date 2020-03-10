@@ -46,7 +46,7 @@ namespace roboRIODev
 
             DigitalGlitchFilter filter = new DigitalGlitchFilter();
             filter.SetPeriod(TimeSpan.FromSeconds(1));
-            filter.Add(di);
+            //filter.Add(di);
 
             interrupt = new AsynchronousInterrupt(di, (r, f) =>
             {
@@ -80,11 +80,13 @@ namespace roboRIODev
 
             if (DriverStation.Instance.GetStickButton(0, 1))
             {
+                Console.WriteLine("Disable");
                 interrupt.Disable();
             }
 
             if (DriverStation.Instance.GetStickButton(0, 2))
             {
+                Console.WriteLine("Enable");
                 interrupt.Enable();
             }
             //sparkMax.SetVoltage(ElectricPotential.FromVolts(5));

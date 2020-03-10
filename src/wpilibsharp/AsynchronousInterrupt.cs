@@ -22,7 +22,11 @@ namespace WPILib
         {
             while (!m_threadRunSource.IsCancellationRequested)
             {
-                var result = m_synchronousInterrupt.WaitForInterrupt(TimeSpan.FromSeconds(10));
+                var result = m_synchronousInterrupt.WaitForInterrupt(TimeSpan.FromSeconds(1));
+                if (m_threadRunSource.IsCancellationRequested)
+                {
+                    break;
+                }
                 if (result == 0)
                 {
                     continue;
