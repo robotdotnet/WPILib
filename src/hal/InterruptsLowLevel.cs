@@ -6,7 +6,7 @@ using WPIUtil.NativeUtilities;
 namespace Hal
 {
     [NativeInterface(typeof(IInterrupts))]
-    public static unsafe class Interrupts
+    public static unsafe class InterruptsLowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
@@ -71,5 +71,9 @@ namespace Hal
             return lowLevel.HAL_WaitForInterrupt(interruptHandle, timeout, ignorePrevious ? 1 : 0);
         }
 
+        public static void ReleaseWaitingInterrupt(int interruptHandle)
+        {
+            lowLevel.HAL_ReleaseWaitingInterrupt(interruptHandle);
+        }
     }
 }

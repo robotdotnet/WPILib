@@ -1,4 +1,6 @@
-﻿using WPILib;
+﻿using System;
+using System.Threading;
+using WPILib;
 using WPILib.Counters;
 using WPILib.SmartDashboardNS;
 
@@ -23,6 +25,10 @@ namespace roboRIODev
         private ExternalDirectionCounter externalDirectionCounter;
         private ExternalDirectionCounter externalDirectionCounter2x;
 
+        AsynchronousInterrupt interrupt;
+
+        int count = 0;
+
         public override void RobotInit()
         {
             absoluteTach = new Tachometer(di);
@@ -38,6 +44,20 @@ namespace roboRIODev
             externalDirectionCounter2x.EdgeConfiguration = EdgeConfiguration.kBothEdges;
             externalDirectionCounter2x.ReverseDirection = true;
 
+            DigitalGlitchFilter filter = new DigitalGlitchFilter();
+            filter.SetPeriod(TimeSpan.FromSeconds(1));
+            filter.Add(di);
+
+            interrupt = new AsynchronousInterrupt(di, (r, f) =>
+            {
+                Console.WriteLine("Interrupt Occured " + count);
+                count++;
+                //Thread.Sleep(20);
+            });
+
+            interrupt.SetInterruptEdges(true, false);
+
+            interrupt.Enable();
         }
 
 
@@ -58,6 +78,15 @@ namespace roboRIODev
             SmartDashboard.PutNumber("Joystick", DriverStation.Instance.GetStickAxis(0, 1));
             sparkMax.Set(DriverStation.Instance.GetStickAxis(0, 1));
 
+            if (DriverStation.Instance.GetStickButton(0, 1))
+            {
+                interrupt.Disable();
+            }
+
+            if (DriverStation.Instance.GetStickButton(0, 2))
+            {
+                interrupt.Enable();
+            }
             //sparkMax.SetVoltage(ElectricPotential.FromVolts(5));
             //int idxLocal = idx;
             //try

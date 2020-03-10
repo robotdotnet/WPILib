@@ -22,7 +22,11 @@ namespace WPILib
         {
             while (!m_threadRunSource.IsCancellationRequested)
             {
-                var result = m_synchronousInterrupt.WaitForInterrupt();
+                var result = m_synchronousInterrupt.WaitForInterrupt(TimeSpan.FromSeconds(10));
+                if (result == 0)
+                {
+                    continue;
+                }
                 m_callback((result & EdgeConfiguration.kRisingEdge) != 0,
                            (result & EdgeConfiguration.kFallingEdge) != 0);
             }

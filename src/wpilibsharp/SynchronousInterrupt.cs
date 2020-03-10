@@ -12,25 +12,13 @@ namespace WPILib
         public SynchronousInterrupt(IDigitalSource source)
         {
             m_source = source ?? throw new ArgumentNullException(nameof(source));
-            m_interruptHandle = Hal.Interrupts.Initialize(false);
-            Hal.Interrupts.Request(m_interruptHandle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);
-        }
-
-        public EdgeConfiguration WaitForInterrupt(bool ignorePrevious = true)
-        {
-            var result = Hal.Interrupts.WaitForInterrupt(m_interruptHandle, 0, ignorePrevious);
-            var rising = ((result & 0xFF) != 0) ? EdgeConfiguration.kRisingEdge : EdgeConfiguration.kNone;
-            var falling = ((result & 0xFF00) != 0) ? EdgeConfiguration.kFallingEdge : EdgeConfiguration.kNone;
-            return rising | falling;
+            m_interruptHandle = Hal.InterruptsLowLevel.Initialize(true);
+            Hal.InterruptsLowLevel.Request(m_interruptHandle, m_source.PortHandleForRouting, m_source.AnalogTriggerTypeForRouting);
         }
 
         public EdgeConfiguration WaitForInterrupt(TimeSpan timeout, bool ignorePrevious = true)
         {
-            if (timeout == TimeSpan.Zero)
-            {
-                return WaitForInterrupt(ignorePrevious);
-            }
-            var result = Hal.Interrupts.WaitForInterrupt(m_interruptHandle, timeout.TotalSeconds, ignorePrevious);
+            var result = Hal.InterruptsLowLevel.WaitForInterrupt(m_interruptHandle, timeout.TotalSeconds, ignorePrevious);
 
             var rising = ((result & 0xFF) != 0) ? EdgeConfiguration.kRisingEdge : EdgeConfiguration.kNone;
             var falling = ((result & 0xFF00) != 0) ? EdgeConfiguration.kFallingEdge : EdgeConfiguration.kNone;
@@ -39,24 +27,22 @@ namespace WPILib
 
         public void SetInterruptEdges(bool risingEdge, bool fallingEdge)
         {
-            Hal.Interrupts.SetInterruptUpSourceEdge(m_interruptHandle, risingEdge, fallingEdge);
+            Hal.InterruptsLowLevel.SetInterruptUpSourceEdge(m_interruptHandle, risingEdge, fallingEdge);
         }
 
-        public TimeSpan RisingTimestamp => TimeSpan.FromTicks((long)(Hal.Interrupts.ReadInterruptRisingTimestamp(m_interruptHandle) * Timer.TicksPerMicrosecond));
+        public TimeSpan RisingTimestamp => TimeSpan.FromTicks((long)(Hal.InterruptsLowLevel.ReadInterruptRisingTimestamp(m_interruptHandle) * Timer.TicksPerMicrosecond));
 
-        public TimeSpan FallingTimestamp => TimeSpan.FromTicks((long)(Hal.Interrupts.ReadInterruptFallingTimestamp(m_interruptHandle) * Timer.TicksPerMicrosecond));
+        public TimeSpan FallingTimestamp => TimeSpan.FromTicks((long)(Hal.InterruptsLowLevel.ReadInterruptFallingTimestamp(m_interruptHandle) * Timer.TicksPerMicrosecond));
 
-#pragma warning disable CA1822 // Mark members as static
         public void WakeupWaitingInterrupt()
-#pragma warning restore CA1822 // Mark members as static
         {
-
+            Hal.InterruptsLowLevel.ReleaseWaitingInterrupt(m_interruptHandle);
         }
 
         public unsafe void Dispose()
         {
             // Clean will wake up any waiting interrupts
-            Hal.Interrupts.Clean(m_interruptHandle);
+            Hal.InterruptsLowLevel.Clean(m_interruptHandle);
         }
     }
 }
