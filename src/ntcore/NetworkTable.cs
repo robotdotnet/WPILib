@@ -185,7 +185,7 @@ namespace NetworkTables
             {
                 var relativeKey = info.Name.AsSpan().Slice(prefixLen);
                 int endSubTable = relativeKey.IndexOf(PathSeparator);
-                if (endSubTable == 1)
+                if (endSubTable == -1)
                 {
                     continue;
                 }
