@@ -231,7 +231,7 @@ namespace NetworkTables
             return new NetworkTableValue(new ManagedValue(value, NtCore.Now()));
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NetworkTableValue v)
             {

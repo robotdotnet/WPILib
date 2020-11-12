@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -31,7 +32,7 @@ namespace WPILib.SmartDashboardNS
             return components.Remove(key);
         }
 
-        public bool TryGetValue(ISendable key, out SendableRegistry.Component value)
+        public bool TryGetValue(ISendable key, [MaybeNullWhen(false)]out SendableRegistry.Component value)
         {
             return components.TryGetValue(key, out value);
         }

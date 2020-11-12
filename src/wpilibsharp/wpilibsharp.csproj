@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>WPILibSharp</AssemblyName>
     <RootNamespace>WPILib</RootNamespace>
     <NoWarn>1701;1702;1591;CA1303;CA1044;CA2225</NoWarn>

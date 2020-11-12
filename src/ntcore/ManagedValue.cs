@@ -26,7 +26,7 @@ namespace NetworkTables
                         hash = (hash * 7) + Data.VDouble.GetHashCode();
                         break;
                     case NtType.String:
-                        hash = (hash * 7) + Data.VString!.GetHashCode();
+                        hash = (hash * 7) + string.GetHashCode(Data.VString!, StringComparison.InvariantCultureIgnoreCase);
                         break;
                     case NtType.Rpc:
                     case NtType.Raw:
@@ -46,7 +46,7 @@ namespace NetworkTables
             }
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is ManagedValue v)
             {

@@ -233,7 +233,7 @@ namespace NetworkTables
             return new RefNetworkTableValue(new RefManagedValue(value, NtCore.Now()));
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return false;
         }

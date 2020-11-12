@@ -44,7 +44,7 @@ namespace WPILib
             Disable();
         }
 
-        public int CompareTo(Watchdog other)
+        public int CompareTo(Watchdog? other)
         {
             if (other == null)
             {
@@ -154,7 +154,7 @@ namespace WPILib
                 {
                     if (m_watchdogs.Count > 0)
                     {
-                        bool timedOut = Monitor.Wait(m_lockObject, m_watchdogs.First.Value.m_expirationTime - Timer.FPGATimestamp);
+                        bool timedOut = Monitor.Wait(m_lockObject, m_watchdogs.First!.Value.m_expirationTime - Timer.FPGATimestamp);
                         if (timedOut)
                         {
                             if (m_watchdogs.Count == 0 || m_watchdogs.First.Value.m_expirationTime > Timer.FPGATimestamp)

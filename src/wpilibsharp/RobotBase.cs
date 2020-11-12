@@ -26,7 +26,7 @@ namespace WPILib
             {
                 string robotName = typeof(Robot).Name;
                 DriverStation.ReportError(("Unhandled exception instanciating robot "
-                    + robotName + " " + ex.Message), ex.StackTrace);
+                    + robotName + " " + ex.Message), ex.StackTrace!);
                 DriverStation.ReportWarning("Robots should not quit, but yours did!", false);
                 DriverStation.ReportError("Could not instanciate robot " + robotName + "!", false);
                 return;
@@ -45,7 +45,7 @@ namespace WPILib
                 }
                 catch (IOException ex)
                 {
-                    DriverStation.ReportError("Could not write FRC_Lib_Version.ini: " + ex.Message, ex.StackTrace);
+                    DriverStation.ReportError("Could not write FRC_Lib_Version.ini: " + ex.Message, ex.StackTrace!);
                 }
             }
 
@@ -59,7 +59,7 @@ namespace WPILib
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 Console.WriteLine(ex);
-                DriverStation.ReportError("Unhandled Exception: " + ex.Message, ex.StackTrace);
+                DriverStation.ReportError("Unhandled Exception: " + ex.Message, ex.StackTrace!);
                 errorOnExit = true;
             }
             finally

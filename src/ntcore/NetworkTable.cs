@@ -227,7 +227,7 @@ namespace NetworkTables
             return Path.Equals(other.Path, StringComparison.CurrentCulture) && Instance.Equals(other.Instance);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NetworkTable v)
             {
@@ -241,7 +241,7 @@ namespace NetworkTables
             unchecked
             {
                 int hash = 13;
-                hash = (hash * 7) + Path.GetHashCode();
+                hash = (hash * 7) + string.GetHashCode(Path, StringComparison.InvariantCultureIgnoreCase);
                 hash = (hash * 7) + Instance.GetHashCode();
                 return hash;
             }

@@ -98,7 +98,7 @@ namespace WPILib
         {
             get
             {
-                return 0;
+                return m_distancePerRotation;
             }
         }
 

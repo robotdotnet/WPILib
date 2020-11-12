@@ -36,7 +36,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtHandle v)
             {
@@ -136,7 +136,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtInst v)
             {
@@ -236,7 +236,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtEntry v)
             {
@@ -336,7 +336,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtEntryListener v)
             {
@@ -436,7 +436,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtEntryListenerPoller v)
             {
@@ -536,7 +536,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtConnectionListener v)
             {
@@ -636,7 +636,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtConnectionListenerPoller v)
             {
@@ -736,7 +736,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtLogger v)
             {
@@ -836,7 +836,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtLoggerPoller v)
             {
@@ -936,7 +936,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtRpcCall v)
             {
@@ -1036,7 +1036,7 @@ namespace NetworkTables.Natives
         /// <param name="obj">Object to check</param>
         /// <returns>True if equal</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NtRpcCallPoller v)
             {

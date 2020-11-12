@@ -267,7 +267,7 @@ namespace NetworkTables
             return NtCore.LoadEntries(Handle, filename, prefix);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             if (obj is NetworkTableInstance v)
             {
