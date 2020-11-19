@@ -336,7 +336,7 @@ namespace NetworkTables.Natives
 
 
 
-        unsafe byte* NT_LoadPersistent(NtInst inst, byte* filename, IntPtr warnFunc);
+        unsafe byte* NT_LoadPersistent(NtInst inst, byte* filename, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void> warnFunc);
 
 
 
@@ -346,7 +346,7 @@ namespace NetworkTables.Natives
 
 
 
-        unsafe byte* NT_LoadEntries(NtInst inst, byte* filename, byte* prefix, UIntPtr prefix_len, IntPtr warnFunc);
+        unsafe byte* NT_LoadEntries(NtInst inst, byte* filename, byte* prefix, UIntPtr prefix_len, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void> warnFunc);
 
 
 

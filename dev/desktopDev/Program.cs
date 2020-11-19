@@ -69,12 +69,12 @@ namespace desktopDev
             map.Add(holder, new Container(holder));
             //holder = null;
 
-            while (map.Any())
-            {
-                //Console.WriteLine(map.Count());
-                GC.Collect();
-            }
-            //RobotBase.StartRobot<Robot>();
+            //while (map.Any())
+            //{
+            //    //Console.WriteLine(map.Count());
+            //    GC.Collect();
+            //}
+            RobotBase.StartRobot<Robot>();
         }
     }
 }

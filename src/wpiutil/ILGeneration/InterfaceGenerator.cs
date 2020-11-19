@@ -111,6 +111,11 @@ namespace WPIUtil.ILGeneration
                 var typeBuilder = moduleBuilder.DefineType("Default" + t.Name);
                 typeBuilder.AddInterfaceImplementation(t);
 
+                if (t.Name == "IInterrupts")
+                {
+                    ;
+                }
+
                 // Check if interface is globally checked by something. If so, load the checked by method ref
                 var statusCheckMethod = FindStatusCheckMethod(t);
 
@@ -118,6 +123,7 @@ namespace WPIUtil.ILGeneration
 
                 foreach (var method in methods.Where(x => x.IsAbstract))
                 {
+                    var rawParams = method.GetParameters();
                     var parameters = method.GetParameters().Select(x => x.ParameterType).ToArray();
                     var methodBuilder = typeBuilder.DefineMethod(method.Name, MethodAttributes.Virtual | MethodAttributes.Public, method.ReturnType, parameters);
                     methodBuilder.SetImplementationFlags(MethodImplAttributes.AggressiveInlining);

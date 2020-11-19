@@ -7,7 +7,7 @@ namespace Hal.Natives
     [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IMain
     {
-        void HAL_SetMain(void* param, IntPtr mainFunc, IntPtr exitFunc);
+        void HAL_SetMain(void* param, delegate* unmanaged[Cdecl]<void*, void> mainFunc, delegate* unmanaged[Cdecl]<void*, void> exitFunc);
 
         int HAL_HasMain();
 

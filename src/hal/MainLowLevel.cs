@@ -16,7 +16,7 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public static void Set(void* param, IntPtr mainFunc, IntPtr exitFunc)
+        public static void Set(void* param, delegate* unmanaged[Cdecl]<void*, void> mainFunc, delegate* unmanaged[Cdecl]<void*, void> exitFunc)
         {
             lowLevel.HAL_SetMain(param, mainFunc, exitFunc);
         }

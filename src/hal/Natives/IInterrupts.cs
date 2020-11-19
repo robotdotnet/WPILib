@@ -7,9 +7,9 @@ namespace Hal.Natives
     [StatusCheckedBy(typeof(StatusHandling))]
     public unsafe interface IInterrupts
     {
-        [StatusCheckLastParameter] void HAL_AttachInterruptHandler(int interruptHandle, IntPtr handler, void* param);
+        [StatusCheckLastParameter] void HAL_AttachInterruptHandler(int interruptHandle, delegate* unmanaged[Cdecl]<uint, void*, void> handler, IntPtr op, void* param);
 
-        [StatusCheckLastParameter] void HAL_AttachInterruptHandlerThreaded(int interruptHandle, IntPtr handler, void* param);
+        [StatusCheckLastParameter] void HAL_AttachInterruptHandlerThreaded(int interruptHandle, delegate* unmanaged[Cdecl]<uint, void*, void> handler, void* param);
 
         [StatusCheckLastParameter] void* HAL_CleanInterrupts(int interruptHandle);
 

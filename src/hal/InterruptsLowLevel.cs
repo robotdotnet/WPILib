@@ -1,6 +1,8 @@
 ﻿
 using Hal.Natives;
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -16,19 +18,31 @@ namespace Hal
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public static void AttachInterruptHandler(int interruptHandle, IntPtr handler, void* param)
+        [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
+        private static void InterruptHandler(uint mask, void* context)
         {
-            lowLevel.HAL_AttachInterruptHandler(interruptHandle, handler, param);
+            var gcHandle = GCHandle.FromIntPtr((IntPtr)context);
+            var callback = gcHandle.Target as Action<uint>;
+            callback?.Invoke(mask);
         }
 
-        public static void AttachInterruptHandlerThreaded(int interruptHandle, IntPtr handler, void* param)
+        public static void AttachInterruptHandler(int interruptHandle, Action<uint> handler)
         {
-            lowLevel.HAL_AttachInterruptHandlerThreaded(interruptHandle, handler, param);
+            var handle = GCHandle.Alloc(handler);
+            lowLevel.HAL_AttachInterruptHandler(interruptHandle, &InterruptHandler, IntPtr.Zero, GCHandle.ToIntPtr(handle).ToPointer());
         }
 
-        public static void* Clean(int interruptHandle)
+        public static void AttachInterruptHandlerThreaded(int interruptHandle, Action<uint> handler)
         {
-            return lowLevel.HAL_CleanInterrupts(interruptHandle);
+            var handle = GCHandle.Alloc(handler);
+            lowLevel.HAL_AttachInterruptHandlerThreaded(interruptHandle, &InterruptHandler, GCHandle.ToIntPtr(handle).ToPointer());
+        }
+
+        public static void Clean(int interruptHandle)
+        {
+            void* handle = lowLevel.HAL_CleanInterrupts(interruptHandle);
+            var gcHandle = GCHandle.FromIntPtr((IntPtr)handle);
+            gcHandle.Free();
         }
 
         public static void Disable(int interruptHandle)

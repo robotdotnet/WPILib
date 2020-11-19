@@ -1312,7 +1312,9 @@ namespace NetworkTables.Natives
                 {
                     warns.Add($"{(int)line} : {UTF8String.ReadUTF8String(message)}");
                 });
-                var error = m_ntcore.NT_LoadPersistent(inst, buf, fp);
+                var callback = (delegate* unmanaged[Cdecl]<UIntPtr, byte*, void>)fp;
+                var error = m_ntcore.NT_LoadPersistent(inst, buf, callback);
+                GC.KeepAlive(fp);
                 if (error != null)
                 {
                     throw new PersistentException(UTF8String.ReadUTF8String(error));
@@ -1350,7 +1352,9 @@ namespace NetworkTables.Natives
                 {
                     warns.Add($"{(int)line} : {UTF8String.ReadUTF8String(message)}");
                 });
-                var error = m_ntcore.NT_LoadEntries(inst, f, p, pStr.Length, fp);
+                var callback = (delegate* unmanaged[Cdecl] < UIntPtr, byte *, void >)fp;
+                var error = m_ntcore.NT_LoadEntries(inst, f, p, pStr.Length, callback);
+                GC.KeepAlive(fp);
                 if (error != null)
                 {
                     throw new PersistentException(UTF8String.ReadUTF8String(error));
