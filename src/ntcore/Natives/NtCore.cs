@@ -18,21 +18,17 @@ namespace NetworkTables.Natives
     [NativeInterface(typeof(INtCore))]
     public static class NtCore
     {
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static INtCore m_ntcore;
+        private static NtCoreNative m_ntcore = null!;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         private unsafe readonly static char* NullTerminator;
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CA1810 // Initialize reference type static fields inline
         static NtCore()
 #pragma warning restore CA1810 // Initialize reference type static fields inline
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
             unsafe
             {
@@ -44,6 +40,7 @@ namespace NetworkTables.Natives
         public static void Initialize()
         {
             if (m_ntcore != null) return;
+            m_ntcore = new NtCoreNative(null!);
             NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(NtCore).Assembly,
                 "ntcore",
                 out var generator);
@@ -1312,7 +1309,7 @@ namespace NetworkTables.Natives
                 {
                     warns.Add($"{(int)line} : {UTF8String.ReadUTF8String(message)}");
                 });
-                var callback = (delegate* unmanaged[Cdecl]<UIntPtr, byte*, void>)fp;
+                var callback = (delegate* unmanaged[Cdecl] < UIntPtr, byte *, void >)fp;
                 var error = m_ntcore.NT_LoadPersistent(inst, buf, callback);
                 GC.KeepAlive(fp);
                 if (error != null)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -28,7 +29,7 @@ namespace CalliGenerator
             }
         }
 
-        public static void GenerateNoStatusMethod(MethodInfo method, StringBuilder builder)
+        public static void GenerateNoStatusMethod(MethodInfo method, StringBuilder builder, List<string> inits)
         {
             string GenerateSignature(MethodInfo method)
             {
@@ -46,7 +47,8 @@ namespace CalliGenerator
                 return builder.ToString();
             }
 
-            builder.AppendLine($"[NativeFunctionPointer(\"{method.Name}\")]");
+            inits.Add($"{method.Name}Func = ({GenerateSignature(method)})loader.GetProcAddress(\"{method.Name}\");");
+
             builder.AppendLine($"private {GenerateSignature(method)} {method.Name}Func;");
             builder.AppendLine();
 
@@ -97,7 +99,7 @@ namespace CalliGenerator
             builder.AppendLine("}");
         }
 
-        public static void GenerateStatusCheckLastParameterMethod(MethodInfo method, StringBuilder builder)
+        public static void GenerateStatusCheckLastParameterMethod(MethodInfo method, StringBuilder builder, List<string> inits)
         {
             string GenerateSignature(MethodInfo method)
             {
@@ -116,7 +118,8 @@ namespace CalliGenerator
                 return builder.ToString();
             }
 
-            builder.AppendLine($"[NativeFunctionPointer(\"{method.Name}\")]");
+            inits.Add($"{method.Name}Func = ({GenerateSignature(method)})loader.GetProcAddress(\"{method.Name}\");");
+
             builder.AppendLine($"private {GenerateSignature(method)} {method.Name}Func;");
             builder.AppendLine();
 
@@ -184,7 +187,7 @@ namespace CalliGenerator
             builder.AppendLine("}");
         }
 
-        public static void GenerateStatusCheckReturnMethod(MethodInfo method, StringBuilder builder)
+        public static void GenerateStatusCheckReturnMethod(MethodInfo method, StringBuilder builder, List<string> inits)
         {
             if (method.ReturnType == typeof(void))
             {
@@ -207,7 +210,8 @@ namespace CalliGenerator
                 return builder.ToString();
             }
 
-            builder.AppendLine($"[NativeFunctionPointer(\"{method.Name}\")]");
+            inits.Add($"{method.Name}Func = ({GenerateSignature(method)})loader.GetProcAddress(\"{method.Name}\");");
+
             builder.AppendLine($"private {GenerateSignature(method)} {method.Name}Func;");
             builder.AppendLine();
 
@@ -255,7 +259,7 @@ namespace CalliGenerator
             builder.AppendLine("}");
         }
 
-        public static void GenerateStatusCheckRangeMethod(MethodInfo method, StringBuilder builder, StatusCheckRangeAttribute range)
+        public static void GenerateStatusCheckRangeMethod(MethodInfo method, StringBuilder builder, StatusCheckRangeAttribute range, List<string> inits)
         {
             string GenerateSignature(MethodInfo method)
             {
@@ -274,7 +278,8 @@ namespace CalliGenerator
                 return builder.ToString();
             }
 
-            builder.AppendLine($"[NativeFunctionPointer(\"{method.Name}\")]");
+            inits.Add($"{method.Name}Func = ({GenerateSignature(method)})loader.GetProcAddress(\"{method.Name}\");");
+
             builder.AppendLine($"private {GenerateSignature(method)} {method.Name}Func;");
             builder.AppendLine();
 
@@ -363,13 +368,15 @@ namespace CalliGenerator
                 builder.AppendLine("using WPIUtil.ILGeneration;");
                 builder.AppendLine("using System.Runtime.CompilerServices;");
 
-                builder.AppendLine($"namespace {t.type.Namespace}");
+                builder.AppendLine($"namespace {t.attribute!.InterfaceType.Namespace}");
                 builder.AppendLine("{");
 
                 builder.AppendLine($"public unsafe class {t.type.Name}Native : {t.attribute!.InterfaceType.Name}");
                 builder.AppendLine("{");
 
                 var methods = t.attribute!.InterfaceType.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+                List<string> inits = new List<string>();
 
                 foreach (var method in methods.Where(x => x.IsAbstract))
                 {
@@ -378,30 +385,46 @@ namespace CalliGenerator
                     var statusCheckLastParam = method.GetCustomAttribute<StatusCheckLastParameterAttribute>();
                     if (statusCheckRange != null)
                     {
-                        GenerateStatusCheckRangeMethod(method, builder, statusCheckRange);
+                        GenerateStatusCheckRangeMethod(method, builder, statusCheckRange, inits);
                     }
                     else if (statusCheckRet != null)
                     {
-                        GenerateStatusCheckReturnMethod(method, builder);
+                        GenerateStatusCheckReturnMethod(method, builder, inits);
                     }
                     else if (statusCheckLastParam != null)
                     {
-                        GenerateStatusCheckLastParameterMethod(method, builder);
+                        GenerateStatusCheckLastParameterMethod(method, builder, inits);
                     }
                     else
                     {
-                        GenerateNoStatusMethod(method, builder);
+                        GenerateNoStatusMethod(method, builder, inits);
                     }
                     builder.AppendLine();
                     builder.AppendLine();
                 }
                 builder.AppendLine();
 
+                builder.AppendLine($"public {t.type.Name}Native(IFunctionPointerLoader loader)");
+                builder.AppendLine("{");
+                builder.AppendLine("if (loader == null)");
+                builder.AppendLine("{");
+                builder.AppendLine("throw new ArgumentNullException(nameof(loader));");
                 builder.AppendLine("}");
+                builder.AppendLine();
+
+                foreach (var method in inits)
+                {
+                    builder.AppendLine(method);
+                }
+
+                builder.AppendLine("}");
+                builder.AppendLine();
 
                 builder.AppendLine("}");
 
-                File.WriteAllText(Path.Join(folderName, t.type.Name + "Native.cs"), builder.ToString());
+                builder.AppendLine("}");
+
+                File.WriteAllText(Path.Join(folderName, t.type.Name + "Native.cs"), builder.ToString().Replace("System.Void", "void"));
             }
         }
 

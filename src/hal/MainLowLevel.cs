@@ -21,20 +21,20 @@ namespace Hal
             lowLevel.HAL_SetMain(param, mainFunc, exitFunc);
         }
 
-        public static bool HasMain()
-        {
-            return lowLevel.HAL_HasMain() != 0;
-        }
-
-        public static void RunMain()
-        {
-            lowLevel.HAL_RunMain();
-        }
-
-        public static void ExitMain()
-        {
-            lowLevel.HAL_ExitMain();
-        }
-
+    public static bool HasMain()
+    {
+        return lowLevel.HAL_HasMain() != 0;
     }
+
+    public static void RunMain()
+    {
+        lowLevel.HAL_RunMain();
+    }
+
+    public static void ExitMain()
+    {
+        lowLevel.HAL_ExitMain();
+    }
+
+}
 }

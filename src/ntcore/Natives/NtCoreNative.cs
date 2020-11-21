@@ -4,8 +4,126 @@ using System;
 
 namespace NetworkTables.Natives
 {
-    public unsafe class NtCoreNative : INtCore
+    public unsafe class NtCoreNative
     {
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+
+        public NtCoreNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+            NT_DisposeEntryNotificationArrayFunc = (delegate* unmanaged[Cdecl] < NtEntryNotification *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeEntryNotificationArray");
+            NT_DisposeEntryNotificationFunc = (delegate* unmanaged[Cdecl] < NtEntryNotification *, void >)loader.GetProcAddress("NT_DisposeEntryNotification");
+            NT_DisposeConnectionNotificationArrayFunc = (delegate* unmanaged[Cdecl] < NtConnectionNotification *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeConnectionNotificationArray");
+            NT_DisposeConnectionNotificationFunc = (delegate* unmanaged[Cdecl] < NtConnectionNotification *, void >)loader.GetProcAddress("NT_DisposeConnectionNotification");
+            NT_DisposeLogMessageArrayFunc = (delegate* unmanaged[Cdecl] < NtLogMessage *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeLogMessageArray");
+            NT_DisposeLogMessageFunc = (delegate* unmanaged[Cdecl] < NtLogMessage *, void >)loader.GetProcAddress("NT_DisposeLogMessage");
+            NT_NowFunc = (delegate* unmanaged[Cdecl] < ulong >)loader.GetProcAddress("NT_Now");
+            NT_CreateLoggerPollerFunc = (delegate* unmanaged[Cdecl] < NtInst, NtLoggerPoller >)loader.GetProcAddress("NT_CreateLoggerPoller");
+            NT_DestroyLoggerPollerFunc = (delegate* unmanaged[Cdecl] < NtLoggerPoller, void >)loader.GetProcAddress("NT_DestroyLoggerPoller");
+            NT_AddPolledLoggerFunc = (delegate* unmanaged[Cdecl] < NtLoggerPoller, uint, uint, NtLogger >)loader.GetProcAddress("NT_AddPolledLogger");
+            NT_PollLoggerFunc = (delegate* unmanaged[Cdecl] < NtLoggerPoller, UIntPtr *, NtLogMessage *>)loader.GetProcAddress("NT_PollLogger");
+            NT_PollLoggerTimeoutFunc = (delegate* unmanaged[Cdecl] < NtLoggerPoller, UIntPtr *, double, NtBool *, NtLogMessage *>)loader.GetProcAddress("NT_PollLoggerTimeout");
+            NT_CancelPollLoggerFunc = (delegate* unmanaged[Cdecl] < NtLoggerPoller, void >)loader.GetProcAddress("NT_CancelPollLogger");
+            NT_RemoveLoggerFunc = (delegate* unmanaged[Cdecl] < NtLogger, void >)loader.GetProcAddress("NT_RemoveLogger");
+            NT_WaitForLoggerQueueFunc = (delegate* unmanaged[Cdecl] < NtInst, double, NtBool >)loader.GetProcAddress("NT_WaitForLoggerQueue");
+            NT_AllocateCharArrayFunc = (delegate* unmanaged[Cdecl] < UIntPtr, byte *>)loader.GetProcAddress("NT_AllocateCharArray");
+            NT_AllocateBooleanArrayFunc = (delegate* unmanaged[Cdecl] < UIntPtr, NtBool *>)loader.GetProcAddress("NT_AllocateBooleanArray");
+            NT_AllocateDoubleArrayFunc = (delegate* unmanaged[Cdecl] < UIntPtr, double *>)loader.GetProcAddress("NT_AllocateDoubleArray");
+            NT_AllocateStringArrayFunc = (delegate* unmanaged[Cdecl] < UIntPtr, NtString *>)loader.GetProcAddress("NT_AllocateStringArray");
+            NT_FreeCharArrayFunc = (delegate* unmanaged[Cdecl] < byte *, void >)loader.GetProcAddress("NT_FreeCharArray");
+            NT_FreeDoubleArrayFunc = (delegate* unmanaged[Cdecl] < double *, void >)loader.GetProcAddress("NT_FreeDoubleArray");
+            NT_FreeBooleanArrayFunc = (delegate* unmanaged[Cdecl] < NtBool *, void >)loader.GetProcAddress("NT_FreeBooleanArray");
+            NT_FreeStringArrayFunc = (delegate* unmanaged[Cdecl] < NtString *, UIntPtr, void >)loader.GetProcAddress("NT_FreeStringArray");
+            NT_GetDefaultInstanceFunc = (delegate* unmanaged[Cdecl] < NtInst >)loader.GetProcAddress("NT_GetDefaultInstance");
+            NT_CreateInstanceFunc = (delegate* unmanaged[Cdecl] < NtInst >)loader.GetProcAddress("NT_CreateInstance");
+            NT_DestroyInstanceFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_DestroyInstance");
+            NT_GetInstanceFromHandleFunc = (delegate* unmanaged[Cdecl] < NtHandle, NtInst >)loader.GetProcAddress("NT_GetInstanceFromHandle");
+            NT_GetEntryFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, UIntPtr, NtEntry >)loader.GetProcAddress("NT_GetEntry");
+            NT_GetEntriesFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, UIntPtr, uint, UIntPtr *, NtEntry *>)loader.GetProcAddress("NT_GetEntries");
+            NT_GetEntryNameFunc = (delegate* unmanaged[Cdecl] < NtEntry, UIntPtr *, byte *>)loader.GetProcAddress("NT_GetEntryName");
+            NT_GetEntryTypeFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtType >)loader.GetProcAddress("NT_GetEntryType");
+            NT_GetEntryLastChangeFunc = (delegate* unmanaged[Cdecl] < NtEntry, ulong >)loader.GetProcAddress("NT_GetEntryLastChange");
+            NT_GetEntryValueFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtValue *, void >)loader.GetProcAddress("NT_GetEntryValue");
+            NT_SetDefaultEntryValueFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtValue *, NtBool >)loader.GetProcAddress("NT_SetDefaultEntryValue");
+            NT_SetEntryValueFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtValue *, NtBool >)loader.GetProcAddress("NT_SetEntryValue");
+            NT_SetEntryTypeValueFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtValue *, void >)loader.GetProcAddress("NT_SetEntryTypeValue");
+            NT_SetEntryFlagsFunc = (delegate* unmanaged[Cdecl] < NtEntry, uint, void >)loader.GetProcAddress("NT_SetEntryFlags");
+            NT_GetEntryFlagsFunc = (delegate* unmanaged[Cdecl] < NtEntry, uint >)loader.GetProcAddress("NT_GetEntryFlags");
+            NT_DeleteEntryFunc = (delegate* unmanaged[Cdecl] < NtEntry, void >)loader.GetProcAddress("NT_DeleteEntry");
+            NT_DeleteAllEntriesFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_DeleteAllEntries");
+            NT_GetEntryInfoFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, UIntPtr, uint, UIntPtr *, NtEntryInfo *>)loader.GetProcAddress("NT_GetEntryInfo");
+            NT_GetEntryInfoHandleFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtEntryInfo *, NtBool >)loader.GetProcAddress("NT_GetEntryInfoHandle");
+            NT_CreateEntryListenerPollerFunc = (delegate* unmanaged[Cdecl] < NtInst, NtEntryListenerPoller >)loader.GetProcAddress("NT_CreateEntryListenerPoller");
+            NT_DestroyEntryListenerPollerFunc = (delegate* unmanaged[Cdecl] < NtEntryListenerPoller, void >)loader.GetProcAddress("NT_DestroyEntryListenerPoller");
+            NT_AddPolledEntryListenerFunc = (delegate* unmanaged[Cdecl] < NtEntryListenerPoller, byte *, UIntPtr, uint, NtEntryListener >)loader.GetProcAddress("NT_AddPolledEntryListener");
+            NT_AddPolledEntryListenerSingleFunc = (delegate* unmanaged[Cdecl] < NtEntryListenerPoller, NtEntry, uint, NtEntryListener >)loader.GetProcAddress("NT_AddPolledEntryListenerSingle");
+            NT_PollEntryListenerFunc = (delegate* unmanaged[Cdecl] < NtEntryListenerPoller, UIntPtr *, NtEntryNotification *>)loader.GetProcAddress("NT_PollEntryListener");
+            NT_PollEntryListenerTimeoutFunc = (delegate* unmanaged[Cdecl] < NtEntryListenerPoller, UIntPtr *, double, NtBool *, NtEntryNotification *>)loader.GetProcAddress("NT_PollEntryListenerTimeout");
+            NT_CancelPollEntryListenerFunc = (delegate* unmanaged[Cdecl] < NtEntryListenerPoller, void >)loader.GetProcAddress("NT_CancelPollEntryListener");
+            NT_RemoveEntryListenerFunc = (delegate* unmanaged[Cdecl] < NtEntryListener, void >)loader.GetProcAddress("NT_RemoveEntryListener");
+            NT_WaitForEntryListenerQueueFunc = (delegate* unmanaged[Cdecl] < NtInst, double, NtBool >)loader.GetProcAddress("NT_WaitForEntryListenerQueue");
+            NT_CreateConnectionListenerPollerFunc = (delegate* unmanaged[Cdecl] < NtInst, NtConnectionListenerPoller >)loader.GetProcAddress("NT_CreateConnectionListenerPoller");
+            NT_DestroyConnectionListenerPollerFunc = (delegate* unmanaged[Cdecl] < NtConnectionListenerPoller, void >)loader.GetProcAddress("NT_DestroyConnectionListenerPoller");
+            NT_AddPolledConnectionListenerFunc = (delegate* unmanaged[Cdecl] < NtConnectionListenerPoller, NtBool, NtConnectionListener >)loader.GetProcAddress("NT_AddPolledConnectionListener");
+            NT_PollConnectionListenerFunc = (delegate* unmanaged[Cdecl] < NtConnectionListenerPoller, UIntPtr *, NtConnectionNotification *>)loader.GetProcAddress("NT_PollConnectionListener");
+            NT_PollConnectionListenerTimeoutFunc = (delegate* unmanaged[Cdecl] < NtConnectionListenerPoller, UIntPtr *, double, NtBool *, NtConnectionNotification *>)loader.GetProcAddress("NT_PollConnectionListenerTimeout");
+            NT_CancelPollConnectionListenerFunc = (delegate* unmanaged[Cdecl] < NtConnectionListenerPoller, void >)loader.GetProcAddress("NT_CancelPollConnectionListener");
+            NT_RemoveConnectionListenerFunc = (delegate* unmanaged[Cdecl] < NtConnectionListener, void >)loader.GetProcAddress("NT_RemoveConnectionListener");
+            NT_WaitForConnectionListenerQueueFunc = (delegate* unmanaged[Cdecl] < NtInst, double, NtBool >)loader.GetProcAddress("NT_WaitForConnectionListenerQueue");
+            NT_CreateRpcCallPollerFunc = (delegate* unmanaged[Cdecl] < NtInst, NtRpcCallPoller >)loader.GetProcAddress("NT_CreateRpcCallPoller");
+            NT_DestroyRpcCallPollerFunc = (delegate* unmanaged[Cdecl] < NtRpcCallPoller, void >)loader.GetProcAddress("NT_DestroyRpcCallPoller");
+            NT_CreatePolledRpcFunc = (delegate* unmanaged[Cdecl] < NtEntry, byte *, UIntPtr, NtRpcCallPoller, void >)loader.GetProcAddress("NT_CreatePolledRpc");
+            NT_PollRpcFunc = (delegate* unmanaged[Cdecl] < NtRpcCallPoller, UIntPtr *, NtRpcAnswer *>)loader.GetProcAddress("NT_PollRpc");
+            NT_PollRpcTimeoutFunc = (delegate* unmanaged[Cdecl] < NtRpcCallPoller, UIntPtr *, double, NtBool *, NtRpcAnswer *>)loader.GetProcAddress("NT_PollRpcTimeout");
+            NT_CancelPollRpcFunc = (delegate* unmanaged[Cdecl] < NtRpcCallPoller, void >)loader.GetProcAddress("NT_CancelPollRpc");
+            NT_WaitForRpcCallQueueFunc = (delegate* unmanaged[Cdecl] < NtInst, double, NtBool >)loader.GetProcAddress("NT_WaitForRpcCallQueue");
+            NT_PostRpcResponseFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtRpcCall, byte *, UIntPtr, void >)loader.GetProcAddress("NT_PostRpcResponse");
+            NT_CallRpcFunc = (delegate* unmanaged[Cdecl] < NtEntry, byte *, UIntPtr, NtRpcCall >)loader.GetProcAddress("NT_CallRpc");
+            NT_GetRpcResultFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtRpcCall, UIntPtr *, byte *>)loader.GetProcAddress("NT_GetRpcResult");
+            NT_GetRpcResultTimeoutFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtRpcCall, UIntPtr *, double, NtBool *, byte *>)loader.GetProcAddress("NT_GetRpcResultTimeout");
+            NT_CancelRpcResultFunc = (delegate* unmanaged[Cdecl] < NtEntry, NtRpcCall, void >)loader.GetProcAddress("NT_CancelRpcResult");
+            NT_PackRpcDefinitionFunc = (delegate* unmanaged[Cdecl] < NtRpcDefinition, UIntPtr *, byte *>)loader.GetProcAddress("NT_PackRpcDefinition");
+            NT_UnpackRpcDefinitionFunc = (delegate* unmanaged[Cdecl] < byte *, UIntPtr, NtRpcDefinition *, NtBool >)loader.GetProcAddress("NT_UnpackRpcDefinition");
+            NT_PackRpcValuesFunc = (delegate* unmanaged[Cdecl] < NtValue * *, UIntPtr, UIntPtr *, byte *>)loader.GetProcAddress("NT_PackRpcValues");
+            NT_UnpackRpcValuesFunc = (delegate* unmanaged[Cdecl] < byte *, UIntPtr, NtType *, UIntPtr, NtValue * *>)loader.GetProcAddress("NT_UnpackRpcValues");
+            NT_SetNetworkIdentityFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, UIntPtr, void >)loader.GetProcAddress("NT_SetNetworkIdentity");
+            NT_GetNetworkModeFunc = (delegate* unmanaged[Cdecl] < NtInst, uint >)loader.GetProcAddress("NT_GetNetworkMode");
+            NT_StartServerFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, byte *, uint, void >)loader.GetProcAddress("NT_StartServer");
+            NT_StopServerFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_StopServer");
+            NT_StartClientNoneFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_StartClientNone");
+            NT_StartClientFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, uint, void >)loader.GetProcAddress("NT_StartClient");
+            NT_StartClientMultiFunc = (delegate* unmanaged[Cdecl] < NtInst, UIntPtr, byte * *, uint *, void >)loader.GetProcAddress("NT_StartClientMulti");
+            NT_StartClientTeamFunc = (delegate* unmanaged[Cdecl] < NtInst, uint, uint, void >)loader.GetProcAddress("NT_StartClientTeam");
+            NT_StopClientFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_StopClient");
+            NT_SetServerFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, uint, void >)loader.GetProcAddress("NT_SetServer");
+            NT_SetServerMultiFunc = (delegate* unmanaged[Cdecl] < NtInst, UIntPtr, byte * *, uint *, void >)loader.GetProcAddress("NT_SetServerMulti");
+            NT_SetServerTeamFunc = (delegate* unmanaged[Cdecl] < NtInst, uint, uint, void >)loader.GetProcAddress("NT_SetServerTeam");
+            NT_StartDSClientFunc = (delegate* unmanaged[Cdecl] < NtInst, uint, void >)loader.GetProcAddress("NT_StartDSClient");
+            NT_StopDSClientFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_StopDSClient");
+            NT_SetUpdateRateFunc = (delegate* unmanaged[Cdecl] < NtInst, double, void >)loader.GetProcAddress("NT_SetUpdateRate");
+            NT_FlushFunc = (delegate* unmanaged[Cdecl] < NtInst, void >)loader.GetProcAddress("NT_Flush");
+            NT_GetConnectionsFunc = (delegate* unmanaged[Cdecl] < NtInst, UIntPtr *, NtConnectionInfo *>)loader.GetProcAddress("NT_GetConnections");
+            NT_IsConnectedFunc = (delegate* unmanaged[Cdecl] < NtInst, NtBool >)loader.GetProcAddress("NT_IsConnected");
+            NT_SavePersistentFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, byte *>)loader.GetProcAddress("NT_SavePersistent");
+            NT_LoadPersistentFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, delegate* unmanaged[Cdecl] < UIntPtr, byte *, void >, byte *>)loader.GetProcAddress("NT_LoadPersistent");
+            NT_SaveEntriesFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, byte *, UIntPtr, byte *>)loader.GetProcAddress("NT_SaveEntries");
+            NT_LoadEntriesFunc = (delegate* unmanaged[Cdecl] < NtInst, byte *, byte *, UIntPtr, delegate* unmanaged[Cdecl] < UIntPtr, byte *, void >, byte *>)loader.GetProcAddress("NT_LoadEntries");
+            NT_DisposeValueFunc = (delegate* unmanaged[Cdecl] < NtValue *, void >)loader.GetProcAddress("NT_DisposeValue");
+            NT_InitValueFunc = (delegate* unmanaged[Cdecl] < NtValue *, void >)loader.GetProcAddress("NT_InitValue");
+            NT_DisposeStringFunc = (delegate* unmanaged[Cdecl] < NtString *, void >)loader.GetProcAddress("NT_DisposeString");
+            NT_InitStringFunc = (delegate* unmanaged[Cdecl] < NtString *, void >)loader.GetProcAddress("NT_InitString");
+            NT_DisposeEntryArrayFunc = (delegate* unmanaged[Cdecl] < NtEntry *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeEntryArray");
+            NT_DisposeConnectionInfoArrayFunc = (delegate* unmanaged[Cdecl] < NtConnectionInfo *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeConnectionInfoArray");
+            NT_DisposeEntryInfoArrayFunc = (delegate* unmanaged[Cdecl] < NtEntryInfo *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeEntryInfoArray");
+            NT_DisposeEntryInfoFunc = (delegate* unmanaged[Cdecl] < NtEntryInfo *, void >)loader.GetProcAddress("NT_DisposeEntryInfo");
+            NT_DisposeRpcDefinitionFunc = (delegate* unmanaged[Cdecl] < NtRpcDefinition *, void >)loader.GetProcAddress("NT_DisposeRpcDefinition");
+            NT_DisposeRpcAnswerArrayFunc = (delegate* unmanaged[Cdecl] < NtRpcAnswer *, UIntPtr, void >)loader.GetProcAddress("NT_DisposeRpcAnswerArray");
+            NT_DisposeRpcAnswerFunc = (delegate* unmanaged[Cdecl] < NtRpcAnswer *, void >)loader.GetProcAddress("NT_DisposeRpcAnswer");
+        }
+
         [NativeFunctionPointer("NT_DisposeEntryNotificationArray")]
         private readonly delegate* unmanaged[Cdecl]<NtEntryNotification*, UIntPtr, void> NT_DisposeEntryNotificationArrayFunc;
 
@@ -953,137 +1071,137 @@ namespace NetworkTables.Natives
         public byte* NT_LoadPersistent(NtInst inst, byte* filename, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void> warnFunc)
         {
             return NT_LoadPersistentFunc(inst, filename, warnFunc);
-        }
+    }
 
 
-        [NativeFunctionPointer("NT_SaveEntries")]
-        private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, UIntPtr, byte*> NT_SaveEntriesFunc;
+    [NativeFunctionPointer("NT_SaveEntries")]
+    private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, UIntPtr, byte*> NT_SaveEntriesFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public byte* NT_SaveEntries(NtInst inst, byte* filename, byte* prefix, UIntPtr prefix_len)
-        {
-            return NT_SaveEntriesFunc(inst, filename, prefix, prefix_len);
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public byte* NT_SaveEntries(NtInst inst, byte* filename, byte* prefix, UIntPtr prefix_len)
+    {
+        return NT_SaveEntriesFunc(inst, filename, prefix, prefix_len);
+    }
 
 
-        [NativeFunctionPointer("NT_LoadEntries")]
-        private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, UIntPtr, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void>, byte*> NT_LoadEntriesFunc;
+    [NativeFunctionPointer("NT_LoadEntries")]
+    private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, UIntPtr, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void>, byte*> NT_LoadEntriesFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public byte* NT_LoadEntries(NtInst inst, byte* filename, byte* prefix, UIntPtr prefix_len, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void> warnFunc)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public byte* NT_LoadEntries(NtInst inst, byte* filename, byte* prefix, UIntPtr prefix_len, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void> warnFunc)
         {
             return NT_LoadEntriesFunc(inst, filename, prefix, prefix_len, warnFunc);
-        }
+}
 
 
-        [NativeFunctionPointer("NT_DisposeValue")]
-        private readonly delegate* unmanaged[Cdecl]<NtValue*, void> NT_DisposeValueFunc;
+[NativeFunctionPointer("NT_DisposeValue")]
+private readonly delegate* unmanaged[Cdecl]<NtValue*, void> NT_DisposeValueFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeValue(NtValue* value)
-        {
-            NT_DisposeValueFunc(value);
-        }
-
-
-        [NativeFunctionPointer("NT_InitValue")]
-        private readonly delegate* unmanaged[Cdecl]<NtValue*, void> NT_InitValueFunc;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_InitValue(NtValue* value)
-        {
-            NT_InitValueFunc(value);
-        }
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeValue(NtValue* value)
+{
+    NT_DisposeValueFunc(value);
+}
 
 
-        [NativeFunctionPointer("NT_DisposeString")]
-        private readonly delegate* unmanaged[Cdecl]<NtString*, void> NT_DisposeStringFunc;
+[NativeFunctionPointer("NT_InitValue")]
+private readonly delegate* unmanaged[Cdecl]<NtValue*, void> NT_InitValueFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeString(NtString* str)
-        {
-            NT_DisposeStringFunc(str);
-        }
-
-
-        [NativeFunctionPointer("NT_InitString")]
-        private readonly delegate* unmanaged[Cdecl]<NtString*, void> NT_InitStringFunc;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_InitString(NtString* str)
-        {
-            NT_InitStringFunc(str);
-        }
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_InitValue(NtValue* value)
+{
+    NT_InitValueFunc(value);
+}
 
 
-        [NativeFunctionPointer("NT_DisposeEntryArray")]
-        private readonly delegate* unmanaged[Cdecl]<NtEntry*, UIntPtr, void> NT_DisposeEntryArrayFunc;
+[NativeFunctionPointer("NT_DisposeString")]
+private readonly delegate* unmanaged[Cdecl]<NtString*, void> NT_DisposeStringFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeEntryArray(NtEntry* arr, UIntPtr count)
-        {
-            NT_DisposeEntryArrayFunc(arr, count);
-        }
-
-
-        [NativeFunctionPointer("NT_DisposeConnectionInfoArray")]
-        private readonly delegate* unmanaged[Cdecl]<NtConnectionInfo*, UIntPtr, void> NT_DisposeConnectionInfoArrayFunc;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeConnectionInfoArray(NtConnectionInfo* arr, UIntPtr count)
-        {
-            NT_DisposeConnectionInfoArrayFunc(arr, count);
-        }
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeString(NtString* str)
+{
+    NT_DisposeStringFunc(str);
+}
 
 
-        [NativeFunctionPointer("NT_DisposeEntryInfoArray")]
-        private readonly delegate* unmanaged[Cdecl]<NtEntryInfo*, UIntPtr, void> NT_DisposeEntryInfoArrayFunc;
+[NativeFunctionPointer("NT_InitString")]
+private readonly delegate* unmanaged[Cdecl]<NtString*, void> NT_InitStringFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeEntryInfoArray(NtEntryInfo* arr, UIntPtr count)
-        {
-            NT_DisposeEntryInfoArrayFunc(arr, count);
-        }
-
-
-        [NativeFunctionPointer("NT_DisposeEntryInfo")]
-        private readonly delegate* unmanaged[Cdecl]<NtEntryInfo*, void> NT_DisposeEntryInfoFunc;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeEntryInfo(NtEntryInfo* info)
-        {
-            NT_DisposeEntryInfoFunc(info);
-        }
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_InitString(NtString* str)
+{
+    NT_InitStringFunc(str);
+}
 
 
-        [NativeFunctionPointer("NT_DisposeRpcDefinition")]
-        private readonly delegate* unmanaged[Cdecl]<NtRpcDefinition*, void> NT_DisposeRpcDefinitionFunc;
+[NativeFunctionPointer("NT_DisposeEntryArray")]
+private readonly delegate* unmanaged[Cdecl]<NtEntry*, UIntPtr, void> NT_DisposeEntryArrayFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeRpcDefinition(NtRpcDefinition* def)
-        {
-            NT_DisposeRpcDefinitionFunc(def);
-        }
-
-
-        [NativeFunctionPointer("NT_DisposeRpcAnswerArray")]
-        private readonly delegate* unmanaged[Cdecl]<NtRpcAnswer*, UIntPtr, void> NT_DisposeRpcAnswerArrayFunc;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeRpcAnswerArray(NtRpcAnswer* arr, UIntPtr count)
-        {
-            NT_DisposeRpcAnswerArrayFunc(arr, count);
-        }
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeEntryArray(NtEntry* arr, UIntPtr count)
+{
+    NT_DisposeEntryArrayFunc(arr, count);
+}
 
 
-        [NativeFunctionPointer("NT_DisposeRpcAnswer")]
-        private readonly delegate* unmanaged[Cdecl]<NtRpcAnswer*, void> NT_DisposeRpcAnswerFunc;
+[NativeFunctionPointer("NT_DisposeConnectionInfoArray")]
+private readonly delegate* unmanaged[Cdecl]<NtConnectionInfo*, UIntPtr, void> NT_DisposeConnectionInfoArrayFunc;
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void NT_DisposeRpcAnswer(NtRpcAnswer* answer)
-        {
-            NT_DisposeRpcAnswerFunc(answer);
-        }
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeConnectionInfoArray(NtConnectionInfo* arr, UIntPtr count)
+{
+    NT_DisposeConnectionInfoArrayFunc(arr, count);
+}
+
+
+[NativeFunctionPointer("NT_DisposeEntryInfoArray")]
+private readonly delegate* unmanaged[Cdecl]<NtEntryInfo*, UIntPtr, void> NT_DisposeEntryInfoArrayFunc;
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeEntryInfoArray(NtEntryInfo* arr, UIntPtr count)
+{
+    NT_DisposeEntryInfoArrayFunc(arr, count);
+}
+
+
+[NativeFunctionPointer("NT_DisposeEntryInfo")]
+private readonly delegate* unmanaged[Cdecl]<NtEntryInfo*, void> NT_DisposeEntryInfoFunc;
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeEntryInfo(NtEntryInfo* info)
+{
+    NT_DisposeEntryInfoFunc(info);
+}
+
+
+[NativeFunctionPointer("NT_DisposeRpcDefinition")]
+private readonly delegate* unmanaged[Cdecl]<NtRpcDefinition*, void> NT_DisposeRpcDefinitionFunc;
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeRpcDefinition(NtRpcDefinition* def)
+{
+    NT_DisposeRpcDefinitionFunc(def);
+}
+
+
+[NativeFunctionPointer("NT_DisposeRpcAnswerArray")]
+private readonly delegate* unmanaged[Cdecl]<NtRpcAnswer*, UIntPtr, void> NT_DisposeRpcAnswerArrayFunc;
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeRpcAnswerArray(NtRpcAnswer* arr, UIntPtr count)
+{
+    NT_DisposeRpcAnswerArrayFunc(arr, count);
+}
+
+
+[NativeFunctionPointer("NT_DisposeRpcAnswer")]
+private readonly delegate* unmanaged[Cdecl]<NtRpcAnswer*, void> NT_DisposeRpcAnswerFunc;
+
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+public void NT_DisposeRpcAnswer(NtRpcAnswer* answer)
+{
+    NT_DisposeRpcAnswerFunc(answer);
+}
 
 
 
