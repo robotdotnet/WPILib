@@ -1,5 +1,6 @@
 ﻿
 using Hal.Natives;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -8,6 +9,11 @@ namespace Hal
     public static unsafe class AnalogAccumulatorLowLevel
     {
         internal static AnalogAccumulatorLowLevelNative lowLevel = null!;
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static long GetAccumulatorCount(int analogPortHandle)
         {

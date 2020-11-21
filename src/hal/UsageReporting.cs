@@ -1,6 +1,7 @@
 ﻿using Hal.Natives;
 using System.Collections.Generic;
 using WPIUtil;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -168,9 +169,12 @@ namespace Hal
 
     public static class UsageReporting
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static UsageReportingLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         private readonly struct ReportStore
         {

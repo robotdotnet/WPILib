@@ -4,6 +4,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using WPIUtil;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -11,9 +12,12 @@ namespace Hal
 
     public static unsafe class SimDeviceLowLevel
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static SimDeviceLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static int Create(string name)
         {

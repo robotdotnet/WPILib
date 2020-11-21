@@ -1,15 +1,19 @@
 ﻿using Hal.Natives;
 using System;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
 
-    public static class CANAPI
+    public static class CANAPILowLevel
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static CANAPILowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static int Initialize(CANManufacturer manufacturer, int deviceId, CANDeviceType deviceType)
         {

@@ -1,13 +1,17 @@
 ﻿
 using Hal.Natives;
+using WPIUtil.ILGeneration;
 
 namespace Hal
 {
     public static unsafe class ExtensionsLowLevel
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static ExtensionsLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static int Load()
         {

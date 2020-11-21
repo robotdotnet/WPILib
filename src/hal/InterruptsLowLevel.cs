@@ -3,6 +3,7 @@ using Hal.Natives;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -10,9 +11,12 @@ namespace Hal
 
     public static unsafe class InterruptsLowLevel
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static InterruptsLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static void InterruptHandler(uint mask, void* context)

@@ -1,5 +1,6 @@
 ﻿
 using Hal.Natives;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -7,9 +8,12 @@ namespace Hal
 
     public static unsafe class RelayLowLevel
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static RelayLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static int CheckChannel(int channel)
         {

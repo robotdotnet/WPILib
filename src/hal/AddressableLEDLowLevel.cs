@@ -1,6 +1,7 @@
 ﻿
 using Hal.Natives;
 using System;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -9,6 +10,11 @@ namespace Hal
     public static unsafe class AddressableLEDLowLevel
     {
         internal static AddressableLEDLowLevelNative lowLevel = null!;
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static void Free(int handle)
         {

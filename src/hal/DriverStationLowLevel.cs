@@ -1,6 +1,7 @@
 ﻿using Hal.Natives;
 using System;
 using WPIUtil;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -8,9 +9,12 @@ namespace Hal
 
     public static unsafe class DriverStationLowLevel
     {
-#pragma warning disable CS0649 // Field is never assigned to
         internal static DriverStationLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static bool SendError(bool isError, int errorCode, bool isLVCode, ReadOnlySpan<char> details, ReadOnlySpan<char> location, ReadOnlySpan<char> callStack, bool printMsg)
         {

@@ -1,5 +1,6 @@
 ﻿using Hal.Natives;
 using WPIUtil;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 namespace Hal
@@ -14,10 +15,12 @@ namespace Hal
 
     public static class HALLowLevel
     {
-
-#pragma warning disable CS0649 // Field is never assigned to
         internal static HALLowLevelNative lowLevel = null!;
-#pragma warning restore CS0649 // Field is never assigned to
+
+        internal static void InitializeNatives(IFunctionPointerLoader loader)
+        {
+            lowLevel = new(loader);
+        }
 
         public static bool Initialize()
         {
