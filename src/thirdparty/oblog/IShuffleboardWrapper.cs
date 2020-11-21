@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WPILib.Oblog
+﻿namespace WPILib.Oblog
 {
     public interface IShuffleboardWrapper
     {

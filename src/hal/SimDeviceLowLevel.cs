@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using WPIUtil;
 using WPIUtil.ILGeneration;
-using WPIUtil.NativeUtilities;
 
 namespace Hal
 {

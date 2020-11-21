@@ -1,5 +1,4 @@
 ﻿using System;
-using WPIUtil.ILGeneration;
 
 namespace Hal
 {

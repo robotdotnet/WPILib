@@ -3,9 +3,7 @@ using NetworkTables;
 using NetworkTables.Natives;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using WPILib;
-using WPILib.SmartDashboardNS;
 
 namespace desktopDev
 {
@@ -17,14 +15,14 @@ namespace desktopDev
 
         private readonly int pwm = Hal.PWMLowLevel.InitializePort(HALLowLevel.GetPort(42));
 
-        private readonly int can = CANAPI.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
+        private readonly int can = CANAPILowLevel.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
 
 
 
         public override unsafe void RobotPeriodic()
         {
             int idxLocal = idx;
-            CANAPI.WritePacket(can, new Span<byte>(&idxLocal, 4), 42);
+            CANAPILowLevel.WritePacket(can, new Span<byte>(&idxLocal, 4), 42);
 
             var current = Timer.FPGATimestamp;
             var delta = current - lastTime;

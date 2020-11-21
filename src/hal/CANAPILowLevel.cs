@@ -1,7 +1,6 @@
 ﻿using Hal.Natives;
 using System;
 using WPIUtil.ILGeneration;
-using WPIUtil.NativeUtilities;
 
 namespace Hal
 {

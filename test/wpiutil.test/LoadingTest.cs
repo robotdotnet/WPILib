@@ -1,5 +1,4 @@
 ﻿using WPIUtil.NativeUtilities;
-using Xunit;
 
 namespace wpiutil.test
 {

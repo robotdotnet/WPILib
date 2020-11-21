@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WPILib.ShuffleboardNS;
+﻿using WPILib.ShuffleboardNS;
 using WPILib.SmartDashboardNS;
 
 namespace WPILib.Oblog

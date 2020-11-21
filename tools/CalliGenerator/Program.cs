@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using NetworkTables.Natives;
+using Hal;
 using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
@@ -432,7 +432,17 @@ namespace CalliGenerator
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            GenerateForAssembly(typeof(REV.SparkMax.CANSparkMaxDriver).Assembly);
+
+            var types = typeof(HALLowLevel).Assembly.GetTypes().Where(x => x.GetFields(BindingFlags.NonPublic | BindingFlags.Static).Select(x => x.Name).Contains("lowLevel")).ToArray();
+
+            foreach (var type in types)
+            {
+                Console.WriteLine($"{type.Name}.InitializeNatives(loader);");
+            }
+
+            ;
+
+            //GenerateForAssembly(typeof(REV.SparkMax.CANSparkMaxDriver).Assembly);
         }
     }
 }

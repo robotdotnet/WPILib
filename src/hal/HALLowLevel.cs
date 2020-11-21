@@ -16,6 +16,7 @@ namespace Hal
     public static class HALLowLevel
     {
         internal static HALLowLevelNative lowLevel = null!;
+        private readonly static object lockObject = new();
 
         internal static void InitializeNatives(IFunctionPointerLoader loader)
         {
@@ -24,9 +25,46 @@ namespace Hal
 
         public static bool Initialize()
         {
-            if (lowLevel == null)
+            lock (lockObject)
             {
-                // TODO Generate
+                if (lowLevel == null)
+                {
+                    IFunctionPointerLoader loader = NativeLibraryLoader.LoadNativeLibrary("wpiHal")!;
+                    AccelerometerLowLevel.InitializeNatives(loader);
+                    AddressableLEDLowLevel.InitializeNatives(loader);
+                    AnalogAccumulatorLowLevel.InitializeNatives(loader);
+                    AnalogGyroLowLevel.InitializeNatives(loader);
+                    AnalogInputLowLevel.InitializeNatives(loader);
+                    AnalogOutputLowLevel.InitializeNatives(loader);
+                    AnalogTriggerLowLevel.InitializeNatives(loader);
+                    CANAPILowLevel.InitializeNatives(loader);
+                    CANLowLevel.InitializeNatives(loader);
+                    CompressorLowLevel.InitializeNatives(loader);
+                    ConstantsLowLevel.InitializeNatives(loader);
+                    CounterLowLevel.InitializeNatives(loader);
+                    DIOLowLevel.InitializeNatives(loader);
+                    DMALowLevel.InitializeNatives(loader);
+                    DriverStationLowLevel.InitializeNatives(loader);
+                    DutyCycleLowLevel.InitializeNatives(loader);
+                    EncoderLowLevel.InitializeNatives(loader);
+                    ExtensionsLowLevel.InitializeNatives(loader);
+                    HALLowLevel.InitializeNatives(loader);
+                    I2CLowLevel.InitializeNatives(loader);
+                    InterruptsLowLevel.InitializeNatives(loader);
+                    MainLowLevel.InitializeNatives(loader);
+                    NotifierLowLevel.InitializeNatives(loader);
+                    PDPLowLevel.InitializeNatives(loader);
+                    PortsLowLevel.InitializeNatives(loader);
+                    PowerLowLevel.InitializeNatives(loader);
+                    PWMLowLevel.InitializeNatives(loader);
+                    RelayLowLevel.InitializeNatives(loader);
+                    SerialPortLowLevel.InitializeNatives(loader);
+                    SimDeviceLowLevel.InitializeNatives(loader);
+                    SolenoidLowLevel.InitializeNatives(loader);
+                    SPILowLevel.InitializeNatives(loader);
+                    ThreadsLowLevel.InitializeNatives(loader);
+                    UsageReporting.InitializeNatives(loader);
+                }
             }
             return lowLevel!.HAL_Initialize(500, 0) != 0;
         }

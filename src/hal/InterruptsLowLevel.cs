@@ -4,7 +4,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WPIUtil.ILGeneration;
-using WPIUtil.NativeUtilities;
 
 namespace Hal
 {

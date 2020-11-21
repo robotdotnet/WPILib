@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WPILib.ShuffleboardNS
+﻿namespace WPILib.ShuffleboardNS
 {
     public enum EventImportance
     {
