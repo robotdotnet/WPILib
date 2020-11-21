@@ -1,4 +1,6 @@
 ﻿using Hal;
+using NetworkTables;
+using NetworkTables.Natives;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -61,20 +63,23 @@ namespace desktopDev
 
         static void Main(string[] args)
         {
-            var i = SendableRegistry.Instance;
+            NtCore.Initialize();
+            NetworkTableInstance instance = NetworkTableInstance.Default;
+            GC.KeepAlive(instance);
+            //var i = SendableRegistry.Instance;
 
-            var map = new ConditionalWeakTable<HolderMethod, Container>();
+            //var map = new ConditionalWeakTable<HolderMethod, Container>();
 
-            var holder = new HolderMethod();
-            map.Add(holder, new Container(holder));
-            //holder = null;
+            //var holder = new HolderMethod();
+            //map.Add(holder, new Container(holder));
+            ////holder = null;
 
-            //while (map.Any())
-            //{
-            //    //Console.WriteLine(map.Count());
-            //    GC.Collect();
-            //}
-            RobotBase.StartRobot<Robot>();
+            ////while (map.Any())
+            ////{
+            ////    //Console.WriteLine(map.Count());
+            ////    GC.Collect();
+            ////}
+            //RobotBase.StartRobot<Robot>();
         }
     }
 }

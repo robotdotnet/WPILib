@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using WPIUtil;
+using WPIUtil.ILGeneration;
 using WPIUtil.NativeUtilities;
 
 [assembly: InternalsVisibleTo("NetworkTable.Test")]
@@ -18,32 +19,27 @@ namespace NetworkTables.Natives
     [NativeInterface(typeof(INtCore))]
     public static class NtCore
     {
-#pragma warning disable CS0649 // Field is never assigned to
-#pragma warning disable IDE0044 // Add readonly modifier
         private static NtCoreNative m_ntcore = null!;
-#pragma warning restore IDE0044 // Add readonly modifier
-#pragma warning restore CS0649 // Field is never assigned to
 
-        private unsafe readonly static char* NullTerminator;
+        private unsafe readonly static char* NullTerminator = InitializeNullTerminator();
 
-#pragma warning disable CA1810 // Initialize reference type static fields inline
-        static NtCore()
-#pragma warning restore CA1810 // Initialize reference type static fields inline
+        private static unsafe char* InitializeNullTerminator()
         {
-            unsafe
-            {
-                NullTerminator = (char*)Marshal.AllocHGlobal(sizeof(char));
-                *NullTerminator = '\0';
-            }
+            var nt = (char*)Marshal.AllocHGlobal(sizeof(char));
+            *nt = '\0';
+            return nt;
         }
 
         public static void Initialize()
         {
             if (m_ntcore != null) return;
-            m_ntcore = new NtCoreNative(null!);
-            NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(NtCore).Assembly,
-                "ntcore",
-                out var generator);
+            m_ntcore = new NtCoreNative(NativeLibraryLoader.LoadNativeLibrary("ntcore")!);
+        }
+
+        public static void Initialize(IFunctionPointerLoader loader)
+        {
+            if (m_ntcore != null) return;
+            m_ntcore = new NtCoreNative(loader);
         }
 
 
