@@ -19,18 +19,6 @@
     <Content Include="runtimes\**" PackagePath="runtimes" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <None Remove="athena\libwpiutil.so" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Content Include="athena\libwpiutil.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
   <ItemGroup>
       <None Include="runtimes\win-x64\native\wpiutil.dll" Link="wpiutil.dll" CopyToOutputDirectory="Always" />
   </ItemGroup>

@@ -21,16 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="athena\libntcore.so" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="athena\libntcore.so">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="runtimes\win-x64\native\ntcore.dll" Link="ntcore.dll" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
