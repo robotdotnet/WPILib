@@ -1,10 +1,32 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class AnalogTriggerLowLevelNative
     {
-        
+        public AnalogTriggerLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CleanAnalogTriggerFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_CleanAnalogTrigger");
+            HAL_GetAnalogTriggerFPGAIndexFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetAnalogTriggerFPGAIndex");
+            HAL_GetAnalogTriggerInWindowFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetAnalogTriggerInWindow");
+            HAL_GetAnalogTriggerOutputFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.AnalogTriggerType, int *, System.Int32 >)loader.GetProcAddress("HAL_GetAnalogTriggerOutput");
+            HAL_GetAnalogTriggerTriggerStateFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetAnalogTriggerTriggerState");
+            HAL_InitializeAnalogTriggerFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeAnalogTrigger");
+            HAL_InitializeAnalogTriggerDutyCycleFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeAnalogTriggerDutyCycle");
+            HAL_SetAnalogTriggerAveragedFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAnalogTriggerAveraged");
+            HAL_SetAnalogTriggerFilteredFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAnalogTriggerFiltered");
+            HAL_SetAnalogTriggerLimitsRawFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAnalogTriggerLimitsRaw");
+            HAL_SetAnalogTriggerLimitsVoltageFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, System.Double, int *, void >)loader.GetProcAddress("HAL_SetAnalogTriggerLimitsVoltage");
+            HAL_SetAnalogTriggerLimitsDutyCycleFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, System.Double, int *, void >)loader.GetProcAddress("HAL_SetAnalogTriggerLimitsDutyCycle");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CleanAnalogTriggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +38,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogTriggerFPGAIndexFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +51,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogTriggerInWindowFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,7 +64,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, AnalogTriggerType, int*, int> HAL_GetAnalogTriggerOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -55,7 +77,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogTriggerTriggerStateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +90,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAnalogTriggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -81,7 +103,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAnalogTriggerDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,7 +116,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAnalogTriggerAveragedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -106,7 +128,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAnalogTriggerFilteredFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -118,7 +140,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_SetAnalogTriggerLimitsRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -130,7 +152,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, double, int*, void> HAL_SetAnalogTriggerLimitsVoltageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -142,7 +164,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, double, int*, void> HAL_SetAnalogTriggerLimitsDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

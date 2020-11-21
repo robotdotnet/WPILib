@@ -1,10 +1,33 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class CompressorLowLevelNative
     {
-        
+        public CompressorLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CheckCompressorModuleFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_CheckCompressorModule");
+            HAL_GetCompressorFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressor");
+            HAL_GetCompressorClosedLoopControlFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorClosedLoopControl");
+            HAL_GetCompressorCurrentFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetCompressorCurrent");
+            HAL_GetCompressorCurrentTooHighFaultFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorCurrentTooHighFault");
+            HAL_GetCompressorCurrentTooHighStickyFaultFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorCurrentTooHighStickyFault");
+            HAL_GetCompressorNotConnectedFaultFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorNotConnectedFault");
+            HAL_GetCompressorNotConnectedStickyFaultFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorNotConnectedStickyFault");
+            HAL_GetCompressorPressureSwitchFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorPressureSwitch");
+            HAL_GetCompressorShortedFaultFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorShortedFault");
+            HAL_GetCompressorShortedStickyFaultFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCompressorShortedStickyFault");
+            HAL_InitializeCompressorFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeCompressor");
+            HAL_SetCompressorClosedLoopControlFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCompressorClosedLoopControl");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckCompressorModuleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +37,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorClosedLoopControlFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +63,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetCompressorCurrentFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +76,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorCurrentTooHighFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +89,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorCurrentTooHighStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +102,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorNotConnectedFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +115,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorNotConnectedStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,7 +128,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorPressureSwitchFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -118,7 +141,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorShortedFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -131,7 +154,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorShortedStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +167,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeCompressorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -157,7 +180,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCompressorClosedLoopControlFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

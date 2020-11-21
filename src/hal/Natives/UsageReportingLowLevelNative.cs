@@ -21,7 +21,7 @@ namespace Hal.Natives
                 throw new ArgumentNullException(nameof(loader));
             }
 
-            HAL_ReportFunc = (delegate* unmanaged[Cdecl]<int, int, int, byte*, int>)loader.GetProcAddress("HAL_Report");
+            HAL_ReportFunc = (delegate* unmanaged[Cdecl] < int, int, int, byte *, int >)loader.GetProcAddress("HAL_Report");
         }
     }
 }

@@ -7,7 +7,7 @@ namespace REV.SparkMax
     public unsafe class CANSparkMaxDriver
     {
         private static CANSparkMaxDriverNative driver = null!;
-        private static readonly object lockObject = new object(); 
+        private static readonly object lockObject = new object();
 
         public static ErrorCode SetAnalogMode(void* handle, AnalogMode mode)
         {

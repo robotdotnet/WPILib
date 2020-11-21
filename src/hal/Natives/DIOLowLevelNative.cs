@@ -1,10 +1,40 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class DIOLowLevelNative
     {
-        
+        public DIOLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_AllocateDigitalPWMFunc = (delegate* unmanaged[Cdecl] < int *, System.Int32 >)loader.GetProcAddress("HAL_AllocateDigitalPWM");
+            HAL_CheckDIOChannelFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_CheckDIOChannel");
+            HAL_FreeDIOPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeDIOPort");
+            HAL_SetDIOFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetDIO");
+            HAL_FreeDigitalPWMFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_FreeDigitalPWM");
+            HAL_GetDIOFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDIO");
+            HAL_GetDIODirectionFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDIODirection");
+            HAL_GetFilterPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int64 >)loader.GetProcAddress("HAL_GetFilterPeriod");
+            HAL_GetFilterSelectFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetFilterSelect");
+            HAL_InitializeDIOPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeDIOPort");
+            HAL_IsAnyPulsingFunc = (delegate* unmanaged[Cdecl] < int *, System.Int32 >)loader.GetProcAddress("HAL_IsAnyPulsing");
+            HAL_IsPulsingFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_IsPulsing");
+            HAL_PulseFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_Pulse");
+            HAL_SetDIOSimDeviceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, void >)loader.GetProcAddress("HAL_SetDIOSimDevice");
+            HAL_SetDIODirectionFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetDIODirection");
+            HAL_SetDigitalPWMDutyCycleFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetDigitalPWMDutyCycle");
+            HAL_SetDigitalPWMOutputChannelFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetDigitalPWMOutputChannel");
+            HAL_SetDigitalPWMRateFunc = (delegate* unmanaged[Cdecl] < System.Double, int *, void >)loader.GetProcAddress("HAL_SetDigitalPWMRate");
+            HAL_SetFilterPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int64, int *, void >)loader.GetProcAddress("HAL_SetFilterPeriod");
+            HAL_SetFilterSelectFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetFilterSelect");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_AllocateDigitalPWMFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +47,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckDIOChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +57,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeDIOPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,7 +67,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDIOFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,7 +79,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeDigitalPWMFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,7 +91,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDIOFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,7 +104,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDIODirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,7 +117,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_GetFilterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +130,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetFilterSelectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -113,7 +143,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, int> HAL_InitializeDIOPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -126,7 +156,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_IsAnyPulsingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -139,7 +169,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_IsPulsingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -152,7 +182,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_PulseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,7 +194,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetDIOSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -174,7 +204,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDIODirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -186,7 +216,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetDigitalPWMDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -198,7 +228,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDigitalPWMOutputChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -210,7 +240,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<double, int*, void> HAL_SetDigitalPWMRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -222,7 +252,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, long, int*, void> HAL_SetFilterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -234,7 +264,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetFilterSelectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

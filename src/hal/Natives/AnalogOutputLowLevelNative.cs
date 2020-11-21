@@ -1,10 +1,25 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class AnalogOutputLowLevelNative
     {
-        
+        public AnalogOutputLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CheckAnalogOutputChannelFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_CheckAnalogOutputChannel");
+            HAL_FreeAnalogOutputPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeAnalogOutputPort");
+            HAL_GetAnalogOutputFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetAnalogOutput");
+            HAL_InitializeAnalogOutputPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeAnalogOutputPort");
+            HAL_SetAnalogOutputFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetAnalogOutput");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckAnalogOutputChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +29,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAnalogOutputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +39,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,7 +52,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAnalogOutputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +65,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetAnalogOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

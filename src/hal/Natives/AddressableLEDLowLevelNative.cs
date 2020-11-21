@@ -1,10 +1,29 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class AddressableLEDLowLevelNative
     {
-        
+        public AddressableLEDLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_FreeAddressableLEDFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeAddressableLED");
+            HAL_InitializeAddressableLEDFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeAddressableLED");
+            HAL_SetAddressableLEDBitTimingFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAddressableLEDBitTiming");
+            HAL_SetAddressableLEDLengthFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAddressableLEDLength");
+            HAL_SetAddressableLEDOutputPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAddressableLEDOutputPort");
+            HAL_SetAddressableLEDSyncTimeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetAddressableLEDSyncTime");
+            HAL_StartAddressableLEDOutputFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_StartAddressableLEDOutput");
+            HAL_StopAddressableLEDOutputFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_StopAddressableLEDOutput");
+            HAL_WriteAddressableLEDDataFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.AddressableLEDData *, System.Int32, int *, void >)loader.GetProcAddress("HAL_WriteAddressableLEDData");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAddressableLEDFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +33,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAddressableLEDFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +46,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int, int, int*, void> HAL_SetAddressableLEDBitTimingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +58,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAddressableLEDLengthFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -51,7 +70,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAddressableLEDOutputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -63,7 +82,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAddressableLEDSyncTimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,7 +94,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StartAddressableLEDOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,7 +106,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StopAddressableLEDOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,7 +118,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, AddressableLEDData*, int, int*, void> HAL_WriteAddressableLEDDataFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

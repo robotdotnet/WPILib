@@ -1,10 +1,24 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class ThreadsLowLevelNative
     {
-        
+        public ThreadsLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_GetCurrentThreadPriorityFunc = (delegate* unmanaged[Cdecl] < System.Int32 *, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCurrentThreadPriority");
+            HAL_GetThreadPriorityFunc = (delegate* unmanaged[Cdecl] < void *, System.Int32 *, int *, System.Int32 >)loader.GetProcAddress("HAL_GetThreadPriority");
+            HAL_SetCurrentThreadPriorityFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_SetCurrentThreadPriority");
+            HAL_SetThreadPriorityFunc = (delegate* unmanaged[Cdecl] < void *, System.Int32, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_SetThreadPriority");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int*, int*, int> HAL_GetCurrentThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +31,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void*, int*, int*, int> HAL_GetThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -30,7 +44,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, int> HAL_SetCurrentThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -43,7 +57,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void*, int, int, int*, int> HAL_SetThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

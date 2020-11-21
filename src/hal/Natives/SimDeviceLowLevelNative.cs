@@ -1,10 +1,26 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class SimDeviceLowLevelNative
     {
-        
+        public SimDeviceLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CreateSimDeviceFunc = (delegate* unmanaged[Cdecl] < System.Byte *, System.Int32 >)loader.GetProcAddress("HAL_CreateSimDevice");
+            HAL_CreateSimValueFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Byte *, System.Int32, Hal.Value *, System.Int32 >)loader.GetProcAddress("HAL_CreateSimValue");
+            HAL_CreateSimValueEnumFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Byte *, System.Int32, System.Int32, System.Byte * *, System.Int32, System.Int32 >)loader.GetProcAddress("HAL_CreateSimValueEnum");
+            HAL_FreeSimDeviceFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeSimDevice");
+            HAL_GetSimValueFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.Value *, void >)loader.GetProcAddress("HAL_GetSimValue");
+            HAL_SetSimValueFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.Value *, void >)loader.GetProcAddress("HAL_SetSimValue");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<byte*, int> HAL_CreateSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +30,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, Value*, int> HAL_CreateSimValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +40,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, int, byte**, int, int> HAL_CreateSimValueEnumFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +60,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, Value*, void> HAL_GetSimValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,7 +70,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, Value*, void> HAL_SetSimValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

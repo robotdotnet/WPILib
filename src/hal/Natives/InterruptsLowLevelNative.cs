@@ -1,31 +1,55 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class InterruptsLowLevelNative
     {
-        
+        public InterruptsLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_AttachInterruptHandlerFunc = (delegate* unmanaged[Cdecl] < System.Int32, delegate* unmanaged[Cdecl] < uint, void *, void >, void *, int *, void >)loader.GetProcAddress("HAL_AttachInterruptHandler");
+            HAL_AttachInterruptHandlerThreadedFunc = (delegate* unmanaged[Cdecl] < System.Int32, delegate* unmanaged[Cdecl] < uint, void *, void >, void *, int *, void >)loader.GetProcAddress("HAL_AttachInterruptHandlerThreaded");
+            HAL_CleanInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void *>)loader.GetProcAddress("HAL_CleanInterrupts");
+            HAL_DisableInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_DisableInterrupts");
+            HAL_DisableInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 *, void >)loader.GetProcAddress("HAL_DisableInterrupts");
+            HAL_EnableInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_EnableInterrupts");
+            HAL_EnableInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 *, void >)loader.GetProcAddress("HAL_EnableInterrupts");
+            HAL_InitializeInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeInterrupts");
+            HAL_ReadInterruptFallingTimestampFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int64 >)loader.GetProcAddress("HAL_ReadInterruptFallingTimestamp");
+            HAL_ReadInterruptRisingTimestampFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int64 >)loader.GetProcAddress("HAL_ReadInterruptRisingTimestamp");
+            HAL_RequestInterruptsFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, Hal.AnalogTriggerType, int *, void >)loader.GetProcAddress("HAL_RequestInterrupts");
+            HAL_SetInterruptUpSourceEdgeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetInterruptUpSourceEdge");
+            HAL_WaitForInterruptFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, System.Int32, int *, System.Int64 >)loader.GetProcAddress("HAL_WaitForInterrupt");
+            HAL_ReleaseWaitingInterruptFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_ReleaseWaitingInterrupt");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, delegate* unmanaged[Cdecl]<uint, void*, void>, void*, int*, void> HAL_AttachInterruptHandlerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void HAL_AttachInterruptHandler(int interruptHandle, delegate* unmanaged[Cdecl]<uint, void*, void> handler, void* param)
-    {
-int status = 0;
+        {
+            int status = 0;
         HAL_AttachInterruptHandlerFunc(interruptHandle, handler, param, &status);
         Hal.StatusHandling.StatusCheck(status);
-}
+        }
 
 
-    
+
     private readonly delegate* unmanaged[Cdecl]<int, delegate* unmanaged[Cdecl]<uint, void*, void>, void*, int*, void> HAL_AttachInterruptHandlerThreadedFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void HAL_AttachInterruptHandlerThreaded(int interruptHandle, delegate* unmanaged[Cdecl]<uint, void*, void> handler, void* param)
-{
-int status = 0;
+        {
+            int status = 0;
     HAL_AttachInterruptHandlerThreadedFunc(interruptHandle, handler, param, &status);
     Hal.StatusHandling.StatusCheck(status);
-}
+        }
 
 
 
@@ -166,5 +190,5 @@ public void HAL_ReleaseWaitingInterrupt(int interruptHandle)
 
 
 
-}
+    }
 }

@@ -33,9 +33,9 @@ namespace Hal.Natives
                 throw new ArgumentNullException(nameof(loader));
             }
 
-            HAL_LoadExtensionsFunc = (delegate* unmanaged[Cdecl]<int>)loader.GetProcAddress("HAL_LoadExtensions");
-            HAL_LoadOneExtensionFunc = (delegate* unmanaged[Cdecl]<byte*, int>)loader.GetProcAddress("HAL_LoadOneExtension");
-            HAL_SetShowExtensionsNotFoundMessagesFunc = (delegate* unmanaged[Cdecl]<int, void>)loader.GetProcAddress("HAL_SetShowExtensionsNotFoundMessages");
+            HAL_LoadExtensionsFunc = (delegate* unmanaged[Cdecl] < int >)loader.GetProcAddress("HAL_LoadExtensions");
+            HAL_LoadOneExtensionFunc = (delegate* unmanaged[Cdecl] < byte *, int >)loader.GetProcAddress("HAL_LoadOneExtension");
+            HAL_SetShowExtensionsNotFoundMessagesFunc = (delegate* unmanaged[Cdecl] < int, void >)loader.GetProcAddress("HAL_SetShowExtensionsNotFoundMessages");
         }
     }
 }

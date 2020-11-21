@@ -1,10 +1,38 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class PWMLowLevelNative
     {
-        
+        public PWMLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CheckPWMChannelFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_CheckPWMChannel");
+            HAL_FreePWMPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_FreePWMPort");
+            HAL_GetPWMCycleStartTimeFunc = (delegate* unmanaged[Cdecl] < int *, System.UInt64 >)loader.GetProcAddress("HAL_GetPWMCycleStartTime");
+            HAL_GetPWMEliminateDeadbandFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetPWMEliminateDeadband");
+            HAL_GetPWMLoopTimingFunc = (delegate* unmanaged[Cdecl] < int *, System.Int32 >)loader.GetProcAddress("HAL_GetPWMLoopTiming");
+            HAL_GetPWMPositionFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetPWMPosition");
+            HAL_GetPWMRawFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetPWMRaw");
+            HAL_GetPWMSpeedFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetPWMSpeed");
+            HAL_InitializePWMPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializePWMPort");
+            HAL_LatchPWMZeroFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_LatchPWMZero");
+            HAL_SetPWMConfigFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, System.Double, System.Double, System.Double, System.Double, int *, void >)loader.GetProcAddress("HAL_SetPWMConfig");
+            HAL_SetPWMConfigRawFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetPWMConfigRaw");
+            HAL_SetPWMDisabledFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_SetPWMDisabled");
+            HAL_SetPWMEliminateDeadbandFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetPWMEliminateDeadband");
+            HAL_SetPWMPeriodScaleFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetPWMPeriodScale");
+            HAL_SetPWMPositionFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetPWMPosition");
+            HAL_SetPWMRawFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetPWMRaw");
+            HAL_SetPWMSpeedFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetPWMSpeed");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckPWMChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +42,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreePWMPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,7 +54,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, ulong> HAL_GetPWMCycleStartTimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +67,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetPWMEliminateDeadbandFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,7 +80,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetPWMLoopTimingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,7 +93,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetPWMPositionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -78,7 +106,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetPWMRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +119,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetPWMSpeedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,7 +132,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializePWMPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -117,7 +145,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_LatchPWMZeroFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,7 +157,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, double, double, double, double, int*, void> HAL_SetPWMConfigFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -141,7 +169,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int, int, int, int*, void> HAL_SetPWMConfigRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,7 +181,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_SetPWMDisabledFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +193,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetPWMEliminateDeadbandFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -177,7 +205,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetPWMPeriodScaleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -189,7 +217,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetPWMPositionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -201,7 +229,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetPWMRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,7 +241,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetPWMSpeedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

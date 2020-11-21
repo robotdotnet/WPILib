@@ -1,10 +1,25 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class RelayLowLevelNative
     {
-        
+        public RelayLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CheckRelayChannelFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_CheckRelayChannel");
+            HAL_FreeRelayPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeRelayPort");
+            HAL_GetRelayFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetRelay");
+            HAL_InitializeRelayPortFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeRelayPort");
+            HAL_SetRelayFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetRelay");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckRelayChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +29,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeRelayPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +39,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetRelayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,7 +52,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, int> HAL_InitializeRelayPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +65,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetRelayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

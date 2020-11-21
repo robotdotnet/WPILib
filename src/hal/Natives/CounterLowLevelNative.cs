@@ -1,10 +1,43 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class CounterLowLevelNative
     {
-        
+        public CounterLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_GetCounterFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCounter");
+            HAL_ClearCounterDownSourceFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_ClearCounterDownSource");
+            HAL_ClearCounterUpSourceFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_ClearCounterUpSource");
+            HAL_FreeCounterFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_FreeCounter");
+            HAL_GetCounterSamplesToAverageFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCounterSamplesToAverage");
+            HAL_GetCounterDirectionFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCounterDirection");
+            HAL_GetCounterPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetCounterPeriod");
+            HAL_InitializeCounterFunc = (delegate* unmanaged[Cdecl] < Hal.CounterMode, System.Int32 *, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeCounter");
+            HAL_ResetCounterFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_ResetCounter");
+            HAL_SetCounterAverageSizeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterAverageSize");
+            HAL_SetCounterDownSourceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, Hal.AnalogTriggerType, int *, void >)loader.GetProcAddress("HAL_SetCounterDownSource");
+            HAL_SetCounterDownSourceEdgeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterDownSourceEdge");
+            HAL_SetCounterExternalDirectionModeFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterExternalDirectionMode");
+            HAL_SetCounterMaxPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetCounterMaxPeriod");
+            HAL_SetCounterPulseLengthModeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetCounterPulseLengthMode");
+            HAL_SetCounterReverseDirectionFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterReverseDirection");
+            HAL_SetCounterSamplesToAverageFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterSamplesToAverage");
+            HAL_SetCounterSemiPeriodModeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterSemiPeriodMode");
+            HAL_SetCounterUpDownModeFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterUpDownMode");
+            HAL_SetCounterUpSourceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, Hal.AnalogTriggerType, int *, void >)loader.GetProcAddress("HAL_SetCounterUpSource");
+            HAL_SetCounterUpSourceEdgeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterUpSourceEdge");
+            HAL_SetCounterUpdateWhenEmptyFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetCounterUpdateWhenEmpty");
+            HAL_GetCounterStoppedFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetCounterStopped");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearCounterDownSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +62,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearCounterUpSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +74,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +86,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +99,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +112,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetCounterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +125,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<CounterMode, int*, int*, int> HAL_InitializeCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,7 +138,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ResetCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -117,7 +150,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterAverageSizeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,7 +162,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int*, void> HAL_SetCounterDownSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -141,7 +174,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_SetCounterDownSourceEdgeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,7 +186,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_SetCounterExternalDirectionModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +198,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetCounterMaxPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -177,7 +210,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetCounterPulseLengthModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -189,7 +222,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterReverseDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -201,7 +234,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,7 +246,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterSemiPeriodModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -225,7 +258,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_SetCounterUpDownModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -237,7 +270,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int*, void> HAL_SetCounterUpSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -249,7 +282,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_SetCounterUpSourceEdgeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -261,7 +294,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterUpdateWhenEmptyFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -273,7 +306,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterStoppedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

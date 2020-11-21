@@ -1,10 +1,48 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class DriverStationLowLevelNative
     {
-        
+        public DriverStationLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_SendErrorFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32, System.Byte *, System.Byte *, System.Byte *, System.Int32, System.Int32 >)loader.GetProcAddress("HAL_SendError");
+            HAL_SendConsoleLineFunc = (delegate* unmanaged[Cdecl] < System.Byte *, System.Int32 >)loader.GetProcAddress("HAL_SendConsoleLine");
+            HAL_GetControlWordFunc = (delegate* unmanaged[Cdecl] < Hal.ControlWord *, void >)loader.GetProcAddress("HAL_GetControlWord");
+            HAL_GetAllianceStationFunc = (delegate* unmanaged[Cdecl] < System.Int32 *, Hal.AllianceStationID >)loader.GetProcAddress("HAL_GetAllianceStation");
+            HAL_GetJoystickAxesFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.JoystickAxes *, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickAxes");
+            HAL_GetJoystickPOVsFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.JoystickPOVs *, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickPOVs");
+            HAL_GetJoystickButtonsFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.JoystickButtons *, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickButtons");
+            HAL_GetJoystickDescriptorFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.JoystickDescriptor *, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickDescriptor");
+            HAL_GetJoystickIsXboxFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickIsXbox");
+            HAL_GetJoystickTypeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickType");
+            HAL_GetJoystickNameFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Byte *>)loader.GetProcAddress("HAL_GetJoystickName");
+            HAL_FreeJoystickNameFunc = (delegate* unmanaged[Cdecl] < System.Byte *, void >)loader.GetProcAddress("HAL_FreeJoystickName");
+            HAL_GetJoystickAxisTypeFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, System.Int32 >)loader.GetProcAddress("HAL_GetJoystickAxisType");
+            HAL_SetJoystickOutputsFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int64, System.Int32, System.Int32, System.Int32 >)loader.GetProcAddress("HAL_SetJoystickOutputs");
+            HAL_GetMatchTimeFunc = (delegate* unmanaged[Cdecl] < System.Int32 *, System.Double >)loader.GetProcAddress("HAL_GetMatchTime");
+            HAL_GetMatchInfoFunc = (delegate* unmanaged[Cdecl] < Hal.MatchInfo *, System.Int32 >)loader.GetProcAddress("HAL_GetMatchInfo");
+            HAL_ReleaseDSMutexFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_ReleaseDSMutex");
+            HAL_WaitForCachedControlDataFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_WaitForCachedControlData");
+            HAL_WaitForCachedControlDataTimeoutFunc = (delegate* unmanaged[Cdecl] < System.Double, System.Int32 >)loader.GetProcAddress("HAL_WaitForCachedControlDataTimeout");
+            HAL_IsNewControlDataFunc = (delegate* unmanaged[Cdecl] < System.Int32 >)loader.GetProcAddress("HAL_IsNewControlData");
+            HAL_WaitForDSDataFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_WaitForDSData");
+            HAL_WaitForDSDataTimeoutFunc = (delegate* unmanaged[Cdecl] < System.Double, System.Int32 >)loader.GetProcAddress("HAL_WaitForDSDataTimeout");
+            HAL_InitializeDriverStationFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_InitializeDriverStation");
+            HAL_ObserveUserProgramStartingFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_ObserveUserProgramStarting");
+            HAL_ObserveUserProgramDisabledFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_ObserveUserProgramDisabled");
+            HAL_ObserveUserProgramAutonomousFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_ObserveUserProgramAutonomous");
+            HAL_ObserveUserProgramTeleopFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_ObserveUserProgramTeleop");
+            HAL_ObserveUserProgramTestFunc = (delegate* unmanaged[Cdecl] < void >)loader.GetProcAddress("HAL_ObserveUserProgramTest");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int, byte*, byte*, byte*, int, int> HAL_SendErrorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +52,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<byte*, int> HAL_SendConsoleLineFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +62,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<Hal.ControlWord*, void> HAL_GetControlWordFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +72,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, Hal.AllianceStationID> HAL_GetAllianceStationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +82,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, Hal.JoystickAxes*, int> HAL_GetJoystickAxesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,7 +92,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, Hal.JoystickPOVs*, int> HAL_GetJoystickPOVsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +102,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, Hal.JoystickButtons*, int> HAL_GetJoystickButtonsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,7 +112,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, Hal.JoystickDescriptor*, int> HAL_GetJoystickDescriptorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -84,7 +122,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_GetJoystickIsXboxFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,7 +132,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_GetJoystickTypeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,7 +142,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, byte*> HAL_GetJoystickNameFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -114,7 +152,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<byte*, void> HAL_FreeJoystickNameFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -124,7 +162,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int> HAL_GetJoystickAxisTypeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -134,7 +172,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, long, int, int, int> HAL_SetJoystickOutputsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +182,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetMatchTimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -154,7 +192,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<Hal.MatchInfo*, int> HAL_GetMatchInfoFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,7 +202,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_ReleaseDSMutexFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -174,7 +212,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_WaitForCachedControlDataFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -184,7 +222,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<double, int> HAL_WaitForCachedControlDataTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -194,7 +232,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int> HAL_IsNewControlDataFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -204,7 +242,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_WaitForDSDataFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -214,7 +252,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<double, int> HAL_WaitForDSDataTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -224,7 +262,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_InitializeDriverStationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -234,7 +272,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_ObserveUserProgramStartingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -244,7 +282,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_ObserveUserProgramDisabledFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -254,7 +292,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_ObserveUserProgramAutonomousFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -264,7 +302,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_ObserveUserProgramTeleopFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -274,7 +312,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void> HAL_ObserveUserProgramTestFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

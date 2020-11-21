@@ -1,10 +1,41 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class EncoderLowLevelNative
     {
-        
+        public EncoderLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_FreeEncoderFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_FreeEncoder");
+            HAL_GetEncoderFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetEncoder");
+            HAL_GetEncoderDecodingScaleFactorFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetEncoderDecodingScaleFactor");
+            HAL_GetEncoderDirectionFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetEncoderDirection");
+            HAL_GetEncoderDistanceFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetEncoderDistance");
+            HAL_GetEncoderDistancePerPulseFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetEncoderDistancePerPulse");
+            HAL_GetEncoderEncodingScaleFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetEncoderEncodingScale");
+            HAL_GetEncoderEncodingTypeFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, Hal.EncoderEncodingType >)loader.GetProcAddress("HAL_GetEncoderEncodingType");
+            HAL_GetEncoderFPGAIndexFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetEncoderFPGAIndex");
+            HAL_GetEncoderPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetEncoderPeriod");
+            HAL_GetEncoderRateFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetEncoderRate");
+            HAL_GetEncoderRawFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetEncoderRaw");
+            HAL_GetEncoderSamplesToAverageFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetEncoderSamplesToAverage");
+            HAL_InitializeEncoderFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.AnalogTriggerType, System.Int32, Hal.AnalogTriggerType, System.Int32, Hal.EncoderEncodingType, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeEncoder");
+            HAL_ResetEncoderFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_ResetEncoder");
+            HAL_SetEncoderIndexSourceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, Hal.AnalogTriggerType, Hal.EncoderIndexingType, int *, void >)loader.GetProcAddress("HAL_SetEncoderIndexSource");
+            HAL_SetEncoderMaxPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetEncoderMaxPeriod");
+            HAL_SetEncoderMinRateFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Double, int *, void >)loader.GetProcAddress("HAL_SetEncoderMinRate");
+            HAL_SetEncoderReverseDirectionFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetEncoderReverseDirection");
+            HAL_SetEncoderSamplesToAverageFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetEncoderSamplesToAverage");
+            HAL_SetEncoderSimDeviceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, void >)loader.GetProcAddress("HAL_SetEncoderSimDevice");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +47,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +60,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderDecodingScaleFactorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,7 +73,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -55,7 +86,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderDistanceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +99,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderDistancePerPulseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -81,7 +112,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderEncodingScaleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,7 +125,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, EncoderEncodingType> HAL_GetEncoderEncodingTypeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -107,7 +138,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderFPGAIndexFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -120,7 +151,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -133,7 +164,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -146,7 +177,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -159,7 +190,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -172,7 +203,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, AnalogTriggerType, int, AnalogTriggerType, int, EncoderEncodingType, int*, int> HAL_InitializeEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -185,7 +216,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ResetEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -197,7 +228,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, EncoderIndexingType, int*, void> HAL_SetEncoderIndexSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -209,7 +240,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetEncoderMaxPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -221,7 +252,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetEncoderMinRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -233,7 +264,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetEncoderReverseDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -245,7 +276,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetEncoderSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -257,7 +288,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetEncoderSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

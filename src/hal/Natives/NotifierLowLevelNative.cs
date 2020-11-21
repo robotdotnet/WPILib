@@ -1,10 +1,28 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class NotifierLowLevelNative
     {
-        
+        public NotifierLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_CancelNotifierAlarmFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_CancelNotifierAlarm");
+            HAL_CleanNotifierFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_CleanNotifier");
+            HAL_InitializeNotifierFunc = (delegate* unmanaged[Cdecl] < int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeNotifier");
+            HAL_SetNotifierNameFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Byte *, int *, void >)loader.GetProcAddress("HAL_SetNotifierName");
+            HAL_StopNotifierFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_StopNotifier");
+            HAL_UpdateNotifierAlarmFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.UInt64, int *, void >)loader.GetProcAddress("HAL_UpdateNotifierAlarm");
+            HAL_WaitForNotifierAlarmFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.UInt64 >)loader.GetProcAddress("HAL_WaitForNotifierAlarm");
+            HAL_WaitForNotifierAlarmFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32 *, System.UInt64 >)loader.GetProcAddress("HAL_WaitForNotifierAlarm");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CancelNotifierAlarmFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +34,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CleanNotifierFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,7 +46,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_InitializeNotifierFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +59,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int*, void> HAL_SetNotifierNameFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +71,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StopNotifierFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,7 +83,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, ulong, int*, void> HAL_UpdateNotifierAlarmFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,7 +95,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, ulong> HAL_WaitForNotifierAlarmFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

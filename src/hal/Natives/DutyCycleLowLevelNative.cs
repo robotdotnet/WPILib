@@ -1,10 +1,28 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class DutyCycleLowLevelNative
     {
-        
+        public DutyCycleLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_FreeDutyCycleFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeDutyCycle");
+            HAL_GetDutyCycleFPGAIndexFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDutyCycleFPGAIndex");
+            HAL_GetDutyCycleFrequencyFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDutyCycleFrequency");
+            HAL_GetDutyCycleOutputFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Double >)loader.GetProcAddress("HAL_GetDutyCycleOutput");
+            HAL_GetDutyCycleOutputRawFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDutyCycleOutputRaw");
+            HAL_GetDutyCycleOutputScaleFactorFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDutyCycleOutputScaleFactor");
+            HAL_InitializeDutyCycleFunc = (delegate* unmanaged[Cdecl] < System.Int32, Hal.AnalogTriggerType, int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeDutyCycle");
+            HAL_SetDutyCycleSimDeviceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, void >)loader.GetProcAddress("HAL_SetDutyCycleSimDevice");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +32,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleFPGAIndexFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +45,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleFrequencyFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +58,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetDutyCycleOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +71,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleOutputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +84,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleOutputScaleFactorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +97,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, AnalogTriggerType, int*, int> HAL_InitializeDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +110,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetDutyCycleSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

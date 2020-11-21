@@ -1,10 +1,48 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
     public unsafe class DMALowLevelNative
     {
-        
+        public DMALowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
+
+            HAL_AddDMAAnalogAccumulatorFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMAAnalogAccumulator");
+            HAL_AddDMAAnalogInputFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMAAnalogInput");
+            HAL_AddDMAAveragedAnalogInputFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMAAveragedAnalogInput");
+            HAL_AddDMACounterFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMACounter");
+            HAL_AddDMACounterPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMACounterPeriod");
+            HAL_AddDMADigitalSourceFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMADigitalSource");
+            HAL_AddDMADutyCycleFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMADutyCycle");
+            HAL_AddDMAEncoderFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMAEncoder");
+            HAL_AddDMAEncoderPeriodFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_AddDMAEncoderPeriod");
+            HAL_FreeDMAFunc = (delegate* unmanaged[Cdecl] < System.Int32, void >)loader.GetProcAddress("HAL_FreeDMA");
+            HAL_GetDMADirectPointerFunc = (delegate* unmanaged[Cdecl] < System.Int32, void *>)loader.GetProcAddress("HAL_GetDMADirectPointer");
+            HAL_GetDMASampleAnalogAccumulatorFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, System.Int64 *, System.Int64 *, int *, void >)loader.GetProcAddress("HAL_GetDMASampleAnalogAccumulator");
+            HAL_GetDMASampleAnalogInputRawFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleAnalogInputRaw");
+            HAL_GetDMASampleAveragedAnalogInputRawFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleAveragedAnalogInputRaw");
+            HAL_GetDMASampleCounterFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleCounter");
+            HAL_GetDMASampleCounterPeriodFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleCounterPeriod");
+            HAL_GetDMASampleDigitalSourceFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleDigitalSource");
+            HAL_GetDMASampleDutyCycleOutputRawFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleDutyCycleOutputRaw");
+            HAL_GetDMASampleEncoderPeriodRawFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleEncoderPeriodRaw");
+            HAL_GetDMASampleEncoderRawFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, System.Int32, int *, System.Int32 >)loader.GetProcAddress("HAL_GetDMASampleEncoderRaw");
+            HAL_GetDMASampleTimeFunc = (delegate* unmanaged[Cdecl] < Hal.DMASample *, int *, System.UInt64 >)loader.GetProcAddress("HAL_GetDMASampleTime");
+            HAL_InitializeDMAFunc = (delegate* unmanaged[Cdecl] < int *, System.Int32 >)loader.GetProcAddress("HAL_InitializeDMA");
+            HAL_ReadDMADirectFunc = (delegate* unmanaged[Cdecl] < void *, Hal.DMASample *, System.Int32, System.Int32 *, int *, Hal.DMAReadStatus >)loader.GetProcAddress("HAL_ReadDMADirect");
+            HAL_SetDMAExternalTriggerFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, Hal.AnalogTriggerType, System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetDMAExternalTrigger");
+            HAL_SetDMAPauseFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetDMAPause");
+            HAL_SetDMARateFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_SetDMARate");
+            HAL_StartDMAFunc = (delegate* unmanaged[Cdecl] < System.Int32, System.Int32, int *, void >)loader.GetProcAddress("HAL_StartDMA");
+            HAL_StopDMAFunc = (delegate* unmanaged[Cdecl] < System.Int32, int *, void >)loader.GetProcAddress("HAL_StopDMA");
+        }
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAnalogAccumulatorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +54,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAnalogInputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,7 +66,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAveragedAnalogInputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +78,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMACounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,7 +90,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMACounterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +102,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMADigitalSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -76,7 +114,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMADutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -88,7 +126,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +138,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAEncoderPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -112,7 +150,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -122,7 +160,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, void*> HAL_GetDMADirectPointerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -132,7 +170,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, long*, long*, int*, void> HAL_GetDMASampleAnalogAccumulatorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +182,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleAnalogInputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -157,7 +195,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleAveragedAnalogInputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -170,7 +208,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -183,7 +221,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleCounterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -196,7 +234,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleDigitalSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -209,7 +247,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleDutyCycleOutputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -222,7 +260,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleEncoderPeriodRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -235,7 +273,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleEncoderRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -248,7 +286,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int*, ulong> HAL_GetDMASampleTimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -261,7 +299,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_InitializeDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -274,7 +312,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<void*, DMASample*, int, int*, int*, DMAReadStatus> HAL_ReadDMADirectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -287,7 +325,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int, int, int*, void> HAL_SetDMAExternalTriggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -299,7 +337,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDMAPauseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -311,7 +349,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDMARateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -323,7 +361,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_StartDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -335,7 +373,7 @@ namespace Hal.Natives
         }
 
 
-        
+
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StopDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
