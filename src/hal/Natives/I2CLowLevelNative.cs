@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class I2CLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CloseI2C")]
+        
         private readonly delegate* unmanaged[Cdecl]<I2CPort, void> HAL_CloseI2CFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeI2C")]
+        
         private readonly delegate* unmanaged[Cdecl]<I2CPort, int*, void> HAL_InitializeI2CFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,7 +26,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ReadI2C")]
+        
         private readonly delegate* unmanaged[Cdecl]<I2CPort, int, byte*, int, int> HAL_ReadI2CFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -36,7 +36,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_TransactionI2C")]
+        
         private readonly delegate* unmanaged[Cdecl]<I2CPort, int, byte*, int, byte*, int, int> HAL_TransactionI2CFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -46,7 +46,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WriteI2C")]
+        
         private readonly delegate* unmanaged[Cdecl]<I2CPort, int, byte*, int, int> HAL_WriteI2CFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

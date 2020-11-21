@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class EncoderLowLevelNative
     {
-        [NativeFunctionPointer("HAL_FreeEncoder")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoder")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +29,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderDecodingScaleFactor")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderDecodingScaleFactorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,7 +42,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderDirection")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -55,7 +55,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderDistance")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderDistanceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +68,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderDistancePerPulse")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderDistancePerPulseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -81,7 +81,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderEncodingScale")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderEncodingScaleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,7 +94,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderEncodingType")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, EncoderEncodingType> HAL_GetEncoderEncodingTypeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -107,7 +107,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderFPGAIndex")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderFPGAIndexFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -120,7 +120,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -133,7 +133,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetEncoderRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -146,7 +146,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -159,7 +159,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetEncoderSamplesToAverage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetEncoderSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -172,7 +172,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeEncoder")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, AnalogTriggerType, int, AnalogTriggerType, int, EncoderEncodingType, int*, int> HAL_InitializeEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -185,7 +185,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ResetEncoder")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ResetEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -197,7 +197,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetEncoderIndexSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, EncoderIndexingType, int*, void> HAL_SetEncoderIndexSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -209,7 +209,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetEncoderMaxPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetEncoderMaxPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -221,7 +221,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetEncoderMinRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetEncoderMinRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -233,7 +233,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetEncoderReverseDirection")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetEncoderReverseDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -245,7 +245,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetEncoderSamplesToAverage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetEncoderSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -257,7 +257,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetEncoderSimDevice")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetEncoderSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class AccelerometerLowLevelNative
     {
-        [NativeFunctionPointer("HAL_GetAccelerometerX")]
+        
         private readonly delegate* unmanaged[Cdecl]<double> HAL_GetAccelerometerXFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAccelerometerY")]
+        
         private readonly delegate* unmanaged[Cdecl]<double> HAL_GetAccelerometerYFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAccelerometerZ")]
+        
         private readonly delegate* unmanaged[Cdecl]<double> HAL_GetAccelerometerZFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +34,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAccelerometerActive")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_SetAccelerometerActiveFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +44,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAccelerometerRange")]
+        
         private readonly delegate* unmanaged[Cdecl]<AccelerometerRange, void> HAL_SetAccelerometerRangeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

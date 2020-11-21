@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class AnalogOutputLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CheckAnalogOutputChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckAnalogOutputChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeAnalogOutputPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAnalogOutputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogOutput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,7 +37,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeAnalogOutputPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAnalogOutputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogOutput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetAnalogOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

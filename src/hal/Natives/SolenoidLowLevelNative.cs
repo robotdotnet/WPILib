@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class SolenoidLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CheckSolenoidChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckSolenoidChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CheckSolenoidModule")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckSolenoidModuleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ClearAllPCMStickyFaults")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearAllPCMStickyFaultsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -36,7 +36,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FireOneShot")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FireOneShotFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -48,7 +48,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeSolenoidPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeSolenoidPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -58,7 +58,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAllSolenoids")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAllSolenoidsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -71,7 +71,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetPCMSolenoidBlackList")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetPCMSolenoidBlackListFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -84,7 +84,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetPCMSolenoidVoltageFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetPCMSolenoidVoltageFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -97,7 +97,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetPCMSolenoidVoltageStickyFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetPCMSolenoidVoltageStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -110,7 +110,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetSolenoid")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetSolenoidFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -123,7 +123,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeSolenoidPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeSolenoidPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -136,7 +136,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAllSolenoids")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAllSolenoidsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -148,7 +148,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetOneShotDuration")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetOneShotDurationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -160,7 +160,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSolenoid")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSolenoidFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

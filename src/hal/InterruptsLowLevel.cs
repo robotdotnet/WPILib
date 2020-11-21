@@ -10,13 +10,9 @@ namespace Hal
 
     public static unsafe class InterruptsLowLevel
     {
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
-#pragma warning disable IDE0044 // Add readonly modifier
         internal static InterruptsLowLevelNative lowLevel = null!;
-#pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         [UnmanagedCallersOnly(CallConvs = new[] { typeof(CallConvCdecl) })]
         private static void InterruptHandler(uint mask, void* context)

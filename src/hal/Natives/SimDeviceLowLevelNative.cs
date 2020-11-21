@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class SimDeviceLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CreateSimDevice")]
+        
         private readonly delegate* unmanaged[Cdecl]<byte*, int> HAL_CreateSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CreateSimValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, Value*, int> HAL_CreateSimValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CreateSimValueEnum")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, int, byte**, int, int> HAL_CreateSimValueEnumFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +34,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeSimDevice")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +44,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetSimValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, Value*, void> HAL_GetSimValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,7 +54,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSimValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, Value*, void> HAL_SetSimValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

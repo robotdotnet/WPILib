@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class InterruptsLowLevelNative
     {
-        [NativeFunctionPointer("HAL_AttachInterruptHandler")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, delegate* unmanaged[Cdecl]<uint, void*, void>, void*, int*, void> HAL_AttachInterruptHandlerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ int status = 0;
 }
 
 
-    [NativeFunctionPointer("HAL_AttachInterruptHandlerThreaded")]
+    
     private readonly delegate* unmanaged[Cdecl]<int, delegate* unmanaged[Cdecl]<uint, void*, void>, void*, int*, void> HAL_AttachInterruptHandlerThreadedFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,7 +28,7 @@ int status = 0;
 }
 
 
-[NativeFunctionPointer("HAL_CleanInterrupts")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, void*> HAL_CleanInterruptsFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +41,7 @@ public void* HAL_CleanInterrupts(int interruptHandle)
 }
 
 
-[NativeFunctionPointer("HAL_DisableInterrupts")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_DisableInterruptsFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,7 +59,7 @@ public void HAL_DisableInterrupts(int interruptHandle, int* status)
 }
 
 
-[NativeFunctionPointer("HAL_EnableInterrupts")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_EnableInterruptsFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,7 +77,7 @@ public void HAL_EnableInterrupts(int interruptHandle, int* status)
 }
 
 
-[NativeFunctionPointer("HAL_InitializeInterrupts")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeInterruptsFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -90,7 +90,7 @@ public int HAL_InitializeInterrupts(int watcher)
 }
 
 
-[NativeFunctionPointer("HAL_ReadInterruptFallingTimestamp")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_ReadInterruptFallingTimestampFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,7 +103,7 @@ public long HAL_ReadInterruptFallingTimestamp(int interruptHandle)
 }
 
 
-[NativeFunctionPointer("HAL_ReadInterruptRisingTimestamp")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_ReadInterruptRisingTimestampFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,7 +116,7 @@ public long HAL_ReadInterruptRisingTimestamp(int interruptHandle)
 }
 
 
-[NativeFunctionPointer("HAL_RequestInterrupts")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int*, void> HAL_RequestInterruptsFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -128,7 +128,7 @@ public void HAL_RequestInterrupts(int interruptHandle, int digitalSourceHandle, 
 }
 
 
-[NativeFunctionPointer("HAL_SetInterruptUpSourceEdge")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_SetInterruptUpSourceEdgeFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -140,7 +140,7 @@ public void HAL_SetInterruptUpSourceEdge(int interruptHandle, int risingEdge, in
 }
 
 
-[NativeFunctionPointer("HAL_WaitForInterrupt")]
+
 private readonly delegate* unmanaged[Cdecl]<int, double, int, int*, long> HAL_WaitForInterruptFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,7 +153,7 @@ public long HAL_WaitForInterrupt(int interruptHandle, double timeout, int ignore
 }
 
 
-[NativeFunctionPointer("HAL_ReleaseWaitingInterrupt")]
+
 private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ReleaseWaitingInterruptFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]

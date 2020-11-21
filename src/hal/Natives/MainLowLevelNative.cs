@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class MainLowLevelNative
     {
-        [NativeFunctionPointer("HAL_SetMain")]
+        
         private readonly delegate* unmanaged[Cdecl]<void*, delegate* unmanaged[Cdecl]<void*, void>, delegate* unmanaged[Cdecl]<void*, void>, void> HAL_SetMainFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ HAL_SetMainFunc(param, mainFunc, exitFunc);
     }
 
 
-    [NativeFunctionPointer("HAL_HasMain")]
+    
     private readonly delegate* unmanaged[Cdecl]<int> HAL_HasMainFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ HAL_SetMainFunc(param, mainFunc, exitFunc);
     }
 
 
-    [NativeFunctionPointer("HAL_RunMain")]
+    
     private readonly delegate* unmanaged[Cdecl]<void> HAL_RunMainFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +34,7 @@ HAL_SetMainFunc(param, mainFunc, exitFunc);
     }
 
 
-    [NativeFunctionPointer("HAL_ExitMain")]
+    
     private readonly delegate* unmanaged[Cdecl]<void> HAL_ExitMainFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

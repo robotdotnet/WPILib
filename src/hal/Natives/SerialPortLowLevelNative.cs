@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class SerialPortLowLevelNative
     {
-        [NativeFunctionPointer("HAL_ClearSerial")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearSerialFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CloseSerial")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CloseSerialFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,7 +28,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_DisableSerialTermination")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_DisableSerialTerminationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +40,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_EnableSerialTermination")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte, int*, void> HAL_EnableSerialTerminationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,7 +52,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FlushSerial")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FlushSerialFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +64,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetSerialBytesReceived")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetSerialBytesReceivedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,7 +77,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetSerialFD")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetSerialFDFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -90,7 +90,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeSerialPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<SerialPortLocation, int*, int> HAL_InitializeSerialPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,7 +103,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeSerialPortDirect")]
+        
         private readonly delegate* unmanaged[Cdecl]<SerialPortLocation, byte*, int*, int> HAL_InitializeSerialPortDirectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,7 +116,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ReadSerial")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, int*, int> HAL_ReadSerialFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,7 +129,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialBaudRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialBaudRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -141,7 +141,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialDataBits")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialDataBitsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,7 +153,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialFlowControl")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialFlowControlFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +165,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialParity")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialParityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -177,7 +177,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialReadBufferSize")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialReadBufferSizeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -189,7 +189,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialStopBits")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialStopBitsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -201,7 +201,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetSerialTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,7 +213,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialWriteBufferSize")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialWriteBufferSizeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -225,7 +225,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetSerialWriteMode")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetSerialWriteModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -237,7 +237,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WriteSerial")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, int*, int> HAL_WriteSerialFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

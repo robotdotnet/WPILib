@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class CANAPILowLevelNative
     {
-        [NativeFunctionPointer("HAL_CleanCAN")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_CleanCANFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeCAN")]
+        
         private readonly delegate* unmanaged[Cdecl]<CANManufacturer, int, CANDeviceType, int*, int> HAL_InitializeCANFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ReadCANPacketLatest")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, byte*, int*, ulong*, int*, void> HAL_ReadCANPacketLatestFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +39,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ReadCANPacketNew")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, byte*, int*, ulong*, int*, void> HAL_ReadCANPacketNewFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -51,7 +51,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ReadCANPacketTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, byte*, int*, ulong*, int, int*, void> HAL_ReadCANPacketTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -63,7 +63,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_StopCANPacketRepeating")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_StopCANPacketRepeatingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,7 +75,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WriteCANPacket")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, int, int*, void> HAL_WriteCANPacketFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,7 +87,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WriteCANPacketRepeating")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int, int, int, int*, void> HAL_WriteCANPacketRepeatingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,7 +99,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WriteCANRTRFrame")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_WriteCANRTRFrameFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

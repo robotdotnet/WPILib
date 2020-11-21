@@ -8,9 +8,7 @@ namespace WPIUtil.NativeUtilities
     /// <summary>
     /// This class handles native libraries on Linux
     /// </summary>
-#pragma warning disable CA1060 // Move pinvokes to native methods class
     public sealed class LinuxLibraryLoader : ILibraryLoader
-#pragma warning restore CA1060 // Move pinvokes to native methods class
     {
         /// <inheritdoc/>
         public IntPtr NativeLibraryHandle { get; private set; } = IntPtr.Zero;
@@ -70,8 +68,6 @@ namespace WPIUtil.NativeUtilities
 
 #pragma warning disable CA2101 // Specify marshaling for P/Invoke string arguments
         [DllImport("libdl.so.2")]
-
-#pragma warning disable IDE1006 // Naming Styles
         private static extern IntPtr dlopen(string fileName, int flags);
 
         [DllImport("libdl.so.2")]
@@ -83,6 +79,5 @@ namespace WPIUtil.NativeUtilities
 
         [DllImport("libdl.so.2")]
         private static extern int dlclose(IntPtr handle);
-#pragma warning restore IDE1006 // Naming Styles
     }
 }

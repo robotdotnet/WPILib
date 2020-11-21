@@ -5,18 +5,6 @@ namespace WPIUtil.NativeUtilities
 {
     public static class NativeLibraryLoader
     {
-
-        public static InterfaceGenerator? LoadNativeLibraryGenerator(string libraryName)
-        {
-            var fpLoader = LoadNativeLibrary(libraryName);
-            if (fpLoader == null)
-            {
-                return null;
-            }
-
-            return new InterfaceGenerator(fpLoader, new CalliILGenerator());
-        }
-
         public static IFunctionPointerLoader? LoadNativeLibrary(string libraryName)
         {
             string fullLibraryName;

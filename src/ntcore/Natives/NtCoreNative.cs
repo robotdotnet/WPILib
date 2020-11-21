@@ -124,7 +124,7 @@ namespace NetworkTables.Natives
             NT_DisposeRpcAnswerFunc = (delegate* unmanaged[Cdecl] < NtRpcAnswer *, void >)loader.GetProcAddress("NT_DisposeRpcAnswer");
         }
 
-        [NativeFunctionPointer("NT_DisposeEntryNotificationArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryNotification*, UIntPtr, void> NT_DisposeEntryNotificationArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -134,7 +134,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DisposeEntryNotification")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryNotification*, void> NT_DisposeEntryNotificationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +144,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DisposeConnectionNotificationArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionNotification*, UIntPtr, void> NT_DisposeConnectionNotificationArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -154,7 +154,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DisposeConnectionNotification")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionNotification*, void> NT_DisposeConnectionNotificationFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,7 +164,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DisposeLogMessageArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLogMessage*, UIntPtr, void> NT_DisposeLogMessageArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -174,7 +174,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DisposeLogMessage")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLogMessage*, void> NT_DisposeLogMessageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -184,7 +184,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_Now")]
+        
         private readonly delegate* unmanaged[Cdecl]<ulong> NT_NowFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -194,7 +194,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CreateLoggerPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, NtLoggerPoller> NT_CreateLoggerPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -204,7 +204,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DestroyLoggerPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLoggerPoller, void> NT_DestroyLoggerPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -214,7 +214,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AddPolledLogger")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLoggerPoller, uint, uint, NtLogger> NT_AddPolledLoggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -224,7 +224,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollLogger")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLoggerPoller, UIntPtr*, NtLogMessage*> NT_PollLoggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -234,7 +234,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollLoggerTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLoggerPoller, UIntPtr*, double, NtBool*, NtLogMessage*> NT_PollLoggerTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -244,7 +244,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CancelPollLogger")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLoggerPoller, void> NT_CancelPollLoggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -254,7 +254,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_RemoveLogger")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtLogger, void> NT_RemoveLoggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -264,7 +264,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_WaitForLoggerQueue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, double, NtBool> NT_WaitForLoggerQueueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -274,7 +274,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AllocateCharArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<UIntPtr, byte*> NT_AllocateCharArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -284,7 +284,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AllocateBooleanArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<UIntPtr, NtBool*> NT_AllocateBooleanArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -294,7 +294,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AllocateDoubleArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<UIntPtr, double*> NT_AllocateDoubleArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -304,7 +304,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AllocateStringArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<UIntPtr, NtString*> NT_AllocateStringArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -314,7 +314,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_FreeCharArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<byte*, void> NT_FreeCharArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -324,7 +324,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_FreeDoubleArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<double*, void> NT_FreeDoubleArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -334,7 +334,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_FreeBooleanArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtBool*, void> NT_FreeBooleanArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -344,7 +344,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_FreeStringArray")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtString*, UIntPtr, void> NT_FreeStringArrayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -354,7 +354,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetDefaultInstance")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst> NT_GetDefaultInstanceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -364,7 +364,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CreateInstance")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst> NT_CreateInstanceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -374,7 +374,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DestroyInstance")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_DestroyInstanceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -384,7 +384,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetInstanceFromHandle")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtHandle, NtInst> NT_GetInstanceFromHandleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -394,7 +394,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntry")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, UIntPtr, NtEntry> NT_GetEntryFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -404,7 +404,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntries")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, UIntPtr, uint, UIntPtr*, NtEntry*> NT_GetEntriesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -414,7 +414,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryName")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, UIntPtr*, byte*> NT_GetEntryNameFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -424,7 +424,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryType")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtType> NT_GetEntryTypeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -434,7 +434,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryLastChange")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, ulong> NT_GetEntryLastChangeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -444,7 +444,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtValue*, void> NT_GetEntryValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -454,7 +454,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetDefaultEntryValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtValue*, NtBool> NT_SetDefaultEntryValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -464,7 +464,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetEntryValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtValue*, NtBool> NT_SetEntryValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -474,7 +474,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetEntryTypeValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtValue*, void> NT_SetEntryTypeValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -484,7 +484,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetEntryFlags")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, uint, void> NT_SetEntryFlagsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -494,7 +494,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryFlags")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, uint> NT_GetEntryFlagsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -504,7 +504,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DeleteEntry")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, void> NT_DeleteEntryFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -514,7 +514,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DeleteAllEntries")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_DeleteAllEntriesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -524,7 +524,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryInfo")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, UIntPtr, uint, UIntPtr*, NtEntryInfo*> NT_GetEntryInfoFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -534,7 +534,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetEntryInfoHandle")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtEntryInfo*, NtBool> NT_GetEntryInfoHandleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -544,7 +544,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CreateEntryListenerPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, NtEntryListenerPoller> NT_CreateEntryListenerPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -554,7 +554,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DestroyEntryListenerPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListenerPoller, void> NT_DestroyEntryListenerPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -564,7 +564,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AddPolledEntryListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListenerPoller, byte*, UIntPtr, uint, NtEntryListener> NT_AddPolledEntryListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -574,7 +574,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AddPolledEntryListenerSingle")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListenerPoller, NtEntry, uint, NtEntryListener> NT_AddPolledEntryListenerSingleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -584,7 +584,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollEntryListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListenerPoller, UIntPtr*, NtEntryNotification*> NT_PollEntryListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -594,7 +594,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollEntryListenerTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListenerPoller, UIntPtr*, double, NtBool*, NtEntryNotification*> NT_PollEntryListenerTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -604,7 +604,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CancelPollEntryListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListenerPoller, void> NT_CancelPollEntryListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -614,7 +614,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_RemoveEntryListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntryListener, void> NT_RemoveEntryListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -624,7 +624,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_WaitForEntryListenerQueue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, double, NtBool> NT_WaitForEntryListenerQueueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -634,7 +634,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CreateConnectionListenerPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, NtConnectionListenerPoller> NT_CreateConnectionListenerPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -644,7 +644,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DestroyConnectionListenerPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionListenerPoller, void> NT_DestroyConnectionListenerPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -654,7 +654,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_AddPolledConnectionListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionListenerPoller, NtBool, NtConnectionListener> NT_AddPolledConnectionListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -664,7 +664,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollConnectionListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionListenerPoller, UIntPtr*, NtConnectionNotification*> NT_PollConnectionListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -674,7 +674,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollConnectionListenerTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionListenerPoller, UIntPtr*, double, NtBool*, NtConnectionNotification*> NT_PollConnectionListenerTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -684,7 +684,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CancelPollConnectionListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionListenerPoller, void> NT_CancelPollConnectionListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -694,7 +694,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_RemoveConnectionListener")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtConnectionListener, void> NT_RemoveConnectionListenerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -704,7 +704,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_WaitForConnectionListenerQueue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, double, NtBool> NT_WaitForConnectionListenerQueueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -714,7 +714,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CreateRpcCallPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, NtRpcCallPoller> NT_CreateRpcCallPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -724,7 +724,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_DestroyRpcCallPoller")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtRpcCallPoller, void> NT_DestroyRpcCallPollerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -734,7 +734,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CreatePolledRpc")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, byte*, UIntPtr, NtRpcCallPoller, void> NT_CreatePolledRpcFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -744,7 +744,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollRpc")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtRpcCallPoller, UIntPtr*, NtRpcAnswer*> NT_PollRpcFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -754,7 +754,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PollRpcTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtRpcCallPoller, UIntPtr*, double, NtBool*, NtRpcAnswer*> NT_PollRpcTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -764,7 +764,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CancelPollRpc")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtRpcCallPoller, void> NT_CancelPollRpcFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -774,7 +774,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_WaitForRpcCallQueue")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, double, NtBool> NT_WaitForRpcCallQueueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -784,7 +784,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PostRpcResponse")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtRpcCall, byte*, UIntPtr, void> NT_PostRpcResponseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -794,7 +794,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CallRpc")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, byte*, UIntPtr, NtRpcCall> NT_CallRpcFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -804,7 +804,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetRpcResult")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtRpcCall, UIntPtr*, byte*> NT_GetRpcResultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -814,7 +814,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetRpcResultTimeout")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtRpcCall, UIntPtr*, double, NtBool*, byte*> NT_GetRpcResultTimeoutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -824,7 +824,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_CancelRpcResult")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtEntry, NtRpcCall, void> NT_CancelRpcResultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -834,7 +834,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PackRpcDefinition")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtRpcDefinition, UIntPtr*, byte*> NT_PackRpcDefinitionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -844,7 +844,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_UnpackRpcDefinition")]
+        
         private readonly delegate* unmanaged[Cdecl]<byte*, UIntPtr, NtRpcDefinition*, NtBool> NT_UnpackRpcDefinitionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -854,7 +854,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_PackRpcValues")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtValue**, UIntPtr, UIntPtr*, byte*> NT_PackRpcValuesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -864,7 +864,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_UnpackRpcValues")]
+        
         private readonly delegate* unmanaged[Cdecl]<byte*, UIntPtr, NtType*, UIntPtr, NtValue**> NT_UnpackRpcValuesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -874,7 +874,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetNetworkIdentity")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, UIntPtr, void> NT_SetNetworkIdentityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -884,7 +884,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetNetworkMode")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, uint> NT_GetNetworkModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -894,7 +894,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StartServer")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, uint, void> NT_StartServerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -904,7 +904,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StopServer")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_StopServerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -914,7 +914,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StartClientNone")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_StartClientNoneFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -924,7 +924,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StartClient")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, uint, void> NT_StartClientFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -934,7 +934,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StartClientMulti")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, UIntPtr, byte**, uint*, void> NT_StartClientMultiFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -944,7 +944,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StartClientTeam")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, uint, uint, void> NT_StartClientTeamFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -954,7 +954,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StopClient")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_StopClientFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -964,7 +964,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetServer")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, uint, void> NT_SetServerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -974,7 +974,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetServerMulti")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, UIntPtr, byte**, uint*, void> NT_SetServerMultiFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -984,7 +984,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetServerTeam")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, uint, uint, void> NT_SetServerTeamFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -994,7 +994,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StartDSClient")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, uint, void> NT_StartDSClientFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1004,7 +1004,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_StopDSClient")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_StopDSClientFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1014,7 +1014,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SetUpdateRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, double, void> NT_SetUpdateRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1024,7 +1024,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_Flush")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, void> NT_FlushFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1034,7 +1034,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_GetConnections")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, UIntPtr*, NtConnectionInfo*> NT_GetConnectionsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1044,7 +1044,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_IsConnected")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, NtBool> NT_IsConnectedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1054,7 +1054,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_SavePersistent")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*> NT_SavePersistentFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1064,7 +1064,7 @@ namespace NetworkTables.Natives
         }
 
 
-        [NativeFunctionPointer("NT_LoadPersistent")]
+        
         private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void>, byte*> NT_LoadPersistentFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1074,7 +1074,7 @@ namespace NetworkTables.Natives
     }
 
 
-    [NativeFunctionPointer("NT_SaveEntries")]
+    
     private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, UIntPtr, byte*> NT_SaveEntriesFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1084,7 +1084,7 @@ namespace NetworkTables.Natives
     }
 
 
-    [NativeFunctionPointer("NT_LoadEntries")]
+    
     private readonly delegate* unmanaged[Cdecl]<NtInst, byte*, byte*, UIntPtr, delegate* unmanaged[Cdecl]<UIntPtr, byte*, void>, byte*> NT_LoadEntriesFunc;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1094,7 +1094,7 @@ namespace NetworkTables.Natives
 }
 
 
-[NativeFunctionPointer("NT_DisposeValue")]
+
 private readonly delegate* unmanaged[Cdecl]<NtValue*, void> NT_DisposeValueFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1104,7 +1104,7 @@ public void NT_DisposeValue(NtValue* value)
 }
 
 
-[NativeFunctionPointer("NT_InitValue")]
+
 private readonly delegate* unmanaged[Cdecl]<NtValue*, void> NT_InitValueFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1114,7 +1114,7 @@ public void NT_InitValue(NtValue* value)
 }
 
 
-[NativeFunctionPointer("NT_DisposeString")]
+
 private readonly delegate* unmanaged[Cdecl]<NtString*, void> NT_DisposeStringFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1124,7 +1124,7 @@ public void NT_DisposeString(NtString* str)
 }
 
 
-[NativeFunctionPointer("NT_InitString")]
+
 private readonly delegate* unmanaged[Cdecl]<NtString*, void> NT_InitStringFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1134,7 +1134,7 @@ public void NT_InitString(NtString* str)
 }
 
 
-[NativeFunctionPointer("NT_DisposeEntryArray")]
+
 private readonly delegate* unmanaged[Cdecl]<NtEntry*, UIntPtr, void> NT_DisposeEntryArrayFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1144,7 +1144,7 @@ public void NT_DisposeEntryArray(NtEntry* arr, UIntPtr count)
 }
 
 
-[NativeFunctionPointer("NT_DisposeConnectionInfoArray")]
+
 private readonly delegate* unmanaged[Cdecl]<NtConnectionInfo*, UIntPtr, void> NT_DisposeConnectionInfoArrayFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1154,7 +1154,7 @@ public void NT_DisposeConnectionInfoArray(NtConnectionInfo* arr, UIntPtr count)
 }
 
 
-[NativeFunctionPointer("NT_DisposeEntryInfoArray")]
+
 private readonly delegate* unmanaged[Cdecl]<NtEntryInfo*, UIntPtr, void> NT_DisposeEntryInfoArrayFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1164,7 +1164,7 @@ public void NT_DisposeEntryInfoArray(NtEntryInfo* arr, UIntPtr count)
 }
 
 
-[NativeFunctionPointer("NT_DisposeEntryInfo")]
+
 private readonly delegate* unmanaged[Cdecl]<NtEntryInfo*, void> NT_DisposeEntryInfoFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1174,7 +1174,7 @@ public void NT_DisposeEntryInfo(NtEntryInfo* info)
 }
 
 
-[NativeFunctionPointer("NT_DisposeRpcDefinition")]
+
 private readonly delegate* unmanaged[Cdecl]<NtRpcDefinition*, void> NT_DisposeRpcDefinitionFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1184,7 +1184,7 @@ public void NT_DisposeRpcDefinition(NtRpcDefinition* def)
 }
 
 
-[NativeFunctionPointer("NT_DisposeRpcAnswerArray")]
+
 private readonly delegate* unmanaged[Cdecl]<NtRpcAnswer*, UIntPtr, void> NT_DisposeRpcAnswerArrayFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1194,7 +1194,7 @@ public void NT_DisposeRpcAnswerArray(NtRpcAnswer* arr, UIntPtr count)
 }
 
 
-[NativeFunctionPointer("NT_DisposeRpcAnswer")]
+
 private readonly delegate* unmanaged[Cdecl]<NtRpcAnswer*, void> NT_DisposeRpcAnswerFunc;
 
 [MethodImpl(MethodImplOptions.AggressiveInlining)]

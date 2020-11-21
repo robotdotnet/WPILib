@@ -12,7 +12,6 @@ namespace Hal
         public const int ResourceIsAllocatedCode = -1029;
         public const int ResourceOutOfRangeCode = -1030;
 
-        [StatusCheckFunction]
         public static void StatusCheck(int status)
         {
             if (status < 0)

@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class PortsLowLevelNative
     {
-        [NativeFunctionPointer("HAL_GetNumAccumulators")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumAccumulatorsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumAddressableLEDs")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumAddressableLEDsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumAnalogInputs")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumAnalogInputsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +34,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumAnalogOutputs")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumAnalogOutputsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -44,7 +44,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumAnalogTriggers")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumAnalogTriggersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,7 +54,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumCounters")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumCountersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +64,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumDigitalChannels")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumDigitalChannelsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,7 +74,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumDigitalHeaders")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumDigitalHeadersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -84,7 +84,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumDigitalPWMOutputs")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumDigitalPWMOutputsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -94,7 +94,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumDutyCycles")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumDutyCyclesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -104,7 +104,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumEncoders")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumEncodersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -114,7 +114,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumInterrupts")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumInterruptsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -124,7 +124,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumPCMModules")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumPCMModulesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -134,7 +134,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumPDPChannels")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumPDPChannelsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +144,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumPDPModules")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumPDPModulesFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -154,7 +154,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumPWMChannels")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumPWMChannelsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,7 +164,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumPWMHeaders")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumPWMHeadersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -174,7 +174,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumRelayChannels")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumRelayChannelsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -184,7 +184,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumRelayHeaders")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumRelayHeadersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -194,7 +194,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetNumSolenoidChannels")]
+        
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumSolenoidChannelsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class DIOLowLevelNative
     {
-        [NativeFunctionPointer("HAL_AllocateDigitalPWM")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_AllocateDigitalPWMFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +17,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CheckDIOChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckDIOChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeDIOPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeDIOPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,7 +37,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDIO")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDIOFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,7 +49,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeDigitalPWM")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeDigitalPWMFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -61,7 +61,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDIO")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDIOFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -74,7 +74,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDIODirection")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDIODirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,7 +87,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetFilterPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_GetFilterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +100,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetFilterSelect")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetFilterSelectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -113,7 +113,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeDIOPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, int> HAL_InitializeDIOPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -126,7 +126,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_IsAnyPulsing")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_IsAnyPulsingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -139,7 +139,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_IsPulsing")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_IsPulsingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -152,7 +152,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_Pulse")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_PulseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,7 +164,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDIOSimDevice")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetDIOSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -174,7 +174,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDIODirection")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDIODirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -186,7 +186,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDigitalPWMDutyCycle")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetDigitalPWMDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -198,7 +198,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDigitalPWMOutputChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDigitalPWMOutputChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -210,7 +210,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDigitalPWMRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<double, int*, void> HAL_SetDigitalPWMRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -222,7 +222,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetFilterPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, long, int*, void> HAL_SetFilterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -234,7 +234,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetFilterSelect")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetFilterSelectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

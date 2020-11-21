@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class AnalogAccumulatorLowLevelNative
     {
-        [NativeFunctionPointer("HAL_GetAccumulatorCount")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_GetAccumulatorCountFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +17,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAccumulatorOutput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, long*, long*, int*, void> HAL_GetAccumulatorOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +29,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAccumulatorValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_GetAccumulatorValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -42,7 +42,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitAccumulator")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_InitAccumulatorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,7 +54,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_IsAccumulatorChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_IsAccumulatorChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -67,7 +67,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ResetAccumulator")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ResetAccumulatorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +79,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAccumulatorCenter")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAccumulatorCenterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +91,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAccumulatorDeadband")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAccumulatorDeadbandFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

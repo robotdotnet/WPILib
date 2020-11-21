@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class RelayLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CheckRelayChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckRelayChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeRelayPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeRelayPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetRelay")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetRelayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -37,7 +37,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeRelayPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, int> HAL_InitializeRelayPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetRelay")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetRelayFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

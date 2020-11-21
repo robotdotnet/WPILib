@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class AnalogInputLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CheckAnalogInputChannel")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckAnalogInputChannelFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CheckAnalogModule")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckAnalogModuleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,7 +24,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeAnalogInputPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAnalogInputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,7 +34,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogAverageBits")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogAverageBitsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -47,7 +47,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogAverageValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogAverageValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -60,7 +60,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogAverageVoltage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogAverageVoltageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,7 +73,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogLSBWeight")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogLSBWeightFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -86,7 +86,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogOffset")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogOffsetFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,7 +99,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogOversampleBits")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogOversampleBitsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -112,7 +112,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogSampleRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetAnalogSampleRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,7 +125,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -138,7 +138,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogValueToVolts")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, double> HAL_GetAnalogValueToVoltsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -151,7 +151,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogVoltage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogVoltageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -164,7 +164,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogVoltsToValue")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, int> HAL_GetAnalogVoltsToValueFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -177,7 +177,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeAnalogInputPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAnalogInputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -190,7 +190,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogAverageBits")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAnalogAverageBitsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -202,7 +202,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogInputSimDevice")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetAnalogInputSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -212,7 +212,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogOversampleBits")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAnalogOversampleBitsFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -224,7 +224,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogSampleRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<double, int*, void> HAL_SetAnalogSampleRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

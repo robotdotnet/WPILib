@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class HALLowLevelNative
     {
-        [NativeFunctionPointer("HAL_Initialize")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int> HAL_InitializeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ExpandFPGATime")]
+        
         private readonly delegate* unmanaged[Cdecl]<uint, int*, ulong> HAL_ExpandFPGATimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetBrownedOut")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetBrownedOutFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +40,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetErrorMessage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*> HAL_GetErrorMessageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetFPGAButton")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetFPGAButtonFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -63,7 +63,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetFPGARevision")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, long> HAL_GetFPGARevisionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -76,7 +76,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetFPGATime")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, ulong> HAL_GetFPGATimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -89,7 +89,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetFPGAVersion")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetFPGAVersionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -102,7 +102,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_GetPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -112,7 +112,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetPortWithModule")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int> HAL_GetPortWithModuleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -122,7 +122,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetRuntimeType")]
+        
         private readonly delegate* unmanaged[Cdecl]<RuntimeType> HAL_GetRuntimeTypeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -132,7 +132,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetSystemActive")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetSystemActiveFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class CounterLowLevelNative
     {
-        [NativeFunctionPointer("HAL_GetCounter")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +17,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ClearCounterDownSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearCounterDownSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +29,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ClearCounterUpSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearCounterUpSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +41,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeCounter")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +53,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCounterSamplesToAverage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +66,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCounterDirection")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +79,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCounterPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetCounterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +92,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeCounter")]
+        
         private readonly delegate* unmanaged[Cdecl]<CounterMode, int*, int*, int> HAL_InitializeCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,7 +105,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ResetCounter")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ResetCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -117,7 +117,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterAverageSize")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterAverageSizeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -129,7 +129,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterDownSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int*, void> HAL_SetCounterDownSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -141,7 +141,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterDownSourceEdge")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_SetCounterDownSourceEdgeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -153,7 +153,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterExternalDirectionMode")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_SetCounterExternalDirectionModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,7 +165,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterMaxPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetCounterMaxPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -177,7 +177,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterPulseLengthMode")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetCounterPulseLengthModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -189,7 +189,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterReverseDirection")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterReverseDirectionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -201,7 +201,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterSamplesToAverage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterSamplesToAverageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -213,7 +213,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterSemiPeriodMode")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterSemiPeriodModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -225,7 +225,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterUpDownMode")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_SetCounterUpDownModeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -237,7 +237,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterUpSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int*, void> HAL_SetCounterUpSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -249,7 +249,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterUpSourceEdge")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int*, void> HAL_SetCounterUpSourceEdgeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -261,7 +261,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCounterUpdateWhenEmpty")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCounterUpdateWhenEmptyFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -273,7 +273,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCounterStopped")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterStoppedFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

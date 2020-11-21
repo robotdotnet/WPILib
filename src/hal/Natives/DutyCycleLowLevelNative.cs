@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class DutyCycleLowLevelNative
     {
-        [NativeFunctionPointer("HAL_FreeDutyCycle")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDutyCycleFPGAIndex")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleFPGAIndexFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDutyCycleFrequency")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleFrequencyFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +40,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDutyCycleOutput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetDutyCycleOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +53,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDutyCycleOutputRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleOutputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +66,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDutyCycleOutputScaleFactor")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetDutyCycleOutputScaleFactorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +79,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeDutyCycle")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, AnalogTriggerType, int*, int> HAL_InitializeDutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +92,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDutyCycleSimDevice")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, void> HAL_SetDutyCycleSimDeviceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

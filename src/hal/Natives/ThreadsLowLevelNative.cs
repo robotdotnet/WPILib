@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class ThreadsLowLevelNative
     {
-        [NativeFunctionPointer("HAL_GetCurrentThreadPriority")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int*, int> HAL_GetCurrentThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +17,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetThreadPriority")]
+        
         private readonly delegate* unmanaged[Cdecl]<void*, int*, int*, int> HAL_GetThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -30,7 +30,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCurrentThreadPriority")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, int> HAL_SetCurrentThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -43,7 +43,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetThreadPriority")]
+        
         private readonly delegate* unmanaged[Cdecl]<void*, int, int, int*, int> HAL_SetThreadPriorityFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

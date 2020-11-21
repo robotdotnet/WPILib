@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class AddressableLEDLowLevelNative
     {
-        [NativeFunctionPointer("HAL_FreeAddressableLED")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAddressableLEDFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeAddressableLED")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAddressableLEDFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAddressableLEDBitTiming")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int, int, int, int*, void> HAL_SetAddressableLEDBitTimingFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +39,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAddressableLEDLength")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAddressableLEDLengthFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -51,7 +51,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAddressableLEDOutputPort")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAddressableLEDOutputPortFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -63,7 +63,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAddressableLEDSyncTime")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetAddressableLEDSyncTimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -75,7 +75,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_StartAddressableLEDOutput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StartAddressableLEDOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -87,7 +87,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_StopAddressableLEDOutput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StopAddressableLEDOutputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -99,7 +99,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WriteAddressableLEDData")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, AddressableLEDData*, int, int*, void> HAL_WriteAddressableLEDDataFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

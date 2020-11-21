@@ -8,9 +8,7 @@ namespace WPIUtil.NativeUtilities
     /// <summary>
     /// This class handles native libraries on Mac OS
     /// </summary>
-#pragma warning disable CA1060 // Move pinvokes to native methods class
     public sealed class MacOsLibraryLoader : ILibraryLoader
-#pragma warning restore CA1060 // Move pinvokes to native methods class
     {
         /// <inheritdoc/>
         public IntPtr NativeLibraryHandle { get; private set; } = IntPtr.Zero;

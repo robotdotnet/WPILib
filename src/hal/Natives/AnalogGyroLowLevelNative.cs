@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class AnalogGyroLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CalibrateAnalogGyro")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CalibrateAnalogGyroFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeAnalogGyro")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAnalogGyroFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,7 +26,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogGyroAngle")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogGyroAngleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +39,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogGyroCenter")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetAnalogGyroCenterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,7 +52,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogGyroOffset")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogGyroOffsetFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,7 +65,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetAnalogGyroRate")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetAnalogGyroRateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -78,7 +78,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeAnalogGyro")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeAnalogGyroFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -91,7 +91,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ResetAnalogGyro")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ResetAnalogGyroFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -103,7 +103,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogGyroDeadband")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetAnalogGyroDeadbandFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -115,7 +115,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogGyroParameters")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, double, int, int*, void> HAL_SetAnalogGyroParametersFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -127,7 +127,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetAnalogGyroVoltsPerDegreePerSecond")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, double, int*, void> HAL_SetAnalogGyroVoltsPerDegreePerSecondFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -139,7 +139,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetupAnalogGyro")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_SetupAnalogGyroFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

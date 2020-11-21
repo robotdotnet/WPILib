@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class CANLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CAN_CloseStreamSession")]
+        
         private readonly delegate* unmanaged[Cdecl]<uint, void> HAL_CAN_CloseStreamSessionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CAN_GetCANStatus")]
+        
         private readonly delegate* unmanaged[Cdecl]<float*, uint*, uint*, uint*, uint*, int*, void> HAL_CAN_GetCANStatusFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,7 +26,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CAN_OpenStreamSession")]
+        
         private readonly delegate* unmanaged[Cdecl]<uint*, uint, uint, uint, int*, void> HAL_CAN_OpenStreamSessionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -38,7 +38,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CAN_ReadStreamSession")]
+        
         private readonly delegate* unmanaged[Cdecl]<uint, CANStreamMessage*, uint, uint*, int*, void> HAL_CAN_ReadStreamSessionFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,7 +50,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CAN_ReceiveMessage")]
+        
         private readonly delegate* unmanaged[Cdecl]<uint*, uint, byte*, byte*, uint*, int*, void> HAL_CAN_ReceiveMessageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -62,7 +62,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CAN_SendMessage")]
+        
         private readonly delegate* unmanaged[Cdecl]<uint, byte*, byte, int, int*, void> HAL_CAN_SendMessageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

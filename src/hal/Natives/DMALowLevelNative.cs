@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class DMALowLevelNative
     {
-        [NativeFunctionPointer("HAL_AddDMAAnalogAccumulator")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAnalogAccumulatorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMAAnalogInput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAnalogInputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,7 +28,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMAAveragedAnalogInput")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAveragedAnalogInputFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +40,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMACounter")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMACounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -52,7 +52,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMACounterPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMACounterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -64,7 +64,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMADigitalSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMADigitalSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -76,7 +76,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMADutyCycle")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMADutyCycleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -88,7 +88,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMAEncoder")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAEncoderFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +100,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_AddDMAEncoderPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAEncoderPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -112,7 +112,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_FreeDMA")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -122,7 +122,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMADirectPointer")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, void*> HAL_GetDMADirectPointerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -132,7 +132,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleAnalogAccumulator")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, long*, long*, int*, void> HAL_GetDMASampleAnalogAccumulatorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +144,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleAnalogInputRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleAnalogInputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -157,7 +157,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleAveragedAnalogInputRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleAveragedAnalogInputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -170,7 +170,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleCounter")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleCounterFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -183,7 +183,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleCounterPeriod")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleCounterPeriodFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -196,7 +196,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleDigitalSource")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleDigitalSourceFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -209,7 +209,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleDutyCycleOutputRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleDutyCycleOutputRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -222,7 +222,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleEncoderPeriodRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleEncoderPeriodRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -235,7 +235,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleEncoderRaw")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int, int*, int> HAL_GetDMASampleEncoderRawFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -248,7 +248,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetDMASampleTime")]
+        
         private readonly delegate* unmanaged[Cdecl]<DMASample*, int*, ulong> HAL_GetDMASampleTimeFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -261,7 +261,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeDMA")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_InitializeDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -274,7 +274,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_ReadDMADirect")]
+        
         private readonly delegate* unmanaged[Cdecl]<void*, DMASample*, int, int*, int*, DMAReadStatus> HAL_ReadDMADirectFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -287,7 +287,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDMAExternalTrigger")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, AnalogTriggerType, int, int, int*, void> HAL_SetDMAExternalTriggerFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -299,7 +299,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDMAPause")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDMAPauseFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -311,7 +311,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetDMARate")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetDMARateFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -323,7 +323,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_StartDMA")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_StartDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -335,7 +335,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_StopDMA")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StopDMAFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

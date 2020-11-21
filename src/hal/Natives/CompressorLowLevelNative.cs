@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class CompressorLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CheckCompressorModule")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckCompressorModuleFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -14,7 +14,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressor")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorClosedLoopControl")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorClosedLoopControlFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -40,7 +40,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorCurrent")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, double> HAL_GetCompressorCurrentFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +53,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorCurrentTooHighFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorCurrentTooHighFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -66,7 +66,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorCurrentTooHighStickyFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorCurrentTooHighStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +79,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorNotConnectedFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorNotConnectedFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -92,7 +92,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorNotConnectedStickyFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorNotConnectedStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -105,7 +105,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorPressureSwitch")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorPressureSwitchFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -118,7 +118,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorShortedFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorShortedFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -131,7 +131,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetCompressorShortedStickyFault")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCompressorShortedStickyFaultFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -144,7 +144,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeCompressor")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_InitializeCompressorFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -157,7 +157,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetCompressorClosedLoopControl")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_SetCompressorClosedLoopControlFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

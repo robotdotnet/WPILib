@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class NotifierLowLevelNative
     {
-        [NativeFunctionPointer("HAL_CancelNotifierAlarm")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CancelNotifierAlarmFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -16,7 +16,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_CleanNotifier")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CleanNotifierFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -28,7 +28,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_InitializeNotifier")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_InitializeNotifierFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,7 +41,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_SetNotifierName")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, byte*, int*, void> HAL_SetNotifierNameFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -53,7 +53,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_StopNotifier")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_StopNotifierFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,7 +65,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_UpdateNotifierAlarm")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, ulong, int*, void> HAL_UpdateNotifierAlarmFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -77,7 +77,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_WaitForNotifierAlarm")]
+        
         private readonly delegate* unmanaged[Cdecl]<int, int*, ulong> HAL_WaitForNotifierAlarmFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

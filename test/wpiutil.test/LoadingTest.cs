@@ -20,15 +20,5 @@ namespace wpiutil.test
         {
 
         }
-
-        [Fact]
-        public void TestThatNativeLoadingWorks()
-        {
-            NativeInterfaceInitializer.LoadAndInitializeNativeTypes(typeof(LoadingTest).Assembly,
-                "wpiutil", out var generator);
-
-            Assert.NotNull(LoadTest.LoadedInterface);
-            Assert.NotEqual(0ul, LoadTest.LoadedInterface!.WPI_Now());
-        }
     }
 }

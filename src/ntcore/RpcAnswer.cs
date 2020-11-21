@@ -4,11 +4,9 @@ using WPIUtil;
 
 namespace NetworkTables
 {
-#pragma warning disable CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
 #pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly ref struct RpcAnswer
 #pragma warning restore CA1815 // Override equals and operator equals on value types
-#pragma warning restore CA1066 // Type {0} should implement IEquatable<T> because it overrides Equals
     {
         public readonly NtEntry EntryHandle { get; }
         public readonly NtRpcCall Call { get; }

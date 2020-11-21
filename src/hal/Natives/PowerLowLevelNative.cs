@@ -4,7 +4,7 @@ namespace Hal.Natives
 {
     public unsafe class PowerLowLevelNative
     {
-        [NativeFunctionPointer("HAL_GetUserActive3V3")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserActive3V3Func;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -17,7 +17,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserActive5V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserActive5VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -30,7 +30,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserActive6V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserActive6VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -43,7 +43,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserCurrent3V3")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetUserCurrent3V3Func;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -56,7 +56,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserCurrent5V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetUserCurrent5VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -69,7 +69,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserCurrent6V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetUserCurrent6VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -82,7 +82,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserCurrentFaults3V3")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserCurrentFaults3V3Func;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -95,7 +95,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserCurrentFaults5V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserCurrentFaults5VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -108,7 +108,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserCurrentFaults6V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserCurrentFaults6VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -121,7 +121,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserVoltage3V3")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetUserVoltage3V3Func;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -134,7 +134,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserVoltage5V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetUserVoltage5VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -147,7 +147,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetUserVoltage6V")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetUserVoltage6VFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -160,7 +160,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetVinCurrent")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetVinCurrentFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -173,7 +173,7 @@ namespace Hal.Natives
         }
 
 
-        [NativeFunctionPointer("HAL_GetVinVoltage")]
+        
         private readonly delegate* unmanaged[Cdecl]<int*, double> HAL_GetVinVoltageFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
