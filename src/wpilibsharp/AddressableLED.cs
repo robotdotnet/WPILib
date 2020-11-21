@@ -34,12 +34,12 @@ namespace WPILib
             Hal.AddressableLEDLowLevel.SetLength(m_handle, length);
         }
 
-        public void SetData(ReadOnlySpan<Hal.AddressableLEDData> data)
+        public void SetData(ReadOnlySpan<AddressableLEDData> data)
         {
             Hal.AddressableLEDLowLevel.WriteData(m_handle, data);
         }
 
-        public unsafe void SetData(Hal.AddressableLEDData* data, int length)
+        public unsafe void SetData(AddressableLEDData* data, int length)
         {
             Hal.AddressableLEDLowLevel.WriteData(m_handle, data, length);
         }

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\hal\hal.csproj" />
+    <ProjectReference Include="..\..\src\ntcore\ntcore.csproj" />
+    <ProjectReference Include="..\..\src\thirdparty\SparkMax\SparkMax.csproj" />
+    <ProjectReference Include="..\..\src\wpilibsharp\wpilibsharp.csproj" />
+    <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>

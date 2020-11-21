@@ -11,16 +11,16 @@ namespace WPILib
     public sealed class DutyCycleEncoder : ISendable, IDisposable
     {
         private readonly DutyCycle m_dutyCycle;
-        private bool m_ownsDutyCycle;
-        private AnalogTrigger m_analogTrigger;
-        private UpDownCounter m_counter;
+        private readonly bool m_ownsDutyCycle;
+        private readonly AnalogTrigger m_analogTrigger;
+        private readonly UpDownCounter m_counter;
 
         private Frequency m_frequencyThreshold = Frequency.FromHertz(100);
         private double m_positionOffset;
-        private double m_distancePerRotation = 1.0;
+        private readonly double m_distancePerRotation = 1.0;
         private Angle m_lastPosition;
 
-        private SimDevice m_simDevice;
+        private readonly SimDevice m_simDevice;
 
         public DutyCycleEncoder(int channel)
 #pragma warning disable CA2000 // Dispose objects before losing scope

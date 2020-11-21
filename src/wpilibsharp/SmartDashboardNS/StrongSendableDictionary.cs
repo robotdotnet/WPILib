@@ -6,7 +6,7 @@ namespace WPILib.SmartDashboardNS
 {
     internal class StrongSendableDictionary : ISendableDictionary
     {
-        private Dictionary<ISendable, SendableRegistry.Component> components = new Dictionary<ISendable, SendableRegistry.Component>();
+        private readonly Dictionary<ISendable, SendableRegistry.Component> components = new Dictionary<ISendable, SendableRegistry.Component>();
 
         public void Add(ISendable key, SendableRegistry.Component value)
         {

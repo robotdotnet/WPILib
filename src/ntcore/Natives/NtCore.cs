@@ -1128,7 +1128,7 @@ namespace NetworkTables.Natives
             }
         }
 
-        public static unsafe void SetNetworkIdentity(NtInst inst, String name)
+        public static unsafe void SetNetworkIdentity(NtInst inst, string name)
         {
             var str = new UTF8String(name);
             fixed (byte* buf = str.Buffer)

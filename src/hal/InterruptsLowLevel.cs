@@ -29,7 +29,7 @@ namespace Hal
         public static void AttachInterruptHandler(int interruptHandle, Action<uint> handler)
         {
             var handle = GCHandle.Alloc(handler);
-            lowLevel.HAL_AttachInterruptHandler(interruptHandle, &InterruptHandler, IntPtr.Zero, GCHandle.ToIntPtr(handle).ToPointer());
+            lowLevel.HAL_AttachInterruptHandler(interruptHandle, &InterruptHandler, GCHandle.ToIntPtr(handle).ToPointer());
         }
 
         public static void AttachInterruptHandlerThreaded(int interruptHandle, Action<uint> handler)

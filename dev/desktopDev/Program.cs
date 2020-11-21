@@ -10,12 +10,12 @@ namespace desktopDev
     public class Robot : TimedRobot
     {
         private TimeSpan lastTime = Timer.FPGATimestamp;
-        double[] buffer = new double[50];
+        readonly double[] buffer = new double[50];
         int idx = 0;
 
-        private int pwm = Hal.PWMLowLevel.InitializePort(HALLowLevel.GetPort(42));
+        private readonly int pwm = Hal.PWMLowLevel.InitializePort(HALLowLevel.GetPort(42));
 
-        private int can = CANAPI.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
+        private readonly int can = CANAPI.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
 
 
 

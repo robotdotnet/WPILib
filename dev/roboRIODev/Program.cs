@@ -14,11 +14,11 @@ namespace roboRIODev
 
         //private int can = CANAPI.Initialize(CANManufacturer.kTeamUse, 1, CANDeviceType.kMiscellaneous);
 
-        private PWMSparkMax sparkMax = new PWMSparkMax(0);
-        private DigitalInput di = new DigitalInput(0);
+        private readonly PWMSparkMax sparkMax = new PWMSparkMax(0);
+        private readonly DigitalInput di = new DigitalInput(0);
         private Tachometer absoluteTach;
-        private DigitalInput quadDI = new DigitalInput(1);
-        private DigitalInput quadDIB = new DigitalInput(2);
+        private readonly DigitalInput quadDI = new DigitalInput(1);
+        private readonly DigitalInput quadDIB = new DigitalInput(2);
         private Tachometer quadratureTach;
         private UpDownCounter quadratureCounter;
 

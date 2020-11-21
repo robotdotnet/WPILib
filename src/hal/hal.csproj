@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>FRC.Hal</AssemblyName>
     <RootNamespace>Hal</RootNamespace>
-    <NoWarn>1701;1702;1591;CA1303</NoWarn>
+    <NoWarn>1701;1702;1591;CA1303;0649</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

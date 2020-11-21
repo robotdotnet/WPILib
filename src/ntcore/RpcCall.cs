@@ -29,7 +29,7 @@ namespace NetworkTables
 
         public ReadOnlySpan<byte> GetResult()
         {
-            Span<byte> store = Span<Byte>.Empty;
+            Span<byte> store = Span<byte>.Empty;
             var result = NtCore.GetRpcResult(Entry.Handle, Handle, store);
             return result;
         }
@@ -42,7 +42,7 @@ namespace NetworkTables
 
         public ReadOnlySpan<byte> GetResult(double timeout)
         {
-            Span<byte> store = Span<Byte>.Empty;
+            Span<byte> store = Span<byte>.Empty;
             var result = NtCore.GetRpcResult(Entry.Handle, Handle, timeout, store);
             return result;
         }
@@ -56,7 +56,7 @@ namespace NetworkTables
         public Task<byte[]> GetResultAsync(CancellationToken token = default)
         {
             NtEntry handle = Entry.Handle;
-            Natives.NtRpcCall call = Handle;
+            NtRpcCall call = Handle;
             token.Register(() =>
             {
                 NtCore.CancelRpcResult(handle, call);
