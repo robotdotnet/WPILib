@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class DriverStationLowLevelNative : IDriverStation
+    public unsafe class DriverStationLowLevelNative
     {
         [NativeFunctionPointer("HAL_SendError")]
         private readonly delegate* unmanaged[Cdecl]<int, int, int, byte*, byte*, byte*, int, int> HAL_SendErrorFunc;

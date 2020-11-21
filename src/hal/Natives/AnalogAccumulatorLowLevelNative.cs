@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class AnalogAccumulatorLowLevelNative : IAnalogAccumulator
+    public unsafe class AnalogAccumulatorLowLevelNative
     {
         [NativeFunctionPointer("HAL_GetAccumulatorCount")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, long> HAL_GetAccumulatorCountFunc;

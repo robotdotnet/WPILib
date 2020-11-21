@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class MainLowLevelNative : IMain
+    public unsafe class MainLowLevelNative
     {
         [NativeFunctionPointer("HAL_SetMain")]
         private readonly delegate* unmanaged[Cdecl]<void*, delegate* unmanaged[Cdecl]<void*, void>, delegate* unmanaged[Cdecl]<void*, void>, void> HAL_SetMainFunc;

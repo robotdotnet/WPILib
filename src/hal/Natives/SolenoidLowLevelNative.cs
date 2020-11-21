@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class SolenoidLowLevelNative : ISolenoid
+    public unsafe class SolenoidLowLevelNative
     {
         [NativeFunctionPointer("HAL_CheckSolenoidChannel")]
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckSolenoidChannelFunc;

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class NotifierLowLevelNative : INotifier
+    public unsafe class NotifierLowLevelNative
     {
         [NativeFunctionPointer("HAL_CancelNotifierAlarm")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CancelNotifierAlarmFunc;

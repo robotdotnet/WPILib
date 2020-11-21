@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class CounterLowLevelNative : ICounter
+    public unsafe class CounterLowLevelNative
     {
         [NativeFunctionPointer("HAL_GetCounter")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, int> HAL_GetCounterFunc;

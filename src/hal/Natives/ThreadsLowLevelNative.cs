@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class ThreadsLowLevelNative : IThreads
+    public unsafe class ThreadsLowLevelNative
     {
         [NativeFunctionPointer("HAL_GetCurrentThreadPriority")]
         private readonly delegate* unmanaged[Cdecl]<int*, int*, int> HAL_GetCurrentThreadPriorityFunc;

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class PowerLowLevelNative : IPower
+    public unsafe class PowerLowLevelNative
     {
         [NativeFunctionPointer("HAL_GetUserActive3V3")]
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_GetUserActive3V3Func;

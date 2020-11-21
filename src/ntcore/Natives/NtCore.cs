@@ -16,7 +16,6 @@ namespace NetworkTables.Natives
     /// <summary>
     /// Raw NT Core access function
     /// </summary>
-    [NativeInterface(typeof(INtCore))]
     public static class NtCore
     {
         private static NtCoreNative m_ntcore = null!;

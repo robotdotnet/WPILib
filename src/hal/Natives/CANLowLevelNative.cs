@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class CANLowLevelNative : ICAN
+    public unsafe class CANLowLevelNative
     {
         [NativeFunctionPointer("HAL_CAN_CloseStreamSession")]
         private readonly delegate* unmanaged[Cdecl]<uint, void> HAL_CAN_CloseStreamSessionFunc;

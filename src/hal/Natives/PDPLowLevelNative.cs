@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class PDPLowLevelNative : IPDP
+    public unsafe class PDPLowLevelNative
     {
         [NativeFunctionPointer("HAL_CheckPDPChannel")]
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckPDPChannelFunc;

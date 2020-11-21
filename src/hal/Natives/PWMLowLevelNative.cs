@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class PWMLowLevelNative : IPWM
+    public unsafe class PWMLowLevelNative
     {
         [NativeFunctionPointer("HAL_CheckPWMChannel")]
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckPWMChannelFunc;

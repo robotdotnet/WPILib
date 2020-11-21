@@ -432,8 +432,7 @@ namespace CalliGenerator
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            GenerateForAssembly(typeof(NtCore).Assembly);
-            GenerateForAssembly(typeof(Hal.AccelerometerLowLevel).Assembly);
+            GenerateForAssembly(typeof(REV.SparkMax.CANSparkMaxDriver).Assembly);
         }
     }
 }

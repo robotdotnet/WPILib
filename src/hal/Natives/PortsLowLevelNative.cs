@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class PortsLowLevelNative : IPorts
+    public unsafe class PortsLowLevelNative
     {
         [NativeFunctionPointer("HAL_GetNumAccumulators")]
         private readonly delegate* unmanaged[Cdecl]<int> HAL_GetNumAccumulatorsFunc;

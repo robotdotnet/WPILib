@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class AddressableLEDLowLevelNative : IAddressableLED
+    public unsafe class AddressableLEDLowLevelNative
     {
         [NativeFunctionPointer("HAL_FreeAddressableLED")]
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_FreeAddressableLEDFunc;

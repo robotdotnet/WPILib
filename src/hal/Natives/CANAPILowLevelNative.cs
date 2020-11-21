@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class CANAPINative : ICANAPI
+    public unsafe class CANAPILowLevelNative
     {
         [NativeFunctionPointer("HAL_CleanCAN")]
         private readonly delegate* unmanaged[Cdecl]<int, void> HAL_CleanCANFunc;

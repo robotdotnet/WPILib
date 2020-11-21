@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class CompressorLowLevelNative : ICompressor
+    public unsafe class CompressorLowLevelNative
     {
         [NativeFunctionPointer("HAL_CheckCompressorModule")]
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckCompressorModuleFunc;

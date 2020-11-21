@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class AnalogGyroLowLevelNative : IAnalogGyro
+    public unsafe class AnalogGyroLowLevelNative
     {
         [NativeFunctionPointer("HAL_CalibrateAnalogGyro")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CalibrateAnalogGyroFunc;

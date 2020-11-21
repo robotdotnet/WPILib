@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class SPILowLevelNative : ISPI
+    public unsafe class SPILowLevelNative
     {
         [NativeFunctionPointer("HAL_CloseSPI")]
         private readonly delegate* unmanaged[Cdecl]<SPIPort, void> HAL_CloseSPIFunc;

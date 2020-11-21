@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class AnalogOutputLowLevelNative : IAnalogOutput
+    public unsafe class AnalogOutputLowLevelNative
     {
         [NativeFunctionPointer("HAL_CheckAnalogOutputChannel")]
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckAnalogOutputChannelFunc;

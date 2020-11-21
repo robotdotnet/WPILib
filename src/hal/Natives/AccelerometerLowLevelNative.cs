@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class AccelerometerLowLevelNative : IAccelerometer
+    public unsafe class AccelerometerLowLevelNative
     {
         [NativeFunctionPointer("HAL_GetAccelerometerX")]
         private readonly delegate* unmanaged[Cdecl]<double> HAL_GetAccelerometerXFunc;

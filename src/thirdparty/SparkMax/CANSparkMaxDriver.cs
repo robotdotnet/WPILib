@@ -4,16 +4,10 @@ using WPIUtil.NativeUtilities;
 
 namespace REV.SparkMax
 {
-    [NativeInterface(typeof(ICANSparkMaxDriver))]
     public unsafe class CANSparkMaxDriver
     {
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-#pragma warning disable CS0649 // Field is never assigned to
-#pragma warning disable IDE0044 // Add readonly modifier
-        private static ICANSparkMaxDriver driver;
-#pragma warning restore IDE0044 // Add readonly modifier
-#pragma warning restore CS0649 // Field is never assigned to
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+        private static CANSparkMaxDriverNative driver = null!;
+        private static readonly object lockObject = new object(); 
 
         public static ErrorCode SetAnalogMode(void* handle, AnalogMode mode)
         {
@@ -273,6 +267,13 @@ namespace REV.SparkMax
         }
         public static APIVersion GetAPIVersion()
         {
+            lock (lockObject)
+            {
+                if (driver == null)
+                {
+                    driver = new CANSparkMaxDriverNative(NativeLibraryLoader.LoadNativeLibrary("CANSparkMaxDriver")!);
+                }
+            }
             return driver.c_SparkMax_GetAPIVersion();
         }
         public static void SetLastError(void* handle, ErrorCode error)
@@ -290,16 +291,29 @@ namespace REV.SparkMax
         }
         public static void* Create(int deviceId, MotorType type)
         {
+            lock (lockObject)
+            {
+                if (driver == null)
+                {
+                    driver = new CANSparkMaxDriverNative(NativeLibraryLoader.LoadNativeLibrary("CANSparkMaxDriver")!);
+                }
+            }
             return driver.c_SparkMax_Create(deviceId, type);
         }
         public static void* Create_Inplace(int deviceId)
         {
+            lock (lockObject)
+            {
+                if (driver == null)
+                {
+                    driver = new CANSparkMaxDriverNative(NativeLibraryLoader.LoadNativeLibrary("CANSparkMaxDriver")!);
+                }
+            }
             return driver.c_SparkMax_Create_Inplace(deviceId);
         }
         public static void Destroy(void* handle)
         {
-            driver.c_SparkMax_Destroy(
-         handle);
+            driver.c_SparkMax_Destroy(handle);
         }
         public static ErrorCode GetFirmwareVersion(void* handle, FirmwareVersion* fwVersion)
         {
@@ -323,8 +337,7 @@ namespace REV.SparkMax
         }
         public static void SetControlFramePeriod(void* handle, int periodMs)
         {
-            driver.c_SparkMax_SetControlFramePeriod(
-         handle, periodMs);
+            driver.c_SparkMax_SetControlFramePeriod(handle, periodMs);
         }
         public static int GetControlFramePeriod(void* handle)
         {

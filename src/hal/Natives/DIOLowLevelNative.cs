@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class DIOLowLevelNative : IDIO
+    public unsafe class DIOLowLevelNative
     {
         [NativeFunctionPointer("HAL_AllocateDigitalPWM")]
         private readonly delegate* unmanaged[Cdecl]<int*, int> HAL_AllocateDigitalPWMFunc;

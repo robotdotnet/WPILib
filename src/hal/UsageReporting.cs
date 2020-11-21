@@ -165,13 +165,13 @@ namespace Hal
 #pragma warning restore CA1707 // Identifiers should not contain underscores
     }
 
-    [NativeInterface(typeof(IUsageReporting))]
+
     public static class UsageReporting
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static IUsageReporting lowLevel;
+        internal static UsageReportingLowLevelNative lowLevel = null!;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

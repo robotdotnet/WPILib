@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class EncoderLowLevelNative : IEncoder
+    public unsafe class EncoderLowLevelNative
     {
         [NativeFunctionPointer("HAL_FreeEncoder")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_FreeEncoderFunc;

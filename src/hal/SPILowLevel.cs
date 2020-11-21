@@ -4,13 +4,13 @@ using WPIUtil.NativeUtilities;
 
 namespace Hal
 {
-    [NativeInterface(typeof(ISPI))]
+
     public static unsafe class SPILowLevel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 #pragma warning disable CS0649 // Field is never assigned to
 #pragma warning disable IDE0044 // Add readonly modifier
-        private static ISPI lowLevel;
+        internal static SPILowLevelNative lowLevel = null!;
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore CS0649 // Field is never assigned to
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.

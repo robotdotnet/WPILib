@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class SimDeviceLowLevelNative : ISimDevice
+    public unsafe class SimDeviceLowLevelNative
     {
         [NativeFunctionPointer("HAL_CreateSimDevice")]
         private readonly delegate* unmanaged[Cdecl]<byte*, int> HAL_CreateSimDeviceFunc;

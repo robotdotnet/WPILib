@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class AnalogTriggerLowLevelNative : IAnalogTrigger
+    public unsafe class AnalogTriggerLowLevelNative
     {
         [NativeFunctionPointer("HAL_CleanAnalogTrigger")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_CleanAnalogTriggerFunc;

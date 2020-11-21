@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class HALLowLevelNative : IHAL
+    public unsafe class HALLowLevelNative
     {
         [NativeFunctionPointer("HAL_Initialize")]
         private readonly delegate* unmanaged[Cdecl]<int, int, int> HAL_InitializeFunc;

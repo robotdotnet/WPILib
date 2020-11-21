@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class SerialPortLowLevelNative : ISerialPort
+    public unsafe class SerialPortLowLevelNative
     {
         [NativeFunctionPointer("HAL_ClearSerial")]
         private readonly delegate* unmanaged[Cdecl]<int, int*, void> HAL_ClearSerialFunc;

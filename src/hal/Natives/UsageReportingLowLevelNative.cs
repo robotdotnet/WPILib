@@ -1,10 +1,11 @@
 ﻿using WPIUtil.ILGeneration;
 using System.Runtime.CompilerServices;
+using System;
+
 namespace Hal.Natives
 {
-    public unsafe class UsageReportingNative : IUsageReporting
+    public unsafe class UsageReportingLowLevelNative
     {
-        [NativeFunctionPointer("HAL_Report")]
         private readonly delegate* unmanaged[Cdecl]<int, int, int, byte*, int> HAL_ReportFunc;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -13,7 +14,14 @@ namespace Hal.Natives
             return HAL_ReportFunc(resource, instanceNumber, context, feature);
         }
 
+        public UsageReportingLowLevelNative(IFunctionPointerLoader loader)
+        {
+            if (loader == null)
+            {
+                throw new ArgumentNullException(nameof(loader));
+            }
 
-
+            HAL_ReportFunc = (delegate* unmanaged[Cdecl]<int, int, int, byte*, int>)loader.GetProcAddress("HAL_Report");
+        }
     }
 }

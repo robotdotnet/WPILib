@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class InterruptsLowLevelNative : IInterrupts
+    public unsafe class InterruptsLowLevelNative
     {
         [NativeFunctionPointer("HAL_AttachInterruptHandler")]
         private readonly delegate* unmanaged[Cdecl]<int, delegate* unmanaged[Cdecl]<uint, void*, void>, void*, int*, void> HAL_AttachInterruptHandlerFunc;

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class DMALowLevelNative : IDMA
+    public unsafe class DMALowLevelNative
     {
         [NativeFunctionPointer("HAL_AddDMAAnalogAccumulator")]
         private readonly delegate* unmanaged[Cdecl]<int, int, int*, void> HAL_AddDMAAnalogAccumulatorFunc;

@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class I2CLowLevelNative : II2C
+    public unsafe class I2CLowLevelNative
     {
         [NativeFunctionPointer("HAL_CloseI2C")]
         private readonly delegate* unmanaged[Cdecl]<I2CPort, void> HAL_CloseI2CFunc;

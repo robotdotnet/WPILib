@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 namespace Hal.Natives
 {
-    public unsafe class RelayLowLevelNative : IRelay
+    public unsafe class RelayLowLevelNative
     {
         [NativeFunctionPointer("HAL_CheckRelayChannel")]
         private readonly delegate* unmanaged[Cdecl]<int, int> HAL_CheckRelayChannelFunc;
