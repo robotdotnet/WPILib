@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
     <RootNamespace>WPIUtil</RootNamespace>
     <AssemblyName>FRC.WPIUtil</AssemblyName>
     <NoWarn>1701;1702;1591;CA1303</NoWarn>

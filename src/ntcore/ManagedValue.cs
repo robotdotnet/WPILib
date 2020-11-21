@@ -26,7 +26,7 @@ namespace NetworkTables
                         hash = (hash * 7) + Data.VDouble.GetHashCode();
                         break;
                     case NtType.String:
-                        hash = (hash * 7) + string.GetHashCode(Data.VString!, StringComparison.InvariantCultureIgnoreCase);
+                        hash = (hash * 7) + Data.VString!.GetHashCode();
                         break;
                     case NtType.Rpc:
                     case NtType.Raw:
@@ -58,52 +58,33 @@ namespace NetworkTables
         public bool Equals(ManagedValue other)
         {
             if (Type != other.Type) return false;
-            switch (Type)
+            return Type switch
             {
-                case NtType.Unassigned:
-                    return true;
-                case NtType.Boolean:
-                    return Data.VBoolean == other.Data.VBoolean;
-                case NtType.Double:
-                    return Data.VDouble == other.Data.VDouble;
-                case NtType.String:
-                    return Data.VString.AsSpan().SequenceEqual(other.Data.VString.AsSpan());
-                case NtType.Raw:
-                case NtType.Rpc:
-                    return Data.VRaw.AsSpan().SequenceEqual(other.Data.VRaw.AsSpan());
-                case NtType.BooleanArray:
-                    return Data.VBooleanArray.AsSpan().SequenceEqual(other.Data.VBooleanArray.AsSpan());
-                case NtType.DoubleArray:
-                    return Data.VDoubleArray.AsSpan().SequenceEqual(other.Data.VDoubleArray.AsSpan());
-                case NtType.StringArray:
-                    return Data.VStringArray.AsSpan().SequenceEqual(other.Data.VStringArray.AsSpan());
-                default:
-                    return false;
-            }
+                NtType.Unassigned => true,
+                NtType.Boolean => Data.VBoolean == other.Data.VBoolean,
+                NtType.Double => Data.VDouble == other.Data.VDouble,
+                NtType.String => Data.VString.AsSpan().SequenceEqual(other.Data.VString.AsSpan()),
+                NtType.Raw or NtType.Rpc => Data.VRaw.AsSpan().SequenceEqual(other.Data.VRaw.AsSpan()),
+                NtType.BooleanArray => Data.VBooleanArray.AsSpan().SequenceEqual(other.Data.VBooleanArray.AsSpan()),
+                NtType.DoubleArray => Data.VDoubleArray.AsSpan().SequenceEqual(other.Data.VDoubleArray.AsSpan()),
+                NtType.StringArray => Data.VStringArray.AsSpan().SequenceEqual(other.Data.VStringArray.AsSpan()),
+                _ => false,
+            };
         }
 
         public object? GetValue()
         {
-            switch (Type)
+            return Type switch
             {
-                case NtType.Boolean:
-                    return Data.VBoolean;
-                case NtType.Double:
-                    return Data.VDouble;
-                case NtType.String:
-                    return Data.VString!;
-                case NtType.Rpc:
-                case NtType.Raw:
-                    return Data.VRaw.AsSpan().ToArray();
-                case NtType.BooleanArray:
-                    return Data.VBooleanArray.AsSpan().ToArray();
-                case NtType.DoubleArray:
-                    return Data.VDoubleArray.AsSpan().ToArray();
-                case NtType.StringArray:
-                    return Data.VStringArray.AsSpan().ToArray();
-                default:
-                    return null;
-            }
+                NtType.Boolean => Data.VBoolean,
+                NtType.Double => Data.VDouble,
+                NtType.String => Data.VString!,
+                NtType.Rpc or NtType.Raw => Data.VRaw.AsSpan().ToArray(),
+                NtType.BooleanArray => Data.VBooleanArray.AsSpan().ToArray(),
+                NtType.DoubleArray => Data.VDoubleArray.AsSpan().ToArray(),
+                NtType.StringArray => Data.VStringArray.AsSpan().ToArray(),
+                _ => null,
+            };
         }
 
         internal unsafe ManagedValue(NtValue* v)
