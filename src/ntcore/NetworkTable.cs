@@ -158,7 +158,7 @@ namespace NetworkTables
         public HashSet<string> GetKeys(NtType types)
         {
             HashSet<string> keys = new HashSet<string>();
-            int prefixLen = -Path.Length + 1;
+            int prefixLen = Path.Length + 1;
             foreach (var info in Instance.GetEntryInfo(m_pathWithSep, types))
             {
                 var relativeKey = info.Name.AsSpan().Slice(prefixLen);
