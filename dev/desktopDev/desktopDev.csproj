@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="UnitsNet.NumberExtensions" Version="4.83.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\hal\hal.csproj" />
     <ProjectReference Include="..\..\src\ntcore\ntcore.csproj" />
     <ProjectReference Include="..\..\src\thirdparty\SparkMax\SparkMax.csproj" />

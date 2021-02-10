@@ -13,6 +13,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="UnitsNet" Version="4.83.0" />
+    <PackageReference Include="UnitsNet.NumberExtensions" Version="4.83.0" />
   </ItemGroup>
 
   <ItemGroup>

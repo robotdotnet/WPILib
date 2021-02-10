@@ -68,7 +68,7 @@ namespace roboRIODev
             SmartDashboard.PutNumber("External Dir Tach 2x", externalDirectionCounter2x.Count);
 
 
-            SmartDashboard.PutNumber("Absolute Tach", absoluteTach.RotationalSpeed?.RevolutionsPerSecond ?? 0);
+            SmartDashboard.PutNumber("Absolute Tach", absoluteTach.RotationalSpeed?.RevolutionsPerSecond ?? double.MaxValue);
 
             SmartDashboard.PutNumber("Quadrature Tach", quadratureTach.RotationalSpeed?.RevolutionsPerSecond ?? 0);
 
