@@ -25,16 +25,17 @@ namespace WPILib.Counters
 
         public int EdgesPerRevolution { get; set; } = 1;
 
-        public RotationalSpeed RotationalSpeed
+        public RotationalSpeed? RotationalSpeed
         {
             get
             {
                 var period = Hal.CounterLowLevel.GetPeriod(m_handle);
                 if (period == 0)
                 {
-                    return RotationalSpeed.MaxValue;
+                    return null;
                 }
-                return RotationalSpeed.FromRevolutionsPerSecond((1.0 / EdgesPerRevolution) / period);
+                return UnitsNet.RotationalSpeed.FromRevolutionsPerSecond((1.0 / EdgesPerRevolution) / period);
+                
             }
         }
 

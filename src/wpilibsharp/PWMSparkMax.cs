@@ -1,4 +1,5 @@
 ﻿using Hal;
+using UnitsNet;
 using WPILib.SmartDashboardNS;
 
 namespace WPILib
@@ -14,6 +15,9 @@ namespace WPILib
 
             UsageReporting.Report(ResourceType.RevSparkMaxPWM, Channel + 1);
             SendableRegistry.Instance.SetName(this, "PWMSparkMax", Channel);
+
+            ElectricPotential.FromVolts(5.0);
+            //this.SetVoltage(ElecticPotential.)
         }
     }
 }

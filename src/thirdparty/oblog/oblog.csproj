@@ -15,9 +15,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\wpilibsharp\wpilibsharp.csproj" />
     <ProjectReference Include="..\..\wpiutil\wpiutil.csproj" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Nullable" Version="1.3.0">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
