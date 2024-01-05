@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>WPINet</RootNamespace>
+    <AssemblyName>FRC.WPINet</AssemblyName>
+    <NoWarn>1591;CA1401</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="runtimes\**" PackagePath="runtimes" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <None Include="runtimes\win-x64\native\wpinet.dll" Link="wpinet.dll" CopyToOutputDirectory="Always" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>
