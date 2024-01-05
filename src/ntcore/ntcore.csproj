@@ -2,33 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <LangVersion>9.0</LangVersion>
-    <AssemblyName>FRC.NetworkTables</AssemblyName>
     <RootNamespace>NetworkTables</RootNamespace>
-    <NoWarn>1701;1702;1591;CA1303;0649</NoWarn>
+    <AssemblyName>FRC.NetworkTables</AssemblyName>
+    <NoWarn>1591;CA1401</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Memory" Version="4.5.4" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="runtimes\**" PackagePath="runtimes" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="runtimes\win-x64\native\ntcore.dll" Link="ntcore.dll" CopyToOutputDirectory="Always" />
+      <None Include="runtimes\win-x64\native\ntcore.dll" Link="ntcore.dll" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Nullable" Version="1.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <ProjectReference Include="..\wpinet\wpinet.csproj" />
   </ItemGroup>
 
 </Project>

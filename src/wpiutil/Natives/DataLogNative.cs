@@ -7,6 +7,11 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIUtil.Natives;
 
+public struct DataLogString
+{
+
+}
+
 public static partial class DataLogNative
 {
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Create", StringMarshalling = StringMarshalling.Utf8)]
@@ -73,9 +78,9 @@ public static partial class DataLogNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, double value, ulong timestamp);
 
-    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendString", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, string value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, byte* value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -97,7 +102,7 @@ public static partial class DataLogNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, ReadOnlySpan<double> value, nuint len, ulong timestamp);
 
-    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendStringArray", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendStringArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, ReadOnlySpan<string> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, DataLogString* value, nuint len, ulong timestamp);
 }
