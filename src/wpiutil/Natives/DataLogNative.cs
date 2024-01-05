@@ -1,12 +1,9 @@
 ﻿global using unsafe DataLogHandle = void*;
-global using unsafe DataLogWriteFunc = delegate* unmanaged[Cdecl]<void*, byte*, nuint, void>;
-global using EntryHandle = int;
 
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
-
 
 namespace WPIUtil.Natives;
 
@@ -18,7 +15,7 @@ public static partial class DataLogNative
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Create_Func", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial DataLogHandle DataLogCreateFunc(DataLogWriteFunc write, void* ptr, double period, string? extraHeader);
+    public static unsafe partial DataLogHandle DataLogCreateFunc(delegate* unmanaged[Cdecl]<void*, byte*, nuint, void> write, void* ptr, double period, string? extraHeader);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Release")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -84,9 +81,9 @@ public static partial class DataLogNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void DataLogAppendStringSpan(DataLogHandle datalog, EntryHandle entry, ReadOnlySpan<byte> value, nuint len, ulong timestamp);
 
-    // [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendBooleanArray")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, ReadOnlySpan<bool> value, nuint len, ulong timestamp);
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendBooleanArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, [MarshalUsing(typeof(BoolToIntMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<bool> value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendIntegerArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

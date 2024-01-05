@@ -15,7 +15,8 @@ public enum PixelFormat
     Uyvy
 }
 
-public sealed class RawFrame : IDisposable {
+public sealed class RawFrame : IDisposable
+{
     private RawFrameRaw internalFrame = new();
 
     public void Dispose()
