@@ -1,25 +1,15 @@
 using System;
-using System.Linq;
 using System.Runtime.InteropServices.Marshalling;
 
-namespace NetworkTables.Natives;
+namespace WPIUtil.Marshal;
 
-[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(NetworkTablesArrayMarshaller<,>))]
+[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CustomFreeArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
-public unsafe ref struct NetworkTablesArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
+public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged, INativeArrayFree
 {
-    private static readonly Type[] supportedTypes = [typeof(NtTopicInfo)];
-
     private TUnmanagedElement* unmanagedStorage;
     private int? length;
     private T[]? managedStorage;
-
-    public NetworkTablesArrayMarshaller()
-    {
-        if (!supportedTypes.Contains(typeof(TUnmanagedElement))) {
-            throw new InvalidOperationException($"{typeof(TUnmanagedElement)} is not supported by SizedFreeArrayMarshaller");
-        }
-    }
 
     public ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(int numElements)
     {
@@ -38,7 +28,7 @@ public unsafe ref struct NetworkTablesArrayMarshaller<T, TUnmanagedElement> wher
     {
         if (unmanagedStorage != null && length.HasValue)
         {
-            // TODO
+            TUnmanagedElement.Free(unmanagedStorage, length.Value);
         }
     }
 

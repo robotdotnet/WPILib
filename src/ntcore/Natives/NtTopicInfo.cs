@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
@@ -16,7 +17,7 @@ public static unsafe class NtTopicInfoMarshaller
             return ReturnInArray.ConvertToManaged(unmanaged);
         }
 
-        public static void Free(NtTopicInfo* unmanaged)
+        public static void Free(NtTopicInfo unmanaged)
         {
         }
     }
@@ -44,11 +45,16 @@ public static unsafe class NtTopicInfoMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct NtTopicInfo
+public struct NtTopicInfo : INativeArrayFree
 {
     public int topic;
     public NtString name;
     public NetworkTableType type;
     public NtString typeStr;
     public NtString properties;
+
+    public static unsafe void Free(void* ptr, int len)
+    {
+        throw new NotImplementedException();
+    }
 }

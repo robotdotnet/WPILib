@@ -3,12 +3,14 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
+using WPIUtil.Marshal;
 using WPIUtil.Natives;
 
 namespace NetworkTables.Natives;
 
 [CustomMarshaller(typeof(StringWrapper), MarshalMode.ManagedToUnmanagedIn, typeof(StringUtf8WrapperMarshaller))]
-public static unsafe class StringUtf8WrapperMarshaller {
+public static unsafe class StringUtf8WrapperMarshaller
+{
     public static ref byte GetPinnableReference(StringWrapper managed)
     {
         return ref managed.str[0];
@@ -21,14 +23,17 @@ public static unsafe class StringUtf8WrapperMarshaller {
 }
 
 [NativeMarshalling(typeof(StringUtf8WrapperMarshaller))]
-public readonly ref struct StringWrapper {
+public readonly ref struct StringWrapper
+{
     public readonly byte[] str;
 
-    public StringWrapper(string value) {
+    public StringWrapper(string value)
+    {
         str = Encoding.UTF8.GetBytes(value);
     }
 
-    public static implicit operator StringWrapper(string value) {
+    public static implicit operator StringWrapper(string value)
+    {
         return new StringWrapper(value);
     }
 }
@@ -93,27 +98,27 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     public static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = "count")]
+    [return: MarshalUsing(typeof(TopicArrayMarshaller<int, int>), CountElementName = "count")]
     public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicsStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = "count")]
-    public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
+    [return: MarshalUsing(typeof(TopicArrayMarshaller<int, int>), CountElementName = "count")]
+    public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfos")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfosStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfo")]

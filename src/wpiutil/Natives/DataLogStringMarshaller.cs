@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
@@ -20,7 +19,7 @@ public static unsafe class DataLogStringMarshaller
         }
 
         int exactByteCount = checked(Encoding.UTF8.GetByteCount(managed));
-        byte* mem = (byte*)Marshal.AllocCoTaskMem(exactByteCount);
+        byte* mem = (byte*)System.Runtime.InteropServices.Marshal.AllocCoTaskMem(exactByteCount);
         Span<byte> buffer = new(mem, exactByteCount);
 
         int byteCount = Encoding.UTF8.GetBytes(managed, buffer);
@@ -39,7 +38,7 @@ public static unsafe class DataLogStringMarshaller
     {
         if (unmanaged.str != null)
         {
-            Marshal.FreeCoTaskMem((nint)unmanaged.str);
+            System.Runtime.InteropServices.Marshal.FreeCoTaskMem((nint)unmanaged.str);
         }
     }
 
@@ -50,6 +49,6 @@ public static unsafe class DataLogStringMarshaller
             return string.Empty;
         }
 
-        return Marshal.PtrToStringUTF8((nint)unmanaged.str, checked((int)unmanaged.len));
+        return System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint)unmanaged.str, checked((int)unmanaged.len));
     }
 }

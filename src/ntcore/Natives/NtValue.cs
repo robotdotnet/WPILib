@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
@@ -17,7 +18,7 @@ public static unsafe class NtValueMarshaller
             return ReturnInArray.ConvertToManaged(unmanaged);
         }
 
-        public static void Free(NtValue* unmanaged)
+        public static void Free(in NtValue unmanaged)
         {
         }
     }
@@ -55,13 +56,18 @@ public static unsafe class NtValueMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public partial struct NtValue
+public partial struct NtValue : INativeArrayFree
 {
     public NetworkTableType type;
     public long lastChange;
     public long serverTime;
 
     public NtValueUnion data;
+
+    public static unsafe void Free(void* ptr, int len)
+    {
+        throw new NotImplementedException();
+    }
 
     [StructLayout(LayoutKind.Explicit)]
     public struct NtValueUnion
