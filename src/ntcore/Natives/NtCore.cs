@@ -2,8 +2,36 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using System.Text;
+using WPIUtil.Natives;
 
 namespace NetworkTables.Natives;
+
+[CustomMarshaller(typeof(StringWrapper), MarshalMode.ManagedToUnmanagedIn, typeof(StringUtf8WrapperMarshaller))]
+public static unsafe class StringUtf8WrapperMarshaller {
+    public static ref byte GetPinnableReference(StringWrapper managed)
+    {
+        return ref managed.str[0];
+    }
+
+    public static byte* ConvertToUnmanaged(StringWrapper managed)
+    {
+        throw new InvalidOperationException("Have to have to satify the marshaller");
+    }
+}
+
+[NativeMarshalling(typeof(StringUtf8WrapperMarshaller))]
+public readonly ref struct StringWrapper {
+    public readonly byte[] str;
+
+    public StringWrapper(string value) {
+        str = Encoding.UTF8.GetBytes(value);
+    }
+
+    public static implicit operator StringWrapper(string value) {
+        return new StringWrapper(value);
+    }
+}
 
 public static partial class NtCore
 {
@@ -25,12 +53,13 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial int GetEntry(int inst, byte* name, nuint nameLen);
+    public static unsafe partial int GetEntry(int inst, StringWrapper name, nuint nameLen);
 
     // Cannot build source generator due to not being able to get the len for a string source generator
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial byte* GetEntryType(int entry, out nuint nameLen);
+    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(nameLen))]
+    public static unsafe partial string GetEntryName(int entry, out nuint nameLen);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
