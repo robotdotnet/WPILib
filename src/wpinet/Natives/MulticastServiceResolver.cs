@@ -2,8 +2,9 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 
-namespace WPINet;
+namespace WPINet.Natives;
 
 [StructLayout(LayoutKind.Sequential)]
 public unsafe struct ServiceDataRaw
@@ -45,9 +46,10 @@ public static partial class MulticastServiceResolver
 
     [LibraryImport("wpinet", EntryPoint = "WPI_GetMulticastServiceResolverData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial ServiceDataRaw* GetMulticastServiceResolverData(MulticastServiceResolverHandle handle, out int dataCount);
+    [return: MarshalUsing(typeof(ServiceDataArrayMarshaller<,>), CountElementName = nameof(dataCount))]
+    public static unsafe partial ServiceData[] GetMulticastServiceResolverData(MulticastServiceResolverHandle handle, out int dataCount);
 
-    [LibraryImport("wpinet", EntryPoint = "WPI_FreeServiceData")]
+    [LibraryImport("wpinet", EntryPoint = "WPI_FreeMulticastServiceResolverData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void GetMulticastServiceResolverData(MulticastServiceResolverHandle handle, ServiceDataRaw* serviceData, int dataCount);
+    public static unsafe partial void FreeMulticastServiceResolverData(ServiceDataRaw* serviceData, int dataCount);
 }

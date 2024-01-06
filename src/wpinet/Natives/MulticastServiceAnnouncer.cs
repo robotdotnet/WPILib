@@ -3,7 +3,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace WPINet;
+namespace WPINet.Natives;
 
 public static partial class MulticastServiceAnnouncer
 {

@@ -36,5 +36,5 @@ public static unsafe class StaticArrayMarshaller<T, TUnmanagedElement> where TUn
     /// <param name="numElements">The unmanaged element count.</param>
     /// <returns>The <see cref="ReadOnlySpan{TUnmanagedElement}"/> containing the unmanaged elements to marshal.</returns>
     public static ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(TUnmanagedElement* unmanagedValue, int numElements)
-        => new ReadOnlySpan<TUnmanagedElement>(unmanagedValue, numElements);
+        => new(unmanagedValue, numElements);
 }
