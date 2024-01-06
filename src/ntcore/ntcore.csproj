@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>NetworkTables</RootNamespace>
     <AssemblyName>FRC.NetworkTables</AssemblyName>
-    <NoWarn>1591;CA1401</NoWarn>
+    <NoWarn>1591;CA1401;1570</NoWarn>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>

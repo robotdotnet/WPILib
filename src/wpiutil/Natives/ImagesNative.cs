@@ -9,5 +9,6 @@ public static partial class ImagesNative
 {
     [LibraryImport("wpiutil", EntryPoint = "WPI_GetResource_wpilib_128_png")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial byte* GetResourceWpilib128Png(out nuint len);
+    [return: MarshalUsing(typeof(StaticArrayMarshaller<,>), CountElementName = nameof(len))]
+    public static unsafe partial byte[] GetResourceWpilib128Png(out nuint len);
 }

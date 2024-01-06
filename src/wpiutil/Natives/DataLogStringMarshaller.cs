@@ -3,16 +3,16 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
-namespace NetworkTables.Natives;
+namespace WPIUtil.Natives;
 
-[CustomMarshaller(typeof(string), MarshalMode.Default, typeof(NtStringMarshaller))]
-public static unsafe class NtStringMarshaller
+[CustomMarshaller(typeof(string), MarshalMode.Default, typeof(DataLogStringMarshaller))]
+public static unsafe class DataLogStringMarshaller
 {
-    public static NtString ConvertToUnmanaged(string? managed)
+    public static DataLogString ConvertToUnmanaged(string? managed)
     {
         if (managed is null || managed.Length == 0)
         {
-            return new NtString()
+            return new DataLogString()
             {
                 str = null,
                 len = 0
@@ -24,14 +24,18 @@ public static unsafe class NtStringMarshaller
         Span<byte> buffer = new(mem, exactByteCount);
 
         int byteCount = Encoding.UTF8.GetBytes(managed, buffer);
-        return new NtString()
+        return new DataLogString()
         {
             str = mem,
             len = (nuint)byteCount,
         };
     }
 
-    public static void Free(NtString unmanaged)
+    /// <summary>
+    /// Free the memory for a specified unmanaged string.
+    /// </summary>
+    /// <param name="unmanaged">The memory allocated for the unmanaged string.</param>
+    public static void Free(DataLogString unmanaged)
     {
         if (unmanaged.str != null)
         {
@@ -39,7 +43,7 @@ public static unsafe class NtStringMarshaller
         }
     }
 
-    public static string ConvertToManaged(NtString unmanaged)
+    public static string ConvertToManaged(DataLogString unmanaged)
     {
         if (unmanaged.str == null || unmanaged.len == 0)
         {
@@ -48,11 +52,4 @@ public static unsafe class NtStringMarshaller
 
         return Marshal.PtrToStringUTF8((nint)unmanaged.str, checked((int)unmanaged.len));
     }
-}
-
-[StructLayout(LayoutKind.Sequential)]
-public unsafe struct NtString
-{
-    public byte* str;
-    public nuint len;
 }

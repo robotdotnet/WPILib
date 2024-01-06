@@ -27,13 +27,14 @@ public static partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial int GetEntry(int inst, byte* name, nuint nameLen);
 
+    // Cannot build source generator due to not being able to get the len for a string source generator
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial byte* GetEntryType(int entry, out nuint nameLen);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtType GetEntryType(int entry);
+    public static partial NetworkTableType GetEntryType(int entry);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryLastChange")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -41,17 +42,17 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void GetEntryValue(int entry, out NtValue value);
+    public static partial void GetEntryValue(int entry, out NetworkTableValue value);
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetDefaultEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool SetDefaultEntryValue(int entry, in NtValue defaultValue);
+    public static partial bool SetDefaultEntryValue(int entry, in NetworkTableValue defaultValue);
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool SetEntryValue(int entry, in NtValue defaultValue);
+    public static partial bool SetEntryValue(int entry, in NetworkTableValue value);
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryFlags")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -63,28 +64,33 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial NtValue* ReadQueueValue(int subentry, out nuint count);
+    [return: MarshalUsing(typeof(NtValueArrayMarshaller<,>), CountElementName = nameof(count))]
+    public static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial int* GetTopics(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
+    [return: MarshalUsing(typeof(TopicArrayMarshaller<,>), CountElementName = "count")]
+    public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicsStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial int* GetTopics(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
+    [return: MarshalUsing(typeof(TopicArrayMarshaller<,>), CountElementName = "count")]
+    public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfos")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial NtTopicInfo* GetTopicInfos(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
+    [return: MarshalUsing(typeof(TopicInfoArrayMarshaller<,>), CountElementName = nameof(count))]
+    public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfosStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial NtTopicInfo* GetTopicInfos(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
+    [return: MarshalUsing(typeof(TopicInfoArrayMarshaller<,>), CountElementName = nameof(count))]
+    public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static unsafe partial bool GetTopicInfo(int topic, out NtTopicInfo info);
+    public static unsafe partial bool GetTopicInfo(int topic, out TopicInfo info);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopic")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -96,7 +102,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtType GetTopicType(int topic);
+    public static partial NetworkTableType GetTopicType(int topic);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicTypeString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -157,7 +163,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_Subscribe", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int Subscribe(int topic, NtType type, string typeStr, in NtPubSubOptions options);
+    public static partial int Subscribe(int topic, NetworkTableType type, string typeStr, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_Unsubscribe")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -165,11 +171,11 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_Publish", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int Publish(int topic, NtType type, string typeStr, in NtPubSubOptions options);
+    public static partial int Publish(int topic, NetworkTableType type, string typeStr, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_PublishEx", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int Publish(int topic, NtType type, string typeStr, string properties, in NtPubSubOptions options);
+    public static partial int PublishEx(int topic, NetworkTableType type, string typeStr, string properties, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_Unpublish")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -177,7 +183,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryEx", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial int GetEntry(int topic, NtType type, string typeStr, in NtPubSubOptions options);
+    public static unsafe partial int GetEntry(int topic, NetworkTableType type, string typeStr, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReleaseEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -190,4 +196,16 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicFromHandle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int GetTopicFromHandle(int pubsubentry);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_Now")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial long Now();
+
+    [LibraryImport("ntcore", EntryPoint = "NT_SubscribeMultiple")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int SubscribeMultiple(int inst, [MarshalUsing(typeof(NtStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, in PubSubOptions options);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_UnsubscribeMultiple")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void UnsubscribeMultiple(int sub);
 }

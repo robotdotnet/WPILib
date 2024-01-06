@@ -7,9 +7,10 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIUtil.Natives;
 
-public struct DataLogString
+public unsafe struct DataLogString
 {
-
+    public byte* str;
+    public nuint len;
 }
 
 public static partial class DataLogNative
@@ -104,5 +105,5 @@ public static partial class DataLogNative
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendStringArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, DataLogString* value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(DataLogHandle datalog, EntryHandle entry, [MarshalUsing(typeof(DataLogStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value, nuint len, ulong timestamp);
 }

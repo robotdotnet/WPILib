@@ -3,7 +3,7 @@
 namespace NetworkTables;
 
 [Flags]
-public enum NtType : uint
+public enum NetworkTableType : uint
 {
     Unassigned = 0,
     Boolean = 0x01,
