@@ -5,18 +5,6 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace NetworkTables.Natives;
 
-public static unsafe partial class ValueFree
-{
-    [LibraryImport("ntcore", EntryPoint = "NT_DisposeValueArray")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DisposeValueArray(NtValue* arr, nuint count);
-
-    [LibraryImport("ntcore", EntryPoint = "NT_DisposeValue")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DisposeValue(NtValue* arr);
-}
-
-
 [CustomMarshaller(typeof(NetworkTableValue), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]
 [CustomMarshaller(typeof(NetworkTableValue), MarshalMode.ManagedToUnmanagedIn, typeof(PassIn))]
 [CustomMarshaller(typeof(NetworkTableValue), MarshalMode.ElementOut, typeof(ReturnInArray))]
@@ -29,12 +17,8 @@ public static unsafe class NtValueMarshaller
             return ReturnInArray.ConvertToManaged(unmanaged);
         }
 
-        public static void Free(in NtValue unmanaged)
+        public static void Free(NtValue* unmanaged)
         {
-            fixed (NtValue* ptr = &unmanaged)
-            {
-                ValueFree.DisposeValue(ptr);
-            }
         }
     }
 
@@ -67,54 +51,6 @@ public static unsafe class NtValueMarshaller
         {
             throw new NotImplementedException();
         }
-    }
-}
-
-[CustomMarshaller(typeof(NetworkTableValue[]), MarshalMode.ManagedToUnmanagedOut, typeof(NtValueArrayMarshaller<,>))]
-[ContiguousCollectionMarshaller]
-public unsafe struct NtValueArrayMarshaller<GenericPlaceholder, TUnmanagedElement> where TUnmanagedElement : unmanaged
-{
-    private TUnmanagedElement* unmanagedStorage;
-    private int? length;
-    private NetworkTableValue[]? managedStorage;
-
-    public NtValueArrayMarshaller()
-    {
-        if (typeof(TUnmanagedElement) != typeof(NtValue))
-        {
-            throw new InvalidOperationException("Unmanaged type must be topic");
-        }
-    }
-
-    public ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(int numElements)
-    {
-        length = numElements;
-        return new ReadOnlySpan<TUnmanagedElement>(unmanagedStorage, numElements);
-    }
-
-    public Span<NetworkTableValue> GetManagedValuesDestination(int numElements)
-    {
-        length = numElements;
-        managedStorage = new NetworkTableValue[numElements];
-        return managedStorage;
-    }
-
-    public readonly void Free()
-    {
-        if (unmanagedStorage != null && length.HasValue)
-        {
-            ValueFree.DisposeValueArray((NtValue*)unmanagedStorage, (nuint)length.Value);
-        }
-    }
-
-    public void FromUnmanaged(TUnmanagedElement* unmanaged)
-    {
-        unmanagedStorage = unmanaged;
-    }
-
-    public readonly NetworkTableValue[] ToManaged()
-    {
-        return managedStorage!;
     }
 }
 

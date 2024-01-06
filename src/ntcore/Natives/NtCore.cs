@@ -93,27 +93,27 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NtValueArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = nameof(count))]
     public static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(TopicArrayMarshaller<,>), CountElementName = "count")]
+    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = "count")]
     public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicsStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(TopicArrayMarshaller<,>), CountElementName = "count")]
+    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = "count")]
     public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfos")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(TopicInfoArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = nameof(count))]
     public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfosStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(TopicInfoArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(NetworkTablesArrayMarshaller<,>), CountElementName = nameof(count))]
     public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfo")]
