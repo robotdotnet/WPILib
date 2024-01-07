@@ -8,7 +8,7 @@ namespace ntcore.test
         [Fact]
         public void TestNtCoreLoads()
         {
-            NtCore.Initialize();
+            NtCore.Now();
         }
     }
 }

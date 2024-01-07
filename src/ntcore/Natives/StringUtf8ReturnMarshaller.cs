@@ -6,13 +6,6 @@ using System.Text;
 
 namespace NetworkTables.Natives;
 
-public static unsafe partial class StringArrayFree
-{
-    [LibraryImport("ntcore", EntryPoint = "NT_FreeCharArray")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void Free(byte* arr);
-}
-
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(StringUtf8ReturnMarshaller<>))]
 [ContiguousCollectionMarshaller]
 public static unsafe class StringUtf8ReturnMarshaller<TUnmanagedElement> where TUnmanagedElement : unmanaged
@@ -28,13 +21,13 @@ public static unsafe class StringUtf8ReturnMarshaller<TUnmanagedElement> where T
         }
 
         string ret = Encoding.UTF8.GetString((byte*)unmanaged, numElements);
-        StringArrayFree.Free((byte*)unmanaged);
+        NtCore.FreeCharArray((byte*)unmanaged);
         return ret;
     }
 
     public static Span<byte> GetManagedValuesDestination(string managed)
-        => new Span<byte>();
+        => new();
 
     public static ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(TUnmanagedElement* unmanagedValue, int numElements)
-        => new ReadOnlySpan<TUnmanagedElement>();
+        => new();
 }

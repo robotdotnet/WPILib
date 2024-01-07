@@ -6,48 +6,56 @@ using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
-[CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(NtStringMarshaller))]
+[CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(PassToArray))]
 public static unsafe class NtStringMarshaller
 {
-    public static NtString ConvertToUnmanaged(string? managed)
+    public static string ManagedConvert(NtString unmanaged)
     {
-        if (managed is null || managed.Length == 0)
+        if (unmanaged.str is null || unmanaged.len is 0)
         {
-            return new NtString()
-            {
-                str = null,
-                len = 0
-            };
-        }
-
-        int exactByteCount = checked(Encoding.UTF8.GetByteCount(managed));
-        byte* mem = (byte*)Marshal.AllocCoTaskMem(exactByteCount);
-        Span<byte> buffer = new(mem, exactByteCount);
-
-        int byteCount = Encoding.UTF8.GetBytes(managed, buffer);
-        return new NtString()
-        {
-            str = mem,
-            len = (nuint)byteCount,
-        };
-    }
-
-    public static void Free(NtString unmanaged)
-    {
-        if (unmanaged.str != null)
-        {
-            Marshal.FreeCoTaskMem((nint)unmanaged.str);
-        }
-    }
-
-    public static string ConvertToManaged(NtString unmanaged)
-    {
-        if (unmanaged.str == null || unmanaged.len == 0)
-        {
-            return string.Empty;
+            return "";
         }
 
         return Marshal.PtrToStringUTF8((nint)unmanaged.str, checked((int)unmanaged.len));
+    }
+
+    public static class PassToArray
+    {
+        public static NtString ConvertToUnmanaged(string? managed)
+        {
+            if (managed is null || managed.Length == 0)
+            {
+                return new NtString()
+                {
+                    str = (byte*)Marshal.AllocCoTaskMem(0),
+                    len = 0
+                };
+            }
+
+            int exactByteCount = Encoding.UTF8.GetByteCount(managed);
+            byte* mem = (byte*)Marshal.AllocCoTaskMem(exactByteCount);
+            Span<byte> buffer = new(mem, exactByteCount);
+
+            int byteCount = Encoding.UTF8.GetBytes(managed, buffer);
+            return new NtString()
+            {
+                str = mem,
+                len = (nuint)byteCount,
+            };
+        }
+
+        public static void Free(NtString unmanaged)
+        {
+            if (unmanaged.str != null)
+            {
+                Marshal.FreeCoTaskMem((nint)unmanaged.str);
+            }
+        }
+
+        public static string ConvertToManaged(NtString unmanaged)
+        {
+            throw new NotSupportedException();
+        }
     }
 }
 

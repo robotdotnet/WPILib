@@ -37,6 +37,10 @@ public static unsafe partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void DisposeEvent(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr);
 
+    [LibraryImport("ntcore", EntryPoint = "NT_AllocateCharArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial byte* AllocateCharArray(nuint len);
+
     [LibraryImport("ntcore", EntryPoint = "NT_FreeCharArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void FreeCharArray(byte* ptr);

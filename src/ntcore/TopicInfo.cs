@@ -33,10 +33,10 @@ public static unsafe class TopicInfoMarshaller
             return new TopicInfo
             {
                 TopicHandle = unmanaged.topic,
-                Name = NtStringMarshaller.ConvertToManaged(unmanaged.name),
+                Name = NtStringMarshaller.ManagedConvert(unmanaged.name),
                 Type = unmanaged.type,
-                TypeStr = NtStringMarshaller.ConvertToManaged(unmanaged.typeStr),
-                Properties = NtStringMarshaller.ConvertToManaged(unmanaged.properties),
+                TypeStr = NtStringMarshaller.ManagedConvert(unmanaged.typeStr),
+                Properties = NtStringMarshaller.ManagedConvert(unmanaged.properties),
 
             };
         }

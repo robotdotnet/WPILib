@@ -15,8 +15,8 @@ public static unsafe class ConnectionInfoMarshaller
     {
         return new ConnectionInfo
         {
-            RemoteId = NtStringMarshaller.ConvertToManaged(unmanaged.remoteId),
-            RemoteIp = NtStringMarshaller.ConvertToManaged(unmanaged.remoteIp),
+            RemoteId = NtStringMarshaller.ManagedConvert(unmanaged.remoteId),
+            RemoteIp = NtStringMarshaller.ManagedConvert(unmanaged.remoteIp),
             RemotePort = unmanaged.remotePort,
             LastUpdate = unmanaged.lastUpdate,
             ProtocolVersion = unmanaged.protocolVersion,
