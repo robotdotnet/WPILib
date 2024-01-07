@@ -5,23 +5,9 @@ using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
-[CustomMarshaller(typeof(NetworkTableEvent), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]
 [CustomMarshaller(typeof(NetworkTableEvent), MarshalMode.ElementOut, typeof(ReturnInArray))]
 public static unsafe class NtEventMarshaller
 {
-public static class ReturnFrom
-    {
-        public static NetworkTableEvent ConvertToManaged(in NtEvent unmanaged)
-        {
-            return ReturnInArray.ConvertToManaged(unmanaged);
-        }
-
-        public static void Free(NtEvent unmanaged)
-        {
-            NtEvent.Free(&unmanaged);
-        }
-    }
-
     public static class ReturnInArray
     {
         public static NetworkTableEvent ConvertToManaged(in NtEvent unmanaged)
