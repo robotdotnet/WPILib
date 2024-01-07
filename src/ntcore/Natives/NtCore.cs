@@ -163,6 +163,12 @@ public static partial class NtCore
     [return: MarshalAs(UnmanagedType.I4)]
     public static unsafe partial bool GetTopicInfo(int topic, out TopicInfo info);
 
+    public static TopicInfo GetTopicInfo(int topic)
+    {
+        GetTopicInfo(topic, out var info);
+        return info;
+    }
+
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopic")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static unsafe partial int GetTopic(int inst, StringWrapper name, nuint nameLen);

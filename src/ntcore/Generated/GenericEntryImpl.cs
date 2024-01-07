@@ -18,7 +18,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
      * @param topic Topic
      * @param handle Native handle
      */
-    GenericEntryImpl(Topic topic, int handle) : base(handle)
+    internal GenericEntryImpl(Topic topic, int handle) : base(handle)
     {
         Topic = topic;
     }

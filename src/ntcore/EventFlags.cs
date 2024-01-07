@@ -18,5 +18,5 @@ public enum EventFlags
     ValueLocal = 0x80,
     ValueAll = ValueRemote | ValueLocal,
     LogMessage = 0x100,
-    Timesync = 0x200,
+    TimeSync = 0x200,
 }

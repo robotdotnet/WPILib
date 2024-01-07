@@ -19,3 +19,25 @@ public enum NetworkTableType : uint
     IntegerArray = 0x400,
     FloatArray = 0x800
 }
+
+public static class NetworkTableTypeHelpers
+{
+    public static NetworkTableType getFromString(string typeString)
+    {
+        return typeString switch
+        {
+            "boolean" => NetworkTableType.Boolean,
+            "double" => NetworkTableType.Double,
+            "float" => NetworkTableType.Float,
+            "int" => NetworkTableType.Integer,
+            "string" or "json" => NetworkTableType.String,
+            "boolean[]" => NetworkTableType.BooleanArray,
+            "double[]" => NetworkTableType.DoubleArray,
+            "float[]" => NetworkTableType.FloatArray,
+            "int[]" => NetworkTableType.IntegerArray,
+            "string[]" => NetworkTableType.StringArray,
+            "" => NetworkTableType.Unassigned,
+            _ => NetworkTableType.Raw,
+        };
+    }
+}
