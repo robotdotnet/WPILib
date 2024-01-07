@@ -15,43 +15,59 @@ public static unsafe class NtValueMarshaller
     {
         public static NetworkTableValue ConvertToManaged(in NtValue unmanaged)
         {
-            return ReturnInArray.ConvertToManaged(unmanaged);
+            return new NetworkTableValue(unmanaged);
         }
 
         public static void Free(in NtValue unmanaged)
         {
+            throw new NotImplementedException();
         }
     }
 
     public static class PassIn
     {
-        public static NetworkTableValue ConvertToManaged(in NtValue unmanaged)
-        {
-            throw new NotImplementedException();
-        }
-
         public static NtValue ConvertToUnmanaged(in NetworkTableValue managed)
         {
-            throw new NotImplementedException();
+            return new NtValue
+            {
+                type = managed.Type,
+                serverTime = managed.ServerTime,
+                lastChange = managed.Time,
+                data = managed.GetNativeValueUnion(),
+            };
         }
 
         public static void Free(in NtValue unmanaged)
         {
-            throw new NotImplementedException();
+            switch (unmanaged.type)
+            {
+                case NetworkTableType.Raw:
+                    Marshal.FreeCoTaskMem((nint)unmanaged.data.valueRaw.data);
+                    break;
+                case NetworkTableType.DoubleArray:
+                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrDouble.arr);
+                    break;
+                case NetworkTableType.BooleanArray:
+                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrBoolean.arr);
+                    break;
+                case NetworkTableType.StringArray:
+                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrString.arr);
+                    break;
+                case NetworkTableType.FloatArray:
+                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrFloat.arr);
+                    break;
+                case NetworkTableType.IntegerArray:
+                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrInt.arr);
+                    break;
+            }
         }
     }
 
     public static class ReturnInArray
     {
-        public static NetworkTableValue ConvertToManaged(in NtValue unmanaged)
-        {
-            throw new NotImplementedException();
-        }
+        public static NetworkTableValue ConvertToManaged(in NtValue unmanaged) => ReturnFrom.ConvertToManaged(unmanaged);
 
-        public static NtValue ConvertToUnmanaged(in NetworkTableValue managed)
-        {
-            throw new NotImplementedException();
-        }
+        public static NtValue ConvertToUnmanaged(in NetworkTableValue managed) => throw new NotSupportedException();
     }
 }
 

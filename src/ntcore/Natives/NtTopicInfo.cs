@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using WPIUtil.Marshal;
@@ -19,6 +18,7 @@ public static unsafe class NtTopicInfoMarshaller
 
         public static void Free(NtTopicInfo unmanaged)
         {
+            throw new NotImplementedException();
         }
     }
 
@@ -39,7 +39,7 @@ public static unsafe class NtTopicInfoMarshaller
 
         public static NtTopicInfo ConvertToUnmanaged(in TopicInfo managed)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }

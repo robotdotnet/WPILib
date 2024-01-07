@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkTables.Natives;
 
-[CustomMarshaller(typeof(string), MarshalMode.Default, typeof(NtStringMarshaller))]
+[CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(NtStringMarshaller))]
 public static unsafe class NtStringMarshaller
 {
     public static NtString ConvertToUnmanaged(string? managed)
