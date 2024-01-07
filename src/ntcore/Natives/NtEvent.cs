@@ -1,7 +1,40 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
+
+[CustomMarshaller(typeof(NetworkTableEvent), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]
+[CustomMarshaller(typeof(NetworkTableEvent), MarshalMode.ElementOut, typeof(ReturnInArray))]
+public static unsafe class NtEventMarshaller
+{
+public static class ReturnFrom
+    {
+        public static NetworkTableEvent ConvertToManaged(in NtEvent unmanaged)
+        {
+            return ReturnInArray.ConvertToManaged(unmanaged);
+        }
+
+        public static void Free(NtEvent unmanaged)
+        {
+            NtEvent.Free(&unmanaged);
+        }
+    }
+
+    public static class ReturnInArray
+    {
+        public static NetworkTableEvent ConvertToManaged(in NtEvent unmanaged)
+        {
+            return default;
+        }
+
+        public static NtEvent ConvertToUnmanaged(in NetworkTableEvent managed)
+        {
+            throw new NotSupportedException();
+        }
+    }
+}
 
 [StructLayout(LayoutKind.Sequential)]
 public struct NtEvent : INativeArrayFree<NtEvent>, INativeFree<NtEvent>
