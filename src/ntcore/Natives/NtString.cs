@@ -52,7 +52,7 @@ public static unsafe class NtStringMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct NtString: INativeFree<NtString>
+public unsafe struct NtString : INativeFree<NtString>
 {
     public byte* str;
     public nuint len;

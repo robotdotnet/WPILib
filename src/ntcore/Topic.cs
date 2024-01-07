@@ -1,4 +1,7 @@
-﻿namespace NetworkTables;
+﻿using System;
+using NetworkTables.Natives;
+
+namespace NetworkTables;
 
 public class Topic
 {

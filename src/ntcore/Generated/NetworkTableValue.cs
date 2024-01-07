@@ -13,23 +13,10 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** A network table entry value. */
-[NativeMarshalling(typeof(NtValueMarshaller))]
+[NativeMarshalling(typeof(NetworkTableValueMarshaller))]
 [StructLayout(LayoutKind.Auto)]
 public readonly struct NetworkTableValue
 {
-    internal NetworkTableValue(in NtValue value) {
-
-    }
-
-    public NtValue ToNative() {
-        return new NtValue();
-    }
-
-    public static void FreeNative(in NtValue value) {
-
-    }
-
-
     internal NetworkTableValue(NetworkTableType type, object? obj, long time, long serverTime)
     {
         Type = type;

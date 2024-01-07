@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -22,7 +22,8 @@ public static unsafe class StringUtf8ReturnMarshaller<TUnmanagedElement> where T
         if (unmanaged is null)
             return "";
 
-        if (typeof(TUnmanagedElement) != typeof(byte)) {
+        if (typeof(TUnmanagedElement) != typeof(byte))
+        {
             throw new InvalidOperationException("TUnmanagedElement must be byte");
         }
 

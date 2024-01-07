@@ -1,4 +1,4 @@
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace NetworkTables.Natives;
@@ -7,7 +7,7 @@ public static unsafe partial class NtCore
 {
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeValue(NtValue* ptr);
+    public static partial void DisposeValue(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr);
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -15,27 +15,27 @@ public static unsafe partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeValueArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeValueArray(NtValue* ptr, nuint count);
+    public static partial void DisposeValueArray(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr, nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeConnectionInfoArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeConnectionInfoArray(NtConnectionInfo* ptr, nuint count);
+    public static partial void DisposeConnectionInfoArray(ConnectionInfoMarshaller.NativeConnectionInfo* ptr, nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeTopicInfoArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeTopicInfoArray(NtTopicInfo* ptr, nuint count);
+    public static partial void DisposeTopicInfoArray(TopicInfoMarshaller.NativeTopicInfo* ptr, nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeTopicInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeTopicInfo(NtTopicInfo* ptr);
+    public static partial void DisposeTopicInfo(TopicInfoMarshaller.NativeTopicInfo* ptr);
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeEventArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeEventArray(NtEvent* ptr, nuint count);
+    public static partial void DisposeEventArray(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr, nuint count);
 
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeEvent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeEvent(NtEvent* ptr);
+    public static partial void DisposeEvent(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr);
 
     [LibraryImport("ntcore", EntryPoint = "NT_FreeCharArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

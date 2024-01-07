@@ -13,24 +13,21 @@ public static unsafe class StringUtf8WrapperMarshaller
 {
     public static ref byte GetPinnableReference(StringWrapper managed)
     {
-        return ref managed.str[0];
+        return ref managed.Str[0];
     }
 
     public static byte* ConvertToUnmanaged(StringWrapper managed)
     {
-        throw new InvalidOperationException("Have to have to satify the marshaller");
+        throw new NotSupportedException("Have to have to satify the marshaller");
     }
 }
 
 [NativeMarshalling(typeof(StringUtf8WrapperMarshaller))]
-public readonly ref struct StringWrapper
+public readonly ref struct StringWrapper(string value)
 {
-    public readonly byte[] str;
+    public readonly byte[] Str = Encoding.UTF8.GetBytes(value);
 
-    public StringWrapper(string value)
-    {
-        str = Encoding.UTF8.GetBytes(value);
-    }
+    public nuint Len => (nuint)Str.Length;
 
     public static implicit operator StringWrapper(string value)
     {
@@ -58,13 +55,24 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial int GetEntry(int inst, StringWrapper name, nuint nameLen);
+    internal static unsafe partial int GetEntry(int inst, StringWrapper name, nuint nameLen);
+
+    public static unsafe int GetEntry(int inst, string name)
+    {
+        StringWrapper wrapper = name;
+        return GetEntry(inst, wrapper, wrapper.Len);
+    }
 
     // Cannot build source generator due to not being able to get the len for a string source generator
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(nameLen))]
-    public static unsafe partial string GetEntryName(int entry, out nuint nameLen);
+    internal static unsafe partial string GetEntryName(int entry, out nuint nameLen);
+
+    public static unsafe string GetEntryName(int entry)
+    {
+        return GetEntryName(entry, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -90,36 +98,65 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryFlags")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetEntryFlags(int entry, uint flags);
+    public static partial void SetEntryFlags(int entry, EntryFlags flags);
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryFlags")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint GetEntryFlags(int entry);
+    public static partial EntryFlags GetEntryFlags(int entry);
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    public static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
+    internal static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
+
+    public static unsafe NetworkTableValue[] ReadQueueValue(int subentry)
+    {
+        return ReadQueueValue(subentry, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(TopicArrayMarshaller<int, int>), CountElementName = "count")]
-    public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
+    internal static unsafe partial int[] GetTopics(int inst, StringWrapper prefix, nuint prefixLen, NetworkTableType types, out nuint count);
+
+    public static unsafe int[] GetTopics(int inst, string prefix, NetworkTableType types)
+    {
+        StringWrapper wrapper = prefix;
+        return GetTopics(inst, wrapper, wrapper.Len, types, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicsStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(TopicArrayMarshaller<int, int>), CountElementName = "count")]
-    public static unsafe partial int[] GetTopics(int inst, byte* prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
+    internal static unsafe partial int[] GetTopics(int inst, StringWrapper prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
+
+    public static unsafe int[] GetTopics(int inst, string prefix, ReadOnlySpan<string> types)
+    {
+        StringWrapper wrapper = prefix;
+        return GetTopics(inst, wrapper, wrapper.Len, types, (nuint)types.Length, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfos")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, uint types, out nuint count);
+    internal static unsafe partial TopicInfo[] GetTopicInfos(int inst, StringWrapper prefix, nuint prefixLen, NetworkTableType types, out nuint count);
+
+    public static TopicInfo[] GetTopicInfos(int inst, string prefix, NetworkTableType types)
+    {
+        StringWrapper wrapper = prefix;
+        return GetTopicInfos(inst, wrapper, wrapper.Len, types, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfosStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    public static unsafe partial TopicInfo[] GetTopicInfos(int inst, byte* prefix, nuint prefixLen, byte** types, nuint typesLen, out nuint count);
+    internal static unsafe partial TopicInfo[] GetTopicInfos(int inst, StringWrapper prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
+
+    public static TopicInfo[] GetTopicInfos(int inst, string prefix, ReadOnlySpan<string> types)
+    {
+        StringWrapper wrapper = prefix;
+        return GetTopicInfos(inst, wrapper, wrapper.Len, types, (nuint)types.Length, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -128,11 +165,23 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopic")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial int GetTopic(int inst, byte* name, nuint nameLen);
+    internal static unsafe partial int GetTopic(int inst, StringWrapper name, nuint nameLen);
+
+    public static int GetTopic(int inst, string name)
+    {
+        StringWrapper wrapper = name;
+        return GetTopic(inst, wrapper, wrapper.Len);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial byte* GetTopicName(int topic, out nuint nameLen);
+    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(nameLen))]
+    internal static unsafe partial string GetTopicName(int topic, out nuint nameLen);
+
+    public static unsafe string GetTopicName(int topic)
+    {
+        return GetTopicName(topic, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -140,7 +189,13 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicTypeString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial byte* GetTopicTypeString(int topic, out nuint typeLen);
+    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(typeLen))]
+    internal static unsafe partial string GetTopicTypeString(int topic, out nuint typeLen);
+
+    public static unsafe string GetTopicTypeString(int topic)
+    {
+        return GetTopicTypeString(topic, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetTopicPersistent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -176,7 +231,13 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicProperty", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial byte* GetTopicProperty(int topic, string name, out nuint len);
+    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(len))]
+    internal static unsafe partial string GetTopicProperty(int topic, string name, out nuint len);
+
+    public static unsafe string GetTopicProperty(int topic, string name)
+    {
+        return GetTopicProperty(topic, name, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetTopicProperty", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -189,7 +250,13 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicProperties")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial byte* GetTopicProperties(int topic, out nuint len);
+    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(len))]
+    internal static unsafe partial string GetTopicProperties(int topic, out nuint len);
+
+    public static string GetTopicProperties(int topic)
+    {
+        return GetTopicProperties(topic, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetTopicProperties", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
