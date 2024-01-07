@@ -4,10 +4,10 @@ using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
-[CustomMarshaller(typeof(ConnectionInfo), MarshalMode.UnmanagedToManagedIn, typeof(NtConnectionInfoMarshaller))]
+[CustomMarshaller(typeof(ConnectionInfo), MarshalMode.ManagedToUnmanagedOut, typeof(NtConnectionInfoMarshaller))]
 public static unsafe class NtConnectionInfoMarshaller
 {
-    public static ConnectionInfo ConvertToManaged(NtConnectionInfo unmanaged)
+    public static ConnectionInfo ConvertToManaged(in NtConnectionInfo unmanaged)
     {
         return new ConnectionInfo
         {
