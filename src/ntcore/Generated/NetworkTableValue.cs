@@ -25,6 +25,10 @@ public readonly struct NetworkTableValue
         return new NtValue();
     }
 
+    public static void FreeNative(in NtValue value) {
+
+    }
+
 
     internal NetworkTableValue(NetworkTableType type, object? obj, long time, long serverTime)
     {

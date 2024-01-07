@@ -18,7 +18,7 @@ public static unsafe class NtTopicInfoMarshaller
 
         public static void Free(NtTopicInfo unmanaged)
         {
-            throw new NotImplementedException();
+            NtTopicInfo.Free(&unmanaged);
         }
     }
 
@@ -45,7 +45,7 @@ public static unsafe class NtTopicInfoMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct NtTopicInfo : INativeArrayFree
+public struct NtTopicInfo : INativeArrayFree<NtTopicInfo>, INativeFree<NtTopicInfo>
 {
     public int topic;
     public NtString name;
@@ -53,8 +53,13 @@ public struct NtTopicInfo : INativeArrayFree
     public NtString typeStr;
     public NtString properties;
 
-    public static unsafe void FreeArray(void* ptr, int len)
+    public static unsafe void Free(NtTopicInfo* ptr)
     {
-        throw new NotImplementedException();
+        NtCore.DisposeTopicInfo(ptr);
+    }
+
+    public static unsafe void FreeArray(NtTopicInfo* ptr, int len)
+    {
+        NtCore.DisposeTopicInfoArray(ptr, (nuint)len);
     }
 }

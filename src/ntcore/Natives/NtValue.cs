@@ -18,9 +18,9 @@ public static unsafe class NtValueMarshaller
             return new NetworkTableValue(unmanaged);
         }
 
-        public static void Free(in NtValue unmanaged)
+        public static void Free(NtValue unmanaged)
         {
-            throw new NotImplementedException();
+            NtValue.Free(&unmanaged);
         }
     }
 
@@ -28,38 +28,12 @@ public static unsafe class NtValueMarshaller
     {
         public static NtValue ConvertToUnmanaged(in NetworkTableValue managed)
         {
-            return new NtValue
-            {
-                type = managed.Type,
-                serverTime = managed.ServerTime,
-                lastChange = managed.Time,
-                data = managed.GetNativeValueUnion(),
-            };
+            return managed.ToNative();
         }
 
         public static void Free(in NtValue unmanaged)
         {
-            switch (unmanaged.type)
-            {
-                case NetworkTableType.Raw:
-                    Marshal.FreeCoTaskMem((nint)unmanaged.data.valueRaw.data);
-                    break;
-                case NetworkTableType.DoubleArray:
-                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrDouble.arr);
-                    break;
-                case NetworkTableType.BooleanArray:
-                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrBoolean.arr);
-                    break;
-                case NetworkTableType.StringArray:
-                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrString.arr);
-                    break;
-                case NetworkTableType.FloatArray:
-                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrFloat.arr);
-                    break;
-                case NetworkTableType.IntegerArray:
-                    Marshal.FreeCoTaskMem((nint)unmanaged.data.arrInt.arr);
-                    break;
-            }
+            NetworkTableValue.FreeNative(unmanaged);
         }
     }
 
@@ -72,7 +46,7 @@ public static unsafe class NtValueMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public partial struct NtValue : INativeArrayFree
+public partial struct NtValue : INativeArrayFree<NtValue>, INativeFree<NtValue>
 {
     public NetworkTableType type;
     public long lastChange;
@@ -80,9 +54,14 @@ public partial struct NtValue : INativeArrayFree
 
     public NtValueUnion data;
 
-    public static unsafe void FreeArray(void* ptr, int len)
+    public static unsafe void Free(NtValue* ptr)
     {
-        throw new NotImplementedException();
+        NtCore.DisposeValue(ptr);
+    }
+
+    public static unsafe void FreeArray(NtValue* ptr, int len)
+    {
+        NtCore.DisposeValueArray(ptr, (nuint)len);
     }
 
     [StructLayout(LayoutKind.Explicit)]

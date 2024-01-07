@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
+using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
@@ -51,8 +52,13 @@ public static unsafe class NtStringMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct NtString
+public unsafe struct NtString: INativeFree<NtString>
 {
     public byte* str;
     public nuint len;
+
+    public static void Free(NtString* ptr)
+    {
+        NtCore.DisposeString(ptr);
+    }
 }
