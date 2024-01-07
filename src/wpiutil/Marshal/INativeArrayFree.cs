@@ -2,6 +2,6 @@ using System;
 
 namespace WPIUtil.Marshal;
 
-public interface INativeArrayFree {
-    static abstract unsafe void Free(void* ptr, int len);
+public interface INativeArrayFree<T> where T : unmanaged {
+    static abstract unsafe void FreeArray(T* ptr, int len);
 }

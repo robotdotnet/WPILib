@@ -53,7 +53,7 @@ public struct NtTopicInfo : INativeArrayFree
     public NtString typeStr;
     public NtString properties;
 
-    public static unsafe void Free(void* ptr, int len)
+    public static unsafe void FreeArray(void* ptr, int len)
     {
         throw new NotImplementedException();
     }

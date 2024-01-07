@@ -5,7 +5,7 @@ namespace WPIUtil.Marshal;
 
 [CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CustomFreeArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
-public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged, INativeArrayFree
+public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged, INativeArrayFree<TUnmanagedElement>
 {
     private TUnmanagedElement* unmanagedStorage;
     private int? length;
@@ -28,7 +28,7 @@ public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where T
     {
         if (unmanagedStorage != null && length.HasValue)
         {
-            TUnmanagedElement.Free(unmanagedStorage, length.Value);
+            TUnmanagedElement.FreeArray(unmanagedStorage, length.Value);
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
@@ -20,11 +21,16 @@ public static unsafe class NtConnectionInfoMarshaller
 }
 
 [StructLayout(LayoutKind.Sequential)]
-public struct NtConnectionInfo
+public struct NtConnectionInfo : INativeArrayFree<NtConnectionInfo>
 {
     public NtString remoteId;
     public NtString remoteIp;
     public uint remotePort;
     public ulong lastUpdate;
     public uint protocolVersion;
+
+    public static unsafe void FreeArray(NtConnectionInfo* ptr, int len)
+    {
+        NtCore.DisposeConnectionInfoArray(ptr, (nuint)len);
+    }
 }
