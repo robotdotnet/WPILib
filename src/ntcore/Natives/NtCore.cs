@@ -161,12 +161,13 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static unsafe partial bool GetTopicInfo(int topic, out TopicInfo info);
+    public static unsafe partial bool GetTopicInfo(int topic, TopicInfoMarshaller.NativeTopicInfo* info);
 
-    public static TopicInfo GetTopicInfo(int topic)
+    public static unsafe TopicInfo GetTopicInfo(int topic)
     {
-        GetTopicInfo(topic, out var info);
-        return info;
+        TopicInfoMarshaller.NativeTopicInfo tmp = default;
+        bool isValid = GetTopicInfo(topic, &tmp);
+        return isValid ? TopicInfoMarshaller.ReturnFrom.ConvertToManaged(tmp) : TopicInfo.Empty;
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopic")]

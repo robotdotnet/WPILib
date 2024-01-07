@@ -7,7 +7,10 @@ namespace NetworkTables.Natives;
 
 [NativeMarshalling(typeof(TopicInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct TopicInfo(int TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties);
+public record struct TopicInfo(int TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties)
+{
+    public static TopicInfo Empty { get; } = new(0, "", NetworkTableType.Unassigned, "", "");
+}
 
 [CustomMarshaller(typeof(TopicInfo), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]
 [CustomMarshaller(typeof(TopicInfo), MarshalMode.ElementOut, typeof(ReturnInArray))]
