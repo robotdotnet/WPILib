@@ -1,0 +1,59 @@
+﻿using System;
+using WPIUtil.Natives;
+
+namespace WPIUtil;
+
+public sealed class RawFrameReader : IDisposable
+{
+    private NativeRawFrame internalFrame = new();
+
+    public void Dispose()
+    {
+        NativeRawFrame.FreeRawFrameData(ref internalFrame);
+    }
+
+    public ref NativeRawFrame RawFrame => ref internalFrame;
+
+    public unsafe ReadOnlySpan<byte> Data => new(internalFrame.data, checked((int)internalFrame.size));
+
+    public void SetInfo(int width, int height, int stride, PixelFormat pixelFormat)
+    {
+        Height = height;
+        Width = width;
+        Stride = stride;
+        PixelFormat = pixelFormat;
+    }
+
+    public int Height
+    {
+        get => internalFrame.height;
+        set => internalFrame.height = value;
+    }
+
+    public int Width
+    {
+        get => internalFrame.width;
+        set => internalFrame.width = value;
+    }
+
+    public int Stride
+    {
+        get => internalFrame.stride;
+        set => internalFrame.stride = value;
+    }
+
+    public PixelFormat PixelFormat
+    {
+        get => internalFrame.pixelFormat;
+        set => internalFrame.pixelFormat = value;
+    }
+
+    public unsafe RawFrameReader CreateCopy() {
+        RawFrameReader ret = new RawFrameReader();
+        ret.SetInfo(Width, Height, Stride, PixelFormat);
+        NativeRawFrame.AllocateRawFrameData(ref ret.RawFrame, internalFrame.size);
+        ret.internalFrame.size = internalFrame.size;
+        new ReadOnlySpan<byte>(internalFrame.data, checked((int)internalFrame.size)).CopyTo(new Span<byte>(ret.internalFrame.data, (int)ret.internalFrame.size));
+        return ret;
+    }
+}
