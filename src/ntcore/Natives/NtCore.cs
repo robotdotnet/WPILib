@@ -4,16 +4,15 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using WPIUtil.Marshal;
-using WPIUtil.Natives;
 
 namespace NetworkTables.Natives;
 
 [CustomMarshaller(typeof(StringWrapper), MarshalMode.ManagedToUnmanagedIn, typeof(StringUtf8WrapperMarshaller))]
 public static unsafe class StringUtf8WrapperMarshaller
 {
-    public static ref byte GetPinnableReference(StringWrapper managed)
+    public static ref readonly byte GetPinnableReference(StringWrapper managed)
     {
-        return ref managed.Str[0];
+        return ref managed.Str.AsSpan().GetPinnableReference();
     }
 
     public static byte* ConvertToUnmanaged(StringWrapper managed)
