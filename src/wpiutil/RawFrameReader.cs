@@ -48,12 +48,25 @@ public sealed class RawFrameReader : IDisposable
         set => internalFrame.pixelFormat = value;
     }
 
-    public unsafe RawFrameReader CreateCopy() {
+    public unsafe RawFrameReader CreateCopy()
+    {
         RawFrameReader ret = new RawFrameReader();
         ret.SetInfo(Width, Height, Stride, PixelFormat);
         NativeRawFrame.AllocateRawFrameData(ref ret.RawFrame, internalFrame.size);
         ret.internalFrame.size = internalFrame.size;
         new ReadOnlySpan<byte>(internalFrame.data, checked((int)internalFrame.size)).CopyTo(new Span<byte>(ret.internalFrame.data, (int)ret.internalFrame.size));
         return ret;
+    }
+
+    public unsafe RawFrameWriter ToWriter()
+    {
+        return new RawFrameWriter()
+        {
+            Data = new ReadOnlySpan<byte>(internalFrame.data, checked((int)internalFrame.size)),
+            Width = Width,
+            Height = Height,
+            Stride = Stride,
+            PixelFormat = PixelFormat,
+        };
     }
 }
