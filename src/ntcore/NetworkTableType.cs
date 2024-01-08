@@ -22,7 +22,7 @@ public enum NetworkTableType : uint
 
 public static class NetworkTableTypeHelpers
 {
-    public static NetworkTableType getFromString(string typeString)
+    public static NetworkTableType GetFromString(string typeString)
     {
         return typeString switch
         {
