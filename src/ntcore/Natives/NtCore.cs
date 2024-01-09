@@ -283,6 +283,10 @@ public static partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial long Now();
 
+    [LibraryImport("ntcore", EntryPoint = "NT_SetNow")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetNow(long timestamp);
+
     [LibraryImport("ntcore", EntryPoint = "NT_SubscribeMultiple")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(NtStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, in PubSubOptions options);

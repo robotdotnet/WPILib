@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using WPIUtil.Marshal;
 
@@ -8,19 +9,27 @@ namespace NetworkTables.Natives;
 [StructLayout(LayoutKind.Auto)]
 public record struct ConnectionInfo(string RemoteId, string RemoteIp, uint RemotePort, ulong LastUpdate, uint ProtocolVersion);
 
-[CustomMarshaller(typeof(ConnectionInfo), MarshalMode.ManagedToUnmanagedOut, typeof(ConnectionInfoMarshaller))]
+[CustomMarshaller(typeof(ConnectionInfo), MarshalMode.ElementOut, typeof(ReturnInArray))]
 public static unsafe class ConnectionInfoMarshaller
 {
-    public static ConnectionInfo ConvertToManaged(in NativeConnectionInfo unmanaged)
+    public static class ReturnInArray
     {
-        return new ConnectionInfo
+        public static ConnectionInfo ConvertToManaged(in NativeConnectionInfo unmanaged)
         {
-            RemoteId = NtStringMarshaller.ManagedConvert(unmanaged.remoteId),
-            RemoteIp = NtStringMarshaller.ManagedConvert(unmanaged.remoteIp),
-            RemotePort = unmanaged.remotePort,
-            LastUpdate = unmanaged.lastUpdate,
-            ProtocolVersion = unmanaged.protocolVersion,
-        };
+            return new ConnectionInfo
+            {
+                RemoteId = NtStringMarshaller.ManagedConvert(unmanaged.remoteId),
+                RemoteIp = NtStringMarshaller.ManagedConvert(unmanaged.remoteIp),
+                RemotePort = unmanaged.remotePort,
+                LastUpdate = unmanaged.lastUpdate,
+                ProtocolVersion = unmanaged.protocolVersion,
+            };
+        }
+
+        public static NativeConnectionInfo ConvertToUnmanaged(ConnectionInfo managed)
+        {
+            throw new NotSupportedException();
+        }
     }
 
     [StructLayout(LayoutKind.Sequential)]
