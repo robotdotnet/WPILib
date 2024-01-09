@@ -17,6 +17,7 @@ namespace NetworkTables;
 [StructLayout(LayoutKind.Auto)]
 public readonly struct NetworkTableValue
 {
+
     internal NetworkTableValue(NetworkTableType type, object? obj, long time, long serverTime)
     {
         Type = type;

@@ -1,19 +1,20 @@
 ﻿using System;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
 
 public class Topic
 {
-    internal Topic(NetworkTableInstance inst, int handle)
+    internal Topic(NetworkTableInstance inst, NtTopic handle)
     {
         Handle = handle;
         Instance = inst;
     }
 
-    public bool IsValid => Handle != 0;
+    public bool IsValid => Handle.Handle != 0;
 
-    public int Handle { get; }
+    public NtTopic Handle { get; }
 
     public NetworkTableInstance Instance { get; }
 

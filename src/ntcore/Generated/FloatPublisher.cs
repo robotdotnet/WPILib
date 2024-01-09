@@ -27,7 +27,6 @@ public interface FloatPublisher : Publisher
         Set(value, 0);
     }
 
-
     /**
      * Publish a new value.
      *
@@ -44,5 +43,4 @@ public interface FloatPublisher : Publisher
      * @param value value
      */
     void SetDefault(float value);
-
 }

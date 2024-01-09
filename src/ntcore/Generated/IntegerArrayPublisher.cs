@@ -27,7 +27,6 @@ public interface IntegerArrayPublisher : Publisher
         Set(value, 0);
     }
 
-
     /**
      * Publish a new value.
      *
@@ -44,5 +43,4 @@ public interface IntegerArrayPublisher : Publisher
      * @param value value
      */
     void SetDefault(long[] value);
-
 }

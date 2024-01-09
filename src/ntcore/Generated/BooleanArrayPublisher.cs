@@ -27,7 +27,6 @@ public interface BooleanArrayPublisher : Publisher
         Set(value, 0);
     }
 
-
     /**
      * Publish a new value.
      *
@@ -44,5 +43,4 @@ public interface BooleanArrayPublisher : Publisher
      * @param value value
      */
     void SetDefault(bool[] value);
-
 }

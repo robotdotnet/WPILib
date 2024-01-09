@@ -1,4 +1,6 @@
-﻿namespace NetworkTables;
+﻿using NetworkTables.Handles;
+
+namespace NetworkTables;
 
 public interface Subscriber : PubSub
 {

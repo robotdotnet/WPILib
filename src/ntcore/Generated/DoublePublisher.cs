@@ -27,7 +27,6 @@ public interface DoublePublisher : Publisher
         Set(value, 0);
     }
 
-
     /**
      * Publish a new value.
      *
@@ -44,5 +43,4 @@ public interface DoublePublisher : Publisher
      * @param value value
      */
     void SetDefault(double value);
-
 }

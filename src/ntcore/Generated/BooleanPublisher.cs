@@ -27,7 +27,6 @@ public interface BooleanPublisher : Publisher
         Set(value, 0);
     }
 
-
     /**
      * Publish a new value.
      *
@@ -44,5 +43,4 @@ public interface BooleanPublisher : Publisher
      * @param value value
      */
     void SetDefault(bool value);
-
 }

@@ -3,7 +3,7 @@
 namespace NetworkTables;
 
 [Flags]
-public enum NetworkMode
+public enum NetworkMode : uint
 {
     None = 0,
     Server = 0x1,

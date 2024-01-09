@@ -1,4 +1,5 @@
 ﻿using System;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
@@ -15,16 +16,17 @@ public sealed class MultiSubscriber : IDisposable
     {
         lock (this)
         {
-            if (Handle != 0)
+            if (Handle.Handle != 0)
             {
                 NtCore.UnsubscribeMultiple(Handle);
+                Handle = default;
             }
         }
     }
 
-    public int Handle { get; }
+    public NtMultiSubscriber Handle { get; private set; }
 
     public NetworkTableInstance Inst { get; }
 
-    public bool IsValid => Handle != 0;
+    public bool IsValid => Handle.Handle != 0;
 }

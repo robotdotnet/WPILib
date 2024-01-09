@@ -1,40 +1,41 @@
 ﻿using System;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
 
 public sealed class NetworkTableListenerPoller(NetworkTableInstance inst) : IDisposable
 {
-    public int Handle { get; private set; } = NtCore.CreateListenerPoller(inst.Handle);
+    public NtListenerPoller Handle { get; private set; } = NtCore.CreateListenerPoller(inst.Handle);
 
     public NetworkTableInstance Instance { get; } = inst;
 
-    public int AddListener(ReadOnlySpan<string> prefixes, EventFlags eventKinds)
+    public NtListener AddListener(ReadOnlySpan<string> prefixes, EventFlags eventKinds)
     {
         return NtCore.AddListener(Handle, prefixes, eventKinds);
     }
 
-    public int AddListener(Topic topic, EventFlags eventKinds)
+    public NtListener AddListener(Topic topic, EventFlags eventKinds)
     {
         return NtCore.AddListener(Handle, topic.Handle, eventKinds);
     }
 
-    public int AddListener(Subscriber subscriber, EventFlags eventKinds)
+    public NtListener AddListener(Subscriber subscriber, EventFlags eventKinds)
     {
         return NtCore.AddListener(Handle, subscriber.Handle, eventKinds);
     }
 
-    public int AddListener(MultiSubscriber subscriber, EventFlags eventKinds)
+    public NtListener AddListener(MultiSubscriber subscriber, EventFlags eventKinds)
     {
         return NtCore.AddListener(Handle, subscriber.Handle, eventKinds);
     }
 
-    public int AddListener(NetworkTableEntry entry, EventFlags eventKinds)
+    public NtListener AddListener(NetworkTableEntry entry, EventFlags eventKinds)
     {
         return NtCore.AddListener(Handle, entry.Handle, eventKinds);
     }
 
-    public int AddConnectionListener(bool immediateNotify)
+    public NtListener AddConnectionListener(bool immediateNotify)
     {
         EventFlags flags = EventFlags.Connection;
         if (immediateNotify)
@@ -44,7 +45,7 @@ public sealed class NetworkTableListenerPoller(NetworkTableInstance inst) : IDis
         return NtCore.AddListener(Handle, Instance.Handle, flags);
     }
 
-    public int AddTimeSyncListener(bool immediateNotify)
+    public NtListener AddTimeSyncListener(bool immediateNotify)
     {
         EventFlags flags = EventFlags.TimeSync;
         if (immediateNotify)
@@ -54,12 +55,12 @@ public sealed class NetworkTableListenerPoller(NetworkTableInstance inst) : IDis
         return NtCore.AddListener(Handle, Instance.Handle, flags);
     }
 
-    public int AddLogger(int minLevel, int maxLevel)
+    public NtListener AddLogger(int minLevel, int maxLevel)
     {
         return NtCore.AddLogger(Handle, (uint)minLevel, (uint)maxLevel);
     }
 
-    public static void RemoveListener(int listener)
+    public static void RemoveListener(NtListener listener)
     {
         NtCore.RemoveListener(listener);
     }
@@ -73,13 +74,13 @@ public sealed class NetworkTableListenerPoller(NetworkTableInstance inst) : IDis
     {
         lock (this)
         {
-            if (Handle != 0)
+            if (Handle.Handle != 0)
             {
                 NtCore.DestroyListenerPoller(Handle);
             }
-            Handle = 0;
+            Handle = default;
         }
     }
 
-    public bool IsValid => Handle != 0;
+    public bool IsValid => Handle.Handle != 0;
 }

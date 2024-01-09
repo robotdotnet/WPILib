@@ -1,4 +1,5 @@
 ﻿using System;
+using NetworkTables.Handles;
 
 namespace NetworkTables;
 
@@ -8,5 +9,5 @@ public interface PubSub : IDisposable
 
     bool IsValid { get; }
 
-    int Handle { get; }
+    NtPubSubEntry Handle { get; }
 }
