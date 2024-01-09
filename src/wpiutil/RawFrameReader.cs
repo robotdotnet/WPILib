@@ -48,7 +48,8 @@ public sealed class RawFrameReader : IDisposable
         set => internalFrame.pixelFormat = value;
     }
 
-    public unsafe RawFrameReader CreateCopy() {
+    public unsafe RawFrameReader CreateCopy()
+    {
         RawFrameReader ret = new RawFrameReader();
         ret.SetInfo(Width, Height, Stride, PixelFormat);
         NativeRawFrame.AllocateRawFrameData(ref ret.RawFrame, internalFrame.size);
