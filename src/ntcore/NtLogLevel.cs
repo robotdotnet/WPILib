@@ -1,6 +1,6 @@
 ﻿namespace NetworkTables;
 
-public enum LogLevel
+public enum NtLogLevel
 {
     Critical = 50,
     Error = 40,

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>CsCore</RootNamespace>
+    <AssemblyName>FRC.CsCore</AssemblyName>
+    <NoWarn>1591;CA1401;1570</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+    <ProjectReference Include="..\wpinet\wpinet.csproj" />
+  </ItemGroup>
+
+</Project>

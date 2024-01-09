@@ -19,7 +19,7 @@ public sealed unsafe class DataLog : IDisposable
         }
     }
 
-    private unsafe DataLogHandle dataLogHandle = null;
+    private unsafe OpaqueDataLog* dataLogHandle = null;
     private GCHandle? gcHandle = null;
     private DataLogCallback? callback = null;
 
