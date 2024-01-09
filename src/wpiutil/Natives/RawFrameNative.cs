@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -27,7 +26,7 @@ public unsafe ref struct RawFrameWriterMarshaller
         rawFrame.stride = managed.Stride;
         rawFrame.pixelFormat = managed.PixelFormat;
     }
-    public ref readonly byte GetPinnableReference()
+    public readonly ref readonly byte GetPinnableReference()
     {
         return ref data.GetPinnableReference();
     }
@@ -38,7 +37,7 @@ public unsafe ref struct RawFrameWriterMarshaller
         {
             rawFrame.data = (byte*)Unsafe.AsPointer(ref Unsafe.AsRef(in data[0]));
         }
-        return (NativeRawFrame*)Unsafe.AsPointer(ref Unsafe.AsRef(ref rawFrame));
+        return (NativeRawFrame*)Unsafe.AsPointer(ref rawFrame);
     }
 
     public void Free()
