@@ -1,6 +1,6 @@
 ﻿using NetworkTables.Natives;
 using Xunit;
-using Marshaller = NetworkTables.Natives.NtStringMarshaller;
+using Marshaller = WPIUtil.Marshal.StringLengthPairMarshaller<NetworkTables.Natives.NtString>;
 
 namespace NetworkTables;
 
@@ -82,7 +82,7 @@ public unsafe class NtStringMarshallerTests
             str = null,
             len = 0,
         };
-        Assert.Equal("", Marshaller.ManagedConvert(tmp));
+        Assert.Null(Marshaller.ManagedConvert(tmp));
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public unsafe class NtStringMarshallerTests
             str = null,
             len = 42,
         };
-        Assert.Equal("", Marshaller.ManagedConvert(tmp));
+        Assert.Null(Marshaller.ManagedConvert(tmp));
     }
 
     [Fact]

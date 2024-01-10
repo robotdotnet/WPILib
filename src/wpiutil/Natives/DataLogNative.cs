@@ -2,15 +2,20 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Marshal;
 
 namespace WPIUtil.Natives;
 
 public struct OpaqueDataLog { }
 
-public unsafe struct DataLogString
+[StructLayout(LayoutKind.Sequential)]
+public unsafe struct DataLogString : IStringLengthPair
 {
     public byte* str;
     public nuint len;
+
+    public byte* Ptr { readonly get => str; set => str = value; }
+    public nuint Len { readonly get => len; set => len = value; }
 }
 
 public static partial class DataLogNative
@@ -105,5 +110,5 @@ public static partial class DataLogNative
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendStringArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, [MarshalUsing(typeof(DataLogStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, [MarshalUsing(typeof(StringLengthPairMarshaller<DataLogString>), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value, nuint len, ulong timestamp);
 }

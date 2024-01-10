@@ -7,7 +7,13 @@ namespace NetworkTables.Natives;
 
 [NativeMarshalling(typeof(ConnectionInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct ConnectionInfo(string RemoteId, string RemoteIp, uint RemotePort, ulong LastUpdate, uint ProtocolVersion);
+public record struct ConnectionInfo(string RemoteId, string RemoteIp, uint RemotePort, ulong LastUpdate, uint ProtocolVersion) : INativeArrayFree<ConnectionInfoMarshaller.NativeConnectionInfo>
+{
+    public static unsafe void FreeArray(ConnectionInfoMarshaller.NativeConnectionInfo* ptr, int len)
+    {
+        NtCore.DisposeConnectionInfoArray(ptr, (nuint)len);
+    }
+}
 
 [CustomMarshaller(typeof(ConnectionInfo), MarshalMode.ElementOut, typeof(ReturnInArray))]
 public static unsafe class ConnectionInfoMarshaller
@@ -18,8 +24,8 @@ public static unsafe class ConnectionInfoMarshaller
         {
             return new ConnectionInfo
             {
-                RemoteId = NtStringMarshaller.ManagedConvert(unmanaged.remoteId),
-                RemoteIp = NtStringMarshaller.ManagedConvert(unmanaged.remoteIp),
+                RemoteId = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.remoteId) ?? "",
+                RemoteIp = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.remoteIp) ?? "",
                 RemotePort = unmanaged.remotePort,
                 LastUpdate = unmanaged.lastUpdate,
                 ProtocolVersion = unmanaged.protocolVersion,
@@ -33,17 +39,12 @@ public static unsafe class ConnectionInfoMarshaller
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct NativeConnectionInfo : INativeArrayFree<NativeConnectionInfo>
+    public struct NativeConnectionInfo
     {
         public NtString remoteId;
         public NtString remoteIp;
         public uint remotePort;
         public ulong lastUpdate;
         public uint protocolVersion;
-
-        public static unsafe void FreeArray(NativeConnectionInfo* ptr, int len)
-        {
-            NtCore.DisposeConnectionInfoArray(ptr, (nuint)len);
-        }
     }
 }

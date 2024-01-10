@@ -24,18 +24,18 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static unsafe partial NtEntry GetEntry(NtInst inst, StringWrapper name, nuint nameLen);
+    internal static unsafe partial NtEntry GetEntry(NtInst inst, WriteStringWrapper name, nuint nameLen);
 
     public static unsafe NtEntry GetEntry(NtInst inst, string name)
     {
-        StringWrapper wrapper = name;
+        WriteStringWrapper wrapper = name;
         return GetEntry(inst, wrapper, wrapper.Len);
     }
 
     // Cannot build source generator due to not being able to get the len for a string source generator
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(nameLen))]
+    [return: MarshalUsing(typeof(NtLengthStringMarshaller<>), CountElementName = nameof(nameLen))]
     internal static unsafe partial string GetEntryName(NtPubSubEntry entry, out nuint nameLen);
 
     public static unsafe string GetEntryName(NtPubSubEntry entry)
@@ -85,45 +85,45 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(TopicArrayMarshaller<NtTopic, int>), CountElementName = "count")]
-    internal static unsafe partial NtTopic[] GetTopics(NtInst inst, StringWrapper prefix, nuint prefixLen, NetworkTableType types, out nuint count);
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = "count")]
+    internal static unsafe partial NtTopic[] GetTopics(NtInst inst, WriteStringWrapper prefix, nuint prefixLen, NetworkTableType types, out nuint count);
 
     public static unsafe NtTopic[] GetTopics(NtInst inst, string prefix, NetworkTableType types)
     {
-        StringWrapper wrapper = prefix;
+        WriteStringWrapper wrapper = prefix;
         return GetTopics(inst, wrapper, wrapper.Len, types, out var _);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicsStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(TopicArrayMarshaller<int, int>), CountElementName = "count")]
-    internal static unsafe partial NtTopic[] GetTopics(NtInst inst, StringWrapper prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = "count")]
+    internal static unsafe partial NtTopic[] GetTopics(NtInst inst, WriteStringWrapper prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
     public static unsafe NtTopic[] GetTopics(NtInst inst, string prefix, ReadOnlySpan<string> types)
     {
-        StringWrapper wrapper = prefix;
+        WriteStringWrapper wrapper = prefix;
         return GetTopics(inst, wrapper, wrapper.Len, types, (nuint)types.Length, out var _);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfos")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, StringWrapper prefix, nuint prefixLen, NetworkTableType types, out nuint count);
+    internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, WriteStringWrapper prefix, nuint prefixLen, NetworkTableType types, out nuint count);
 
     public static TopicInfo[] GetTopicInfos(NtInst inst, string prefix, NetworkTableType types)
     {
-        StringWrapper wrapper = prefix;
+        WriteStringWrapper wrapper = prefix;
         return GetTopicInfos(inst, wrapper, wrapper.Len, types, out var _);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfosStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, StringWrapper prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
+    internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, WriteStringWrapper prefix, nuint prefixLen, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
     public static TopicInfo[] GetTopicInfos(NtInst inst, string prefix, ReadOnlySpan<string> types)
     {
-        StringWrapper wrapper = prefix;
+        WriteStringWrapper wrapper = prefix;
         return GetTopicInfos(inst, wrapper, wrapper.Len, types, (nuint)types.Length, out var _);
     }
 
@@ -141,17 +141,17 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopic")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static unsafe partial NtTopic GetTopic(NtInst inst, StringWrapper name, nuint nameLen);
+    internal static unsafe partial NtTopic GetTopic(NtInst inst, WriteStringWrapper name, nuint nameLen);
 
     public static NtTopic GetTopic(NtInst inst, string name)
     {
-        StringWrapper wrapper = name;
+        WriteStringWrapper wrapper = name;
         return GetTopic(inst, wrapper, wrapper.Len);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(nameLen))]
+    [return: MarshalUsing(typeof(NtLengthStringMarshaller<>), CountElementName = nameof(nameLen))]
     internal static unsafe partial string GetTopicName(NtTopic topic, out nuint nameLen);
 
     public static unsafe string GetTopicName(NtTopic topic)
@@ -165,7 +165,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicTypeString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(typeLen))]
+    [return: MarshalUsing(typeof(NtLengthStringMarshaller<>), CountElementName = nameof(typeLen))]
     internal static unsafe partial string GetTopicTypeString(NtTopic topic, out nuint typeLen);
 
     public static unsafe string GetTopicTypeString(NtTopic topic)
@@ -212,7 +212,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicProperty", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(len))]
+    [return: MarshalUsing(typeof(NtLengthStringMarshaller<>), CountElementName = nameof(len))]
     internal static unsafe partial string GetTopicProperty(NtTopic topic, string name, out nuint len);
 
     public static unsafe string GetTopicProperty(NtTopic topic, string name)
@@ -231,7 +231,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicProperties")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(StringUtf8ReturnMarshaller<>), CountElementName = nameof(len))]
+    [return: MarshalUsing(typeof(NtLengthStringMarshaller<>), CountElementName = nameof(len))]
     internal static unsafe partial string GetTopicProperties(NtTopic topic, out nuint len);
 
     public static string GetTopicProperties(NtTopic topic)
@@ -289,7 +289,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_SubscribeMultiple")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(NtStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, in PubSubOptions options);
+    public static partial NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(StringLengthPairMarshaller<NtString>), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_UnsubscribeMultiple")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

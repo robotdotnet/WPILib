@@ -9,14 +9,25 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using NetworkTables.Natives;
+using WPIUtil.Marshal;
 
 namespace NetworkTables;
 
 /** A network table entry value. */
 [NativeMarshalling(typeof(NetworkTableValueMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly struct NetworkTableValue
+public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>, INativeFree<NetworkTableValueMarshaller.NativeNetworkTableValue>
 {
+
+    public static unsafe void Free(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr)
+    {
+        NtCore.DisposeValue(ptr);
+    }
+
+    public static unsafe void FreeArray(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr, int len)
+    {
+        NtCore.DisposeValueArray(ptr, (nuint)len);
+    }
 
     internal NetworkTableValue(NetworkTableType type, object? obj, long time, long serverTime)
     {

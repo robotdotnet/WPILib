@@ -7,9 +7,19 @@ namespace NetworkTables.Natives;
 
 [NativeMarshalling(typeof(TopicInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct TopicInfo(int TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties)
+public record struct TopicInfo(int TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties) : INativeArrayFree<TopicInfoMarshaller.NativeTopicInfo>, INativeFree<TopicInfoMarshaller.NativeTopicInfo>
 {
     public static TopicInfo Empty { get; } = new(0, "", NetworkTableType.Unassigned, "", "");
+
+            public static unsafe void Free(TopicInfoMarshaller.NativeTopicInfo* ptr)
+        {
+            NtCore.DisposeTopicInfo(ptr);
+        }
+
+        public static unsafe void FreeArray(TopicInfoMarshaller.NativeTopicInfo* ptr, int len)
+        {
+            NtCore.DisposeTopicInfoArray(ptr, (nuint)len);
+        }
 }
 
 [CustomMarshaller(typeof(TopicInfo), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]
@@ -25,7 +35,7 @@ public static unsafe class TopicInfoMarshaller
 
         public static void Free(NativeTopicInfo unmanaged)
         {
-            NativeTopicInfo.Free(&unmanaged);
+            TopicInfo.Free(&unmanaged);
         }
     }
 
@@ -36,10 +46,10 @@ public static unsafe class TopicInfoMarshaller
             return new TopicInfo
             {
                 TopicHandle = unmanaged.topic,
-                Name = NtStringMarshaller.ManagedConvert(unmanaged.name),
+                Name = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.name) ?? "",
                 Type = unmanaged.type,
-                TypeStr = NtStringMarshaller.ManagedConvert(unmanaged.typeStr),
-                Properties = NtStringMarshaller.ManagedConvert(unmanaged.properties),
+                TypeStr = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.typeStr) ?? "",
+                Properties = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.properties) ?? "",
 
             };
         }
@@ -51,23 +61,13 @@ public static unsafe class TopicInfoMarshaller
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct NativeTopicInfo : INativeArrayFree<NativeTopicInfo>, INativeFree<NativeTopicInfo>
+    public struct NativeTopicInfo
     {
         public int topic;
         public NtString name;
         public NetworkTableType type;
         public NtString typeStr;
         public NtString properties;
-
-        public static unsafe void Free(NativeTopicInfo* ptr)
-        {
-            NtCore.DisposeTopicInfo(ptr);
-        }
-
-        public static unsafe void FreeArray(NativeTopicInfo* ptr, int len)
-        {
-            NtCore.DisposeTopicInfoArray(ptr, (nuint)len);
-        }
     }
 
 }

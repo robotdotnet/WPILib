@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices.Marshalling;
 
-namespace WPIUtil.Natives;
+namespace WPIUtil.Marshal;
 
 [CustomMarshaller(typeof(bool), MarshalMode.Default, typeof(BoolToIntMarshaller))]
 public static class BoolToIntMarshaller

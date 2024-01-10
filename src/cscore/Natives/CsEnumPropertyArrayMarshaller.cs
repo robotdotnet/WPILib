@@ -1,16 +1,31 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices.Marshalling;
+using System.Text;
+using CsCore.Natives;
+using WPIUtil.Marshal;
 
-namespace WPIUtil.Marshal;
+namespace CsCore;
 
-[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CustomFreeArrayMarshaller<,>))]
+public class CsEnumPropertyStringFree : INullTerminatedStringFree<byte>
+{
+    public static unsafe void FreeString(byte* ptr)
+    {
+    }
+}
+
+[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CsEnumPropertyArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
-public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
-                                                                         where T : INativeArrayFree<TUnmanagedElement>
+public unsafe ref struct CsEnumPropertyArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement: unmanaged
 {
     private TUnmanagedElement* unmanagedStorage;
     private int? length;
     private T[]? managedStorage;
+
+    public CsEnumPropertyArrayMarshaller() {
+        if (typeof(TUnmanagedElement) != typeof(byte*)) {
+            throw new InvalidOperationException("Target can only be byte*");
+        }
+    }
 
     public ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(int numElements)
     {
@@ -29,7 +44,7 @@ public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where T
     {
         if (unmanagedStorage != null && length.HasValue)
         {
-            T.FreeArray(unmanagedStorage, length.Value);
+            CsNatives.FreeEnumPropertyChoices((byte**)unmanagedStorage, length.Value);
         }
     }
 

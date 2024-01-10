@@ -3,6 +3,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Marshal;
 
 namespace WPINet.Natives;
 
@@ -46,7 +47,7 @@ public static partial class MulticastServiceResolver
 
     [LibraryImport("wpinet", EntryPoint = "WPI_GetMulticastServiceResolverData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(ServiceDataArrayMarshaller<,>), CountElementName = nameof(dataCount))]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(dataCount))]
     public static unsafe partial ServiceData[] GetMulticastServiceResolverData(MulticastServiceResolverHandle handle, out int dataCount);
 
     [LibraryImport("wpinet", EntryPoint = "WPI_FreeMulticastServiceResolverData")]

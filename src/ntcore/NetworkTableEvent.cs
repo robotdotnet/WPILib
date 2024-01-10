@@ -7,7 +7,7 @@ using WPIUtil.Marshal;
 namespace NetworkTables;
 
 [NativeMarshalling(typeof(NetworkTableEventMarshaller))]
-public readonly struct NetworkTableEvent
+public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>, INativeFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>
 {
     public int ListenerHandle { get; }
     public EventFlags Flags { get; }
@@ -16,6 +16,16 @@ public readonly struct NetworkTableEvent
     public ValueEventData? ValueData { get; }
     public LogMessage? LogMessage { get; }
     public TimeSyncEventData? TimeSyncData { get; }
+
+    public static unsafe void Free(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr)
+    {
+        NtCore.DisposeEvent(ptr);
+    }
+
+    public static unsafe void FreeArray(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr, int len)
+    {
+        NtCore.DisposeEventArray(ptr, (nuint)len);
+    }
 }
 
 [CustomMarshaller(typeof(NetworkTableEvent), MarshalMode.ElementOut, typeof(ReturnInArray))]
@@ -35,21 +45,11 @@ public static unsafe class NetworkTableEventMarshaller
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct NativeNetworkTableEvent : INativeArrayFree<NativeNetworkTableEvent>, INativeFree<NativeNetworkTableEvent>
+    public struct NativeNetworkTableEvent
     {
         public int listener;
         public uint flags;
         public NtEventUnion data;
-
-        public static unsafe void Free(NativeNetworkTableEvent* ptr)
-        {
-            NtCore.DisposeEvent(ptr);
-        }
-
-        public static unsafe void FreeArray(NativeNetworkTableEvent* ptr, int len)
-        {
-            NtCore.DisposeEventArray(ptr, (nuint)len);
-        }
 
         [StructLayout(LayoutKind.Explicit)]
         public struct NtEventUnion

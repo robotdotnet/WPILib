@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using NetworkTables.Natives;
 using Xunit;
-using Marshaller = NetworkTables.Natives.StringUtf8ReturnMarshaller<byte>;
+using Marshaller = NetworkTables.Natives.NtLengthStringMarshaller<byte>;
 
 namespace NetworkTables;
 

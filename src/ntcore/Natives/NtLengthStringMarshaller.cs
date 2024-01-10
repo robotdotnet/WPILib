@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -6,9 +6,9 @@ using System.Text;
 
 namespace NetworkTables.Natives;
 
-[CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(StringUtf8ReturnMarshaller<>))]
+[CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(NtLengthStringMarshaller<>))]
 [ContiguousCollectionMarshaller]
-public static unsafe class StringUtf8ReturnMarshaller<TUnmanagedElement> where TUnmanagedElement : unmanaged
+public static unsafe class NtLengthStringMarshaller<TUnmanagedElement> where TUnmanagedElement : unmanaged
 {
     public static string AllocateContainerForManagedElements(TUnmanagedElement* unmanaged, int numElements)
     {

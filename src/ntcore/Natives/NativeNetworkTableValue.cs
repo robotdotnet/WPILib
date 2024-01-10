@@ -20,7 +20,7 @@ public static unsafe class NetworkTableValueMarshaller
 
         public static void Free(NativeNetworkTableValue unmanaged)
         {
-            NativeNetworkTableValue.Free(&unmanaged);
+            NetworkTableValue.Free(&unmanaged);
         }
     }
 
@@ -45,23 +45,13 @@ public static unsafe class NetworkTableValueMarshaller
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct NativeNetworkTableValue : INativeArrayFree<NativeNetworkTableValue>, INativeFree<NativeNetworkTableValue>
+    public struct NativeNetworkTableValue
     {
         public NetworkTableType type;
         public long lastChange;
         public long serverTime;
 
         public NtValueUnion data;
-
-        public static unsafe void Free(NativeNetworkTableValue* ptr)
-        {
-            NtCore.DisposeValue(ptr);
-        }
-
-        public static unsafe void FreeArray(NativeNetworkTableValue* ptr, int len)
-        {
-            NtCore.DisposeValueArray(ptr, (nuint)len);
-        }
 
         [StructLayout(LayoutKind.Explicit)]
         public struct NtValueUnion
