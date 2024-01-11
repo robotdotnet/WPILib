@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIUtil.Marshal;
@@ -9,7 +9,7 @@ public static unsafe class NullTerminatedStringMarshaller<TFree> where TFree : I
 {
     public static string? ConvertToManaged(byte* unmanaged)
     {
-        string? ret = System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint) unmanaged);
+        string? ret = System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint)unmanaged);
         TFree.FreeString(unmanaged);
         return ret;
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using CsCore.Natives;
@@ -15,14 +15,16 @@ public class CsEnumPropertyStringFree : INullTerminatedStringFree<byte>
 
 [CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CsEnumPropertyArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
-public unsafe ref struct CsEnumPropertyArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement: unmanaged
+public unsafe ref struct CsEnumPropertyArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
 {
     private TUnmanagedElement* unmanagedStorage;
     private int? length;
     private T[]? managedStorage;
 
-    public CsEnumPropertyArrayMarshaller() {
-        if (typeof(TUnmanagedElement) != typeof(byte*)) {
+    public CsEnumPropertyArrayMarshaller()
+    {
+        if (typeof(TUnmanagedElement) != typeof(byte*))
+        {
             throw new InvalidOperationException("Target can only be byte*");
         }
     }

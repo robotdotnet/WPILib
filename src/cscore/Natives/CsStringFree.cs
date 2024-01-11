@@ -1,4 +1,4 @@
-using CsCore.Natives;
+﻿using CsCore.Natives;
 using WPIUtil.Marshal;
 
 namespace CsCore;

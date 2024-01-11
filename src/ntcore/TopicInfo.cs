@@ -11,15 +11,15 @@ public record struct TopicInfo(int TopicHandle, string Name, NetworkTableType Ty
 {
     public static TopicInfo Empty { get; } = new(0, "", NetworkTableType.Unassigned, "", "");
 
-            public static unsafe void Free(TopicInfoMarshaller.NativeTopicInfo* ptr)
-        {
-            NtCore.DisposeTopicInfo(ptr);
-        }
+    public static unsafe void Free(TopicInfoMarshaller.NativeTopicInfo* ptr)
+    {
+        NtCore.DisposeTopicInfo(ptr);
+    }
 
-        public static unsafe void FreeArray(TopicInfoMarshaller.NativeTopicInfo* ptr, int len)
-        {
-            NtCore.DisposeTopicInfoArray(ptr, (nuint)len);
-        }
+    public static unsafe void FreeArray(TopicInfoMarshaller.NativeTopicInfo* ptr, int len)
+    {
+        NtCore.DisposeTopicInfoArray(ptr, (nuint)len);
+    }
 }
 
 [CustomMarshaller(typeof(TopicInfo), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]

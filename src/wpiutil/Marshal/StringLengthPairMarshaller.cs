@@ -1,24 +1,28 @@
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace WPIUtil.Marshal;
 
-public unsafe interface IStringLengthPair {
-    public byte* Ptr {get; set;}
-    public nuint Len {get; set;}
+public unsafe interface IStringLengthPair
+{
+    public byte* Ptr { get; set; }
+    public nuint Len { get; set; }
 }
 
 [CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(StringLengthPairMarshaller<>.PassToArray))]
-public static unsafe class StringLengthPairMarshaller<T> where T : unmanaged, IStringLengthPair {
-    public static string? ManagedConvert(T unmanaged) {
+public static unsafe class StringLengthPairMarshaller<T> where T : unmanaged, IStringLengthPair
+{
+    public static string? ManagedConvert(T unmanaged)
+    {
         byte* ptr = unmanaged.Ptr;
-        if (ptr is null) {
+        if (ptr is null)
+        {
             return null;
         }
 
-        string? ret = System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint) ptr, checked((int)unmanaged.Len));
+        string? ret = System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint)ptr, checked((int)unmanaged.Len));
         return ret;
     }
 
@@ -26,8 +30,10 @@ public static unsafe class StringLengthPairMarshaller<T> where T : unmanaged, IS
     {
         public static T ConvertToUnmanaged(string? managed)
         {
-            if (managed is null || managed.Length == 0) {
-                return new T {
+            if (managed is null || managed.Length == 0)
+            {
+                return new T
+                {
                     Ptr = (byte*)NativeMemory.Alloc(0),
                     Len = 0
                 };
@@ -45,9 +51,11 @@ public static unsafe class StringLengthPairMarshaller<T> where T : unmanaged, IS
             };
         }
 
-        public static void Free(T unmanaged) {
+        public static void Free(T unmanaged)
+        {
             byte* ptr = unmanaged.Ptr;
-            if (ptr != null) {
+            if (ptr != null)
+            {
                 NativeMemory.Free(ptr);
             }
         }

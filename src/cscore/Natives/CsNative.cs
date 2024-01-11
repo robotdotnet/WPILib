@@ -72,7 +72,8 @@ public static unsafe partial class CsNatives
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial CsSource CreateHttpCamera(string name, ReadOnlySpan<string> urls, int count, HttpCameraKind kind, out StatusValue status);
 
-    public static CsSource CreateHttpCamera(string name, ReadOnlySpan<string> urls, HttpCameraKind kind, out StatusValue status) {
+    public static CsSource CreateHttpCamera(string name, ReadOnlySpan<string> urls, HttpCameraKind kind, out StatusValue status)
+    {
         return CreateHttpCamera(name, urls, urls.Length, kind, out status);
     }
 
