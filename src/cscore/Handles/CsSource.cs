@@ -10,6 +10,6 @@ public record struct CsSource(int Handle) : ICsHandle, INativeArrayFree<int>
 {
     public static unsafe void FreeArray(int* ptr, int len)
     {
-        throw new NotImplementedException();
+        CsNatives.ReleaseEnumeratedSources(ptr, len);
     }
 }

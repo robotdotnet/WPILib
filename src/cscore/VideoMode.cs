@@ -1,12 +1,20 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using CsCore.Natives;
 using WPIUtil;
+using WPIUtil.Marshal;
 
 namespace CsCore;
 
 [NativeMarshalling(typeof(VideoModeMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct VideoMode(PixelFormat PixelFormat, int Width, int Height, int Fps);
+public record struct VideoMode(PixelFormat PixelFormat, int Width, int Height, int Fps) : INativeArrayFree<VideoModeMarshaller.NativeVideoMode>
+{
+    public static unsafe void FreeArray(VideoModeMarshaller.NativeVideoMode* ptr, int len)
+    {
+        CsNatives.FreeEnumeratedVideoModes(ptr, len);
+    }
+}
 
 [CustomMarshaller(typeof(VideoMode), MarshalMode.Default, typeof(VideoModeMarshaller))]
 public static unsafe class VideoModeMarshaller
