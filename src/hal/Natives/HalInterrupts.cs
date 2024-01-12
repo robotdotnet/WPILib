@@ -19,6 +19,10 @@ public static partial class HalInterrupts
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial long ReadInterruptFallingTimestamp(HalInterruptHandle interruptHandle, out HalStatus status);
 
+    [LibraryImport("wpiHal", EntryPoint = "HAL_ReadInterruptFallingTimestamp")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial long ReadInterruptFallingTimestamp(HalInterruptHandle interruptHandle, ref HalStatus status);
+
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadInterruptRisingTimestamp")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial long ReadInterruptRisingTimestamp(HalInterruptHandle interruptHandle, out HalStatus status);
