@@ -19,7 +19,7 @@ public static partial class HalNotifier
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial HalNotifierHandle InitializeNotifier(out HalStatus status);
 
-    [LibraryImport("wpiHal", EntryPoint = "HAL_SetNotifierName")]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetNotifierName", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetNotifierName(HalNotifierHandle notifierHandle, string name, out HalStatus status);
 
@@ -31,9 +31,11 @@ public static partial class HalNotifier
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void UpdateNotifierAlarm(HalNotifierHandle notifierHandle, ulong triggerTime, out HalStatus status);
 
-    // [LibraryImport("wpiHal", EntryPoint = "This will cause any call into HAL_WaitForNotifierAlarm to return with time = * 0. * * @param[in] notifierHandle the notifier handle * @param[out] status Error status variable. 0 on success. */ void HAL_StopNotifier")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static partial* This will cause any call into WaitForNotifierAlarm to return with time = *0. * *@param[in] notifierHandle the notifier handle * @param[out] status Error status variable. 0 on success. */ void StopNotifier(HalNotifierHandle notifierHandle, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetNotifierThreadPriority")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int SetNotifierThreadPriority(int realTime, int priority, out HalStatus status);
 
-
+    [LibraryImport("wpiHal", EntryPoint = "HAL_WaitForNotifierAlarm")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial ulong WaitForNotifierAlarm(HalNotifierHandle notifierHandle, out HalStatus status);
 }

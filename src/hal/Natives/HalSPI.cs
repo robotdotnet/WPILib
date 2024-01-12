@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
@@ -41,15 +42,15 @@ public static partial class HalSPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadSPI")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int ReadSPI(SPIPort port, byte* buffer, int count);
+    public static partial int ReadSPI(SPIPort port, Span<byte> buffer, int count);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadSPIAutoReceivedData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int ReadSPIAutoReceivedData(SPIPort port, uint* buffer, int numToRead, double timeout, out HalStatus status);
+    public static partial int ReadSPIAutoReceivedData(SPIPort port, Span<uint> buffer, int numToRead, double timeout, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetSPIAutoTransmitData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetSPIAutoTransmitData(SPIPort port, byte* dataToSend, int dataSize, int zeroSize, out HalStatus status);
+    public static partial void SetSPIAutoTransmitData(SPIPort port, ReadOnlySpan<byte> dataToSend, int dataSize, int zeroSize, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetSPIChipSelectActiveHigh")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -73,7 +74,7 @@ public static partial class HalSPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_StartSPIAutoTrigger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartSPIAutoTrigger(SPIPort port, HALHANDLETODO digitalSourceHandle, AnalogTriggerType analogTriggerType, int triggerRising, int triggerFalling, out HalStatus status);
+    public static partial void StartSPIAutoTrigger(SPIPort port, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, int triggerRising, int triggerFalling, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_StopSPIAuto")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -81,11 +82,11 @@ public static partial class HalSPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_TransactionSPI")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int TransactionSPI(SPIPort port, byte* dataToSend, byte* dataReceived, int size);
+    public static partial int TransactionSPI(SPIPort port, ReadOnlySpan<byte> dataToSend, Span<byte> dataReceived, int size);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_WriteSPI")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int WriteSPI(SPIPort port, byte* dataToSend, int sendSize);
+    public static partial int WriteSPI(SPIPort port, ReadOnlySpan<byte> dataToSend, int sendSize);
 
 
 }

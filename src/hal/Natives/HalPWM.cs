@@ -35,7 +35,7 @@ public static partial class HalPWM
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial double GetPWMSpeed(HalDigitalHandle pwmPortHandle, out HalStatus status);
 
-    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializePWMPort")]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializePWMPort", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial HalDigitalHandle InitializePWMPort(HalPortHandle portHandle, string allocationLocation, out HalStatus status);
 

@@ -11,7 +11,7 @@ public static partial class HalExtensions
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int LoadExtensions();
 
-    [LibraryImport("wpiHal", EntryPoint = "HAL_LoadOneExtension")]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_LoadOneExtension", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int LoadOneExtension(string library);
 

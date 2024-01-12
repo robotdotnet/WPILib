@@ -75,9 +75,13 @@ public static partial class HalDMA
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int GetDMASampleCounterPeriod(in DMASample dmaSample, HalCounterHandle counterHandle, out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDMASampleDigitalSource")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  int GetDMASampleDigitalSource( in DMASample dmaSample, HALHANDLETODO dSourceHandle, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetDMASampleDigitalSource")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetDMASampleDigitalSource(in DMASample dmaSample, HalDigitalHandle dSourceHandle, out HalStatus status);
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetDMASampleDigitalSource")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetDMASampleDigitalSource(in DMASample dmaSample, HalAnalogTriggerHandle dSourceHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDMASampleDutyCycleOutputRaw")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -95,33 +99,35 @@ public static partial class HalDMA
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial ulong GetDMASampleTime(in DMASample dmaSample, out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "Use HAL_GetDutyCycleOutputScaleFactor to scale this to a percentage. * * @param[in] dmaSample the sample to read from * @param[in] dutyCycleHandle the duty cycle handle * @param[out] status Error status variable. 0 on success. * @return raw duty cycle input data */ int HAL_GetDMASampleDutyCycleOutputRaw")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  * Use GetDutyCycleOutputScaleFactor to scale this to a percentage. * * @param[in] dmaSample the sample to read from * @param[in] dutyCycleHandle the duty cycle handle * @param[out] status Error status variable. 0 on success. * @return raw duty cycle input data */ int GetDMASampleDutyCycleOutputRaw( in DMASample dmaSample, HalDutyCycleHandle dutyCycleHandle, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeDMA")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial HalDMAHandle InitializeDMA(out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "Use HAL_GetDutyCycleOutputScaleFactor to scale this to a percentage. * * @param[in] dmaSample the sample to read from * @param[in] dutyCycleHandle the duty cycle handle * @param[out] status Error status variable. 0 on success. * @return raw duty cycle input data */ int HAL_GetDMASampleDutyCycleOutputRaw")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  * Use GetDutyCycleOutputScaleFactor to scale this to a percentage. * * @param[in] dmaSample the sample to read from * @param[in] dutyCycleHandle the duty cycle handle * @param[out] status Error status variable. 0 on success. * @return raw duty cycle input data */ int GetDMASampleDutyCycleOutputRaw( in DMASample dmaSample, HalDutyCycleHandle dutyCycleHandle, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_ReadDMADirect")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static unsafe partial DMAReadStatus ReadDMADirect(void* dmaPointer, out DMASample dmaSample, double timeoutSeconds, out int remainingOut, out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "This is in the same time domain as HAL_GetFPGATime")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  * This is in the same time domain as GetFPGATime(). * * @param[in] dmaSample the sample to read from * @param[out] status Error status variable. 0 on success. * @return timestamp in microseconds since FPGA Initialization */ ulong GetDMASampleTime( in DMASample dmaSample, out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeDMA")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  HalDMAHandle InitializeDMA(out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_ReadDMA")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static unsafe partial DMAReadStatus ReadDMA(HalDMAHandle handle, out DMASample dmaSample, double timeoutSeconds, out int remainingOut, out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "See HAL_ReadDMA for full documentation. * * @param[in] dmaPointer     direct DMA pointer * @param[in] dmaSample      the sample object to place data into * @param[in] timeoutSeconds the time to wait for data to be queued before *                           timing out * @param[in] remainingOut   the number of samples remaining in the queue * @param[out] status        Error status variable. 0 on success. */ enum HAL_DMAReadStatus HAL_ReadDMADirect")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  * See ReadDMA for full documentation. * * @param[in] dmaPointer     direct DMA pointer * @param[in] dmaSample      the sample object to place data into * @param[in] timeoutSeconds the time to wait for data to be queued before *                           timing out * @param[in] remainingOut   the number of samples remaining in the queue * @param[out] status        Error status variable. 0 on success. */ enum DMAReadStatus ReadDMADirect(void* dmaPointer, in DMASample dmaSample, double timeoutSeconds, int* remainingOut, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMAExternalTrigger")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial int SetDMAExternalTrigger(HalDMAHandle handle, HalDigitalHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, int rising, int falling, out HalStatus status);
 
-    //     [LibraryImport("wpiHal", EntryPoint = "HAL_DMAReadStatus HAL_ReadDMADirect")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  enum DMAReadStatus ReadDMADirect(void* dmaPointer, in DMASample dmaSample, double timeoutSeconds, int* remainingOut, out HalStatus status);
+    public static int SetDMAExternalTrigger(HalDMAHandle handle, HalDigitalHandle digitalSourceHandle, int rising, int falling, out HalStatus status)
+    {
+        return SetDMAExternalTrigger(handle, digitalSourceHandle, AnalogTriggerType.State, rising, falling, out status);
+    }
 
-    //     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMAExternalTrigger")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  int SetDMAExternalTrigger(HalDMAHandle handle, HALHANDLETODO digitalSourceHandle, AnalogTriggerType analogTriggerType, int rising, int falling, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMAExternalTrigger")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int SetDMAExternalTrigger(HalDMAHandle handle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, int rising, int falling, out HalStatus status);
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMATimedTrigger")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetDMATimedTrigger(HalDMAHandle handle, double periodSeconds, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMAPause")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

@@ -24,7 +24,7 @@ public static partial class HalCAN
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void ReadStreamSession(uint sessionHandle, Span<CANStreamMessage> messages, uint messagesToRead, out uint messagesRead, out HalStatus status);
 
-    public static ReadOnlySpan<CANStreamMessage> ReadStreamSession(uint sessionHandle, Span<CANStreamMessage> messages, out HalStatus status)
+    public static Span<CANStreamMessage> ReadStreamSession(uint sessionHandle, Span<CANStreamMessage> messages, out HalStatus status)
     {
         ReadStreamSession(sessionHandle, messages, (uint)messages.Length, out var messagesRead, out status);
         return messages[..(int)messagesRead];
@@ -34,7 +34,7 @@ public static partial class HalCAN
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void ReceiveMessage(ref uint messageID, uint messageIDMask, Span<byte> data, out byte dataSize, out uint timeStamp, out HalStatus status);
 
-    public static ReadOnlySpan<byte> ReceiveMessage(ref uint messageID, uint messageIDMask, Span<byte> data, out uint timeStamp, out HalStatus status)
+    public static Span<byte> ReceiveMessage(ref uint messageID, uint messageIDMask, Span<byte> data, out uint timeStamp, out HalStatus status)
     {
         ReceiveMessage(ref messageID, messageIDMask, data, out var dataLen, out timeStamp, out status);
         return data[..dataLen];

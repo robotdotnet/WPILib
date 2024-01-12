@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
@@ -37,15 +38,15 @@ public static partial class HalSerialPort
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeSerialPort")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalSerialPortHandle InitializeSerialPort(SerialPort port, out HalStatus status);
+    public static partial HalSerialPortHandle InitializeSerialPort(RioSerialPort port, out HalStatus status);
 
-    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeSerialPortDirect")]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeSerialPortDirect", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalSerialPortHandle InitializeSerialPortDirect(SerialPort port, string portName, out HalStatus status);
+    public static partial HalSerialPortHandle InitializeSerialPortDirect(RioSerialPort port, string portName, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadSerial")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int ReadSerial(HalSerialPortHandle handle, byte* buffer, int count, out HalStatus status);
+    public static partial int ReadSerial(HalSerialPortHandle handle, Span<byte> buffer, int count, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetSerialBaudRate")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -85,7 +86,7 @@ public static partial class HalSerialPort
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_WriteSerial")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int WriteSerial(HalSerialPortHandle handle, string buffer, int count, out HalStatus status);
+    public static partial int WriteSerial(HalSerialPortHandle handle, ReadOnlySpan<byte> buffer, int count, out HalStatus status);
 
 
 }

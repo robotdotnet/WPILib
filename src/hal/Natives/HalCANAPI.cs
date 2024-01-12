@@ -20,7 +20,7 @@ public static partial class HalCANAPI
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void ReadCANPacketLatest(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, out HalStatus status);
 
-    public static ReadOnlySpan<byte> ReadCANPacketLatest(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, out HalStatus status)
+    public static Span<byte> ReadCANPacketLatest(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, out HalStatus status)
     {
         ReadCANPacketLatest(handle, apiId, data, out var dataLen, out receivedTimestamp, out status);
         return data[..dataLen];
@@ -30,7 +30,7 @@ public static partial class HalCANAPI
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void ReadCANPacketNew(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, out HalStatus status);
 
-    public static ReadOnlySpan<byte> ReadCANPacketNew(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, out HalStatus status)
+    public static Span<byte> ReadCANPacketNew(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, out HalStatus status)
     {
         ReadCANPacketNew(handle, apiId, data, out var dataLen, out receivedTimestamp, out status);
         return data[..dataLen];
@@ -40,7 +40,7 @@ public static partial class HalCANAPI
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void ReadCANPacketTimeout(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, int timeoutMs, out HalStatus status);
 
-    public static ReadOnlySpan<byte> ReadCANPacketTimeout(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, int timeoutMs, out HalStatus status)
+    public static Span<byte> ReadCANPacketTimeout(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, int timeoutMs, out HalStatus status)
     {
         ReadCANPacketTimeout(handle, apiId, data, out var dataLen, out receivedTimestamp, timeoutMs, out status);
         return data[..dataLen];

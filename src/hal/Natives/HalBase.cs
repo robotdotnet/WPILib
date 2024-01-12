@@ -1,11 +1,13 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using WPIHal;
 using WPIHal.Handles;
+using WPIUtil.Marshal;
 
 namespace Hal.Natives;
 
-public static partial class HalHALBase
+public static partial class HalBase
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_ExpandFPGATime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -17,6 +19,7 @@ public static partial class HalHALBase
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetErrorMessage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<NoFreeNullTerminatedStringFree>))]
     public static partial string GetErrorMessage(int code);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGAButton")]

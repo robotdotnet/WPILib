@@ -1,59 +1,62 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using WPIHal;
 using WPIHal.Handles;
+using WPIUtil.Marshal;
 
 namespace Hal.Natives;
 
 public static partial class HalDriverStation
 {
-    //     [LibraryImport("wpiHal", EntryPoint = "The returned array must be freed with HAL_FreeJoystickName. * * Will be null terminated. * * @param joystickNum the joystick number * @return the joystick name */ byte* HAL_GetJoystickName")]
-    //     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    //    public static partial  * The returned array must be freed with FreeJoystickName. * * Will be null terminated. * * @param joystickNum the joystick number * @return the joystick name */ byte* GetJoystickName(int joystickNum);
-
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetAllianceStation")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial AllianceStationID GetAllianceStation(out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetControlWord")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetControlWord(ControlWord* controlWord);
+    public static partial HalStatus GetControlWord(ControlWord controlWord);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickAxes")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickAxes(int joystickNum, JoystickAxes* axes);
+    public static partial HalStatus GetJoystickAxes(int joystickNum, out JoystickAxes axes);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickAxisType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickAxisType(int joystickNum, int axis);
+    public static partial HalStatus GetJoystickAxisType(int joystickNum, int axis);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickButtons")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickButtons(int joystickNum, JoystickButtons* buttons);
+    public static partial HalStatus GetJoystickButtons(int joystickNum, out JoystickButtons buttons);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickDescriptor")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickDescriptor(int joystickNum, JoystickDescriptor* desc);
+    public static partial HalStatus GetJoystickDescriptor(int joystickNum, out JoystickDescriptor desc);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickIsXbox")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickIsXbox(int joystickNum);
+    public static partial HalStatus GetJoystickIsXbox(int joystickNum);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial byte* GetJoystickName(int joystickNum);
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<JoystickNameStringFree>))]
+    public static partial string GetJoystickName(int joystickNum);
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_FreeJoystickName")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static unsafe partial void FreeJoystickName(byte* joystickName);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickPOVs")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickPOVs(int joystickNum, JoystickPOVs* povs);
+    public static partial HalStatus GetJoystickPOVs(int joystickNum, out JoystickPOVs povs);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetJoystickType(int joystickNum);
+    public static partial HalStatus GetJoystickType(int joystickNum);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetMatchInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetMatchInfo(MatchInfo* info);
+    public static partial HalStatus GetMatchInfo(out MatchInfo info);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetMatchTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -79,7 +82,7 @@ public static partial class HalDriverStation
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void ObserveUserProgramTest();
 
-    [LibraryImport("wpiHal", EntryPoint = "HAL_SendError")]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SendError", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int SendError(int isError, int errorCode, int isLVCode, string details, string location, string callStack, int printMsg);
 

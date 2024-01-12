@@ -19,7 +19,7 @@ public static partial class HalRelay
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int GetRelay(HalRelayHandle relayPortHandle, out HalStatus status);
 
-    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeRelayPort")]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeRelayPort", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial HalRelayHandle InitializeRelayPort(HalPortHandle portHandle, int fwd, string allocationLocation, out HalStatus status);
 

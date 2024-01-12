@@ -59,25 +59,34 @@ public static partial class HalEncoder
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int GetEncoderSamplesToAverage(HalEncoderHandle encoderHandle, out HalStatus status);
 
-    // [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderStopped method. * * @param[in] encoderHandle the encoder handle * @param[in] maxPeriod     the maximum period where the counted device is *                          considered moving in seconds * @param[out] status       Error status variable. 0 on success. */ void HAL_SetEncoderMaxPeriod")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static partial* GetEncoderStopped method. ** @param[in] encoderHandle the encoder handle * @param[in] maxPeriod     the maximum period where the counted device is *                          considered moving in seconds* @param[out] status Error status variable. 0 on success. */ void SetEncoderMaxPeriod(HalEncoderHandle encoderHandle, double maxPeriod, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderStopped")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetEncoderStopped(HalEncoderHandle encoderHandle, out HalStatus status);
 
-    // [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeEncoder")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static partial HalEncoderHandle InitializeEncoder(HALHANDLETODO digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, HALHANDLETODO digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeEncoder")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial HalEncoderHandle InitializeEncoder(HalAnalogTriggerHandle digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, HalAnalogTriggerHandle digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType, out HalStatus status);
 
-    // [LibraryImport("wpiHal", EntryPoint = "HAL_ResetEncoder")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static partial void ResetEncoder(HalEncoderHandle encoderHandle, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_ResetEncoder")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void ResetEncoder(HalEncoderHandle encoderHandle, out HalStatus status);
 
-    // [LibraryImport("wpiHal", EntryPoint = "                     passed to HAL_SetEncoderDistancePerPulse) */ double HAL_GetEncoderDistance")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static partial* passed to SetEncoderDistancePerPulse) */ double GetEncoderDistance(HalEncoderHandle encoderHandle, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderDistancePerPulse")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetEncoderDistancePerPulse(HalEncoderHandle encoderHandle, double distancePerPulse, out HalStatus status);
 
-    // [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderIndexSource")]
-    // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    // public static partial void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HALHANDLETODO digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, out HalStatus status);
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderIndexSource")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HalDigitalHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, out HalStatus status);
+
+    public static void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HalDigitalHandle digitalSourceHandle, EncoderIndexingType type, out HalStatus status)
+    {
+        SetEncoderIndexSource(encoderHandle, digitalSourceHandle, AnalogTriggerType.State, type, out status);
+    }
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderIndexSource")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderMaxPeriod")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
