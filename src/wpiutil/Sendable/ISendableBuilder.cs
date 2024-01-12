@@ -1,16 +1,18 @@
-using System;
+﻿using System;
 
 namespace WPIUtil.Sendable;
 
-public interface ISendableBuilder : IDisposable {
-    enum BackingKind {
+public interface ISendableBuilder : IDisposable
+{
+    enum BackingKind
+    {
         Unknown,
         NetworkTables
     }
 
-    BackingKind Backing {get;}
+    BackingKind Backing { get; }
 
-    bool IsPublished {get;}
+    bool IsPublished { get; }
 
     void SetSmartDashboardType(string type);
 

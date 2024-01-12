@@ -1,5 +1,6 @@
-namespace WPIUtil.Sendable;
+﻿namespace WPIUtil.Sendable;
 
-public interface ISendable {
+public interface ISendable
+{
     void InitSendable(ISendableBuilder builder);
 }
