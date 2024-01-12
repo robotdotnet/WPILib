@@ -12,7 +12,7 @@ public record struct VideoMode(PixelFormat PixelFormat, int Width, int Height, i
 {
     public static unsafe void FreeArray(VideoModeMarshaller.NativeVideoMode* ptr, int len)
     {
-        CsNatives.FreeEnumeratedVideoModes(ptr, len);
+        CsNative.FreeEnumeratedVideoModes(ptr, len);
     }
 }
 

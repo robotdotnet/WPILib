@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using CsCore.Natives;
+using WPIUtil.Marshal;
 
 namespace CsCore;
 
 [NativeMarshalling(typeof(UsbCameraInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public struct UsbCameraInfo
+public struct UsbCameraInfo : INativeArrayFree<UsbCameraInfoMarshaller.NativeUsbCameraInfo>
 {
     public int Dev { get; set; }
     public string Path { get; set; }
@@ -14,6 +16,11 @@ public struct UsbCameraInfo
     public List<string>? OtherPaths { get; set; }
     public int VendorId { get; set; }
     public int ProductId { get; set; }
+
+    public static unsafe void FreeArray(UsbCameraInfoMarshaller.NativeUsbCameraInfo* ptr, int len)
+    {
+        CsNative.FreeEnumeratedUsbCameras(ptr, len);
+    }
 }
 
 [CustomMarshaller(typeof(UsbCameraInfo), MarshalMode.Default, typeof(UsbCameraInfoMarshaller))]

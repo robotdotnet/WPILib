@@ -1,14 +1,20 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using CsCore.Natives;
+using WPIUtil.Marshal;
 
 namespace CsCore;
 
 [NativeMarshalling(typeof(CsEventMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly struct CsEvent
+public readonly struct CsEvent : INativeArrayFree<CsEventMarshaller.NativeCsEvent>
 {
     public EventKind Kind { get; init; }
 
+    public static unsafe void FreeArray(CsEventMarshaller.NativeCsEvent* ptr, int len)
+    {
+        CsNative.FreeEvents(ptr, len);
+    }
 }
 
 [CustomMarshaller(typeof(CsEvent), MarshalMode.Default, typeof(CsEventMarshaller))]

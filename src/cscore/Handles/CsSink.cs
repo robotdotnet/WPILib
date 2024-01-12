@@ -10,6 +10,6 @@ public record struct CsSink(int Handle) : ICsHandle, INativeArrayFree<int>
 {
     public static unsafe void FreeArray(int* ptr, int len)
     {
-        CsNatives.ReleaseEnumeratedSinks(ptr, len);
+        CsNative.ReleaseEnumeratedSinks(ptr, len);
     }
 }

@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace CsCore.Natives;
 
-public static unsafe partial class CsNatives
+public static unsafe partial class CsNative
 {
     [LibraryImport("cscore", EntryPoint = "CS_FreeEnumeratedUsbCameras")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

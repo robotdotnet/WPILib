@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
-using System.Text;
 using CsCore.Handles;
 using WPIUtil;
 using WPIUtil.Marshal;
 
 namespace CsCore.Natives;
 
-public static unsafe partial class CsNatives
+public static unsafe partial class CsNative
 {
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyKind")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -312,8 +310,128 @@ public static unsafe partial class CsNatives
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial CsProperty GetSinkSourceProperty(CsSink sink, string name, out StatusValue status);
 
+    [LibraryImport("cscore", EntryPoint = "CS_SetSinkConfigJson", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool SetSinkConfigJson(CsSink sink, string config, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetSinkConfigJson")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<CsStringFree>))]
+    public static partial string? GetSinkConfigJson(CsSink sink, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_CopySink")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial CsSink CopySink(CsSink sink, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_ReleaseSink")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial CsSink ReleaseSink(CsSink sink, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetMjpegServerListenAddress")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<CsStringFree>))]
+    public static partial string? GetMjpegServerListenAddress(CsSink sink, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetMjpegServerPort")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetMjpegServerPort(CsSink sink, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_SetSinkDescription", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetSinkDescription(CsSink sink, string description, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetSinkError")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<CsStringFree>))]
+    public static partial string? GetSinkError(CsSink sink, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_SetSinkEnabled")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int SetSinkEnabled(CsSink sink, [MarshalAs(UnmanagedType.I4)] bool enabled, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_CreateListenerPoller")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial CsListenerPoller CreateListenerPoller();
+
+    [LibraryImport("cscore", EntryPoint = "CS_DestroyListenerPoller")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void DestroyListenerPoller(CsListenerPoller poller);
+
+    [LibraryImport("cscore", EntryPoint = "CS_AddPolledListener")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial CsListener AddPolledListener(CsListenerPoller poller, EventKind eventMask, [MarshalAs(UnmanagedType.I4)] bool immediateNotify, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_PollListener")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = "count")]
+    public static partial CsEvent[] PollListener(CsListenerPoller poller, out int count);
+
+    [LibraryImport("cscore", EntryPoint = "CS_PollListenerTimeout")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = "count")]
+    public static partial CsEvent[] PollListener(CsListenerPoller poller, out int count, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
+
+    [LibraryImport("cscore", EntryPoint = "CS_FreeEvents")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void FreeEvents(CsEventMarshaller.NativeCsEvent* arr, int count);
+
+    [LibraryImport("cscore", EntryPoint = "CS_CancelPollListener")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void CancelPollListener(CsListenerPoller poller);
+
+    [LibraryImport("cscore", EntryPoint = "CS_NotifierDestroyed")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool IsNotifierDestroyed();
+
+    [LibraryImport("cscore", EntryPoint = "CS_SetTelemetryPeriod")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetTelemetryPeriod(double seconds);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryElapsedTime")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial double CS_GetTelemetryElapsedTime();
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryValue")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial long GetTelemetryValue(CsSource source, TelemetryKind kind, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_SetLogger")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetLogger(delegate* unmanaged[Cdecl]<uint, byte*, uint, byte*, void> func, uint min_level);
+
+    [LibraryImport("cscore", EntryPoint = "CS_SetDefaultLogger")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetDefaultLogger(uint min_level);
+
+    [LibraryImport("cscore", EntryPoint = "CS_Shutdown")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void CS_Shutdown();
+
+    [LibraryImport("cscore", EntryPoint = "CS_EnumerateUsbCameras")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
+    public static partial UsbCameraInfo[] EnumerateUsbCameras(out int count, out StatusValue status);
+
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSources")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     public static partial CsSource[] EnumerateSources(out int count, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_EnumerateSinks")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
+    public static partial CsSink[] EnumerateSinks(out int count, out StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetHostname")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<CsStringFree>))]
+    public static partial string? GetHostname();
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetNetworkInterfaces")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(CsEnumPropertyArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<NetworkInterfacesStringFree>), ElementIndirectionDepth = 1)]
+    public static partial string[] GetNetworkInterfaces(out int count);
 }

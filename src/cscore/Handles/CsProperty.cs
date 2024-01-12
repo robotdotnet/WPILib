@@ -9,6 +9,6 @@ public record struct CsProperty(int Handle) : ICsHandle, INativeArrayFree<int>
 {
     public static unsafe void FreeArray(int* ptr, int len)
     {
-        CsNatives.FreeEnumeratedProperties(ptr, len);
+        CsNative.FreeEnumeratedProperties(ptr, len);
     }
 }

@@ -7,6 +7,6 @@ public class CsStringFree : INullTerminatedStringFree<byte>
 {
     public static unsafe void FreeString(byte* ptr)
     {
-        CsNatives.FreeString(ptr);
+        CsNative.FreeString(ptr);
     }
 }

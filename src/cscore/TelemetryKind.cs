@@ -1,6 +1,6 @@
 ﻿namespace CsCore;
 
-public enum TelemteryKind
+public enum TelemetryKind
 {
     SourceBytesReceived = 1,
     SourceFramesReceived = 2,

@@ -6,22 +6,22 @@ using WPIUtil.Marshal;
 
 namespace CsCore;
 
-public class CsEnumPropertyStringFree : INullTerminatedStringFree<byte>
+public class NetworkInterfacesStringFree : INullTerminatedStringFree<byte>
 {
     public static unsafe void FreeString(byte* ptr)
     {
     }
 }
 
-[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CsEnumPropertyArrayMarshaller<,>))]
+[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(NetworkInterfacesArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
-public unsafe ref struct CsEnumPropertyArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
+public unsafe ref struct NetworkInterfacesArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
 {
     private TUnmanagedElement* unmanagedStorage;
     private int? length;
     private T[]? managedStorage;
 
-    public CsEnumPropertyArrayMarshaller()
+    public NetworkInterfacesArrayMarshaller()
     {
         if (typeof(TUnmanagedElement) != typeof(byte*))
         {

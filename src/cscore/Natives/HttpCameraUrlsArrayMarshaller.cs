@@ -46,7 +46,7 @@ public unsafe ref struct HttpCameraUrlsArrayMarshaller<T, TUnmanagedElement> whe
     {
         if (unmanagedStorage != null && length.HasValue)
         {
-            CsNatives.FreeHttpCameraUrls((byte**)unmanagedStorage, length.Value);
+            CsNative.FreeHttpCameraUrls((byte**)unmanagedStorage, length.Value);
         }
     }
 
