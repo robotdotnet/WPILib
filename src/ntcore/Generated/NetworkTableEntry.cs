@@ -17,13 +17,14 @@ namespace NetworkTables;
  */
 public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
 {
+
     /**
      * Construct from native handle.
      *
      * @param inst Instance
      * @param handle Native handle
      */
-    public NetworkTableEntry(NetworkTableInstance inst, NtPubSubEntry handle) : this(new Topic(inst, NtCore.GetTopicFromHandle(handle)), handle)
+    public NetworkTableEntry(NetworkTableInstance inst, NtEntry handle) : this(new Topic(inst, NtCore.GetTopicFromHandle(handle)), handle)
     {
     }
 
@@ -33,12 +34,15 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      * @param topic Topic
      * @param handle Native handle
      */
-    public NetworkTableEntry(Topic topic, NtPubSubEntry handle)
+    public NetworkTableEntry(Topic topic, NtEntry handle)
     {
         Topic = topic;
         Handle = handle;
     }
 
+    NtPublisher PubSub<NtPublisher>.Handle => new(Handle.Handle);
+
+    NtSubscriber PubSub<NtSubscriber>.Handle => new(Handle.Handle);
 
     public void Dispose() { }
 
@@ -56,7 +60,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      * @return Native handle
      */
 
-    public NtPubSubEntry Handle { get; }
+    public NtEntry Handle { get; }
 
     /**
      * Gets the subscribed-to / published-to topic.
@@ -111,8 +115,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public NetworkTableValue GetValue()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
-        return value;
+        return NtCore.GetEntryValue(Handle);
     }
 
     /**
@@ -124,7 +127,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public bool GetBoolean(bool defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsBoolean)
         {
             return value.GetBoolean();
@@ -141,7 +144,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public long GetInteger(long defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsInteger)
         {
             return value.GetInteger();
@@ -158,7 +161,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public float GetFloat(float defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsFloat)
         {
             return value.GetFloat();
@@ -175,7 +178,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public double GetDouble(double defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDouble)
         {
             return value.GetDouble();
@@ -192,7 +195,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public string GetString(string defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsString)
         {
             return value.GetString();
@@ -209,7 +212,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public byte[] GetRaw(byte[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsRaw)
         {
             return value.GetRaw();
@@ -226,7 +229,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public bool[] GetBooleanArray(bool[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsBooleanArray)
         {
             return value.GetBooleanArray();
@@ -243,7 +246,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public long[] GetIntegerArray(long[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsIntegerArray)
         {
             return value.GetIntegerArray();
@@ -260,7 +263,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public float[] GetFloatArray(float[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsFloatArray)
         {
             return value.GetFloatArray();
@@ -277,7 +280,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public double[] GetDoubleArray(double[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDoubleArray)
         {
             return value.GetDoubleArray();
@@ -294,7 +297,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public string[] GetStringArray(string[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsStringArray)
         {
             return value.GetStringArray();
@@ -313,7 +316,7 @@ public sealed class NetworkTableEntry : Publisher, Subscriber, IDisposable
      */
     public NetworkTableValue[] ReadQueue()
     {
-        return NtCore.ReadQueueValue(Handle, out nuint _);
+        return NtCore.ReadQueueValue(Handle);
     }
 
     //  /**

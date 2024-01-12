@@ -49,11 +49,11 @@ public class BooleanArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public BooleanArraySubscriber Subscribe(
+    public IBooleanArraySubscriber Subscribe(
         bool[] defaultValue,
         PubSubOptions options)
     {
-        return new BooleanArrayEntryImpl(
+        return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
@@ -77,12 +77,12 @@ public class BooleanArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public BooleanArraySubscriber SubscribeEx(
+    public IBooleanArraySubscriber SubscribeEx(
         string typeString,
         bool[] defaultValue,
         PubSubOptions options)
     {
-        return new BooleanArrayEntryImpl(
+        return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
@@ -105,10 +105,10 @@ public class BooleanArrayTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public BooleanArrayPublisher Publish(
+    public IBooleanArrayPublisher Publish(
         PubSubOptions options)
     {
-        return new BooleanArrayEntryImpl(
+        return new BooleanArrayEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.BooleanArray,
@@ -134,12 +134,12 @@ public class BooleanArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public BooleanArrayPublisher PublishEx(
+    public IBooleanArrayPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new BooleanArrayEntryImpl(
+        return new BooleanArrayEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.BooleanArray,
@@ -167,11 +167,11 @@ public class BooleanArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public BooleanArrayEntry GetEntry(
+    public IBooleanArrayEntry GetEntry(
         bool[] defaultValue,
         PubSubOptions options)
     {
-        return new BooleanArrayEntryImpl(
+        return new BooleanArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,
@@ -200,12 +200,12 @@ public class BooleanArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public BooleanArrayEntry GetEntryEx(
+    public IBooleanArrayEntry GetEntryEx(
         string typeString,
         bool[] defaultValue,
         PubSubOptions options)
     {
-        return new BooleanArrayEntryImpl(
+        return new BooleanArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,

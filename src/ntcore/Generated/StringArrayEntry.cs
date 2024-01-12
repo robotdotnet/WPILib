@@ -11,7 +11,7 @@ namespace NetworkTables;
  *
  * <p>Unlike NetworkTableEntry, the entry goes away when close() is called.
  */
-public interface StringArrayEntry : StringArraySubscriber, StringArrayPublisher
+public interface IStringArrayEntry : IStringArraySubscriber, IStringArrayPublisher
 {
     /** Stops publishing the entry if it's published. */
     void Unpublish();

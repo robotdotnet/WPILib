@@ -1,6 +1,6 @@
 ﻿namespace NetworkTables;
 
-public interface GenericEntry : GenericSubscriber, GenericPublisher
+public interface IGenericEntry : IGenericSubscriber, IGenericPublisher
 {
     void Unpublish();
 }

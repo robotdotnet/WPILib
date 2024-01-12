@@ -10,7 +10,7 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** NetworkTables Double implementation. */
-internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
+internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : struct, INtEntryHandle
 {
     /**
      * Constructor.
@@ -19,19 +19,18 @@ internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
      * @param handle Native handle
      * @param defaultValue Default value for Get()
      */
-    internal DoubleEntryImpl(DoubleTopic topic, NtPubSubEntry handle, double defaultValue) : base(handle)
+    internal DoubleEntryImpl(DoubleTopic topic, T handle, double defaultValue) : base(handle)
     {
         Topic = topic;
         m_defaultValue = defaultValue;
     }
-
 
     public override DoubleTopic Topic { get; }
 
 
     public double Get()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDouble)
         {
             return value.GetDouble();
@@ -42,7 +41,7 @@ internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
 
     public double Get(double defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDouble)
         {
             return value.GetDouble();
@@ -53,7 +52,7 @@ internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
 
     public TimestampedDouble GetAtomic()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double baseValue = value.IsDouble ? value.GetDouble() : m_defaultValue;
         return new TimestampedDouble(value.Time, value.ServerTime, baseValue);
     }
@@ -61,7 +60,7 @@ internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
 
     public TimestampedDouble GetAtomic(double defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double baseValue = value.IsDouble ? value.GetDouble() : defaultValue;
         return new TimestampedDouble(value.Time, value.ServerTime, baseValue);
     }
@@ -69,7 +68,7 @@ internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
 
     public TimestampedDouble[] ReadQueue()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         TimestampedDouble[] timestamped = new TimestampedDouble[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
@@ -81,7 +80,7 @@ internal sealed class DoubleEntryImpl : EntryBase, DoubleEntry
 
     public double[] ReadQueueValues()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         double[] timestamped = new double[values.Length];
         for (int i = 0; i < values.Length; i++)
         {

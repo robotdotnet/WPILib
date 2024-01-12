@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables BooleanArray publisher. */
-public interface BooleanArrayPublisher : Publisher
+public interface IBooleanArrayPublisher : Publisher
 {
     /**
      * Get the corresponding topic.

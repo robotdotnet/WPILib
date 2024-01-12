@@ -49,11 +49,11 @@ public class IntegerArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public IntegerArraySubscriber Subscribe(
+    public IIntegerArraySubscriber Subscribe(
         long[] defaultValue,
         PubSubOptions options)
     {
-        return new IntegerArrayEntryImpl(
+        return new IntegerArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.IntegerArray,
@@ -77,12 +77,12 @@ public class IntegerArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public IntegerArraySubscriber SubscribeEx(
+    public IIntegerArraySubscriber SubscribeEx(
         string typeString,
         long[] defaultValue,
         PubSubOptions options)
     {
-        return new IntegerArrayEntryImpl(
+        return new IntegerArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.IntegerArray,
@@ -105,10 +105,10 @@ public class IntegerArrayTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public IntegerArrayPublisher Publish(
+    public IIntegerArrayPublisher Publish(
         PubSubOptions options)
     {
-        return new IntegerArrayEntryImpl(
+        return new IntegerArrayEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.IntegerArray,
@@ -134,12 +134,12 @@ public class IntegerArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public IntegerArrayPublisher PublishEx(
+    public IIntegerArrayPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new IntegerArrayEntryImpl(
+        return new IntegerArrayEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.IntegerArray,
@@ -167,11 +167,11 @@ public class IntegerArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public IntegerArrayEntry GetEntry(
+    public IIntegerArrayEntry GetEntry(
         long[] defaultValue,
         PubSubOptions options)
     {
-        return new IntegerArrayEntryImpl(
+        return new IntegerArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.IntegerArray,
@@ -200,12 +200,12 @@ public class IntegerArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public IntegerArrayEntry GetEntryEx(
+    public IIntegerArrayEntry GetEntryEx(
         string typeString,
         long[] defaultValue,
         PubSubOptions options)
     {
-        return new IntegerArrayEntryImpl(
+        return new IntegerArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.IntegerArray,

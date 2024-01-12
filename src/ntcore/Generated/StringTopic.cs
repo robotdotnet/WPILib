@@ -49,11 +49,11 @@ public class StringTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public StringSubscriber Subscribe(
+    public IStringSubscriber Subscribe(
         string defaultValue,
         PubSubOptions options)
     {
-        return new StringEntryImpl(
+        return new StringEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.String,
@@ -77,12 +77,12 @@ public class StringTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public StringSubscriber SubscribeEx(
+    public IStringSubscriber SubscribeEx(
         string typeString,
         string defaultValue,
         PubSubOptions options)
     {
-        return new StringEntryImpl(
+        return new StringEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.String,
@@ -105,10 +105,10 @@ public class StringTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public StringPublisher Publish(
+    public IStringPublisher Publish(
         PubSubOptions options)
     {
-        return new StringEntryImpl(
+        return new StringEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.String,
@@ -134,12 +134,12 @@ public class StringTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public StringPublisher PublishEx(
+    public IStringPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new StringEntryImpl(
+        return new StringEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.String,
@@ -167,11 +167,11 @@ public class StringTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public StringEntry GetEntry(
+    public IStringEntry GetEntry(
         string defaultValue,
         PubSubOptions options)
     {
-        return new StringEntryImpl(
+        return new StringEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.String,
@@ -200,12 +200,12 @@ public class StringTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public StringEntry GetEntryEx(
+    public IStringEntry GetEntryEx(
         string typeString,
         string defaultValue,
         PubSubOptions options)
     {
-        return new StringEntryImpl(
+        return new StringEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.String,

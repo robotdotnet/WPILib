@@ -10,7 +10,7 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** NetworkTables DoubleArray implementation. */
-internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
+internal sealed class DoubleArrayEntryImpl<T> : EntryBase<T>, IDoubleArrayEntry where T : struct, INtEntryHandle
 {
     /**
      * Constructor.
@@ -19,19 +19,18 @@ internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
      * @param handle Native handle
      * @param defaultValue Default value for Get()
      */
-    internal DoubleArrayEntryImpl(DoubleArrayTopic topic, NtPubSubEntry handle, double[] defaultValue) : base(handle)
+    internal DoubleArrayEntryImpl(DoubleArrayTopic topic, T handle, double[] defaultValue) : base(handle)
     {
         Topic = topic;
         m_defaultValue = defaultValue;
     }
-
 
     public override DoubleArrayTopic Topic { get; }
 
 
     public double[] Get()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDoubleArray)
         {
             return value.GetDoubleArray();
@@ -42,7 +41,7 @@ internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
 
     public double[] Get(double[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDoubleArray)
         {
             return value.GetDoubleArray();
@@ -53,7 +52,7 @@ internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
 
     public TimestampedDoubleArray GetAtomic()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double[] baseValue = value.IsDoubleArray ? value.GetDoubleArray() : m_defaultValue;
         return new TimestampedDoubleArray(value.Time, value.ServerTime, baseValue);
     }
@@ -61,7 +60,7 @@ internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
 
     public TimestampedDoubleArray GetAtomic(double[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double[] baseValue = value.IsDoubleArray ? value.GetDoubleArray() : defaultValue;
         return new TimestampedDoubleArray(value.Time, value.ServerTime, baseValue);
     }
@@ -69,7 +68,7 @@ internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
 
     public TimestampedDoubleArray[] ReadQueue()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         TimestampedDoubleArray[] timestamped = new TimestampedDoubleArray[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
@@ -81,7 +80,7 @@ internal sealed class DoubleArrayEntryImpl : EntryBase, DoubleArrayEntry
 
     public double[][] ReadQueueValues()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         double[][] timestamped = new double[values.Length][];
         for (int i = 0; i < values.Length; i++)
         {

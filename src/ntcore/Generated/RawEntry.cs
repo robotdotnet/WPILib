@@ -11,7 +11,7 @@ namespace NetworkTables;
  *
  * <p>Unlike NetworkTableEntry, the entry goes away when close() is called.
  */
-public interface RawEntry : RawSubscriber, RawPublisher
+public interface IRawEntry : IRawSubscriber, IRawPublisher
 {
     /** Stops publishing the entry if it's published. */
     void Unpublish();

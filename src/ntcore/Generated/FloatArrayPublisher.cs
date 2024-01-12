@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables FloatArray publisher. */
-public interface FloatArrayPublisher : Publisher
+public interface IFloatArrayPublisher : Publisher
 {
     /**
      * Get the corresponding topic.

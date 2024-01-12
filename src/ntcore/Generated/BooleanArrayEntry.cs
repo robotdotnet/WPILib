@@ -11,7 +11,7 @@ namespace NetworkTables;
  *
  * <p>Unlike NetworkTableEntry, the entry goes away when close() is called.
  */
-public interface BooleanArrayEntry : BooleanArraySubscriber, BooleanArrayPublisher
+public interface IBooleanArrayEntry : IBooleanArraySubscriber, IBooleanArrayPublisher
 {
     /** Stops publishing the entry if it's published. */
     void Unpublish();

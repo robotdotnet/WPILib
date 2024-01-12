@@ -11,7 +11,7 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** NetworkTables generic implementation. */
-internal sealed class GenericEntryImpl : EntryBase, GenericEntry
+internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEntry where THandle : struct, INtEntryHandle
 {
     /**
      * Constructor.
@@ -19,7 +19,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
      * @param topic Topic
      * @param handle Native handle
      */
-    internal GenericEntryImpl(Topic topic, NtPubSubEntry handle) : base(handle)
+    internal GenericEntryImpl(Topic topic, THandle handle) : base(handle)
     {
         Topic = topic;
     }
@@ -28,8 +28,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public NetworkTableValue Get()
     {
-        NtCore.GetEntryValue(Handle, out var value);
-        return value;
+        return NtCore.GetEntryValue(Handle);
     }
 
     /**
@@ -42,7 +41,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public bool GetBoolean(bool defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsBoolean)
         {
             return value.GetBoolean();
@@ -60,7 +59,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public long GetInteger(long defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsInteger)
         {
             return value.GetInteger();
@@ -78,7 +77,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public float GetFloat(float defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsFloat)
         {
             return value.GetFloat();
@@ -96,7 +95,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public double GetDouble(double defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDouble)
         {
             return value.GetDouble();
@@ -114,7 +113,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public string GetString(string defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsString)
         {
             return value.GetString();
@@ -132,7 +131,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public byte[] GetRaw(byte[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsRaw)
         {
             return value.GetRaw();
@@ -150,7 +149,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public bool[] GetBooleanArray(bool[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsBooleanArray)
         {
             return value.GetBooleanArray();
@@ -168,7 +167,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public long[] GetIntegerArray(long[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsIntegerArray)
         {
             return value.GetIntegerArray();
@@ -186,7 +185,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public float[] GetFloatArray(float[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsFloatArray)
         {
             return value.GetFloatArray();
@@ -204,7 +203,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public double[] GetDoubleArray(double[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsDoubleArray)
         {
             return value.GetDoubleArray();
@@ -222,7 +221,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public string[] GetStringArray(string[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsStringArray)
         {
             return value.GetStringArray();
@@ -233,7 +232,7 @@ internal sealed class GenericEntryImpl : EntryBase, GenericEntry
 
     public NetworkTableValue[] ReadQueue()
     {
-        return NtCore.ReadQueueValue(Handle, out nuint _);
+        return NtCore.ReadQueueValue(Handle);
     }
 
 

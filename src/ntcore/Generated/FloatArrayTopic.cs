@@ -49,11 +49,11 @@ public class FloatArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public FloatArraySubscriber Subscribe(
+    public IFloatArraySubscriber Subscribe(
         float[] defaultValue,
         PubSubOptions options)
     {
-        return new FloatArrayEntryImpl(
+        return new FloatArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
@@ -77,12 +77,12 @@ public class FloatArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public FloatArraySubscriber SubscribeEx(
+    public IFloatArraySubscriber SubscribeEx(
         string typeString,
         float[] defaultValue,
         PubSubOptions options)
     {
-        return new FloatArrayEntryImpl(
+        return new FloatArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
@@ -105,10 +105,10 @@ public class FloatArrayTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public FloatArrayPublisher Publish(
+    public IFloatArrayPublisher Publish(
         PubSubOptions options)
     {
-        return new FloatArrayEntryImpl(
+        return new FloatArrayEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.FloatArray,
@@ -134,12 +134,12 @@ public class FloatArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public FloatArrayPublisher PublishEx(
+    public IFloatArrayPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new FloatArrayEntryImpl(
+        return new FloatArrayEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.FloatArray,
@@ -167,11 +167,11 @@ public class FloatArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public FloatArrayEntry GetEntry(
+    public IFloatArrayEntry GetEntry(
         float[] defaultValue,
         PubSubOptions options)
     {
-        return new FloatArrayEntryImpl(
+        return new FloatArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,
@@ -200,12 +200,12 @@ public class FloatArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public FloatArrayEntry GetEntryEx(
+    public IFloatArrayEntry GetEntryEx(
         string typeString,
         float[] defaultValue,
         PubSubOptions options)
     {
-        return new FloatArrayEntryImpl(
+        return new FloatArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,

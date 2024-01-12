@@ -42,7 +42,12 @@ public static unsafe partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_AddPolledListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtListener AddListener(NtListenerPoller poller, NtPubSubEntry handle, EventFlags flags);
+    internal static partial NtListener AddListener(NtListenerPoller poller, int handle, EventFlags flags);
+
+    public static NtListener AddListener<T>(NtListenerPoller poller, T handle, EventFlags flags) where T : struct, INtEntryHandle
+    {
+        return AddListener(poller, handle.Handle, flags);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_AddPolledListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

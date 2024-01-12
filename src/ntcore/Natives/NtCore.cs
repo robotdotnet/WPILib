@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using NetworkTables.Handles;
+using WPIUtil.Handles;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
@@ -36,51 +37,87 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(NtLengthStringMarshaller<>), CountElementName = nameof(nameLen))]
-    internal static unsafe partial string GetEntryName(NtPubSubEntry entry, out nuint nameLen);
+    internal static unsafe partial string GetEntryName(int entry, out nuint nameLen);
 
-    public static unsafe string GetEntryName(NtPubSubEntry entry)
+    public static unsafe string GetEntryName<T>(T entry) where T : struct, INtEntryHandle
     {
-        return GetEntryName(entry, out var _);
+        return GetEntryName(entry.Handle, out var _);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NetworkTableType GetEntryType(NtPubSubEntry entry);
+    internal static partial NetworkTableType GetEntryType(int entry);
+
+    public static unsafe NetworkTableType GetEntryType<T>(T entry) where T : struct, INtEntryHandle
+    {
+        return GetEntryType(entry.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryLastChange")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial ulong GetEntryLastChange(NtPubSubEntry entry);
+    internal static partial ulong GetEntryLastChange(int entry);
+
+    public static ulong GetEntryLastChange<T>(T entry) where T : struct, INtEntryHandle
+    {
+        return GetEntryLastChange(entry.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void GetEntryValue(NtPubSubEntry entry, out NetworkTableValue value);
+    internal static partial void GetEntryValue(int entry, out NetworkTableValue value);
+
+    public static NetworkTableValue GetEntryValue<T>(T entry) where T : struct, INtEntryHandle
+    {
+        GetEntryValue(entry.Handle, out var value);
+        return value;
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetDefaultEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool SetDefaultEntryValue(NtPubSubEntry entry, in NetworkTableValue defaultValue);
+    internal static partial bool SetDefaultEntryValue(int entry, in NetworkTableValue defaultValue);
+
+    public static bool SetDefaultEntryValue<T>(T entry, in NetworkTableValue defaultValue) where T : struct, INtEntryHandle
+    {
+        return SetDefaultEntryValue(entry.Handle, defaultValue);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool SetEntryValue(NtPubSubEntry entry, in NetworkTableValue value);
+    internal static partial bool SetEntryValue(int entry, in NetworkTableValue value);
+
+    public static bool SetEntryValue<T>(T entry, in NetworkTableValue value) where T : struct, INtEntryHandle
+    {
+        return SetEntryValue(entry.Handle, value);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryFlags")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetEntryFlags(NtPubSubEntry entry, EntryFlags flags);
+    internal static partial void SetEntryFlags(int entry, EntryFlags flags);
+
+    public static void SetEntryFlags<T>(T entry, EntryFlags flags) where T : struct, INtEntryHandle
+    {
+        SetEntryFlags(entry.Handle, flags);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryFlags")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial EntryFlags GetEntryFlags(NtPubSubEntry entry);
+    internal static partial EntryFlags GetEntryFlags(int entry);
+
+    public static EntryFlags GetEntryFlags<T>(T entry) where T : struct, INtEntryHandle
+    {
+        return GetEntryFlags(entry.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static unsafe partial NetworkTableValue[] ReadQueueValue(NtPubSubEntry subentry, out nuint count);
+    internal static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
 
-    public static unsafe NetworkTableValue[] ReadQueueValue(NtPubSubEntry subentry)
+    public static unsafe NetworkTableValue[] ReadQueueValue<T>(T subentry) where T : struct, INtEntryHandle
     {
-        return ReadQueueValue(subentry, out var _);
+        return ReadQueueValue(subentry.Handle, out var _);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
@@ -208,7 +245,12 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicExists")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetTopicExists(NtPubSubEntry handle);
+    internal static partial bool GetTopicExists(int handle);
+
+    public static bool GetTopicExists<T>(T handle) where T : struct, INtEntryHandle
+    {
+        return GetTopicExists(handle.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicProperty", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -261,7 +303,12 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_Unpublish")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void Unpublish(NtPubSubEntry pubentry);
+    internal static partial void Unpublish(int pubentry);
+
+    public static void Unpublish<T>(T pubsubentry) where T : struct, INtEntryHandle
+    {
+        Unpublish(pubsubentry.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryEx", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -273,11 +320,21 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_Release")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void Release(NtPubSubEntry pubsubentry);
+    internal static partial void Release(int pubsubentry);
+
+    public static void Release<T>(T pubsubentry) where T : struct, INtEntryHandle
+    {
+        Release(pubsubentry.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicFromHandle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtTopic GetTopicFromHandle(NtPubSubEntry pubsubentry);
+    internal static partial NtTopic GetTopicFromHandle(int pubsubentry);
+
+    public static NtTopic GetTopicFromHandle<T>(T pubsubentry) where T : struct, INtEntryHandle
+    {
+        return GetTopicFromHandle(pubsubentry.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_Now")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

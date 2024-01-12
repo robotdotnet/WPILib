@@ -10,7 +10,7 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** NetworkTables BooleanArray implementation. */
-internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
+internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntry where T : struct, INtEntryHandle
 {
     /**
      * Constructor.
@@ -19,19 +19,18 @@ internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
      * @param handle Native handle
      * @param defaultValue Default value for Get()
      */
-    internal BooleanArrayEntryImpl(BooleanArrayTopic topic, NtPubSubEntry handle, bool[] defaultValue) : base(handle)
+    internal BooleanArrayEntryImpl(BooleanArrayTopic topic, T handle, bool[] defaultValue) : base(handle)
     {
         Topic = topic;
         m_defaultValue = defaultValue;
     }
-
 
     public override BooleanArrayTopic Topic { get; }
 
 
     public bool[] Get()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsBooleanArray)
         {
             return value.GetBooleanArray();
@@ -42,7 +41,7 @@ internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
 
     public bool[] Get(bool[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsBooleanArray)
         {
             return value.GetBooleanArray();
@@ -53,7 +52,7 @@ internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
 
     public TimestampedBooleanArray GetAtomic()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         bool[] baseValue = value.IsBooleanArray ? value.GetBooleanArray() : m_defaultValue;
         return new TimestampedBooleanArray(value.Time, value.ServerTime, baseValue);
     }
@@ -61,7 +60,7 @@ internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
 
     public TimestampedBooleanArray GetAtomic(bool[] defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         bool[] baseValue = value.IsBooleanArray ? value.GetBooleanArray() : defaultValue;
         return new TimestampedBooleanArray(value.Time, value.ServerTime, baseValue);
     }
@@ -69,7 +68,7 @@ internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
 
     public TimestampedBooleanArray[] ReadQueue()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         TimestampedBooleanArray[] timestamped = new TimestampedBooleanArray[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
@@ -81,7 +80,7 @@ internal sealed class BooleanArrayEntryImpl : EntryBase, BooleanArrayEntry
 
     public bool[][] ReadQueueValues()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         bool[][] timestamped = new bool[values.Length][];
         for (int i = 0; i < values.Length; i++)
         {

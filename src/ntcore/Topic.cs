@@ -58,31 +58,31 @@ public class Topic
         set => NtCore.SetTopicProperties(Handle, value);
     }
 
-    public GenericSubscriber GenericSubscribe(in PubSubOptions options) => GenericSubscribe("", options);
+    public IGenericSubscriber GenericSubscribe(in PubSubOptions options) => GenericSubscribe("", options);
 
-    public GenericSubscriber GenericSubscribe(string typeString, in PubSubOptions options)
+    public IGenericSubscriber GenericSubscribe(string typeString, in PubSubOptions options)
     {
-        return new GenericEntryImpl(this, NtCore.Subscribe(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
+        return new GenericEntryImpl<NtSubscriber>(this, NtCore.Subscribe(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }
 
-    public GenericPublisher GenericPublish(string typeString, in PubSubOptions options)
+    public IGenericPublisher GenericPublish(string typeString, in PubSubOptions options)
     {
-        return new GenericEntryImpl(this, NtCore.Publish(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
+        return new GenericEntryImpl<NtPublisher>(this, NtCore.Publish(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }
 
-    public GenericPublisher GenericPublishEx(string typeString, string properties, in PubSubOptions options)
+    public IGenericPublisher GenericPublishEx(string typeString, string properties, in PubSubOptions options)
     {
-        return new GenericEntryImpl(this, NtCore.PublishEx(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, properties, options));
+        return new GenericEntryImpl<NtPublisher>(this, NtCore.PublishEx(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, properties, options));
     }
 
-    public GenericEntry GetGenericEntry(in PubSubOptions options)
+    public IGenericEntry GetGenericEntry(in PubSubOptions options)
     {
         return GetGenericEntry("", options);
     }
 
-    public GenericEntry GetGenericEntry(string typeString, in PubSubOptions options)
+    public IGenericEntry GetGenericEntry(string typeString, in PubSubOptions options)
     {
-        return new GenericEntryImpl(this, NtCore.GetEntry(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
+        return new GenericEntryImpl<NtEntry>(this, NtCore.GetEntry(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }
 
     // TODO implement equals and hash code

@@ -1,12 +1,13 @@
 ﻿using System;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
+using WPIUtil.Handles;
 
 namespace NetworkTables;
 
-public abstract class EntryBase(NtPubSubEntry handle) : Subscriber, Publisher
+public abstract class EntryBase<T>(T handle) : Subscriber, Publisher where T : struct, INtEntryHandle
 {
-    private readonly NtPubSubEntry m_handle = handle;
+    private readonly T m_handle = handle;
 
     public bool Exists => NtCore.GetTopicExists(m_handle);
 
@@ -14,9 +15,13 @@ public abstract class EntryBase(NtPubSubEntry handle) : Subscriber, Publisher
 
     public bool IsValid => m_handle.Handle != 0;
 
-    public NtPubSubEntry Handle => m_handle;
+    public T Handle => m_handle;
 
     public abstract Topic Topic { get; }
+
+    NtSubscriber PubSub<NtSubscriber>.Handle => new(m_handle.Handle);
+
+    NtPublisher PubSub<NtPublisher>.Handle => new(m_handle.Handle);
 
     public void Dispose()
     {

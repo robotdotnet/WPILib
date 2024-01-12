@@ -26,7 +26,6 @@ public struct UsbCameraInfo : INativeArrayFree<UsbCameraInfoMarshaller.NativeUsb
 [CustomMarshaller(typeof(UsbCameraInfo), MarshalMode.Default, typeof(UsbCameraInfoMarshaller))]
 public static unsafe class UsbCameraInfoMarshaller
 {
-
     public static NativeUsbCameraInfo ConvertToUnmanaged(in UsbCameraInfo managed)
     {
         throw new System.NotImplementedException();

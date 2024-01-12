@@ -48,13 +48,13 @@ public class RawTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public RawSubscriber Subscribe(
+    public IRawSubscriber Subscribe(
         string typeString,
 
         byte[] defaultValue,
         PubSubOptions options)
     {
-        return new RawEntryImpl(
+        return new RawEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.Raw,
@@ -79,12 +79,12 @@ public class RawTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public RawPublisher Publish(
+    public IRawPublisher Publish(
         string typeString,
 
         PubSubOptions options)
     {
-        return new RawEntryImpl(
+        return new RawEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.Raw,
@@ -110,12 +110,12 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public RawPublisher PublishEx(
+    public IRawPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new RawEntryImpl(
+        return new RawEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.Raw,
@@ -145,13 +145,13 @@ public class RawTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public RawEntry GetEntry(
+    public IRawEntry GetEntry(
         string typeString,
 
         byte[] defaultValue,
         PubSubOptions options)
     {
-        return new RawEntryImpl(
+        return new RawEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.Raw,

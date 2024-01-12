@@ -10,7 +10,7 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** NetworkTables Float implementation. */
-internal sealed class FloatEntryImpl : EntryBase, FloatEntry
+internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : struct, INtEntryHandle
 {
     /**
      * Constructor.
@@ -19,19 +19,18 @@ internal sealed class FloatEntryImpl : EntryBase, FloatEntry
      * @param handle Native handle
      * @param defaultValue Default value for Get()
      */
-    internal FloatEntryImpl(FloatTopic topic, NtPubSubEntry handle, float defaultValue) : base(handle)
+    internal FloatEntryImpl(FloatTopic topic, T handle, float defaultValue) : base(handle)
     {
         Topic = topic;
         m_defaultValue = defaultValue;
     }
-
 
     public override FloatTopic Topic { get; }
 
 
     public float Get()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsFloat)
         {
             return value.GetFloat();
@@ -42,7 +41,7 @@ internal sealed class FloatEntryImpl : EntryBase, FloatEntry
 
     public float Get(float defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsFloat)
         {
             return value.GetFloat();
@@ -53,7 +52,7 @@ internal sealed class FloatEntryImpl : EntryBase, FloatEntry
 
     public TimestampedFloat GetAtomic()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         float baseValue = value.IsFloat ? value.GetFloat() : m_defaultValue;
         return new TimestampedFloat(value.Time, value.ServerTime, baseValue);
     }
@@ -61,7 +60,7 @@ internal sealed class FloatEntryImpl : EntryBase, FloatEntry
 
     public TimestampedFloat GetAtomic(float defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         float baseValue = value.IsFloat ? value.GetFloat() : defaultValue;
         return new TimestampedFloat(value.Time, value.ServerTime, baseValue);
     }
@@ -69,7 +68,7 @@ internal sealed class FloatEntryImpl : EntryBase, FloatEntry
 
     public TimestampedFloat[] ReadQueue()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         TimestampedFloat[] timestamped = new TimestampedFloat[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
@@ -81,7 +80,7 @@ internal sealed class FloatEntryImpl : EntryBase, FloatEntry
 
     public float[] ReadQueueValues()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         float[] timestamped = new float[values.Length];
         for (int i = 0; i < values.Length; i++)
         {

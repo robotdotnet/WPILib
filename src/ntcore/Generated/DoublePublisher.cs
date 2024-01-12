@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables Double publisher. */
-public interface DoublePublisher : Publisher
+public interface IDoublePublisher : Publisher
 {
     /**
      * Get the corresponding topic.

@@ -10,7 +10,7 @@ using NetworkTables.Natives;
 namespace NetworkTables;
 
 /** NetworkTables Integer implementation. */
-internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
+internal sealed class IntegerEntryImpl<T> : EntryBase<T>, IIntegerEntry where T : struct, INtEntryHandle
 {
     /**
      * Constructor.
@@ -19,19 +19,18 @@ internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
      * @param handle Native handle
      * @param defaultValue Default value for Get()
      */
-    internal IntegerEntryImpl(IntegerTopic topic, NtPubSubEntry handle, long defaultValue) : base(handle)
+    internal IntegerEntryImpl(IntegerTopic topic, T handle, long defaultValue) : base(handle)
     {
         Topic = topic;
         m_defaultValue = defaultValue;
     }
-
 
     public override IntegerTopic Topic { get; }
 
 
     public long Get()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsInteger)
         {
             return value.GetInteger();
@@ -42,7 +41,7 @@ internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
 
     public long Get(long defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         if (value.IsInteger)
         {
             return value.GetInteger();
@@ -53,7 +52,7 @@ internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
 
     public TimestampedInteger GetAtomic()
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         long baseValue = value.IsInteger ? value.GetInteger() : m_defaultValue;
         return new TimestampedInteger(value.Time, value.ServerTime, baseValue);
     }
@@ -61,7 +60,7 @@ internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
 
     public TimestampedInteger GetAtomic(long defaultValue)
     {
-        NtCore.GetEntryValue(Handle, out NetworkTableValue value);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
         long baseValue = value.IsInteger ? value.GetInteger() : defaultValue;
         return new TimestampedInteger(value.Time, value.ServerTime, baseValue);
     }
@@ -69,7 +68,7 @@ internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
 
     public TimestampedInteger[] ReadQueue()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         TimestampedInteger[] timestamped = new TimestampedInteger[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
@@ -81,7 +80,7 @@ internal sealed class IntegerEntryImpl : EntryBase, IntegerEntry
 
     public long[] ReadQueueValues()
     {
-        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle, out nuint _);
+        NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
         long[] timestamped = new long[values.Length];
         for (int i = 0; i < values.Length; i++)
         {

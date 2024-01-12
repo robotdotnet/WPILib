@@ -11,7 +11,7 @@ namespace NetworkTables;
  *
  * <p>Unlike NetworkTableEntry, the entry goes away when close() is called.
  */
-public interface FloatEntry : FloatSubscriber, FloatPublisher
+public interface IFloatEntry : IFloatSubscriber, IFloatPublisher
 {
     /** Stops publishing the entry if it's published. */
     void Unpublish();

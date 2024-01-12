@@ -49,11 +49,11 @@ public class FloatTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public FloatSubscriber Subscribe(
+    public IFloatSubscriber Subscribe(
         float defaultValue,
         PubSubOptions options)
     {
-        return new FloatEntryImpl(
+        return new FloatEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.Float,
@@ -77,12 +77,12 @@ public class FloatTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public FloatSubscriber SubscribeEx(
+    public IFloatSubscriber SubscribeEx(
         string typeString,
         float defaultValue,
         PubSubOptions options)
     {
-        return new FloatEntryImpl(
+        return new FloatEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.Float,
@@ -105,10 +105,10 @@ public class FloatTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public FloatPublisher Publish(
+    public IFloatPublisher Publish(
         PubSubOptions options)
     {
-        return new FloatEntryImpl(
+        return new FloatEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.Float,
@@ -134,12 +134,12 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public FloatPublisher PublishEx(
+    public IFloatPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new FloatEntryImpl(
+        return new FloatEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.Float,
@@ -167,11 +167,11 @@ public class FloatTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public FloatEntry GetEntry(
+    public IFloatEntry GetEntry(
         float defaultValue,
         PubSubOptions options)
     {
-        return new FloatEntryImpl(
+        return new FloatEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.Float,
@@ -200,12 +200,12 @@ public class FloatTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public FloatEntry GetEntryEx(
+    public IFloatEntry GetEntryEx(
         string typeString,
         float defaultValue,
         PubSubOptions options)
     {
-        return new FloatEntryImpl(
+        return new FloatEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.Float,

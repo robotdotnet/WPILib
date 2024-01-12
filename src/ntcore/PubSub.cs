@@ -1,13 +1,14 @@
 ﻿using System;
 using NetworkTables.Handles;
+using WPIUtil.Handles;
 
 namespace NetworkTables;
 
-public interface PubSub : IDisposable
+public interface PubSub<T> : IDisposable where T : struct, INtEntryHandle
 {
     Topic Topic { get; }
 
     bool IsValid { get; }
 
-    NtPubSubEntry Handle { get; }
+    T Handle { get; }
 }

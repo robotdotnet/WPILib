@@ -49,11 +49,11 @@ public class DoubleArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public DoubleArraySubscriber Subscribe(
+    public IDoubleArraySubscriber Subscribe(
         double[] defaultValue,
         PubSubOptions options)
     {
-        return new DoubleArrayEntryImpl(
+        return new DoubleArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.DoubleArray,
@@ -77,12 +77,12 @@ public class DoubleArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    public DoubleArraySubscriber SubscribeEx(
+    public IDoubleArraySubscriber SubscribeEx(
         string typeString,
         double[] defaultValue,
         PubSubOptions options)
     {
-        return new DoubleArrayEntryImpl(
+        return new DoubleArrayEntryImpl<NtSubscriber>(
             this,
             NtCore.Subscribe(
                 Handle, NetworkTableType.DoubleArray,
@@ -105,10 +105,10 @@ public class DoubleArrayTopic : Topic
      * @param options publish options
      * @return publisher
      */
-    public DoubleArrayPublisher Publish(
+    public IDoubleArrayPublisher Publish(
         PubSubOptions options)
     {
-        return new DoubleArrayEntryImpl(
+        return new DoubleArrayEntryImpl<NtPublisher>(
             this,
             NtCore.Publish(
                 Handle, NetworkTableType.DoubleArray,
@@ -134,12 +134,12 @@ public class DoubleArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    public DoubleArrayPublisher PublishEx(
+    public IDoubleArrayPublisher PublishEx(
         string typeString,
         string properties,
         PubSubOptions options)
     {
-        return new DoubleArrayEntryImpl(
+        return new DoubleArrayEntryImpl<NtPublisher>(
             this,
             NtCore.PublishEx(
                 Handle, NetworkTableType.DoubleArray,
@@ -167,11 +167,11 @@ public class DoubleArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public DoubleArrayEntry GetEntry(
+    public IDoubleArrayEntry GetEntry(
         double[] defaultValue,
         PubSubOptions options)
     {
-        return new DoubleArrayEntryImpl(
+        return new DoubleArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.DoubleArray,
@@ -200,12 +200,12 @@ public class DoubleArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    public DoubleArrayEntry GetEntryEx(
+    public IDoubleArrayEntry GetEntryEx(
         string typeString,
         double[] defaultValue,
         PubSubOptions options)
     {
-        return new DoubleArrayEntryImpl(
+        return new DoubleArrayEntryImpl<NtEntry>(
             this,
             NtCore.GetEntry(
                 Handle, NetworkTableType.DoubleArray,

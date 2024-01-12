@@ -1,8 +1,9 @@
 ﻿using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Handles;
 
 namespace NetworkTables.Handles;
 
-[NativeMarshalling(typeof(NtHandleMarshaller<NtSubscriber>))]
-public record struct NtSubscriber(int Handle) : INtHandle
+[NativeMarshalling(typeof(WPIIntHandleMarshaller<NtSubscriber>))]
+public record struct NtSubscriber(int Handle) : INtEntryHandle
 {
 }
