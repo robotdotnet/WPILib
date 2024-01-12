@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalDutyCycle
 {
@@ -13,15 +13,15 @@ public static partial class HalDutyCycle
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDutyCycleFPGAIndex")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetDutyCycleFPGAIndex(HalDutyCycleHandle dutyCycleHandle, out HalStatus status);
+    internal static partial int GetDutyCycleFPGAIndexRefShim(HalDutyCycleHandle dutyCycleHandle, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDutyCycleFrequency")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetDutyCycleFrequency(HalDutyCycleHandle dutyCycleHandle, out HalStatus status);
+    internal static partial int GetDutyCycleFrequencyRefShim(HalDutyCycleHandle dutyCycleHandle, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalDutyCycleHandle InitializeDutyCycle(HalDigitalHandle digitalSourceHandle, AnalogTriggerType triggerType, out HalStatus status);
+    internal static partial HalDutyCycleHandle InitializeDutyCycleRefShim(HalDigitalHandle digitalSourceHandle, AnalogTriggerType triggerType, ref HalStatus status);
 
     public static HalDutyCycleHandle InitializeDutyCycle(HalDigitalHandle digitalSourceHandle, out HalStatus status)
     {
@@ -30,7 +30,7 @@ public static partial class HalDutyCycle
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalDutyCycleHandle InitializeDutyCycle(HalAnalogTriggerHandle analogTriggerHandle, AnalogTriggerType triggerType, out HalStatus status);
+    internal static partial HalDutyCycleHandle InitializeDutyCycleRefShim(HalAnalogTriggerHandle analogTriggerHandle, AnalogTriggerType triggerType, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDutyCycleSimDevice")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

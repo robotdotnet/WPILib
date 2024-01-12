@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalAnalogOutput
 {
@@ -17,15 +17,15 @@ public static partial class HalAnalogOutput
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetAnalogOutput")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial double GetAnalogOutput(HalAnalogOutputHandle analogOutputHandle, out HalStatus status);
+    internal static partial double GetAnalogOutputRefShim(HalAnalogOutputHandle analogOutputHandle, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeAnalogOutputPort", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalAnalogOutputHandle InitializeAnalogOutputPort(HalPortHandle portHandle, string allocationLocation, out HalStatus status);
+    internal static partial HalAnalogOutputHandle InitializeAnalogOutputPortRefShim(HalPortHandle portHandle, string allocationLocation, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetAnalogOutput")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetAnalogOutput(HalAnalogOutputHandle analogOutputHandle, double voltage, out HalStatus status);
+    internal static partial void SetAnalogOutputRefShim(HalAnalogOutputHandle analogOutputHandle, double voltage, ref HalStatus status);
 
 
 }

@@ -1,7 +1,6 @@
-﻿using Hal.Natives;
-using WPIUtil.Marshal;
+﻿using WPIUtil.Marshal;
 
-namespace WPIHal;
+namespace WPIHal.Natives;
 
 public class JoystickNameStringFree : INullTerminatedStringFree<byte>
 {

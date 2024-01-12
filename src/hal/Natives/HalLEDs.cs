@@ -7,10 +7,10 @@ public static partial class HalLEDs
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetRadioLEDState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetRadioLEDState(RadioLEDState state, out HalStatus status);
+    internal static partial void SetRadioLEDStateRefShim(RadioLEDState state, ref HalStatus status);
 
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetRadioLEDState")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial RadioLEDState GetRadioLEDState(out HalStatus status);
+    internal static partial RadioLEDState GetRadioLEDStateRefShim(ref HalStatus status);
 }

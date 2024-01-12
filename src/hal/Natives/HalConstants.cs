@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalConstants
 {

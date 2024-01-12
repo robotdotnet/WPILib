@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalInterrupts
 {
@@ -13,27 +13,27 @@ public static partial class HalInterrupts
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeInterrupts")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalInterruptHandle InitializeInterrupts(out HalStatus status);
+    internal static partial HalInterruptHandle InitializeInterruptsRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadInterruptFallingTimestamp")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial long ReadInterruptFallingTimestamp(HalInterruptHandle interruptHandle, out HalStatus status);
+    internal static partial long ReadInterruptFallingTimestampRefShim(HalInterruptHandle interruptHandle, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadInterruptRisingTimestamp")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial long ReadInterruptRisingTimestamp(HalInterruptHandle interruptHandle, out HalStatus status);
+    internal static partial long ReadInterruptRisingTimestampRefShim(HalInterruptHandle interruptHandle, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_RequestInterrupts")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void RequestInterrupts(HalInterruptHandle interruptHandle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, out HalStatus status);
+    internal static partial void RequestInterruptsRefShim(HalInterruptHandle interruptHandle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetInterruptUpSourceEdge")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetInterruptUpSourceEdge(HalInterruptHandle interruptHandle, int risingEdge, int fallingEdge, out HalStatus status);
+    internal static partial void SetInterruptUpSourceEdgeRefShim(HalInterruptHandle interruptHandle, int risingEdge, int fallingEdge, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_WaitForInterrupt")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial long WaitForInterrupt(HalInterruptHandle interruptHandle, double timeout, int ignorePrevious, out HalStatus status);
+    internal static partial long WaitForInterruptRefShim(HalInterruptHandle interruptHandle, double timeout, int ignorePrevious, ref HalStatus status);
 
 
 }

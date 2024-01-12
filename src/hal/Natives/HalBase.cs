@@ -5,17 +5,17 @@ using WPIHal;
 using WPIHal.Handles;
 using WPIUtil.Marshal;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalBase
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_ExpandFPGATime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial ulong ExpandFPGATime(uint unexpandedLower, out HalStatus status);
+    internal static partial ulong ExpandFPGATimeRefShim(uint unexpandedLower, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetBrownedOut")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetBrownedOut(out HalStatus status);
+    internal static partial int GetBrownedOutRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetErrorMessage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -24,15 +24,15 @@ public static partial class HalBase
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGAButton")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetFPGAButton(out HalStatus status);
+    internal static partial int GetFPGAButtonRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGARevision")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial long GetFPGARevision(out HalStatus status);
+    internal static partial long GetFPGARevisionRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGAVersion")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetFPGAVersion(out HalStatus status);
+    internal static partial int GetFPGAVersionRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetPort")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -48,7 +48,7 @@ public static partial class HalBase
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetSystemActive")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetSystemActive(out HalStatus status);
+    internal static partial int GetSystemActiveRefShim(ref HalStatus status);
 
 
 }

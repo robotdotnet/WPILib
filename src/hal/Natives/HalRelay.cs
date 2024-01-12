@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalRelay
 {
@@ -17,15 +17,15 @@ public static partial class HalRelay
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetRelay")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetRelay(HalRelayHandle relayPortHandle, out HalStatus status);
+    internal static partial int GetRelayRefShim(HalRelayHandle relayPortHandle, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeRelayPort", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalRelayHandle InitializeRelayPort(HalPortHandle portHandle, int fwd, string allocationLocation, out HalStatus status);
+    internal static partial HalRelayHandle InitializeRelayPortRefShim(HalPortHandle portHandle, int fwd, string allocationLocation, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetRelay")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetRelay(HalRelayHandle relayPortHandle, int on, out HalStatus status);
+    internal static partial void SetRelayRefShim(HalRelayHandle relayPortHandle, int on, ref HalStatus status);
 
 
 }

@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using WPIHal;
 using WPIHal.Handles;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalI2C
 {
@@ -14,7 +14,7 @@ public static partial class HalI2C
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeI2C")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void InitializeI2C(I2CPort port, out HalStatus status);
+    internal static partial void InitializeI2CRefShim(I2CPort port, ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadI2C")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

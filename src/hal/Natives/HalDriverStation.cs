@@ -5,13 +5,13 @@ using WPIHal;
 using WPIHal.Handles;
 using WPIUtil.Marshal;
 
-namespace Hal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalDriverStation
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetAllianceStation")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial AllianceStationID GetAllianceStation(out HalStatus status);
+    internal static partial AllianceStationID GetAllianceStationRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetControlWord")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -60,7 +60,7 @@ public static partial class HalDriverStation
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetMatchTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial double GetMatchTime(out HalStatus status);
+    internal static partial double GetMatchTimeRefShim(ref HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ObserveUserProgramAutonomous")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
