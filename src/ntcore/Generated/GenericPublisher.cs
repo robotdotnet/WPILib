@@ -7,30 +7,8 @@
 namespace NetworkTables;
 
 /** NetworkTables generic publisher. */
-public interface IGenericPublisher : Publisher
+public partial interface IGenericPublisher
 {
-
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @return False if the topic already exists with a different type
-     */
-    bool Set(in NetworkTableValue value);
-
-    bool Set(in RefNetworkTableValue value);
-
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     * @throws IllegalArgumentException if the value is not a known type
-     */
-    bool SetValue<T>(long time, T value);
-
-    bool SetValue<T>(T value);
 
     /**
      * Publish a new value.
@@ -44,6 +22,14 @@ public interface IGenericPublisher : Publisher
     bool SetBoolean(bool value);
 
     /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultBoolean(bool defaultValue);
+
+    /**
      * Publish a new value.
      *
      * @param value value to publish
@@ -53,6 +39,14 @@ public interface IGenericPublisher : Publisher
     bool SetInteger(long time, long value);
 
     bool SetInteger(long value);
+
+    /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultInteger(long defaultValue);
 
     /**
      * Publish a new value.
@@ -66,6 +60,14 @@ public interface IGenericPublisher : Publisher
     bool SetFloat(float value);
 
     /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultFloat(float defaultValue);
+
+    /**
      * Publish a new value.
      *
      * @param value value to publish
@@ -75,6 +77,14 @@ public interface IGenericPublisher : Publisher
     bool SetDouble(long time, double value);
 
     bool SetDouble(double value);
+
+    /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultDouble(double defaultValue);
 
     /**
      * Publish a new value.
@@ -88,6 +98,14 @@ public interface IGenericPublisher : Publisher
     bool SetString(string value);
 
     /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultString(string defaultValue);
+
+    /**
      * Publish a new value.
      *
      * @param value value to publish
@@ -97,6 +115,14 @@ public interface IGenericPublisher : Publisher
     bool SetRaw(long time, byte[] value);
 
     bool SetRaw(byte[] value);
+
+    /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultRaw(byte[] defaultValue);
 
     /**
      * Publish a new value.
@@ -110,6 +136,14 @@ public interface IGenericPublisher : Publisher
     bool SetBooleanArray(bool[] value);
 
     /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultBooleanArray(bool[] defaultValue);
+
+    /**
      * Publish a new value.
      *
      * @param value value to publish
@@ -119,6 +153,14 @@ public interface IGenericPublisher : Publisher
     bool SetIntegerArray(long time, long[] value);
 
     bool SetIntegerArray(long[] value);
+
+    /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultIntegerArray(long[] defaultValue);
 
     /**
      * Publish a new value.
@@ -132,6 +174,14 @@ public interface IGenericPublisher : Publisher
     bool SetFloatArray(float[] value);
 
     /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultFloatArray(float[] defaultValue);
+
+    /**
      * Publish a new value.
      *
      * @param value value to publish
@@ -143,6 +193,14 @@ public interface IGenericPublisher : Publisher
     bool SetDoubleArray(double[] value);
 
     /**
+     * Sets the entry's value if it does not exist.
+     *
+     * @param defaultValue the default value to set
+     * @return False if the entry exists with a different type
+     */
+    bool SetDefaultDoubleArray(double[] defaultValue);
+
+    /**
      * Publish a new value.
      *
      * @param value value to publish
@@ -152,104 +210,6 @@ public interface IGenericPublisher : Publisher
     bool SetStringArray(long time, string[] value);
 
     bool SetStringArray(string[] value);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefault(in NetworkTableValue defaultValue);
-    bool SetDefault(in RefNetworkTableValue defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     * @throws IllegalArgumentException if the value is not a known type
-     */
-    bool SetDefaultValue<T>(T defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultBoolean(bool defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultInteger(long defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultFloat(float defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultDouble(double defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultString(string defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultRaw(byte[] defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultBooleanArray(bool[] defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultIntegerArray(long[] defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultFloatArray(float[] defaultValue);
-
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefaultDoubleArray(double[] defaultValue);
 
     /**
      * Sets the entry's value if it does not exist.

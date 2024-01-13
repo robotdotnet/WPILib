@@ -7,15 +7,8 @@
 namespace NetworkTables;
 
 /** NetworkTables generic subscriber. */
-public interface IGenericSubscriber : Subscriber
+public partial interface IGenericSubscriber
 {
-    /**
-     * Get the last published value.
-     * If no value has been published, returns a value with type NetworkTableType.kUnassigned.
-     *
-     * @return value
-     */
-    NetworkTableValue Get();
 
     /**
      * Gets the entry's value as a bool. If the entry does not exist or is of different type, it
@@ -116,15 +109,4 @@ public interface IGenericSubscriber : Subscriber
      */
     string[] GetStringArray(string[] defaultValue);
 
-    /**
-     * Get an array of all value changes since the last call to readQueue.
-     * Also provides a timestamp for each value.
-     *
-     * <p>The "poll storage" subscribe option can be used to set the queue
-     * depth.
-     *
-     * @return Array of timestamped values; empty array if no new changes have
-     *     been published since the previous call.
-     */
-    NetworkTableValue[] ReadQueue();
 }
