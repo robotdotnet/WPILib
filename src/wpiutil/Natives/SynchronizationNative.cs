@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using CommunityToolkit.Diagnostics;
 using SynchronizationHandle = int;
 
 public static partial class SynchronizationNative
@@ -49,6 +50,14 @@ public static partial class SynchronizationNative
     [LibraryImport("wpiutil", EntryPoint = "WPI_WaitForObjects")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial int WaitForObjects(ReadOnlySpan<SynchronizationHandle> handles, int handlesCount, Span<SynchronizationHandle> signaled);
+
+    public static unsafe ReadOnlySpan<int> WaitForObjects(ReadOnlySpan<SynchronizationHandle> handles, Span<SynchronizationHandle> signaled) {
+        if (handles.Length > signaled.Length) {
+            ThrowHelper.ThrowArgumentException("Handles must have a length larger then signaled");
+        }
+        int numSignaled = WaitForObjects(handles, handles.Length, signaled);
+        return signaled[..numSignaled];
+    }
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_WaitForObjectsTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
