@@ -86,7 +86,12 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_GetConnections")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    public static partial ConnectionInfo[] GetConnections(NtInst inst, out nuint count);
+    internal static partial ConnectionInfo[] GetConnections(NtInst inst, out nuint count);
+
+    public static ConnectionInfo[] GetConnections(NtInst inst)
+    {
+        return GetConnections(inst, out var _);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_IsConnected")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

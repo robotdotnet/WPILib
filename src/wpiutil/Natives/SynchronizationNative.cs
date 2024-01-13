@@ -51,8 +51,10 @@ public static partial class SynchronizationNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial int WaitForObjects(ReadOnlySpan<SynchronizationHandle> handles, int handlesCount, Span<SynchronizationHandle> signaled);
 
-    public static unsafe ReadOnlySpan<int> WaitForObjects(ReadOnlySpan<SynchronizationHandle> handles, Span<SynchronizationHandle> signaled) {
-        if (handles.Length > signaled.Length) {
+    public static unsafe ReadOnlySpan<int> WaitForObjects(ReadOnlySpan<SynchronizationHandle> handles, Span<SynchronizationHandle> signaled)
+    {
+        if (handles.Length > signaled.Length)
+        {
             ThrowHelper.ThrowArgumentException("Handles must have a length larger then signaled");
         }
         int numSignaled = WaitForObjects(handles, handles.Length, signaled);

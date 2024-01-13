@@ -19,30 +19,31 @@ public sealed unsafe class DataLog : IDisposable
         }
     }
 
-    private unsafe OpaqueDataLog* dataLogHandle = null;
     private GCHandle? gcHandle = null;
-    private DataLogCallback? callback = null;
+    private readonly DataLogCallback? callback = null;
 
     public delegate void DataLogCallback(ReadOnlySpan<byte> data);
 
     public DataLog(string? dir = null, string? filename = null, double period = 0.25, string? extraHeader = null)
     {
-        dataLogHandle = DataLogNative.DataLogCreate(dir, filename, period, extraHeader);
+        NativeHandle = DataLogNative.DataLogCreate(dir, filename, period, extraHeader);
     }
 
     public DataLog(DataLogCallback callback, double period = 0.25, string? extraHeader = null)
     {
         gcHandle = GCHandle.Alloc(this);
         this.callback = callback;
-        dataLogHandle = DataLogNative.DataLogCreateFunc(&NativeDataLogCallback, (void*)GCHandle.ToIntPtr(gcHandle.Value), period, extraHeader);
+        NativeHandle = DataLogNative.DataLogCreateFunc(&NativeDataLogCallback, (void*)GCHandle.ToIntPtr(gcHandle.Value), period, extraHeader);
     }
 
     public void Dispose()
     {
-        DataLogNative.DataLogRelease(dataLogHandle);
+        DataLogNative.DataLogRelease(NativeHandle);
         if (gcHandle.HasValue)
         {
             gcHandle.Value.Free();
         }
     }
+
+    public unsafe OpaqueDataLog* NativeHandle { get; } = null;
 }

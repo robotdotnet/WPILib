@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+﻿// Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -7,9 +7,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
+using WPIUtil;
 using WPIUtil.Concurrent;
 using WPIUtil.Natives;
 
@@ -32,10 +34,10 @@ namespace NetworkTables;
  * kept to the NetworkTableInstance returned by this function to keep it from being garbage
  * collected.
  */
-public sealed partial class NetworkTableInstance : IDisposable
+public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance?>
 {
-    public static readonly int kDefaultPort3 = 1735;
-    public static readonly int kDefaultPort4 = 5810;
+    public const int KDefaultPort3 = 1735;
+    public const int KDefaultPort4 = 5810;
 
     private NetworkTableInstance() : this(NtCore.GetDefaultInstance(), false) { }
 
@@ -330,18 +332,157 @@ public sealed partial class NetworkTableInstance : IDisposable
         return m_listeners.Add(Handle, flags, listener);
     }
 
-    public NetworkMode GetNetworkMode() {
+    public NetworkMode GetNetworkMode()
+    {
         return NtCore.GetNetworkMode(Handle);
     }
 
-    public void StartLocal() {
+    public void StartLocal()
+    {
         NtCore.StartLocal(Handle);
     }
 
-    public void StopLocal() {
+    public void StopLocal()
+    {
         NtCore.StopLocal(Handle);
+    }
+
+    public void StartServer(string persistFilename = "networktables.json", string listenAddress = "", int port3 = KDefaultPort3, int port4 = KDefaultPort4)
+    {
+        NtCore.StartServer(Handle, persistFilename, listenAddress, (uint)port3, (uint)port4);
+    }
+
+    public void StopServer()
+    {
+        NtCore.StopServer(Handle);
+    }
+
+    public void StartClient3(string identity)
+    {
+        NtCore.StartClient3(Handle, identity);
+    }
+
+    public void StartClient4(string identity)
+    {
+        NtCore.StartClient4(Handle, identity);
+    }
+
+    public void SetServer(string serverName, int port = 0)
+    {
+        NtCore.SetServer(Handle, serverName, (uint)port);
+    }
+
+    public void SetServer(params string[] serverNames)
+    {
+        SetServer(serverNames, 0);
+    }
+
+    public void SetServer(ReadOnlySpan<string> serverNames, int port)
+    {
+        Span<int> ports = stackalloc int[16];
+        if (serverNames.Length > 16)
+        {
+            ports = new int[serverNames.Length];
+        }
+        else
+        {
+            ports = ports[..serverNames.Length];
+        }
+
+        ports.Fill(port);
+        SetServer(serverNames, ports);
+    }
+
+    public void SetServer(ReadOnlySpan<string> serverNames, ReadOnlySpan<int> ports)
+    {
+        NtCore.SetServerMulti(Handle, serverNames, MemoryMarshal.Cast<int, uint>(ports));
+    }
+
+    public void SetServerTeam(int team, int port = 0)
+    {
+        NtCore.SetServerTeam(Handle, (uint)team, (uint)port);
+    }
+
+    public void Disconnect()
+    {
+        NtCore.Disconnect(Handle);
+    }
+
+    public void StartDsClient(int port = 0)
+    {
+        NtCore.StartDSClient(Handle, (uint)port);
+    }
+
+    public void StopDsClient()
+    {
+        NtCore.StopDSClient(Handle);
+    }
+
+    public void FlushLLocal()
+    {
+        NtCore.FlushLocal(Handle);
+    }
+
+    public void Flush()
+    {
+        NtCore.Flush(Handle);
+    }
+
+    public ConnectionInfo[] GetConnections()
+    {
+        return NtCore.GetConnections(Handle);
+    }
+
+    public bool Connected => NtCore.IsConnected(Handle);
+
+    public long? ServerTimeOffset => NtCore.GetServerTimeOffset(Handle);
+
+    public unsafe NtDataLogger StartEntryDataLog(DataLog log, string prefix, string logPrefix)
+    {
+        return NtCore.StartEntryDataLog(Handle, log.NativeHandle, prefix, logPrefix);
+    }
+
+    public static void StopEntryDataLog(NtDataLogger logger)
+    {
+        NtCore.StopEntryDataLog(logger);
+    }
+
+    public unsafe NtConnectionDataLogger StartConnectionDataLog(DataLog log, string name)
+    {
+        return NtCore.StartConnectionDataLog(Handle, log.NativeHandle, name);
+    }
+
+    public static void StopConnectionDataLog(NtConnectionDataLogger logger)
+    {
+        NtCore.StopConnectionDataLog(logger);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as NetworkTableInstance);
+    }
+
+    public bool Equals(NetworkTableInstance? other)
+    {
+        return other is not null &&
+               Handle == other.Handle;
+    }
+
+    public override int GetHashCode()
+    {
+        return Handle.GetHashCode();
     }
 
     private readonly ConcurrentDictionary<string, Topic> m_topics = new();
     private readonly ConcurrentDictionary<NtTopic, Topic> m_topicsByHandle = new();
+
+    public static bool operator ==(NetworkTableInstance? left, NetworkTableInstance? right)
+    {
+        return EqualityComparer<NetworkTableInstance>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(NetworkTableInstance? left, NetworkTableInstance? right)
+    {
+        return !(left == right);
+    }
 }
