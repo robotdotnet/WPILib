@@ -10,6 +10,11 @@ namespace NetworkTables.Natives;
 [StructLayout(LayoutKind.Auto)]
 public record struct TopicInfo(NtTopic TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties) : INativeArrayFree<TopicInfoMarshaller.NativeTopicInfo>, INativeFree<TopicInfoMarshaller.NativeTopicInfo>
 {
+    public readonly Topic GetTopic(NetworkTableInstance inst)
+    {
+        return new Topic(inst, TopicHandle);
+    }
+
     public static unsafe void Free(TopicInfoMarshaller.NativeTopicInfo* ptr)
     {
         NtCore.DisposeTopicInfo(ptr);
