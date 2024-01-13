@@ -17,15 +17,13 @@ public interface IDoublePublisher : Publisher
 
     new DoubleTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(double value)
-    {
-        Set(value, 0);
-    }
+    void Set(double value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IDoublePublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(double value, long time);
+    void Set(long time, double value);
 
     /**
      * Publish a default value.

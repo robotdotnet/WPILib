@@ -17,15 +17,13 @@ public interface IStringPublisher : Publisher
 
     new StringTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(string value)
-    {
-        Set(value, 0);
-    }
+    void Set(string value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IStringPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(string value, long time);
+    void Set(long time, string value);
 
     /**
      * Publish a default value.

@@ -280,7 +280,7 @@ public readonly partial struct NetworkTableValue
      * @param time the creation time to use (instead of the current time)
      * @return The entry value
      */
-    public static NetworkTableValue MakeBoolean(bool value, long time)
+    public static NetworkTableValue MakeBoolean(long time, bool value)
     {
         return new NetworkTableValue(NetworkTableType.Boolean, value, time);
     }
@@ -304,7 +304,7 @@ public readonly partial struct NetworkTableValue
      * @param time the creation time to use (instead of the current time)
      * @return The entry value
      */
-    public static NetworkTableValue MakeInteger(long value, long time)
+    public static NetworkTableValue MakeInteger(long time, long value)
     {
         return new NetworkTableValue(NetworkTableType.Integer, value, time);
     }
@@ -328,7 +328,7 @@ public readonly partial struct NetworkTableValue
      * @param time the creation time to use (instead of the current time)
      * @return The entry value
      */
-    public static NetworkTableValue MakeFloat(float value, long time)
+    public static NetworkTableValue MakeFloat(long time, float value)
     {
         return new NetworkTableValue(NetworkTableType.Float, value, time);
     }
@@ -352,7 +352,7 @@ public readonly partial struct NetworkTableValue
      * @param time the creation time to use (instead of the current time)
      * @return The entry value
      */
-    public static NetworkTableValue MakeDouble(double value, long time)
+    public static NetworkTableValue MakeDouble(long time, double value)
     {
         return new NetworkTableValue(NetworkTableType.Double, value, time);
     }
@@ -376,7 +376,7 @@ public readonly partial struct NetworkTableValue
      * @param time the creation time to use (instead of the current time)
      * @return The entry value
      */
-    public static NetworkTableValue MakeString(string value, long time)
+    public static NetworkTableValue MakeString(long time, string value)
     {
         return new NetworkTableValue(NetworkTableType.String, value, time);
     }

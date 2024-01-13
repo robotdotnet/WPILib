@@ -17,15 +17,13 @@ public interface IFloatPublisher : Publisher
 
     new FloatTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(float value)
-    {
-        Set(value, 0);
-    }
+    void Set(float value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IFloatPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(float value, long time);
+    void Set(long time, float value);
 
     /**
      * Publish a default value.

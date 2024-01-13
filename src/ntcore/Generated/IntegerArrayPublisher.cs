@@ -17,15 +17,13 @@ public interface IIntegerArrayPublisher : Publisher
 
     new IntegerArrayTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(long[] value)
-    {
-        Set(value, 0);
-    }
+    void Set(params long[] value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IIntegerArrayPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long[] value, long time);
+    void Set(long time, params long[] value);
 
     /**
      * Publish a default value.
@@ -42,5 +40,5 @@ public interface IIntegerArrayPublisher : Publisher
      *
      * @param value value
      */
-    void SetDefault(long[] value);
+    void SetDefault(params long[] value);
 }

@@ -7,7 +7,6 @@ using WPIUtil.Marshal;
 namespace NetworkTables.Natives;
 
 [CustomMarshaller(typeof(NetworkTableValue), MarshalMode.ManagedToUnmanagedOut, typeof(ReturnFrom))]
-[CustomMarshaller(typeof(NetworkTableValue), MarshalMode.ManagedToUnmanagedIn, typeof(PassIn))]
 [CustomMarshaller(typeof(NetworkTableValue), MarshalMode.ElementOut, typeof(ReturnInArray))]
 public static unsafe class NetworkTableValueMarshaller
 {
@@ -21,19 +20,6 @@ public static unsafe class NetworkTableValueMarshaller
         public static void Free(NativeNetworkTableValue unmanaged)
         {
             NetworkTableValue.Free(&unmanaged);
-        }
-    }
-
-    public static class PassIn
-    {
-        public static NativeNetworkTableValue ConvertToUnmanaged(in NetworkTableValue managed)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static void Free(in NativeNetworkTableValue unmanaged)
-        {
-            throw new NotImplementedException();
         }
     }
 

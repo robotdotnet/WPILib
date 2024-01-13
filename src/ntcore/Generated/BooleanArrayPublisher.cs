@@ -17,15 +17,13 @@ public interface IBooleanArrayPublisher : Publisher
 
     new BooleanArrayTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(bool[] value)
-    {
-        Set(value, 0);
-    }
+    void Set(params bool[] value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IBooleanArrayPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(bool[] value, long time);
+    void Set(long time, params bool[] value);
 
     /**
      * Publish a default value.
@@ -42,5 +40,5 @@ public interface IBooleanArrayPublisher : Publisher
      *
      * @param value value
      */
-    void SetDefault(bool[] value);
+    void SetDefault(params bool[] value);
 }

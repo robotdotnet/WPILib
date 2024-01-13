@@ -17,15 +17,13 @@ public interface IDoubleArrayPublisher : Publisher
 
     new DoubleArrayTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(double[] value)
-    {
-        Set(value, 0);
-    }
+    void Set(params double[] value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IDoubleArrayPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(double[] value, long time);
+    void Set(long time, params double[] value);
 
     /**
      * Publish a default value.
@@ -42,5 +40,5 @@ public interface IDoubleArrayPublisher : Publisher
      *
      * @param value value
      */
-    void SetDefault(double[] value);
+    void SetDefault(params double[] value);
 }

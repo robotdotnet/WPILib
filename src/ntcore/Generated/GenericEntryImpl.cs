@@ -241,6 +241,11 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
         return NtCore.SetEntryValue(Handle, value);
     }
 
+    public bool Set(in RefNetworkTableValue value)
+    {
+        return NtCore.SetEntryValue(Handle, value);
+    }
+
     /**
      * Sets the entry's value.
      *
@@ -249,20 +254,25 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @throws IllegalArgumentException if the value is not a known type
      */
 
-    public bool SetValue<T>(T value, long time)
+    public bool SetValue<T>(T value)
+    {
+        return SetValue(0, value);
+    }
+
+    public bool SetValue<T>(long time, T value)
     {
         return value switch
         {
             NetworkTableValue v => Set(v),
-            bool v => Set(NetworkTableValue.MakeBoolean(v, time)),
-            double v => Set(NetworkTableValue.MakeDouble(v, time)),
-            float v => Set(NetworkTableValue.MakeFloat(v, time)),
-            string v => Set(NetworkTableValue.MakeString(v, time)),
-            bool[] v => Set(NetworkTableValue.MakeBooleanArray(v, time)),
-            double[] v => Set(NetworkTableValue.MakeDoubleArray(v, time)),
-            float[] v => Set(NetworkTableValue.MakeFloatArray(v, time)),
-            string[] v => Set(NetworkTableValue.MakeStringArray(v, time)),
-            byte[] v => Set(NetworkTableValue.MakeRaw(v, time)),
+            bool v => Set(NetworkTableValue.MakeBoolean(time, v)),
+            double v => Set(NetworkTableValue.MakeDouble(time, v)),
+            float v => Set(NetworkTableValue.MakeFloat(time, v)),
+            string v => Set(NetworkTableValue.MakeString(time, v)),
+            bool[] v => Set(NetworkTableValue.MakeBooleanArray(time, v)),
+            double[] v => Set(NetworkTableValue.MakeDoubleArray(time, v)),
+            float[] v => Set(NetworkTableValue.MakeFloatArray(time, v)),
+            string[] v => Set(NetworkTableValue.MakeStringArray(time, v)),
+            byte[] v => Set(NetworkTableValue.MakeRaw(time, v)),
             _ => throw new InvalidOperationException($"Value of type {value?.GetType().Name} cannot be put into a table")
         };
     }
@@ -274,9 +284,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetBoolean(bool value, long time)
+    public bool SetBoolean(bool value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeBoolean(value, time));
+        return SetBoolean(0, value);
+    }
+
+    public bool SetBoolean(long time, bool value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeBoolean(time, value));
     }
 
     /**
@@ -286,9 +301,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetInteger(long value, long time)
+    public bool SetInteger(long value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeInteger(value, time));
+        return SetInteger(0, value);
+    }
+
+    public bool SetInteger(long time, long value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeInteger(time, value));
     }
 
     /**
@@ -298,9 +318,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetFloat(float value, long time)
+    public bool SetFloat(float value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeFloat(value, time));
+        return SetFloat(0, value);
+    }
+
+    public bool SetFloat(long time, float value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeFloat(time, value));
     }
 
     /**
@@ -310,9 +335,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetDouble(double value, long time)
+    public bool SetDouble(double value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeDouble(value, time));
+        return SetDouble(0, value);
+    }
+
+    public bool SetDouble(long time, double value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeDouble(time, value));
     }
 
     /**
@@ -322,9 +352,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetString(string value, long time)
+    public bool SetString(string value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeString(value, time));
+        return SetString(0, value);
+    }
+
+    public bool SetString(long time, string value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeString(time, value));
     }
 
     /**
@@ -334,9 +369,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetRaw(byte[] value, long time)
+    public bool SetRaw(byte[] value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeRaw(value, time));
+        return SetRaw(0, value);
+    }
+
+    public bool SetRaw(long time, byte[] value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeRaw(time, value));
     }
 
     /**
@@ -346,9 +386,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetBooleanArray(bool[] value, long time)
+    public bool SetBooleanArray(bool[] value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeBooleanArray(value, time));
+        return SetBooleanArray(0, value);
+    }
+
+    public bool SetBooleanArray(long time, bool[] value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeBooleanArray(time, value));
     }
 
     /**
@@ -358,9 +403,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetIntegerArray(long[] value, long time)
+    public bool SetIntegerArray(long[] value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeIntegerArray(value, time));
+        return SetIntegerArray(0, value);
+    }
+
+    public bool SetIntegerArray(long time, long[] value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeIntegerArray(time, value));
     }
 
     /**
@@ -370,9 +420,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetFloatArray(float[] value, long time)
+    public bool SetFloatArray(float[] value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeFloatArray(value, time));
+        return SetFloatArray(0, value);
+    }
+
+    public bool SetFloatArray(long time, float[] value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeFloatArray(time, value));
     }
 
     /**
@@ -382,9 +437,14 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetDoubleArray(double[] value, long time)
+    public bool SetDoubleArray(double[] value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeDoubleArray(value, time));
+        return SetDoubleArray(0, value);
+    }
+
+    public bool SetDoubleArray(long time, double[] value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeDoubleArray(time, value));
     }
 
     /**
@@ -394,13 +454,23 @@ internal sealed class GenericEntryImpl<THandle> : EntryBase<THandle>, IGenericEn
      * @return False if the entry exists with a different type
      */
 
-    public bool SetStringArray(string[] value, long time)
+    public bool SetStringArray(string[] value)
     {
-        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeStringArray(value, time));
+        return SetStringArray(0, value);
+    }
+
+    public bool SetStringArray(long time, string[] value)
+    {
+        return NtCore.SetEntryValue(Handle, NetworkTableValue.MakeStringArray(time, value));
     }
 
 
     public bool SetDefault(in NetworkTableValue value)
+    {
+        return NtCore.SetDefaultEntryValue(Handle, value);
+    }
+
+    public bool SetDefault(in RefNetworkTableValue value)
     {
         return NtCore.SetDefaultEntryValue(Handle, value);
     }

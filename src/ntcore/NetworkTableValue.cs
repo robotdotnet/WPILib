@@ -153,11 +153,11 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
      */
     public NetworkTableType Type { get; }
 
-    private readonly object? m_objectValue;
-    private readonly ValueStorage m_structValue;
+    internal readonly object? m_objectValue;
+    internal readonly ValueStorage m_structValue;
 
     [StructLayout(LayoutKind.Explicit)]
-    private readonly struct ValueStorage
+    internal readonly struct ValueStorage
     {
         public ValueStorage(bool value)
         {

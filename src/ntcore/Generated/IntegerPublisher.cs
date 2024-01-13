@@ -17,15 +17,13 @@ public interface IIntegerPublisher : Publisher
 
     new IntegerTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(long value)
-    {
-        Set(value, 0);
-    }
+    void Set(long value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IIntegerPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long value, long time);
+    void Set(long time, long value);
 
     /**
      * Publish a default value.

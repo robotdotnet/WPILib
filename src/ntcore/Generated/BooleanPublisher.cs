@@ -17,15 +17,13 @@ public interface IBooleanPublisher : Publisher
 
     new BooleanTopic Topic { get; }
 
+
     /**
      * Publish a new value using current NT time.
      *
      * @param value value to publish
      */
-    void Set(bool value)
-    {
-        Set(value, 0);
-    }
+    void Set(bool value);
 
     /**
      * Publish a new value.
@@ -33,7 +31,7 @@ public interface IBooleanPublisher : Publisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(bool value, long time);
+    void Set(long time, bool value);
 
     /**
      * Publish a default value.
