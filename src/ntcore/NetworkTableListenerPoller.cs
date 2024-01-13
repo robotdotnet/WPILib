@@ -30,11 +30,6 @@ public sealed class NetworkTableListenerPoller(NetworkTableInstance inst) : IDis
         return NtCore.AddListener(Handle, subscriber.Handle, eventKinds);
     }
 
-    public NtListener AddListener(NetworkTableEntry entry, EventFlags eventKinds)
-    {
-        return NtCore.AddListener(Handle, entry.Handle, eventKinds);
-    }
-
     public NtListener AddConnectionListener(bool immediateNotify)
     {
         EventFlags flags = EventFlags.Connection;

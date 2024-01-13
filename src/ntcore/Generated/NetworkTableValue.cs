@@ -14,91 +14,8 @@ using WPIUtil.Marshal;
 namespace NetworkTables;
 
 /** A network table entry value. */
-[NativeMarshalling(typeof(NetworkTableValueMarshaller))]
-[StructLayout(LayoutKind.Auto)]
-public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>, INativeFree<NetworkTableValueMarshaller.NativeNetworkTableValue>
+public readonly partial struct NetworkTableValue
 {
-
-    public static unsafe void Free(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr)
-    {
-        NtCore.DisposeValue(ptr);
-    }
-
-    public static unsafe void FreeArray(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr, int len)
-    {
-        NtCore.DisposeValueArray(ptr, (nuint)len);
-    }
-
-    internal NetworkTableValue(NetworkTableType type, object? obj, long time, long serverTime)
-    {
-        Type = type;
-        Time = time;
-        ServerTime = serverTime;
-        m_objectValue = obj;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, long value) : this(type, null, NtCore.Now(), 1)
-    {
-        m_longValue = value;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, float value) : this(type, null, NtCore.Now(), 1)
-    {
-        m_floatValue = value;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, double value) : this(type, null, NtCore.Now(), 1)
-    {
-        m_doubleValue = value;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, object value) : this(type, value, NtCore.Now(), 1) { }
-
-    internal NetworkTableValue(NetworkTableType type, long value, long time) : this(type, null, NtCore.Now(), 1)
-    {
-        m_longValue = value;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, float value, long time) : this(type, null, NtCore.Now(), 1)
-    {
-        m_floatValue = value;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, double value, long time) : this(type, null, NtCore.Now(), 1)
-    {
-        m_doubleValue = value;
-    }
-
-    internal NetworkTableValue(NetworkTableType type, object value, long time) : this(type, value, time, 1)
-    {
-    }
-
-
-    /**
-     * Get the data type.
-     *
-     * @return The type.
-     */
-    public NetworkTableType Type { get; }
-
-    /**
-     * Get the data value stored.
-     *
-     * @return The type.
-     */
-    public object? Value
-    {
-        get
-        {
-            if (m_objectValue != null)
-            {
-                return m_objectValue;
-            }
-            // TODO load value
-            return null;
-        }
-    }
-
     /**
      * Get the creation time of the value in local time.
      *
@@ -218,7 +135,7 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
         {
             throw new InvalidCastException($"cannot convert {Type} to bool");
         }
-        return m_longValue != 0;
+        return m_structValue.boolValue;
     }
 
     /**
@@ -233,7 +150,7 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
         {
             throw new InvalidCastException($"cannot convert {Type} to long");
         }
-        return m_longValue;
+        return m_structValue.longValue;
     }
 
     /**
@@ -248,7 +165,7 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
         {
             throw new InvalidCastException($"cannot convert {Type} to float");
         }
-        return m_floatValue;
+        return m_structValue.floatValue;
     }
 
     /**
@@ -263,7 +180,7 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
         {
             throw new InvalidCastException($"cannot convert {Type} to double");
         }
-        return m_doubleValue;
+        return m_structValue.doubleValue;
     }
 
     /**
@@ -383,7 +300,7 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
      */
     public static NetworkTableValue MakeBoolean(bool value)
     {
-        return new NetworkTableValue(NetworkTableType.Boolean, value ? 1 : 0);
+        return new NetworkTableValue(NetworkTableType.Boolean, value);
     }
 
     /**
@@ -395,7 +312,7 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
      */
     public static NetworkTableValue MakeBoolean(bool value, long time)
     {
-        return new NetworkTableValue(NetworkTableType.Boolean, value ? 1 : 0, time);
+        return new NetworkTableValue(NetworkTableType.Boolean, value, time);
     }
 
 
@@ -637,13 +554,4 @@ public readonly struct NetworkTableValue : INativeArrayFree<NetworkTableValueMar
     {
         return new NetworkTableValue(NetworkTableType.StringArray, value, time);
     }
-
-
-
-    // TODO Generate equals
-
-    private readonly object? m_objectValue;
-    private readonly long m_longValue;
-    private readonly float m_floatValue;
-    private readonly double m_doubleValue;
 }

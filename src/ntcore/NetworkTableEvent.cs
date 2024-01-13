@@ -10,6 +10,7 @@ namespace NetworkTables;
 [NativeMarshalling(typeof(NetworkTableEventMarshaller))]
 public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>, INativeFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>
 {
+    public bool Is(EventFlags kind) => (Flags & kind) != 0;
     public required NtListener ListenerHandle { get; init; }
     public required EventFlags Flags { get; init; }
     public ConnectionInfo? ConnectionInfo { get; init; }
