@@ -75,6 +75,31 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
     {
     }
 
+    /**
+ * Get the creation time of the value in local time.
+ *
+ * @return The time, in the units returned by NtCore.Now().
+ */
+    public long Time { get; }
+
+    /**
+     * Get the creation time of the value in server time.
+     *
+     * @return The server time.
+     */
+    public long ServerTime { get; }
+
+    /*
+     * Type Checkers
+     */
+
+    /**
+     * Determine if entry value contains a value or is unassigned.
+     *
+     * @return True if the entry value contains a value.
+     */
+    public bool IsValid => Type != NetworkTableType.Unassigned;
+
     public object? Value
     {
         get
