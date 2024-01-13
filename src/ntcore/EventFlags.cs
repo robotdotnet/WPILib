@@ -3,7 +3,7 @@
 namespace NetworkTables;
 
 [Flags]
-public enum EventFlags
+public enum EventFlags : uint
 {
     None = 0,
     Immediate = 0x1,

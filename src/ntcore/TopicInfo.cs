@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using NetworkTables.Handles;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
 [NativeMarshalling(typeof(TopicInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct TopicInfo(int TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties) : INativeArrayFree<TopicInfoMarshaller.NativeTopicInfo>, INativeFree<TopicInfoMarshaller.NativeTopicInfo>
+public record struct TopicInfo(NtTopic TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties) : INativeArrayFree<TopicInfoMarshaller.NativeTopicInfo>, INativeFree<TopicInfoMarshaller.NativeTopicInfo>
 {
-    public static TopicInfo Empty { get; } = new(0, "", NetworkTableType.Unassigned, "", "");
-
     public static unsafe void Free(TopicInfoMarshaller.NativeTopicInfo* ptr)
     {
         NtCore.DisposeTopicInfo(ptr);
@@ -45,7 +44,7 @@ public static unsafe class TopicInfoMarshaller
         {
             return new TopicInfo
             {
-                TopicHandle = unmanaged.topic,
+                TopicHandle = new NtTopic(unmanaged.topic),
                 Name = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.name) ?? "",
                 Type = unmanaged.type,
                 TypeStr = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.typeStr) ?? "",

@@ -169,11 +169,11 @@ public static partial class NtCore
     [return: MarshalAs(UnmanagedType.I4)]
     public static unsafe partial bool GetTopicInfo(NtTopic topic, TopicInfoMarshaller.NativeTopicInfo* info);
 
-    public static unsafe TopicInfo GetTopicInfo(NtTopic topic)
+    public static unsafe TopicInfo? GetTopicInfo(NtTopic topic)
     {
         TopicInfoMarshaller.NativeTopicInfo tmp = default;
         bool isValid = GetTopicInfo(topic, &tmp);
-        return isValid ? TopicInfoMarshaller.ReturnFrom.ConvertToManaged(tmp) : TopicInfo.Empty;
+        return isValid ? TopicInfoMarshaller.ReturnFrom.ConvertToManaged(tmp) : null;
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopic")]

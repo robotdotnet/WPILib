@@ -24,7 +24,7 @@ public class Topic
 
     public string TypeString => NtCore.GetTopicTypeString(Handle);
 
-    public TopicInfo Info => NtCore.GetTopicInfo(Handle);
+    public TopicInfo? Info => NtCore.GetTopicInfo(Handle);
 
     public bool Persistent
     {

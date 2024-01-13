@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Marshal;
 
@@ -9,13 +10,13 @@ namespace NetworkTables;
 [NativeMarshalling(typeof(NetworkTableEventMarshaller))]
 public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>, INativeFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>
 {
-    public int ListenerHandle { get; }
-    public EventFlags Flags { get; }
-    public ConnectionInfo? ConnectionInfo { get; }
-    public TopicInfo? TopicInfo { get; }
-    public ValueEventData? ValueData { get; }
-    public LogMessage? LogMessage { get; }
-    public TimeSyncEventData? TimeSyncData { get; }
+    public required NtListener ListenerHandle { get; init; }
+    public required EventFlags Flags { get; init; }
+    public ConnectionInfo? ConnectionInfo { get; init; }
+    public TopicInfo? TopicInfo { get; init; }
+    public ValueEventData? ValueData { get; init; }
+    public LogMessage? LogMessage { get; init; }
+    public TimeSyncEventData? TimeSyncData { get; init; }
 
     public static unsafe void Free(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr)
     {
@@ -35,7 +36,59 @@ public static unsafe class NetworkTableEventMarshaller
     {
         public static NetworkTableEvent ConvertToManaged(in NativeNetworkTableEvent unmanaged)
         {
-            throw new NotImplementedException();
+            if ((unmanaged.flags & EventFlags.Connection) != 0)
+            {
+                return new NetworkTableEvent
+                {
+                    ListenerHandle = new NtListener(unmanaged.listener),
+                    Flags = unmanaged.flags,
+                    ConnectionInfo = ConnectionInfoMarshaller.ReturnInArray.ConvertToManaged(unmanaged.data.connInfo),
+                };
+            }
+            else if ((unmanaged.flags & EventFlags.LogMessage) != 0)
+            {
+                return new NetworkTableEvent
+                {
+                    ListenerHandle = new NtListener(unmanaged.listener),
+                    Flags = unmanaged.flags,
+                    LogMessage = LogMessageMarshaller.ConvertToManaged(unmanaged.data.logMessage),
+                };
+            }
+            else if ((unmanaged.flags & EventFlags.Topic) != 0)
+            {
+                return new NetworkTableEvent
+                {
+                    ListenerHandle = new NtListener(unmanaged.listener),
+                    Flags = unmanaged.flags,
+                    TopicInfo = TopicInfoMarshaller.ReturnInArray.ConvertToManaged(unmanaged.data.topicInfo),
+                };
+            }
+            else if ((unmanaged.flags & EventFlags.ValueAll) != 0)
+            {
+                return new NetworkTableEvent
+                {
+                    ListenerHandle = new NtListener(unmanaged.listener),
+                    Flags = unmanaged.flags,
+                    ValueData = ValueEventDataMarshaller.ConvertToManaged(unmanaged.data.valueData),
+                };
+            }
+            else if ((unmanaged.flags & EventFlags.TimeSync) != 0)
+            {
+                return new NetworkTableEvent
+                {
+                    ListenerHandle = new NtListener(unmanaged.listener),
+                    Flags = unmanaged.flags,
+                    TimeSyncData = TimeSyncEventDataMarshaller.ConvertToManaged(unmanaged.data.timeSyncData),
+                };
+            }
+            else
+            {
+                return new NetworkTableEvent
+                {
+                    ListenerHandle = new NtListener(unmanaged.listener),
+                    Flags = unmanaged.flags,
+                };
+            }
         }
 
         public static NativeNetworkTableEvent ConvertToUnmanaged(in NetworkTableEvent managed)
@@ -48,7 +101,7 @@ public static unsafe class NetworkTableEventMarshaller
     public struct NativeNetworkTableEvent
     {
         public int listener;
-        public uint flags;
+        public EventFlags flags;
         public NtEventUnion data;
 
         [StructLayout(LayoutKind.Explicit)]
