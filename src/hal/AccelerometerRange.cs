@@ -2,7 +2,7 @@
 
 public enum AccelerometerRange : int
 {
-    K2G = 0,
-    K4G = 1,
-    K8G = 2,
+    Range2G = 0,
+    Range4G = 1,
+    Range8G = 2,
 }

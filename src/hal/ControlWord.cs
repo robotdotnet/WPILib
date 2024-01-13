@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIHal;
@@ -12,17 +13,55 @@ public static class ControlWordMarshaller
 {
     public static NativeControlWord ConvertToUnmanaged(ControlWord managed)
     {
-        throw new System.NotImplementedException();
+        NativeControlWord ret = default;
+        if (managed.Enabled)
+        {
+            ret |= NativeControlWord.Enabled;
+        }
+        if (managed.Autonomous)
+        {
+            ret |= NativeControlWord.Autonomous;
+        }
+        if (managed.Test)
+        {
+            ret |= NativeControlWord.Test;
+        }
+        if (managed.EStop)
+        {
+            ret |= NativeControlWord.EStop;
+        }
+        if (managed.FmsAttached)
+        {
+            ret |= NativeControlWord.FmsArrached;
+        }
+        if (managed.DsAttached)
+        {
+            ret |= NativeControlWord.DsAttached;
+        }
+        return ret;
     }
 
     public static ControlWord ConvertToManaged(NativeControlWord unmanaged)
     {
-        throw new System.NotImplementedException();
+        return new ControlWord
+        {
+            Enabled = unmanaged.HasFlag(NativeControlWord.Enabled),
+            Autonomous = unmanaged.HasFlag(NativeControlWord.Autonomous),
+            Test = unmanaged.HasFlag(NativeControlWord.Test),
+            EStop = unmanaged.HasFlag(NativeControlWord.EStop),
+            FmsAttached = unmanaged.HasFlag(NativeControlWord.FmsArrached),
+            DsAttached = unmanaged.HasFlag(NativeControlWord.DsAttached),
+        };
     }
 
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NativeControlWord
+    [Flags]
+    public enum NativeControlWord : uint
     {
-        public uint word;
+        Enabled = 0x1,
+        Autonomous = 0x2,
+        Test = 0x4,
+        EStop = 0x8,
+        FmsArrached = 0x10,
+        DsAttached = 0x20,
     }
 }
