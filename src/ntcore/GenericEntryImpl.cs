@@ -36,12 +36,6 @@ internal sealed partial class GenericEntryImpl<THandle> : EntryBase<THandle>, IG
         return NtCore.ReadQueueValue(Handle);
     }
 
-
-    public bool Set(in NetworkTableValue value)
-    {
-        return NtCore.SetEntryValue(Handle, value);
-    }
-
     public bool Set(in RefNetworkTableValue value)
     {
         return NtCore.SetEntryValue(Handle, value);
@@ -76,11 +70,6 @@ internal sealed partial class GenericEntryImpl<THandle> : EntryBase<THandle>, IG
             byte[] v => Set(RefNetworkTableValue.MakeRaw(time, v)),
             _ => throw new InvalidOperationException($"Value of type {value?.GetType().Name} cannot be put into a table")
         };
-    }
-
-    public bool SetDefault(in NetworkTableValue value)
-    {
-        return NtCore.SetDefaultEntryValue(Handle, value);
     }
 
     public bool SetDefault(in RefNetworkTableValue value)

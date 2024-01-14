@@ -9,14 +9,6 @@ namespace NetworkTables;
 /** NetworkTables generic publisher. */
 public partial interface IGenericPublisher : Publisher
 {
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @return False if the topic already exists with a different type
-     */
-    bool Set(in NetworkTableValue value);
-
     bool Set(in RefNetworkTableValue value);
 
     /**
@@ -31,13 +23,6 @@ public partial interface IGenericPublisher : Publisher
 
     bool SetValue<T>(T value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-    bool SetDefault(in NetworkTableValue defaultValue);
     bool SetDefault(in RefNetworkTableValue defaultValue);
 
     /**

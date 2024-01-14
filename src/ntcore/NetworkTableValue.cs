@@ -188,4 +188,23 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
         [FieldOffset(0)]
         public readonly double doubleValue;
     }
+
+    public static implicit operator RefNetworkTableValue(in NetworkTableValue value)
+    {
+        return value.Type switch
+        {
+            NetworkTableType.Boolean => RefNetworkTableValue.MakeBoolean(value.Time, value.m_structValue.boolValue),
+            NetworkTableType.Double => RefNetworkTableValue.MakeDouble(value.Time, value.m_structValue.doubleValue),
+            NetworkTableType.String => RefNetworkTableValue.MakeString(value.Time, (string)value.m_objectValue!),
+            NetworkTableType.Raw => RefNetworkTableValue.MakeRaw(value.Time, (byte[])value.m_objectValue!),
+            NetworkTableType.BooleanArray => RefNetworkTableValue.MakeBooleanArray(value.Time, (bool[])value.m_objectValue!),
+            NetworkTableType.DoubleArray => RefNetworkTableValue.MakeDoubleArray(value.Time, (double[])value.m_objectValue!),
+            NetworkTableType.StringArray => RefNetworkTableValue.MakeStringArray(value.Time, (string[])value.m_objectValue!),
+            NetworkTableType.Integer => RefNetworkTableValue.MakeInteger(value.Time, value.m_structValue.longValue),
+            NetworkTableType.Float => RefNetworkTableValue.MakeFloat(value.Time, value.m_structValue.floatValue),
+            NetworkTableType.IntegerArray => RefNetworkTableValue.MakeIntegerArray(value.Time, (long[])value.m_objectValue!),
+            NetworkTableType.FloatArray => RefNetworkTableValue.MakeFloatArray(value.Time, (float[])value.m_objectValue!),
+            _ => RefNetworkTableValue.MakeUnassigned(value.Time),
+        };
+    }
 }
