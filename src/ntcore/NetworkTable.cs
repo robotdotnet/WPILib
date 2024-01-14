@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-public sealed class NetworkTable
+public sealed class NetworkTable : IEquatable<NetworkTable?>
 {
     public const char PATH_SEPARATOR = '/';
-
-    private readonly string m_path;
     private readonly string m_pathWithSep;
 
     public static ReadOnlySpan<char> BasenameKey(ReadOnlySpan<char> key)
@@ -53,7 +53,7 @@ public sealed class NetworkTable
 
     internal NetworkTable(NetworkTableInstance inst, string path)
     {
-        m_path = path;
+        Path = path;
         m_pathWithSep = $"{path}{PATH_SEPARATOR}";
         Instance = inst;
     }
@@ -62,7 +62,7 @@ public sealed class NetworkTable
 
     public override string ToString()
     {
-        return $"NetworkTable: {m_path}";
+        return $"NetworkTable: {Path}";
     }
 
     public Topic GetTopic(string name)
@@ -89,7 +89,7 @@ public sealed class NetworkTable
     public List<TopicInfo> GetTopicInfo(NetworkTableType types = NetworkTableType.Unassigned)
     {
         List<TopicInfo> infos = [];
-        int prefixLen = m_path.Length + 1;
+        int prefixLen = Path.Length + 1;
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
@@ -105,7 +105,7 @@ public sealed class NetworkTable
     public List<Topic> GetTopics(NetworkTableType types = NetworkTableType.Unassigned)
     {
         List<Topic> topics = [];
-        int prefixLen = m_path.Length + 1;
+        int prefixLen = Path.Length + 1;
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
@@ -121,7 +121,7 @@ public sealed class NetworkTable
     public HashSet<string> GetKeys(NetworkTableType types = NetworkTableType.Unassigned)
     {
         HashSet<string> keys = [];
-        int prefixLen = m_path.Length + 1;
+        int prefixLen = Path.Length + 1;
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
@@ -132,5 +132,88 @@ public sealed class NetworkTable
             keys.Add(relativeKey.ToString());
         }
         return keys;
+    }
+
+    public HashSet<string> GetSubTables(NetworkTableType types = NetworkTableType.Unassigned)
+    {
+        HashSet<string> keys = [];
+        int prefixLen = Path.Length + 1;
+        foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
+        {
+            ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
+            int endSubTable = relativeKey.IndexOf(PATH_SEPARATOR);
+            if (endSubTable == -1)
+            {
+                continue;
+            }
+            keys.Add(relativeKey[..endSubTable].ToString());
+        }
+        return keys;
+    }
+
+    private readonly ConcurrentDictionary<string, IGenericEntry> m_entries = [];
+
+    public IGenericEntry GetEntry(string key)
+    {
+        IGenericEntry entry = m_entries.GetOrAdd(key, n =>
+                {
+                    Topic topic = GetTopic(n);
+                    return topic.GetGenericEntry(default);
+                });
+        return entry;
+    }
+
+    public bool PutValue(string key, in RefNetworkTableValue value)
+    {
+        return GetEntry(key).Set(value);
+    }
+
+    public bool SetDefaultValue(string key, in RefNetworkTableValue defaultValue)
+    {
+        return GetEntry(key).SetDefault(defaultValue);
+    }
+
+    public NetworkTableValue GetValue(string key)
+    {
+        return GetEntry(key).Get();
+    }
+
+    public string Path { get; }
+
+    // public NtListener AddListener(EventFlags kinds, Action<NetworkTable, string, NetworkTableEvent> listener) {
+    //     int prefixLex = Path.Length + 1;
+    //     return Instance.Add
+    // }
+
+    public void RemoveListener(NtListener listener)
+    {
+        Instance.RemoveListener(listener);
+    }
+
+
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as NetworkTable);
+    }
+
+    public bool Equals(NetworkTable? other)
+    {
+        return other is not null &&
+               Instance == other.Instance && Path == other.Path;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Instance, Path);
+    }
+
+    public static bool operator ==(NetworkTable? left, NetworkTable? right)
+    {
+        return EqualityComparer<NetworkTable>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(NetworkTable? left, NetworkTable? right)
+    {
+        return !(left == right);
     }
 }
