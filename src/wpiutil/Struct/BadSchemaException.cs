@@ -1,6 +1,6 @@
 using System;
 
-namespace WPIUtil.Struct;
+namespace WPIUtil;
 
 public class BadSchemaException : Exception {
     public string Property {get;}

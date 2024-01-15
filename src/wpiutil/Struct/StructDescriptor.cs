@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WPIUtil.Struct;
+namespace WPIUtil;
 
 public class StructPropertyDescriptor {
     public int Offset {get; internal set;}

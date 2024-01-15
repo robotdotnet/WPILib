@@ -1,4 +1,4 @@
-namespace WPIUtil.Struct;
+namespace WPIUtil;
 
 public enum StructPropertyType {
     Bool,

@@ -2,7 +2,7 @@ using System;
 using System.Buffers.Binary;
 using CommunityToolkit.Diagnostics;
 
-namespace WPIUtil.Struct;
+namespace WPIUtil;
 
 public class DynamicStruct {
     private Memory<byte>? m_writable;

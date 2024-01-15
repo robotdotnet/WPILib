@@ -3,4 +3,4 @@
 /// <summary>
 /// Marker interface to indicate a class is serializable using WPI serialization methods.
 /// </summary>
-public interface IWPISerializable { }
+public interface IWPISerializable<T> { }
