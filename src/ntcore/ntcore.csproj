@@ -5,6 +5,7 @@
     <RootNamespace>NetworkTables</RootNamespace>
     <AssemblyName>FRC.NetworkTables</AssemblyName>
     <NoWarn>1591;CA1401;1570</NoWarn>
+    <PublishAot>true</PublishAot>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
