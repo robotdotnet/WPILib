@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\hal\hal.csproj" />
     <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
