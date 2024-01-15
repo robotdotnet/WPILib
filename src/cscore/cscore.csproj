@@ -6,7 +6,6 @@
     <AssemblyName>FRC.CsCore</AssemblyName>
     <NoWarn>1591;CA1401;1570</NoWarn>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <PublishAot>true</PublishAot>
     <AnalysisLevel>latest</AnalysisLevel>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>

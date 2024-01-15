@@ -4,7 +4,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>WPILibSharp.NewCommands</AssemblyName>
     <RootNamespace>WPILib2.Commands</RootNamespace>
-    <PublishAot>true</PublishAot>
   </PropertyGroup>
 
   <ItemGroup>
