@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>NetworkTables</RootNamespace>
     <AssemblyName>FRC.NetworkTables</AssemblyName>
     <NoWarn>1591;CA1401;1570</NoWarn>
