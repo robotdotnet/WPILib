@@ -4,20 +4,25 @@ using WPIUtil.Serialization;
 
 namespace WPIUtil.Logging;
 
-public sealed class StructArrayLogEntry<T> : DataLogEntry
+public sealed class StructArrayLogEntry<T> : DataLogEntry where T : IStructSerializable<T>
 {
     private StructBuffer<T> m_storage;
     private readonly object m_lockObject = new();
 
-    private StructArrayLogEntry(DataLog log, string name, Struct<T> value, string metadata, long timestamp) : base(log, name, $"{value.TypeString}[]", metadata, timestamp)
+    private StructArrayLogEntry(DataLog log, string name, IStruct<T> value, string metadata, long timestamp) : base(log, name, $"{value.TypeString}[]", metadata, timestamp)
     {
         m_storage = StructBuffer<T>.Create(value);
         log.AddSchema(value, timestamp);
     }
 
-    public StructArrayLogEntry<T> Create(DataLog log, string name, Struct<T> value, string metadata = "", long timestamp = 0)
+    public StructArrayLogEntry<T> Create(DataLog log, string name, IStruct<T> value, string metadata = "", long timestamp = 0)
     {
         return new StructArrayLogEntry<T>(log, name, value, metadata, timestamp);
+    }
+
+    public StructArrayLogEntry<T> Create(DataLog log, string name, string metadata = "", long timestamp = 0)
+    {
+        return new StructArrayLogEntry<T>(log, name, T.Struct, metadata, timestamp);
     }
 
     public void Reserve(int nelem)

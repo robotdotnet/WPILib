@@ -1,17 +1,20 @@
-﻿using System;
-using System.Buffers;
+﻿namespace WPIUtil.Serialization;
 
-namespace WPIUtil.Serialization;
-
-public interface Struct<T>
+public interface IStructBase
 {
+    public const int SizeBool = 1;
+    public const int SizeDouble = 8;
+
     string TypeString { get; }
     int Size { get; }
     string Schema { get; }
 
-    Struct<object>[] Nested => [];
+    IStructBase[] Nested => [];
+}
 
-    T Unpack(ref SequenceReader<byte> buffer);
+public interface IStruct<T> : IStructBase
+{
+    T Unpack(ref StructUnpacker buffer);
 
-    ReadOnlySpan<byte> Pack(Span<byte> buffer, T value);
+    void Pack(ref StructPacker buffer, T value);
 }

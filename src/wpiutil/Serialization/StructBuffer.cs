@@ -8,16 +8,16 @@ public struct StructBuffer<T>
     private readonly int m_structSize;
     private byte[] m_buf;
 
-    private StructBuffer(Struct<T> value)
+    private StructBuffer(IStruct<T> value)
     {
         m_structSize = value.Size;
         m_buf = new byte[m_structSize];
         Struct = value;
     }
 
-    public static StructBuffer<T> Create(Struct<T> value) => new(value);
+    public static StructBuffer<T> Create(IStruct<T> value) => new(value);
 
-    public Struct<T> Struct { get; }
+    public IStruct<T> Struct { get; }
 
     public readonly string TypeString => Struct.TypeString;
 
@@ -29,7 +29,12 @@ public struct StructBuffer<T>
         }
     }
 
-    public readonly ReadOnlySpan<byte> Write(T value) => Struct.Pack(m_buf, value);
+    public readonly ReadOnlySpan<byte> Write(T value)
+    {
+        StructPacker packer = new(m_buf);
+        Struct.Pack(ref packer, value);
+        return packer.Filled;
+    }
 
     public ReadOnlySpan<byte> WriteArray(ReadOnlySpan<T> values)
     {
@@ -37,12 +42,11 @@ public struct StructBuffer<T>
         {
             m_buf = new byte[values.Length * m_structSize];
         }
-        Span<byte> buf = m_buf;
-        int writeLength = 0;
+        StructPacker packer = new(m_buf);
         foreach (T v in values)
         {
-            writeLength += Struct.Pack(buf[writeLength..], v).Length;
+            Struct.Pack(ref packer, v);
         }
-        return m_buf.AsSpan()[..writeLength];
+        return packer.Filled;
     }
 }

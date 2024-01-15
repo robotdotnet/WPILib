@@ -1,6 +1,8 @@
 ﻿global using EntryHandle = int;
 
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WPIUtil.Handles;
@@ -67,10 +69,46 @@ public sealed unsafe class DataLog : IDisposable
         DataLogNative.DataLogAppend(NativeHandle, entry, data, (ulong)timestamp);
     }
 
-    public void AddSchema<T>(Struct<T> value, long timestamp = 0)
+    public void AddSchema<T>(IStruct<T> value, long timestamp = 0)
     {
         throw new NotImplementedException();
     }
+
+    public bool HasSchema(string name)
+    {
+        return m_schemaMap.ContainsKey(name);
+    }
+
+    public void AddSchema(string name, string type, string schema, long timestamp = 0)
+    {
+        if (!m_schemaMap.TryAdd(name, 1))
+        {
+            return;
+        }
+        // TODO add schema functions
+        // DataLogNative
+    }
+
+    private void AddSchemaImpl(IStructBase value, long timestamp, HashSet<string> seen)
+    {
+        string typeString = value.TypeString;
+        if (HasSchema(typeString))
+        {
+            return;
+        }
+        if (!seen.Add(typeString))
+        {
+            throw new InvalidOperationException($"{typeString}: circular reference with {seen}");
+        }
+        AddSchema(typeString, "structschema", value.Schema, timestamp);
+        foreach (var inner in value.Nested)
+        {
+            AddSchemaImpl(inner, timestamp, seen);
+        }
+        seen.Remove(typeString);
+    }
+
+    private readonly ConcurrentDictionary<string, int> m_schemaMap = [];
 
     public unsafe OpaqueDataLog* NativeHandle { get; } = null;
 }
