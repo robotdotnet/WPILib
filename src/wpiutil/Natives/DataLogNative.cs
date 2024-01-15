@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Handles;
 using WPIUtil.Marshal;
 
 namespace WPIUtil.Natives;
@@ -54,61 +55,66 @@ public static partial class DataLogNative
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Start", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial EntryHandle DataLogStart(OpaqueDataLog* datalog, string name, string type, string metadata, ulong timestamp);
+    public static unsafe partial DataLogEntryHandle DataLogStart(OpaqueDataLog* datalog, string name, string type, string metadata, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Finish")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogFinish(OpaqueDataLog* datalog, EntryHandle entry, ulong timestamp);
+    public static unsafe partial void DataLogFinish(OpaqueDataLog* datalog, DataLogEntryHandle entry, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_SetMetadata", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogSetMetadata(OpaqueDataLog* datalog, EntryHandle entry, string metadata, ulong timestamp);
+    public static unsafe partial void DataLogSetMetadata(OpaqueDataLog* datalog, DataLogEntryHandle entry, string metadata, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendRaw")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, ReadOnlySpan<byte> raw, nuint len, ulong timestamp);
+    internal static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, ReadOnlySpan<byte> raw, nuint len, ulong timestamp);
+
+    public static unsafe void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, ReadOnlySpan<byte> raw, ulong timestamp)
+    {
+        DataLogAppend(datalog, entry, raw, (nuint)raw.Length, timestamp);
+    }
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendBoolean")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, [MarshalAs(UnmanagedType.I4)] bool value, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, [MarshalAs(UnmanagedType.I4)] bool value, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendInteger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, long value, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, long value, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendFloat")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, float value, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, float value, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendDouble")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, double value, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, double value, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, byte* value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, byte* value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendString")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppendStringSpan(OpaqueDataLog* datalog, EntryHandle entry, ReadOnlySpan<byte> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppendStringSpan(OpaqueDataLog* datalog, DataLogEntryHandle entry, ReadOnlySpan<byte> value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendBooleanArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, [MarshalUsing(typeof(BoolToIntMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<bool> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, [MarshalUsing(typeof(BoolToIntMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<bool> value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendIntegerArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, ReadOnlySpan<long> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, ReadOnlySpan<long> value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendFloatArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, ReadOnlySpan<float> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, ReadOnlySpan<float> value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendDoubleArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, ReadOnlySpan<double> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, ReadOnlySpan<double> value, nuint len, ulong timestamp);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_AppendStringArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, EntryHandle entry, [MarshalUsing(typeof(StringLengthPairMarshaller<DataLogString>), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value, nuint len, ulong timestamp);
+    public static unsafe partial void DataLogAppend(OpaqueDataLog* datalog, DataLogEntryHandle entry, [MarshalUsing(typeof(StringLengthPairMarshaller<DataLogString>), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value, nuint len, ulong timestamp);
 }

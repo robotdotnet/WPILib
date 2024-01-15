@@ -3,7 +3,9 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using WPIUtil.Handles;
 using WPIUtil.Natives;
+using WPIUtil.Serialization;
 
 namespace WPIUtil;
 
@@ -43,6 +45,31 @@ public sealed unsafe class DataLog : IDisposable
         {
             gcHandle.Value.Free();
         }
+    }
+
+    public DataLogEntryHandle Start(string name, string type, string metadata = "", long timestamp = 0)
+    {
+        return DataLogNative.DataLogStart(NativeHandle, name, type, metadata, (ulong)timestamp);
+    }
+
+    public void SetMetadata(DataLogEntryHandle entry, string metadata, long timestamp = 0)
+    {
+        DataLogNative.DataLogSetMetadata(NativeHandle, entry, metadata, (ulong)timestamp);
+    }
+
+    public void Finish(DataLogEntryHandle entry, long timestamp = 0)
+    {
+        DataLogNative.DataLogFinish(NativeHandle, entry, (ulong)timestamp);
+    }
+
+    public void AppendRaw(DataLogEntryHandle entry, ReadOnlySpan<byte> data, long timestamp = 0)
+    {
+        DataLogNative.DataLogAppend(NativeHandle, entry, data, (ulong)timestamp);
+    }
+
+    public void AddSchema<T>(Struct<T> value, long timestamp = 0)
+    {
+        throw new NotImplementedException();
     }
 
     public unsafe OpaqueDataLog* NativeHandle { get; } = null;
