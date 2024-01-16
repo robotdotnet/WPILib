@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>WPIMath</RootNamespace>
+    <AssemblyName>FRC.WPIMath</AssemblyName>
+    <NoWarn>1591;CA1401</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>
