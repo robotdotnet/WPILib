@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WPIUtil.Handles;
 using WPIUtil.Natives;
+using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
 
 namespace WPIUtil;
@@ -69,7 +70,12 @@ public sealed unsafe class DataLog : IDisposable
         DataLogNative.DataLogAppend(NativeHandle, entry, data, (ulong)timestamp);
     }
 
-    public void AddSchema<T>(IStruct<T> value, long timestamp = 0)
+    public void AddSchema(IStructBase value, long timestamp = 0)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AddSchema(IProtobufBase value, long timestamp = 0)
     {
         throw new NotImplementedException();
     }
