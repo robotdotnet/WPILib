@@ -1,5 +1,4 @@
-﻿using System;
-using WPIUtil.Serialization.Struct;
+﻿using WPIUtil.Serialization.Struct;
 
 namespace WPIUtil.Logging;
 

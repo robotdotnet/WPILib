@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using WPIUtil.Serialization.Struct;
 
 namespace WPIUtil.Logging;
@@ -11,7 +10,7 @@ public sealed class StructArrayLogEntry<T> : DataLogEntry where T : IStructSeria
 
     private StructArrayLogEntry(DataLog log, string name, IStruct<T> value, string metadata, long timestamp) : base(log, name, $"{value.TypeString}[]", metadata, timestamp)
     {
-        m_storage = StructBuffer<T>.Create(value);
+        m_storage = new();
         log.AddSchema(value, timestamp);
     }
 

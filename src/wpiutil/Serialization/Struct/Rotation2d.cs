@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using System.Text.Json.Serialization;
-using Google.Protobuf;
 using Google.Protobuf.Reflection;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToAngle;

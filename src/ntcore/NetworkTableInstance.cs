@@ -9,7 +9,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
-using Google.Protobuf;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIMath.Geometry;

@@ -1,6 +1,4 @@
-﻿global using EntryHandle = int;
-
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

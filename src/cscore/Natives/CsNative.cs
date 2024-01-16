@@ -391,7 +391,7 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryElapsedTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial double CS_GetTelemetryElapsedTime();
+    public static partial double GetTelemetryElapsedTime();
 
     [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

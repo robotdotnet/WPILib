@@ -1,5 +1,4 @@
-﻿using System;
-using NetworkTables.Handles;
+﻿using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;

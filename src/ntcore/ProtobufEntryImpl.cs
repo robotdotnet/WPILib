@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Buffers;
-using System.Reflection.Metadata;
-using Google.Protobuf;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Serialization.Protobuf;

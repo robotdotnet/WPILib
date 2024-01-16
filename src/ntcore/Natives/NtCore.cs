@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using NetworkTables.Handles;
-using WPIUtil.Handles;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;

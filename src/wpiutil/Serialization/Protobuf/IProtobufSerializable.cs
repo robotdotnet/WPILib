@@ -1,6 +1,4 @@
-﻿using Google.Protobuf;
-
-namespace WPIUtil.Serialization.Protobuf;
+﻿namespace WPIUtil.Serialization.Protobuf;
 
 public interface IProtobufSerializable<T> : IWPISerializable<T>
 {

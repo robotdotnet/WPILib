@@ -1,5 +1,4 @@
-﻿using Google.Protobuf;
-using WPIUtil.Serialization.Protobuf;
+﻿using WPIUtil.Serialization.Protobuf;
 
 namespace NetworkTables;
 
