@@ -9,11 +9,14 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Google.Protobuf;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
+using WPIMath.Geometry;
 using WPIUtil;
 using WPIUtil.Concurrent;
 using WPIUtil.Natives;
+using WPIUtil.Serialization.Protobuf;
 
 namespace NetworkTables;
 
@@ -484,5 +487,17 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
     public static bool operator !=(NetworkTableInstance? left, NetworkTableInstance? right)
     {
         return !(left == right);
+    }
+
+    public void AddSchema(IProtobufBase proto)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ProtobufTopic<T> GetProtobufTopic<T>(string name) where T : IProtobufSerializable<T>
+    {
+
+        GetProtobufTopic<Rotation2d>("Hello");
+        throw new NotImplementedException();
     }
 }

@@ -3,8 +3,7 @@ using Google.Protobuf;
 
 namespace WPIUtil.Serialization.Protobuf;
 
-public struct ProtobufBuffer<T, MessageType> where MessageType : IMessage
-                                                   where T : IProtobufSerializable<T, MessageType>
+public struct ProtobufBuffer<T> where T : IProtobufSerializable<T>
 {
     public ProtobufBuffer()
     {
@@ -12,7 +11,7 @@ public struct ProtobufBuffer<T, MessageType> where MessageType : IMessage
         m_msg = Proto.CreateMessage();
     }
 
-    public IProtobuf<T, MessageType> Proto { get; }
+    public IProtobuf<T> Proto { get; }
 
     public readonly string TypeString => Proto.TypeString;
 
@@ -40,6 +39,6 @@ public struct ProtobufBuffer<T, MessageType> where MessageType : IMessage
         Proto.UnpackInto(ref output, m_msg);
     }
 
-    private readonly MessageType m_msg;
+    private readonly IMessage m_msg;
     private byte[] m_buf = new byte[1024];
 }

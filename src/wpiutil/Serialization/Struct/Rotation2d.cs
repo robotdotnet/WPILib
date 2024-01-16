@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using System.Text.Json.Serialization;
+using Google.Protobuf;
 using Google.Protobuf.Reflection;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToAngle;
@@ -50,7 +51,7 @@ public class Rotation2dStruct : IStruct<Rotation2d>
 }
 
 public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
-                                    IProtobufSerializable<Rotation2d, ProtobufRotation2d>,
+                                    IProtobufSerializable<Rotation2d>,
                                     IAdditionOperators<Rotation2d, Rotation2d, Rotation2d>,
                                     ISubtractionOperators<Rotation2d, Rotation2d, Rotation2d>,
                                     IUnaryNegationOperators<Rotation2d, Rotation2d>,
@@ -60,7 +61,7 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
                                     IEquatable<Rotation2d>
 {
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
-    public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto { get; } = new Rotation2dProto();
+    public static IProtobuf<Rotation2d> Proto { get; } = new Rotation2dProto();
 
     public Rotation2d()
     {

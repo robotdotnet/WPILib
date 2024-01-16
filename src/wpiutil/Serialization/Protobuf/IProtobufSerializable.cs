@@ -2,7 +2,7 @@
 
 namespace WPIUtil.Serialization.Protobuf;
 
-public interface IProtobufSerializable<T, MessageType> : IWPISerializable<T> where MessageType : IMessage
+public interface IProtobufSerializable<T> : IWPISerializable<T>
 {
-    public static abstract IProtobuf<T, MessageType> Proto { get; }
+    public static abstract IProtobuf<T> Proto { get; }
 }
