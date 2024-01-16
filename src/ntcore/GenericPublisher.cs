@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables generic publisher. */
-public partial interface IGenericPublisher : Publisher
+public partial interface IGenericPublisher : IPublisher
 {
     bool Set(in RefNetworkTableValue value);
 

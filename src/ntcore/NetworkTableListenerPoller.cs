@@ -20,7 +20,7 @@ public sealed class NetworkTableListenerPoller(NetworkTableInstance inst) : IDis
         return NtCore.AddListener(Handle, topic.Handle, eventKinds);
     }
 
-    public NtListener AddListener(Subscriber subscriber, EventFlags eventKinds)
+    public NtListener AddListener(ISubscriber subscriber, EventFlags eventKinds)
     {
         return NtCore.AddListener(Handle, subscriber.Handle, eventKinds);
     }

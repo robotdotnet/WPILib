@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables Raw publisher. */
-public interface IRawPublisher : Publisher
+public interface IRawPublisher : IPublisher
 {
     /**
      * Get the corresponding topic.

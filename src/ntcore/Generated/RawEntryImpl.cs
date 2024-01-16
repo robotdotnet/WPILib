@@ -51,29 +51,29 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
     }
 
 
-    public TimestampedRaw GetAtomic()
+    public TimestampedObject<byte[]> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         byte[] baseValue = value.IsRaw ? value.GetRaw() : m_defaultValue;
-        return new TimestampedRaw(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<byte[]>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedRaw GetAtomic(byte[] defaultValue)
+    public TimestampedObject<byte[]> GetAtomic(byte[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         byte[] baseValue = value.IsRaw ? value.GetRaw() : defaultValue;
-        return new TimestampedRaw(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<byte[]>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedRaw[] ReadQueue()
+    public TimestampedObject<byte[]>[] ReadQueue()
     {
         NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
-        TimestampedRaw[] timestamped = new TimestampedRaw[values.Length];
+        TimestampedObject<byte[]>[] timestamped = new TimestampedObject<byte[]>[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
-            timestamped[i] = new TimestampedRaw(values[i].Time, values[i].ServerTime, values[i].GetRaw());
+            timestamped[i] = new TimestampedObject<byte[]>(values[i].Time, values[i].ServerTime, values[i].GetRaw());
         }
         return timestamped;
     }

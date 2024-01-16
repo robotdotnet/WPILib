@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables String subscriber. */
-public interface IStringSubscriber : Subscriber
+public interface IStringSubscriber : ISubscriber
 {
     /**
      * Get the corresponding topic.
@@ -41,7 +41,7 @@ public interface IStringSubscriber : Subscriber
      *
      * @return timestamped value
      */
-    TimestampedString GetAtomic();
+    TimestampedObject<string> GetAtomic();
 
     /**
      * Get the last published value along with its timestamp
@@ -51,7 +51,7 @@ public interface IStringSubscriber : Subscriber
      * @param defaultValue default value to return if no value has been published
      * @return timestamped value
      */
-    TimestampedString GetAtomic(string defaultValue);
+    TimestampedObject<string> GetAtomic(string defaultValue);
 
     /**
      * Get an array of all value changes since the last call to readQueue.
@@ -63,7 +63,7 @@ public interface IStringSubscriber : Subscriber
      * @return Array of timestamped values; empty array if no new changes have
      *     been published since the previous call.
      */
-    TimestampedString[] ReadQueue();
+    TimestampedObject<string>[] ReadQueue();
 
     /**
      * Get an array of all value changes since the last call to readQueue.

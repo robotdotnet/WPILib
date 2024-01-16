@@ -2,7 +2,7 @@
 
 namespace NetworkTables;
 
-public interface IProtobufSubscriber<T> : Subscriber where T : IProtobufSerializable<T>
+public interface IProtobufSubscriber<T> : ISubscriber where T : IProtobufSerializable<T>
 {
     new ProtobufTopic<T> Topic { get; }
 

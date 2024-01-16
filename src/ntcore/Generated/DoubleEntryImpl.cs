@@ -50,29 +50,29 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
     }
 
 
-    public TimestampedDouble GetAtomic()
+    public TimestampedObject<double> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double baseValue = value.IsDouble ? value.GetDouble() : m_defaultValue;
-        return new TimestampedDouble(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<double>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedDouble GetAtomic(double defaultValue)
+    public TimestampedObject<double> GetAtomic(double defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double baseValue = value.IsDouble ? value.GetDouble() : defaultValue;
-        return new TimestampedDouble(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<double>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedDouble[] ReadQueue()
+    public TimestampedObject<double>[] ReadQueue()
     {
         NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
-        TimestampedDouble[] timestamped = new TimestampedDouble[values.Length];
+        TimestampedObject<double>[] timestamped = new TimestampedObject<double>[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
-            timestamped[i] = new TimestampedDouble(values[i].Time, values[i].ServerTime, values[i].GetDouble());
+            timestamped[i] = new TimestampedObject<double>(values[i].Time, values[i].ServerTime, values[i].GetDouble());
         }
         return timestamped;
     }

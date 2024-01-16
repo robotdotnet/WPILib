@@ -2,6 +2,6 @@
 
 namespace NetworkTables;
 
-public interface Publisher : PubSub<NtPublisher>
+public interface IPublisher : IPubSub<NtPublisher>
 {
 }

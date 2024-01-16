@@ -50,29 +50,29 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
     }
 
 
-    public TimestampedFloat GetAtomic()
+    public TimestampedObject<float> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         float baseValue = value.IsFloat ? value.GetFloat() : m_defaultValue;
-        return new TimestampedFloat(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<float>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedFloat GetAtomic(float defaultValue)
+    public TimestampedObject<float> GetAtomic(float defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         float baseValue = value.IsFloat ? value.GetFloat() : defaultValue;
-        return new TimestampedFloat(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<float>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedFloat[] ReadQueue()
+    public TimestampedObject<float>[] ReadQueue()
     {
         NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
-        TimestampedFloat[] timestamped = new TimestampedFloat[values.Length];
+        TimestampedObject<float>[] timestamped = new TimestampedObject<float>[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
-            timestamped[i] = new TimestampedFloat(values[i].Time, values[i].ServerTime, values[i].GetFloat());
+            timestamped[i] = new TimestampedObject<float>(values[i].Time, values[i].ServerTime, values[i].GetFloat());
         }
         return timestamped;
     }

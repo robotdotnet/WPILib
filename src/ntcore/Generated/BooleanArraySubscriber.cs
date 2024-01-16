@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables BooleanArray subscriber. */
-public interface IBooleanArraySubscriber : Subscriber
+public interface IBooleanArraySubscriber : ISubscriber
 {
     /**
      * Get the corresponding topic.
@@ -41,7 +41,7 @@ public interface IBooleanArraySubscriber : Subscriber
      *
      * @return timestamped value
      */
-    TimestampedBooleanArray GetAtomic();
+    TimestampedObject<bool[]> GetAtomic();
 
     /**
      * Get the last published value along with its timestamp
@@ -51,7 +51,7 @@ public interface IBooleanArraySubscriber : Subscriber
      * @param defaultValue default value to return if no value has been published
      * @return timestamped value
      */
-    TimestampedBooleanArray GetAtomic(bool[] defaultValue);
+    TimestampedObject<bool[]> GetAtomic(bool[] defaultValue);
 
     /**
      * Get an array of all value changes since the last call to readQueue.
@@ -63,7 +63,7 @@ public interface IBooleanArraySubscriber : Subscriber
      * @return Array of timestamped values; empty array if no new changes have
      *     been published since the previous call.
      */
-    TimestampedBooleanArray[] ReadQueue();
+    TimestampedObject<bool[]>[] ReadQueue();
 
     /**
      * Get an array of all value changes since the last call to readQueue.

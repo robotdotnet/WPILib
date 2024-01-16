@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables generic subscriber. */
-public partial interface IGenericSubscriber : Subscriber
+public partial interface IGenericSubscriber : ISubscriber
 {
     /**
  * Get the last published value.

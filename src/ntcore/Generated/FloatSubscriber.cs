@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables Float subscriber. */
-public interface IFloatSubscriber : Subscriber
+public interface IFloatSubscriber : ISubscriber
 {
     /**
      * Get the corresponding topic.
@@ -41,7 +41,7 @@ public interface IFloatSubscriber : Subscriber
      *
      * @return timestamped value
      */
-    TimestampedFloat GetAtomic();
+    TimestampedObject<float> GetAtomic();
 
     /**
      * Get the last published value along with its timestamp
@@ -51,7 +51,7 @@ public interface IFloatSubscriber : Subscriber
      * @param defaultValue default value to return if no value has been published
      * @return timestamped value
      */
-    TimestampedFloat GetAtomic(float defaultValue);
+    TimestampedObject<float> GetAtomic(float defaultValue);
 
     /**
      * Get an array of all value changes since the last call to readQueue.
@@ -63,7 +63,7 @@ public interface IFloatSubscriber : Subscriber
      * @return Array of timestamped values; empty array if no new changes have
      *     been published since the previous call.
      */
-    TimestampedFloat[] ReadQueue();
+    TimestampedObject<float>[] ReadQueue();
 
     /**
      * Get an array of all value changes since the last call to readQueue.

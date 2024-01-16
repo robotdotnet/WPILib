@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables String publisher. */
-public interface IStringPublisher : Publisher
+public interface IStringPublisher : IPublisher
 {
     /**
      * Get the corresponding topic.

@@ -2,7 +2,7 @@
 
 namespace NetworkTables;
 
-public interface Subscriber : PubSub<NtSubscriber>
+public interface ISubscriber : IPubSub<NtSubscriber>
 {
     bool Exists { get; }
     long LastChange { get; }

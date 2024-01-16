@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables DoubleArray publisher. */
-public interface IDoubleArrayPublisher : Publisher
+public interface IDoubleArrayPublisher : IPublisher
 {
     /**
      * Get the corresponding topic.

@@ -7,7 +7,7 @@
 namespace NetworkTables;
 
 /** NetworkTables Integer publisher. */
-public interface IIntegerPublisher : Publisher
+public interface IIntegerPublisher : IPublisher
 {
     /**
      * Get the corresponding topic.

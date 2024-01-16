@@ -3,7 +3,7 @@ using NetworkTables.Handles;
 
 namespace NetworkTables;
 
-public interface PubSub<T> : IDisposable where T : struct, INtEntryHandle
+public interface IPubSub<T> : IDisposable where T : struct, INtEntryHandle
 {
     Topic Topic { get; }
 

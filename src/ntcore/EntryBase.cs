@@ -4,7 +4,7 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-public abstract class EntryBase<T>(T handle) : Subscriber, Publisher where T : struct, INtEntryHandle
+public abstract class EntryBase<T>(T handle) : ISubscriber, IPublisher where T : struct, INtEntryHandle
 {
     private readonly T m_handle = handle;
 
@@ -18,9 +18,9 @@ public abstract class EntryBase<T>(T handle) : Subscriber, Publisher where T : s
 
     public abstract Topic Topic { get; }
 
-    NtSubscriber PubSub<NtSubscriber>.Handle => new(m_handle.Handle);
+    NtSubscriber IPubSub<NtSubscriber>.Handle => new(m_handle.Handle);
 
-    NtPublisher PubSub<NtPublisher>.Handle => new(m_handle.Handle);
+    NtPublisher IPubSub<NtPublisher>.Handle => new(m_handle.Handle);
 
     public void Dispose()
     {

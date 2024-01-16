@@ -113,7 +113,7 @@ internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProto
         }
     }
 
-    private TimestampedObject<T> FromRaw(TimestampedRaw raw, T defaultValue)
+    private TimestampedObject<T> FromRaw(TimestampedObject<byte[]> raw, T defaultValue)
     {
         if (raw.Value.Length == 0)
         {

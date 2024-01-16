@@ -50,29 +50,29 @@ internal sealed class BooleanEntryImpl<T> : EntryBase<T>, IBooleanEntry where T 
     }
 
 
-    public TimestampedBoolean GetAtomic()
+    public TimestampedObject<bool> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         bool baseValue = value.IsBoolean ? value.GetBoolean() : m_defaultValue;
-        return new TimestampedBoolean(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<bool>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedBoolean GetAtomic(bool defaultValue)
+    public TimestampedObject<bool> GetAtomic(bool defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         bool baseValue = value.IsBoolean ? value.GetBoolean() : defaultValue;
-        return new TimestampedBoolean(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<bool>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedBoolean[] ReadQueue()
+    public TimestampedObject<bool>[] ReadQueue()
     {
         NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
-        TimestampedBoolean[] timestamped = new TimestampedBoolean[values.Length];
+        TimestampedObject<bool>[] timestamped = new TimestampedObject<bool>[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
-            timestamped[i] = new TimestampedBoolean(values[i].Time, values[i].ServerTime, values[i].GetBoolean());
+            timestamped[i] = new TimestampedObject<bool>(values[i].Time, values[i].ServerTime, values[i].GetBoolean());
         }
         return timestamped;
     }

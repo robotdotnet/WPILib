@@ -50,29 +50,29 @@ internal sealed class IntegerEntryImpl<T> : EntryBase<T>, IIntegerEntry where T 
     }
 
 
-    public TimestampedInteger GetAtomic()
+    public TimestampedObject<long> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         long baseValue = value.IsInteger ? value.GetInteger() : m_defaultValue;
-        return new TimestampedInteger(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<long>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedInteger GetAtomic(long defaultValue)
+    public TimestampedObject<long> GetAtomic(long defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         long baseValue = value.IsInteger ? value.GetInteger() : defaultValue;
-        return new TimestampedInteger(value.Time, value.ServerTime, baseValue);
+        return new TimestampedObject<long>(value.Time, value.ServerTime, baseValue);
     }
 
 
-    public TimestampedInteger[] ReadQueue()
+    public TimestampedObject<long>[] ReadQueue()
     {
         NetworkTableValue[] values = NtCore.ReadQueueValue(Handle);
-        TimestampedInteger[] timestamped = new TimestampedInteger[values.Length];
+        TimestampedObject<long>[] timestamped = new TimestampedObject<long>[values.Length];
         for (int i = 0; i < values.Length; i++)
         {
-            timestamped[i] = new TimestampedInteger(values[i].Time, values[i].ServerTime, values[i].GetInteger());
+            timestamped[i] = new TimestampedObject<long>(values[i].Time, values[i].ServerTime, values[i].GetInteger());
         }
         return timestamped;
     }
