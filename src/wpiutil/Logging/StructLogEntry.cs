@@ -19,7 +19,7 @@ public sealed class StructLogEntry<T> : DataLogEntry where T : IStructSerializab
         return new StructLogEntry<T>(log, name, value, metadata, timestamp);
     }
 
-        public StructLogEntry<T> Create(DataLog log, string name, string metadata = "", long timestamp = 0)
+    public StructLogEntry<T> Create(DataLog log, string name, string metadata = "", long timestamp = 0)
     {
         return new StructLogEntry<T>(log, name, T.Struct, metadata, timestamp);
     }

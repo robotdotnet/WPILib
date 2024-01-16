@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using Google.Protobuf.Reflection;
@@ -60,7 +60,7 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
                                     IEquatable<Rotation2d>
 {
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
-    public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto {get;} = new Rotation2dProto();
+    public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto { get; } = new Rotation2dProto();
 
     public Rotation2d()
     {
@@ -115,7 +115,8 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     private readonly double m_cos = 1;
     private readonly double m_sin = 0;
 
-    public readonly Rotation2d RotateBy(Rotation2d other) {
+    public readonly Rotation2d RotateBy(Rotation2d other)
+    {
         return new(Cos * other.Cos - Sin * other.Sin, Cos * other.Sin + Sin * other.Cos);
     }
 
