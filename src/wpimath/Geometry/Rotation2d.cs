@@ -180,7 +180,7 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
 
     public Rotation2d Interpolate(Rotation2d endValue, double t)
     {
-        return this + ((endValue - this) * Math.Clamp(t, 0, 1));
+        return MathExtras.Lerp(this, endValue, t);
     }
 
 }
