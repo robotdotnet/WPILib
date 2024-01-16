@@ -11,7 +11,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
-using WPIMath.Geometry;
 using WPIUtil;
 using WPIUtil.Concurrent;
 using WPIUtil.Natives;
@@ -495,8 +494,6 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
 
     public ProtobufTopic<T> GetProtobufTopic<T>(string name) where T : IProtobufSerializable<T>
     {
-
-        GetProtobufTopic<Rotation2d>("Hello");
         throw new NotImplementedException();
     }
 }

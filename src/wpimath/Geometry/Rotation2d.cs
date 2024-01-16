@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Google.Protobuf.Reflection;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToAngle;
+using WPIMath.Interpolation;
 using WPIMath.Proto;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
@@ -50,17 +51,20 @@ public class Rotation2dStruct : IStruct<Rotation2d>
 }
 
 public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
-                                    IProtobufSerializable<Rotation2d>,
+                                    IProtobufSerializable<Rotation2d, ProtobufRotation2d>,
                                     IAdditionOperators<Rotation2d, Rotation2d, Rotation2d>,
                                     ISubtractionOperators<Rotation2d, Rotation2d, Rotation2d>,
                                     IUnaryNegationOperators<Rotation2d, Rotation2d>,
                                     IMultiplyOperators<Rotation2d, double, Rotation2d>,
                                     IDivisionOperators<Rotation2d, double, Rotation2d>,
                                     IEqualityOperators<Rotation2d, Rotation2d, bool>,
+                                    IAdditiveIdentity<Rotation2d, Rotation2d>,
+                                    IInterpolatable<Rotation2d>,
                                     IEquatable<Rotation2d>
 {
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
-    public static IProtobuf<Rotation2d> Proto { get; } = new Rotation2dProto();
+    public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto { get; } = new Rotation2dProto();
+    static IProtobuf<Rotation2d> IProtobufSerializable<Rotation2d>.Proto => Proto;
 
     public Rotation2d(Angle angle)
     {
@@ -106,6 +110,10 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     public double Sin => m_sin;
     [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
     public double Tan => Sin / Cos;
+
+    public static Rotation2d Zero => new(Angle.Zero);
+
+    public static Rotation2d AdditiveIdentity => Zero;
 
     private readonly double m_cos = 1;
     private readonly double m_sin = 0;
@@ -169,4 +177,10 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     {
         return this == other;
     }
+
+    public Rotation2d Interpolate(Rotation2d endValue, double t)
+    {
+        return this + ((endValue - this) * Math.Clamp(t, 0, 1));
+    }
+
 }

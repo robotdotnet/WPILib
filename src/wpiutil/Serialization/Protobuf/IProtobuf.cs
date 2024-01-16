@@ -43,10 +43,9 @@ public interface IProtobuf<T> : IProtobufBase
 
 public interface IProtobuf<T, MessageType> : IProtobuf<T> where MessageType : IMessage<MessageType>
 {
-
     IMessage IProtobuf<T>.CreateMessage()
     {
-        throw new NotImplementedException();
+        return CreateMessage();
     }
 
     void IProtobuf<T>.Pack(IMessage msg, T value)
