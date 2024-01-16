@@ -115,7 +115,8 @@ public class Rotation2dTest
     }
 
     [Fact]
-    public void TestInterpolate() {
+    public void TestInterpolate()
+    {
         // 50 + (70 - 50) * 0.5 = 60
         Rotation2d rot1 = 50.Degrees();
         Rotation2d rot2 = 70.Degrees();
