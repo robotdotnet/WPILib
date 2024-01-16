@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Serialization;
+﻿namespace WPIUtil.Serialization.Struct;
 
 public interface IStructSerializable<T> : IWPISerializable<T>
 {

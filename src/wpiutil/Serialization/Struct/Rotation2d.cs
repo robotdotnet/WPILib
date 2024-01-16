@@ -1,11 +1,34 @@
 using System;
 using System.Numerics;
 using System.Text.Json.Serialization;
+using Google.Protobuf.Reflection;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToAngle;
-using WPIUtil.Serialization;
+using Wpi.Proto;
+using WPIUtil.Serialization.Protobuf;
+using WPIUtil.Serialization.Struct;
 
 namespace WPIMath.Geometry;
+
+public class Rotation2dProto : IProtobuf<Rotation2d, ProtobufRotation2d>
+{
+    public MessageDescriptor Descriptor => ProtobufRotation2d.Descriptor;
+
+    public ProtobufRotation2d CreateMessage()
+    {
+        return new ProtobufRotation2d();
+    }
+
+    public void Pack(ProtobufRotation2d msg, Rotation2d value)
+    {
+        msg.Value = value.Angle.Radians;
+    }
+
+    public Rotation2d Unpack(ProtobufRotation2d msg)
+    {
+        return new(msg.Value.Radians());
+    }
+}
 
 public class Rotation2dStruct : IStruct<Rotation2d>
 {
@@ -27,6 +50,7 @@ public class Rotation2dStruct : IStruct<Rotation2d>
 }
 
 public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
+                                    IProtobufSerializable<Rotation2d, ProtobufRotation2d>,
                                     IAdditionOperators<Rotation2d, Rotation2d, Rotation2d>,
                                     ISubtractionOperators<Rotation2d, Rotation2d, Rotation2d>,
                                     IUnaryNegationOperators<Rotation2d, Rotation2d>,
@@ -36,6 +60,7 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
                                     IEquatable<Rotation2d>
 {
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
+    public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto {get;} = new Rotation2dProto();
 
     public Rotation2d()
     {

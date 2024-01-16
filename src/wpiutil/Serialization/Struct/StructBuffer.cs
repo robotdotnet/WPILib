@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections;
 
-namespace WPIUtil.Serialization;
+namespace WPIUtil.Serialization.Struct;
 
-public struct StructBuffer<T>
+public sealed class StructBuffer<T>
 {
     private readonly int m_structSize;
     private byte[] m_buf;
@@ -19,7 +18,7 @@ public struct StructBuffer<T>
 
     public IStruct<T> Struct { get; }
 
-    public readonly string TypeString => Struct.TypeString;
+    public string TypeString => Struct.TypeString;
 
     public void Reserve(int nelem)
     {
@@ -29,7 +28,7 @@ public struct StructBuffer<T>
         }
     }
 
-    public readonly ReadOnlySpan<byte> Write(T value)
+    public ReadOnlySpan<byte> Write(T value)
     {
         StructPacker packer = new(m_buf);
         Struct.Pack(ref packer, value);

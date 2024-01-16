@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 
-namespace WPIUtil.Serialization;
+namespace WPIUtil.Serialization.Struct;
 
 public enum StructFieldType
 {

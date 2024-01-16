@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
+    <PackageReference Include="Google.Protobuf" Version="3.21.12" />
     <PackageReference Include="UnitsNet" Version="5.42.0" />
     <PackageReference Include="UnitsNet.NumberExtensions" Version="5.42.0" />
   </ItemGroup>

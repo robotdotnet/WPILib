@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WPIUtil.Serialization;
+namespace WPIUtil.Serialization.Struct;
 
 public class StructDescriptor
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using WPIUtil.Serialization;
+using WPIUtil.Serialization.Struct;
 
 namespace WPIUtil.Logging;
 

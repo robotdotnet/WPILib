@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using WPIUtil.Handles;
 using WPIUtil.Natives;
-using WPIUtil.Serialization;
+using WPIUtil.Serialization.Struct;
 
 namespace WPIUtil;
 

@@ -2,7 +2,7 @@
 using System.Buffers.Binary;
 using CommunityToolkit.Diagnostics;
 
-namespace WPIUtil.Serialization;
+namespace WPIUtil.Serialization.Struct;
 
 public ref struct StructUnpacker(ReadOnlySpan<byte> data)
 {

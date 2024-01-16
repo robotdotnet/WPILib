@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WPIUtil.Serialization;
+namespace WPIUtil.Serialization.Struct;
 
 public class BadSchemaException : Exception
 {
