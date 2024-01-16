@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Sendable;
+namespace WPIUtil.Sendable;
 
 public interface ISendable
 {

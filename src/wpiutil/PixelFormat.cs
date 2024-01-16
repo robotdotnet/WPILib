@@ -1,4 +1,4 @@
-﻿namespace WPIUtil;
+namespace WPIUtil;
 
 public enum PixelFormat : int
 {

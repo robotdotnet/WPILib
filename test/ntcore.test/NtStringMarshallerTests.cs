@@ -1,4 +1,4 @@
-﻿using NetworkTables.Natives;
+using NetworkTables.Natives;
 using Xunit;
 using Marshaller = WPIUtil.Marshal.StringLengthPairMarshaller<NetworkTables.Natives.NtString>;
 

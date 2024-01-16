@@ -1,4 +1,4 @@
-﻿using WPIUtil.Handles;
+using WPIUtil.Handles;
 
 namespace NetworkTables.Handles;
 

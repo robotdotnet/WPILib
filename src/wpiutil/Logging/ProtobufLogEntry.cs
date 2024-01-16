@@ -1,4 +1,4 @@
-﻿using WPIUtil.Serialization.Protobuf;
+using WPIUtil.Serialization.Protobuf;
 
 namespace WPIUtil.Logging;
 

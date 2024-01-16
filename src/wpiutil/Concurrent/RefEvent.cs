@@ -1,4 +1,4 @@
-﻿using WPIUtil.Natives;
+using WPIUtil.Natives;
 
 namespace WPIUtil.Concurrent;
 

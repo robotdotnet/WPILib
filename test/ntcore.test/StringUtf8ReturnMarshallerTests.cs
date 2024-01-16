@@ -1,4 +1,4 @@
-﻿using NetworkTables.Natives;
+using NetworkTables.Natives;
 using Xunit;
 using Marshaller = NetworkTables.Natives.NtLengthStringMarshaller<byte>;
 

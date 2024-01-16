@@ -1,4 +1,4 @@
-﻿namespace NetworkTables;
+namespace NetworkTables;
 
 public interface IGenericEntry : IGenericSubscriber, IGenericPublisher
 {

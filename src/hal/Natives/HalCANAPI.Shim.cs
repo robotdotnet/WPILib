@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using WPIHal.Handles;
 
 namespace WPIHal.Natives;

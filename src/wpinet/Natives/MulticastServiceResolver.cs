@@ -1,4 +1,4 @@
-﻿global using MulticastServiceResolverHandle = uint;
+global using MulticastServiceResolverHandle = uint;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;

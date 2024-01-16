@@ -1,4 +1,4 @@
-﻿global using MulticastServiceAnnouncerHandle = uint;
+global using MulticastServiceAnnouncerHandle = uint;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

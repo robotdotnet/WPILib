@@ -1,3 +1,3 @@
-﻿namespace WPIHal;
+namespace WPIHal;
 
 public enum RioSerialPort;

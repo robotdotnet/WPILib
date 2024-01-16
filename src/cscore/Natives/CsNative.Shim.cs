@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices.Marshalling;
 using CsCore.Handles;
 using WPIUtil;

@@ -1,4 +1,4 @@
-﻿using WPIUtil.Marshal;
+using WPIUtil.Marshal;
 
 namespace WPIHal.Natives;
 

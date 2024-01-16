@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Handles;
+namespace WPIUtil.Handles;
 
 public interface IWPIIntHandle
 {

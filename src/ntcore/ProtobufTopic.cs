@@ -1,4 +1,4 @@
-﻿using NetworkTables.Handles;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Serialization.Protobuf;
 

@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices.Marshalling;
+using System.Runtime.InteropServices.Marshalling;
 using WPIUtil.Handles;
 
 namespace NetworkTables.Handles;

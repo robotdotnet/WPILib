@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.Json;
 using UnitsNet.NumberExtensions.NumberToAngle;
 using WPIMath.Geometry;

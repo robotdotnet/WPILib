@@ -1,4 +1,4 @@
-﻿namespace CsCore;
+namespace CsCore;
 
 public enum CsLogLevel
 {

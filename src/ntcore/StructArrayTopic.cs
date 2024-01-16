@@ -1,4 +1,4 @@
-﻿using NetworkTables.Handles;
+using NetworkTables.Handles;
 using WPIUtil.Serialization.Struct;
 
 namespace NetworkTables;

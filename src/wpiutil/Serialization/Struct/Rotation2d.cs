@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using Google.Protobuf.Reflection;

@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using NetworkTables.Natives;
 using WPIUtil.Marshal;

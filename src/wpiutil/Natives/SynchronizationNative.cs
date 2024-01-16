@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Natives;
+namespace WPIUtil.Natives;
 
 using System;
 using System.Runtime.CompilerServices;

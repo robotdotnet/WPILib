@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Serialization.Struct;
+namespace WPIUtil.Serialization.Struct;
 
 public enum StructFieldType
 {

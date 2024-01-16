@@ -1,4 +1,4 @@
-﻿namespace WPIHal;
+namespace WPIHal;
 
 public enum AccelerometerRange : int
 {

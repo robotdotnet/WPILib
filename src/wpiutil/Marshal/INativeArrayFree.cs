@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Marshal;
+namespace WPIUtil.Marshal;
 
 public interface INativeArrayFree<T> where T : unmanaged
 {

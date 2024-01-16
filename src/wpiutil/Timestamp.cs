@@ -1,4 +1,4 @@
-﻿namespace WPIUtil;
+namespace WPIUtil;
 
 public class Timestamp
 {

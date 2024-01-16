@@ -1,4 +1,4 @@
-﻿namespace WPIUtil.Concurrent;
+namespace WPIUtil.Concurrent;
 
 public enum SynchronizationResult
 {

@@ -1,4 +1,4 @@
-﻿namespace WPIHal.Natives;
+namespace WPIHal.Natives;
 
 public static partial class HalMain
 {
