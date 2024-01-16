@@ -1,4 +1,6 @@
-﻿namespace WPIUtil.Serialization.Struct;
+﻿using System;
+
+namespace WPIUtil.Serialization.Struct;
 
 public interface IStructBase
 {
@@ -17,4 +19,9 @@ public interface IStruct<T> : IStructBase
     T Unpack(ref StructUnpacker buffer);
 
     void Pack(ref StructPacker buffer, T value);
+
+    void UnpackInto(ref T value, ref StructUnpacker buffer)
+    {
+        throw new NotSupportedException("Object does not support UnpackInto");
+    }
 }

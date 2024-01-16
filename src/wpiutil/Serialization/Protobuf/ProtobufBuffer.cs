@@ -3,23 +3,18 @@ using Google.Protobuf;
 
 namespace WPIUtil.Serialization.Protobuf;
 
-public sealed class ProtobufBuffer<T, MessageType> where MessageType : IMessage
+public struct ProtobufBuffer<T, MessageType> where MessageType : IMessage
                                                    where T : IProtobufSerializable<T, MessageType>
 {
-    private ProtobufBuffer()
+    public ProtobufBuffer()
     {
         Proto = T.Proto;
         m_msg = Proto.CreateMessage();
     }
 
-    public static ProtobufBuffer<T, MessageType> Create()
-    {
-        return new ProtobufBuffer<T, MessageType>();
-    }
-
     public IProtobuf<T, MessageType> Proto { get; }
 
-    public string TypeString => Proto.TypeString;
+    public readonly string TypeString => Proto.TypeString;
 
     public ReadOnlySpan<byte> Write(T value)
     {
@@ -33,10 +28,16 @@ public sealed class ProtobufBuffer<T, MessageType> where MessageType : IMessage
         return m_buf.AsSpan()[..size];
     }
 
-    public T Read(ReadOnlySpan<byte> buffer)
+    public readonly T Read(ReadOnlySpan<byte> buffer)
     {
         m_msg.MergeFrom(buffer);
         return Proto.Unpack(m_msg);
+    }
+
+    public readonly void ReadInto(ref T output, ReadOnlySpan<byte> buffer)
+    {
+        m_msg.MergeFrom(buffer);
+        Proto.UnpackInto(ref output, m_msg);
     }
 
     private readonly MessageType m_msg;
