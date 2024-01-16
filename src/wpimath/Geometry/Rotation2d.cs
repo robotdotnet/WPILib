@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 using Google.Protobuf.Reflection;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToAngle;
-using Wpi.Proto;
+using WPIMath.Proto;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
 
@@ -61,11 +61,6 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
 {
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
     public static IProtobuf<Rotation2d> Proto { get; } = new Rotation2dProto();
-
-    public Rotation2d()
-    {
-
-    }
 
     public Rotation2d(Angle angle)
     {
