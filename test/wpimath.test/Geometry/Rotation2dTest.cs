@@ -120,13 +120,13 @@ public class Rotation2dTest
         // 50 + (70 - 50) * 0.5 = 60
         Rotation2d rot1 = 50.Degrees();
         Rotation2d rot2 = 70.Degrees();
-        var interpolated = rot1.Interpolate(rot2, 0.5);
+        var interpolated = MathExtras.Lerp(rot1, rot2, 0.5);
         Assert.Equal(60.0, interpolated.Angle.Degrees, Epsilon);
 
         // -160 minus half distance between 170 and -160 (15) = -175
         rot1 = 170.Degrees();
         rot2 = -160.Degrees();
-        interpolated = rot1.Interpolate(rot2, 0.5);
+        interpolated = MathExtras.Lerp(rot1, rot2, 0.5);
         Assert.Equal(-175.0, interpolated.Angle.Degrees, Epsilon);
     }
 }
