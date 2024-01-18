@@ -11,6 +11,11 @@ public class BadSchemaException : Exception
         Property = "";
     }
 
+    public BadSchemaException(string message, Exception inner) : base(message, inner)
+    {
+        Property = "";
+    }
+
     public BadSchemaException(string property, string message) : base(message)
     {
         Property = property;
@@ -18,6 +23,6 @@ public class BadSchemaException : Exception
 
     public override string ToString()
     {
-        return $"Property: {Property}, Exception:\n{base.ToString()}";
+        return $"Property: {Property}, Exception:\n{base.Message}";
     }
 }

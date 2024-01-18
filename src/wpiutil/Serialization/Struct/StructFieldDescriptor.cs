@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace WPIUtil.Serialization.Struct;
 
-public class StructFieldDescriptor
+public sealed class StructFieldDescriptor
 {
     private static int ToBitWidth(int size, int bitWidth)
     {
@@ -30,12 +30,12 @@ public class StructFieldDescriptor
 
     internal StructFieldDescriptor(StructDescriptor parent,
                                    string name,
-                                   StructFieldType type,
+                                   StructFieldTypeInfo type,
                                    int size,
                                    int arraySize,
                                    int bitWidth,
                                    Dictionary<string, long>? enumValues,
-                                   StructDescriptor structDesc)
+                                   StructDescriptor? structDesc)
     {
         Parent = parent;
         Name = name;
@@ -60,13 +60,13 @@ public class StructFieldDescriptor
     public bool IsBitField { get; }
     public int BitWidth { get; }
     public int BitShift { get; internal set; }
-    public StructFieldType Type { get; }
-    public StructDescriptor Struct { get; }
+    public StructFieldTypeInfo Type { get; }
+    public StructDescriptor? Struct { get; }
 
     public StructDescriptor Parent { get; }
 
-    public bool IsInt => Type.GetFieldTypeInfo().IsInt;
-    public bool IsUint => Type.GetFieldTypeInfo().IsUint;
+    public bool IsInt => Type.IsInt;
+    public bool IsUint => Type.IsUint;
 
     public bool IsArray => ArraySize > 1;
 

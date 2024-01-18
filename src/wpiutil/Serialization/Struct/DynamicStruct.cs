@@ -1,5 +1,6 @@
 using System;
 using System.Buffers.Binary;
+using System.Text;
 using CommunityToolkit.Diagnostics;
 
 namespace WPIUtil.Serialization.Struct;
@@ -39,9 +40,46 @@ public class DynamicStruct
         return Descriptor.FindFieldByName(name);
     }
 
+    public bool GetBoolField(StructFieldDescriptor field, int arrIndex = 0)
+    {
+        if (field.Type.Type != StructFieldType.Bool)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not bool type");
+        }
+        return GetFieldImpl(field, arrIndex) != 0;
+    }
+
+    public void SetBoolField(StructFieldDescriptor field, bool value, int arrIndex = 0)
+    {
+        if (field.Type.Type != StructFieldType.Bool)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not bool type");
+        }
+        SetFieldImpl(field, value ? 1 : 0, arrIndex);
+    }
+
+    public string GetStringField(StructFieldDescriptor field)
+    {
+        if (field.Type.Type != StructFieldType.Char)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not char type");
+        }
+        if (field.Parent != Descriptor)
+        {
+            ThrowHelper.ThrowArgumentException("field is not part of this struct");
+        }
+        if (!Descriptor.IsValid)
+        {
+            ThrowHelper.ThrowInvalidOperationException("struct descriptor is not valid");
+        }
+
+        ReadOnlySpan<byte> bytes = Buffer.Span[field.Offset..field.ArraySize];
+        return Encoding.UTF8.GetString(bytes);
+    }
+
     public DynamicStruct GetStructField(StructFieldDescriptor field, int arrIndex = 0)
     {
-        if (field.Type != StructFieldType.Struct)
+        if (field.Type.Type != StructFieldType.Struct)
         {
             throw new Exception();
         }
@@ -57,13 +95,13 @@ public class DynamicStruct
         {
             throw new IndexOutOfRangeException("TODO");
         }
-        StructDescriptor strct = field.Struct;
+        StructDescriptor strct = field.Struct!;
         return Wrap(strct, Buffer[(field.Offset + arrIndex * strct.Size)..]);
     }
 
     public void SetStructField(StructFieldDescriptor field, DynamicStruct value, int arrIndex)
     {
-        if (field.Type != StructFieldType.Struct)
+        if (field.Type.Type != StructFieldType.Struct)
         {
             throw new Exception();
         }
@@ -75,7 +113,7 @@ public class DynamicStruct
         {
             throw new Exception("TODO better exception");
         }
-        StructDescriptor strct = field.Struct;
+        StructDescriptor strct = field.Struct!;
         if (value.Descriptor != strct)
         {
             throw new Exception();
@@ -118,7 +156,7 @@ public class DynamicStruct
             _ => throw new Exception("Illegal state"),
         };
 
-        if (field.IsUint || field.Type == StructFieldType.Bool)
+        if (field.IsUint || field.Type.Type == StructFieldType.Bool)
         {
             // for unsigned fields, we can simply logical shift and mask
             return (val >>> field.BitShift) & field.BitMask;

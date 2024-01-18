@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WPIUtil.Serialization.Struct;
 
-public class StructDescriptor
+public sealed class StructDescriptor
 {
     public string Name { get; }
     public string? Schema { get; internal set; }
@@ -31,13 +31,13 @@ public class StructDescriptor
 
     public StructFieldDescriptor? FindFieldByName(string name)
     {
-        return m_propertiesByName.GetValueOrDefault(name);
+        return m_fieldsByName.GetValueOrDefault(name);
     }
 
     public List<StructFieldDescriptor> Fields { get; } = [];
 
     internal readonly List<StructDescriptor> m_references = [];
-    internal readonly Dictionary<string, StructFieldDescriptor> m_propertiesByName = [];
+    internal readonly Dictionary<string, StructFieldDescriptor> m_fieldsByName = [];
 
     internal bool CheckCircular(Stack<StructDescriptor> stack)
     {
@@ -85,7 +85,7 @@ public class StructDescriptor
             else
             {
                 int bitWidth = field.BitWidth;
-                if (field.Type == StructFieldType.Bool && prevBitfieldSize != 0 && (shift + 1) <= (prevBitfieldSize * 8))
+                if (field.Type.Type == StructFieldType.Bool && prevBitfieldSize != 0 && (shift + 1) <= (prevBitfieldSize * 8))
                 {
                     // bool takes on size of preceding bitfield type (if it fits)
                     field.Size = prevBitfieldSize;
