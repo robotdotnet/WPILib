@@ -7,8 +7,11 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
+using Google.Protobuf.WellKnownTypes;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Concurrent;
@@ -36,7 +39,7 @@ namespace NetworkTables;
  * kept to the NetworkTableInstance returned by this function to keep it from being garbage
  * collected.
  */
-public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance?>
+public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance?>, IEqualityOperators<NetworkTableInstance?, NetworkTableInstance?, bool>
 {
     public const int KDefaultPort3 = 1735;
     public const int KDefaultPort4 = 5810;
@@ -488,18 +491,84 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return !(left == right);
     }
 
-    public void AddSchema(IStructBase proto)
+    public RawTopic GetRawTopic(string name)
     {
         throw new NotImplementedException();
     }
 
+    public bool HasSchema(string name)
+    {
+        return m_schemas.ContainsKey($"/.schema/{name}");
+    }
+
+    public void AddSchema(string name, string type, ReadOnlySpan<byte> schema)
+    {
+        bool added = false;
+        var pub = m_schemas.GetOrAdd($"/.schema/{name}", k =>
+        {
+            IRawPublisher pub = GetRawTopic(k).PublishExDangerous(type, "{\"retained\":true}"u8, PubSubOptions.None);
+            added = true;
+            return pub;
+        });
+        if (added)
+        {
+            pub.SetDefault(schema);
+        }
+    }
+
+    public void AddSchema(string name, string type, string schema)
+    {
+        var pub = m_schemas.GetOrAdd($"/.schema/{name}", k =>
+        {
+            IRawPublisher pub = GetRawTopic(k).PublishExDangerous(type, "{\"retained\":true}"u8, PubSubOptions.None);
+            pub.SetDefault(Encoding.UTF8.GetBytes(schema));
+            return pub;
+        });
+    }
+
+    public void AddSchema(IStructBase proto)
+    {
+        AddSchemaImpl(proto, []);
+    }
+
     public void AddSchema(IProtobufBase proto)
     {
-        throw new NotImplementedException();
+        proto.ForEachDescriptor(HasSchema, (typeString, schema) => AddSchema(typeString, "proto:FileDescriptorProto", schema));
     }
 
     public ProtobufTopic<T> GetProtobufTopic<T>(string name) where T : IProtobufSerializable<T>
     {
         throw new NotImplementedException();
     }
+
+    public StructTopic<T> GetStructTopic<T>(string name) where T : IStructSerializable<T>
+    {
+        throw new NotImplementedException();
+    }
+
+    public StructArrayTopic<T> GetStructArrayTopic<T>(string name) where T : IStructSerializable<T>
+    {
+        throw new NotImplementedException();
+    }
+
+    private void AddSchemaImpl(IStructBase strct, HashSet<string> seen)
+    {
+        string typeString = strct.TypeString;
+        if (HasSchema(typeString))
+        {
+            return;
+        }
+        if (!seen.Add(typeString))
+        {
+            throw new InvalidOperationException($"{typeString}: circular reference");
+        }
+        AddSchema(typeString, "structschema", strct.Schema);
+        foreach (var inner in strct.Nested)
+        {
+            AddSchemaImpl(inner, seen);
+        }
+        seen.Remove(typeString);
+    }
+
+    private readonly ConcurrentDictionary<string, IRawPublisher> m_schemas = [];
 }

@@ -434,6 +434,10 @@ public static partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial NtSubscriber Subscribe(NtTopic topic, NetworkTableType type, string typeStr, in PubSubOptions options);
 
+    [LibraryImport("ntcore", EntryPoint = "NT_Subscribe")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial NtSubscriber SubscribeDangerous(NtTopic topic, NetworkTableType type, ReadOnlySpan<byte> typeStr, in PubSubOptions options);
+
     [LibraryImport("ntcore", EntryPoint = "NT_Unsubscribe")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void Unsubscribe(NtSubscriber sub);
@@ -442,9 +446,25 @@ public static partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial NtPublisher Publish(NtTopic topic, NetworkTableType type, string typeStr, in PubSubOptions options);
 
+    [LibraryImport("ntcore", EntryPoint = "NT_Publish")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial NtPublisher PublishDangerous(NtTopic topic, NetworkTableType type, ReadOnlySpan<byte> typeStr, in PubSubOptions options);
+
     [LibraryImport("ntcore", EntryPoint = "NT_PublishEx", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial NtPublisher PublishEx(NtTopic topic, NetworkTableType type, string typeStr, string properties, in PubSubOptions options);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_PublishEx", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial NtPublisher PublishExDangerous(NtTopic topic, NetworkTableType type, ReadOnlySpan<byte> typeStr, string properties, in PubSubOptions options);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_PublishEx", StringMarshalling = StringMarshalling.Utf8)]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial NtPublisher PublishExDangerous(NtTopic topic, NetworkTableType type, string typeStr, ReadOnlySpan<byte> properties, in PubSubOptions options);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_PublishEx")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial NtPublisher PublishExDangerous(NtTopic topic, NetworkTableType type, ReadOnlySpan<byte> typeStr, ReadOnlySpan<byte> properties, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_Unpublish")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -458,6 +478,10 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryEx", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial NtEntry GetEntry(NtTopic topic, NetworkTableType type, string typeStr, in PubSubOptions options);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_GetEntryEx")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static unsafe partial NtEntry GetEntryDangerous(NtTopic topic, NetworkTableType type, ReadOnlySpan<byte> typeStr, in PubSubOptions options);
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReleaseEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

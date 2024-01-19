@@ -388,7 +388,7 @@ public readonly partial struct NetworkTableValue
      * @param value the value
      * @return The entry value
      */
-    public static NetworkTableValue MakeRaw(params byte[] value)
+    public static NetworkTableValue MakeRaw(byte[] value)
     {
         return new NetworkTableValue(NetworkTableType.Raw, value);
     }
@@ -412,7 +412,7 @@ public readonly partial struct NetworkTableValue
      * @param value the value
      * @return The entry value
      */
-    public static NetworkTableValue MakeBooleanArray(params bool[] value)
+    public static NetworkTableValue MakeBooleanArray(bool[] value)
     {
         return new NetworkTableValue(NetworkTableType.BooleanArray, value);
     }
@@ -436,7 +436,7 @@ public readonly partial struct NetworkTableValue
      * @param value the value
      * @return The entry value
      */
-    public static NetworkTableValue MakeIntegerArray(params long[] value)
+    public static NetworkTableValue MakeIntegerArray(long[] value)
     {
         return new NetworkTableValue(NetworkTableType.IntegerArray, value);
     }
@@ -460,7 +460,7 @@ public readonly partial struct NetworkTableValue
      * @param value the value
      * @return The entry value
      */
-    public static NetworkTableValue MakeFloatArray(params float[] value)
+    public static NetworkTableValue MakeFloatArray(float[] value)
     {
         return new NetworkTableValue(NetworkTableType.FloatArray, value);
     }
@@ -484,7 +484,7 @@ public readonly partial struct NetworkTableValue
      * @param value the value
      * @return The entry value
      */
-    public static NetworkTableValue MakeDoubleArray(params double[] value)
+    public static NetworkTableValue MakeDoubleArray(double[] value)
     {
         return new NetworkTableValue(NetworkTableType.DoubleArray, value);
     }
@@ -508,7 +508,7 @@ public readonly partial struct NetworkTableValue
      * @param value the value
      * @return The entry value
      */
-    public static NetworkTableValue MakeStringArray(params string[] value)
+    public static NetworkTableValue MakeStringArray(string[] value)
     {
         return new NetworkTableValue(NetworkTableType.StringArray, value);
     }

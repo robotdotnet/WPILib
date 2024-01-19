@@ -91,21 +91,21 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
     }
 
 
-    public void Set(string[] value)
+    public void Set(ReadOnlySpan<string> value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value.AsSpan(), 0);
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value, 0);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void Set(string[] value, long time)
+    public void Set(ReadOnlySpan<string> value, long time)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value.AsSpan(), time);
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value, time);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void SetDefault(string[] value)
+    public void SetDefault(ReadOnlySpan<string> value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
     public void Unpublish()

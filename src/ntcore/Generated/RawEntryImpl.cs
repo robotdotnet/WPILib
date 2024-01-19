@@ -91,21 +91,21 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
     }
 
 
-    public void Set(byte[] value)
+    public void Set(ReadOnlySpan<byte> value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value.AsSpan(), 0);
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value, 0);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void Set(byte[] value, long time)
+    public void Set(ReadOnlySpan<byte> value, long time)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value.AsSpan(), time);
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value, time);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void SetDefault(byte[] value)
+    public void SetDefault(ReadOnlySpan<byte> value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
     public void Unpublish()
