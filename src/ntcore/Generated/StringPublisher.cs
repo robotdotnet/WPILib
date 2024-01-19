@@ -31,7 +31,7 @@ public interface IStringPublisher : IPublisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long time, string value);
+    void Set(string value, long time);
 
     /**
      * Publish a default value.

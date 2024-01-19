@@ -31,7 +31,7 @@ public interface IBooleanArrayPublisher : IPublisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long time, params bool[] value);
+    void Set(bool[] value, long time);
 
     /**
      * Publish a default value.
@@ -40,5 +40,5 @@ public interface IBooleanArrayPublisher : IPublisher
      *
      * @param value value
      */
-    void SetDefault(params bool[] value);
+    void SetDefault(bool[] value);
 }

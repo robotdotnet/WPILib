@@ -19,7 +19,7 @@ public partial interface IGenericPublisher : IPublisher
      * @return False if the topic already exists with a different type
      * @throws IllegalArgumentException if the value is not a known type
      */
-    bool SetValue<T>(long time, T value);
+    bool SetValue<T>(T value, long time);
 
     bool SetValue<T>(T value);
 

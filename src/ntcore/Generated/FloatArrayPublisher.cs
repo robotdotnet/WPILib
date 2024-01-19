@@ -31,7 +31,7 @@ public interface IFloatArrayPublisher : IPublisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long time, params float[] value);
+    void Set(float[] value, long time);
 
     /**
      * Publish a default value.
@@ -40,5 +40,5 @@ public interface IFloatArrayPublisher : IPublisher
      *
      * @param value value
      */
-    void SetDefault(params float[] value);
+    void SetDefault(float[] value);
 }

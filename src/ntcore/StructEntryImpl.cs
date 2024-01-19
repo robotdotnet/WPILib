@@ -1,26 +1,26 @@
 using System;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
-using WPIUtil.Serialization.Protobuf;
+using WPIUtil.Serialization.Struct;
 
 namespace NetworkTables;
 
-internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProtobufEntry<T> where THandle : struct, INtEntryHandle where T : IProtobufSerializable<T>
+internal sealed class StructEntryImpl<T, THandle> : EntryBase<THandle>, IStructEntry<T> where THandle : struct, INtEntryHandle where T : IStructSerializable<T>
 {
-    internal ProtobufEntryImpl(ProtobufTopic<T> topic, THandle handle, T defaultValue, bool schemaPublished) : base(handle)
+    internal StructEntryImpl(StructTopic<T> topic, THandle handle, T defaultValue, bool schemaPublished) : base(handle)
     {
         Topic = topic;
         m_defaultValue = defaultValue;
-        m_buf = new ProtobufBuffer<T>();
+        m_buf = new StructBuffer<T>();
         m_schemaPublished = schemaPublished;
     }
 
     private readonly T m_defaultValue;
-    private readonly ProtobufBuffer<T> m_buf;
+    private readonly StructBuffer<T> m_buf;
     private bool m_schemaPublished;
     private readonly object m_lockObject = new();
 
-    public override ProtobufTopic<T> Topic { get; }
+    public override StructTopic<T> Topic { get; }
 
     public T Get()
     {
@@ -94,7 +94,7 @@ internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProto
                 if (!m_schemaPublished)
                 {
                     m_schemaPublished = true;
-                    Topic.Instance.AddSchema(m_buf.Proto);
+                    Topic.Instance.AddSchema(m_buf.Struct);
                 }
                 NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeRaw(m_buf.Write(value), time));
             }
@@ -114,7 +114,7 @@ internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProto
                 if (!m_schemaPublished)
                 {
                     m_schemaPublished = true;
-                    Topic.Instance.AddSchema(m_buf.Proto);
+                    Topic.Instance.AddSchema(m_buf.Struct);
                 }
                 NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeRaw(m_buf.Write(value)));
             }

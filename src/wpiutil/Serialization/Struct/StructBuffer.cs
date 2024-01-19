@@ -44,6 +44,23 @@ public struct StructBuffer<T> where T : IStructSerializable<T>
         Struct.UnpackInto(ref output, ref unpacker);
     }
 
+    public readonly ReadOnlySpan<T> ReadInto(Span<T> output, ReadOnlySpan<byte> buffer, out bool copiedAll)
+    {
+        if ((buffer.Length % m_structSize) != 0)
+        {
+            throw new Exception("Buffer size not a multiple of struct size");
+        }
+        int nelem = buffer.Length / m_structSize;
+        int length = int.Min(nelem, output.Length);
+        copiedAll = length == nelem;
+        StructUnpacker unpacker = new(buffer);
+        for (int i = 0; i < length; i++)
+        {
+            Struct.UnpackInto(ref output[0], ref unpacker);
+        }
+        return output[..length];
+    }
+
     public ReadOnlySpan<byte> WriteArray(ReadOnlySpan<T> values)
     {
         if ((values.Length * m_structSize) > m_buf.Length)

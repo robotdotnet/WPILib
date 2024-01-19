@@ -31,7 +31,7 @@ public interface IDoubleArrayPublisher : IPublisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long time, params double[] value);
+    void Set(double[] value, long time);
 
     /**
      * Publish a default value.
@@ -40,5 +40,5 @@ public interface IDoubleArrayPublisher : IPublisher
      *
      * @param value value
      */
-    void SetDefault(params double[] value);
+    void SetDefault(double[] value);
 }

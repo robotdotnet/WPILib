@@ -17,7 +17,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetBoolean(long time, bool value);
+    bool SetBoolean(bool value, long time);
 
     bool SetBoolean(bool value);
 
@@ -36,7 +36,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetInteger(long time, long value);
+    bool SetInteger(long value, long time);
 
     bool SetInteger(long value);
 
@@ -55,7 +55,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetFloat(long time, float value);
+    bool SetFloat(float value, long time);
 
     bool SetFloat(float value);
 
@@ -74,7 +74,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetDouble(long time, double value);
+    bool SetDouble(double value, long time);
 
     bool SetDouble(double value);
 
@@ -93,7 +93,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetString(long time, string value);
+    bool SetString(string value, long time);
 
     bool SetString(string value);
 
@@ -112,7 +112,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetRaw(long time, byte[] value);
+    bool SetRaw(byte[] value, long time);
 
     bool SetRaw(byte[] value);
 
@@ -131,7 +131,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetBooleanArray(long time, bool[] value);
+    bool SetBooleanArray(bool[] value, long time);
 
     bool SetBooleanArray(bool[] value);
 
@@ -150,7 +150,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetIntegerArray(long time, long[] value);
+    bool SetIntegerArray(long[] value, long time);
 
     bool SetIntegerArray(long[] value);
 
@@ -169,7 +169,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetFloatArray(long time, float[] value);
+    bool SetFloatArray(float[] value, long time);
 
     bool SetFloatArray(float[] value);
 
@@ -188,7 +188,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetDoubleArray(long time, double[] value);
+    bool SetDoubleArray(double[] value, long time);
 
     bool SetDoubleArray(double[] value);
 
@@ -207,7 +207,7 @@ public partial interface IGenericPublisher
      * @param time timestamp; 0 indicates current NT time should be used
      * @return False if the topic already exists with a different type
      */
-    bool SetStringArray(long time, string[] value);
+    bool SetStringArray(string[] value, long time);
 
     bool SetStringArray(string[] value);
 

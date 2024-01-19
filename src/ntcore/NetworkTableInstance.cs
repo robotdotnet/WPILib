@@ -15,6 +15,7 @@ using WPIUtil.Concurrent;
 using WPIUtil.Logging;
 using WPIUtil.Natives;
 using WPIUtil.Serialization.Protobuf;
+using WPIUtil.Serialization.Struct;
 
 namespace NetworkTables;
 
@@ -485,6 +486,11 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
     public static bool operator !=(NetworkTableInstance? left, NetworkTableInstance? right)
     {
         return !(left == right);
+    }
+
+    public void AddSchema(IStructBase proto)
+    {
+        throw new NotImplementedException();
     }
 
     public void AddSchema(IProtobufBase proto)

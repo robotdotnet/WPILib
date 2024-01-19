@@ -91,19 +91,19 @@ internal sealed class FloatArrayEntryImpl<T> : EntryBase<T>, IFloatArrayEntry wh
     }
 
 
-    public void Set(params float[] value)
+    public void Set(float[] value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloatArray(0, value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloatArray(value.AsSpan(), 0);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void Set(long time, params float[] value)
+    public void Set(float[] value, long time)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloatArray(time, value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloatArray(value.AsSpan(), time);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void SetDefault(params float[] value)
+    public void SetDefault(float[] value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloatArray(value.AsSpan());
         NtCore.SetDefaultEntryValue(Handle, ntValue);

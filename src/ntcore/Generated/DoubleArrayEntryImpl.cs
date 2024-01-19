@@ -91,19 +91,19 @@ internal sealed class DoubleArrayEntryImpl<T> : EntryBase<T>, IDoubleArrayEntry 
     }
 
 
-    public void Set(params double[] value)
+    public void Set(double[] value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDoubleArray(0, value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDoubleArray(value.AsSpan(), 0);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void Set(long time, params double[] value)
+    public void Set(double[] value, long time)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDoubleArray(time, value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDoubleArray(value.AsSpan(), time);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void SetDefault(params double[] value)
+    public void SetDefault(double[] value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDoubleArray(value.AsSpan());
         NtCore.SetDefaultEntryValue(Handle, ntValue);

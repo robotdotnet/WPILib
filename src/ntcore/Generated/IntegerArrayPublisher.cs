@@ -31,7 +31,7 @@ public interface IIntegerArrayPublisher : IPublisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long time, params long[] value);
+    void Set(long[] value, long time);
 
     /**
      * Publish a default value.
@@ -40,5 +40,5 @@ public interface IIntegerArrayPublisher : IPublisher
      *
      * @param value value
      */
-    void SetDefault(params long[] value);
+    void SetDefault(long[] value);
 }

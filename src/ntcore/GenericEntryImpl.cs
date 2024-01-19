@@ -51,23 +51,23 @@ internal sealed partial class GenericEntryImpl<THandle> : EntryBase<THandle>, IG
 
     public bool SetValue<T>(T value)
     {
-        return SetValue(0, value);
+        return SetValue(value, 0);
     }
 
-    public bool SetValue<T>(long time, T value)
+    public bool SetValue<T>(T value, long time)
     {
         return value switch
         {
             NetworkTableValue v => Set(v),
-            bool v => Set(RefNetworkTableValue.MakeBoolean(time, v)),
-            double v => Set(RefNetworkTableValue.MakeDouble(time, v)),
-            float v => Set(RefNetworkTableValue.MakeFloat(time, v)),
-            string v => Set(RefNetworkTableValue.MakeString(time, v)),
-            bool[] v => Set(RefNetworkTableValue.MakeBooleanArray(time, v)),
-            double[] v => Set(RefNetworkTableValue.MakeDoubleArray(time, v)),
-            float[] v => Set(RefNetworkTableValue.MakeFloatArray(time, v)),
-            string[] v => Set(RefNetworkTableValue.MakeStringArray(time, v)),
-            byte[] v => Set(RefNetworkTableValue.MakeRaw(time, v)),
+            bool v => Set(RefNetworkTableValue.MakeBoolean(v, time)),
+            double v => Set(RefNetworkTableValue.MakeDouble(v, time)),
+            float v => Set(RefNetworkTableValue.MakeFloat(v, time)),
+            string v => Set(RefNetworkTableValue.MakeString(v, time)),
+            bool[] v => Set(RefNetworkTableValue.MakeBooleanArray(v, time)),
+            double[] v => Set(RefNetworkTableValue.MakeDoubleArray(v, time)),
+            float[] v => Set(RefNetworkTableValue.MakeFloatArray(v, time)),
+            string[] v => Set(RefNetworkTableValue.MakeStringArray(v, time)),
+            byte[] v => Set(RefNetworkTableValue.MakeRaw(v, time)),
             _ => throw new InvalidOperationException($"Value of type {value?.GetType().Name} cannot be put into a table")
         };
     }

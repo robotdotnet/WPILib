@@ -31,7 +31,7 @@ public interface IDoublePublisher : IPublisher
      * @param value value to publish
      * @param time timestamp; 0 indicates current NT time should be used
      */
-    void Set(long time, double value);
+    void Set(double value, long time);
 
     /**
      * Publish a default value.

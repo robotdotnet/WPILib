@@ -91,19 +91,19 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
     }
 
 
-    public void Set(params long[] value)
+    public void Set(long[] value)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(0, value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(value.AsSpan(), 0);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void Set(long time, params long[] value)
+    public void Set(long[] value, long time)
     {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(time, value.AsSpan());
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(value.AsSpan(), time);
         NtCore.SetEntryValue(Handle, ntValue);
     }
 
-    public void SetDefault(params long[] value)
+    public void SetDefault(long[] value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(value.AsSpan());
         NtCore.SetDefaultEntryValue(Handle, ntValue);

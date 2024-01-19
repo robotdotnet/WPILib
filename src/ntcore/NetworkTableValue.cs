@@ -191,17 +191,17 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
     {
         return value.Type switch
         {
-            NetworkTableType.Boolean => RefNetworkTableValue.MakeBoolean(value.Time, value.m_structValue.boolValue),
-            NetworkTableType.Double => RefNetworkTableValue.MakeDouble(value.Time, value.m_structValue.doubleValue),
-            NetworkTableType.String => RefNetworkTableValue.MakeString(value.Time, (string)value.m_objectValue!),
-            NetworkTableType.Raw => RefNetworkTableValue.MakeRaw(value.Time, (byte[])value.m_objectValue!),
-            NetworkTableType.BooleanArray => RefNetworkTableValue.MakeBooleanArray(value.Time, (bool[])value.m_objectValue!),
-            NetworkTableType.DoubleArray => RefNetworkTableValue.MakeDoubleArray(value.Time, (double[])value.m_objectValue!),
-            NetworkTableType.StringArray => RefNetworkTableValue.MakeStringArray(value.Time, (string[])value.m_objectValue!),
-            NetworkTableType.Integer => RefNetworkTableValue.MakeInteger(value.Time, value.m_structValue.longValue),
-            NetworkTableType.Float => RefNetworkTableValue.MakeFloat(value.Time, value.m_structValue.floatValue),
-            NetworkTableType.IntegerArray => RefNetworkTableValue.MakeIntegerArray(value.Time, (long[])value.m_objectValue!),
-            NetworkTableType.FloatArray => RefNetworkTableValue.MakeFloatArray(value.Time, (float[])value.m_objectValue!),
+            NetworkTableType.Boolean => RefNetworkTableValue.MakeBoolean(value.m_structValue.boolValue, value.Time),
+            NetworkTableType.Double => RefNetworkTableValue.MakeDouble(value.m_structValue.doubleValue, value.Time),
+            NetworkTableType.String => RefNetworkTableValue.MakeString((string)value.m_objectValue!, value.Time),
+            NetworkTableType.Raw => RefNetworkTableValue.MakeRaw((byte[])value.m_objectValue!, value.Time),
+            NetworkTableType.BooleanArray => RefNetworkTableValue.MakeBooleanArray((bool[])value.m_objectValue!, value.Time),
+            NetworkTableType.DoubleArray => RefNetworkTableValue.MakeDoubleArray((double[])value.m_objectValue!, value.Time),
+            NetworkTableType.StringArray => RefNetworkTableValue.MakeStringArray((string[])value.m_objectValue!, value.Time),
+            NetworkTableType.Integer => RefNetworkTableValue.MakeInteger(value.m_structValue.longValue, value.Time),
+            NetworkTableType.Float => RefNetworkTableValue.MakeFloat(value.m_structValue.floatValue, value.Time),
+            NetworkTableType.IntegerArray => RefNetworkTableValue.MakeIntegerArray((long[])value.m_objectValue!, value.Time),
+            NetworkTableType.FloatArray => RefNetworkTableValue.MakeFloatArray((float[])value.m_objectValue!, value.Time),
             _ => RefNetworkTableValue.MakeUnassigned(value.Time),
         };
     }

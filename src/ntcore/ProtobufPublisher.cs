@@ -8,7 +8,7 @@ public interface IProtobufPublisher<T> : IPublisher where T : IProtobufSerializa
 
     void Set(T value);
 
-    void Set(long time, T value);
+    void Set(T value, long time);
 
     void SetDefault(T value);
 }
