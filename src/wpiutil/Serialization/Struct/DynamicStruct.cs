@@ -58,6 +58,60 @@ public class DynamicStruct
         SetFieldImpl(field, value ? 1 : 0, arrIndex);
     }
 
+    public long GetIntField(StructFieldDescriptor field, int arrIndex = 0)
+    {
+        if (!field.IsInt && !field.IsUint)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not integer type");
+        }
+        return GetFieldImpl(field, arrIndex);
+    }
+
+    public void SetIntField(StructFieldDescriptor field, long value, int arrIndex = 0)
+    {
+        if (!field.IsInt && !field.IsUint)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not integer type");
+        }
+        SetFieldImpl(field, value, arrIndex);
+    }
+
+    public float GetFloatField(StructFieldDescriptor field, int arrIndex = 0)
+    {
+        if (field.Type.Type != StructFieldType.Float)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not bool type");
+        }
+        return BitConverter.SingleToInt32Bits((int)GetFieldImpl(field, arrIndex));
+    }
+
+    public void SetFloatField(StructFieldDescriptor field, float value, int arrIndex = 0)
+    {
+        if (field.Type.Type != StructFieldType.Bool)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not bool type");
+        }
+        SetFieldImpl(field, BitConverter.SingleToInt32Bits(value), arrIndex);
+    }
+
+    public double GetDoubleField(StructFieldDescriptor field, int arrIndex = 0)
+    {
+        if (field.Type.Type != StructFieldType.Double)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not bool type");
+        }
+        return BitConverter.DoubleToInt64Bits(GetFieldImpl(field, arrIndex));
+    }
+
+    public void SetDoubleField(StructFieldDescriptor field, double value, int arrIndex = 0)
+    {
+        if (field.Type.Type != StructFieldType.Bool)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not bool type");
+        }
+        SetFieldImpl(field, BitConverter.DoubleToInt64Bits(value), arrIndex);
+    }
+
     public string GetStringField(StructFieldDescriptor field)
     {
         if (field.Type.Type != StructFieldType.Char)
@@ -75,6 +129,27 @@ public class DynamicStruct
 
         ReadOnlySpan<byte> bytes = Buffer.Span[field.Offset..field.ArraySize];
         return Encoding.UTF8.GetString(bytes);
+    }
+
+    public void SetStringField(StructFieldDescriptor field, string value)
+    {
+        if (field.Type.Type != StructFieldType.Char)
+        {
+            ThrowHelper.ThrowInvalidOperationException("field is not char type");
+        }
+        if (field.Parent != Descriptor)
+        {
+            ThrowHelper.ThrowArgumentException("field is not part of this struct");
+        }
+        if (!Descriptor.IsValid)
+        {
+            ThrowHelper.ThrowInvalidOperationException("struct descriptor is not valid");
+        }
+
+        Span<byte> bytes = Buffer.Span[field.Offset..field.ArraySize];
+        Encoding.UTF8.GetEncoder().Convert(value, bytes, false, out int _, out int bytesUsed, out bool _);
+        bytes[bytesUsed..].Clear();
+
     }
 
     public DynamicStruct GetStructField(StructFieldDescriptor field, int arrIndex = 0)
@@ -208,8 +283,6 @@ public class DynamicStruct
             }
             return;
         }
-
-
 
         switch (field.Size)
         {
