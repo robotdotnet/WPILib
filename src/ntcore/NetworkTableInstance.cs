@@ -11,8 +11,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
-using WPIUtil;
 using WPIUtil.Concurrent;
+using WPIUtil.Logging;
 using WPIUtil.Natives;
 using WPIUtil.Serialization.Protobuf;
 

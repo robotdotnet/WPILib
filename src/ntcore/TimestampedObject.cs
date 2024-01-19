@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace NetworkTables;
 
-public sealed record class TimestampedObject<T>(long Timestamp, long ServerTime, T Value);
+public record struct TimestampedObject<T>(long Timestamp, long ServerTime, T Value);

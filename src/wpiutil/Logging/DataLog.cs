@@ -8,7 +8,7 @@ using WPIUtil.Natives;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
 
-namespace WPIUtil;
+namespace WPIUtil.Logging;
 
 public sealed unsafe class DataLog : IDisposable
 {
@@ -70,12 +70,16 @@ public sealed unsafe class DataLog : IDisposable
 
     public void AddSchema(IStructBase value, long timestamp = 0)
     {
-        throw new NotImplementedException();
+        AddSchemaImpl(value, timestamp == 0 ? (long)TimestampNative.Now() : timestamp, []);
     }
 
-    public void AddSchema(IProtobufBase value, long timestamp = 0)
+    public void AddSchema(IProtobufBase proto, long timestamp = 0)
     {
-        throw new NotImplementedException();
+        long actualTimestamp = timestamp == 0 ? (long)TimestampNative.Now() : timestamp;
+        proto.ForEachDescriptor(HasSchema, (typeString, schema) =>
+        {
+            AddSchema(typeString, "proto:FileDescriptorProto", schema, actualTimestamp);
+        });
     }
 
     public bool HasSchema(string name)
@@ -84,6 +88,16 @@ public sealed unsafe class DataLog : IDisposable
     }
 
     public void AddSchema(string name, string type, string schema, long timestamp = 0)
+    {
+        if (!m_schemaMap.TryAdd(name, 1))
+        {
+            return;
+        }
+        // TODO add schema functions
+        // DataLogNative
+    }
+
+    public void AddSchema(string name, string type, ReadOnlySpan<byte> schema, long timestamp = 0)
     {
         if (!m_schemaMap.TryAdd(name, 1))
         {

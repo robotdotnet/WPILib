@@ -24,27 +24,49 @@ internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProto
 
     public T Get()
     {
-        throw new System.NotImplementedException();
+        return FromRaw(m_defaultValue).Value;
     }
 
     public T Get(T defaultValue)
     {
-        throw new System.NotImplementedException();
-    }
-
-    public TimestampedObject<T> GetAtomic()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public TimestampedObject<T> GetAtomic(T defaultValue)
-    {
-        throw new System.NotImplementedException();
+        return FromRaw(defaultValue).Value;
     }
 
     public bool GetInto(ref T output)
     {
-        throw new System.NotImplementedException();
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
+        if (!value.IsRaw)
+        {
+            return false;
+        }
+        byte[] raw = value.GetRaw();
+        if (raw.Length == 0)
+        {
+            return false;
+        }
+        try
+        {
+            lock (m_lockObject)
+            {
+                m_buf.ReadInto(ref output, raw);
+                return true;
+            }
+        }
+        catch (Exception)
+        {
+
+        }
+        return false;
+    }
+
+    public TimestampedObject<T> GetAtomic()
+    {
+        return FromRaw(m_defaultValue);
+    }
+
+    public TimestampedObject<T> GetAtomic(T defaultValue)
+    {
+        return FromRaw(defaultValue);
     }
 
     public TimestampedObject<T>[] ReadQueue()
@@ -93,37 +115,23 @@ internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProto
         NtCore.Unpublish(Handle);
     }
 
-    private T FromRaw(ReadOnlySpan<byte> raw, T defaultValue)
+    private TimestampedObject<T> FromRaw(T defaultValue)
     {
+        NetworkTableValue value = NtCore.GetEntryValue(Handle);
+        if (!value.IsRaw)
+        {
+            return new TimestampedObject<T>(value.Time, value.ServerTime, defaultValue);
+        }
+        byte[] raw = value.GetRaw();
         if (raw.Length == 0)
         {
-            return defaultValue;
-        }
-
-        try
-        {
-            lock (m_lockObject)
-            {
-                return m_buf.Read(raw);
-            }
-        }
-        catch
-        {
-            return defaultValue;
-        }
-    }
-
-    private TimestampedObject<T> FromRaw(TimestampedObject<byte[]> raw, T defaultValue)
-    {
-        if (raw.Value.Length == 0)
-        {
-            return new TimestampedObject<T>(0, 0, defaultValue);
+            return new TimestampedObject<T>(value.Time, value.ServerTime, defaultValue);
         }
         try
         {
             lock (m_lockObject)
             {
-                return new TimestampedObject<T>(raw.Timestamp, raw.ServerTime, m_buf.Read(raw.Value));
+                return new TimestampedObject<T>(value.Time, value.ServerTime, m_buf.Read(raw));
             }
         }
         catch
@@ -132,5 +140,5 @@ internal sealed class ProtobufEntryImpl<T, THandle> : EntryBase<THandle>, IProto
         }
     }
 
-    private static readonly ReadOnlyMemory<byte> m_emptyRaw = Array.Empty<byte>();
+    private static readonly byte[] m_emptyRaw = Array.Empty<byte>();
 }

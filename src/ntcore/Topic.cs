@@ -1,9 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-public class Topic
+public class Topic : IEquatable<Topic?>, IEqualityOperators<Topic?, Topic?, bool>
 {
     internal Topic(NetworkTableInstance inst, NtTopic handle)
     {
@@ -84,5 +87,29 @@ public class Topic
         return new GenericEntryImpl<NtEntry>(this, NtCore.GetEntry(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }
 
-    // TODO implement equals and hash code
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as Topic);
+    }
+
+    public bool Equals(Topic? other)
+    {
+        return other is not null &&
+               Handle.Equals(other.Handle);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Handle);
+    }
+
+    public static bool operator ==(Topic? left, Topic? right)
+    {
+        return EqualityComparer<Topic>.Default.Equals(left, right);
+    }
+
+    public static bool operator !=(Topic? left, Topic? right)
+    {
+        return !(left == right);
+    }
 }
