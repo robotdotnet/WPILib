@@ -128,10 +128,65 @@ public class DynamicStruct
         }
 
         ReadOnlySpan<byte> bytes = Buffer.Span[field.Offset..field.ArraySize];
-        return Encoding.UTF8.GetString(bytes);
+
+        // Find last non zero character
+        int stringLength = bytes.Length;
+        for (; stringLength > 0; stringLength--)
+        {
+            if (bytes[stringLength - 1] != 0)
+            {
+                break;
+            }
+        }
+        // If string is all zeroes, its empty and return an empty string.
+        if (stringLength == 0)
+        {
+            return "";
+        }
+        // Check if the end of the string is in the middle of a continuation byte or not.
+        if ((bytes[stringLength - 1] & 0x80) != 0)
+        {
+            // This is a UTF8 continuation byte. Make sure its valid.
+            // Walk back until initial byte is found
+            int utf8StartByte = stringLength;
+            for (; utf8StartByte > 0; utf8StartByte--)
+            {
+                if ((bytes[utf8StartByte - 1] & 0x40) != 0)
+                {
+                    // Having 2nd bit set means start byte
+                    break;
+                }
+            }
+            if (utf8StartByte == 0)
+            {
+                // This case means string only contains continuation bytes
+                return "";
+            }
+            utf8StartByte--;
+            // Check if its a 2, 3, or 4 byte
+            byte checkByte = bytes[utf8StartByte];
+            if ((checkByte & 0xE0) == 0xC0 && utf8StartByte != stringLength - 2)
+            {
+                // 2 byte, need 1 more byte
+                stringLength = utf8StartByte;
+            }
+            else if ((checkByte & 0xF0) == 0xE0 && utf8StartByte != stringLength - 3)
+            {
+                // 3 byte, need 2 more bytes
+                stringLength = utf8StartByte;
+            }
+            else if ((checkByte & 0xF8) == 0xF0 && utf8StartByte != stringLength - 4)
+            {
+                // 4 byte, need 3 more bytes
+                stringLength = utf8StartByte;
+            }
+            // If we get here, the string is either completely garbage or fine.
+        }
+
+        return Encoding.UTF8.GetString(bytes[..stringLength]);
     }
 
-    public void SetStringField(StructFieldDescriptor field, string value)
+    public bool SetStringField(StructFieldDescriptor field, string value)
     {
         if (field.Type.Type != StructFieldType.Char)
         {
@@ -147,9 +202,9 @@ public class DynamicStruct
         }
 
         Span<byte> bytes = Buffer.Span[field.Offset..field.ArraySize];
-        Encoding.UTF8.GetEncoder().Convert(value, bytes, false, out int _, out int bytesUsed, out bool _);
+        Encoding.UTF8.GetEncoder().Convert(value, bytes, false, out int _, out int bytesUsed, out bool complete);
         bytes[bytesUsed..].Clear();
-
+        return complete;
     }
 
     public DynamicStruct GetStructField(StructFieldDescriptor field, int arrIndex = 0)
