@@ -1,3 +1,4 @@
+using System.Text.Json;
 using UnitsNet.NumberExtensions.NumberToAngle;
 using WPIMath.Geometry;
 using Xunit;
@@ -128,5 +129,47 @@ public class Rotation2dTest
         rot2 = -160.Degrees();
         interpolated = MathExtras.Lerp(rot1, rot2, 0.5);
         Assert.Equal(-175.0, interpolated.Angle.Degrees, Epsilon);
+    }
+
+    [Fact]
+    public void TestDeserialization()
+    {
+
+        Rotation2d r = JsonSerializer.Deserialize<Rotation2d>("{\"radians\":5}");
+        Assert.Equal(5, r.Angle.Radians, Epsilon);
+    }
+
+    [Fact]
+    public void TestSerialization()
+    {
+        Rotation2d rot = 5.Radians();
+
+        var serializerOptions = new JsonSerializerOptions
+        {
+            WriteIndented = false,
+        };
+        string serialized = JsonSerializer.Serialize(rot, serializerOptions);
+        Assert.Equal("{\"radians\":5}", serialized);
+    }
+
+    [Fact]
+    public void TestDeserializationSourceGenerated()
+    {
+        Rotation2d r = JsonSerializer.Deserialize("{\"radians\":5}", Rotation2dJsonContext.Default.Rotation2d);
+        Assert.Equal(5, r.Angle.Radians, Epsilon);
+    }
+
+    [Fact]
+    public void TestSerializationSourceGenerated()
+    {
+        Rotation2d rot = 5.Radians();
+
+        var serializerOptions = new JsonSerializerOptions
+        {
+            WriteIndented = false,
+        };
+        var context = new Rotation2dJsonContext(serializerOptions).Rotation2d;
+        string serialized = JsonSerializer.Serialize(rot, context);
+        Assert.Equal("{\"radians\":5}", serialized);
     }
 }
