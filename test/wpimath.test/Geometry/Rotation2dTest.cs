@@ -163,13 +163,7 @@ public class Rotation2dTest
     public void TestSerializationSourceGenerated()
     {
         Rotation2d rot = 5.Radians();
-
-        var serializerOptions = new JsonSerializerOptions
-        {
-            WriteIndented = false,
-        };
-        var context = new Rotation2dJsonContext(serializerOptions).Rotation2d;
-        string serialized = JsonSerializer.Serialize(rot, context);
+        string serialized = JsonSerializer.Serialize(rot, Rotation2dJsonContext.Default.Rotation2d);
         Assert.Equal("{\"radians\":5}", serialized);
     }
 }

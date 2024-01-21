@@ -50,7 +50,6 @@ public class Rotation2dStruct : IStruct<Rotation2d>
     }
 }
 
-[JsonSourceGenerationOptions(WriteIndented = true)]
 [JsonSerializable(typeof(Rotation2d))]
 public partial class Rotation2dJsonContext : JsonSerializerContext
 {
