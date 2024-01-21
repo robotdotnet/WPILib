@@ -50,6 +50,12 @@ public class Rotation2dStruct : IStruct<Rotation2d>
     }
 }
 
+[JsonSourceGenerationOptions(WriteIndented = true)]
+[JsonSerializable(typeof(Rotation2d))]
+public partial class Rotation2dJsonContext : JsonSerializerContext
+{
+}
+
 public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
                                     IProtobufSerializable<Rotation2d, ProtobufRotation2d>,
                                     IAdditionOperators<Rotation2d, Rotation2d, Rotation2d>,
@@ -90,16 +96,14 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     }
 
     [JsonConstructor]
-#pragma warning disable IDE0051 // Remove unused private members
-    private Rotation2d(double radians) : this(radians.Radians())
+    internal Rotation2d(double radians) : this(radians.Radians())
     {
 
     }
 
     [JsonInclude]
     [JsonPropertyName("radians")]
-    private readonly double Radians => Angle.Radians;
-#pragma warning restore IDE0051 // Remove unused private members
+    internal readonly double Radians => Angle.Radians;
 
     [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
     public Angle Angle { get; } = 0.Radians();
