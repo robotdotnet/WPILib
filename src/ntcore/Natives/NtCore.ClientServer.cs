@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using CommunityToolkit.Diagnostics;
 using NetworkTables.Handles;
+using WPIUtil;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
@@ -22,33 +23,33 @@ public static partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void StopLocal(NtInst inst);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_StartServer", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("ntcore", EntryPoint = "NT_StartServer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartServer(NtInst inst, string persistFilename, string listenAddres, uint port3, uint port4);
+    public static partial void StartServer(NtInst inst, WpiString persistFilename, WpiString listenAddres, uint port3, uint port4);
 
     [LibraryImport("ntcore", EntryPoint = "NT_StopServer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void StopServer(NtInst inst);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_StartClient3", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("ntcore", EntryPoint = "NT_StartClient3")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartClient3(NtInst inst, string identity);
+    public static partial void StartClient3(NtInst inst, WpiString identity);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_StartClient4", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("ntcore", EntryPoint = "NT_StartClient4")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartClient4(NtInst inst, string identity);
+    public static partial void StartClient4(NtInst inst, WpiString identity);
 
     [LibraryImport("ntcore", EntryPoint = "NT_StopClient")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void StopClient(NtInst inst);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_SetServer", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("ntcore", EntryPoint = "NT_SetServer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetServer(NtInst inst, string serverName, uint port);
+    public static partial void SetServer(NtInst inst, WpiString serverName, uint port);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_SetServerMulti", StringMarshalling = StringMarshalling.Utf8)]
+    [LibraryImport("ntcore", EntryPoint = "NT_SetServerMulti")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetServerMulti(NtInst inst, nuint count, ReadOnlySpan<string> serverNames, ReadOnlySpan<uint> ports);
+    internal static partial void SetServerMulti(NtInst inst, nuint count, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> serverNames, ReadOnlySpan<uint> ports);
 
     public static void SetServerMulti(NtInst inst, ReadOnlySpan<string> serverNames, ReadOnlySpan<uint> ports)
     {

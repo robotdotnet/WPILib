@@ -58,7 +58,7 @@ public class BooleanTopic : Topic
     {
         return new BooleanEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Boolean,
                 "boolean"u8, options),
             defaultValue);
@@ -109,14 +109,14 @@ public class BooleanTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IBooleanSubscriber SubscribeExDangerous(
+    internal IBooleanSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         bool defaultValue,
         PubSubOptions options)
     {
         return new BooleanEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Boolean,
                 typeString, options),
             defaultValue);
@@ -142,7 +142,7 @@ public class BooleanTopic : Topic
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishDangerous(
+            NtCore.Publish(
                 Handle, NetworkTableType.Boolean,
                 "boolean"u8, options),
             false);
@@ -194,14 +194,14 @@ public class BooleanTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanPublisher PublishExDangerous(
+    internal IBooleanPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Boolean,
                 typeString, properties, options),
             false);
@@ -225,14 +225,14 @@ public class BooleanTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanPublisher PublishExDangerous(
+    internal IBooleanPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Boolean,
                 typeString, properties, options),
             false);
@@ -256,14 +256,14 @@ public class BooleanTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanPublisher PublishExDangerous(
+    internal IBooleanPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Boolean,
                 typeString, properties, options),
             false);
@@ -295,7 +295,7 @@ public class BooleanTopic : Topic
     {
         return new BooleanEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Boolean,
                 "boolean"u8, options),
             defaultValue);
@@ -356,14 +356,14 @@ public class BooleanTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IBooleanEntry GetEntryExDangerous(
+    internal IBooleanEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         bool defaultValue,
         PubSubOptions options)
     {
         return new BooleanEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Boolean,
                 typeString, options),
             defaultValue);

@@ -133,5 +133,15 @@ public static unsafe class WpiStringMarshaller
     {
         public readonly byte* Str = str;
         public readonly nuint Len = len;
+
+        public readonly string ConvertToString()
+        {
+            if (Len == 0)
+            {
+                return "";
+            }
+
+            return Encoding.UTF8.GetString(Str, checked((int)Len));
+        }
     }
 }

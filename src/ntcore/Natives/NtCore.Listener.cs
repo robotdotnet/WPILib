@@ -29,7 +29,7 @@ public static unsafe partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_AddPolledListenerMultiple")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial NtListener AddListener(NtListenerPoller poller, [MarshalUsing(typeof(StringLengthPairMarshaller<NtString>), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, EventFlags flags);
+    internal static partial NtListener AddListener(NtListenerPoller poller, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, EventFlags flags);
 
     public static NtListener AddListener(NtListenerPoller poller, ReadOnlySpan<string> prefixes, EventFlags flags)
     {

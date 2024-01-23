@@ -20,11 +20,25 @@ public class Topic : IEquatable<Topic?>, IEqualityOperators<Topic?, Topic?, bool
 
     public NetworkTableInstance Instance { get; }
 
-    public string Name => NtCore.GetTopicName(Handle);
+    public string Name
+    {
+        get
+        {
+            NtCore.GetTopicName(Handle, out var name);
+            return name;
+        }
+    }
 
     public NetworkTableType Type => NtCore.GetTopicType(Handle);
 
-    public string TypeString => NtCore.GetTopicTypeString(Handle);
+    public string TypeString
+    {
+        get
+        {
+            NtCore.GetTopicTypeString(Handle, out var typeString);
+            return typeString;
+        }
+    }
 
     public TopicInfo? Info => NtCore.GetTopicInfo(Handle);
 
@@ -48,7 +62,11 @@ public class Topic : IEquatable<Topic?>, IEqualityOperators<Topic?, Topic?, bool
 
     public bool Exists => NtCore.GetTopicExists(Handle);
 
-    public string GetProperty(string name) => NtCore.GetTopicProperty(Handle, name);
+    public string GetProperty(string name)
+    {
+        NtCore.GetTopicProperty(Handle, name, out var property);
+        return property;
+    }
 
     public void SetProperty(string name, string value) => NtCore.SetTopicProperty(Handle, name, value);
 
@@ -56,7 +74,12 @@ public class Topic : IEquatable<Topic?>, IEqualityOperators<Topic?, Topic?, bool
 
     public string Properties
     {
-        get => NtCore.GetTopicProperties(Handle);
+        get
+        {
+            NtCore.GetTopicProperties(Handle, out var properties);
+            return properties;
+        }
+
         set => NtCore.SetTopicProperties(Handle, value);
     }
 

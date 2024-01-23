@@ -58,7 +58,7 @@ public class DoubleTopic : Topic
     {
         return new DoubleEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Double,
                 "double"u8, options),
             defaultValue);
@@ -109,14 +109,14 @@ public class DoubleTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IDoubleSubscriber SubscribeExDangerous(
+    internal IDoubleSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         double defaultValue,
         PubSubOptions options)
     {
         return new DoubleEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Double,
                 typeString, options),
             defaultValue);
@@ -142,7 +142,7 @@ public class DoubleTopic : Topic
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishDangerous(
+            NtCore.Publish(
                 Handle, NetworkTableType.Double,
                 "double"u8, options),
             0);
@@ -194,14 +194,14 @@ public class DoubleTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoublePublisher PublishExDangerous(
+    internal IDoublePublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Double,
                 typeString, properties, options),
             0);
@@ -225,14 +225,14 @@ public class DoubleTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoublePublisher PublishExDangerous(
+    internal IDoublePublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Double,
                 typeString, properties, options),
             0);
@@ -256,14 +256,14 @@ public class DoubleTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoublePublisher PublishExDangerous(
+    internal IDoublePublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Double,
                 typeString, properties, options),
             0);
@@ -295,7 +295,7 @@ public class DoubleTopic : Topic
     {
         return new DoubleEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Double,
                 "double"u8, options),
             defaultValue);
@@ -356,14 +356,14 @@ public class DoubleTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IDoubleEntry GetEntryExDangerous(
+    internal IDoubleEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         double defaultValue,
         PubSubOptions options)
     {
         return new DoubleEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Double,
                 typeString, options),
             defaultValue);

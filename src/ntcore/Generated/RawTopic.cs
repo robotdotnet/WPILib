@@ -79,14 +79,14 @@ public class RawTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IRawSubscriber SubscribeDangerous(
+    internal IRawSubscriber Subscribe(
         ReadOnlySpan<byte> typeString,
         byte[] defaultValue,
         PubSubOptions options)
     {
         return new RawEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
             defaultValue);
@@ -136,13 +136,13 @@ public class RawTopic : Topic
       * @param options publish options
       * @return publisher
       */
-    internal IRawPublisher PublishDangerous(
+    internal IRawPublisher Publish(
         ReadOnlySpan<byte> typeString,
         PubSubOptions options)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishDangerous(
+            NtCore.Publish(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
             []);
@@ -194,14 +194,14 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IRawPublisher PublishExDangerous(
+    internal IRawPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Raw,
                 typeString, properties, options),
             []);
@@ -225,14 +225,14 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IRawPublisher PublishExDangerous(
+    internal IRawPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Raw,
                 typeString, properties, options),
             []);
@@ -256,14 +256,14 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IRawPublisher PublishExDangerous(
+    internal IRawPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Raw,
                 typeString, properties, options),
             []);
@@ -324,14 +324,14 @@ public class RawTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IRawEntry GetEntryDangerous(
+    internal IRawEntry GetEntry(
         ReadOnlySpan<byte> typeString,
         byte[] defaultValue,
         PubSubOptions options)
     {
         return new RawEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
             defaultValue);

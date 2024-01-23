@@ -50,10 +50,10 @@ public static unsafe class TopicInfoMarshaller
             return new TopicInfo
             {
                 TopicHandle = new NtTopic(unmanaged.topic),
-                Name = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.name) ?? "",
+                Name = unmanaged.name.ConvertToString(),
                 Type = unmanaged.type,
-                TypeStr = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.typeStr) ?? "",
-                Properties = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.properties) ?? "",
+                TypeStr = unmanaged.typeStr.ConvertToString(),
+                Properties = unmanaged.properties.ConvertToString(),
 
             };
         }
@@ -68,10 +68,10 @@ public static unsafe class TopicInfoMarshaller
     public struct NativeTopicInfo
     {
         public int topic;
-        public NtString name;
+        public WpiStringMarshaller.WpiStringNative name;
         public NetworkTableType type;
-        public NtString typeStr;
-        public NtString properties;
+        public WpiStringMarshaller.WpiStringNative typeStr;
+        public WpiStringMarshaller.WpiStringNative properties;
     }
 
 }

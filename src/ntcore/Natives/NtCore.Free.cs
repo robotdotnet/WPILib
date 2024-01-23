@@ -9,10 +9,6 @@ public static unsafe partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void DisposeValue(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_DisposeString")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void DisposeString(NtString* ptr);
-
     [LibraryImport("ntcore", EntryPoint = "NT_DisposeValueArray")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void DisposeValueArray(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr, nuint count);

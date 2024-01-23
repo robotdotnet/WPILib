@@ -58,7 +58,7 @@ public class FloatTopic : Topic
     {
         return new FloatEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Float,
                 "float"u8, options),
             defaultValue);
@@ -109,14 +109,14 @@ public class FloatTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IFloatSubscriber SubscribeExDangerous(
+    internal IFloatSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         float defaultValue,
         PubSubOptions options)
     {
         return new FloatEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.Float,
                 typeString, options),
             defaultValue);
@@ -142,7 +142,7 @@ public class FloatTopic : Topic
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishDangerous(
+            NtCore.Publish(
                 Handle, NetworkTableType.Float,
                 "float"u8, options),
             0);
@@ -194,14 +194,14 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatPublisher PublishExDangerous(
+    internal IFloatPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Float,
                 typeString, properties, options),
             0);
@@ -225,14 +225,14 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatPublisher PublishExDangerous(
+    internal IFloatPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Float,
                 typeString, properties, options),
             0);
@@ -256,14 +256,14 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatPublisher PublishExDangerous(
+    internal IFloatPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.Float,
                 typeString, properties, options),
             0);
@@ -295,7 +295,7 @@ public class FloatTopic : Topic
     {
         return new FloatEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Float,
                 "float"u8, options),
             defaultValue);
@@ -356,14 +356,14 @@ public class FloatTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IFloatEntry GetEntryExDangerous(
+    internal IFloatEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         float defaultValue,
         PubSubOptions options)
     {
         return new FloatEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.Float,
                 typeString, options),
             defaultValue);

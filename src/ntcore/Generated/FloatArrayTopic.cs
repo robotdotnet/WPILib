@@ -58,7 +58,7 @@ public class FloatArrayTopic : Topic
     {
         return new FloatArrayEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
                 "float[]"u8, options),
             defaultValue);
@@ -109,14 +109,14 @@ public class FloatArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IFloatArraySubscriber SubscribeExDangerous(
+    internal IFloatArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         float[] defaultValue,
         PubSubOptions options)
     {
         return new FloatArrayEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
                 typeString, options),
             defaultValue);
@@ -142,7 +142,7 @@ public class FloatArrayTopic : Topic
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishDangerous(
+            NtCore.Publish(
                 Handle, NetworkTableType.FloatArray,
                 "float[]"u8, options),
             []);
@@ -194,14 +194,14 @@ public class FloatArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatArrayPublisher PublishExDangerous(
+    internal IFloatArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.FloatArray,
                 typeString, properties, options),
             []);
@@ -225,14 +225,14 @@ public class FloatArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatArrayPublisher PublishExDangerous(
+    internal IFloatArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.FloatArray,
                 typeString, properties, options),
             []);
@@ -256,14 +256,14 @@ public class FloatArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatArrayPublisher PublishExDangerous(
+    internal IFloatArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.FloatArray,
                 typeString, properties, options),
             []);
@@ -295,7 +295,7 @@ public class FloatArrayTopic : Topic
     {
         return new FloatArrayEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,
                 "float[]"u8, options),
             defaultValue);
@@ -356,14 +356,14 @@ public class FloatArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IFloatArrayEntry GetEntryExDangerous(
+    internal IFloatArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         float[] defaultValue,
         PubSubOptions options)
     {
         return new FloatArrayEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,
                 typeString, options),
             defaultValue);

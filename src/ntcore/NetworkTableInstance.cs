@@ -506,7 +506,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         bool added = false;
         var pub = m_schemas.GetOrAdd($"/.schema/{name}", k =>
         {
-            IRawPublisher pub = GetRawTopic(k).PublishExDangerous(type, "{\"retained\":true}"u8, PubSubOptions.None);
+            IRawPublisher pub = GetRawTopic(k).PublishEx(type, "{\"retained\":true}"u8, PubSubOptions.None);
             added = true;
             return pub;
         });
@@ -520,7 +520,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
     {
         var pub = m_schemas.GetOrAdd($"/.schema/{name}", k =>
         {
-            IRawPublisher pub = GetRawTopic(k).PublishExDangerous(type, "{\"retained\":true}"u8, PubSubOptions.None);
+            IRawPublisher pub = GetRawTopic(k).PublishEx(type, "{\"retained\":true}"u8, PubSubOptions.None);
             pub.SetDefault(Encoding.UTF8.GetBytes(schema));
             return pub;
         });

@@ -24,8 +24,8 @@ public static unsafe class ConnectionInfoMarshaller
         {
             return new ConnectionInfo
             {
-                RemoteId = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.remoteId) ?? "",
-                RemoteIp = StringLengthPairMarshaller<NtString>.ManagedConvert(unmanaged.remoteIp) ?? "",
+                RemoteId = unmanaged.remoteId.ConvertToString(),
+                RemoteIp = unmanaged.remoteIp.ConvertToString(),
                 RemotePort = unmanaged.remotePort,
                 LastUpdate = unmanaged.lastUpdate,
                 ProtocolVersion = unmanaged.protocolVersion,
@@ -41,8 +41,8 @@ public static unsafe class ConnectionInfoMarshaller
     [StructLayout(LayoutKind.Sequential)]
     public struct NativeConnectionInfo
     {
-        public NtString remoteId;
-        public NtString remoteIp;
+        public WpiStringMarshaller.WpiStringNative remoteId;
+        public WpiStringMarshaller.WpiStringNative remoteIp;
         public uint remotePort;
         public ulong lastUpdate;
         public uint protocolVersion;

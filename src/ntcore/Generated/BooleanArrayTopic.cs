@@ -58,7 +58,7 @@ public class BooleanArrayTopic : Topic
     {
         return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
                 "boolean[]"u8, options),
             defaultValue);
@@ -109,14 +109,14 @@ public class BooleanArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IBooleanArraySubscriber SubscribeExDangerous(
+    internal IBooleanArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         bool[] defaultValue,
         PubSubOptions options)
     {
         return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
-            NtCore.SubscribeDangerous(
+            NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, options),
             defaultValue);
@@ -142,7 +142,7 @@ public class BooleanArrayTopic : Topic
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishDangerous(
+            NtCore.Publish(
                 Handle, NetworkTableType.BooleanArray,
                 "boolean[]"u8, options),
             []);
@@ -194,14 +194,14 @@ public class BooleanArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanArrayPublisher PublishExDangerous(
+    internal IBooleanArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, properties, options),
             []);
@@ -225,14 +225,14 @@ public class BooleanArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanArrayPublisher PublishExDangerous(
+    internal IBooleanArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, properties, options),
             []);
@@ -256,14 +256,14 @@ public class BooleanArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanArrayPublisher PublishExDangerous(
+    internal IBooleanArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
-            NtCore.PublishExDangerous(
+            NtCore.PublishEx(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, properties, options),
             []);
@@ -295,7 +295,7 @@ public class BooleanArrayTopic : Topic
     {
         return new BooleanArrayEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,
                 "boolean[]"u8, options),
             defaultValue);
@@ -356,14 +356,14 @@ public class BooleanArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IBooleanArrayEntry GetEntryExDangerous(
+    internal IBooleanArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         bool[] defaultValue,
         PubSubOptions options)
     {
         return new BooleanArrayEntryImpl<NtEntry>(
             this,
-            NtCore.GetEntryDangerous(
+            NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, options),
             defaultValue);

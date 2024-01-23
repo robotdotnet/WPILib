@@ -1,5 +1,7 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil;
+using WPIUtil.Marshal;
 
 namespace NetworkTables;
 
@@ -15,8 +17,8 @@ public static unsafe class LogMessageMarshaller
         return new LogMessage
         {
             LogLevel = (int)unmanaged.level,
-            Message = Utf8StringMarshaller.ConvertToManaged(unmanaged.message) ?? "",
-            Filename = Utf8StringMarshaller.ConvertToManaged(unmanaged.filename) ?? "",
+            Message = unmanaged.message.ConvertToString(),
+            Filename = unmanaged.message.ConvertToString(),
             Line = (int)unmanaged.line
         };
     }
@@ -25,9 +27,9 @@ public static unsafe class LogMessageMarshaller
     public unsafe struct NativeLogMessage
     {
         public uint level;
-        public byte* filename;
+        public WpiStringMarshaller.WpiStringNative filename;
         public uint line;
-        public byte* message;
+        public WpiStringMarshaller.WpiStringNative message;
     }
 
 }

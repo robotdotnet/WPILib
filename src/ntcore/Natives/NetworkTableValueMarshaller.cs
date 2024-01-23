@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil;
+using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
 
@@ -53,7 +55,7 @@ public static unsafe class NetworkTableValueMarshaller
             public double valueDouble;
 
             [FieldOffset(0)]
-            public NtString valueString;
+            public WpiStringMarshaller.WpiStringNative valueString;
 
             [FieldOffset(0)]
             public NtValueRaw valueRaw;
@@ -108,7 +110,7 @@ public static unsafe class NetworkTableValueMarshaller
 
             public unsafe partial struct NtValueStringArray
             {
-                public NtString* arr;
+                public WpiStringMarshaller.WpiStringNative* arr;
                 public nuint size;
             }
         }
