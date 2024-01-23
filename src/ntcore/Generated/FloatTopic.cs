@@ -109,7 +109,7 @@ public class FloatTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IFloatSubscriber SubscribeEx(
+    public IFloatSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         float defaultValue,
         PubSubOptions options)
@@ -194,7 +194,7 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatPublisher PublishEx(
+    public IFloatPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatPublisher PublishEx(
+    public IFloatPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class FloatTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IFloatPublisher PublishEx(
+    public IFloatPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -356,7 +356,7 @@ public class FloatTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IFloatEntry GetEntryEx(
+    public IFloatEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         float defaultValue,
         PubSubOptions options)

@@ -79,7 +79,7 @@ public class RawTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IRawSubscriber Subscribe(
+    public IRawSubscriber Subscribe(
         ReadOnlySpan<byte> typeString,
         byte[] defaultValue,
         PubSubOptions options)
@@ -136,7 +136,7 @@ public class RawTopic : Topic
       * @param options publish options
       * @return publisher
       */
-    internal IRawPublisher Publish(
+    public IRawPublisher Publish(
         ReadOnlySpan<byte> typeString,
         PubSubOptions options)
     {
@@ -194,7 +194,7 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IRawPublisher PublishEx(
+    public IRawPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IRawPublisher PublishEx(
+    public IRawPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class RawTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IRawPublisher PublishEx(
+    public IRawPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -324,7 +324,7 @@ public class RawTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IRawEntry GetEntry(
+    public IRawEntry GetEntry(
         ReadOnlySpan<byte> typeString,
         byte[] defaultValue,
         PubSubOptions options)

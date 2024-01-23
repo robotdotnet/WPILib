@@ -109,7 +109,7 @@ public class StringTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IStringSubscriber SubscribeEx(
+    public IStringSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         string defaultValue,
         PubSubOptions options)
@@ -194,7 +194,7 @@ public class StringTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IStringPublisher PublishEx(
+    public IStringPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class StringTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IStringPublisher PublishEx(
+    public IStringPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class StringTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IStringPublisher PublishEx(
+    public IStringPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -356,7 +356,7 @@ public class StringTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IStringEntry GetEntryEx(
+    public IStringEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         string defaultValue,
         PubSubOptions options)

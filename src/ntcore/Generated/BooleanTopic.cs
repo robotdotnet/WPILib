@@ -109,7 +109,7 @@ public class BooleanTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IBooleanSubscriber SubscribeEx(
+    public IBooleanSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         bool defaultValue,
         PubSubOptions options)
@@ -194,7 +194,7 @@ public class BooleanTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanPublisher PublishEx(
+    public IBooleanPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class BooleanTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanPublisher PublishEx(
+    public IBooleanPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class BooleanTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IBooleanPublisher PublishEx(
+    public IBooleanPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -356,7 +356,7 @@ public class BooleanTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IBooleanEntry GetEntryEx(
+    public IBooleanEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         bool defaultValue,
         PubSubOptions options)

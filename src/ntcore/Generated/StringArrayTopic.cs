@@ -109,7 +109,7 @@ public class StringArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IStringArraySubscriber SubscribeEx(
+    public IStringArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         string[] defaultValue,
         PubSubOptions options)
@@ -194,7 +194,7 @@ public class StringArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IStringArrayPublisher PublishEx(
+    public IStringArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class StringArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IStringArrayPublisher PublishEx(
+    public IStringArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class StringArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IStringArrayPublisher PublishEx(
+    public IStringArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -356,7 +356,7 @@ public class StringArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IStringArrayEntry GetEntryEx(
+    public IStringArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         string[] defaultValue,
         PubSubOptions options)

@@ -109,7 +109,7 @@ public class DoubleTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IDoubleSubscriber SubscribeEx(
+    public IDoubleSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         double defaultValue,
         PubSubOptions options)
@@ -194,7 +194,7 @@ public class DoubleTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoublePublisher PublishEx(
+    public IDoublePublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class DoubleTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoublePublisher PublishEx(
+    public IDoublePublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class DoubleTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoublePublisher PublishEx(
+    public IDoublePublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -356,7 +356,7 @@ public class DoubleTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IDoubleEntry GetEntryEx(
+    public IDoubleEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         double defaultValue,
         PubSubOptions options)

@@ -109,7 +109,7 @@ public class DoubleArrayTopic : Topic
      * @param options subscribe options
      * @return subscriber
      */
-    internal IDoubleArraySubscriber SubscribeEx(
+    public IDoubleArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         double[] defaultValue,
         PubSubOptions options)
@@ -194,7 +194,7 @@ public class DoubleArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoubleArrayPublisher PublishEx(
+    public IDoubleArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
         PubSubOptions options)
@@ -225,7 +225,7 @@ public class DoubleArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoubleArrayPublisher PublishEx(
+    public IDoubleArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -256,7 +256,7 @@ public class DoubleArrayTopic : Topic
      * @return publisher
      * @throws IllegalArgumentException if properties is not a JSON object
      */
-    internal IDoubleArrayPublisher PublishEx(
+    public IDoubleArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
         PubSubOptions options)
@@ -356,7 +356,7 @@ public class DoubleArrayTopic : Topic
      * @param options publish and/or subscribe options
      * @return entry
      */
-    internal IDoubleArrayEntry GetEntryEx(
+    public IDoubleArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         double[] defaultValue,
         PubSubOptions options)
