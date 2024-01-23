@@ -7,63 +7,77 @@ using System.Text;
 
 namespace WPIUtil.Natives;
 
-// Cannot be a ref struct due to being used as a parameter to ReadOnlySpanMarshaller in the ElementIn case
-[StructLayout(LayoutKind.Sequential)]
-public readonly unsafe struct WpiConstString(byte* str, nuint len)
+[NativeMarshalling(typeof(WpiStringMarshaller))]
+public readonly ref struct WpiString
 {
-    public readonly byte* Str = str;
-    public readonly nuint Len = len;
+    public readonly ReadOnlySpan<byte> buffer;
+    public readonly bool isString;
+
+    public WpiString(ReadOnlySpan<char> buffer)
+    {
+        this.buffer = MemoryMarshal.AsBytes(buffer);
+        isString = true;
+    }
+
+    public WpiString(ReadOnlySpan<byte> buffer)
+    {
+        this.buffer = buffer;
+        isString = false;
+    }
+
+    public static implicit operator WpiString(string buffer)
+    {
+        return new(buffer);
+    }
+
+    public static implicit operator WpiString(ReadOnlySpan<byte> buffer)
+    {
+        return new(buffer);
+    }
+
+    public static implicit operator WpiString(Span<byte> buffer)
+    {
+        return new(buffer);
+    }
+
+    public static implicit operator WpiString(ReadOnlySpan<char> buffer)
+    {
+        return new(buffer);
+    }
+
+    public static implicit operator WpiString(Span<char> buffer)
+    {
+        return new(buffer);
+    }
 }
 
-[CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedIn, typeof(PassStringTo))]
+[CustomMarshaller(typeof(WpiString), MarshalMode.ManagedToUnmanagedIn, typeof(PassTo))]
+[CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(ReceiveFromString))]
+[CustomMarshaller(typeof(byte[]), MarshalMode.ManagedToUnmanagedOut, typeof(ReceiveFromByteArray))]
 [CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(PassStringToArray))]
-[CustomMarshaller(typeof(ReadOnlySpan<byte>), MarshalMode.ManagedToUnmanagedIn, typeof(PassSpanIn))]
-public static unsafe class WpiConstStringMarshaller
+public static unsafe class WpiStringMarshaller
 {
-    public ref struct PassSpanIn
+    public static class ReceiveFromString
     {
-        private ReadOnlySpan<byte> data;
-        private WpiConstString nativeString;
-
-        public void FromManaged(ReadOnlySpan<byte> managed)
+        public static string ConvertToManaged(WpiStringNative unmanaged)
         {
-            data = managed;
-        }
-
-        public readonly ref readonly byte GetPinnableReference()
-        {
-            return ref data.GetPinnableReference();
-        }
-
-        public WpiConstString* ToUnmanaged()
-        {
-            if (data.Length == 0)
+            if (unmanaged.Len == 0)
             {
-                nativeString = new WpiConstString(null, 0);
+                return "";
             }
-            else
-            {
-                // Getting a pointer to the span is safe here because we've pinned it due to GetPinnableReference()
-                nativeString = new((byte*)Unsafe.AsPointer(ref Unsafe.AsRef(in data[0])), (nuint)data.Length);
-            }
-            // AsPointer is safe here due to being inside of a ref struct
-            return (WpiConstString*)Unsafe.AsPointer(ref nativeString);
-        }
-
-        public void Free()
-        {
-            // Throw is here to satisfy the marshaller. I would LOVE to remove if, as that would
-            // remove the try finally from the marshaller
+            string buf = Encoding.UTF8.GetString(unmanaged.Str, checked((int)unmanaged.Len));
+            // TODO Free Buffer
+            return buf;
         }
     }
 
     public static class PassStringToArray
     {
-        public static WpiConstString ConvertToUnmanaged(string? managed)
+        public static WpiStringNative ConvertToUnmanaged(string? managed)
         {
             if (managed is null || managed.Length == 0)
             {
-                return new WpiConstString(null, 0);
+                return new WpiStringNative(null, 0);
             }
 
             int exactByteCount = Encoding.UTF8.GetByteCount(managed);
@@ -72,10 +86,10 @@ public static unsafe class WpiConstStringMarshaller
 
             int byteCount = Encoding.UTF8.GetBytes(managed, buffer);
             Debug.Assert(byteCount == exactByteCount);
-            return new WpiConstString(mem, (nuint)exactByteCount);
+            return new WpiStringNative(mem, (nuint)exactByteCount);
         }
 
-        public static void Free(WpiConstString unmanaged)
+        public static void Free(WpiStringNative unmanaged)
         {
             byte* ptr = unmanaged.Str;
             if (ptr != null)
@@ -84,78 +98,103 @@ public static unsafe class WpiConstStringMarshaller
             }
         }
 
-        public static string ConvertToManaged(WpiConstString unmanaged)
+        public static string ConvertToManaged(WpiStringNative unmanaged)
         {
             throw new NotSupportedException();
         }
     }
 
-    public ref struct PassStringTo
+
+    public static class ReceiveFromByteArray
+    {
+        public static byte[] ConvertToManaged(WpiStringNative unmanaged)
+        {
+            if (unmanaged.Len == 0)
+            {
+                return [];
+            }
+            byte[] buf = new byte[unmanaged.Len];
+            new ReadOnlySpan<byte>(unmanaged.Str, checked((int)unmanaged.Len)).CopyTo(buf);
+            // TODO Free Buffer
+            return buf;
+        }
+    }
+
+    public ref struct PassTo
     {
         public static int BufferSize => 256;
-        private bool wasAllocated;
-        private WpiConstString nativeString;
-        public void FromManaged(string? managed, Span<byte> callerAllocatedBuffer)
+        private ReadOnlySpan<byte> data;
+        private WpiStringNative nativeString;
+        public void FromManaged(WpiString managed, Span<byte> callerAllocatedBuffer)
         {
-            wasAllocated = false;
-
-            if (managed is null || managed.Length == 0)
+            if (managed.isString)
             {
-                nativeString = new WpiConstString(null, 0);
-                return;
-            }
-
-            int exactByteCount = Encoding.UTF8.GetByteCount(managed);
-            if (exactByteCount <= callerAllocatedBuffer.Length)
-            {
-                nativeString = new((byte*)Unsafe.AsPointer(ref callerAllocatedBuffer[0]), (nuint)exactByteCount);
+                ReadOnlySpan<char> strBuf = MemoryMarshal.Cast<byte, char>(managed.buffer);
+                int exactByteCount = Encoding.UTF8.GetByteCount(strBuf);
+                if (exactByteCount > callerAllocatedBuffer.Length)
+                {
+                    callerAllocatedBuffer = new byte[exactByteCount];
+                }
+                int byteCount = Encoding.UTF8.GetBytes(strBuf, callerAllocatedBuffer);
+                Debug.Assert(byteCount == exactByteCount);
+                data = callerAllocatedBuffer;
             }
             else
             {
-                nativeString = new((byte*)NativeMemory.Alloc((nuint)exactByteCount), (nuint)exactByteCount);
-                wasAllocated = true;
+                data = managed.buffer;
             }
-
-            Span<byte> buffer = new(nativeString.Str, exactByteCount);
-
-            int byteCount = Encoding.UTF8.GetBytes(managed, buffer);
-            Debug.Assert(byteCount == exactByteCount);
-
         }
 
-        public WpiConstString* ToUnmanaged()
+        public readonly ref readonly byte GetPinnableReference()
         {
+            return ref data.GetPinnableReference();
+        }
+
+        public WpiStringNative* ToUnmanaged()
+        {
+            if (data.Length == 0)
+            {
+                nativeString = new WpiStringNative(null, 0);
+            }
+            else
+            {
+                // Getting a pointer to the span is safe here because we've pinned it due to GetPinnableReference()
+                nativeString = new((byte*)Unsafe.AsPointer(ref Unsafe.AsRef(in data[0])), (nuint)data.Length);
+            }
             // AsPointer is safe here due to being inside of a ref struct
-            return (WpiConstString*)Unsafe.AsPointer(ref nativeString);
+            return (WpiStringNative*)Unsafe.AsPointer(ref nativeString);
         }
 
-        public readonly void Free()
+        public void Free()
         {
-            if (!wasAllocated)
-            {
-                return;
-            }
-            byte* ptr = nativeString.Str;
-            if (ptr != null)
-            {
-                NativeMemory.Free(ptr);
-            }
+            // Purposely empty
         }
     }
-}
 
+    // Cannot be a ref struct due to being used as a parameter to ReadOnlySpanMarshaller in the ElementIn case
+    [StructLayout(LayoutKind.Sequential)]
+    public readonly unsafe struct WpiStringNative(byte* str, nuint len)
+    {
+        public readonly byte* Str = str;
+        public readonly nuint Len = len;
+    }
+}
 
 public static partial class StringsNative
 {
     [LibraryImport("wpiutil", EntryPoint = "WPI_DestroyEvent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void TakesString([MarshalUsing(typeof(WpiConstStringMarshaller))] string value);
+    public static partial void TakesString(WpiString value);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DestroyEvent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void TakesSpan([MarshalUsing(typeof(WpiConstStringMarshaller))] ReadOnlySpan<byte> value);
+    public static partial void TakesStringOut([MarshalUsing(typeof(WpiStringMarshaller))] out string value);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DestroyEvent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void TakesStringArray([MarshalUsing(typeof(WpiConstStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value);
+    public static partial void TakesByteArrayOut([MarshalUsing(typeof(WpiStringMarshaller))] out byte[] value);
+
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DestroyEvent")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void TakesStringArray([MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> value);
 }
