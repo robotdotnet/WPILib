@@ -9,7 +9,7 @@ public interface IStructBase
 
     string TypeString { get; }
     int Size { get; }
-    string Schema { get; }
+    ReadOnlySpan<byte> Schema { get; }
 
     IStructBase[] Nested => [];
 }

@@ -27,64 +27,65 @@ public sealed unsafe class DataLog : IDisposable
 
     public delegate void DataLogCallback(ReadOnlySpan<byte> data);
 
-    public DataLog(string? dir = null, string? filename = null, double period = 0.25, string? extraHeader = null)
+    public DataLog(string dir = "", string filename = "", double period = 0.25, string extraHeader = "")
     {
-        NativeHandle = DataLogNative.DataLogCreate(dir, filename, period, extraHeader);
+        NativeHandle = DataLogNative.Create(dir, filename, period, extraHeader);
     }
 
-    public DataLog(DataLogCallback callback, double period = 0.25, string? extraHeader = null)
+    public DataLog(DataLogCallback callback, double period = 0.25, string extraHeader = "")
     {
         gcHandle = GCHandle.Alloc(this);
         this.callback = callback;
-        NativeHandle = DataLogNative.DataLogCreateFunc(&NativeDataLogCallback, (void*)GCHandle.ToIntPtr(gcHandle.Value), period, extraHeader);
+        NativeHandle = DataLogNative.CreateFunc(&NativeDataLogCallback, (void*)GCHandle.ToIntPtr(gcHandle.Value), period, extraHeader);
     }
 
     public void Dispose()
     {
-        DataLogNative.DataLogRelease(NativeHandle);
+        DataLogNative.Release(NativeHandle);
         if (gcHandle.HasValue)
         {
             gcHandle.Value.Free();
         }
     }
 
-    public DataLogEntryHandle Start(string name, string type, string metadata = "", long timestamp = 0)
+    public void SetFilename(string filename)
     {
-        return DataLogNative.DataLogStart(NativeHandle, name, type, metadata, (ulong)timestamp);
+        DataLogNative.SetFilename(NativeHandle, filename);
     }
 
-    public void SetMetadata(DataLogEntryHandle entry, string metadata, long timestamp = 0)
+    public void Flush()
     {
-        DataLogNative.DataLogSetMetadata(NativeHandle, entry, metadata, (ulong)timestamp);
+        DataLogNative.Flush(NativeHandle);
     }
 
-    public void Finish(DataLogEntryHandle entry, long timestamp = 0)
+    public void Pause()
     {
-        DataLogNative.DataLogFinish(NativeHandle, entry, (ulong)timestamp);
+        DataLogNative.Pause(NativeHandle);
     }
 
-    public void AppendRaw(DataLogEntryHandle entry, ReadOnlySpan<byte> data, long timestamp = 0)
+    public void Resume()
     {
-        DataLogNative.DataLogAppend(NativeHandle, entry, data, (ulong)timestamp);
+        DataLogNative.Resume(NativeHandle);
     }
 
-    public void AddSchema(IStructBase value, long timestamp = 0)
+    public void Stop()
     {
-        AddSchemaImpl(value, timestamp == 0 ? (long)TimestampNative.Now() : timestamp, []);
-    }
-
-    public void AddSchema(IProtobufBase proto, long timestamp = 0)
-    {
-        long actualTimestamp = timestamp == 0 ? (long)TimestampNative.Now() : timestamp;
-        proto.ForEachDescriptor(HasSchema, (typeString, schema) =>
-        {
-            AddSchema(typeString, "proto:FileDescriptorProto", schema, actualTimestamp);
-        });
+        DataLogNative.Stop(NativeHandle);
     }
 
     public bool HasSchema(string name)
     {
         return m_schemaMap.ContainsKey(name);
+    }
+
+    private void AddSchemaNative(string name, WpiString type, WpiString schema, long timestamp = 0)
+    {
+        if (!m_schemaMap.TryAdd(name, 1))
+        {
+            return;
+        }
+        // TODO add schema functions
+        // DataLogNative
     }
 
     public void AddSchema(string name, string type, string schema, long timestamp = 0)
@@ -107,6 +108,100 @@ public sealed unsafe class DataLog : IDisposable
         // DataLogNative
     }
 
+    public void AddSchema(IStructBase value, long timestamp = 0)
+    {
+        AddSchemaImpl(value, timestamp == 0 ? (long)TimestampNative.Now() : timestamp, []);
+    }
+
+    public void AddSchema(IProtobufBase proto, long timestamp = 0)
+    {
+        long actualTimestamp = timestamp == 0 ? (long)TimestampNative.Now() : timestamp;
+        proto.ForEachDescriptor(HasSchema, (typeString, schema) =>
+        {
+            AddSchemaNative(typeString, "proto:FileDescriptorProto"u8, schema, actualTimestamp);
+        });
+    }
+
+    public DataLogEntryHandle Start(string name, string type, string metadata = "", long timestamp = 0)
+    {
+        return DataLogNative.Start(NativeHandle, name, type, metadata, (ulong)timestamp);
+    }
+
+    public void Finish(DataLogEntryHandle entry, long timestamp = 0)
+    {
+        DataLogNative.Finish(NativeHandle, entry, (ulong)timestamp);
+    }
+
+    public void SetMetadata(DataLogEntryHandle entry, string metadata, long timestamp = 0)
+    {
+        DataLogNative.SetMetadata(NativeHandle, entry, metadata, (ulong)timestamp);
+    }
+
+    public void AppendRaw(DataLogEntryHandle entry, ReadOnlySpan<byte> data, long timestamp = 0)
+    {
+        DataLogNative.AppendRaw(NativeHandle, entry, data, (ulong)timestamp);
+    }
+
+    public void AppendBoolean(DataLogEntryHandle entry, bool value, long timestamp = 0)
+    {
+        DataLogNative.AppendBoolean(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendInteger(DataLogEntryHandle entry, long value, long timestamp = 0)
+    {
+        DataLogNative.AppendInteger(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendFloat(DataLogEntryHandle entry, float value, long timestamp = 0)
+    {
+        DataLogNative.AppendFloat(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendDouble(DataLogEntryHandle entry, double value, long timestamp = 0)
+    {
+        DataLogNative.AppendDouble(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendString(DataLogEntryHandle entry, string value, long timestamp = 0)
+    {
+        DataLogNative.AppendString(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendString(DataLogEntryHandle entry, ReadOnlySpan<char> value, long timestamp = 0)
+    {
+        DataLogNative.AppendString(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendString(DataLogEntryHandle entry, ReadOnlySpan<byte> value, long timestamp = 0)
+    {
+        DataLogNative.AppendRaw(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendBooleanArray(DataLogEntryHandle entry, ReadOnlySpan<bool> value, long timestamp = 0)
+    {
+        DataLogNative.AppendBooleanArray(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendIntegerArray(DataLogEntryHandle entry, ReadOnlySpan<long> value, long timestamp = 0)
+    {
+        DataLogNative.AppendIntegerArray(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendFloatArray(DataLogEntryHandle entry, ReadOnlySpan<float> value, long timestamp = 0)
+    {
+        DataLogNative.AppendFloatArray(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendDoubleArray(DataLogEntryHandle entry, ReadOnlySpan<double> value, long timestamp = 0)
+    {
+        DataLogNative.AppendDoubleArray(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
+    public void AppendStringArray(DataLogEntryHandle entry, ReadOnlySpan<string> value, long timestamp = 0)
+    {
+        DataLogNative.AppendStringArray(NativeHandle, entry, value, (ulong)timestamp);
+    }
+
     private void AddSchemaImpl(IStructBase value, long timestamp, HashSet<string> seen)
     {
         string typeString = value.TypeString;
@@ -118,7 +213,7 @@ public sealed unsafe class DataLog : IDisposable
         {
             throw new InvalidOperationException($"{typeString}: circular reference with {seen}");
         }
-        AddSchema(typeString, "structschema", value.Schema, timestamp);
+        AddSchemaNative(typeString, "structschema"u8, value.Schema, timestamp);
         foreach (var inner in value.Nested)
         {
             AddSchemaImpl(inner, timestamp, seen);
