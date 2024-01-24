@@ -9,9 +9,8 @@ public class DynamicStructTest
     public void TestEmpty()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "");
+        var desc = db.Add("test", ""u8);
         Assert.Equal("test", desc.Name);
-        Assert.Equal("", desc.Schema);
         Assert.Empty(desc.Fields);
         Assert.True(desc.IsValid);
         Assert.Equal(0, desc.Size);
@@ -21,9 +20,9 @@ public class DynamicStructTest
     public void TestNestedStruct()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "int32 a");
+        var desc = db.Add("test", "int32 a"u8);
         Assert.True(desc.IsValid);
-        var desc2 = db.Add("test2", "test a");
+        var desc2 = db.Add("test2", "test a"u8);
         Assert.True(desc2.IsValid);
         Assert.Equal(4, desc2.Size);
     }
@@ -32,7 +31,7 @@ public class DynamicStructTest
     public void TestStringAllZeros()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[32]");
+        var desc = db.Add("test", "char a[32]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -43,7 +42,7 @@ public class DynamicStructTest
     public void TestStringRoundTrip()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[32]");
+        var desc = db.Add("test", "char a[32]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -55,7 +54,7 @@ public class DynamicStructTest
     public void TestStringRoundTripEmbeddedNull()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[32]");
+        var desc = db.Add("test", "char a[32]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -67,7 +66,7 @@ public class DynamicStructTest
     public void TestStringRoundTripStringTooLong()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[2]");
+        var desc = db.Add("test", "char a[2]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -79,7 +78,7 @@ public class DynamicStructTest
     public void TestStringRoundTripPartial2ByteUtf8()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[2]");
+        var desc = db.Add("test", "char a[2]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -91,7 +90,7 @@ public class DynamicStructTest
     public void TestStringRoundTrip2ByteUtf8()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[3]");
+        var desc = db.Add("test", "char a[3]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -103,7 +102,7 @@ public class DynamicStructTest
     public void TestStringRoundTripPartial3ByteUtf8FirstByte()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[2]");
+        var desc = db.Add("test", "char a[2]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -115,7 +114,7 @@ public class DynamicStructTest
     public void TestStringRoundTripPartial3ByteUtf8SecondByte()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[3]");
+        var desc = db.Add("test", "char a[3]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -127,7 +126,7 @@ public class DynamicStructTest
     public void TestStringRoundTrip3ByteUtf8()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[4]");
+        var desc = db.Add("test", "char a[4]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -139,7 +138,7 @@ public class DynamicStructTest
     public void TestStringRoundTripPartial4ByteUtf8FirstByte()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[2]");
+        var desc = db.Add("test", "char a[2]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -151,7 +150,7 @@ public class DynamicStructTest
     public void TestStringRoundTripPartial4ByteUtf8SecondByte()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[3]");
+        var desc = db.Add("test", "char a[3]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -163,7 +162,7 @@ public class DynamicStructTest
     public void TestStringRoundTripPartial4ByteUtf8ThirdByte()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[4]");
+        var desc = db.Add("test", "char a[4]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);
@@ -175,7 +174,7 @@ public class DynamicStructTest
     public void TestStringRoundTrip4ByteUtf8()
     {
         var db = new StructDescriptorDatabase();
-        var desc = db.Add("test", "char a[5]");
+        var desc = db.Add("test", "char a[5]"u8);
         var dynamic = DynamicStruct.Allocate(desc);
         var field = desc.FindFieldByName("a");
         Assert.NotNull(field);

@@ -6,7 +6,6 @@ namespace WPIUtil.Serialization.Struct;
 public sealed class StructDescriptor
 {
     public string Name { get; }
-    public string? Schema { get; internal set; }
 
     internal StructDescriptor(string name)
     {

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace WPIUtil.Serialization.Struct.Parsing;
 
-public ref struct Parser(ReadOnlySpan<char> inStr)
+public ref struct Parser(ReadOnlySpan<byte> inStr)
 {
     private Lexer m_lexer = new(inStr);
     private TokenKind m_token;
@@ -32,7 +33,7 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
         ParsedDeclaration decl = new(null!, null!, null, 1, 0);
 
         // optional enum specification
-        if (m_token == TokenKind.Identifier && "enum".AsSpan().SequenceEqual(m_lexer.GetTokenText()))
+        if (m_token == TokenKind.Identifier && "enum"u8.SequenceEqual(m_lexer.GetTokenText()))
         {
             GetNextToken();
             Expect(TokenKind.LeftBrace);
@@ -47,12 +48,12 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
 
         // type name
         Expect(TokenKind.Identifier);
-        decl.TypeString = m_lexer.GetTokenText().ToString();
+        decl.TypeString = Encoding.UTF8.GetString(m_lexer.GetTokenText());
         GetNextToken();
 
         // identifier name
         Expect(TokenKind.Identifier);
-        decl.Name = m_lexer.GetTokenText().ToString();
+        decl.Name = Encoding.UTF8.GetString(m_lexer.GetTokenText());
         GetNextToken();
 
         // array or bit field
@@ -60,7 +61,7 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
         {
             GetNextToken();
             Expect(TokenKind.Integer);
-            ReadOnlySpan<char> valueStr = m_lexer.GetTokenText();
+            ReadOnlySpan<byte> valueStr = m_lexer.GetTokenText();
             if (!int.TryParse(valueStr, out int value))
             {
                 value = 0;
@@ -72,7 +73,7 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
             else
             {
                 throw new ParseException(
-                    m_lexer.Position, $"array size '{valueStr}' is not a positive integer");
+                    m_lexer.Position, $"array size '{Encoding.UTF8.GetString(valueStr)}' is not a positive integer");
             }
             GetNextToken();
             Expect(TokenKind.RightBracket);
@@ -82,7 +83,7 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
         {
             GetNextToken();
             Expect(TokenKind.Integer);
-            ReadOnlySpan<char> valueStr = m_lexer.GetTokenText();
+            ReadOnlySpan<byte> valueStr = m_lexer.GetTokenText();
             if (!int.TryParse(valueStr, out int value))
             {
                 value = 0;
@@ -94,7 +95,7 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
             else
             {
                 throw new ParseException(
-                    m_lexer.Position, $"bitfield width '{valueStr}' is not a positive integer");
+                    m_lexer.Position, $"bitfield width '{Encoding.UTF8.GetString(valueStr)}' is not a positive integer");
             }
             GetNextToken();
         }
@@ -117,17 +118,17 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
         while (m_token != TokenKind.RightBrace)
         {
             Expect(TokenKind.Identifier);
-            ReadOnlySpan<char> name = m_lexer.GetTokenText();
+            ReadOnlySpan<byte> name = m_lexer.GetTokenText();
             GetNextToken();
             Expect(TokenKind.Equals);
             GetNextToken();
             Expect(TokenKind.Integer);
-            ReadOnlySpan<char> valueStr = m_lexer.GetTokenText();
+            ReadOnlySpan<byte> valueStr = m_lexer.GetTokenText();
             if (!long.TryParse(valueStr, out long value))
             {
-                throw new ParseException(m_lexer.Position, $"could not parse enum value '{valueStr}'");
+                throw new ParseException(m_lexer.Position, $"could not parse enum value '{Encoding.UTF8.GetString(valueStr)}'");
             }
-            map.Add(name.ToString(), value);
+            map.Add(Encoding.UTF8.GetString(name), value);
             GetNextToken();
             if (m_token == TokenKind.RightBrace)
             {
@@ -149,7 +150,7 @@ public ref struct Parser(ReadOnlySpan<char> inStr)
     {
         if (m_token != kind)
         {
-            throw new ParseException(m_lexer.Position, $"Expected {kind}, got '{m_lexer.GetTokenText()}'");
+            throw new ParseException(m_lexer.Position, $"Expected {kind}, got '{Encoding.UTF8.GetString(m_lexer.GetTokenText())}'");
         }
     }
 }

@@ -1,24 +1,31 @@
 using System;
+using System.Buffers;
+using System.Text;
 
 namespace WPIUtil.Serialization.Struct.Parsing;
 
-public ref struct Lexer(ReadOnlySpan<char> inStr)
+public ref struct Lexer(ReadOnlySpan<byte> inStr)
 {
-    private ReadOnlySpan<char> m_in = inStr;
-    private char m_current;
-    private int m_tokenStart;
-    private int m_pos;
+   private Utf8CodePointEnumerator m_enumerator = new(inStr);
+
+   public int Position => m_enumerator.CurrentMark;
 
     public TokenKind Scan()
     {
         // skip whitespace
-        do
-        {
-            Get();
-        } while (m_current == ' ' || m_current == '\t' || m_current == '\n');
-        m_tokenStart = m_pos - 1;
+        bool hasMoreData;
+        do {
+            hasMoreData = m_enumerator.MoveNext();
+        } while (hasMoreData && Rune.IsWhiteSpace(m_enumerator.Current));
 
-        switch (m_current)
+        if (!hasMoreData) {
+            // String has nothing left
+            return TokenKind.Unknown;
+        }
+
+        m_enumerator.Mark();
+
+        switch (m_enumerator.Current.Value)
         {
             case '[':
                 return TokenKind.LeftBracket;
@@ -51,7 +58,7 @@ public ref struct Lexer(ReadOnlySpan<char> inStr)
             case '\0':
                 return TokenKind.EndOfInput;
             default:
-                if (char.IsLetter(m_current) || m_current == '_')
+                if (Rune.IsLetter(m_enumerator.Current) || m_enumerator.Current.Value == '_')
                 {
                     return ScanIdentifier();
                 }
@@ -59,67 +66,30 @@ public ref struct Lexer(ReadOnlySpan<char> inStr)
         }
     }
 
-    public readonly ReadOnlySpan<char> GetTokenText()
+    public readonly ReadOnlySpan<byte> GetTokenText()
     {
-        if (m_tokenStart >= m_in.Length)
-        {
-            return "";
-        }
-        return m_in[m_tokenStart..m_pos];
+        return m_enumerator.MarkedSpan;
     }
-
-    public readonly int Position => m_tokenStart;
 
     private TokenKind ScanInteger()
     {
-        do
-        {
-            Get();
-        } while (char.IsDigit(m_current));
-        Unget();
+        bool hasMoreData;
+        do {
+            hasMoreData = m_enumerator.MoveNext();
+        } while (hasMoreData && Rune.IsDigit(m_enumerator.Current));
+
+        m_enumerator.MovePrevious();
         return TokenKind.Integer;
     }
 
     private TokenKind ScanIdentifier()
     {
-        do
-        {
-            Get();
-        } while (char.IsLetterOrDigit(m_current) || m_current == '_');
-        Unget();
+        bool hasMoreData;
+        do {
+            hasMoreData = m_enumerator.MoveNext();
+        } while (hasMoreData && (Rune.IsLetterOrDigit(m_enumerator.Current) || m_enumerator.Current.Value == '_'));
+
+        m_enumerator.MovePrevious();
         return TokenKind.Identifier;
-    }
-
-    private void Get()
-    {
-        if (m_pos < m_in.Length)
-        {
-            m_current = m_in[m_pos];
-        }
-        else
-        {
-            m_current = '\0';
-        }
-        m_pos++;
-    }
-
-    private void Unget()
-    {
-        if (m_pos > 0)
-        {
-            m_pos--;
-            if (m_pos < m_in.Length)
-            {
-                m_current = m_in[m_pos];
-            }
-            else
-            {
-                m_current = '\0';
-            }
-        }
-        else
-        {
-            m_current = '\0';
-        }
     }
 }

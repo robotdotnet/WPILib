@@ -8,7 +8,7 @@ public class ParserTest
     [Fact]
     public void TestEmpty()
     {
-        Parser p = new("");
+        Parser p = new(""u8);
         ParsedSchema schema = p.Parse();
         Assert.True(schema.Declarations.IsEmpty);
     }
@@ -16,7 +16,7 @@ public class ParserTest
     [Fact]
     public void TestEmptySemicolon()
     {
-        Parser p = new(";");
+        Parser p = new(";"u8);
         ParsedSchema schema = p.Parse();
         Assert.True(schema.Declarations.IsEmpty);
     }
@@ -24,7 +24,7 @@ public class ParserTest
     [Fact]
     public void TestSimple()
     {
-        Parser p = new("int32 a");
+        Parser p = new("int32 a"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -37,7 +37,7 @@ public class ParserTest
     [Fact]
     public void TestSimpleTrailingSemi()
     {
-        Parser p = new("int32 a;");
+        Parser p = new("int32 a;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -50,7 +50,7 @@ public class ParserTest
     [Fact]
     public void TestArray()
     {
-        Parser p = new("int32 a[2]");
+        Parser p = new("int32 a[2]"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -63,7 +63,7 @@ public class ParserTest
     [Fact]
     public void TestArrayTrailingSemi()
     {
-        Parser p = new("int32 a[2];");
+        Parser p = new("int32 a[2];"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -76,7 +76,7 @@ public class ParserTest
     [Fact]
     public void TestBitfield()
     {
-        Parser p = new("int32 a:2");
+        Parser p = new("int32 a:2"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -90,7 +90,7 @@ public class ParserTest
     [Fact]
     public void TestBitfieldTrailingSemi()
     {
-        Parser p = new("int32 a:2;");
+        Parser p = new("int32 a:2;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -104,7 +104,7 @@ public class ParserTest
     [Fact]
     public void TestEnumKeyword()
     {
-        Parser p = new("enum {x=1} int32 a;");
+        Parser p = new("enum {x=1} int32 a;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -119,7 +119,7 @@ public class ParserTest
     [Fact]
     public void TestEnumNoKeyword()
     {
-        Parser p = new("{x=1} int32 a;");
+        Parser p = new("{x=1} int32 a;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -134,7 +134,7 @@ public class ParserTest
     [Fact]
     public void TestEnumNoValues()
     {
-        Parser p = new("{} int32 a;");
+        Parser p = new("{} int32 a;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -148,7 +148,7 @@ public class ParserTest
     [Fact]
     public void TestEnumMultipleValues()
     {
-        Parser p = new("{x=1,y=-2} int32 a;");
+        Parser p = new("{x=1,y=-2} int32 a;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -164,7 +164,7 @@ public class ParserTest
     [Fact]
     public void TestEnumTrailingComma()
     {
-        Parser p = new("{x=1,y=-2,} int32 a;");
+        Parser p = new("{x=1,y=-2,} int32 a;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(1, declarations.Length);
@@ -180,7 +180,7 @@ public class ParserTest
     [Fact]
     public void TestMultipleNoTrailingSemi()
     {
-        Parser p = new("int32 a; int16 b");
+        Parser p = new("int32 a; int16 b"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(2, declarations.Length);
@@ -195,7 +195,7 @@ public class ParserTest
     [Fact]
     public void TestMultipleTrailingSemi()
     {
-        Parser p = new("int32 a; int16 b;");
+        Parser p = new("int32 a; int16 b;"u8);
         ParsedSchema schema = p.Parse();
         ReadOnlySpan<ParsedDeclaration> declarations = schema.Declarations;
         Assert.Equal(2, declarations.Length);
@@ -210,7 +210,7 @@ public class ParserTest
     [Fact]
     public void TestErrBitfieldArray()
     {
-        Parser p = new("int32 a[1]:2");
+        Parser p = new("int32 a[1]:2"u8);
 
         ParseException? exception = null;
         try
@@ -230,7 +230,7 @@ public class ParserTest
     [Fact]
     public void TestErrNoArrayValue()
     {
-        Parser p = new("int32 a[]");
+        Parser p = new("int32 a[]"u8);
 
         ParseException? exception = null;
         try
@@ -250,7 +250,7 @@ public class ParserTest
     [Fact]
     public void TestErrNoBitfieldValue()
     {
-        Parser p = new("int32 a:");
+        Parser p = new("int32 a:"u8);
 
         ParseException? exception = null;
         try
@@ -270,7 +270,7 @@ public class ParserTest
     [Fact]
     public void TestErrNoNameArray()
     {
-        Parser p = new("int32 [2]");
+        Parser p = new("int32 [2]"u8);
 
         ParseException? exception = null;
         try
@@ -290,7 +290,7 @@ public class ParserTest
     [Fact]
     public void TestErrNoNameBitfield()
     {
-        Parser p = new("int32 :2");
+        Parser p = new("int32 :2"u8);
 
         ParseException? exception = null;
         try
@@ -310,7 +310,7 @@ public class ParserTest
     [Fact]
     public void TestNegativeBitField()
     {
-        Parser p = new("int32 a:-1");
+        Parser p = new("int32 a:-1"u8);
 
         ParseException? exception = null;
         try
@@ -330,7 +330,7 @@ public class ParserTest
     [Fact]
     public void TestNegativeArraySize()
     {
-        Parser p = new("int32 a[-1]");
+        Parser p = new("int32 a[-1]"u8);
 
         ParseException? exception = null;
         try
@@ -350,7 +350,7 @@ public class ParserTest
     [Fact]
     public void TestZeroBitfield()
     {
-        Parser p = new("int32 a:0");
+        Parser p = new("int32 a:0"u8);
 
         ParseException? exception = null;
         try
@@ -370,7 +370,7 @@ public class ParserTest
     [Fact]
     public void TestZeroArraySize()
     {
-        Parser p = new("int32 a[0]");
+        Parser p = new("int32 a[0]"u8);
 
         ParseException? exception = null;
         try

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using WPIUtil.Serialization.Struct.Parsing;
@@ -6,7 +7,7 @@ namespace WPIUtil.Serialization.Struct;
 
 public sealed class StructDescriptorDatabase
 {
-    public StructDescriptor Add(string name, string schema)
+    public StructDescriptor Add(string name, ReadOnlySpan<byte> schema)
     {
         Parser parser = new(schema);
         ParsedSchema parsed;
@@ -27,7 +28,6 @@ public sealed class StructDescriptorDatabase
         }
         // Store non ref in local variable, as we will invalidate the ref later
         StructDescriptor theStruct = theStructRef!;
-        theStruct.Schema = schema;
         theStruct.Fields.Clear();
         bool isValid = true;
         foreach (ref readonly ParsedDeclaration decl in parsed.Declarations)
