@@ -6,24 +6,25 @@ namespace WPIUtil.Serialization.Struct.Parsing;
 
 public ref struct Lexer(ReadOnlySpan<byte> inStr)
 {
-   private Utf8CodePointEnumerator m_enumerator = new(inStr);
+    private Utf8CodePointEnumerator m_enumerator = new(inStr);
 
-   public int Position => m_enumerator.CurrentMark;
+    public int Position => m_enumerator.CurrentMark;
 
     public TokenKind Scan()
     {
         // skip whitespace
         bool hasMoreData;
-        do {
+        do
+        {
+            m_enumerator.Mark();
             hasMoreData = m_enumerator.MoveNext();
         } while (hasMoreData && Rune.IsWhiteSpace(m_enumerator.Current));
 
-        if (!hasMoreData) {
+        if (!hasMoreData)
+        {
             // String has nothing left
-            return TokenKind.Unknown;
+            return TokenKind.EndOfInput;
         }
-
-        m_enumerator.Mark();
 
         switch (m_enumerator.Current.Value)
         {
@@ -74,22 +75,31 @@ public ref struct Lexer(ReadOnlySpan<byte> inStr)
     private TokenKind ScanInteger()
     {
         bool hasMoreData;
-        do {
+        do
+        {
             hasMoreData = m_enumerator.MoveNext();
         } while (hasMoreData && Rune.IsDigit(m_enumerator.Current));
 
-        m_enumerator.MovePrevious();
+        if (hasMoreData)
+        {
+            m_enumerator.MovePrevious();
+        }
         return TokenKind.Integer;
     }
 
     private TokenKind ScanIdentifier()
     {
         bool hasMoreData;
-        do {
+        do
+        {
             hasMoreData = m_enumerator.MoveNext();
         } while (hasMoreData && (Rune.IsLetterOrDigit(m_enumerator.Current) || m_enumerator.Current.Value == '_'));
 
-        m_enumerator.MovePrevious();
+        if (hasMoreData)
+        {
+            m_enumerator.MovePrevious();
+        }
+
         return TokenKind.Identifier;
     }
 }
