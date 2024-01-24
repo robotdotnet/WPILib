@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Buffers.Binary;
 using System.Text;
 using CommunityToolkit.Diagnostics;
@@ -138,52 +139,17 @@ public class DynamicStruct
                 break;
             }
         }
-        // If string is all zeroes, its empty and return an empty string.
-        if (stringLength == 0)
-        {
-            return "";
-        }
-        // Check if the end of the string is in the middle of a continuation byte or not.
-        if ((bytes[stringLength - 1] & 0x80) != 0)
-        {
-            // This is a UTF8 continuation byte. Make sure its valid.
-            // Walk back until initial byte is found
-            int utf8StartByte = stringLength;
-            for (; utf8StartByte > 0; utf8StartByte--)
-            {
-                if ((bytes[utf8StartByte - 1] & 0x40) != 0)
-                {
-                    // Having 2nd bit set means start byte
-                    break;
-                }
-            }
-            if (utf8StartByte == 0)
-            {
-                // This case means string only contains continuation bytes
-                return "";
-            }
-            utf8StartByte--;
-            // Check if its a 2, 3, or 4 byte
-            byte checkByte = bytes[utf8StartByte];
-            if ((checkByte & 0xE0) == 0xC0 && utf8StartByte != stringLength - 2)
-            {
-                // 2 byte, need 1 more byte
-                stringLength = utf8StartByte;
-            }
-            else if ((checkByte & 0xF0) == 0xE0 && utf8StartByte != stringLength - 3)
-            {
-                // 3 byte, need 2 more bytes
-                stringLength = utf8StartByte;
-            }
-            else if ((checkByte & 0xF8) == 0xF0 && utf8StartByte != stringLength - 4)
-            {
-                // 4 byte, need 3 more bytes
-                stringLength = utf8StartByte;
-            }
-            // If we get here, the string is either completely garbage or fine.
-        }
 
-        return Encoding.UTF8.GetString(bytes[..stringLength]);
+        OperationStatus result = Rune.DecodeLastFromUtf8(bytes[..stringLength], out var lastChar, out var consumed);
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+        ReadOnlySpan<byte> buffer = result switch {
+            OperationStatus.Done => bytes[..stringLength], // Correct character
+            OperationStatus.NeedMoreData => new(), // Standalone Surrogate or empty
+            OperationStatus.InvalidData => bytes[..(stringLength - consumed)]
+        };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+
+        return Encoding.UTF8.GetString(buffer);
     }
 
     public bool SetStringField(StructFieldDescriptor field, string value)
