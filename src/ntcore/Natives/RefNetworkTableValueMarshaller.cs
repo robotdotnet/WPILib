@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
-using WPIUtil;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
@@ -11,6 +10,7 @@ namespace NetworkTables.Natives;
 [CustomMarshaller(typeof(RefNetworkTableValue), MarshalMode.ManagedToUnmanagedIn, typeof(RefNetworkTableValueMarshaller))]
 public unsafe ref struct RefNetworkTableValueMarshaller
 {
+    public static int BufferSize => 256;
     private ref byte m_toPin;
 
     private ref byte* m_toAssignPin;
@@ -19,7 +19,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
 
     private NetworkTableValueMarshaller.NativeNetworkTableValue m_nativeValue;
 
-    public void FromManaged(in RefNetworkTableValue managed)
+    public void FromManaged(in RefNetworkTableValue managed, Span<byte> callerAllocatedBuffer)
     {
         m_nativeValue.type = managed.Type;
         m_nativeValue.lastChange = managed.Time;
@@ -64,12 +64,16 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 m_doAssignment = true;
                 break;
             case NetworkTableType.BooleanArray:
-                int[] boolArrayData = new int[managed.m_boolSpan.Length];
-                for (int i = 0; i < boolArrayData.Length; i++)
+                Span<int> boolArraySpan = MemoryMarshal.Cast<byte, int>(callerAllocatedBuffer);
+                if (boolArraySpan.Length < managed.m_boolSpan.Length)
                 {
-                    boolArrayData[i] = managed.m_boolSpan[i] ? 1 : 0;
+                    boolArraySpan = new int[managed.m_boolSpan.Length];
                 }
-                m_toPin = MemoryMarshal.AsBytes(boolArrayData.AsSpan()).GetPinnableReference();
+                for (int i = 0; i < boolArraySpan.Length; i++)
+                {
+                    boolArraySpan[i] = managed.m_boolSpan[i] ? 1 : 0;
+                }
+                m_toPin = MemoryMarshal.AsBytes(boolArraySpan).GetPinnableReference();
                 m_toAssignPin = (byte*)m_nativeValue.data.arrBoolean.arr;
                 m_nativeValue.data.arrBoolean.size = (nuint)managed.m_boolSpan.Length;
                 m_doAssignment = true;
