@@ -1,9 +1,11 @@
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.Marshalling;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
 
 [StructLayout(LayoutKind.Auto)]
+[NativeMarshalling(typeof(RefNetworkTableValueMarshaller))]
 public readonly ref partial struct RefNetworkTableValue
 {
     /**

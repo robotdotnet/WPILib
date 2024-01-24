@@ -113,5 +113,11 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         NtCore.Unpublish(Handle);
     }
 
+    public void Set(ReadOnlySpan<byte> value)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value, 0);
+        NtCore.SetEntryValue(Handle, ntValue);
+    }
+
     private readonly string m_defaultValue;
 }

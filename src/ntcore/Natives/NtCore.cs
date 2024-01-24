@@ -62,165 +62,21 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_SetDefaultEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static unsafe partial bool SetDefaultEntryValue(int entry, NetworkTableValueMarshaller.NativeNetworkTableValue* defaultValue);
+    internal static unsafe partial bool SetDefaultEntryValue(int entry, in RefNetworkTableValue defaultValue);
 
     public static unsafe bool SetDefaultEntryValue<T>(T entry, in RefNetworkTableValue defaultValue) where T : struct, INtEntryHandle
     {
-        NetworkTableValueMarshaller.NativeNetworkTableValue nativeValue = new NetworkTableValueMarshaller.NativeNetworkTableValue
-        {
-            type = defaultValue.Type,
-            lastChange = defaultValue.Time,
-            serverTime = 0
-        };
-        switch (defaultValue.Type)
-        {
-            case NetworkTableType.Boolean:
-                nativeValue.data.valueBoolean = defaultValue.m_structValue.boolValue ? 1 : 0;
-                return SetDefaultEntryValue(entry.Handle, &nativeValue);
-            case NetworkTableType.Double:
-                nativeValue.data.valueDouble = defaultValue.m_structValue.doubleValue;
-                return SetDefaultEntryValue(entry.Handle, &nativeValue);
-            case NetworkTableType.String:
-                byte[] stringData = Encoding.UTF8.GetBytes(defaultValue.m_stringValue!);
-                fixed (byte* stringPtr = stringData)
-                {
-                    nativeValue.data.valueString = new(stringPtr, (nuint)stringData.Length);
-                    return SetDefaultEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.Raw:
-                fixed (byte* stringPtr = defaultValue.m_byteSpan)
-                {
-                    nativeValue.data.valueRaw.data = stringPtr;
-                    nativeValue.data.valueRaw.size = (nuint)defaultValue.m_byteSpan.Length;
-                    return SetDefaultEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.BooleanArray:
-                int[] boolArrayData = new int[defaultValue.m_boolSpan.Length];
-                for (int i = 0; i < boolArrayData.Length; i++)
-                {
-                    boolArrayData[i] = defaultValue.m_boolSpan[i] ? 1 : 0;
-                }
-                fixed (int* boolPtr = boolArrayData)
-                {
-                    nativeValue.data.arrBoolean.arr = boolPtr;
-                    nativeValue.data.arrBoolean.size = (nuint)boolArrayData.Length;
-                    return SetDefaultEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.DoubleArray:
-                fixed (double* doublePtr = defaultValue.m_doubleSpan)
-                {
-                    nativeValue.data.arrDouble.arr = doublePtr;
-                    nativeValue.data.arrDouble.size = (nuint)defaultValue.m_doubleSpan.Length;
-                    return SetDefaultEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.IntegerArray:
-                fixed (long* intPtr = defaultValue.m_longSpan)
-                {
-                    nativeValue.data.arrInt.arr = intPtr;
-                    nativeValue.data.arrInt.size = (nuint)defaultValue.m_longSpan.Length;
-                    return SetDefaultEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.FloatArray:
-                fixed (float* floatPtr = defaultValue.m_floatSpan)
-                {
-                    nativeValue.data.arrFloat.arr = floatPtr;
-                    nativeValue.data.arrFloat.size = (nuint)defaultValue.m_floatSpan.Length;
-                    return SetDefaultEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.StringArray:
-                // TODO
-                throw new NotImplementedException();
-            case NetworkTableType.Integer:
-                nativeValue.data.valueInt = defaultValue.m_structValue.longValue;
-                return SetDefaultEntryValue(entry.Handle, &nativeValue);
-            case NetworkTableType.Float:
-                nativeValue.data.valueFloat = defaultValue.m_structValue.floatValue;
-                return SetDefaultEntryValue(entry.Handle, &nativeValue);
-            default:
-                return SetDefaultEntryValue(entry.Handle, &nativeValue);
-        }
+        return SetDefaultEntryValue(entry.Handle, defaultValue);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static unsafe partial bool SetEntryValue(int entry, NetworkTableValueMarshaller.NativeNetworkTableValue* value);
+    internal static unsafe partial bool SetEntryValue(int entry, in RefNetworkTableValue value);
 
     public static unsafe bool SetEntryValue<T>(T entry, in RefNetworkTableValue value) where T : struct, INtEntryHandle
     {
-        NetworkTableValueMarshaller.NativeNetworkTableValue nativeValue = new NetworkTableValueMarshaller.NativeNetworkTableValue
-        {
-            type = value.Type,
-            lastChange = value.Time,
-            serverTime = 0
-        };
-        switch (value.Type)
-        {
-            case NetworkTableType.Boolean:
-                nativeValue.data.valueBoolean = value.m_structValue.boolValue ? 1 : 0;
-                return SetEntryValue(entry.Handle, &nativeValue);
-            case NetworkTableType.Double:
-                nativeValue.data.valueDouble = value.m_structValue.doubleValue;
-                return SetEntryValue(entry.Handle, &nativeValue);
-            case NetworkTableType.String:
-                byte[] stringData = Encoding.UTF8.GetBytes(value.m_stringValue!);
-                fixed (byte* stringPtr = stringData)
-                {
-                    nativeValue.data.valueString = new(stringPtr, (nuint)stringData.Length);
-                    return SetEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.Raw:
-                fixed (byte* stringPtr = value.m_byteSpan)
-                {
-                    nativeValue.data.valueRaw.data = stringPtr;
-                    nativeValue.data.valueRaw.size = (nuint)value.m_byteSpan.Length;
-                    return SetEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.BooleanArray:
-                int[] boolArrayData = new int[value.m_boolSpan.Length];
-                for (int i = 0; i < boolArrayData.Length; i++)
-                {
-                    boolArrayData[i] = value.m_boolSpan[i] ? 1 : 0;
-                }
-                fixed (int* boolPtr = boolArrayData)
-                {
-                    nativeValue.data.arrBoolean.arr = boolPtr;
-                    nativeValue.data.arrBoolean.size = (nuint)boolArrayData.Length;
-                    return SetEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.DoubleArray:
-                fixed (double* doublePtr = value.m_doubleSpan)
-                {
-                    nativeValue.data.arrDouble.arr = doublePtr;
-                    nativeValue.data.arrDouble.size = (nuint)value.m_doubleSpan.Length;
-                    return SetEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.IntegerArray:
-                fixed (long* intPtr = value.m_longSpan)
-                {
-                    nativeValue.data.arrInt.arr = intPtr;
-                    nativeValue.data.arrInt.size = (nuint)value.m_longSpan.Length;
-                    return SetEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.FloatArray:
-                fixed (float* floatPtr = value.m_floatSpan)
-                {
-                    nativeValue.data.arrFloat.arr = floatPtr;
-                    nativeValue.data.arrFloat.size = (nuint)value.m_floatSpan.Length;
-                    return SetEntryValue(entry.Handle, &nativeValue);
-                }
-            case NetworkTableType.StringArray:
-                // TODO
-                throw new NotImplementedException();
-            case NetworkTableType.Integer:
-                nativeValue.data.valueInt = value.m_structValue.longValue;
-                return SetEntryValue(entry.Handle, &nativeValue);
-            case NetworkTableType.Float:
-                nativeValue.data.valueFloat = value.m_structValue.floatValue;
-                return SetEntryValue(entry.Handle, &nativeValue);
-            default:
-                return SetEntryValue(entry.Handle, &nativeValue);
-        }
+        return SetEntryValue(entry.Handle, value);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_SetEntryFlags")]

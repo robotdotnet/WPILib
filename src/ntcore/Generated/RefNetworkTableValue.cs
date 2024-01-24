@@ -134,8 +134,32 @@ public readonly ref partial struct RefNetworkTableValue
         return new RefNetworkTableValue(value, time);
     }
 
+    public static RefNetworkTableValue MakeString(ReadOnlySpan<byte> value)
+    {
+        return new RefNetworkTableValue(value, true);
+    }
+
+    public static RefNetworkTableValue MakeString(ReadOnlySpan<byte> value, long time)
+    {
+        return new RefNetworkTableValue(value, time, true);
+    }
+
 
     internal readonly ReadOnlySpan<byte> m_byteSpan;
+
+    internal RefNetworkTableValue(ReadOnlySpan<byte> value, bool isString)
+    {
+        Type = NetworkTableType.String;
+        Time = NtCore.Now();
+        m_byteSpan = value;
+    }
+
+    internal RefNetworkTableValue(ReadOnlySpan<byte> value, long time, bool isString)
+    {
+        Type = NetworkTableType.String;
+        Time = time;
+        m_byteSpan = value;
+    }
 
     internal RefNetworkTableValue(ReadOnlySpan<byte> value)
     {

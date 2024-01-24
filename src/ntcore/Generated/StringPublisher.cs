@@ -27,6 +27,8 @@ public interface IStringPublisher : IPublisher
      */
     void Set(string value);
 
+    void Set(ReadOnlySpan<byte> value);
+
     /**
      * Publish a new value.
      *
