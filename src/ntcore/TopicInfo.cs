@@ -8,7 +8,7 @@ namespace NetworkTables.Natives;
 
 [NativeMarshalling(typeof(TopicInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct TopicInfo(NtTopic TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties) : INativeArrayFree<TopicInfoMarshaller.NativeTopicInfo>, INativeFree<TopicInfoMarshaller.NativeTopicInfo>
+public record struct TopicInfo(NtTopic TopicHandle, string Name, NetworkTableType Type, string TypeStr, string Properties) : INativeArrayFree<TopicInfoMarshaller.NativeTopicInfo>
 {
     public readonly Topic GetTopic(NetworkTableInstance inst)
     {
@@ -34,19 +34,6 @@ public static unsafe class TopicInfoMarshaller
     {
         public static TopicInfo ConvertToManaged(in NativeTopicInfo unmanaged)
         {
-            return ReturnInArray.ConvertToManaged(unmanaged);
-        }
-
-        public static void Free(NativeTopicInfo unmanaged)
-        {
-            TopicInfo.Free(&unmanaged);
-        }
-    }
-
-    public static class ReturnInArray
-    {
-        public static TopicInfo ConvertToManaged(in NativeTopicInfo unmanaged)
-        {
             return new TopicInfo
             {
                 TopicHandle = new NtTopic(unmanaged.topic),
@@ -56,6 +43,19 @@ public static unsafe class TopicInfoMarshaller
                 Properties = unmanaged.properties.ConvertToString(),
 
             };
+        }
+
+        public static void Free(NativeTopicInfo unmanaged)
+        {
+            NtCore.DisposeTopicInfo(&unmanaged);
+        }
+    }
+
+    public static class ReturnInArray
+    {
+        public static TopicInfo ConvertToManaged(in NativeTopicInfo unmanaged)
+        {
+            return ReturnFrom.ConvertToManaged(unmanaged);
         }
 
         public static NativeTopicInfo ConvertToUnmanaged(in TopicInfo managed)

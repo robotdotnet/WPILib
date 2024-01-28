@@ -114,7 +114,9 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     if (byteCount > stringSpan.Length)
                     {
                         stringSpan = new byte[byteCount];
-                    } else {
+                    }
+                    else
+                    {
                         stringSpan = stringSpan[..byteCount];
                     }
                     int exactBytes = Encoding.UTF8.GetBytes(managed.m_stringValue!, stringSpan);

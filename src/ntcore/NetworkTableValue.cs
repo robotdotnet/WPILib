@@ -1,5 +1,7 @@
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using System.Text;
 using NetworkTables.Natives;
 using WPIUtil.Marshal;
 
@@ -7,13 +9,8 @@ namespace NetworkTables;
 
 [NativeMarshalling(typeof(NetworkTableValueMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>, INativeFree<NetworkTableValueMarshaller.NativeNetworkTableValue>
+public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>
 {
-    public static unsafe void Free(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr)
-    {
-        NtCore.DisposeValue(ptr);
-    }
-
     public static unsafe void FreeArray(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr, int len)
     {
         NtCore.DisposeValueArray(ptr, (nuint)len);
@@ -204,5 +201,67 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
             NetworkTableType.FloatArray => RefNetworkTableValue.MakeFloatArray((float[])value.m_objectValue!, value.Time),
             _ => RefNetworkTableValue.MakeUnassigned(value.Time),
         };
+    }
+
+    internal unsafe NetworkTableValue(in NetworkTableValueMarshaller.NativeNetworkTableValue value)
+    {
+        Time = value.lastChange;
+        ServerTime = value.serverTime;
+        Type = value.type;
+
+        switch (Type)
+        {
+            case NetworkTableType.Boolean:
+                m_structValue = new(value.data.valueBoolean != 0);
+                break;
+            case NetworkTableType.Integer:
+                m_structValue = new(value.data.valueInt);
+                break;
+            case NetworkTableType.Float:
+                m_structValue = new(value.data.valueFloat);
+                break;
+            case NetworkTableType.Double:
+                m_structValue = new(value.data.valueDouble);
+                break;
+            case NetworkTableType.String:
+                m_objectValue = value.data.valueString.ConvertToString();
+                break;
+            case NetworkTableType.Raw:
+                byte[] bytes = new byte[checked((int)value.data.valueRaw.size)];
+                new ReadOnlySpan<byte>(value.data.valueRaw.data, bytes.Length).CopyTo(bytes);
+                m_objectValue = bytes;
+                break;
+            case NetworkTableType.BooleanArray:
+                bool[] boolArr = new bool[checked((int)value.data.arrBoolean.size)];
+                for (int i = 0; i < boolArr.Length; i++)
+                {
+                    boolArr[i] = value.data.valueRaw.data[i] != 0;
+                }
+                m_objectValue = boolArr;
+                break;
+            case NetworkTableType.IntegerArray:
+                long[] longArr = new long[checked((int)value.data.arrInt.size)];
+                new ReadOnlySpan<long>(value.data.arrInt.arr, longArr.Length).CopyTo(longArr);
+                m_objectValue = longArr;
+                break;
+            case NetworkTableType.FloatArray:
+                float[] floatArr = new float[checked((int)value.data.arrFloat.size)];
+                new ReadOnlySpan<float>(value.data.arrFloat.arr, floatArr.Length).CopyTo(floatArr);
+                m_objectValue = floatArr;
+                break;
+            case NetworkTableType.DoubleArray:
+                double[] doubleArr = new double[checked((int)value.data.arrDouble.size)];
+                new ReadOnlySpan<double>(value.data.arrDouble.arr, doubleArr.Length).CopyTo(doubleArr);
+                m_objectValue = doubleArr;
+                break;
+            case NetworkTableType.StringArray:
+                string[] stringArr = new string[checked((int)value.data.arrString.size)];
+                for (int i = 0; i < stringArr.Length; i++)
+                {
+                    stringArr[i] = value.data.arrString.arr[i].ConvertToString();
+                }
+                m_objectValue = stringArr;
+                break;
+        }
     }
 }

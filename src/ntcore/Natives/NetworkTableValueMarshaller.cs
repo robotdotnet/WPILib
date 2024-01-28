@@ -14,12 +14,12 @@ public static unsafe class NetworkTableValueMarshaller
     {
         public static NetworkTableValue ConvertToManaged(in NativeNetworkTableValue unmanaged)
         {
-            throw new NotImplementedException();
+            return new(unmanaged);
         }
 
         public static void Free(NativeNetworkTableValue unmanaged)
         {
-            NetworkTableValue.Free(&unmanaged);
+            NtCore.DisposeValue(&unmanaged);
         }
     }
 

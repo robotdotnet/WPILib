@@ -8,7 +8,7 @@ using WPIUtil.Marshal;
 namespace NetworkTables;
 
 [NativeMarshalling(typeof(NetworkTableEventMarshaller))]
-public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>, INativeFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>
+public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMarshaller.NativeNetworkTableEvent>
 {
     public bool Is(EventFlags kind) => (Flags & kind) != 0;
     public required NtListener ListenerHandle { get; init; }
@@ -18,11 +18,6 @@ public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMar
     public ValueEventData? ValueData { get; init; }
     public LogMessage? LogMessage { get; init; }
     public TimeSyncEventData? TimeSyncData { get; init; }
-
-    public static unsafe void Free(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr)
-    {
-        NtCore.DisposeEvent(ptr);
-    }
 
     public static unsafe void FreeArray(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr, int len)
     {
