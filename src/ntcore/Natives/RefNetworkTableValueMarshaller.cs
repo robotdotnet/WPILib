@@ -158,6 +158,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
         return ref m_toPin;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public NetworkTableValueMarshaller.NativeNetworkTableValue ToUnmanaged()
     {
         if (m_doAssignment)
