@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -79,9 +80,15 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 m_doAssignment = true;
                 break;
             case NetworkTableType.String:
-                byte[] stringArrayData = Encoding.UTF8.GetBytes(managed.m_stringValue!);
-                m_toPin = MemoryMarshal.AsBytes(stringArrayData.AsSpan()).GetPinnableReference();
-                m_nativeValue.data.valueString = new(null, (nuint)stringArrayData.Length);
+                int byteCount = Encoding.UTF8.GetByteCount(managed.m_stringValue!);
+                Span<byte> stringSpan = callerAllocatedBuffer;
+                if (byteCount > stringSpan.Length) {
+                    stringSpan = new byte[byteCount];
+                }
+                int exactBytes = Encoding.UTF8.GetBytes(managed.m_stringValue!, stringSpan);
+                Debug.Assert(exactBytes == byteCount);
+                m_toPin = stringSpan.GetPinnableReference();
+                m_nativeValue.data.valueString = new(null, (nuint)stringSpan.Length);
                 m_toAssignPin = m_nativeValue.data.valueString.Str;
                 m_doAssignment = true;
                 break;
@@ -92,7 +99,8 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 {
                     int len = Encoding.UTF8.GetByteCount(managed.m_stringSpan[i]);
                     byte* mem = (byte*)NativeMemory.Alloc((nuint)len);
-                    Encoding.UTF8.GetBytes(managed.m_stringSpan[i], new Span<byte>(mem, len));
+                    int exactLen = Encoding.UTF8.GetBytes(managed.m_stringSpan[i], new Span<byte>(mem, len));
+                    Debug.Assert(exactLen == len);
                     strings[i] = new WpiStringMarshaller.WpiStringNative(mem, (nuint)len);
                 }
 
