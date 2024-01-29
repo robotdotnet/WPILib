@@ -1,4 +1,7 @@
 using System;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using WPIUtil;
@@ -77,40 +80,40 @@ public static unsafe class NetworkTableValueMarshaller
 
             public unsafe struct NtValueRaw
             {
-                public byte* data;
+                public Ptr<byte> data;
                 public nuint size;
             }
 
             public unsafe struct NtValueBooleanArray
             {
-                public int* arr;
+                public Ptr<int> arr;
                 public nuint size;
             }
 
             public unsafe struct NtValueDoubleArray
             {
-                public double* arr;
+                public Ptr<double> arr;
 
                 public nuint size;
             }
 
             public unsafe struct NtValueFloatArray
             {
-                public float* arr;
+                public Ptr<float> arr;
 
                 public nuint size;
             }
 
             public unsafe struct NtValueIntArray
             {
-                public long* arr;
+                public Ptr<long> arr;
 
                 public nuint size;
             }
 
-            public unsafe partial struct NtValueStringArray
+            public unsafe struct NtValueStringArray
             {
-                public WpiStringMarshaller.WpiStringNative* arr;
+                public Ptr<WpiStringMarshaller.WpiStringNative> arr;
                 public nuint size;
             }
         }

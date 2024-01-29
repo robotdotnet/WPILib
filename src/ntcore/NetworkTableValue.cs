@@ -235,7 +235,7 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
                 bool[] boolArr = new bool[checked((int)value.data.arrBoolean.size)];
                 for (int i = 0; i < boolArr.Length; i++)
                 {
-                    boolArr[i] = value.data.valueRaw.data[i] != 0;
+                    boolArr[i] = value.data.arrBoolean.arr[i] != 0;
                 }
                 m_objectValue = boolArr;
                 break;

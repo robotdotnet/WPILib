@@ -143,7 +143,7 @@ public class RefNetworkTableValueMarshallerTest
             Assert.Equal(NetworkTableType.Raw, v->type);
             Assert.Equal((nuint)0, v->data.valueRaw.size);
             Assert.True(pinned == null);
-            Assert.True(v->data.valueRaw.data == null);
+            Assert.True(v->data.valueRaw.data.IsNull);
         });
     }
 
@@ -188,7 +188,32 @@ public class RefNetworkTableValueMarshallerTest
             Assert.Equal(NetworkTableType.String, v->type);
             Assert.Equal((nuint)0, v->data.valueString.Len);
             Assert.True(pinned == null);
-            Assert.True(v->data.valueString.Str == null);
+            Assert.True(v->data.valueString.Str.IsNull);
+        });
+    }
+
+    [Fact]
+    public unsafe void TestStringArray()
+    {
+        Span<byte> raw = stackalloc byte[3];
+        "abc"u8.CopyTo(raw);
+        void* ptr = Unsafe.AsPointer(ref raw.GetPinnableReference());
+        HandleInMarshal(RefNetworkTableValue.MakeRaw(raw), (v, pinned) =>
+        {
+            Assert.Equal(NetworkTableType.Raw, v->type);
+            Assert.Equal((nuint)3, v->data.valueRaw.size);
+            ReadOnlySpan<byte> consumed = new ReadOnlySpan<byte>(v->data.valueRaw.data, (int)v->data.valueRaw.size);
+            Assert.True(consumed.SequenceEqual("abc"u8));
+            Assert.True(pinned == ptr);
+            Assert.True(pinned == v->data.valueRaw.data);
+        });
+
+        HandleInMarshal(RefNetworkTableValue.MakeRaw(new()), (v, pinned) =>
+        {
+            Assert.Equal(NetworkTableType.Raw, v->type);
+            Assert.Equal((nuint)0, v->data.valueRaw.size);
+            Assert.True(pinned == null);
+            Assert.True(v->data.valueRaw.data.IsNull);
         });
     }
 }

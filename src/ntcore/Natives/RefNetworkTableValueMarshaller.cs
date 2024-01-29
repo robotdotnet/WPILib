@@ -14,9 +14,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
     public static int BufferSize => 256;
     private ref readonly byte m_toPin;
 
-    private byte** m_toAssignPin;
-
-    private bool m_doAssignment;
+    private ref Ptr<byte> m_toAssignPin;
 
     private NetworkTableValueMarshaller.NativeNetworkTableValue m_nativeValue;
 
@@ -42,39 +40,23 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 break;
             case NetworkTableType.Raw:
                 m_toPin = ref managed.m_byteSpan.GetPinnableReference();
-                fixed (void* ptr = &m_nativeValue.data.valueRaw.data)
-                {
-                    m_toAssignPin = (byte**)ptr;
-                }
+                m_toAssignPin = ref m_nativeValue.data.valueRaw.data.GetPinnableReference();
                 m_nativeValue.data.valueRaw.size = (nuint)managed.m_byteSpan.Length;
-                m_doAssignment = true;
                 break;
             case NetworkTableType.DoubleArray:
                 m_toPin = ref MemoryMarshal.AsBytes(managed.m_doubleSpan).GetPinnableReference();
-                fixed (void* ptr = &m_nativeValue.data.arrDouble.arr)
-                {
-                    m_toAssignPin = (byte**)ptr;
-                }
+                m_toAssignPin = ref m_nativeValue.data.arrDouble.arr.GetPinnableReference();
                 m_nativeValue.data.arrDouble.size = (nuint)managed.m_doubleSpan.Length;
-                m_doAssignment = true;
                 break;
             case NetworkTableType.IntegerArray:
                 m_toPin = ref MemoryMarshal.AsBytes(managed.m_longSpan).GetPinnableReference();
-                fixed (void* ptr = &m_nativeValue.data.arrInt.arr)
-                {
-                    m_toAssignPin = (byte**)ptr;
-                }
+                m_toAssignPin = ref m_nativeValue.data.arrInt.arr.GetPinnableReference();
                 m_nativeValue.data.arrInt.size = (nuint)managed.m_longSpan.Length;
-                m_doAssignment = true;
                 break;
             case NetworkTableType.FloatArray:
                 m_toPin = ref MemoryMarshal.AsBytes(managed.m_floatSpan).GetPinnableReference();
-                fixed (void* ptr = &m_nativeValue.data.arrFloat.arr)
-                {
-                    m_toAssignPin = (byte**)ptr;
-                }
+                m_toAssignPin = ref m_nativeValue.data.arrFloat.arr.GetPinnableReference();
                 m_nativeValue.data.arrFloat.size = (nuint)managed.m_floatSpan.Length;
-                m_doAssignment = true;
                 break;
             case NetworkTableType.BooleanArray:
                 Span<int> boolArraySpan = MemoryMarshal.Cast<byte, int>(callerAllocatedBuffer);
@@ -87,12 +69,8 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     boolArraySpan[i] = managed.m_boolSpan[i] ? 1 : 0;
                 }
                 m_toPin = ref MemoryMarshal.AsBytes(boolArraySpan).GetPinnableReference();
-                fixed (void* ptr = &m_nativeValue.data.arrBoolean.arr)
-                {
-                    m_toAssignPin = (byte**)ptr;
-                }
+                m_toAssignPin = ref m_nativeValue.data.arrBoolean.arr.GetPinnableReference();
                 m_nativeValue.data.arrBoolean.size = (nuint)managed.m_boolSpan.Length;
-                m_doAssignment = true;
                 break;
             case NetworkTableType.String:
                 if (managed.m_stringValue == null)
@@ -100,11 +78,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     // String is stored as utf-8 in raw span
                     m_toPin = ref managed.m_byteSpan.GetPinnableReference();
                     m_nativeValue.data.valueString = new(null, (nuint)managed.m_byteSpan.Length);
-                    fixed (void* ptr = &m_nativeValue.data.valueString.Str)
-                    {
-                        m_toAssignPin = (byte**)ptr;
-                    }
-                    m_doAssignment = true;
+                    m_toAssignPin = ref m_nativeValue.data.valueString.Str.GetPinnableReference();
                 }
                 else
                 {
@@ -123,11 +97,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     Debug.Assert(exactBytes == byteCount);
                     m_toPin = ref stringSpan.GetPinnableReference();
                     m_nativeValue.data.valueString = new(null, (nuint)stringSpan.Length);
-                    fixed (void* ptr = &m_nativeValue.data.valueString.Str)
-                    {
-                        m_toAssignPin = (byte**)ptr;
-                    }
-                    m_doAssignment = true;
+                    m_toAssignPin = ref m_nativeValue.data.valueString.Str.GetPinnableReference();
                 }
                 break;
             case NetworkTableType.StringArray:
@@ -143,12 +113,8 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 }
 
                 m_toPin = ref MemoryMarshal.AsBytes(strings.AsSpan()).GetPinnableReference();
-                fixed (void* ptr = &m_nativeValue.data.arrString.arr)
-                {
-                    m_toAssignPin = (byte**)ptr;
-                }
+                m_toAssignPin = ref m_nativeValue.data.arrString.arr.GetPinnableReference();
                 m_nativeValue.data.arrString.size = (nuint)managed.m_stringSpan.Length;
-                m_doAssignment = true;
                 break;
             default:
                 break;
@@ -163,9 +129,9 @@ public unsafe ref struct RefNetworkTableValueMarshaller
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public NetworkTableValueMarshaller.NativeNetworkTableValue ToUnmanaged()
     {
-        if (m_doAssignment)
+        if (!Unsafe.IsNullRef(in m_toPin))
         {
-            *m_toAssignPin = (byte*)Unsafe.AsPointer(ref Unsafe.AsRef(in m_toPin));
+            m_toAssignPin = (byte*)Unsafe.AsPointer(ref Unsafe.AsRef(in m_toPin));
         }
         return m_nativeValue;
     }

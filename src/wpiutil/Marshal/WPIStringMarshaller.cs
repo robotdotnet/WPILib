@@ -1,5 +1,7 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -129,10 +131,10 @@ public static unsafe class WpiStringMarshaller
 
     // Cannot be a ref struct due to being used as a parameter to ReadOnlySpanMarshaller in the ElementIn case
     [StructLayout(LayoutKind.Sequential)]
-    public readonly unsafe struct WpiStringNative(byte* str, nuint len)
+    public unsafe struct WpiStringNative(byte* str, nuint len)
     {
-        public readonly byte* Str = str;
-        public readonly nuint Len = len;
+        public Ptr<byte> Str = str;
+        public nuint Len = len;
 
         public readonly string ConvertToString()
         {
@@ -143,5 +145,36 @@ public static unsafe class WpiStringMarshaller
 
             return Encoding.UTF8.GetString(Str, checked((int)Len));
         }
+    }
+}
+
+public unsafe readonly struct Ptr<T> where T : unmanaged
+{
+    private readonly T* ptr;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Ptr(T* ptr) => this.ptr = ptr;
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator Ptr<T>(T* p) => new(p);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static implicit operator T*(Ptr<T> ptr) => ptr.ptr;
+
+    public ref T this[int index]
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => ref *(ptr + index);
+    }
+
+    public bool IsNull
+    {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        get => ptr == null;
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public ref Ptr<byte> GetPinnableReference()
+    {
+        return ref Unsafe.As<Ptr<T>, Ptr<byte>>(ref Unsafe.AsRef(in this));
     }
 }
