@@ -40,22 +40,22 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 break;
             case NetworkTableType.Raw:
                 m_toPin = ref managed.m_byteSpan.GetPinnableReference();
-                m_toAssignPin = ref m_nativeValue.data.valueRaw.data.GetPinnableReference();
+                m_toAssignPin = ref m_nativeValue.data.valueRaw.data.GetPinnableByteReference();
                 m_nativeValue.data.valueRaw.size = (nuint)managed.m_byteSpan.Length;
                 break;
             case NetworkTableType.DoubleArray:
                 m_toPin = ref MemoryMarshal.AsBytes(managed.m_doubleSpan).GetPinnableReference();
-                m_toAssignPin = ref m_nativeValue.data.arrDouble.arr.GetPinnableReference();
+                m_toAssignPin = ref m_nativeValue.data.arrDouble.arr.GetPinnableByteReference();
                 m_nativeValue.data.arrDouble.size = (nuint)managed.m_doubleSpan.Length;
                 break;
             case NetworkTableType.IntegerArray:
                 m_toPin = ref MemoryMarshal.AsBytes(managed.m_longSpan).GetPinnableReference();
-                m_toAssignPin = ref m_nativeValue.data.arrInt.arr.GetPinnableReference();
+                m_toAssignPin = ref m_nativeValue.data.arrInt.arr.GetPinnableByteReference();
                 m_nativeValue.data.arrInt.size = (nuint)managed.m_longSpan.Length;
                 break;
             case NetworkTableType.FloatArray:
                 m_toPin = ref MemoryMarshal.AsBytes(managed.m_floatSpan).GetPinnableReference();
-                m_toAssignPin = ref m_nativeValue.data.arrFloat.arr.GetPinnableReference();
+                m_toAssignPin = ref m_nativeValue.data.arrFloat.arr.GetPinnableByteReference();
                 m_nativeValue.data.arrFloat.size = (nuint)managed.m_floatSpan.Length;
                 break;
             case NetworkTableType.BooleanArray:
@@ -69,7 +69,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     boolArraySpan[i] = managed.m_boolSpan[i] ? 1 : 0;
                 }
                 m_toPin = ref MemoryMarshal.AsBytes(boolArraySpan).GetPinnableReference();
-                m_toAssignPin = ref m_nativeValue.data.arrBoolean.arr.GetPinnableReference();
+                m_toAssignPin = ref m_nativeValue.data.arrBoolean.arr.GetPinnableByteReference();
                 m_nativeValue.data.arrBoolean.size = (nuint)managed.m_boolSpan.Length;
                 break;
             case NetworkTableType.String:
@@ -78,7 +78,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     // String is stored as utf-8 in raw span
                     m_toPin = ref managed.m_byteSpan.GetPinnableReference();
                     m_nativeValue.data.valueString = new(null, (nuint)managed.m_byteSpan.Length);
-                    m_toAssignPin = ref m_nativeValue.data.valueString.Str.GetPinnableReference();
+                    m_toAssignPin = ref m_nativeValue.data.valueString.Str.GetPinnableByteReference();
                 }
                 else
                 {
@@ -97,7 +97,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     Debug.Assert(exactBytes == byteCount);
                     m_toPin = ref stringSpan.GetPinnableReference();
                     m_nativeValue.data.valueString = new(null, (nuint)stringSpan.Length);
-                    m_toAssignPin = ref m_nativeValue.data.valueString.Str.GetPinnableReference();
+                    m_toAssignPin = ref m_nativeValue.data.valueString.Str.GetPinnableByteReference();
                 }
                 break;
             case NetworkTableType.StringArray:
@@ -113,7 +113,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 }
 
                 m_toPin = ref MemoryMarshal.AsBytes(strings.AsSpan()).GetPinnableReference();
-                m_toAssignPin = ref m_nativeValue.data.arrString.arr.GetPinnableReference();
+                m_toAssignPin = ref m_nativeValue.data.arrString.arr.GetPinnableByteReference();
                 m_nativeValue.data.arrString.size = (nuint)managed.m_stringSpan.Length;
                 break;
             default:
