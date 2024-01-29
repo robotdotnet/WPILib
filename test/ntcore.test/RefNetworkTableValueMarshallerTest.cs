@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 using NetworkTables.Natives;
+using WPIUtil.Marshal;
 using Xunit;
 
 namespace NetworkTables.Test;
@@ -195,25 +196,29 @@ public class RefNetworkTableValueMarshallerTest
     [Fact]
     public unsafe void TestStringArray()
     {
-        Span<byte> raw = stackalloc byte[3];
-        "abc"u8.CopyTo(raw);
-        void* ptr = Unsafe.AsPointer(ref raw.GetPinnableReference());
-        HandleInMarshal(RefNetworkTableValue.MakeRaw(raw), (v, pinned) =>
+        HandleInMarshal(RefNetworkTableValue.MakeStringArray(["abc", "12345"]), (v, pinned) =>
         {
-            Assert.Equal(NetworkTableType.Raw, v->type);
-            Assert.Equal((nuint)3, v->data.valueRaw.size);
-            ReadOnlySpan<byte> consumed = new ReadOnlySpan<byte>(v->data.valueRaw.data, (int)v->data.valueRaw.size);
+            Assert.Equal(NetworkTableType.StringArray, v->type);
+            Assert.Equal((nuint)2, v->data.arrString.size);
+
+            ReadOnlySpan<WpiStringMarshaller.WpiStringNative> array = new ReadOnlySpan<WpiStringMarshaller.WpiStringNative>(v->data.arrString.arr, (int)v->data.arrString.size);
+            Assert.Equal((nuint)3, array[0].Len);
+            ReadOnlySpan<byte> consumed = new ReadOnlySpan<byte>(array[0].Str, (int)array[0].Len);
             Assert.True(consumed.SequenceEqual("abc"u8));
-            Assert.True(pinned == ptr);
-            Assert.True(pinned == v->data.valueRaw.data);
+
+            Assert.Equal((nuint)5, array[1].Len);
+            consumed = new ReadOnlySpan<byte>(array[1].Str, (int)array[1].Len);
+            Assert.True(consumed.SequenceEqual("12345"u8));
+
+            Assert.True(pinned == v->data.arrString.arr);
         });
 
-        HandleInMarshal(RefNetworkTableValue.MakeRaw(new()), (v, pinned) =>
+        HandleInMarshal(RefNetworkTableValue.MakeStringArray(new()), (v, pinned) =>
         {
-            Assert.Equal(NetworkTableType.Raw, v->type);
-            Assert.Equal((nuint)0, v->data.valueRaw.size);
+            Assert.Equal(NetworkTableType.StringArray, v->type);
+            Assert.Equal((nuint)0, v->data.arrString.size);
             Assert.True(pinned == null);
-            Assert.True(v->data.valueRaw.data.IsNull);
+            Assert.True(v->data.arrString.arr.IsNull);
         });
     }
 }

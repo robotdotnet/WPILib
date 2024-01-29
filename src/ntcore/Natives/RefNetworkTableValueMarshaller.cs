@@ -136,15 +136,21 @@ public unsafe ref struct RefNetworkTableValueMarshaller
         return m_nativeValue;
     }
 
-    public void Free()
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public readonly void Free()
     {
         if (m_nativeValue.type == NetworkTableType.StringArray)
         {
-            int len = (int)m_nativeValue.data.arrString.size;
-            for (int i = 0; i < len; i++)
-            {
-                NativeMemory.Free(m_nativeValue.data.arrString.arr[i].Str);
-            }
+            FreeStringArray();
+        }
+    }
+
+    private readonly void FreeStringArray()
+    {
+        int len = (int)m_nativeValue.data.arrString.size;
+        for (int i = 0; i < len; i++)
+        {
+            NativeMemory.Free(m_nativeValue.data.arrString.arr[i].Str);
         }
     }
 }
