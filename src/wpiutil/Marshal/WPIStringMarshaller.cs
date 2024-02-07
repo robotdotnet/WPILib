@@ -1,7 +1,5 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -12,11 +10,12 @@ namespace WPIUtil.Marshal;
 
 [CustomMarshaller(typeof(WpiString), MarshalMode.ManagedToUnmanagedIn, typeof(PassTo))]
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(ReceiveFromString))]
+[CustomMarshaller(typeof(string), MarshalMode.ElementOut, typeof(ReceiveFromArray))]
 [CustomMarshaller(typeof(byte[]), MarshalMode.ManagedToUnmanagedOut, typeof(ReceiveFromByteArray))]
 [CustomMarshaller(typeof(string), MarshalMode.ElementIn, typeof(PassStringToArray))]
 public static unsafe class WpiStringMarshaller
 {
-    public static class ReceiveFromString
+    public static class ReceiveFromArray
     {
         public static string ConvertToManaged(WpiStringNative unmanaged)
         {
@@ -25,7 +24,26 @@ public static unsafe class WpiStringMarshaller
                 return "";
             }
             string buf = Encoding.UTF8.GetString(unmanaged.Str, checked((int)unmanaged.Len));
-            StringsNative.FreeString(ref unmanaged);
+            return buf;
+        }
+
+        public static WpiStringNative ConvertToUnmanaged(string managed)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+    public static class ReceiveFromString
+    {
+        public static string ConvertToManaged(WpiStringNative unmanaged)
+        {
+            if (unmanaged.Len == 0)
+            {
+                StringsNative.FreeString(&unmanaged);
+                return "";
+            }
+            string buf = Encoding.UTF8.GetString(unmanaged.Str, checked((int)unmanaged.Len));
+            StringsNative.FreeString(&unmanaged);
             return buf;
         }
     }
@@ -36,11 +54,12 @@ public static unsafe class WpiStringMarshaller
         {
             if (unmanaged.Len == 0)
             {
+                StringsNative.FreeString(&unmanaged);
                 return [];
             }
             byte[] buf = new byte[unmanaged.Len];
             new ReadOnlySpan<byte>(unmanaged.Str, checked((int)unmanaged.Len)).CopyTo(buf);
-            StringsNative.FreeString(ref unmanaged);
+            StringsNative.FreeString(&unmanaged);
             return buf;
         }
     }
@@ -131,10 +150,15 @@ public static unsafe class WpiStringMarshaller
 
     // Cannot be a ref struct due to being used as a parameter to ReadOnlySpanMarshaller in the ElementIn case
     [StructLayout(LayoutKind.Sequential)]
-    public unsafe struct WpiStringNative(byte* str, nuint len)
+    public unsafe struct WpiStringNative(byte* str, nuint len) : INativeArrayFree<WpiStringNative>
     {
         public Ptr<byte> Str = str;
         public nuint Len = len;
+
+        public static void FreeArray(WpiStringNative* ptr, int len)
+        {
+            throw new NotImplementedException();
+        }
 
         public readonly string ConvertToString()
         {

@@ -3,10 +3,9 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIUtil.Marshal;
 
-[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(CustomFreeArrayMarshaller<,>))]
+[CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(UnmanagedFreeArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
-public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
-                                                                         where T : INativeArrayFree<TUnmanagedElement>
+public unsafe ref struct UnmanagedFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged, INativeArrayFree<TUnmanagedElement>
 {
     private TUnmanagedElement* unmanagedStorage;
     private int? length;
@@ -29,7 +28,7 @@ public unsafe ref struct CustomFreeArrayMarshaller<T, TUnmanagedElement> where T
     {
         if (unmanagedStorage != null && length.HasValue)
         {
-            T.FreeArray(unmanagedStorage, length.Value);
+            TUnmanagedElement.FreeArray(unmanagedStorage, length.Value);
         }
     }
 

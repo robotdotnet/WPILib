@@ -99,7 +99,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     internal static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, out nuint count);
 
     public static unsafe NetworkTableValue[] ReadQueueValue<T>(T subentry) where T : struct, INtEntryHandle
@@ -109,7 +109,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = "count")]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
     internal static unsafe partial NtTopic[] GetTopics(NtInst inst, WpiString prefix, NetworkTableType types, out nuint count);
 
     public static unsafe NtTopic[] GetTopics(NtInst inst, WpiString prefix, NetworkTableType types)
@@ -119,8 +119,8 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicsStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = "count")]
-    internal static unsafe partial NtTopic[] GetTopics(NtInst inst, WpiString prefix, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
+    internal static unsafe partial NtTopic[] GetTopics(NtInst inst, WpiString prefix, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
     public static unsafe NtTopic[] GetTopics(NtInst inst, string prefix, ReadOnlySpan<string> types)
     {
@@ -129,7 +129,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfos")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, WpiString prefix, NetworkTableType types, out nuint count);
 
     public static TopicInfo[] GetTopicInfos(NtInst inst, string prefix, NetworkTableType types)
@@ -139,7 +139,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopicInfosStr")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, WpiString prefix, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
     public static TopicInfo[] GetTopicInfos(NtInst inst, string prefix, ReadOnlySpan<string> types)

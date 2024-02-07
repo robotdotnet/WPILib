@@ -30,7 +30,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            var name = CsNative.GetSourceName(Handle, out var status);
+            CsNative.GetSourceName(Handle, out var name, out var status);
             VideoException.ThrowIfFailed(status);
             return name;
         }
@@ -40,7 +40,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            var description = CsNative.GetSourceDescription(Handle, out var status);
+            CsNative.GetSourceDescription(Handle, out var description, out var status);
             VideoException.ThrowIfFailed(status);
             return description;
         }
@@ -109,9 +109,9 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public string GetConfigJson()
     {
-        var ret = CsNative.GetSourceConfigJson(Handle, out var status) ?? "";
+        CsNative.GetSourceConfigJson(Handle, out var str, out var status);
         VideoException.ThrowIfFailed(status);
-        return ret;
+        return str;
     }
 
     public void Dispose()

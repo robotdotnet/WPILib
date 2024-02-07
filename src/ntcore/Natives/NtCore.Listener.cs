@@ -11,7 +11,7 @@ public static unsafe partial class NtCore
 {
     [LibraryImport("ntcore", EntryPoint = "NT_ReadListenerQueue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(len))]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(len))]
     internal static partial NetworkTableEvent[] ReadListenerQueue(NtListenerPoller poller, out nuint len);
 
     public static NetworkTableEvent[] ReadListenerQueue(NtListenerPoller poller)

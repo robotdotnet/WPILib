@@ -12,10 +12,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetPropertyKindRefShim(property, ref status);
     }
-    public static string? GetPropertyName(CsProperty property, out StatusValue status)
+    public static void GetPropertyName(CsProperty property, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetPropertyNameRefShim(property, ref status);
+        GetPropertyNameRefShim(property, out value, ref status);
     }
     public static int GetProperty(CsProperty property, out StatusValue status)
     {
@@ -42,10 +42,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetPropertyDefaultRefShim(property, ref status);
     }
-    public static string GetStringProperty(CsProperty property, out StatusValue status)
+    public static void GetStringProperty(CsProperty property, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetStringPropertyRefShim(property, ref status);
+        GetStringPropertyRefShim(property, out value, ref status);
     }
     public static void SetStringProperty(CsProperty property, [MarshalUsing(typeof(Utf8StringMarshaller))] string value, out StatusValue status)
     {
@@ -87,15 +87,15 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetSourceKindRefShim(source, ref status);
     }
-    public static string GetSourceName(CsSource source, out StatusValue status)
+    public static void GetSourceName(CsSource source, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSourceNameRefShim(source, ref status);
+        GetSourceNameRefShim(source, out value, ref status);
     }
-    public static string GetSourceDescription(CsSource source, out StatusValue status)
+    public static void GetSourceDescription(CsSource source, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSourceDescriptionRefShim(source, ref status);
+        GetSourceDescriptionRefShim(source, out value, ref status);
     }
     public static ulong GetSourceLastFrameTime(CsSource source, out StatusValue status)
     {
@@ -162,10 +162,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return SetSourceConfigJsonRefShim(source, config, ref status);
     }
-    public static string? GetSourceConfigJson(CsSource source, out StatusValue status)
+    public static void GetSourceConfigJson(CsSource source, out string config, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSourceConfigJsonRefShim(source, ref status);
+        GetSourceConfigJsonRefShim(source, out config, ref status);
     }
     public static VideoMode[] EnumerateSourceVideoModes(CsSource source, out int count, out StatusValue status)
     {
@@ -232,10 +232,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         SetUsbCameraPathRefShim(source, path, ref status);
     }
-    public static string? GetUsbCameraPath(CsSource source, out StatusValue status)
+    public static void GetUsbCameraPath(CsSource source, out string path, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetUsbCameraPathRefShim(source, ref status);
+        GetUsbCameraPathRefShim(source, out path, ref status);
     }
     public static UsbCameraInfo GetUsbCameraInfo(CsSource source, out StatusValue status)
     {
@@ -302,15 +302,15 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetSinkKindRefShim(sink, ref status);
     }
-    public static string GetSinkName(CsSink sink, out StatusValue status)
+    public static void GetSinkName(CsSink sink, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSinkNameRefShim(sink, ref status);
+        GetSinkNameRefShim(sink, out value, ref status);
     }
-    public static string GetSinkDescription(CsSink sink, out StatusValue status)
+    public static void GetSinkDescription(CsSink sink, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSinkDescriptionRefShim(sink, ref status);
+        GetSinkDescriptionRefShim(sink, out value, ref status);
     }
     public static CsProperty GetSinkProperty(CsSink sink, string name, out StatusValue status)
     {
@@ -337,10 +337,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return SetSinkConfigJsonRefShim(sink, config, ref status);
     }
-    public static string? GetSinkConfigJson(CsSink sink, out StatusValue status)
+    public static void GetSinkConfigJson(CsSink sink, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSinkConfigJsonRefShim(sink, ref status);
+        GetSinkConfigJsonRefShim(sink, out value, ref status);
     }
     public static CsSink CopySink(CsSink sink, out StatusValue status)
     {
@@ -352,10 +352,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return ReleaseSinkRefShim(sink, ref status);
     }
-    public static string? GetMjpegServerListenAddress(CsSink sink, out StatusValue status)
+    public static void GetMjpegServerListenAddress(CsSink sink, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetMjpegServerListenAddressRefShim(sink, ref status);
+        GetMjpegServerListenAddressRefShim(sink, out value, ref status);
     }
     public static int GetMjpegServerPort(CsSink sink, out StatusValue status)
     {
@@ -367,10 +367,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         SetSinkDescriptionRefShim(sink, description, ref status);
     }
-    public static string? GetSinkError(CsSink sink, out StatusValue status)
+    public static void GetSinkError(CsSink sink, out string value, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetSinkErrorRefShim(sink, ref status);
+        GetSinkErrorRefShim(sink, out value, ref status);
     }
     public static int SetSinkEnabled(CsSink sink, bool enabled, out StatusValue status)
     {

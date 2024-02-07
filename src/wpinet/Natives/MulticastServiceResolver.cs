@@ -46,7 +46,7 @@ public static partial class MulticastServiceResolver
 
     [LibraryImport("wpinet", EntryPoint = "WPI_GetMulticastServiceResolverData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CustomFreeArrayMarshaller<,>), CountElementName = nameof(dataCount))]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(dataCount))]
     public static unsafe partial ServiceData[] GetMulticastServiceResolverData(MulticastServiceResolverHandle handle, out int dataCount);
 
     [LibraryImport("wpinet", EntryPoint = "WPI_FreeMulticastServiceResolverData")]
