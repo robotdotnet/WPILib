@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using WPIHal.Handles;
+using WPIHal.Marshal;
 using WPIUtil.Marshal;
 
 namespace WPIHal.Natives;

@@ -1,4 +1,4 @@
-namespace WPIUtil.Marshal;
+namespace WPIHal.Marshal;
 
 public interface INullTerminatedStringFree<T> where T : unmanaged
 {

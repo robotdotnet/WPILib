@@ -17,10 +17,6 @@ public static unsafe partial class CsNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void ReleaseEnumeratedSinks(int* sinks, int count);
 
-    [LibraryImport("cscore", EntryPoint = "CS_FreeString")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void FreeString(byte* str);
-
     [LibraryImport("cscore", EntryPoint = "CS_FreeEnumPropertyChoices")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void FreeEnumPropertyChoices(byte** choices, int count);

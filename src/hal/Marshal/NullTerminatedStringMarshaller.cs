@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Marshal;
 
-namespace WPIUtil.Marshal;
+namespace WPIHal.Marshal;
 
 [CustomMarshaller(typeof(string), MarshalMode.ManagedToUnmanagedOut, typeof(NullTerminatedStringMarshaller<>))]
 [CustomMarshaller(typeof(string), MarshalMode.ElementOut, typeof(NullTerminatedStringMarshaller<>))]

@@ -36,7 +36,7 @@ public static class JoystickDescriptorMarshaller
                 ReadOnlySpan<byte> thisSpan = this;
                 fixed (byte* b = thisSpan)
                 {
-                    return Marshal.PtrToStringUTF8((nint)b)!;
+                    return System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint)b)!;
                 }
             }
         }

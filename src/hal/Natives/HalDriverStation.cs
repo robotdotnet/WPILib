@@ -37,12 +37,7 @@ public static partial class HalDriverStation
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<JoystickNameStringFree>))]
-    public static partial string GetJoystickName(int joystickNum);
-
-    [LibraryImport("wpiHal", EntryPoint = "HAL_FreeJoystickName")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void FreeJoystickName(byte* joystickName);
+    public static partial void GetJoystickName([MarshalUsing(typeof(WpiStringMarshaller))] out string name, int joystickNum);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickPOVs")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
