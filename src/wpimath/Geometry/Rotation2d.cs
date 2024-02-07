@@ -37,7 +37,7 @@ public class Rotation2dStruct : IStruct<Rotation2d>
 
     public int Size => IStructBase.SizeDouble;
 
-    public ReadOnlySpan<byte> Schema => "double value"u8;
+    public string Schema => "double value";
 
     public void Pack(ref StructPacker buffer, Rotation2d value)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using CsCore.Natives;
@@ -9,7 +10,7 @@ namespace CsCore;
 [StructLayout(LayoutKind.Auto)]
 public readonly struct CsEvent : INativeArrayFree<CsEventMarshaller.NativeCsEvent>
 {
-    public EventKind Kind { get; init; }
+    public required EventKind Kind { get; init; }
 
     public static unsafe void FreeArray(CsEventMarshaller.NativeCsEvent* ptr, int len)
     {
@@ -17,18 +18,18 @@ public readonly struct CsEvent : INativeArrayFree<CsEventMarshaller.NativeCsEven
     }
 }
 
-[CustomMarshaller(typeof(CsEvent), MarshalMode.Default, typeof(CsEventMarshaller))]
+[CustomMarshaller(typeof(CsEvent), MarshalMode.ElementOut, typeof(CsEventMarshaller))]
 public static unsafe class CsEventMarshaller
 {
 
     public static NativeCsEvent ConvertToUnmanaged(in CsEvent managed)
     {
-        throw new System.NotImplementedException();
+        throw new System.NotSupportedException();
     }
 
     public static CsEvent ConvertToManaged(in NativeCsEvent unmanaged)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     [StructLayout(LayoutKind.Sequential)]

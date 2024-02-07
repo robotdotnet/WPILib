@@ -238,8 +238,8 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_GetHttpCameraUrls")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CsEnumPropertyArrayMarshaller<,>), CountElementName = nameof(count))]
-    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<CsEnumPropertyStringFree>), ElementIndirectionDepth = 1)]
+    [return: MarshalUsing(typeof(HttpCameraUrlsArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<HttpCameraUrlsStringFree>), ElementIndirectionDepth = 1)]
     internal static partial string[] GetHttpCameraUrlsRefShim(CsSource source, out int count, ref StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_NotifySourceError", StringMarshalling = StringMarshalling.Utf8)]
@@ -431,7 +431,7 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_GetNetworkInterfaces")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalUsing(typeof(CsEnumPropertyArrayMarshaller<,>), CountElementName = nameof(count))]
+    [return: MarshalUsing(typeof(NetworkInterfacesArrayMarshaller<,>), CountElementName = nameof(count))]
     [return: MarshalUsing(typeof(NullTerminatedStringMarshaller<NetworkInterfacesStringFree>), ElementIndirectionDepth = 1)]
     public static partial string[] GetNetworkInterfaces(out int count);
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using CsCore.Natives;
@@ -8,14 +7,14 @@ namespace CsCore;
 
 [NativeMarshalling(typeof(UsbCameraInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public struct UsbCameraInfo : INativeArrayFree<UsbCameraInfoMarshaller.NativeUsbCameraInfo>
+public readonly struct UsbCameraInfo : INativeArrayFree<UsbCameraInfoMarshaller.NativeUsbCameraInfo>
 {
-    public int Dev { get; set; }
-    public string Path { get; set; }
-    public string Name { get; set; }
-    public List<string>? OtherPaths { get; set; }
-    public int VendorId { get; set; }
-    public int ProductId { get; set; }
+    public required int Dev { get; init; }
+    public required string Path { get; init; }
+    public required string Name { get; init; }
+    public required string[] OtherPaths { get; init; }
+    public required int VendorId { get; init; }
+    public required int ProductId { get; init; }
 
     public static unsafe void FreeArray(UsbCameraInfoMarshaller.NativeUsbCameraInfo* ptr, int len)
     {
@@ -23,17 +22,40 @@ public struct UsbCameraInfo : INativeArrayFree<UsbCameraInfoMarshaller.NativeUsb
     }
 }
 
-[CustomMarshaller(typeof(UsbCameraInfo), MarshalMode.Default, typeof(UsbCameraInfoMarshaller))]
+[CustomMarshaller(typeof(UsbCameraInfo), MarshalMode.ElementOut, typeof(UsbCameraInfoMarshaller))]
+[CustomMarshaller(typeof(UsbCameraInfo), MarshalMode.ManagedToUnmanagedOut, typeof(UsbCameraInfoMarshaller))]
 public static unsafe class UsbCameraInfoMarshaller
 {
     public static NativeUsbCameraInfo ConvertToUnmanaged(in UsbCameraInfo managed)
     {
-        throw new System.NotImplementedException();
+        throw new System.NotSupportedException();
     }
 
     public static UsbCameraInfo ConvertToManaged(in NativeUsbCameraInfo unmanaged)
     {
-        throw new System.NotImplementedException();
+        string[] otherPaths;
+        if (unmanaged.otherPathsCount == 0)
+        {
+            otherPaths = [];
+        }
+        else
+        {
+            otherPaths = new string[unmanaged.otherPathsCount];
+            for (int i = 0; i < otherPaths.Length; i++)
+            {
+                otherPaths[i] = Marshal.PtrToStringUTF8((nint)unmanaged.otherPaths[i]) ?? "";
+            }
+        }
+
+        return new UsbCameraInfo()
+        {
+            Dev = unmanaged.dev,
+            Name = Marshal.PtrToStringUTF8((nint)unmanaged.name) ?? "",
+            Path = Marshal.PtrToStringUTF8((nint)unmanaged.path) ?? "",
+            VendorId = unmanaged.vendorId,
+            ProductId = unmanaged.productId,
+            OtherPaths = otherPaths
+        };
     }
 
     [StructLayout(LayoutKind.Sequential)]

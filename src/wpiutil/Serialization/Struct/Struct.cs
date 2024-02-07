@@ -5,11 +5,12 @@ namespace WPIUtil.Serialization.Struct;
 public interface IStructBase
 {
     public const int SizeBool = 1;
+    public const int SizeInt16 = 4;
     public const int SizeDouble = 8;
 
     string TypeString { get; }
     int Size { get; }
-    ReadOnlySpan<byte> Schema { get; }
+    string Schema { get; }
 
     IStructBase[] Nested => [];
 }
