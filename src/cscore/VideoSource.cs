@@ -11,7 +11,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public bool IsValid => Handle.Handle != 0;
 
-    protected VideoSource(CsSource handle)
+    protected internal VideoSource(CsSource handle)
     {
         Handle = handle;
     }
@@ -112,6 +112,70 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
         CsNative.GetSourceConfigJson(Handle, out var str, out var status);
         VideoException.ThrowIfFailed(status);
         return str;
+    }
+
+    public double GetActualFPS()
+    {
+        var avg = CsNative.GetTelemetryAverageValue(Handle, TelemetryKind.SourceFramesReceived, out var status);
+        VideoException.ThrowIfFailed(status);
+        return avg;
+    }
+
+    public double GetActualDataRate()
+    {
+        var avg = CsNative.GetTelemetryAverageValue(Handle, TelemetryKind.SourceBytesReceived, out var status);
+        VideoException.ThrowIfFailed(status);
+        return avg;
+    }
+
+    public VideoMode[] EnumerateVideoModes()
+    {
+        var modes = CsNative.EnumerateSourceVideoModes(Handle, out var status);
+        VideoException.ThrowIfFailed(status);
+        return modes;
+    }
+
+    public VideoSink[] EnumerateSinks()
+    {
+        var handles = CsNative.EnumerateSourceSinks(Handle, out var status);
+        VideoException.ThrowIfFailed(status);
+        VideoSink[] rv = new VideoSink[handles.Length];
+        for (int i = 0; i < handles.Length; i++)
+        {
+            rv[i] = new VideoSink(handles[i]);
+        }
+        return rv;
+    }
+
+    public VideoProperty GetProperty(string name)
+    {
+        var property = CsNative.GetSourceProperty(Handle, name, out var status);
+        VideoException.ThrowIfFailed(status);
+        return new VideoProperty(property);
+    }
+
+    public VideoProperty[] EnumerateProperties()
+    {
+        var handles = CsNative.EnumerateSourceProperties(Handle, out var status);
+        VideoException.ThrowIfFailed(status);
+        VideoProperty[] rv = new VideoProperty[handles.Length];
+        for (int i = 0; i < handles.Length; i++)
+        {
+            rv[i] = new VideoProperty(handles[i]);
+        }
+        return rv;
+    }
+
+    public static VideoSource[] EnumerateSources()
+    {
+        var handles = CsNative.EnumerateSources(out var status);
+        VideoException.ThrowIfFailed(status);
+        VideoSource[] rv = new VideoSource[handles.Length];
+        for (int i = 0; i < handles.Length; i++)
+        {
+            rv[i] = new VideoSource(handles[i]);
+        }
+        return rv;
     }
 
     public void Dispose()

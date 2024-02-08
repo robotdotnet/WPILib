@@ -30,7 +30,7 @@ public class TrackedTagStruct : IStruct<TrackedTag>
 
     public int Size => Rotation2d.Struct.Size + IStructBase.SizeInt16;
 
-    public string Schema {get;} = $"int16 id;{Rotation2d.Struct.Schema}";
+    public string Schema { get; } = $"int16 id;{Rotation2d.Struct.Schema}";
 
     public void Pack(ref StructPacker buffer, TrackedTag value)
     {
@@ -43,7 +43,8 @@ public class TrackedTagStruct : IStruct<TrackedTag>
     {
         short id = buffer.Read16();
         Rotation2d rot = Rotation2d.Struct.Unpack(ref buffer);
-        return new TrackedTag() {
+        return new TrackedTag()
+        {
             Id = id,
             Tfr = rot,
         };
@@ -52,8 +53,8 @@ public class TrackedTagStruct : IStruct<TrackedTag>
 
 public struct TrackedTag : IStructSerializable<TrackedTag>
 {
-    public static IStruct<TrackedTag> Struct {get;} = new TrackedTagStruct();
+    public static IStruct<TrackedTag> Struct { get; } = new TrackedTagStruct();
 
-    public Rotation2d Tfr {get;set;}
-    public short Id {get;set;}
+    public Rotation2d Tfr { get; set; }
+    public short Id { get; set; }
 }

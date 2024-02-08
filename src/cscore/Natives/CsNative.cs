@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.Marshalling;
 using CsCore.Handles;
 using WPIUtil;
 using WPIUtil.Marshal;
+using WPIUtil.Natives;
 
 namespace CsCore.Natives;
 
@@ -21,6 +22,10 @@ public static unsafe partial class CsNative
     [LibraryImport("cscore", EntryPoint = "CS_GetProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial int GetPropertyRefShim(CsProperty property, ref StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_SetProperty")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void SetPropertyRefShim(CsProperty property, int value, ref StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyMin")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -311,6 +316,10 @@ public static unsafe partial class CsNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void GetSinkConfigJsonRefShim(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string config, ref StatusValue status);
 
+    [LibraryImport("cscore", EntryPoint = "CS_GetSinkSource")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial CsSource GetSinkSourceRefShim(CsSink sink, ref StatusValue status);
+
     [LibraryImport("cscore", EntryPoint = "CS_CopySink")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial CsSink CopySinkRefShim(CsSink sink, ref StatusValue status);
@@ -354,20 +363,34 @@ public static unsafe partial class CsNative
     [LibraryImport("cscore", EntryPoint = "CS_PollListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
-    public static partial CsEvent[] PollListener(CsListenerPoller poller, out int count);
+    internal static partial VideoEvent[] PollListener(CsListenerPoller poller, out int count);
+
+    public static VideoEvent[] PollListener(CsListenerPoller poller)
+    {
+        return PollListener(poller, out var _);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_PollListenerTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
-    public static partial CsEvent[] PollListener(CsListenerPoller poller, out int count, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
+    internal static partial VideoEvent[] PollListener(CsListenerPoller poller, out int count, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
+
+    public static VideoEvent[] PollListener(CsListenerPoller poller, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut)
+    {
+        return PollListener(poller, out var _, timeout, out timedOut);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_FreeEvents")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void FreeEvents(CsEventMarshaller.NativeCsEvent* arr, int count);
+    public static partial void FreeEvents(VideoEventMarshaller.NativeCsEvent* arr, int count);
 
     [LibraryImport("cscore", EntryPoint = "CS_CancelPollListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void CancelPollListener(CsListenerPoller poller);
+
+    [LibraryImport("cscore", EntryPoint = "CS_RemoveListener")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void RemoveListenerRefShim(CsListener listener, ref StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_NotifierDestroyed")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -385,6 +408,10 @@ public static unsafe partial class CsNative
     [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial long GetTelemetryValueRefShim(CsSource source, TelemetryKind kind, ref StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryAverageValue")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial long GetTelemetryAverageValueRefShim(CsSource source, TelemetryKind kind, ref StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetLogger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -422,4 +449,24 @@ public static unsafe partial class CsNative
     [return: MarshalUsing(typeof(UnmanagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     [return: MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)]
     public static partial string[] GetNetworkInterfaces(out int count);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GrabRawSinkFrame")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial ulong GrabRawSinkFrameRefShim(CsSink sink, RawFrameReader rawImage, ref StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_GrabRawSinkFrameTimeout")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial ulong GrabRawSinkFrameRefShim(CsSink sink, RawFrameReader rawImage, double timeout, ref StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_CreateRawSink")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial CsSink CreateRawSinkRefShim(WpiString name, ref StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_PutRawSourceFrame")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void PutRawSourceFrameRefShim(CsSource source, RawFrameWriter rawImage, ref StatusValue status);
+
+    [LibraryImport("cscore", EntryPoint = "CS_CreateRawSource")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial CsSource CreateRawSourceRefShim(WpiString name, in VideoMode mode, ref StatusValue status);
 }

@@ -1,33 +1,36 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using CsCore.Handles;
 using CsCore.Natives;
 using WPIUtil.Marshal;
 
 namespace CsCore;
 
-[NativeMarshalling(typeof(CsEventMarshaller))]
+[NativeMarshalling(typeof(VideoEventMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly struct CsEvent : INativeArrayFree<CsEventMarshaller.NativeCsEvent>
+public readonly struct VideoEvent : INativeArrayFree<VideoEventMarshaller.NativeCsEvent>
 {
     public required EventKind Kind { get; init; }
 
-    public static unsafe void FreeArray(CsEventMarshaller.NativeCsEvent* ptr, int len)
+    public required CsListener Listener { get; init; }
+
+    public static unsafe void FreeArray(VideoEventMarshaller.NativeCsEvent* ptr, int len)
     {
         CsNative.FreeEvents(ptr, len);
     }
 }
 
-[CustomMarshaller(typeof(CsEvent), MarshalMode.ElementOut, typeof(CsEventMarshaller))]
-public static unsafe class CsEventMarshaller
+[CustomMarshaller(typeof(VideoEvent), MarshalMode.ElementOut, typeof(VideoEventMarshaller))]
+public static unsafe class VideoEventMarshaller
 {
 
-    public static NativeCsEvent ConvertToUnmanaged(in CsEvent managed)
+    public static NativeCsEvent ConvertToUnmanaged(in VideoEvent managed)
     {
         throw new System.NotSupportedException();
     }
 
-    public static CsEvent ConvertToManaged(in NativeCsEvent unmanaged)
+    public static VideoEvent ConvertToManaged(in NativeCsEvent unmanaged)
     {
         throw new NotImplementedException();
     }

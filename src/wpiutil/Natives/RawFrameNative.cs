@@ -50,10 +50,6 @@ public unsafe partial struct NativeRawFrame
 {
     [LibraryImport("wpiutil", EntryPoint = "WPI_AllocateRawFrameData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void TakesRawFrame(in RawFrameWriter writer);
-
-    [LibraryImport("wpiutil", EntryPoint = "WPI_AllocateRawFrameData")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.U4)]
     public static unsafe partial bool AllocateRawFrameData(ref NativeRawFrame frame, nuint requestedSize);
 

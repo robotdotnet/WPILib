@@ -2,6 +2,7 @@ using System;
 using System.Runtime.InteropServices.Marshalling;
 using CsCore.Handles;
 using WPIUtil;
+using WPIUtil.Natives;
 
 namespace CsCore.Natives;
 
@@ -21,6 +22,11 @@ public static unsafe partial class CsNative
     {
         status = StatusValue.Ok;
         return GetPropertyRefShim(property, ref status);
+    }
+    public static void SetProperty(CsProperty property, int value, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        SetPropertyRefShim(property, value, ref status);
     }
     public static int GetPropertyMin(CsProperty property, out StatusValue status)
     {
@@ -52,10 +58,10 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         SetStringPropertyRefShim(property, value, ref status);
     }
-    public static string[] GetEnumPropertyChoices(CsProperty property, out int count, out StatusValue status)
+    public static string[] GetEnumPropertyChoices(CsProperty property, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetEnumPropertyChoicesRefShim(property, out count, ref status);
+        return GetEnumPropertyChoicesRefShim(property, out var _, ref status);
     }
     public static CsSource CreateUsbCamera(string name, int dev, out StatusValue status)
     {
@@ -122,10 +128,15 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetSourcePropertyRefShim(source, name, ref status);
     }
-    public static CsProperty[] EnumerateSourceProperties(CsSource source, out int count, out StatusValue status)
+    public static CsProperty GetSourceProperty(CsSource source, ReadOnlySpan<byte> name, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateSourcePropertiesRefShim(source, out count, ref status);
+        return GetSourcePropertyRefShim(source, name, ref status);
+    }
+    public static CsProperty[] EnumerateSourceProperties(CsSource source, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return EnumerateSourcePropertiesRefShim(source, out var _, ref status);
     }
     public static void GetSourceVideoMode(CsSource source, out VideoMode mode, out StatusValue status)
     {
@@ -167,15 +178,15 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         GetSourceConfigJsonRefShim(source, out config, ref status);
     }
-    public static VideoMode[] EnumerateSourceVideoModes(CsSource source, out int count, out StatusValue status)
+    public static VideoMode[] EnumerateSourceVideoModes(CsSource source, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateSourceVideoModesRefShim(source, out count, ref status);
+        return EnumerateSourceVideoModesRefShim(source, out var _, ref status);
     }
-    public static CsSink[] EnumerateSourceSinks(CsSource source, out int count, out StatusValue status)
+    public static CsSink[] EnumerateSourceSinks(CsSource source, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateSourceSinksRefShim(source, out count, ref status);
+        return EnumerateSourceSinksRefShim(source, out var _, ref status);
     }
     public static CsSource CopySource(CsSource source, out StatusValue status)
     {
@@ -252,11 +263,18 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         SetHttpCameraUrlsRefShim(source, urls, count, ref status);
     }
-    public static string[] GetHttpCameraUrls(CsSource source, out int count, out StatusValue status)
+    public static string[] GetHttpCameraUrls(CsSource source, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return GetHttpCameraUrlsRefShim(source, out count, ref status);
+        return GetHttpCameraUrlsRefShim(source, out var _, ref status);
     }
+
+    public static void RemoveListener(CsListener listener, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        RemoveListenerRefShim(listener, ref status);
+    }
+
     public static void NotifySourceError(CsSource source, string msg, out StatusValue status)
     {
         status = StatusValue.Ok;
@@ -317,10 +335,15 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetSinkPropertyRefShim(sink, name, ref status);
     }
-    public static CsProperty[] EnumerateSinkProperties(CsSink sink, out int count, out StatusValue status)
+    public static CsProperty GetSinkProperty(CsSink sink, ReadOnlySpan<byte> name, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateSinkPropertiesRefShim(sink, out count, ref status);
+        return GetSinkPropertyRefShim(sink, name, ref status);
+    }
+    public static CsProperty[] EnumerateSinkProperties(CsSink sink, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return EnumerateSinkPropertiesRefShim(sink, out var _, ref status);
     }
     public static void SetSinkSource(CsSink sink, CsSource source, out StatusValue status)
     {
@@ -341,6 +364,11 @@ public static unsafe partial class CsNative
     {
         status = StatusValue.Ok;
         GetSinkConfigJsonRefShim(sink, out value, ref status);
+    }
+    public static CsSource GetSinkSource(CsSink sink, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return GetSinkSourceRefShim(sink, ref status);
     }
     public static CsSink CopySink(CsSink sink, out StatusValue status)
     {
@@ -387,19 +415,53 @@ public static unsafe partial class CsNative
         status = StatusValue.Ok;
         return GetTelemetryValueRefShim(source, kind, ref status);
     }
-    public static UsbCameraInfo[] EnumerateUsbCameras(out int count, out StatusValue status)
+    internal static long GetTelemetryAverageValue(CsSource source, TelemetryKind kind, out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateUsbCamerasRefShim(out count, ref status);
+        return GetTelemetryAverageValueRefShim(source, kind, ref status);
     }
-    public static CsSource[] EnumerateSources(out int count, out StatusValue status)
+    public static UsbCameraInfo[] EnumerateUsbCameras(out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateSourcesRefShim(out count, ref status);
+        return EnumerateUsbCamerasRefShim(out var _, ref status);
     }
-    public static CsSink[] EnumerateSinks(out int count, out StatusValue status)
+    public static CsSource[] EnumerateSources(out StatusValue status)
     {
         status = StatusValue.Ok;
-        return EnumerateSinksRefShim(out count, ref status);
+        return EnumerateSourcesRefShim(out var _, ref status);
+    }
+    public static CsSink[] EnumerateSinks(out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return EnumerateSinksRefShim(out var _, ref status);
+    }
+
+    public static ulong GrabRawSinkFrame(CsSink sink, RawFrameReader rawImage, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return GrabRawSinkFrameRefShim(sink, rawImage, ref status);
+    }
+    public static ulong GrabRawSinkFrame(CsSink sink, RawFrameReader rawImage, double timeout, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return GrabRawSinkFrameRefShim(sink, rawImage, timeout, ref status);
+    }
+
+    public static CsSink CreateRawSink(string name, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return CreateRawSinkRefShim(name, ref status);
+    }
+
+    public static void PutRawSourceFrame(CsSource source, RawFrameWriter rawImage, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        PutRawSourceFrameRefShim(source, rawImage, ref status);
+    }
+
+    public static CsSource CreateRawSource(string name, in VideoMode mode, out StatusValue status)
+    {
+        status = StatusValue.Ok;
+        return CreateRawSourceRefShim(name, mode, ref status);
     }
 }

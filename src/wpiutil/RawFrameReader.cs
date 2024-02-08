@@ -1,8 +1,10 @@
 using System;
+using System.Runtime.InteropServices.Marshalling;
 using WPIUtil.Natives;
 
 namespace WPIUtil;
 
+[NativeMarshalling(typeof(RawFrameReaderMarshaller))]
 public sealed class RawFrameReader : IDisposable
 {
     private NativeRawFrame internalFrame = new();
@@ -68,5 +70,19 @@ public sealed class RawFrameReader : IDisposable
             Stride = Stride,
             PixelFormat = PixelFormat,
         };
+    }
+}
+
+[CustomMarshaller(typeof(RawFrameReader), MarshalMode.ManagedToUnmanagedIn, typeof(RawFrameReaderMarshaller))]
+public static class RawFrameReaderMarshaller
+{
+    public static ref NativeRawFrame GetPinnableReference(RawFrameReader managed)
+    {
+        return ref managed.RawFrame;
+    }
+
+    public static unsafe NativeRawFrame* ConvertToUnmanaged(RawFrameReader managed)
+    {
+        throw new NotSupportedException();
     }
 }
