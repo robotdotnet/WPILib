@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "desktopDev": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

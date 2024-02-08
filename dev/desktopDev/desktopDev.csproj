@@ -8,6 +8,7 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\cscore\cscore.csproj" />
     <ProjectReference Include="..\..\src\hal\hal.csproj" />
     <ProjectReference Include="..\..\src\ntcore\ntcore.csproj" />
     <ProjectReference Include="..\..\src\wpinet\wpinet.csproj" />
