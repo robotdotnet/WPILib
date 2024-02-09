@@ -114,7 +114,7 @@ public static unsafe class WpiStringMarshaller
                 }
                 int byteCount = Encoding.UTF8.GetBytes(strBuf, callerAllocatedBuffer);
                 Debug.Assert(byteCount == exactByteCount);
-                data = callerAllocatedBuffer;
+                data = callerAllocatedBuffer[..byteCount];
             }
             else
             {
