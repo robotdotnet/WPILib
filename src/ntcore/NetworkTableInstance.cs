@@ -41,7 +41,7 @@ namespace NetworkTables;
  * kept to the NetworkTableInstance returned by this function to keep it from being garbage
  * collected.
  */
-public sealed partial class NetworkTableInstance : IEquatable<NetworkTableInstance?>, IEqualityOperators<NetworkTableInstance?, NetworkTableInstance?, bool>
+public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance?>, IEqualityOperators<NetworkTableInstance?, NetworkTableInstance?, bool>
 {
     private static readonly ConcurrentDictionary<NtInst, NetworkTableInstance> s_instances = new();
 
