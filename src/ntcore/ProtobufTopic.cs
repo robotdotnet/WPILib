@@ -15,7 +15,7 @@ public sealed class ProtobufTopic<T> : Topic, IEquatable<ProtobufTopic<T>?>, IEq
     {
     }
 
-    private ProtobufTopic(NetworkTableInstance inst, NtTopic handle) : base(inst, handle)
+    internal ProtobufTopic(NetworkTableInstance inst, NtTopic handle) : base(inst, handle)
     {
     }
 

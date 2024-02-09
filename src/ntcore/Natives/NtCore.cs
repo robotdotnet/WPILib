@@ -5,6 +5,7 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using NetworkTables.Handles;
 using WPIUtil;
+using WPIUtil.Handles;
 using WPIUtil.Marshal;
 
 namespace NetworkTables.Natives;
@@ -22,6 +23,15 @@ public static partial class NtCore
     [LibraryImport("ntcore", EntryPoint = "NT_DestroyInstance")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void DestroyInstance(NtInst inst);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_GetInstanceFromHandle")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial NtInst GetInstanceFromHandle(int handle);
+
+    public static NtInst GetInstanceFromHandle<T>(T handle) where T : IWPIIntHandle
+    {
+        return GetInstanceFromHandle(handle.Handle);
+    }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -142,7 +152,7 @@ public static partial class NtCore
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
     internal static unsafe partial NtTopic[] GetTopics(NtInst inst, WpiString prefix, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
-    public static unsafe NtTopic[] GetTopics(NtInst inst, string prefix, ReadOnlySpan<string> types)
+    public static unsafe NtTopic[] GetTopics(NtInst inst, WpiString prefix, ReadOnlySpan<string> types)
     {
         return GetTopics(inst, prefix, types, (nuint)types.Length, out var _);
     }
@@ -152,7 +162,7 @@ public static partial class NtCore
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, WpiString prefix, NetworkTableType types, out nuint count);
 
-    public static TopicInfo[] GetTopicInfos(NtInst inst, string prefix, NetworkTableType types)
+    public static TopicInfo[] GetTopicInfos(NtInst inst, WpiString prefix, NetworkTableType types)
     {
         return GetTopicInfos(inst, prefix, types, out var _);
     }
@@ -162,7 +172,7 @@ public static partial class NtCore
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     internal static unsafe partial TopicInfo[] GetTopicInfos(NtInst inst, WpiString prefix, [MarshalUsing(typeof(Utf8StringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> types, nuint typesLen, out nuint count);
 
-    public static TopicInfo[] GetTopicInfos(NtInst inst, string prefix, ReadOnlySpan<string> types)
+    public static TopicInfo[] GetTopicInfos(NtInst inst, WpiString prefix, ReadOnlySpan<string> types)
     {
         return GetTopicInfos(inst, prefix, types, (nuint)types.Length, out var _);
     }

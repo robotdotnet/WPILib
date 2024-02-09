@@ -15,7 +15,7 @@ public sealed class StructArrayTopic<T> : Topic, IEquatable<StructArrayTopic<T>?
     {
     }
 
-    private StructArrayTopic(NetworkTableInstance inst, NtTopic handle) : base(inst, handle)
+    internal StructArrayTopic(NetworkTableInstance inst, NtTopic handle) : base(inst, handle)
     {
     }
 

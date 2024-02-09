@@ -15,7 +15,7 @@ public sealed class StructTopic<T> : Topic, IEquatable<StructTopic<T>?>, IEquali
     {
     }
 
-    private StructTopic(NetworkTableInstance inst, NtTopic handle) : base(inst, handle)
+    internal StructTopic(NetworkTableInstance inst, NtTopic handle) : base(inst, handle)
     {
     }
 

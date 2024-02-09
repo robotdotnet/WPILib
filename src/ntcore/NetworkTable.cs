@@ -8,7 +8,7 @@ using WPIUtil.Concurrent;
 
 namespace NetworkTables;
 
-public sealed class NetworkTable : IEquatable<NetworkTable?>
+public sealed partial class NetworkTable : IEquatable<NetworkTable?>
 {
     public const char PATH_SEPARATOR = '/';
     private readonly string m_pathWithSep;

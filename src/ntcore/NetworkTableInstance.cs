@@ -16,6 +16,7 @@ using CommunityToolkit.Diagnostics;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Concurrent;
+using WPIUtil.Handles;
 using WPIUtil.Logging;
 using WPIUtil.Natives;
 using WPIUtil.Serialization.Protobuf;
@@ -40,83 +41,92 @@ namespace NetworkTables;
  * kept to the NetworkTableInstance returned by this function to keep it from being garbage
  * collected.
  */
-public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance?>, IEqualityOperators<NetworkTableInstance?, NetworkTableInstance?, bool>
+public sealed partial class NetworkTableInstance : IEquatable<NetworkTableInstance?>, IEqualityOperators<NetworkTableInstance?, NetworkTableInstance?, bool>
 {
     private static readonly ConcurrentDictionary<NtInst, NetworkTableInstance> s_instances = new();
 
-    public static NetworkTableInstance? GetInstanceForHandle(NtInst inst)
+    private static NetworkTableInstance InstanceCreator(NtInst inst)
     {
-        if (s_instances.TryGetValue(inst, out var value))
+        if (inst == NtCore.GetDefaultInstance())
         {
-            return value;
+            return new NetworkTableInstance(inst, false);
         }
-        return null;
+        else
+        {
+            return new NetworkTableInstance(inst, true);
+        }
     }
+
+    public static NetworkTableInstance GetInstanceForHandle(NtInst inst)
+    {
+        return s_instances.GetOrAdd(inst, InstanceCreator);
+    }
+
+    private readonly ConcurrentDictionary<string, Topic> m_topics = new();
+    private readonly ConcurrentDictionary<NtTopic, Topic> m_topicsByHandle = new();
+    private readonly ListenerStorage m_listeners;
+    private readonly bool m_owned;
 
     public const int KDefaultPort3 = 1735;
     public const int KDefaultPort4 = 5810;
-
-    private NetworkTableInstance() : this(NtCore.GetDefaultInstance(), false) { }
 
     private NetworkTableInstance(NtInst inst, bool owned)
     {
         Handle = inst;
         m_owned = owned;
-        m_listeners = new(this);
+        m_listeners = new(Handle);
     }
 
     public NtInst Handle { get; private set; }
 
-    private readonly bool m_owned;
+    public bool IsValid => Handle.Handle != 0;
+
+    public static NetworkTableInstance Default => GetInstanceForHandle(NtCore.GetDefaultInstance());
+
+    public static NetworkTableInstance Create() => GetInstanceForHandle(NtCore.CreateInstance());
+
+    public static NetworkTableInstance FromHandle<T>(T handle) where T : IWPIIntHandle => GetInstanceForHandle(NtCore.GetInstanceFromHandle(handle));
 
     public void Dispose()
     {
         if (m_owned & Handle.Handle != 0)
         {
             m_listeners.Dispose();
-            foreach (var s in m_schemas)
-            {
-                s.Value.Dispose();
-            }
             NtCore.DestroyInstance(Handle);
             s_instances.TryRemove(Handle, out var _);
             Handle = default;
         }
     }
 
-    public bool IsValid => Handle.Handle != 0;
-
-    private static readonly Lazy<NetworkTableInstance> s_defaultInstance = new(() =>
+    private static Topic TopicCreator(string name, NetworkTableInstance instance)
     {
-        NetworkTableInstance newInstance = new();
-        if (!s_instances.TryAdd(newInstance.Handle, newInstance))
-        {
-            throw new InvalidOperationException("Somehow a duplicate default instance was created");
-        }
-        return newInstance;
-    });
+        Topic topic = new Topic(instance, NtCore.GetTopic(instance.Handle, name));
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
+    }
 
-    public static NetworkTableInstance Default => s_defaultInstance.Value;
-
-    public static NetworkTableInstance Create()
+    private static Topic TopicByHandleAdder(NtTopic handle, Topic newTopic)
     {
-        NetworkTableInstance newInstance = new(NtCore.CreateInstance(), true);
-        if (!s_instances.TryAdd(newInstance.Handle, newInstance))
-        {
-            throw new InvalidOperationException("Somehow a duplicate handle was created");
-        }
-        return newInstance;
+        return newTopic;
+    }
+    private static Topic TopicByHandleUpdater(NtTopic handle, Topic oldTopic, Topic newTopic)
+    {
+        return newTopic;
     }
 
     public Topic GetTopic(string name)
     {
-        Topic topic = m_topics.GetOrAdd(name, n =>
-        {
-            NtTopic topicHandle = NtCore.GetTopic(Handle, name);
-            Topic topic = new(this, topicHandle);
-            m_topicsByHandle.TryAdd(topicHandle, topic);
-            return topic;
-        });
+        return m_topics.GetOrAdd(name, TopicCreator, this);
+    }
+
+    private static Topic CachedTopicAdder(NtTopic handle, NetworkTableInstance instance)
+    {
+        return new Topic(instance, handle);
+    }
+
+    private Topic GetCachedTopic(NtTopic handle)
+    {
+        Topic topic = m_topicsByHandle.GetOrAdd(handle, CachedTopicAdder, this);
         return topic;
     }
 
@@ -130,65 +140,81 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return topics;
     }
 
-    internal Topic GetCachedTopic(NtTopic handle)
-    {
-        Topic topic = m_topicsByHandle.GetOrAdd(handle, n =>
-                {
-                    Topic topic = new(this, handle);
-                    return topic;
-                });
-        return topic;
-    }
-
-    public Topic[] GetTopics()
-    {
-        return TopicHandlesToTopics(NtCore.GetTopics(Handle, "", NetworkTableType.Unassigned));
-    }
-
-    public Topic[] GetTopics(string prefix)
-    {
-        return TopicHandlesToTopics(NtCore.GetTopics(Handle, prefix, NetworkTableType.Unassigned));
-    }
-
-    public Topic[] GetTopics(string prefix, NetworkTableType types)
+    public Topic[] GetTopics(string prefix = "", NetworkTableType types = NetworkTableType.Unassigned)
     {
         return TopicHandlesToTopics(NtCore.GetTopics(Handle, prefix, types));
     }
 
-    public Topic[] GetTopics(string prefix, string[] types)
+    public Topic[] GetTopics(ReadOnlySpan<byte> prefix = default, NetworkTableType types = NetworkTableType.Unassigned)
     {
         return TopicHandlesToTopics(NtCore.GetTopics(Handle, prefix, types));
     }
 
-    public TopicInfo[] GetTopicInfo()
+    public Topic[] GetTopics(string prefix, ReadOnlySpan<string> types)
     {
-        return NtCore.GetTopicInfos(Handle, "", NetworkTableType.Unassigned);
+        return TopicHandlesToTopics(NtCore.GetTopics(Handle, prefix, types));
     }
 
-    public TopicInfo[] GetTopicInfo(string prefix)
+    public Topic[] GetTopics(ReadOnlySpan<byte> prefix, ReadOnlySpan<string> types)
     {
-        return NtCore.GetTopicInfos(Handle, prefix, NetworkTableType.Unassigned);
+        return TopicHandlesToTopics(NtCore.GetTopics(Handle, prefix, types));
     }
 
-    public TopicInfo[] GetTopicInfo(string prefix, NetworkTableType types)
-    {
-        return NtCore.GetTopicInfos(Handle, prefix, types);
-    }
-
-    public TopicInfo[] GetTopicInfo(string prefix, string[] types)
+    public TopicInfo[] GetTopicInfo(string prefix = "", NetworkTableType types = NetworkTableType.Unassigned)
     {
         return NtCore.GetTopicInfos(Handle, prefix, types);
     }
 
-    private class ListenerStorage(NetworkTableInstance inst) : IDisposable
+    public TopicInfo[] GetTopicInfo(ReadOnlySpan<byte> prefix = default, NetworkTableType types = NetworkTableType.Unassigned)
+    {
+        return NtCore.GetTopicInfos(Handle, prefix, types);
+    }
+
+    public TopicInfo[] GetTopicInfo(string prefix, ReadOnlySpan<string> types)
+    {
+        return NtCore.GetTopicInfos(Handle, prefix, types);
+    }
+
+    public TopicInfo[] GetTopicInfo(ReadOnlySpan<byte> prefix, ReadOnlySpan<string> types)
+    {
+        return NtCore.GetTopicInfos(Handle, prefix, types);
+    }
+
+    public NetworkTable GetTable(string key)
+    {
+        if (string.IsNullOrWhiteSpace(key) || key == "/")
+        {
+            return new NetworkTable(this, "");
+        }
+        else if (key[0] == NetworkTable.PATH_SEPARATOR)
+        {
+            return new NetworkTable(this, key);
+        }
+        else
+        {
+            return new NetworkTable(this, $"/{key}");
+        }
+    }
+
+    public void RemoveListener(NtListener listener)
+    {
+        m_listeners.Remove(listener);
+    }
+
+    public bool WaitForListenerQueue(TimeSpan? timeout)
+    {
+        return m_listeners.WaitForQueue(timeout);
+    }
+
+    private class ListenerStorage(NtInst inst) : IDisposable
     {
         private readonly object m_lock = new();
-        private readonly Dictionary<NtListener, Action<NetworkTableEvent>> m_listeners = new();
+        private readonly Dictionary<NtListener, Action<NetworkTableEvent>> m_listeners = [];
         private Thread? m_thread;
         private NtListenerPoller m_poller;
         private bool m_waitQueue;
         private readonly Event m_waitQueueEvent = new();
-        private readonly NetworkTableInstance m_inst = inst;
+        private readonly NtInst m_inst = inst;
 
         public NtListener Add(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
@@ -196,7 +222,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             {
                 if (m_poller.Handle == 0)
                 {
-                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    m_poller = NtCore.CreateListenerPoller(m_inst);
                     StartThread();
                 }
                 NtListener h = NtCore.AddListener(m_poller, prefixes, eventKinds);
@@ -211,7 +237,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             {
                 if (m_poller.Handle == 0)
                 {
-                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    m_poller = NtCore.CreateListenerPoller(m_inst);
                     StartThread();
                 }
                 NtListener h = NtCore.AddListener(m_poller, handle, eventKinds);
@@ -226,7 +252,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             {
                 if (m_poller.Handle == 0)
                 {
-                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    m_poller = NtCore.CreateListenerPoller(m_inst);
                     StartThread();
                 }
                 NtListener h = NtCore.AddListener(m_poller, handle, eventKinds);
@@ -241,7 +267,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             {
                 if (m_poller.Handle == 0)
                 {
-                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    m_poller = NtCore.CreateListenerPoller(m_inst);
                     StartThread();
                 }
                 NtListener h = NtCore.AddListener(m_poller, handle, eventKinds);
@@ -256,10 +282,25 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             {
                 if (m_poller.Handle == 0)
                 {
-                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    m_poller = NtCore.CreateListenerPoller(m_inst);
                     StartThread();
                 }
                 NtListener h = NtCore.AddListener(m_poller, handle, eventKinds);
+                m_listeners.Add(h, listener);
+                return h;
+            }
+        }
+
+        public NtListener AddLogger(int minLevel, int maxLevel, Action<NetworkTableEvent> listener)
+        {
+            lock (m_lock)
+            {
+                if (m_poller.Handle == 0)
+                {
+                    m_poller = NtCore.CreateListenerPoller(m_inst);
+                    StartThread();
+                }
+                NtListener h = NtCore.AddLogger(m_poller, (uint)minLevel, (uint)maxLevel);
                 m_listeners.Add(h, listener);
                 return h;
             }
@@ -376,18 +417,6 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         }
     }
 
-    private readonly ListenerStorage m_listeners;
-
-    public void RemoveListener(NtListener listener)
-    {
-        m_listeners.Remove(listener);
-    }
-
-    public bool WaitForListenerQueue(TimeSpan? timeout)
-    {
-        return m_listeners.WaitForQueue(timeout);
-    }
-
     public NtListener AddConnectionListener(bool immediateNotify, Action<NetworkTableEvent> listener)
     {
         EventFlags flags = EventFlags.Connection;
@@ -432,6 +461,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         {
             ThrowHelper.ThrowArgumentException("Topic is not from this instance");
         }
+
         return m_listeners.Add(subscriber.Handle, eventKinds, listener);
     }
 
@@ -565,6 +595,11 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         NtCore.StopConnectionDataLog(logger);
     }
 
+    public NtListener AddLogger(int minLevel, int maxLevel, Action<NetworkTableEvent> callback)
+    {
+        return m_listeners.AddLogger(minLevel, maxLevel, callback);
+    }
+
     public override bool Equals(object? obj)
     {
         return Equals(obj as NetworkTableInstance);
@@ -581,9 +616,6 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return Handle.GetHashCode();
     }
 
-    private readonly ConcurrentDictionary<string, Topic> m_topics = new();
-    private readonly ConcurrentDictionary<NtTopic, Topic> m_topicsByHandle = new();
-
     public static bool operator ==(NetworkTableInstance? left, NetworkTableInstance? right)
     {
         return EqualityComparer<NetworkTableInstance>.Default.Equals(left, right);
@@ -594,39 +626,19 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return !(left == right);
     }
 
-    public RawTopic GetRawTopic(string name)
-    {
-        throw new NotImplementedException();
-    }
-
     public bool HasSchema(string name)
     {
-        return m_schemas.ContainsKey($"/.schema/{name}");
+        return NtCore.HasSchema(Handle, name);
     }
 
     public void AddSchema(string name, string type, ReadOnlySpan<byte> schema)
     {
-        bool added = false;
-        var pub = m_schemas.GetOrAdd($"/.schema/{name}", k =>
-        {
-            IRawPublisher pub = GetRawTopic(k).PublishEx(type, "{\"retained\":true}"u8, PubSubOptions.None);
-            added = true;
-            return pub;
-        });
-        if (added)
-        {
-            pub.SetDefault(schema);
-        }
+        NtCore.AddSchema(Handle, name, type, schema);
     }
 
     public void AddSchema(string name, string type, string schema)
     {
-        var pub = m_schemas.GetOrAdd($"/.schema/{name}", k =>
-        {
-            IRawPublisher pub = GetRawTopic(k).PublishEx(type, "{\"retained\":true}"u8, PubSubOptions.None);
-            pub.SetDefault(Encoding.UTF8.GetBytes(schema));
-            return pub;
-        });
+        NtCore.AddSchema(Handle, name, type, Encoding.UTF8.GetBytes(schema));
     }
 
     public void AddSchema(IStructBase proto)
@@ -639,19 +651,73 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         proto.ForEachDescriptor(HasSchema, (typeString, schema) => AddSchema(typeString, "proto:FileDescriptorProto", schema));
     }
 
+    private static ProtobufTopic<T> ProtobufTopicCreator<T>(string name, NetworkTableInstance instance) where T : IProtobufSerializable<T>
+    {
+        ProtobufTopic<T> topic = new ProtobufTopic<T>(instance, NtCore.GetTopic(instance.Handle, name));
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
+    }
+    private static ProtobufTopic<T> ProtobufTopicUpdator<T>(string name, Topic existingTopic, NetworkTableInstance instance) where T : IProtobufSerializable<T>
+    {
+        // Exists, but might be wrong type
+        if (existingTopic is ProtobufTopic<T> protobufTopic)
+        {
+            return protobufTopic;
+        }
+        ProtobufTopic<T> topic = new ProtobufTopic<T>(instance, existingTopic.Handle);
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
+    }
+
     public ProtobufTopic<T> GetProtobufTopic<T>(string name) where T : IProtobufSerializable<T>
     {
-        throw new NotImplementedException();
+        return (ProtobufTopic<T>)m_topics.AddOrUpdate(name, ProtobufTopicCreator<T>, ProtobufTopicUpdator<T>, this);
+    }
+
+    private static StructTopic<T> StructTopicCreator<T>(string name, NetworkTableInstance instance) where T : IStructSerializable<T>
+    {
+        StructTopic<T> topic = new StructTopic<T>(instance, NtCore.GetTopic(instance.Handle, name));
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
+    }
+    private static StructTopic<T> StructTopicUpdator<T>(string name, Topic existingTopic, NetworkTableInstance instance) where T : IStructSerializable<T>
+    {
+        // Exists, but might be wrong type
+        if (existingTopic is StructTopic<T> structTopic)
+        {
+            return structTopic;
+        }
+        StructTopic<T> topic = new StructTopic<T>(instance, existingTopic.Handle);
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
     }
 
     public StructTopic<T> GetStructTopic<T>(string name) where T : IStructSerializable<T>
     {
-        throw new NotImplementedException();
+        return (StructTopic<T>)m_topics.AddOrUpdate(name, StructTopicCreator<T>, StructTopicUpdator<T>, this);
+    }
+
+    private static StructArrayTopic<T> StructArrayTopicCreator<T>(string name, NetworkTableInstance instance) where T : IStructSerializable<T>
+    {
+        StructArrayTopic<T> topic = new StructArrayTopic<T>(instance, NtCore.GetTopic(instance.Handle, name));
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
+    }
+    private static StructArrayTopic<T> StructArrayTopicUpdator<T>(string name, Topic existingTopic, NetworkTableInstance instance) where T : IStructSerializable<T>
+    {
+        // Exists, but might be wrong type
+        if (existingTopic is StructArrayTopic<T> structTopic)
+        {
+            return structTopic;
+        }
+        StructArrayTopic<T> topic = new StructArrayTopic<T>(instance, existingTopic.Handle);
+        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
+        return topic;
     }
 
     public StructArrayTopic<T> GetStructArrayTopic<T>(string name) where T : IStructSerializable<T>
     {
-        throw new NotImplementedException();
+        return (StructArrayTopic<T>)m_topics.AddOrUpdate(name, StructArrayTopicCreator<T>, StructArrayTopicUpdator<T>, this);
     }
 
     private void AddSchemaImpl(IStructBase strct, HashSet<string> seen)
@@ -672,6 +738,4 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         }
         seen.Remove(typeString);
     }
-
-    private readonly ConcurrentDictionary<string, IRawPublisher> m_schemas = [];
 }
