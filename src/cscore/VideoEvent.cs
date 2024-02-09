@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using CsCore.Handles;
 using CsCore.Natives;
+using WPIUtil;
 using WPIUtil.Marshal;
 
 namespace CsCore;
@@ -11,14 +12,40 @@ namespace CsCore;
 [StructLayout(LayoutKind.Auto)]
 public readonly struct VideoEvent : INativeArrayFree<VideoEventMarshaller.NativeCsEvent>
 {
-    public required EventKind Kind { get; init; }
+    public EventKind Kind { get; }
+    public CsListener Listener { get; }
 
-    public required CsListener Listener { get; init; }
+    public VideoEvent(in VideoEventMarshaller.NativeCsEvent csEvent)
+    {
+        Kind = csEvent.kind;
+        Listener = new CsListener(csEvent.listener);
+    }
 
     public static unsafe void FreeArray(VideoEventMarshaller.NativeCsEvent* ptr, int len)
     {
         CsNative.FreeEvents(ptr, len);
     }
+}
+
+[StructLayout(LayoutKind.Explicit)]
+internal struct VideoEventUnion
+{
+    [FieldOffset(0)]
+    public CsSource source;
+    [FieldOffset(0)]
+    public CsSink sink;
+    [FieldOffset(0)]
+    public VideoMode mode;
+    [FieldOffset(0)]
+    public PropertyTuple property;
+}
+
+[StructLayout(LayoutKind.Auto)]
+internal struct PropertyTuple
+{
+    public CsProperty property;
+    public PropertyKind kind;
+    public int value;
 }
 
 [CustomMarshaller(typeof(VideoEvent), MarshalMode.ElementOut, typeof(VideoEventMarshaller))]
@@ -27,12 +54,12 @@ public static unsafe class VideoEventMarshaller
 
     public static NativeCsEvent ConvertToUnmanaged(in VideoEvent managed)
     {
-        throw new System.NotSupportedException();
+        throw new NotSupportedException();
     }
 
     public static VideoEvent ConvertToManaged(in NativeCsEvent unmanaged)
     {
-        throw new NotImplementedException();
+        return new(unmanaged);
     }
 
     [StructLayout(LayoutKind.Sequential)]
@@ -41,12 +68,12 @@ public static unsafe class VideoEventMarshaller
         public EventKind kind;
         public int source;
         public int sink;
-        public byte* name;
+        public WpiStringMarshaller.WpiStringNative name;
         public VideoMode mode;
         public int property;
         public PropertyKind propertyKind;
         public int value;
-        public byte* valueStr;
+        public WpiStringMarshaller.WpiStringNative valueStr;
         public int listener;
     }
 }

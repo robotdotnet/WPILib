@@ -8,10 +8,11 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using Google.Protobuf.WellKnownTypes;
+using CommunityToolkit.Diagnostics;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Concurrent;
@@ -41,6 +42,17 @@ namespace NetworkTables;
  */
 public sealed partial class NetworkTableInstance : IDisposable, IEquatable<NetworkTableInstance?>, IEqualityOperators<NetworkTableInstance?, NetworkTableInstance?, bool>
 {
+    private static readonly ConcurrentDictionary<NtInst, NetworkTableInstance> s_instances = new();
+
+    public static NetworkTableInstance? GetInstanceForHandle(NtInst inst)
+    {
+        if (s_instances.TryGetValue(inst, out var value))
+        {
+            return value;
+        }
+        return null;
+    }
+
     public const int KDefaultPort3 = 1735;
     public const int KDefaultPort4 = 5810;
 
@@ -61,20 +73,39 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
     {
         if (m_owned & Handle.Handle != 0)
         {
+            m_listeners.Dispose();
+            foreach (var s in m_schemas)
+            {
+                s.Value.Dispose();
+            }
             NtCore.DestroyInstance(Handle);
+            s_instances.TryRemove(Handle, out var _);
             Handle = default;
         }
     }
 
     public bool IsValid => Handle.Handle != 0;
 
-    private static readonly Lazy<NetworkTableInstance> s_defaultInstance = new();
+    private static readonly Lazy<NetworkTableInstance> s_defaultInstance = new(() =>
+    {
+        NetworkTableInstance newInstance = new();
+        if (!s_instances.TryAdd(newInstance.Handle, newInstance))
+        {
+            throw new InvalidOperationException("Somehow a duplicate default instance was created");
+        }
+        return newInstance;
+    });
 
     public static NetworkTableInstance Default => s_defaultInstance.Value;
 
     public static NetworkTableInstance Create()
     {
-        return new(NtCore.CreateInstance(), true);
+        NetworkTableInstance newInstance = new(NtCore.CreateInstance(), true);
+        if (!s_instances.TryAdd(newInstance.Handle, newInstance))
+        {
+            throw new InvalidOperationException("Somehow a duplicate handle was created");
+        }
+        return newInstance;
     }
 
     public Topic GetTopic(string name)
@@ -159,7 +190,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         private readonly Event m_waitQueueEvent = new();
         private readonly NetworkTableInstance m_inst = inst;
 
-        public NtListener Add(string[] prefixes, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+        public NtListener Add(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -175,6 +206,36 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         }
 
         public NtListener Add(NtInst handle, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+        {
+            lock (m_lock)
+            {
+                if (m_poller.Handle == 0)
+                {
+                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    StartThread();
+                }
+                NtListener h = NtCore.AddListener(m_poller, handle, eventKinds);
+                m_listeners.Add(h, listener);
+                return h;
+            }
+        }
+
+        public NtListener Add(NtTopic handle, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+        {
+            lock (m_lock)
+            {
+                if (m_poller.Handle == 0)
+                {
+                    m_poller = NtCore.CreateListenerPoller(m_inst.Handle);
+                    StartThread();
+                }
+                NtListener h = NtCore.AddListener(m_poller, handle, eventKinds);
+                m_listeners.Add(h, listener);
+                return h;
+            }
+        }
+
+        public NtListener Add(NtMultiSubscriber handle, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -337,6 +398,48 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.Add(Handle, flags, listener);
     }
 
+    public NtListener AddTimeSyncListener(bool immediateNotify, Action<NetworkTableEvent> listener)
+    {
+        EventFlags flags = EventFlags.TimeSync;
+        if (immediateNotify)
+        {
+            flags |= EventFlags.Immediate;
+        }
+        return m_listeners.Add(Handle, flags, listener);
+    }
+
+    public NtListener AddListener(Topic topic, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+    {
+        if (topic.Instance.Handle != Handle)
+        {
+            ThrowHelper.ThrowArgumentException("Topic is not from this instance");
+        }
+        return m_listeners.Add(topic.Handle, eventKinds, listener);
+    }
+
+    public NtListener AddListener(ISubscriber subscriber, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+    {
+        if (subscriber.Topic.Instance.Handle != Handle)
+        {
+            ThrowHelper.ThrowArgumentException("Topic is not from this instance");
+        }
+        return m_listeners.Add(subscriber.Handle, eventKinds, listener);
+    }
+
+    public NtListener AddListener(MultiSubscriber subscriber, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+    {
+        if (subscriber.Instance.Handle != Handle)
+        {
+            ThrowHelper.ThrowArgumentException("Topic is not from this instance");
+        }
+        return m_listeners.Add(subscriber.Handle, eventKinds, listener);
+    }
+
+    public NtListener AddListener(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Action<NetworkTableEvent> listener)
+    {
+        return m_listeners.Add(prefixes, eventKinds, listener);
+    }
+
     public NetworkMode GetNetworkMode()
     {
         return NtCore.GetNetworkMode(Handle);
@@ -423,7 +526,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         NtCore.StopDSClient(Handle);
     }
 
-    public void FlushLLocal()
+    public void FlushLocal()
     {
         NtCore.FlushLocal(Handle);
     }

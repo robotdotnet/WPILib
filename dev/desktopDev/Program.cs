@@ -53,7 +53,8 @@ class Program
             Source = camera
         };
 
-        RawSink sink = new RawSink("Sink") {
+        RawSink sink = new RawSink("Sink")
+        {
             Source = camera
         };
 
@@ -68,15 +69,18 @@ class Program
             ConnectionStrategy = ConnectionStrategy.ConnectionKeepOpen
         };
 
-        MJpegServer sinkServer = new MJpegServer("SinkServer", 1182) {
+        MJpegServer sinkServer = new MJpegServer("SinkServer", 1182)
+        {
             Source = source
         };
 
         RawFrameReader reader = new RawFrameReader();
 
-        while (true) {
+        while (true)
+        {
             long ts = sink.GrabFrame(reader);
-            if (ts <= 0) {
+            if (ts <= 0)
+            {
                 continue;
             }
 

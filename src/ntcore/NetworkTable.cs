@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
+using WPIUtil.Concurrent;
 
 namespace NetworkTables;
 
@@ -21,12 +23,26 @@ public sealed class NetworkTable : IEquatable<NetworkTable?>
         return key[(slash + 1)..];
     }
 
-    public static string NormalizeKey(ReadOnlySpan<char> key, bool withLeadingSlash = true)
+    public static string NormalizeKey(string key, bool withLeadingSlash = true)
     {
-        throw new NotImplementedException();
+        string normalized;
+        if (withLeadingSlash)
+        {
+            normalized = $"{PATH_SEPARATOR}{key}";
+        }
+        else
+        {
+            normalized = key;
+        }
+        normalized = normalized.Replace($"{PATH_SEPARATOR}{PATH_SEPARATOR}", $"{PATH_SEPARATOR}");
+        if (!withLeadingSlash && normalized[0] == PATH_SEPARATOR)
+        {
+            normalized = normalized[1..];
+        }
+        return normalized;
     }
 
-    public static List<string> GetHierarchy(ReadOnlySpan<char> key)
+    public static List<string> GetHierarchy(string key)
     {
         string normal = NormalizeKey(key);
         List<string> hierarchy = [];
@@ -180,16 +196,81 @@ public sealed class NetworkTable : IEquatable<NetworkTable?>
 
     public string Path { get; }
 
-    // public NtListener AddListener(EventFlags kinds, Action<NetworkTable, string, NetworkTableEvent> listener) {
-    //     int prefixLex = Path.Length + 1;
-    //     return Instance.Add
-    // }
+    public NtListener AddListener(EventFlags eventKinds, Action<NetworkTable, string, NetworkTableEvent> listener)
+    {
+        int prefixLex = Path.Length + 1;
+        return Instance.AddListener([m_pathWithSep], eventKinds, ntEvent =>
+        {
+            string? topicName = null;
+            if (ntEvent.TopicInfo != null)
+            {
+                topicName = ntEvent.TopicInfo.Value.Name;
+            }
+            else if (ntEvent.ValueData != null)
+            {
+                // Don't fully construct the lazy object
+                topicName = ntEvent.ValueData.Value.GetTopicName();
+            }
+            if (topicName == null)
+            {
+                return;
+            }
+            string relativeKey = topicName[prefixLex..];
+            if (relativeKey.Contains(PATH_SEPARATOR))
+            {
+                // part of a subtable
+                return;
+            }
+            listener(this, relativeKey, ntEvent);
+        });
+    }
+
+    public NtListener AddListener(string key, EventFlags eventKinds, Action<NetworkTable, string, NetworkTableEvent> listener)
+    {
+        var entry = GetEntry(key);
+        return Instance.AddListener(entry, eventKinds, ntEvent => listener(this, key, ntEvent));
+    }
+
+    private class SubTableListenerHolder(int prefixLen, NetworkTable parent, Action<NetworkTable, string, NetworkTable> listener)
+    {
+        private readonly int m_prefixLen = prefixLen;
+        private readonly NetworkTable m_parent = parent;
+        private readonly Action<NetworkTable, string, NetworkTable> m_listener = listener;
+        private readonly HashSet<string> m_notifiedTables = [];
+
+        public void OnEvent(NetworkTableEvent ntEvent)
+        {
+            if (ntEvent.TopicInfo == null)
+            {
+                return;
+            }
+            var relativeKey = ntEvent.TopicInfo.Value.Name.AsSpan()[m_prefixLen..];
+            int endSubTable = relativeKey.IndexOf(PATH_SEPARATOR);
+            if (endSubTable == -1)
+            {
+                return;
+            }
+            string subTableKey = relativeKey[..endSubTable].ToString();
+            if (m_notifiedTables.Contains(subTableKey))
+            {
+                return;
+            }
+            m_notifiedTables.Add(subTableKey);
+            m_listener(m_parent, subTableKey, m_parent.GetSubTable(subTableKey));
+        }
+    }
+
+    public NtListener AddSubTableListener(Action<NetworkTable, string, NetworkTable> listener)
+    {
+        int prefixLen = Path.Length + 1;
+        SubTableListenerHolder holder = new(prefixLen, this, listener);
+        return Instance.AddListener([m_pathWithSep], EventFlags.Publish | EventFlags.Immediate, holder.OnEvent);
+    }
 
     public void RemoveListener(NtListener listener)
     {
         Instance.RemoveListener(listener);
     }
-
 
     public override bool Equals(object? obj)
     {

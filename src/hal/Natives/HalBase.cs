@@ -9,6 +9,11 @@ namespace WPIHal.Natives;
 
 public static partial class HalBase
 {
+    [LibraryImport("wpiHal", EntryPoint = "HAL_Initialize")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool Initialize(int timeout, int mode);
+
     [LibraryImport("wpiHal", EntryPoint = "HAL_ExpandFPGATime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial ulong ExpandFPGATimeRefShim(uint unexpandedLower, ref HalStatus status);

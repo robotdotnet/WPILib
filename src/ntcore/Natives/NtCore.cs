@@ -59,6 +59,16 @@ public static partial class NtCore
         return value;
     }
 
+    [LibraryImport("ntcore", EntryPoint = "NT_GetEntryValueType")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial void GetEntryValue(int entry, NetworkTableType types, out NetworkTableValue value);
+
+    public static NetworkTableValue GetEntryValue<T>(T entry, NetworkTableType types) where T : struct, INtEntryHandle
+    {
+        GetEntryValue(entry.Handle, types, out var value);
+        return value;
+    }
+
     [LibraryImport("ntcore", EntryPoint = "NT_SetDefaultEntryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
@@ -105,6 +115,16 @@ public static partial class NtCore
     public static unsafe NetworkTableValue[] ReadQueueValue<T>(T subentry) where T : struct, INtEntryHandle
     {
         return ReadQueueValue(subentry.Handle, out var _);
+    }
+
+    [LibraryImport("ntcore", EntryPoint = "NT_ReadQueueValueType")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
+    internal static unsafe partial NetworkTableValue[] ReadQueueValue(int subentry, NetworkTableType types, out nuint count);
+
+    public static unsafe NetworkTableValue[] ReadQueueValue<T>(T subentry, NetworkTableType types) where T : struct, INtEntryHandle
+    {
+        return ReadQueueValue(subentry.Handle, types, out var _);
     }
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetTopics")]

@@ -157,7 +157,7 @@ public static unsafe class WpiStringMarshaller
 
         public static void FreeArray(WpiStringNative* ptr, int len)
         {
-            throw new NotImplementedException();
+            StringsNative.FreeStringArray(ptr, (nuint)len);
         }
 
         public readonly string ConvertToString()

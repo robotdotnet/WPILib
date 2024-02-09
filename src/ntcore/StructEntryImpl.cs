@@ -34,7 +34,7 @@ internal sealed class StructEntryImpl<T, THandle> : EntryBase<THandle>, IStructE
 
     public bool GetInto(ref T output)
     {
-        NetworkTableValue value = NtCore.GetEntryValue(Handle);
+        NetworkTableValue value = NtCore.GetEntryValue(Handle, NetworkTableType.Raw);
         if (!value.IsRaw)
         {
             return false;
@@ -71,13 +71,66 @@ internal sealed class StructEntryImpl<T, THandle> : EntryBase<THandle>, IStructE
 
     public TimestampedObject<T>[] ReadQueue()
     {
+        NetworkTableValue[] raw = NtCore.ReadQueueValue(Handle, NetworkTableType.Raw);
+        var arr = new TimestampedObject<T>[raw.Length];
+        int arrCount = 0;
+        int shrinkCount = 0;
+        for (int i = 0; i < raw.Length; i++)
+        {
+            var parsed = FromRaw(in raw[i]);
+            if (parsed.HasValue)
+            {
+                arr[arrCount] = parsed.Value;
+                arrCount++;
+            }
+            else
+            {
+                shrinkCount++;
+            }
+        }
 
-        throw new System.NotImplementedException();
+        if (shrinkCount > 0)
+        {
+            var old = arr;
+            arr = new TimestampedObject<T>[arr.Length - shrinkCount];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = old[i];
+            }
+        }
+        return arr;
     }
 
     public T[] ReadQueueValues()
     {
-        throw new System.NotImplementedException();
+        NetworkTableValue[] raw = NtCore.ReadQueueValue(Handle, NetworkTableType.Raw);
+        var arr = new T[raw.Length];
+        int arrCount = 0;
+        int shrinkCount = 0;
+        for (int i = 0; i < raw.Length; i++)
+        {
+            var parsed = FromRaw(in raw[i]);
+            if (parsed.HasValue)
+            {
+                arr[arrCount] = parsed.Value.Value;
+                arrCount++;
+            }
+            else
+            {
+                shrinkCount++;
+            }
+        }
+
+        if (shrinkCount > 0)
+        {
+            var old = arr;
+            arr = new T[arr.Length - shrinkCount];
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = old[i];
+            }
+        }
+        return arr;
     }
 
     public void Set(T value)
@@ -132,11 +185,7 @@ internal sealed class StructEntryImpl<T, THandle> : EntryBase<THandle>, IStructE
 
     private TimestampedObject<T> FromRaw(T defaultValue)
     {
-        NetworkTableValue value = NtCore.GetEntryValue(Handle);
-        if (!value.IsRaw)
-        {
-            return new TimestampedObject<T>(value.Time, value.ServerTime, defaultValue);
-        }
+        NetworkTableValue value = NtCore.GetEntryValue(Handle, NetworkTableType.Raw);
         byte[] raw = value.GetRaw();
         if (raw.Length == 0)
         {
@@ -152,6 +201,26 @@ internal sealed class StructEntryImpl<T, THandle> : EntryBase<THandle>, IStructE
         catch
         {
             return new TimestampedObject<T>(0, 0, defaultValue);
+        }
+    }
+
+    private TimestampedObject<T>? FromRaw(ref readonly NetworkTableValue value)
+    {
+        byte[] raw = value.GetRaw();
+        if (raw.Length == 0)
+        {
+            return null;
+        }
+        try
+        {
+            lock (m_lockObject)
+            {
+                return new TimestampedObject<T>(value.Time, value.ServerTime, m_buf.Read(raw));
+            }
+        }
+        catch
+        {
+            return null;
         }
     }
 }

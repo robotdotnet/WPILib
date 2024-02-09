@@ -4,29 +4,20 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-public sealed class MultiSubscriber : IDisposable
+public sealed class MultiSubscriber(NetworkTableInstance inst, string[] prefixes, in PubSubOptions options) : IDisposable
 {
-    public MultiSubscriber(NetworkTableInstance inst, string[] prefixes, in PubSubOptions options)
-    {
-        Inst = inst;
-        Handle = NtCore.SubscribeMultiple(inst.Handle, prefixes, (nuint)prefixes.Length, options);
-    }
-
     public void Dispose()
     {
-        lock (this)
+        if (Handle.Handle != 0)
         {
-            if (Handle.Handle != 0)
-            {
-                NtCore.UnsubscribeMultiple(Handle);
-                Handle = default;
-            }
+            NtCore.UnsubscribeMultiple(Handle);
+            Handle = default;
         }
     }
 
-    public NtMultiSubscriber Handle { get; private set; }
+    public NtMultiSubscriber Handle { get; private set; } = NtCore.SubscribeMultiple(inst.Handle, prefixes, (nuint)prefixes.Length, options);
 
-    public NetworkTableInstance Inst { get; }
+    public NetworkTableInstance Instance { get; } = inst;
 
     public bool IsValid => Handle.Handle != 0;
 }

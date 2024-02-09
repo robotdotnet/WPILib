@@ -1,12 +1,30 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using NetworkTables.Handles;
 using NetworkTables.Natives;
 
 namespace NetworkTables;
 
 [NativeMarshalling(typeof(ValueEventDataMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly record struct ValueEventData(int TopicHandle, int Subentry, NetworkTableValue Value);
+public record struct ValueEventData(NtTopic TopicHandle, int Subentry, NetworkTableValue Value)
+{
+    private Topic? m_topicObject;
+    public Topic GetTopic(NetworkTableInstance instance)
+    {
+        if (m_topicObject == null)
+        {
+            m_topicObject = new Topic(instance, TopicHandle);
+        }
+        return m_topicObject;
+    }
+
+    public string GetTopicName()
+    {
+        NtCore.GetTopicName(TopicHandle, out var name);
+        return name;
+    }
+}
 
 [CustomMarshaller(typeof(ValueEventData), MarshalMode.ManagedToUnmanagedOut, typeof(ValueEventDataMarshaller))]
 public static unsafe class ValueEventDataMarshaller
@@ -15,7 +33,7 @@ public static unsafe class ValueEventDataMarshaller
     {
         return new ValueEventData
         {
-            TopicHandle = unmanaged.topic,
+            TopicHandle = new(unmanaged.topic),
             Subentry = unmanaged.subentry,
             Value = NetworkTableValueMarshaller.ReturnFrom.ConvertToManaged(unmanaged.value),
         };
