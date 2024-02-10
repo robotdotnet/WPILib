@@ -32,7 +32,7 @@ public interface IProtobufBase
 
 public interface IProtobuf<T> : IProtobufBase
 {
-    abstract IMessage CreateMessage();
+    IMessage CreateMessage();
 
     T Unpack(IMessage msg);
 
@@ -41,29 +41,26 @@ public interface IProtobuf<T> : IProtobufBase
     void UnpackInto(ref T value, IMessage msg);
 }
 
-public interface IProtobuf<T, MessageType> : IProtobuf<T> where MessageType : IMessage<MessageType>
+public interface IProtobuf<T, MessageType> : IProtobufBase where MessageType : IMessage<MessageType>
 {
-    IMessage IProtobuf<T>.CreateMessage()
+    internal class ProtobufWrapper(IProtobuf<T, MessageType> proto) : IProtobuf<T>
     {
-        return CreateMessage();
+        private readonly IProtobuf<T, MessageType> m_proto = proto;
+
+        public MessageDescriptor Descriptor => m_proto.Descriptor;
+
+        public IMessage CreateMessage() => m_proto.CreateMessage();
+
+        public void Pack(IMessage msg, T value) => m_proto.Pack((MessageType)msg, value);
+
+        public T Unpack(IMessage msg) => m_proto.Unpack((MessageType)msg);
+
+        public void UnpackInto(ref T value, IMessage msg) => m_proto.UnpackInto(ref value, (MessageType)msg);
     }
 
-    void IProtobuf<T>.Pack(IMessage msg, T value)
-    {
-        Pack((MessageType)msg, value);
-    }
+    public IProtobuf<T> UntypedProto => new ProtobufWrapper(this);
 
-    T IProtobuf<T>.Unpack(IMessage msg)
-    {
-        return Unpack((MessageType)msg);
-    }
-
-    void IProtobuf<T>.UnpackInto(ref T value, IMessage msg)
-    {
-        UnpackInto(ref value, (MessageType)msg);
-    }
-
-    new MessageType CreateMessage();
+    MessageType CreateMessage();
 
     T Unpack(MessageType msg);
 

@@ -72,7 +72,7 @@ public readonly struct Translation2d : IStructSerializable<Translation2d>, IProt
 {
     public static IStruct<Translation2d> Struct { get; } = new Translation2dStruct();
     public static IProtobuf<Translation2d, ProtobufTranslation2d> Proto { get; } = new Translation2dProto();
-    static IProtobuf<Translation2d> IProtobufSerializable<Translation2d>.Proto => Proto;
+    static IProtobuf<Translation2d> IProtobufSerializable<Translation2d>.Proto => Proto.UntypedProto;
 
     [JsonIgnore]
     public Length X { get; }
@@ -129,47 +129,47 @@ public readonly struct Translation2d : IStructSerializable<Translation2d>, IProt
 
     public Translation2d Interpolate(Translation2d endValue, double t)
     {
-        throw new NotImplementedException();
+        return new Translation2d(MathExtras.Lerp(X, endValue.X, t), MathExtras.Lerp(Y, endValue.Y, t));
     }
 
     public bool Equals(Translation2d other)
     {
-        throw new NotImplementedException();
+        return X.Equals(other.X, 1e-9.Meters()) && Y.Equals(other.Y, 1e-9.Meters());
     }
 
     public static Translation2d operator +(Translation2d left, Translation2d right)
     {
-        throw new NotImplementedException();
+        return new(left.X + right.X, left.Y + right.Y);
     }
 
     public static Translation2d operator -(Translation2d left, Translation2d right)
     {
-        throw new NotImplementedException();
+        return new Translation2d(left.X - right.X, left.Y - right.Y);
     }
 
     public static Translation2d operator -(Translation2d value)
     {
-        throw new NotImplementedException();
+        return new Translation2d(-value.X, -value.Y);
     }
 
     public static Translation2d operator *(Translation2d left, double right)
     {
-        throw new NotImplementedException();
+        return new(left.X * right, left.Y * right);
     }
 
     public static Translation2d operator /(Translation2d left, double right)
     {
-        throw new NotImplementedException();
+        return new(left.X / right, left.Y / right);
     }
 
     public static bool operator ==(Translation2d left, Translation2d right)
     {
-        throw new NotImplementedException();
+        return left.Equals(right);
     }
 
     public static bool operator !=(Translation2d left, Translation2d right)
     {
-        throw new NotImplementedException();
+        return !(left == right);
     }
 
     public override bool Equals(object? obj)

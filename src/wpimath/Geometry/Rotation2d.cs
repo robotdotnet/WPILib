@@ -69,7 +69,7 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
 {
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
     public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto { get; } = new Rotation2dProto();
-    static IProtobuf<Rotation2d> IProtobufSerializable<Rotation2d>.Proto => Proto;
+    static IProtobuf<Rotation2d> IProtobufSerializable<Rotation2d>.Proto => Proto.UntypedProto;
 
     public Rotation2d(Angle angle)
     {
