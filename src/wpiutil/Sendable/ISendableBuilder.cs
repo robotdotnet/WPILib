@@ -10,7 +10,7 @@ public interface ISendableBuilder : IDisposable
         NetworkTables
     }
 
-    BackingKind Backing { get; }
+    BackingKind BackendKind { get; }
 
     bool IsPublished { get; }
 

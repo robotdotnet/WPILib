@@ -74,8 +74,8 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     public Rotation2d(Angle angle)
     {
         Angle = angle;
-        m_cos = Math.Cos(angle.Radians);
-        m_sin = Math.Sin(angle.Radians);
+        Cos = Math.Cos(angle.Radians);
+        Sin = Math.Sin(angle.Radians);
     }
 
     public Rotation2d(double x, double y)
@@ -83,43 +83,35 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
         double magnitude = double.Hypot(x, y);
         if (magnitude > 1e-6)
         {
-            m_sin = y / magnitude;
-            m_cos = x / magnitude;
+            Sin = y / magnitude;
+            Cos = x / magnitude;
         }
         else
         {
-            m_sin = 0.0;
-            m_cos = 1.0;
+            Sin = 0.0;
+            Cos = 1.0;
         }
-        Angle = Math.Atan2(m_sin, m_cos).Radians();
+        Angle = Math.Atan2(Sin, Cos).Radians();
     }
 
     [JsonConstructor]
     internal Rotation2d(double radians) : this(radians.Radians())
     {
-
     }
-
     [JsonInclude]
     [JsonPropertyName("radians")]
-    internal readonly double Radians => Angle.Radians;
+    internal double Radians => Angle.Radians;
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    [JsonIgnore]
     public Angle Angle { get; } = 0.Radians();
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-    public double Cos => m_cos;
-    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
-    public double Sin => m_sin;
-    [JsonIgnore(Condition = JsonIgnoreCondition.Always)]
+    [JsonIgnore]
+    public double Cos { get; } = 1;
+    [JsonIgnore]
+    public double Sin { get; } = 0;
+    [JsonIgnore]
     public double Tan => Sin / Cos;
 
-    public static Rotation2d Zero => new(Angle.Zero);
-
-    public static Rotation2d AdditiveIdentity => Zero;
-
-    private readonly double m_cos = 1;
-    private readonly double m_sin = 0;
+    public static Rotation2d AdditiveIdentity => new(Angle.Zero);
 
     public readonly Rotation2d RotateBy(Rotation2d other)
     {

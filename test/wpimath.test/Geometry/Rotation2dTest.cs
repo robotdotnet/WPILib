@@ -40,7 +40,7 @@ public class Rotation2dTest
     [Fact]
     public void TestRotationByFromZero()
     {
-        var zero = Rotation2d.Zero;
+        var zero = Rotation2d.AdditiveIdentity;
         var rotated = zero.RotateBy(90.Degrees());
 
         Assert.Equal(Math.PI / 2, rotated.Angle.Radians, Epsilon);
