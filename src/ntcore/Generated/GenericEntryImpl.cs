@@ -9,17 +9,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables generic implementation. */
 internal sealed partial class GenericEntryImpl<THandle>
 {
-
-    /**
-     * Gets the entry's value as a bool. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public bool GetBoolean(bool defaultValue)
     {
@@ -31,13 +22,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetBoolean(bool value)
     {
         return SetBoolean(value, 0);
@@ -48,25 +32,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeBoolean(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultBoolean(bool value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeBoolean(value));
     }
-
-    /**
-     * Gets the entry's value as a long. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public long GetInteger(long defaultValue)
     {
@@ -78,13 +47,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetInteger(long value)
     {
         return SetInteger(value, 0);
@@ -95,25 +57,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeInteger(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultInteger(long value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeInteger(value));
     }
-
-    /**
-     * Gets the entry's value as a float. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public float GetFloat(float defaultValue)
     {
@@ -125,13 +72,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetFloat(float value)
     {
         return SetFloat(value, 0);
@@ -142,25 +82,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeFloat(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultFloat(float value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeFloat(value));
     }
-
-    /**
-     * Gets the entry's value as a double. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public double GetDouble(double defaultValue)
     {
@@ -172,13 +97,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDouble(double value)
     {
         return SetDouble(value, 0);
@@ -189,25 +107,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeDouble(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultDouble(double value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeDouble(value));
     }
-
-    /**
-     * Gets the entry's value as a string. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public string GetString(string defaultValue)
     {
@@ -219,13 +122,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetString(string value)
     {
         return SetString(value, 0);
@@ -236,25 +132,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeString(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultString(string value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeString(value));
     }
-
-    /**
-     * Gets the entry's value as a byte[]. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public byte[] GetRaw(byte[] defaultValue)
     {
@@ -266,13 +147,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetRaw(byte[] value)
     {
         return SetRaw(value, 0);
@@ -283,25 +157,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeRaw(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultRaw(byte[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeRaw(value));
     }
-
-    /**
-     * Gets the entry's value as a bool[]. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public bool[] GetBooleanArray(bool[] defaultValue)
     {
@@ -313,13 +172,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetBooleanArray(bool[] value)
     {
         return SetBooleanArray(value, 0);
@@ -330,25 +182,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeBooleanArray(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultBooleanArray(bool[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeBooleanArray(value));
     }
-
-    /**
-     * Gets the entry's value as a long[]. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public long[] GetIntegerArray(long[] defaultValue)
     {
@@ -360,13 +197,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetIntegerArray(long[] value)
     {
         return SetIntegerArray(value, 0);
@@ -377,25 +207,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeIntegerArray(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultIntegerArray(long[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeIntegerArray(value));
     }
-
-    /**
-     * Gets the entry's value as a float[]. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public float[] GetFloatArray(float[] defaultValue)
     {
@@ -407,13 +222,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetFloatArray(float[] value)
     {
         return SetFloatArray(value, 0);
@@ -424,25 +232,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeFloatArray(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultFloatArray(float[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeFloatArray(value));
     }
-
-    /**
-     * Gets the entry's value as a double[]. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public double[] GetDoubleArray(double[] defaultValue)
     {
@@ -454,13 +247,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDoubleArray(double[] value)
     {
         return SetDoubleArray(value, 0);
@@ -471,25 +257,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeDoubleArray(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultDoubleArray(double[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeDoubleArray(value));
     }
-
-    /**
-     * Gets the entry's value as a string[]. If the entry does not exist or is of different type, it
-     * will return the default value.
-     *
-     * @param defaultValue the value to be returned if no value is found
-     * @return the entry's value or the given default value
-     */
 
     public string[] GetStringArray(string[] defaultValue)
     {
@@ -501,13 +272,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return defaultValue;
     }
 
-    /**
-     * Sets the entry's value.
-     *
-     * @param value the value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetStringArray(string[] value)
     {
         return SetStringArray(value, 0);
@@ -518,18 +282,10 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeStringArray(value, time));
     }
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
-
     public bool SetDefaultStringArray(string[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeStringArray(value));
     }
-
 
 
     public void Unpublish()

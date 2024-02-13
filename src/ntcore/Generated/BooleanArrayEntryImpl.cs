@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables BooleanArray implementation. */
 internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal BooleanArrayEntryImpl(BooleanArrayTopic topic, T handle, bool[] defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
     }
 
     public override BooleanArrayTopic Topic { get; }
-
 
     public bool[] Get()
     {
@@ -39,7 +30,6 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
         return m_defaultValue;
     }
 
-
     public bool[] Get(bool[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
         return defaultValue;
     }
 
-
     public TimestampedObject<bool[]> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
         return new TimestampedObject<bool[]>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<bool[]> GetAtomic(bool[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         bool[] baseValue = value.IsBooleanArray ? value.GetBooleanArray() : defaultValue;
         return new TimestampedObject<bool[]>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<bool[]>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
         }
         return timestamped;
     }
-
 
     public bool[][] ReadQueueValues()
     {
@@ -108,6 +94,7 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeBooleanArray(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);

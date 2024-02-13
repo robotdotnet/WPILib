@@ -6,13 +6,13 @@
 
 namespace NetworkTables;
 
-/**
- * NetworkTables DoubleArray entry.
- *
- * <p>Unlike NetworkTableEntry, the entry goes away when close() is called.
- */
+/// <summary>
+/// NetworkTables DoubleArray entry.
+/// </summary>
 public interface IDoubleArrayEntry : IDoubleArraySubscriber, IDoubleArrayPublisher
 {
-    /** Stops publishing the entry if it's published. */
+    /// <summary>
+    /// Stops publishing the entry if its published.
+    /// </summary>
     void Unpublish();
 }

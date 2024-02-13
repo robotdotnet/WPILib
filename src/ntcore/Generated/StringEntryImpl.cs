@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables String implementation. */
 internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal StringEntryImpl(StringTopic topic, T handle, string defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
     }
 
     public override StringTopic Topic { get; }
-
 
     public string Get()
     {
@@ -39,7 +30,6 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         return m_defaultValue;
     }
 
-
     public string Get(string defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         return defaultValue;
     }
 
-
     public TimestampedObject<string> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         return new TimestampedObject<string>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<string> GetAtomic(string defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         string baseValue = value.IsString ? value.GetString() : defaultValue;
         return new TimestampedObject<string>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<string>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         }
         return timestamped;
     }
-
 
     public string[] ReadQueueValues()
     {
@@ -108,15 +94,10 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);
-    }
-
-    public void Set(ReadOnlySpan<byte> value)
-    {
-        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value, 0);
-        NtCore.SetEntryValue(Handle, ntValue);
     }
 
     private readonly string m_defaultValue;

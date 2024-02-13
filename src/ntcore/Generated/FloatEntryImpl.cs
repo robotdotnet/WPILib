@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables Float implementation. */
 internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal FloatEntryImpl(FloatTopic topic, T handle, float defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
     }
 
     public override FloatTopic Topic { get; }
-
 
     public float Get()
     {
@@ -39,7 +30,6 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
         return m_defaultValue;
     }
 
-
     public float Get(float defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
         return defaultValue;
     }
 
-
     public TimestampedObject<float> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
         return new TimestampedObject<float>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<float> GetAtomic(float defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         float baseValue = value.IsFloat ? value.GetFloat() : defaultValue;
         return new TimestampedObject<float>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<float>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
         }
         return timestamped;
     }
-
 
     public float[] ReadQueueValues()
     {
@@ -108,6 +94,7 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloat(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);

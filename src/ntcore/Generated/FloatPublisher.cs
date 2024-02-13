@@ -8,39 +8,34 @@ using System;
 
 namespace NetworkTables;
 
-/** NetworkTables Float publisher. */
+/// <summary>
+/// NetworkTables Float publisher.
+/// </summary>
 public interface IFloatPublisher : IPublisher
 {
-    /**
-     * Get the corresponding topic.
-     *
-     * @return Topic
-     */
-
+    /// <summary>
+    /// Gets the corresponding topic.
+    /// </summary>
     new FloatTopic Topic { get; }
 
 
-    /**
-     * Publish a new value using current NT time.
-     *
-     * @param value value to publish
-     */
+    /// <summary>
+    /// Publish a new value using the current NT time.
+    /// </summary>
+    /// <param name="value">value to publish</param>
     void Set(float value);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
     void Set(float value, long time);
 
-    /**
-     * Publish a default value.
-     * On reconnect, a default value will never be used in preference to a
-     * published value.
-     *
-     * @param value value
-     */
+    /// <summary>
+    /// Publish a default value. On reconnect, a default value will never be used
+    /// in prference to a published value
+    /// </summary>
+    /// <param name="value">value</param>
     void SetDefault(float value);
 }

@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables Double implementation. */
 internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal DoubleEntryImpl(DoubleTopic topic, T handle, double defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
     }
 
     public override DoubleTopic Topic { get; }
-
 
     public double Get()
     {
@@ -39,7 +30,6 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
         return m_defaultValue;
     }
 
-
     public double Get(double defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
         return defaultValue;
     }
 
-
     public TimestampedObject<double> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
         return new TimestampedObject<double>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<double> GetAtomic(double defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         double baseValue = value.IsDouble ? value.GetDouble() : defaultValue;
         return new TimestampedObject<double>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<double>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
         }
         return timestamped;
     }
-
 
     public double[] ReadQueueValues()
     {
@@ -108,6 +94,7 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDouble(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);

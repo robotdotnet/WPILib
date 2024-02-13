@@ -6,73 +6,62 @@
 
 namespace NetworkTables;
 
-/** NetworkTables Raw subscriber. */
+/// <summary>
+/// NetworkTables Raw subscriver.
+/// </summary>
 public interface IRawSubscriber : ISubscriber
 {
-    /**
-     * Get the corresponding topic.
-     *
-     * @return Topic
-     */
-
+    /// <summary>
+    /// Gets the corresponding topic.
+    /// </summary>
     new RawTopic Topic { get; }
 
-    /**
-     * Get the last published value.
-     * If no value has been published, returns the stored default value.
-     *
-     * @return value
-     */
+    /// <summary>
+    /// Get the last published value.
+    /// If no value has been published, returns the stored default value.
+    /// </summary>
+    /// <returns>value</returns>
     byte[] Get();
 
-    /**
-     * Get the last published value.
-     * If no value has been published, returns the passed defaultValue.
-     *
-     * @param defaultValue default value to return if no value has been published
-     * @return value
-     */
+    /// <summary>
+    /// Get the last published value.
+    /// If no value has been published, returns the passed default value.
+    /// </summary>
+    /// <param name="defaultValue">default value to return if no value has been published</param>
+    /// <returns>value</returns>
     byte[] Get(byte[] defaultValue);
 
-    /**
-     * Get the last published value along with its timestamp
-     * If no value has been published, returns the stored default value and a
-     * timestamp of 0.
-     *
-     * @return timestamped value
-     */
+    /// <summary>
+    /// Get the last published value along with its timestamp.
+    /// If no value has been published, returns the stored default value and a timestamp of 0.
+    /// </summary>
+    /// <returns>timestamped value</returns>
     TimestampedObject<byte[]> GetAtomic();
 
-    /**
-     * Get the last published value along with its timestamp
-     * If no value has been published, returns the passed defaultValue and a
-     * timestamp of 0.
-     *
-     * @param defaultValue default value to return if no value has been published
-     * @return timestamped value
-     */
+    /// <summary>
+    /// Get the last published value along with its timestamp.
+    /// If no value has been published, returns the passed default value and a timestamp of 0.
+    /// </summary>
+    /// <param name="defaultValue">default value to return if no value has been published</param>
+    /// <returns>timestamped value</returns>
     TimestampedObject<byte[]> GetAtomic(byte[] defaultValue);
 
-    /**
-     * Get an array of all value changes since the last call to readQueue.
-     * Also provides a timestamp for each value.
-     *
-     * <p>The "poll storage" subscribe option can be used to set the queue
-     * depth.
-     *
-     * @return Array of timestamped values; empty array if no new changes have
-     *     been published since the previous call.
-     */
+    /// <summary>
+    /// Get an array of all value changes since the last call to ReadQueue.
+    /// Also provides a timestamp for each value.
+    /// </summary>
+    /// <remarks>
+    /// The "poll storage" subscribe option can be used to set the queue depth.
+    /// </remarks
+    /// <returns>Array of timestamped values; emptry if no new changes</returns>
     TimestampedObject<byte[]>[] ReadQueue();
 
-    /**
-     * Get an array of all value changes since the last call to readQueue.
-     *
-     * <p>The "poll storage" subscribe option can be used to set the queue
-     * depth.
-     *
-     * @return Array of values; empty array if no new changes have been
-     *     published since the previous call.
-     */
+    /// <summary>
+    /// Get an array of all value changes since the last call to ReadQueue.
+    /// </summary>
+    /// <remarks>
+    /// The "poll storage" subscribe option can be used to set the queue depth.
+    /// </remarks
+    /// <returns>Array of values; emptry if no new changes</returns>
     byte[][] ReadQueueValues();
 }

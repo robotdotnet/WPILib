@@ -6,13 +6,13 @@
 
 namespace NetworkTables;
 
-/**
- * NetworkTables Integer entry.
- *
- * <p>Unlike NetworkTableEntry, the entry goes away when close() is called.
- */
+/// <summary>
+/// NetworkTables Integer entry.
+/// </summary>
 public interface IIntegerEntry : IIntegerSubscriber, IIntegerPublisher
 {
-    /** Stops publishing the entry if it's published. */
+    /// <summary>
+    /// Stops publishing the entry if its published.
+    /// </summary>
     void Unpublish();
 }

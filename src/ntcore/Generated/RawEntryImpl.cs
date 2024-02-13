@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables Raw implementation. */
 internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal RawEntryImpl(RawTopic topic, T handle, byte[] defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
     }
 
     public override RawTopic Topic { get; }
-
 
     public byte[] Get()
     {
@@ -39,7 +30,6 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
         return m_defaultValue;
     }
 
-
     public byte[] Get(byte[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
         return defaultValue;
     }
 
-
     public TimestampedObject<byte[]> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
         return new TimestampedObject<byte[]>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<byte[]> GetAtomic(byte[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         byte[] baseValue = value.IsRaw ? value.GetRaw() : defaultValue;
         return new TimestampedObject<byte[]>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<byte[]>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
         }
         return timestamped;
     }
-
 
     public byte[][] ReadQueueValues()
     {
@@ -108,6 +94,7 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);

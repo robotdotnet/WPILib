@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables StringArray implementation. */
 internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal StringArrayEntryImpl(StringArrayTopic topic, T handle, string[] defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
     }
 
     public override StringArrayTopic Topic { get; }
-
 
     public string[] Get()
     {
@@ -39,7 +30,6 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
         return m_defaultValue;
     }
 
-
     public string[] Get(string[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
         return defaultValue;
     }
 
-
     public TimestampedObject<string[]> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
         return new TimestampedObject<string[]>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<string[]> GetAtomic(string[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         string[] baseValue = value.IsStringArray ? value.GetStringArray() : defaultValue;
         return new TimestampedObject<string[]>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<string[]>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
         }
         return timestamped;
     }
-
 
     public string[][] ReadQueueValues()
     {
@@ -108,6 +94,7 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeStringArray(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);

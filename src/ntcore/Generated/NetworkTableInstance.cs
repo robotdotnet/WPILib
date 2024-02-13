@@ -27,6 +27,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a bool topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>BooleanTopic</returns>
     public BooleanTopic GetBooleanTopic(string name)
     {
         return (BooleanTopic)m_topics.AddOrUpdate(name, BooleanTopicCreator, BooleanTopicUpdator, this);
@@ -49,6 +54,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a long topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>IntegerTopic</returns>
     public IntegerTopic GetIntegerTopic(string name)
     {
         return (IntegerTopic)m_topics.AddOrUpdate(name, IntegerTopicCreator, IntegerTopicUpdator, this);
@@ -71,6 +81,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a float topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>FloatTopic</returns>
     public FloatTopic GetFloatTopic(string name)
     {
         return (FloatTopic)m_topics.AddOrUpdate(name, FloatTopicCreator, FloatTopicUpdator, this);
@@ -93,6 +108,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a double topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>DoubleTopic</returns>
     public DoubleTopic GetDoubleTopic(string name)
     {
         return (DoubleTopic)m_topics.AddOrUpdate(name, DoubleTopicCreator, DoubleTopicUpdator, this);
@@ -115,6 +135,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a string topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>StringTopic</returns>
     public StringTopic GetStringTopic(string name)
     {
         return (StringTopic)m_topics.AddOrUpdate(name, StringTopicCreator, StringTopicUpdator, this);
@@ -137,6 +162,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a byte[] topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>RawTopic</returns>
     public RawTopic GetRawTopic(string name)
     {
         return (RawTopic)m_topics.AddOrUpdate(name, RawTopicCreator, RawTopicUpdator, this);
@@ -159,6 +189,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a bool[] topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>BooleanArrayTopic</returns>
     public BooleanArrayTopic GetBooleanArrayTopic(string name)
     {
         return (BooleanArrayTopic)m_topics.AddOrUpdate(name, BooleanArrayTopicCreator, BooleanArrayTopicUpdator, this);
@@ -181,6 +216,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a long[] topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>IntegerArrayTopic</returns>
     public IntegerArrayTopic GetIntegerArrayTopic(string name)
     {
         return (IntegerArrayTopic)m_topics.AddOrUpdate(name, IntegerArrayTopicCreator, IntegerArrayTopicUpdator, this);
@@ -203,6 +243,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a float[] topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>FloatArrayTopic</returns>
     public FloatArrayTopic GetFloatArrayTopic(string name)
     {
         return (FloatArrayTopic)m_topics.AddOrUpdate(name, FloatArrayTopicCreator, FloatArrayTopicUpdator, this);
@@ -225,6 +270,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a double[] topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>DoubleArrayTopic</returns>
     public DoubleArrayTopic GetDoubleArrayTopic(string name)
     {
         return (DoubleArrayTopic)m_topics.AddOrUpdate(name, DoubleArrayTopicCreator, DoubleArrayTopicUpdator, this);
@@ -247,6 +297,11 @@ public sealed partial class NetworkTableInstance
         instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
         return topic;
     }
+    /// <summary>
+    /// Gets a string[] topic.
+    /// </summary>
+    /// <param name="name">topic name</param>
+    /// <returns>StringArrayTopic</returns>
     public StringArrayTopic GetStringArrayTopic(string name)
     {
         return (StringArrayTopic)m_topics.AddOrUpdate(name, StringArrayTopicCreator, StringArrayTopicUpdator, this);

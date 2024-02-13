@@ -10,16 +10,8 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-/** NetworkTables IntegerArray implementation. */
 internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntry where T : struct, INtEntryHandle
 {
-    /**
-     * Constructor.
-     *
-     * @param topic Topic
-     * @param handle Native handle
-     * @param defaultValue Default value for Get()
-     */
     internal IntegerArrayEntryImpl(IntegerArrayTopic topic, T handle, long[] defaultValue) : base(handle)
     {
         Topic = topic;
@@ -27,7 +19,6 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
     }
 
     public override IntegerArrayTopic Topic { get; }
-
 
     public long[] Get()
     {
@@ -39,7 +30,6 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
         return m_defaultValue;
     }
 
-
     public long[] Get(long[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -50,7 +40,6 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
         return defaultValue;
     }
 
-
     public TimestampedObject<long[]> GetAtomic()
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -58,14 +47,12 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
         return new TimestampedObject<long[]>(value.Time, value.ServerTime, baseValue);
     }
 
-
     public TimestampedObject<long[]> GetAtomic(long[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
         long[] baseValue = value.IsIntegerArray ? value.GetIntegerArray() : defaultValue;
         return new TimestampedObject<long[]>(value.Time, value.ServerTime, baseValue);
     }
-
 
     public TimestampedObject<long[]>[] ReadQueue()
     {
@@ -77,7 +64,6 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
         }
         return timestamped;
     }
-
 
     public long[][] ReadQueueValues()
     {
@@ -108,6 +94,7 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);
     }
+
     public void Unpublish()
     {
         NtCore.Unpublish(Handle);

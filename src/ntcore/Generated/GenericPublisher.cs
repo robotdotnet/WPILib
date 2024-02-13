@@ -6,217 +6,249 @@
 
 namespace NetworkTables;
 
-/** NetworkTables generic publisher. */
 public partial interface IGenericPublisher
 {
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetBoolean(bool value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetBoolean(bool value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultBoolean(bool defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetInteger(long value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetInteger(long value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultInteger(long defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetFloat(float value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetFloat(float value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultFloat(float defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetDouble(double value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetDouble(double value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultDouble(double defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetString(string value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetString(string value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultString(string defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetRaw(byte[] value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetRaw(byte[] value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultRaw(byte[] defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetBooleanArray(bool[] value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetBooleanArray(bool[] value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultBooleanArray(bool[] defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetIntegerArray(long[] value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetIntegerArray(long[] value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultIntegerArray(long[] defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetFloatArray(float[] value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetFloatArray(float[] value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultFloatArray(float[] defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetDoubleArray(double[] value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetDoubleArray(double[] value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultDoubleArray(double[] defaultValue);
 
-    /**
-     * Publish a new value.
-     *
-     * @param value value to publish
-     * @param time timestamp; 0 indicates current NT time should be used
-     * @return False if the topic already exists with a different type
-     */
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetStringArray(string[] value, long time);
 
+    /// <summary>
+    /// Publish a new value.
+    /// </summary>
+    /// <param name="value">value to publish</param>
+    /// <returns>False if the topic already exists with a different type</returns>
     bool SetStringArray(string[] value);
 
-    /**
-     * Sets the entry's value if it does not exist.
-     *
-     * @param defaultValue the default value to set
-     * @return False if the entry exists with a different type
-     */
+    /// <summary>
+    /// Sets the entry's value if it does not exist.
+    /// </summary>
+    /// <param name="defaultValue">the default value  to set</param>
+    /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultStringArray(string[] defaultValue);
 
 }

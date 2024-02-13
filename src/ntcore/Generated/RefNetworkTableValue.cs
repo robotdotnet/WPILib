@@ -9,6 +9,9 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
+/// <summary>
+/// A NetworkTable entry value used for write purposes
+/// </summary>
 public readonly ref partial struct RefNetworkTableValue
 {
 
@@ -26,11 +29,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_structValue = new(value);
     }
 
+    /// <summary>
+    /// Creates a bool value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeBoolean(bool value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a bool value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeBoolean(bool value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -50,11 +64,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_structValue = new(value);
     }
 
+    /// <summary>
+    /// Creates a long value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeInteger(long value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a long value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeInteger(long value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -74,11 +99,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_structValue = new(value);
     }
 
+    /// <summary>
+    /// Creates a float value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeFloat(float value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a float value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeFloat(float value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -98,11 +134,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_structValue = new(value);
     }
 
+    /// <summary>
+    /// Creates a double value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeDouble(double value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a double value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeDouble(double value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -124,29 +171,6 @@ public readonly ref partial struct RefNetworkTableValue
         m_stringValue = value;
     }
 
-    public static RefNetworkTableValue MakeString(string value)
-    {
-        return new RefNetworkTableValue(value);
-    }
-
-    public static RefNetworkTableValue MakeString(string value, long time)
-    {
-        return new RefNetworkTableValue(value, time);
-    }
-
-    public static RefNetworkTableValue MakeString(ReadOnlySpan<byte> value)
-    {
-        return new RefNetworkTableValue(value, true);
-    }
-
-    public static RefNetworkTableValue MakeString(ReadOnlySpan<byte> value, long time)
-    {
-        return new RefNetworkTableValue(value, time, true);
-    }
-
-
-    internal readonly ReadOnlySpan<byte> m_byteSpan;
-
     internal RefNetworkTableValue(ReadOnlySpan<byte> value, bool isString)
     {
         Type = NetworkTableType.String;
@@ -160,6 +184,51 @@ public readonly ref partial struct RefNetworkTableValue
         Time = time;
         m_byteSpan = value;
     }
+
+    /// <summary>
+    /// Creates a string value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
+    public static RefNetworkTableValue MakeString(string value)
+    {
+        return new RefNetworkTableValue(value);
+    }
+
+    /// <summary>
+    /// Creates a string value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
+    public static RefNetworkTableValue MakeString(string value, long time)
+    {
+        return new RefNetworkTableValue(value, time);
+    }
+
+    /// <summary>
+    /// Creates a string value from a UFT8 string.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
+    public static RefNetworkTableValue MakeString(ReadOnlySpan<byte> value)
+    {
+        return new RefNetworkTableValue(value);
+    }
+
+    /// <summary>
+    /// Creates a string value from a UFT8 string.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
+    public static RefNetworkTableValue MakeString(ReadOnlySpan<byte> value, long time)
+    {
+        return new RefNetworkTableValue(value, time);
+    }
+
+
+    internal readonly ReadOnlySpan<byte> m_byteSpan;
 
     internal RefNetworkTableValue(ReadOnlySpan<byte> value)
     {
@@ -175,11 +244,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_byteSpan = value;
     }
 
+    /// <summary>
+    /// Creates a byte[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeRaw(ReadOnlySpan<byte> value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a byte[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeRaw(ReadOnlySpan<byte> value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -202,11 +282,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_boolSpan = value;
     }
 
+    /// <summary>
+    /// Creates a bool[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeBooleanArray(ReadOnlySpan<bool> value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a bool[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeBooleanArray(ReadOnlySpan<bool> value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -229,11 +320,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_longSpan = value;
     }
 
+    /// <summary>
+    /// Creates a long[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeIntegerArray(ReadOnlySpan<long> value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a long[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeIntegerArray(ReadOnlySpan<long> value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -256,11 +358,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_floatSpan = value;
     }
 
+    /// <summary>
+    /// Creates a float[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeFloatArray(ReadOnlySpan<float> value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a float[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeFloatArray(ReadOnlySpan<float> value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -283,11 +396,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_doubleSpan = value;
     }
 
+    /// <summary>
+    /// Creates a double[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeDoubleArray(ReadOnlySpan<double> value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a double[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeDoubleArray(ReadOnlySpan<double> value, long time)
     {
         return new RefNetworkTableValue(value, time);
@@ -310,11 +434,22 @@ public readonly ref partial struct RefNetworkTableValue
         m_stringSpan = value;
     }
 
+    /// <summary>
+    /// Creates a string[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeStringArray(ReadOnlySpan<string> value)
     {
         return new RefNetworkTableValue(value);
     }
 
+    /// <summary>
+    /// Creates a string[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
     public static RefNetworkTableValue MakeStringArray(ReadOnlySpan<string> value, long time)
     {
         return new RefNetworkTableValue(value, time);
