@@ -127,6 +127,11 @@ public sealed unsafe class DataLog : IDisposable
         return DataLogNative.Start(NativeHandle, name, type, metadata, (ulong)timestamp);
     }
 
+    public DataLogEntryHandle Start(string name, ReadOnlySpan<byte> type, string metadata = "", long timestamp = 0)
+    {
+        return DataLogNative.Start(NativeHandle, name, type, metadata, (ulong)timestamp);
+    }
+
     public void Finish(DataLogEntryHandle entry, long timestamp = 0)
     {
         DataLogNative.Finish(NativeHandle, entry, (ulong)timestamp);
@@ -174,7 +179,7 @@ public sealed unsafe class DataLog : IDisposable
 
     public void AppendString(DataLogEntryHandle entry, ReadOnlySpan<byte> value, long timestamp = 0)
     {
-        DataLogNative.AppendRaw(NativeHandle, entry, value, (ulong)timestamp);
+        DataLogNative.AppendString(NativeHandle, entry, value, (ulong)timestamp);
     }
 
     public void AppendBooleanArray(DataLogEntryHandle entry, ReadOnlySpan<bool> value, long timestamp = 0)

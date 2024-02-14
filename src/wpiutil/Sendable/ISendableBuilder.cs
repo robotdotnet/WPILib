@@ -40,25 +40,31 @@ public interface ISendableBuilder : IDisposable
 
     void PublishConstString(string key, string value);
 
-    void AddBooleanArrayProperty(string key, Func<bool> getter, Action<bool> setter);
+    void PublishConstString(string key, ReadOnlySpan<byte> value);
 
-    void PublishConstBooleanArray(string key, bool value);
+    void AddBooleanArrayProperty(string key, Func<bool[]> getter, Action<bool[]> setter);
 
-    void AddIntegerArrayProperty(string key, Func<long> getter, Action<long> setter);
+    void PublishConstBooleanArray(string key, ReadOnlySpan<bool> value);
 
-    void PublishConstIntegerArray(string key, long value);
+    void AddIntegerArrayProperty(string key, Func<long[]> getter, Action<long[]> setter);
 
-    void AddFloatArrayProperty(string key, Func<float> getter, Action<float> setter);
+    void PublishConstIntegerArray(string key, ReadOnlySpan<long> value);
 
-    void PublishConstFloatArray(string key, float value);
+    void AddFloatArrayProperty(string key, Func<float[]> getter, Action<float[]> setter);
 
-    void AddDoubleArrayProperty(string key, Func<double> getter, Action<double> setter);
+    void PublishConstFloatArray(string key, ReadOnlySpan<float> value);
 
-    void PublishConstDoubleArray(string key, double value);
+    void AddDoubleArrayProperty(string key, Func<double[]> getter, Action<double[]> setter);
 
-    void AddStringArrayProperty(string key, Func<string> getter, Action<string> setter);
+    void PublishConstDoubleArray(string key, ReadOnlySpan<double> value);
 
-    void PublishConstStringArray(string key, string value);
+    void AddStringArrayProperty(string key, Func<string[]> getter, Action<string[]> setter);
+
+    void PublishConstStringArray(string key, ReadOnlySpan<string> value);
+
+    void AddRawProperty(string key, string typeString, Func<byte[]> getter, Action<byte[]> setter);
+
+    void PublishConstRaw(string key, string typeString, ReadOnlySpan<byte> value);
 
     void Update();
 
