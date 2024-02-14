@@ -9,7 +9,7 @@ namespace NetworkTables;
 
 public sealed class ProtobufTopic<T> : Topic, IEquatable<ProtobufTopic<T>?>, IEqualityOperators<ProtobufTopic<T>?, ProtobufTopic<T>?, bool> where T : IProtobufSerializable<T>
 {
-    public IProtobuf<T> Proto { get; } = T.Proto;
+    public IGenericProtobuf<T> Proto { get; } = T.ProtoGeneric;
 
     private ProtobufTopic(Topic topic) : base(topic.Instance, topic.Handle)
     {
@@ -57,7 +57,7 @@ public sealed class ProtobufTopic<T> : Topic, IEquatable<ProtobufTopic<T>?>, IEq
     public bool Equals(ProtobufTopic<T>? other)
     {
         return other is not null &&
-               EqualityComparer<IProtobuf<T>>.Default.Equals(Proto, other.Proto);
+               EqualityComparer<IGenericProtobuf<T>>.Default.Equals(Proto, other.Proto);
     }
 
     public override int GetHashCode()

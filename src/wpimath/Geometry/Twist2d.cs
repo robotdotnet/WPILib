@@ -72,7 +72,7 @@ public readonly struct Twist2d : IEquatable<Twist2d>, IEqualityOperators<Twist2d
 {
     public static IStruct<Twist2d> Struct { get; } = new Twist2dStruct();
     public static IProtobuf<Twist2d, ProtobufTwist2d> Proto { get; } = new Twist2dProto();
-    static IProtobuf<Twist2d> IProtobufSerializable<Twist2d>.Proto => Proto.UntypedProto;
+    static IGenericProtobuf<Twist2d> IProtobufSerializable<Twist2d>.ProtoGeneric => Proto;
 
     [JsonIgnore]
     public Length Dx { get; init; }

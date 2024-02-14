@@ -646,7 +646,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         AddSchemaImpl(proto, []);
     }
 
-    public void AddSchema(IProtobufBase proto)
+    public void AddSchema(IProtobuf proto)
     {
         proto.ForEachDescriptor(HasSchema, (typeString, schema) => AddSchema(typeString, "proto:FileDescriptorProto", schema));
     }

@@ -113,7 +113,7 @@ public sealed unsafe class DataLog : IDisposable
         AddSchemaImpl(value, timestamp == 0 ? (long)TimestampNative.Now() : timestamp, []);
     }
 
-    public void AddSchema(IProtobufBase proto, long timestamp = 0)
+    public void AddSchema(IProtobuf proto, long timestamp = 0)
     {
         long actualTimestamp = timestamp == 0 ? (long)TimestampNative.Now() : timestamp;
         proto.ForEachDescriptor(HasSchema, (typeString, schema) =>

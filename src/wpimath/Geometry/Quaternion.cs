@@ -78,7 +78,7 @@ public readonly struct Quaternion : IEquatable<Quaternion>, IEqualityOperators<Q
 {
     public static IStruct<Quaternion> Struct { get; } = new QuaternionStruct();
     public static IProtobuf<Quaternion, ProtobufQuaternion> Proto { get; } = new QuaternionProto();
-    static IProtobuf<Quaternion> IProtobufSerializable<Quaternion>.Proto => Proto.UntypedProto;
+    static IGenericProtobuf<Quaternion> IProtobufSerializable<Quaternion>.ProtoGeneric => Proto;
 
     [JsonInclude]
     public double W { get; init; }

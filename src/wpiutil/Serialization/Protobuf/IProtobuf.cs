@@ -4,11 +4,11 @@ using Google.Protobuf.Reflection;
 
 namespace WPIUtil.Serialization.Protobuf;
 
-public interface IProtobufBase
+public interface IProtobuf
 {
     string TypeString => $"proto:{Descriptor.FullName}";
     MessageDescriptor Descriptor { get; }
-    IProtobufBase[] Nested => [];
+    IProtobuf[] Nested => [];
 
     void ForEachDescriptor(Func<string, bool> exists, Action<string, byte[]> fn)
     {
@@ -30,35 +30,38 @@ public interface IProtobufBase
     }
 }
 
-public interface IProtobuf<T> : IProtobufBase
+public interface IGenericProtobuf<T> : IProtobuf
 {
-    IMessage CreateMessage();
+    IMessage GenericCreateMessage();
 
-    T Unpack(IMessage msg);
+    T GenericUnpack(IMessage msg);
 
-    void Pack(IMessage msg, T value);
+    void GenericPack(IMessage msg, T value);
 
-    void UnpackInto(ref T value, IMessage msg);
+    void GenericUnpackInto(ref T value, IMessage msg);
 }
 
-public interface IProtobuf<T, MessageType> : IProtobufBase where MessageType : IMessage<MessageType>
+public interface IProtobuf<T, MessageType> : IGenericProtobuf<T> where MessageType : IMessage<MessageType>
 {
-    internal class ProtobufWrapper(IProtobuf<T, MessageType> proto) : IProtobuf<T>
+    IMessage IGenericProtobuf<T>.GenericCreateMessage()
     {
-        private readonly IProtobuf<T, MessageType> m_proto = proto;
-
-        public MessageDescriptor Descriptor => m_proto.Descriptor;
-
-        public IMessage CreateMessage() => m_proto.CreateMessage();
-
-        public void Pack(IMessage msg, T value) => m_proto.Pack((MessageType)msg, value);
-
-        public T Unpack(IMessage msg) => m_proto.Unpack((MessageType)msg);
-
-        public void UnpackInto(ref T value, IMessage msg) => m_proto.UnpackInto(ref value, (MessageType)msg);
+        return CreateMessage();
     }
 
-    public IProtobuf<T> UntypedProto => new ProtobufWrapper(this);
+    T IGenericProtobuf<T>.GenericUnpack(IMessage msg)
+    {
+        return Unpack((MessageType)msg);
+    }
+
+    void IGenericProtobuf<T>.GenericPack(IMessage msg, T value)
+    {
+        Pack((MessageType)msg, value);
+    }
+
+    void IGenericProtobuf<T>.GenericUnpackInto(ref T value, IMessage msg)
+    {
+        UnpackInto(ref value, (MessageType)msg);
+    }
 
     MessageType CreateMessage();
 

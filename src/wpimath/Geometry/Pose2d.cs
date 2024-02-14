@@ -71,7 +71,7 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
 {
     public static IStruct<Pose2d> Struct { get; } = new Pose2dStruct();
     public static IProtobuf<Pose2d, ProtobufPose2d> Proto { get; } = new Pose2dProto();
-    static IProtobuf<Pose2d> IProtobufSerializable<Pose2d>.Proto { get; } = Proto.UntypedProto;
+    static IGenericProtobuf<Pose2d> IProtobufSerializable<Pose2d>.ProtoGeneric => Proto;
 
     [JsonInclude]
     [JsonPropertyName("translation")]

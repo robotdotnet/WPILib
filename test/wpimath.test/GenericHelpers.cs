@@ -16,9 +16,9 @@ public static class GenericHelpers
 
     public static T ProtoRoundTrip<T>(T start) where T : IProtobufSerializable<T>
     {
-        var proto = T.Proto.CreateMessage();
-        T.Proto.Pack(proto, start);
-        return T.Proto.Unpack(proto);
+        var proto = T.ProtoGeneric.GenericCreateMessage();
+        T.ProtoGeneric.GenericPack(proto, start);
+        return T.ProtoGeneric.GenericUnpack(proto);
     }
 
     public static T ProtoTypedRoundTrip<T, U>(T start) where T : IProtobufSerializable<T, U> where U : IMessage<U>
