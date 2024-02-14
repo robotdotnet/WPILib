@@ -68,8 +68,14 @@ public readonly struct Transform2d : IAdditionOperators<Transform2d, Transform2d
                                     IDivisionOperators<Transform2d, double, Transform2d>,
                                     IEqualityOperators<Transform2d, Transform2d, bool>,
                                     IAdditiveIdentity<Transform2d, Transform2d>,
-                                    IEquatable<Transform2d>
+                                    IEquatable<Transform2d>,
+                                    IStructSerializable<Transform2d>,
+                                    IProtobufSerializable<Transform2d, ProtobufTransform2d>
 {
+    public static IStruct<Transform2d> Struct { get; } = new Transform2dStruct();
+    public static IProtobuf<Transform2d, ProtobufTransform2d> Proto { get; } = new Transform2dProto();
+    static IGenericProtobuf<Transform2d> IProtobufSerializable<Transform2d>.ProtoGeneric => Proto;
+
     [JsonInclude]
     [JsonPropertyName("translation")]
     public Translation2d Translation { get; init; }
