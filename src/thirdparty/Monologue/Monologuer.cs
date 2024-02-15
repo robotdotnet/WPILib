@@ -1,0 +1,95 @@
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using NetworkTables;
+using WPIUtil.Logging;
+using WPIUtil.Serialization.Protobuf;
+using WPIUtil.Serialization.Struct;
+
+namespace Monologue;
+
+public sealed class Monologuer
+{
+    private string rootPath = "NOTSET";
+
+    public static Monologuer Logger { get; } = new();
+
+    public void Setup(string name, bool fileOnly, bool lazyLogging)
+    {
+        rootPath = name;
+        FileOnly = fileOnly;
+    }
+
+    public bool FileOnly { get; set; }
+
+    public static void UpdateAll(ILogged logged)
+    {
+        var logger = Logger;
+        logged.UpdateMonologue(logger.rootPath, Logger);
+    }
+
+    private readonly DataLog log = null!;
+
+    private readonly Dictionary<string, (IBooleanPublisher? topic, BooleanLogEntry? logEntry)> booleanLogs = [];
+    private readonly Dictionary<string, (object? topic, object? logEntry)> structLogs = [];
+
+    public void LogBoolean(string path, LogType logType, bool value)
+    {
+        if (logType == LogType.None)
+        {
+            return;
+        }
+        ref var logs = ref CollectionsMarshal.GetValueRefOrAddDefault(booleanLogs, path, out _);
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= NetworkTableInstance.Default.GetBooleanTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new BooleanLogEntry(log, path);
+            logs.logEntry.Append(value);
+        }
+    }
+
+    public void LogStruct<T>(string path, LogType logType, in T value) where T : IStructSerializable<T>
+    {
+        if (logType == LogType.None)
+        {
+            return;
+        }
+        ref var logs = ref CollectionsMarshal.GetValueRefOrAddDefault(structLogs, path, out _);
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= NetworkTableInstance.Default.GetStructTopic<T>(path).Publish(PubSubOptions.None);
+            IStructPublisher<T> tl = (IStructPublisher<T>)logs.topic;
+            tl.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StructLogEntry<T>(log, path);
+            StructLogEntry<T> tl = (StructLogEntry<T>)logs.logEntry;
+            tl.Append(value);
+        }
+    }
+
+    public void LogProto<T>(string path, LogType logType, in T value) where T : IProtobufSerializable<T>
+    {
+        if (logType == LogType.None)
+        {
+            return;
+        }
+        ref var logs = ref CollectionsMarshal.GetValueRefOrAddDefault(structLogs, path, out _);
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= NetworkTableInstance.Default.GetProtobufTopic<T>(path).Publish(PubSubOptions.None);
+            IProtobufPublisher<T> tl = (IProtobufPublisher<T>)logs.topic;
+            tl.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new ProtobufLogEntry<T>(log, path);
+            ProtobufLogEntry<T> tl = (ProtobufLogEntry<T>)logs.logEntry;
+            tl.Append(value);
+        }
+    }
+}

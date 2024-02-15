@@ -1,7 +1,10 @@
+using System;
+
 namespace Monologue;
 
+[Flags]
 public enum LogType {
-    None,
-    File,
-    Nt
+    None = 0,
+    File = 1,
+    Nt = 2
 }

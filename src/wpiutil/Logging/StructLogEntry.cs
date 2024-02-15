@@ -7,14 +7,9 @@ public sealed class StructLogEntry<T> : DataLogEntry where T : IStructSerializab
     private readonly StructBuffer<T> m_storage = new();
     private readonly object m_lockObject = new();
 
-    private StructLogEntry(DataLog log, string name, IStruct<T> value, string metadata, long timestamp) : base(log, name, value.TypeString, metadata, timestamp)
+    public StructLogEntry(DataLog log, string name, string metadata = "", long timestamp = 0) : base(log, name, T.Struct.TypeString, metadata, timestamp)
     {
-        log.AddSchema(value, timestamp);
-    }
-
-    public StructLogEntry<T> Create(DataLog log, string name, string metadata = "", long timestamp = 0)
-    {
-        return new StructLogEntry<T>(log, name, T.Struct, metadata, timestamp);
+        log.AddSchema(T.Struct, timestamp);
     }
 
     public void Append(T value, long timestamp = 0)

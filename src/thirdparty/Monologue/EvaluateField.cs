@@ -16,19 +16,4 @@ internal class EvaluateField {
 
     public static void EvalField(FieldInfo field, ILogged loggable, string rootPath) {
     }
-
-    private static bool EvalNestedLogged(FieldInfo field, ILogged loggable, string rootPath)
-    {
-        var fieldValue = GetField(field, loggable);
-        if (fieldValue == null || field.GetCustomAttribute<IgnoreLoggedAttribute>() != null) {
-            return false;
-        }
-
-        bool recursed = false;
-
-        if (typeof(ILogged).IsAssignableFrom(field.FieldType)) {
-            ILogged logged = (ILogged)fieldValue;
-
-        }
-    }
 }
