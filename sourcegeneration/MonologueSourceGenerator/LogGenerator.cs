@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -5,16 +6,16 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Monologue.SourceGenerator;
 
-public record ClassData
+internal record ClassData
 {
-    public readonly List<string> LoggedItems;
+    public readonly EquatableArray<string> LoggedItems;
     public readonly string Name;
     public readonly string ClassDeclaration;
     public readonly string? Namespace;
 
-    public ClassData(List<string> loggedItems, string name, string classDeclaration, string? ns)
+    public ClassData(ImmutableArray<string> loggedItems, string name, string classDeclaration, string? ns)
     {
-        LoggedItems = loggedItems;
+        LoggedItems = new (loggedItems);
         Name = name;
         ClassDeclaration = classDeclaration;
         Namespace = ns;
@@ -37,7 +38,7 @@ public class LogGenerator : IIncrementalGenerator
 
         var classMembers = classSymbol.GetMembers();
 
-        var loggableMembers = new List<string>(classMembers.Length);
+        var loggableMembers = ImmutableArray.CreateBuilder<string>(classMembers.Length);
 
         foreach (var member in classMembers)
         {
@@ -108,7 +109,7 @@ public class LogGenerator : IIncrementalGenerator
             }
         }
 
-        return new ClassData(loggableMembers, classSymbol.Name, typeBuilder.ToString(), ns);
+        return new ClassData(loggableMembers.ToImmutable(), classSymbol.Name, typeBuilder.ToString(), ns);
     }
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
