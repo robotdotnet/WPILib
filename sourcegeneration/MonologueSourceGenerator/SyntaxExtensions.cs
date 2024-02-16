@@ -7,13 +7,14 @@ namespace Monologue.SourceGenerator;
 
 public static class SyntaxExtensions
 {
-    public static void GetTypeDeclaration(this ITypeSymbol symbol, StringBuilder builder)
+    public static void GetTypeDeclaration(this ITypeSymbol symbol, StringBuilder builder, CancellationToken token)
     {
         var displayFormat = new SymbolDisplayFormat(
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
             genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters | SymbolDisplayGenericsOptions.IncludeVariance);
 
         var nameString = symbol.ToDisplayString(displayFormat);
+        token.ThrowIfCancellationRequested();
 
         if (symbol.IsReadOnly)
         {

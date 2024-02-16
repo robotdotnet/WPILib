@@ -6,35 +6,24 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Monologue.SourceGenerator;
 
-internal record ClassData
-{
-    public readonly EquatableArray<string> LoggedItems;
-    public readonly string Name;
-    public readonly string ClassDeclaration;
-    public readonly string? Namespace;
-
-    public ClassData(ImmutableArray<string> loggedItems, string name, string classDeclaration, string? ns)
-    {
-        LoggedItems = new (loggedItems);
-        Name = name;
-        ClassDeclaration = classDeclaration;
-        Namespace = ns;
-    }
-}
+internal record ClassData(ImmutableArray<string> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
 
 [Generator]
 public class LogGenerator : IIncrementalGenerator
 {
-    static ClassData? GetClassData(SemanticModel semanticModel, SyntaxNode classDeclarationSyntax)
+    static ClassData? GetClassData(SemanticModel semanticModel, SyntaxNode classDeclarationSyntax, CancellationToken token)
     {
         if (semanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol classSymbol)
         {
             return null;
         }
+        token.ThrowIfCancellationRequested();
 
         var ns = classSymbol.ContainingNamespace?.ToDisplayString();
+        token.ThrowIfCancellationRequested();
         StringBuilder typeBuilder = new StringBuilder();
-        classSymbol.GetTypeDeclaration(typeBuilder);
+        classSymbol.GetTypeDeclaration(typeBuilder, token);
+        token.ThrowIfCancellationRequested();
 
         var classMembers = classSymbol.GetMembers();
 
@@ -42,10 +31,13 @@ public class LogGenerator : IIncrementalGenerator
 
         foreach (var member in classMembers)
         {
+            token.ThrowIfCancellationRequested();
             var attributes = member.GetAttributes();
+            token.ThrowIfCancellationRequested();
 
             foreach (AttributeData attribute in attributes)
             {
+                token.ThrowIfCancellationRequested();
                 var attributeClass = attribute.AttributeClass;
                 if (attributeClass is null)
                 {
@@ -53,6 +45,7 @@ public class LogGenerator : IIncrementalGenerator
                 }
                 if (attributeClass.ToDisplayString() == "Monologue.LogAttribute")
                 {
+                    token.ThrowIfCancellationRequested();
                     string getOperation;
                     string defaultPathName;
                     ITypeSymbol logType;
@@ -100,10 +93,8 @@ public class LogGenerator : IIncrementalGenerator
                         // TODO the rest of the types
                         fullOperation = "";
                     }
-
+                    token.ThrowIfCancellationRequested();
                     loggableMembers.Add(fullOperation);
-
-
                     break;
                 }
             }
@@ -118,7 +109,7 @@ public class LogGenerator : IIncrementalGenerator
             .ForAttributeWithMetadataName(
                 "Monologue.GenerateLogAttribute",
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
-                transform: static (ctx, _) => GetClassData(ctx.SemanticModel, ctx.TargetNode))
+                transform: static (ctx, token) => GetClassData(ctx.SemanticModel, ctx.TargetNode, token))
             .Where(static m => m is not null);
 
         context.RegisterSourceOutput(attributedTypes,
