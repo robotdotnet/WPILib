@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace Monologue;
+namespace Stereologue;
 
 internal class EvaluateField
 {

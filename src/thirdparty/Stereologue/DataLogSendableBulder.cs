@@ -5,7 +5,7 @@ using NetworkTables;
 using WPIUtil.Logging;
 using static WPIUtil.Sendable.ISendableBuilder;
 
-namespace Monologue;
+namespace Stereologue;
 
 internal class DataLogSendableBuilder : INtSendableBuilder
 {

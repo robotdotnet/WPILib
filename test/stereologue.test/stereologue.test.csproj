@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\thirdparty\Stereologue\Stereologue.csproj" />
+    <ProjectReference Include="..\..\src\wpimath\wpimath.csproj" />
+    <ProjectReference Include="..\..\sourcegeneration\StereologueSourceGenerator\StereologueSourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+</Project>

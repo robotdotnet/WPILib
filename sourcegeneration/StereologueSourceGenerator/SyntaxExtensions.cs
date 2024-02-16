@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace Monologue.SourceGenerator;
+namespace Stereologue.SourceGenerator;
 
 public static class SyntaxExtensions
 {

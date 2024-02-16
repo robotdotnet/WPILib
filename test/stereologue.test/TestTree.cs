@@ -1,6 +1,6 @@
 using WPIMath.Geometry;
 
-namespace Monologue.Test;
+namespace Stereologue.Test;
 
 [GenerateLog]
 public partial class GenerateGenericClass<T>
@@ -92,15 +92,14 @@ public partial record class GenerateRecordClass
 [GenerateLog]
 public partial class GenerateAllKnownTypes
 {
-    [Log(LogType = LogType.None)]
+    [Log(LogType = 0)]
     public bool boolVar;
-    [Log]
+    [Log(Key = "CustomKey")]
     public char charVar;
-    [Log]
+    [Log(LogLevel = LogLevel.OverrideFileOnly)]
     public byte byteVar;
-    [Log]
+    [Log(LogType = LogType.File | LogType.Nt | LogType.Once)]
     public sbyte sbyteVar;
-    [Log]
     public short shortVar;
     [Log]
     public ushort ushortVar;
@@ -157,4 +156,10 @@ public partial class GenerateAllKnownTypes
     public Span<byte> RawSpan => new();
     [Log]
     public Span<bool> BoolSpan => new();
+
+    [Log]
+    public Rotation2d Rotation => new();
+
+    [Log(UseProtobuf = true)]
+    public Rotation2d RotationProto => new();
 }

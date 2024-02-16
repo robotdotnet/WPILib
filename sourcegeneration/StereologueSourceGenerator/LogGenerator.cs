@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Monologue.SourceGenerator;
+namespace Stereologue.SourceGenerator;
 
 internal enum DeclarationType
 {
@@ -57,14 +57,14 @@ public class LogGenerator : IIncrementalGenerator
                 {
                     continue;
                 }
-                if (attributeClass.ToDisplayString() == "Monologue.LogAttribute")
+                if (attributeClass.ToDisplayString() == "Stereologue.LogAttribute")
                 {
                     token.ThrowIfCancellationRequested();
 
                     string path = member.Name;
                     bool useProtobuf = false;
-                    string logTypeEnum = "Monologue.LogType.Nt | Monologue.LogType.File";
-                    string logLevel = "Monologue.LogLevel.Default";
+                    string logTypeEnum = "Stereologue.LogType.Nt | Stereologue.LogType.File";
+                    string logLevel = "Stereologue.LogLevel.Default";
 
                     // Get the log attribute
                     foreach (var named in attribute.NamedArguments)
@@ -140,11 +140,11 @@ public class LogGenerator : IIncrementalGenerator
 
     private static LogData ComputeOperation(ITypeSymbol logType, string getOp, LogAttributeInfo attributeInfo)
     {
-        if (logType.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Monologue.GenerateLogAttribute").Any())
+        if (logType.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
             return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
         }
-        if (logType.AllInterfaces.Where(x => x.ToDisplayString() == "Monologue.ILogged").Any())
+        if (logType.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
             return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
         }
@@ -179,7 +179,7 @@ public class LogGenerator : IIncrementalGenerator
     {
         var attributedTypes = context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                "Monologue.GenerateLogAttribute",
+                "Stereologue.GenerateLogAttribute",
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
                 transform: static (ctx, token) => GetClassData(ctx.SemanticModel, ctx.TargetNode, token))
             .Where(static m => m is not null);
@@ -195,13 +195,13 @@ public class LogGenerator : IIncrementalGenerator
         switch (data.DecelType)
         {
             case DeclarationType.Logged:
-                builder.AppendLine($"{data.GetOperation}?.UpdateMonologue($\"{{path}}/{data.AttributeInfo.Path}\", logger);");
+                builder.AppendLine($"{data.GetOperation}?.UpdateStereologue($\"{{path}}/{data.AttributeInfo.Path}\", logger, {data.AttributeInfo.LogLevel});");
                 return;
             case DeclarationType.Struct:
-                builder.AppendLine($"logger.LogStruct($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation});");
+                builder.AppendLine($"logger.LogStruct($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation}, {data.AttributeInfo.LogLevel});");
                 return;
             case DeclarationType.Protobuf:
-                builder.AppendLine($"logger.LogProto($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation});");
+                builder.AppendLine($"logger.LogProto($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation}, {data.AttributeInfo.LogLevel});");
                 return;
         }
 
@@ -242,7 +242,7 @@ public class LogGenerator : IIncrementalGenerator
             _ => (data.Type, "", "")
         };
 
-        builder.AppendLine($"logger.{ret.LogMethod}($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {ret.Cast}{data.GetOperation}{ret.Conversion});");
+        builder.AppendLine($"logger.{ret.LogMethod}($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {ret.Cast}{data.GetOperation}{ret.Conversion}, {data.AttributeInfo.LogLevel});");
     }
 
     static void Execute(ClassData? classData, SourceProductionContext context)
@@ -257,7 +257,7 @@ public class LogGenerator : IIncrementalGenerator
 
                 builder.AppendLine(value.ClassDeclaration);
                 builder.AppendLine("{");
-                builder.AppendLine("    public void UpdateMonologue(string path, Monologue.Monologuer logger)");
+                builder.AppendLine("    public void UpdateStereologue(string path, Stereologue.Stereologuer logger)");
                 builder.AppendLine("    {");
                 foreach (var call in value.LoggedItems)
                 {
@@ -266,7 +266,7 @@ public class LogGenerator : IIncrementalGenerator
                 builder.AppendLine("    }");
                 builder.AppendLine("}");
             }
-            context.AddSource($"Monologue.{value.Name}.g.cs", SourceText.From(builder.ToString(), Encoding.UTF8));
+            context.AddSource($"Stereologue.{value.Name}.g.cs", SourceText.From(builder.ToString(), Encoding.UTF8));
         }
     }
 

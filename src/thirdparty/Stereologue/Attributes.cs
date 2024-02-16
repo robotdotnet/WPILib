@@ -1,6 +1,6 @@
 using System;
 
-namespace Monologue;
+namespace Stereologue;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method | AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
 public sealed class LogAttribute : Attribute

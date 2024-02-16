@@ -1,6 +1,6 @@
 using NetworkTables;
 
-namespace Monologue;
+namespace Stereologue;
 
 public sealed class NTLogger
 {

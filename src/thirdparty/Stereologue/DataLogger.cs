@@ -1,4 +1,4 @@
-namespace Monologue;
+namespace Stereologue;
 
 public sealed class DataLogger
 {

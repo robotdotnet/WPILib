@@ -7,13 +7,13 @@ using WPIUtil.Logging;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
 
-namespace Monologue;
+namespace Stereologue;
 
-public sealed class Monologuer
+public sealed class Stereologuer
 {
     private string rootPath = "NOTSET";
 
-    public static Monologuer Logger { get; } = new();
+    public static Stereologuer Logger { get; } = new();
 
     public void Setup(string name, bool fileOnly, bool lazyLogging)
     {
@@ -26,7 +26,7 @@ public sealed class Monologuer
     public static void UpdateAll(ILogged logged)
     {
         var logger = Logger;
-        logged.UpdateMonologue(logger.rootPath, Logger);
+        logged.UpdateStereologue(logger.rootPath, Logger);
     }
 
     private readonly DataLog log = null!;
@@ -220,7 +220,7 @@ public sealed class Monologuer
             where TDataLog : DataLogEntry
     {
         // If we have no log type, do nothing
-        if (logType == LogType.None)
+        if (logType == 0)
         {
             return ref Unsafe.NullRef<TypedLogs<TNT, TDataLog>>();
         }
