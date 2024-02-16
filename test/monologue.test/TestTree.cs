@@ -92,7 +92,7 @@ public partial record class GenerateRecordClass
 [GenerateLog]
 public partial class GenerateAllKnownTypes
 {
-    [Log]
+    [Log(LogType = LogType.None)]
     public bool boolVar;
     [Log]
     public char charVar;

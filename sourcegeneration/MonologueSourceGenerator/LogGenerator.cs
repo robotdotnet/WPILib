@@ -1,12 +1,24 @@
 using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Monologue.SourceGenerator;
 
-internal record LogData(string? PreComputed, string? GetOperation, string? Path, string? Type);
+internal enum DeclarationType
+{
+    Logged,
+    Struct,
+    Protobuf,
+    Other
+}
+
+
+internal record LogAttributeInfo(string Path, string LogLevel, string LogType, bool UseProtobuf);
+
+internal record LogData(string GetOperation, string? Type, DeclarationType DecelType, LogAttributeInfo AttributeInfo);
 
 internal record ClassData(ImmutableArray<LogData> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
 
@@ -48,20 +60,49 @@ public class LogGenerator : IIncrementalGenerator
                 if (attributeClass.ToDisplayString() == "Monologue.LogAttribute")
                 {
                     token.ThrowIfCancellationRequested();
+
+                    string path = member.Name;
+                    bool useProtobuf = false;
+                    string logTypeEnum = "Monologue.LogType.Nt | Monologue.LogType.File";
+                    string logLevel = "Monologue.LogLevel.Default";
+
+                    // Get the log attribute
+                    foreach (var named in attribute.NamedArguments)
+                    {
+                        if (named.Key == "Key")
+                        {
+                            if (!named.Value.IsNull)
+                            {
+                                path = SymbolDisplay.FormatPrimitive(named.Value.Value!, false, false);
+                            }
+                        }
+                        else if (named.Key == "LogLevel")
+                        {
+                            logLevel = named.Value.ToCSharpString();
+                        }
+                        else if (named.Key == "LogType")
+                        {
+                            logTypeEnum = named.Value.ToCSharpString();
+                        }
+                        else if (named.Key == "UseProtobuf")
+                        {
+                            useProtobuf = (bool)named.Value.Value!;
+                        }
+                    }
+
+                    var attributeInfo = new LogAttributeInfo(path, logLevel, logTypeEnum, useProtobuf);
+
                     string getOperation;
-                    string defaultPathName;
                     ITypeSymbol logType;
                     // This is ours
                     if (member is IFieldSymbol field)
                     {
                         getOperation = field.Name;
-                        defaultPathName = field.Name;
                         logType = field.Type;
                     }
                     else if (member is IPropertySymbol property)
                     {
                         getOperation = property.Name;
-                        defaultPathName = property.Name;
                         logType = property.Type;
                     }
                     else if (member is IMethodSymbol method)
@@ -76,7 +117,6 @@ public class LogGenerator : IIncrementalGenerator
                         }
 
                         getOperation = $"{method.Name}()";
-                        defaultPathName = method.Name;
                         logType = method.ReturnType;
                     }
                     else
@@ -84,7 +124,7 @@ public class LogGenerator : IIncrementalGenerator
                         throw new InvalidOperationException("Field is not loggable");
                     }
 
-                    var fullOperation = ComputeOperation(logType, getOperation, defaultPathName);
+                    var fullOperation = ComputeOperation(logType, getOperation, attributeInfo);
                     token.ThrowIfCancellationRequested();
                     loggableMembers.Add(fullOperation);
                     break;
@@ -98,36 +138,41 @@ public class LogGenerator : IIncrementalGenerator
         return new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns);
     }
 
-    private static LogData ComputeOperation(ITypeSymbol logType, string getOp, string path)
+    private static LogData ComputeOperation(ITypeSymbol logType, string getOp, LogAttributeInfo attributeInfo)
     {
         if (logType.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Monologue.GenerateLogAttribute").Any())
         {
-            return new($"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);", null, null, null);
+            return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
         }
         if (logType.AllInterfaces.Where(x => x.ToDisplayString() == "Monologue.ILogged").Any())
         {
-            return new($"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);", null, null, null);
-            //return $"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);";
+            return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
         }
         var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
-        var fullName = logType.ToDisplayString(fmt);
-        var structName = $"WPIUtil.Serialization.Struct.IStructSerializable<{fullName}>";
-        var protobufName = $"WPIUtil.Serialization.Protobuf.IProtobufSerializable<{fullName}>";
+        var fullTypeName = logType.ToDisplayString(fmt);
+        var structName = $"WPIUtil.Serialization.Struct.IStructSerializable<{fullTypeName}>";
+        var protobufName = $"WPIUtil.Serialization.Protobuf.IProtobufSerializable<{fullTypeName}>";
+
         foreach (var inf in logType.AllInterfaces)
         {
             var interfaceName = inf.ToDisplayString();
-            // For now prefer struct
             if (interfaceName == structName)
             {
-                return new($"logger.LogStruct($\"{{path}}/{path}\", LogType.Nt, {getOp});", null, null, null);
+                if (!attributeInfo.UseProtobuf)
+                {
+                    return new LogData(getOp, null, DeclarationType.Struct, attributeInfo);
+                }
             }
             else if (interfaceName == protobufName)
             {
-                return new($"logger.LogProto($\"{{path}}/{path}\", LogType.Nt, {getOp});", null, null, null);
+                if (attributeInfo.UseProtobuf)
+                {
+                    return new LogData(getOp, null, DeclarationType.Protobuf, attributeInfo);
+                }
             }
         }
 
-        return new(null, getOp, path, fullName);
+        return new LogData(getOp, fullTypeName, DeclarationType.Other, attributeInfo);
     }
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -145,14 +190,22 @@ public class LogGenerator : IIncrementalGenerator
 
     static void ConstructCall(LogData data, StringBuilder builder)
     {
-        if (data.PreComputed is not null)
-        {
+        builder.Append("        ");
 
-            builder.AppendLine($"        {data.PreComputed}");
-            return;
+        switch (data.DecelType)
+        {
+            case DeclarationType.Logged:
+                builder.AppendLine($"{data.GetOperation}?.UpdateMonologue($\"{{path}}/{data.AttributeInfo.Path}\", logger);");
+                return;
+            case DeclarationType.Struct:
+                builder.AppendLine($"logger.LogStruct($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation});");
+                return;
+            case DeclarationType.Protobuf:
+                builder.AppendLine($"logger.LogProto($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation});");
+                return;
         }
 
-        var ret = data.Type switch
+        (string? LogMethod, string Cast, string Conversion) ret = data.Type switch
         {
             "System.Single" => ("LogFloat", "", ""),
             "System.Double" => ("LogDouble", "", ""),
@@ -189,7 +242,7 @@ public class LogGenerator : IIncrementalGenerator
             _ => (data.Type, "", "")
         };
 
-        builder.AppendLine($"        logger.{ret.Item1}($\"{{path}}/{data.Path}\", LogType.Nt, {ret.Item2}{data.GetOperation}{ret.Item3});");
+        builder.AppendLine($"logger.{ret.LogMethod}($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {ret.Cast}{data.GetOperation}{ret.Conversion});");
     }
 
     static void Execute(ClassData? classData, SourceProductionContext context)
