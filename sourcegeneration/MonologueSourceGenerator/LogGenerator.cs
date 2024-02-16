@@ -109,7 +109,8 @@ public class LogGenerator : IIncrementalGenerator
             return new($"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);", null, null, null);
             //return $"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);";
         }
-        var fullName = logType.ToDisplayString();
+        var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
+        var fullName = logType.ToDisplayString(fmt);
         var structName = $"WPIUtil.Serialization.Struct.IStructSerializable<{fullName}>";
         var protobufName = $"WPIUtil.Serialization.Protobuf.IProtobufSerializable<{fullName}>";
         foreach (var inf in logType.AllInterfaces)
@@ -151,22 +152,42 @@ public class LogGenerator : IIncrementalGenerator
         }
 
         var ret = data.Type switch {
-            "float" => ("LogFloat", ""),
-            "double" => ("LogDouble", ""),
-            "byte" => ("LogInteger", ""),
-            "sbyte" => ("LogInteger", ""),
-            "short" => ("LogInteger", ""),
-            "ushort" => ("LogInteger", ""),
-            "int" => ("LogInteger", ""),
-            "uint" => ("LogInteger", ""),
-            "long" => ("LogInteger", ""),
-            "ulong" => ("LogInteger", "(long)"),
-            "bool" => ("LogBoolean", ""),
-            "char" => ("LogChar", ""),
-            _ => (data.Type, "")
+            "System.Single" => ("LogFloat", "", ""),
+            "System.Double" => ("LogDouble", "", ""),
+            "System.Byte" => ("LogInteger", "", ""),
+            "System.SByte" => ("LogInteger", "", ""),
+            "System.Int16" => ("LogInteger", "", ""),
+            "System.UInt16" => ("LogInteger", "", ""),
+            "System.Int32" => ("LogInteger", "", ""),
+            "System.UInt32" => ("LogInteger", "", ""),
+            "System.Int64" => ("LogInteger", "", ""),
+            "System.UInt64" => ("LogInteger", "(long)", ""),
+            "System.Boolean" => ("LogBoolean", "", ""),
+            "System.Char" => ("LogChar", "", ""),
+            "System.String" => ("LogString", "", ""),
+            "System.Single[]" => ("LogFloatArray", "", ".AsSpan()"),
+            "System.Double[]" => ("LogDoubleArray", "", ".AsSpan()"),
+            "System.Int64[]" => ("LogIntegerArray", "", ".AsSpan()"),
+            "System.String[]" => ("LogStringArray", "", ".AsSpan()"),
+            "System.Byte[]" => ("LogRaw", "", ".AsSpan()"),
+            "System.Boolean[]" => ("LogBooleanArray", "", ".AsSpan()"),
+            "System.ReadOnlySpan<System.Char>" => ("LogString", "", ""),
+            "System.ReadOnlySpan<System.Single>" => ("LogFloatArray", "", ""),
+            "System.ReadOnlySpan<System.Double>" => ("LogDoubleArray", "", ""),
+            "System.ReadOnlySpan<System.Int64>" => ("LogIntegerArray", "", ""),
+            "System.ReadOnlySpan<System.String>" => ("LogStringArray", "", ""),
+            "System.ReadOnlySpan<System.Byte>" => ("LogRaw", "", ""),
+            "System.ReadOnlySpan<System.Boolean>" => ("LogBooleanArray", "", ""),
+            "System.Span<System.Single>" => ("LogFloatArray", "", ""),
+            "System.Span<System.Double>" => ("LogDoubleArray", "", ""),
+            "System.Span<System.Int64>" => ("LogIntegerArray", "", ""),
+            "System.Span<System.String>" => ("LogStringArray", "", ""),
+            "System.Span<System.Byte>" => ("LogRaw", "", ""),
+            "System.Span<System.Boolean>" => ("LogBooleanArray", "", ""),
+            _ => (data.Type, "", "")
         };
 
-        builder.AppendLine($"        logger.{ret.Item1}($\"{{path}}/{data.Path}\", LogType.Nt, {ret.Item2}{data.GetOperation});");
+        builder.AppendLine($"        logger.{ret.Item1}($\"{{path}}/{data.Path}\", LogType.Nt, {ret.Item2}{data.GetOperation}{ret.Item3});");
     }
 
     static void Execute(ClassData? classData, SourceProductionContext context)

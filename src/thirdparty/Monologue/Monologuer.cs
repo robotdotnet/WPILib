@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using NetworkTables;
@@ -112,4 +113,60 @@ public sealed class Monologuer
             tl.Append(value);
         }
     }
+
+    public void LogChar(string path, LogType logType, char value)
+    {
+
+    }
+
+    public void LogFloat(string path, LogType logType, float value)
+    {
+
+    }
+
+    public void LogDouble(string path, LogType logType, double value)
+    {
+
+    }
+
+    public void LogString(string path, LogType logType, string? value)
+    {
+        LogString(path, logType, value.AsSpan());
+    }
+
+    public void LogString(string path, LogType logType, ReadOnlySpan<char> value)
+    {
+
+    }
+
+    public void LogBooleanArray(string path, LogType logType, ReadOnlySpan<bool> value)
+    {
+
+    }
+
+    public void LogStringArray(string path, LogType logType, ReadOnlySpan<string?> value)
+    {
+
+    }
+
+    public void LogRaw(string path, LogType logType, ReadOnlySpan<byte> value)
+    {
+
+    }
+
+    public void LogIntegerArray(string path, LogType logType, ReadOnlySpan<long> value)
+    {
+
+    }
+
+    public void LogFloatArray(string path, LogType logType, ReadOnlySpan<float> value)
+    {
+
+    }
+
+    public void LogDoubleArray(string path, LogType logType, ReadOnlySpan<double> value)
+    {
+
+    }
+
 }

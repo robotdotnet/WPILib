@@ -90,40 +90,71 @@ public partial record class GenerateRecordClass
 }
 
 [GenerateLog]
-public partial class TestRootClass
+public partial class GenerateAllKnownTypes
 {
     [Log]
-    public readonly TestClass TCField = new();
-
+    public bool boolVar;
+    [Log]
+    public char charVar;
+    [Log]
+    public byte byteVar;
+    [Log]
+    public sbyte sbyteVar;
+    [Log]
+    public short shortVar;
+    [Log]
+    public ushort ushortVar;
+    [Log]
+    public int intVar;
+    [Log]
+    public uint uintVar;
+    [Log]
+    public long longVar;
+    [Log]
+    public ulong ulongVar;
+    [Log]
+    public float floatVar;
+    [Log]
+    public double doubleVar;
+    [Log]
+    public string? stringVar;
 
     [Log]
-    public TestClass TCMethod() => new();
+    public long[]? longArrVar;
+    [Log]
+    public float[]? floatArrVar;
+    [Log]
+    public double[]? doubleArrVar;
+    [Log]
+    public string?[]? stringArrVar;
+    [Log]
+    public byte[]? rawVar;
+    [Log]
+    public bool[]? boolArrVar;
 
     [Log]
-    public TestClass TC { get; } = new();
+    public ReadOnlySpan<float> FloatROSpan => new();
     [Log]
-    public TestStruct TS { get; } = new();
-}
-
-[GenerateLog]
-public partial class TestClass
-{
+    public ReadOnlySpan<double> DoubleROSpan => new();
     [Log]
-    public TestStruct TS { get; } = new();
-}
-
-[GenerateLog]
-public partial struct TestStruct
-{
+    public ReadOnlySpan<long> LongROSpan => new();
     [Log]
-    public Rotation2d Rotation { get; set; } = new();
-
-    public TestStruct() { }
-}
-
-[GenerateLog]
-public partial class TestDemo
-{
+    public ReadOnlySpan<string?> StringROSpan => new();
     [Log]
-    public Rotation2d Rotation { get; set; } = new();
+    public ReadOnlySpan<byte> RawROSpan => new();
+    [Log]
+    public ReadOnlySpan<bool> BoolROSpan => new();
+
+    [Log]
+    public Span<float> FloatSpan => new();
+    [Log]
+    public Span<double> DoubleSpan => new();
+    [Log]
+    public Span<long> LongSpan => new();
+    [Log]
+    public Span<string?> StringSpan => new();
+    [Log]
+    public Span<byte> RawSpan => new();
+    [Log]
+    public Span<bool> BoolSpan => new();
 }
