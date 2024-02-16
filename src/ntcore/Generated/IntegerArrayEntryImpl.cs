@@ -76,7 +76,6 @@ internal sealed class IntegerArrayEntryImpl<T> : EntryBase<T>, IIntegerArrayEntr
         return timestamped;
     }
 
-
     public void Set(ReadOnlySpan<long> value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeIntegerArray(value, 0);

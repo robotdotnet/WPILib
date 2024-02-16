@@ -55,7 +55,7 @@ public class RawTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class RawTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -287,7 +287,7 @@ public class RawTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -321,7 +321,7 @@ public class RawTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.Raw,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
 }

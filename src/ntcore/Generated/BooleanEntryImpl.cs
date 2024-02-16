@@ -76,7 +76,6 @@ internal sealed class BooleanEntryImpl<T> : EntryBase<T>, IBooleanEntry where T 
         return timestamped;
     }
 
-
     public void Set(bool value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeBoolean(value, 0);

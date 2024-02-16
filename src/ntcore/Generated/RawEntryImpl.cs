@@ -76,7 +76,6 @@ internal sealed class RawEntryImpl<T> : EntryBase<T>, IRawEntry where T : struct
         return timestamped;
     }
 
-
     public void Set(ReadOnlySpan<byte> value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeRaw(value, 0);

@@ -18,7 +18,6 @@ public interface IDoublePublisher : IPublisher
     /// </summary>
     new DoubleTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

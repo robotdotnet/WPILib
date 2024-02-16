@@ -103,28 +103,6 @@ public partial interface IGenericPublisher
     /// <param name="value">value to publish</param>
     /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
     /// <returns>False if the topic already exists with a different type</returns>
-    bool SetString(string value, long time);
-
-    /// <summary>
-    /// Publish a new value.
-    /// </summary>
-    /// <param name="value">value to publish</param>
-    /// <returns>False if the topic already exists with a different type</returns>
-    bool SetString(string value);
-
-    /// <summary>
-    /// Sets the entry's value if it does not exist.
-    /// </summary>
-    /// <param name="defaultValue">the default value  to set</param>
-    /// <returns>False if the entry already exists with a different type</returns>
-    bool SetDefaultString(string defaultValue);
-
-    /// <summary>
-    /// Publish a new value.
-    /// </summary>
-    /// <param name="value">value to publish</param>
-    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
-    /// <returns>False if the topic already exists with a different type</returns>
     bool SetRaw(byte[] value, long time);
 
     /// <summary>
@@ -228,27 +206,5 @@ public partial interface IGenericPublisher
     /// <param name="defaultValue">the default value  to set</param>
     /// <returns>False if the entry already exists with a different type</returns>
     bool SetDefaultDoubleArray(double[] defaultValue);
-
-    /// <summary>
-    /// Publish a new value.
-    /// </summary>
-    /// <param name="value">value to publish</param>
-    /// <param name="time">timestamp; 0 indicates current NT time should be used</param>
-    /// <returns>False if the topic already exists with a different type</returns>
-    bool SetStringArray(string[] value, long time);
-
-    /// <summary>
-    /// Publish a new value.
-    /// </summary>
-    /// <param name="value">value to publish</param>
-    /// <returns>False if the topic already exists with a different type</returns>
-    bool SetStringArray(string[] value);
-
-    /// <summary>
-    /// Sets the entry's value if it does not exist.
-    /// </summary>
-    /// <param name="defaultValue">the default value  to set</param>
-    /// <returns>False if the entry already exists with a different type</returns>
-    bool SetDefaultStringArray(string[] defaultValue);
 
 }

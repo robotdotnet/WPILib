@@ -62,7 +62,7 @@ public class BooleanArrayTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
                 "boolean[]"u8, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class BooleanArrayTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class BooleanArrayTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -292,7 +292,7 @@ public class BooleanArrayTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,
                 "boolean[]"u8, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -326,7 +326,7 @@ public class BooleanArrayTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -360,7 +360,7 @@ public class BooleanArrayTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.BooleanArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
 }

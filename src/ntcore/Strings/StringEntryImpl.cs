@@ -37,7 +37,7 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
         {
             return value.GetString();
         }
-        return defaultValue;
+        return defaultValue ?? "";
     }
 
     public TimestampedObject<string> GetAtomic()
@@ -50,7 +50,7 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
     public TimestampedObject<string> GetAtomic(string defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
-        string baseValue = value.IsString ? value.GetString() : defaultValue;
+        string baseValue = value.IsString ? value.GetString() : defaultValue ?? "";
         return new TimestampedObject<string>(value.Time, value.ServerTime, baseValue);
     }
 
@@ -90,6 +90,42 @@ internal sealed class StringEntryImpl<T> : EntryBase<T>, IStringEntry where T : 
     }
 
     public void SetDefault(string value)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value);
+        NtCore.SetDefaultEntryValue(Handle, ntValue);
+    }
+
+    public void Set(ReadOnlySpan<char> value)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value, 0);
+        NtCore.SetEntryValue(Handle, ntValue);
+    }
+
+    public void Set(ReadOnlySpan<char> value, long time)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value, time);
+        NtCore.SetEntryValue(Handle, ntValue);
+    }
+
+    public void SetDefault(ReadOnlySpan<char> value)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value);
+        NtCore.SetDefaultEntryValue(Handle, ntValue);
+    }
+
+    public void Set(ReadOnlySpan<byte> value)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value, 0);
+        NtCore.SetEntryValue(Handle, ntValue);
+    }
+
+    public void Set(ReadOnlySpan<byte> value, long time)
+    {
+        RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value, time);
+        NtCore.SetEntryValue(Handle, ntValue);
+    }
+
+    public void SetDefault(ReadOnlySpan<byte> value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeString(value);
         NtCore.SetDefaultEntryValue(Handle, ntValue);

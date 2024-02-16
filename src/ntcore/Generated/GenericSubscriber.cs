@@ -42,14 +42,6 @@ public partial interface IGenericSubscriber
     double GetDouble(double defaultValue);
 
     /// <summary>
-    /// Gets the entry's value as a string. If the entry does not exist
-    /// or is of a different type, it will return the default value.
-    /// </summary>
-    /// <param name="defaultValue">the value to be returned if no value is found</param>
-    /// <returns>the entry's value or the given default value</returns>
-    string GetString(string defaultValue);
-
-    /// <summary>
     /// Gets the entry's value as a byte[]. If the entry does not exist
     /// or is of a different type, it will return the default value.
     /// </summary>
@@ -88,13 +80,5 @@ public partial interface IGenericSubscriber
     /// <param name="defaultValue">the value to be returned if no value is found</param>
     /// <returns>the entry's value or the given default value</returns>
     double[] GetDoubleArray(double[] defaultValue);
-
-    /// <summary>
-    /// Gets the entry's value as a string[]. If the entry does not exist
-    /// or is of a different type, it will return the default value.
-    /// </summary>
-    /// <param name="defaultValue">the value to be returned if no value is found</param>
-    /// <returns>the entry's value or the given default value</returns>
-    string[] GetStringArray(string[] defaultValue);
 
 }

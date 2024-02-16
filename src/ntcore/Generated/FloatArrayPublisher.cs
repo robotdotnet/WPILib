@@ -18,7 +18,6 @@ public interface IFloatArrayPublisher : IPublisher
     /// </summary>
     new FloatArrayTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

@@ -18,7 +18,6 @@ public interface IIntegerPublisher : IPublisher
     /// </summary>
     new IntegerTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

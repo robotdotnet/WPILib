@@ -13,6 +13,10 @@ public sealed class Stereologuer
 {
     private string rootPath = "NOTSET";
 
+    private readonly NetworkTableInstance ntInstance = NetworkTableInstance.Default;
+
+    private Stereologuer() { }
+
     public static Stereologuer Logger { get; } = new();
 
     public void Setup(string name, bool fileOnly, bool lazyLogging)
@@ -33,11 +37,22 @@ public sealed class Stereologuer
 
     private record struct TypedLogs<TNT, TDataLog>(TNT? topic, TDataLog? logEntry) where TNT : class, IPublisher where TDataLog : DataLogEntry;
 
-    private readonly Dictionary<string, TypedLogs<IIntegerPublisher, IntegerLogEntry>> integerLogs = [];
     private readonly Dictionary<string, TypedLogs<IBooleanPublisher, BooleanLogEntry>> booleanLogs = [];
+    private readonly Dictionary<string, TypedLogs<IIntegerPublisher, IntegerLogEntry>> integerLogs = [];
+    private readonly Dictionary<string, TypedLogs<IFloatPublisher, FloatLogEntry>> floatLogs = [];
     private readonly Dictionary<string, TypedLogs<IDoublePublisher, DoubleLogEntry>> doubleLogs = [];
+    private readonly Dictionary<string, TypedLogs<IStringPublisher, StringLogEntry>> stringLogs = [];
     private readonly Dictionary<string, TypedLogs<IPublisher, DataLogEntry>> structLogs = [];
     private readonly Dictionary<string, TypedLogs<IPublisher, DataLogEntry>> protobufLogs = [];
+
+    private readonly Dictionary<string, TypedLogs<IBooleanArrayPublisher, BooleanArrayLogEntry>> booleanArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IIntegerArrayPublisher, IntegerArrayLogEntry>> integerArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IFloatArrayPublisher, FloatArrayLogEntry>> floatArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IDoubleArrayPublisher, DoubleArrayLogEntry>> doubleArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IStringArrayPublisher, StringArrayLogEntry>> stringArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IPublisher, DataLogEntry>> structArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IPublisher, DataLogEntry>> protobufArrayLogs = [];
+    private readonly Dictionary<string, TypedLogs<IRawPublisher, RawLogEntry>> rawLogs = [];
 
     public void LogBoolean(string path, LogType logType, bool value, LogLevel logLevel = LogLevel.Default)
     {
@@ -48,7 +63,7 @@ public sealed class Stereologuer
         }
         if (logType.HasFlag(LogType.Nt))
         {
-            logs.topic ??= NetworkTableInstance.Default.GetBooleanTopic(path).Publish(PubSubOptions.None);
+            logs.topic ??= ntInstance.GetBooleanTopic(path).Publish(PubSubOptions.None);
             logs.topic.Set(value);
         }
         if (logType.HasFlag(LogType.File))
@@ -67,7 +82,7 @@ public sealed class Stereologuer
         }
         if (logType.HasFlag(LogType.Nt))
         {
-            logs.topic ??= NetworkTableInstance.Default.GetIntegerTopic(path).Publish(PubSubOptions.None);
+            logs.topic ??= ntInstance.GetIntegerTopic(path).Publish(PubSubOptions.None);
             logs.topic.Set(value);
         }
         if (logType.HasFlag(LogType.File))
@@ -86,7 +101,7 @@ public sealed class Stereologuer
         }
         if (logType.HasFlag(LogType.Nt))
         {
-            logs.topic ??= NetworkTableInstance.Default.GetStructTopic<T>(path).Publish(PubSubOptions.None);
+            logs.topic ??= ntInstance.GetStructTopic<T>(path).Publish(PubSubOptions.None);
             IStructPublisher<T> tl = (IStructPublisher<T>)logs.topic;
             tl.Set(value);
         }
@@ -107,7 +122,7 @@ public sealed class Stereologuer
         }
         if (logType.HasFlag(LogType.Nt))
         {
-            logs.topic ??= NetworkTableInstance.Default.GetProtobufTopic<T>(path).Publish(PubSubOptions.None);
+            logs.topic ??= ntInstance.GetProtobufTopic<T>(path).Publish(PubSubOptions.None);
             IProtobufPublisher<T> tl = (IProtobufPublisher<T>)logs.topic;
             tl.Set(value);
         }
@@ -121,10 +136,21 @@ public sealed class Stereologuer
 
     public void LogChar(string path, LogType logType, char value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, stringLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        var stringValue = $"{value}";
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetStringTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(stringValue);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StringLogEntry(log, path);
+            logs.logEntry.Append(stringValue);
         }
     }
 
@@ -146,71 +172,174 @@ public sealed class Stereologuer
         }
     }
 
-    public void LogString(string path, LogType logType, string? value, LogLevel logLevel = LogLevel.Default)
+    public void LogString(string path, LogType logType, string value, LogLevel logLevel = LogLevel.Default)
     {
-        LogString(path, logType, value.AsSpan());
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, stringLogs);
+        if (Unsafe.IsNullRef(ref logs))
+        {
+            return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetStringTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StringLogEntry(log, path);
+            logs.logEntry.Append(value);
+        }
     }
 
     public void LogString(string path, LogType logType, ReadOnlySpan<char> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, stringLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetStringTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StringLogEntry(log, path);
+            logs.logEntry.Append(value);
+        }
+    }
+
+    public void LogString(string path, LogType logType, ReadOnlySpan<byte> value, LogLevel logLevel = LogLevel.Default)
+    {
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, stringLogs);
+        if (Unsafe.IsNullRef(ref logs))
+        {
+            return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetStringTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StringLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 
     public void LogBooleanArray(string path, LogType logType, ReadOnlySpan<bool> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, booleanArrayLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
         }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetBooleanArrayTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new BooleanArrayLogEntry(log, path);
+            logs.logEntry.Append(value);
+        }
     }
 
-    public void LogStringArray(string path, LogType logType, ReadOnlySpan<string?> value, LogLevel logLevel = LogLevel.Default)
+    public void LogStringArray(string path, LogType logType, ReadOnlySpan<string> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, stringArrayLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetStringArrayTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StringArrayLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 
     public void LogRaw(string path, LogType logType, ReadOnlySpan<byte> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, rawLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetRawTopic(path).Publish("raw", PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new RawLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 
     public void LogIntegerArray(string path, LogType logType, ReadOnlySpan<long> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, integerArrayLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetIntegerArrayTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new IntegerArrayLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 
     public void LogFloatArray(string path, LogType logType, ReadOnlySpan<float> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, floatArrayLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetFloatArrayTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new FloatArrayLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 
     public void LogDoubleArray(string path, LogType logType, ReadOnlySpan<double> value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleArrayLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetDoubleArrayTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new DoubleArrayLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 

@@ -112,31 +112,6 @@ internal sealed partial class GenericEntryImpl<THandle>
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeDouble(value));
     }
 
-    public string GetString(string defaultValue)
-    {
-        NetworkTableValue value = NtCore.GetEntryValue(Handle);
-        if (value.IsString)
-        {
-            return value.GetString();
-        }
-        return defaultValue;
-    }
-
-    public bool SetString(string value)
-    {
-        return SetString(value, 0);
-    }
-
-    public bool SetString(string value, long time)
-    {
-        return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeString(value, time));
-    }
-
-    public bool SetDefaultString(string value)
-    {
-        return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeString(value));
-    }
-
     public byte[] GetRaw(byte[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
@@ -260,31 +235,6 @@ internal sealed partial class GenericEntryImpl<THandle>
     public bool SetDefaultDoubleArray(double[] value)
     {
         return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeDoubleArray(value));
-    }
-
-    public string[] GetStringArray(string[] defaultValue)
-    {
-        NetworkTableValue value = NtCore.GetEntryValue(Handle);
-        if (value.IsStringArray)
-        {
-            return value.GetStringArray();
-        }
-        return defaultValue;
-    }
-
-    public bool SetStringArray(string[] value)
-    {
-        return SetStringArray(value, 0);
-    }
-
-    public bool SetStringArray(string[] value, long time)
-    {
-        return NtCore.SetEntryValue(Handle, RefNetworkTableValue.MakeStringArray(value, time));
-    }
-
-    public bool SetDefaultStringArray(string[] value)
-    {
-        return NtCore.SetDefaultEntryValue(Handle, RefNetworkTableValue.MakeStringArray(value));
     }
 
 

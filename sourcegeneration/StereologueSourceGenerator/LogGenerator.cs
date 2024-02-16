@@ -219,7 +219,7 @@ public class LogGenerator : IIncrementalGenerator
             "System.UInt64" => ("LogInteger", "(long)", ""),
             "System.Boolean" => ("LogBoolean", "", ""),
             "System.Char" => ("LogChar", "", ""),
-            "System.String" => ("LogString", "", ""),
+            "System.String" => ("LogString", "", ".AsSpan()"),
             "System.Single[]" => ("LogFloatArray", "", ".AsSpan()"),
             "System.Double[]" => ("LogDoubleArray", "", ".AsSpan()"),
             "System.Int64[]" => ("LogIntegerArray", "", ".AsSpan()"),

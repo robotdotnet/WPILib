@@ -76,7 +76,6 @@ internal sealed class FloatArrayEntryImpl<T> : EntryBase<T>, IFloatArrayEntry wh
         return timestamped;
     }
 
-
     public void Set(ReadOnlySpan<float> value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloatArray(value, 0);

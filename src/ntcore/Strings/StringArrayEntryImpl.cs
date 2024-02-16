@@ -37,7 +37,7 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
         {
             return value.GetStringArray();
         }
-        return defaultValue;
+        return defaultValue ?? [];
     }
 
     public TimestampedObject<string[]> GetAtomic()
@@ -50,7 +50,7 @@ internal sealed class StringArrayEntryImpl<T> : EntryBase<T>, IStringArrayEntry 
     public TimestampedObject<string[]> GetAtomic(string[] defaultValue)
     {
         NetworkTableValue value = NtCore.GetEntryValue(Handle);
-        string[] baseValue = value.IsStringArray ? value.GetStringArray() : defaultValue;
+        string[] baseValue = value.IsStringArray ? value.GetStringArray() : defaultValue ?? [];
         return new TimestampedObject<string[]>(value.Time, value.ServerTime, baseValue);
     }
 

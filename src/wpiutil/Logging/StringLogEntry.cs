@@ -42,6 +42,16 @@ public class StringLogEntry(DataLog log, string name, string metadata = "", long
     /// </summary>
     /// <param name="value">Value to record</param>
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
+    public void Append(ReadOnlySpan<char> value, long timestamp = 0)
+    {
+        m_log.AppendString(m_entry, value, timestamp);
+    }
+
+    /// <summary>
+    /// Appends a record to the log.
+    /// </summary>
+    /// <param name="value">Value to record</param>
+    /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<byte> value, long timestamp = 0)
     {
         m_log.AppendString(m_entry, value, timestamp);

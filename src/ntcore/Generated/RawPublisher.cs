@@ -18,7 +18,6 @@ public interface IRawPublisher : IPublisher
     /// </summary>
     new RawTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

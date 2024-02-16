@@ -62,7 +62,7 @@ public class StringTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.String,
                 "string"u8, options),
-            defaultValue);
+            defaultValue ?? "");
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class StringTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.String,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? "");
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class StringTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.String,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? "");
     }
 
     /// <summary>
@@ -292,7 +292,7 @@ public class StringTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.String,
                 "string"u8, options),
-            defaultValue);
+            defaultValue ?? "");
     }
 
     /// <summary>
@@ -326,7 +326,7 @@ public class StringTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.String,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? "");
     }
 
     /// <summary>
@@ -360,7 +360,7 @@ public class StringTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.String,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? "");
     }
 
 }

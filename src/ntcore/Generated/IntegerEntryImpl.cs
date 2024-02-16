@@ -76,7 +76,6 @@ internal sealed class IntegerEntryImpl<T> : EntryBase<T>, IIntegerEntry where T 
         return timestamped;
     }
 
-
     public void Set(long value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeInteger(value, 0);

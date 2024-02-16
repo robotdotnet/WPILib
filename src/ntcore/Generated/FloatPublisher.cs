@@ -18,7 +18,6 @@ public interface IFloatPublisher : IPublisher
     /// </summary>
     new FloatTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

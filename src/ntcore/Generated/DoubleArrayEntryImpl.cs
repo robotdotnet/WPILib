@@ -76,7 +76,6 @@ internal sealed class DoubleArrayEntryImpl<T> : EntryBase<T>, IDoubleArrayEntry 
         return timestamped;
     }
 
-
     public void Set(ReadOnlySpan<double> value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDoubleArray(value, 0);

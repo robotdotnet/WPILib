@@ -18,7 +18,6 @@ public interface IBooleanArrayPublisher : IPublisher
     /// </summary>
     new BooleanArrayTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

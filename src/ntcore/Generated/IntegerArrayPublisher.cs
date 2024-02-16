@@ -18,7 +18,6 @@ public interface IIntegerArrayPublisher : IPublisher
     /// </summary>
     new IntegerArrayTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

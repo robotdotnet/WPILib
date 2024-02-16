@@ -32,11 +32,6 @@ public readonly partial struct NetworkTableValue
     public bool IsDouble => Type == NetworkTableType.Double;
 
     /// <summary>
-    /// Gets if entry value contains a string.
-    /// </summary>
-    public bool IsString => Type == NetworkTableType.String;
-
-    /// <summary>
     /// Gets if entry value contains a byte[].
     /// </summary>
     public bool IsRaw => Type == NetworkTableType.Raw;
@@ -60,11 +55,6 @@ public readonly partial struct NetworkTableValue
     /// Gets if entry value contains a double[].
     /// </summary>
     public bool IsDoubleArray => Type == NetworkTableType.DoubleArray;
-
-    /// <summary>
-    /// Gets if entry value contains a string[].
-    /// </summary>
-    public bool IsStringArray => Type == NetworkTableType.StringArray;
 
 
     /// <summary>
@@ -124,20 +114,6 @@ public readonly partial struct NetworkTableValue
     }
 
     /// <summary>
-    /// Get the string value.
-    /// </summary>
-    /// <returns>The string value.</returns>
-    /// <exception cref="InvalidCastException">Thrown if the entry value is not of string type.</exception>
-    public string GetString()
-    {
-        if (Type != NetworkTableType.String)
-        {
-            throw new InvalidCastException($"cannot convert {Type} to string");
-        }
-        return (string)m_objectValue!;
-    }
-
-    /// <summary>
     /// Get the byte[] value.
     /// </summary>
     /// <returns>The byte[] value.</returns>
@@ -148,7 +124,7 @@ public readonly partial struct NetworkTableValue
         {
             throw new InvalidCastException($"cannot convert {Type} to byte[]");
         }
-        return (byte[])m_objectValue!;
+        return m_objectValue as byte[] ?? [];
     }
 
     /// <summary>
@@ -162,7 +138,7 @@ public readonly partial struct NetworkTableValue
         {
             throw new InvalidCastException($"cannot convert {Type} to bool[]");
         }
-        return (bool[])m_objectValue!;
+        return m_objectValue as bool[] ?? [];
     }
 
     /// <summary>
@@ -176,7 +152,7 @@ public readonly partial struct NetworkTableValue
         {
             throw new InvalidCastException($"cannot convert {Type} to long[]");
         }
-        return (long[])m_objectValue!;
+        return m_objectValue as long[] ?? [];
     }
 
     /// <summary>
@@ -190,7 +166,7 @@ public readonly partial struct NetworkTableValue
         {
             throw new InvalidCastException($"cannot convert {Type} to float[]");
         }
-        return (float[])m_objectValue!;
+        return m_objectValue as float[] ?? [];
     }
 
     /// <summary>
@@ -204,21 +180,7 @@ public readonly partial struct NetworkTableValue
         {
             throw new InvalidCastException($"cannot convert {Type} to double[]");
         }
-        return (double[])m_objectValue!;
-    }
-
-    /// <summary>
-    /// Get the string[] value.
-    /// </summary>
-    /// <returns>The string[] value.</returns>
-    /// <exception cref="InvalidCastException">Thrown if the entry value is not of string[] type.</exception>
-    public string[] GetStringArray()
-    {
-        if (Type != NetworkTableType.StringArray)
-        {
-            throw new InvalidCastException($"cannot convert {Type} to string[]");
-        }
-        return (string[])m_objectValue!;
+        return m_objectValue as double[] ?? [];
     }
 
 
@@ -308,28 +270,6 @@ public readonly partial struct NetworkTableValue
     public static NetworkTableValue MakeDouble(double value, long time)
     {
         return new NetworkTableValue(NetworkTableType.Double, value, time);
-    }
-
-
-    /// <summary>
-    /// Creates a string value.
-    /// </summary>
-    /// <param name="value">the value</param>
-    /// <returns>The entry value</returns>
-    public static NetworkTableValue MakeString(string value)
-    {
-        return new NetworkTableValue(NetworkTableType.String, value);
-    }
-
-    /// <summary>
-    /// Creates a string value.
-    /// </summary>
-    /// <param name="value">the value</param>
-    /// <param name="time">the creation time to use (instead of the current time)</param>
-    /// <returns>The entry value</returns>
-    public static NetworkTableValue MakeString(string value, long time)
-    {
-        return new NetworkTableValue(NetworkTableType.String, value, time);
     }
 
 
@@ -440,28 +380,6 @@ public readonly partial struct NetworkTableValue
     public static NetworkTableValue MakeDoubleArray(double[] value, long time)
     {
         return new NetworkTableValue(NetworkTableType.DoubleArray, value, time);
-    }
-
-
-    /// <summary>
-    /// Creates a string[] value.
-    /// </summary>
-    /// <param name="value">the value</param>
-    /// <returns>The entry value</returns>
-    public static NetworkTableValue MakeStringArray(string[] value)
-    {
-        return new NetworkTableValue(NetworkTableType.StringArray, value);
-    }
-
-    /// <summary>
-    /// Creates a string[] value.
-    /// </summary>
-    /// <param name="value">the value</param>
-    /// <param name="time">the creation time to use (instead of the current time)</param>
-    /// <returns>The entry value</returns>
-    public static NetworkTableValue MakeStringArray(string[] value, long time)
-    {
-        return new NetworkTableValue(NetworkTableType.StringArray, value, time);
     }
 
 }

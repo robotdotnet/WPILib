@@ -118,33 +118,6 @@ public sealed partial class NetworkTableInstance
         return (DoubleTopic)m_topics.AddOrUpdate(name, DoubleTopicCreator, DoubleTopicUpdator, this);
     }
 
-    private static StringTopic StringTopicCreator(string name, NetworkTableInstance instance)
-    {
-        StringTopic topic = new StringTopic(instance, NtCore.GetTopic(instance.Handle, name));
-        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
-        return topic;
-    }
-    private static StringTopic StringTopicUpdator(string name, Topic existingTopic, NetworkTableInstance instance)
-    {
-        // Exists, but might be wrong type
-        if (existingTopic is StringTopic StringTopic)
-        {
-            return StringTopic;
-        }
-        StringTopic topic = new StringTopic(instance, existingTopic.Handle);
-        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
-        return topic;
-    }
-    /// <summary>
-    /// Gets a string topic.
-    /// </summary>
-    /// <param name="name">topic name</param>
-    /// <returns>StringTopic</returns>
-    public StringTopic GetStringTopic(string name)
-    {
-        return (StringTopic)m_topics.AddOrUpdate(name, StringTopicCreator, StringTopicUpdator, this);
-    }
-
     private static RawTopic RawTopicCreator(string name, NetworkTableInstance instance)
     {
         RawTopic topic = new RawTopic(instance, NtCore.GetTopic(instance.Handle, name));
@@ -278,32 +251,5 @@ public sealed partial class NetworkTableInstance
     public DoubleArrayTopic GetDoubleArrayTopic(string name)
     {
         return (DoubleArrayTopic)m_topics.AddOrUpdate(name, DoubleArrayTopicCreator, DoubleArrayTopicUpdator, this);
-    }
-
-    private static StringArrayTopic StringArrayTopicCreator(string name, NetworkTableInstance instance)
-    {
-        StringArrayTopic topic = new StringArrayTopic(instance, NtCore.GetTopic(instance.Handle, name));
-        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
-        return topic;
-    }
-    private static StringArrayTopic StringArrayTopicUpdator(string name, Topic existingTopic, NetworkTableInstance instance)
-    {
-        // Exists, but might be wrong type
-        if (existingTopic is StringArrayTopic StringArrayTopic)
-        {
-            return StringArrayTopic;
-        }
-        StringArrayTopic topic = new StringArrayTopic(instance, existingTopic.Handle);
-        instance.m_topicsByHandle.AddOrUpdate(topic.Handle, TopicByHandleAdder, TopicByHandleUpdater, topic);
-        return topic;
-    }
-    /// <summary>
-    /// Gets a string[] topic.
-    /// </summary>
-    /// <param name="name">topic name</param>
-    /// <returns>StringArrayTopic</returns>
-    public StringArrayTopic GetStringArrayTopic(string name)
-    {
-        return (StringArrayTopic)m_topics.AddOrUpdate(name, StringArrayTopicCreator, StringArrayTopicUpdator, this);
     }
 }

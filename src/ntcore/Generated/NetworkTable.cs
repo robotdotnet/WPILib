@@ -49,16 +49,6 @@ public sealed partial class NetworkTable
     }
 
     /// <summary>
-    /// Gets a string topic.
-    /// </summary>
-    /// <param name="name">topic name</param>
-    /// <returns>StringTopic</returns>
-    public StringTopic GetStringTopic(string name)
-    {
-        return Instance.GetStringTopic($"{m_pathWithSep}{name}");
-    }
-
-    /// <summary>
     /// Gets a byte[] topic.
     /// </summary>
     /// <param name="name">topic name</param>
@@ -106,15 +96,5 @@ public sealed partial class NetworkTable
     public DoubleArrayTopic GetDoubleArrayTopic(string name)
     {
         return Instance.GetDoubleArrayTopic($"{m_pathWithSep}{name}");
-    }
-
-    /// <summary>
-    /// Gets a string[] topic.
-    /// </summary>
-    /// <param name="name">topic name</param>
-    /// <returns>StringArrayTopic</returns>
-    public StringArrayTopic GetStringArrayTopic(string name)
-    {
-        return Instance.GetStringArrayTopic($"{m_pathWithSep}{name}");
     }
 }

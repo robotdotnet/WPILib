@@ -76,7 +76,6 @@ internal sealed class BooleanArrayEntryImpl<T> : EntryBase<T>, IBooleanArrayEntr
         return timestamped;
     }
 
-
     public void Set(ReadOnlySpan<bool> value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeBooleanArray(value, 0);

@@ -44,36 +44,36 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 m_nativeValue.data.valueRaw.size = (nuint)managed.m_byteSpan.Length;
                 break;
             case NetworkTableType.DoubleArray:
-                m_toPin = ref MemoryMarshal.AsBytes(managed.m_doubleSpan).GetPinnableReference();
+                m_toPin = ref managed.m_byteSpan.GetPinnableReference();
                 m_toAssignPin = ref m_nativeValue.data.arrDouble.arr.GetPinnableByteReference();
-                m_nativeValue.data.arrDouble.size = (nuint)managed.m_doubleSpan.Length;
+                m_nativeValue.data.arrDouble.size = (nuint)managed.m_byteSpan.Length / 8;
                 break;
             case NetworkTableType.IntegerArray:
-                m_toPin = ref MemoryMarshal.AsBytes(managed.m_longSpan).GetPinnableReference();
+                m_toPin = ref managed.m_byteSpan.GetPinnableReference();
                 m_toAssignPin = ref m_nativeValue.data.arrInt.arr.GetPinnableByteReference();
-                m_nativeValue.data.arrInt.size = (nuint)managed.m_longSpan.Length;
+                m_nativeValue.data.arrInt.size = (nuint)managed.m_byteSpan.Length / 8;
                 break;
             case NetworkTableType.FloatArray:
-                m_toPin = ref MemoryMarshal.AsBytes(managed.m_floatSpan).GetPinnableReference();
+                m_toPin = ref managed.m_byteSpan.GetPinnableReference();
                 m_toAssignPin = ref m_nativeValue.data.arrFloat.arr.GetPinnableByteReference();
-                m_nativeValue.data.arrFloat.size = (nuint)managed.m_floatSpan.Length;
+                m_nativeValue.data.arrFloat.size = (nuint)managed.m_byteSpan.Length / 4;
                 break;
             case NetworkTableType.BooleanArray:
                 Span<int> boolArraySpan = MemoryMarshal.Cast<byte, int>(callerAllocatedBuffer);
-                if (boolArraySpan.Length < managed.m_boolSpan.Length)
+                if (boolArraySpan.Length < managed.m_byteSpan.Length)
                 {
-                    boolArraySpan = new int[managed.m_boolSpan.Length];
+                    boolArraySpan = new int[managed.m_byteSpan.Length];
                 }
                 for (int i = 0; i < boolArraySpan.Length; i++)
                 {
-                    boolArraySpan[i] = managed.m_boolSpan[i] ? 1 : 0;
+                    boolArraySpan[i] = managed.m_byteSpan[i];
                 }
                 m_toPin = ref MemoryMarshal.AsBytes(boolArraySpan).GetPinnableReference();
                 m_toAssignPin = ref m_nativeValue.data.arrBoolean.arr.GetPinnableByteReference();
-                m_nativeValue.data.arrBoolean.size = (nuint)managed.m_boolSpan.Length;
+                m_nativeValue.data.arrBoolean.size = (nuint)managed.m_byteSpan.Length;
                 break;
             case NetworkTableType.String:
-                if (managed.m_stringValue == null)
+                if (managed.m_structValue.stringStorageType == RefNetworkTableValue.StringStorageType.Utf8)
                 {
                     // String is stored as utf-8 in raw span
                     m_toPin = ref managed.m_byteSpan.GetPinnableReference();
@@ -83,7 +83,8 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                 else
                 {
                     // Is string, convert to UTF-8
-                    int byteCount = Encoding.UTF8.GetByteCount(managed.m_stringValue!);
+                    ReadOnlySpan<char> stringValue = MemoryMarshal.Cast<byte, char>(managed.m_byteSpan);
+                    int byteCount = Encoding.UTF8.GetByteCount(stringValue);
                     Span<byte> stringSpan = callerAllocatedBuffer;
                     if (byteCount > stringSpan.Length)
                     {
@@ -93,7 +94,7 @@ public unsafe ref struct RefNetworkTableValueMarshaller
                     {
                         stringSpan = stringSpan[..byteCount];
                     }
-                    int exactBytes = Encoding.UTF8.GetBytes(managed.m_stringValue!, stringSpan);
+                    int exactBytes = Encoding.UTF8.GetBytes(stringValue, stringSpan);
                     Debug.Assert(exactBytes == byteCount);
                     m_toPin = ref stringSpan.GetPinnableReference();
                     m_nativeValue.data.valueString = new(null, (nuint)stringSpan.Length);
@@ -105,9 +106,9 @@ public unsafe ref struct RefNetworkTableValueMarshaller
 
                 for (int i = 0; i < strings.Length; i++)
                 {
-                    int len = Encoding.UTF8.GetByteCount(managed.m_stringSpan[i]);
+                    int len = Encoding.UTF8.GetByteCount(managed.m_stringSpan[i].AsSpan());
                     byte* mem = (byte*)NativeMemory.Alloc((nuint)len);
-                    int exactLen = Encoding.UTF8.GetBytes(managed.m_stringSpan[i], new Span<byte>(mem, len));
+                    int exactLen = Encoding.UTF8.GetBytes(managed.m_stringSpan[i].AsSpan(), new Span<byte>(mem, len));
                     Debug.Assert(exactLen == len);
                     strings[i] = new WpiStringMarshaller.WpiStringNative(mem, (nuint)len);
                 }

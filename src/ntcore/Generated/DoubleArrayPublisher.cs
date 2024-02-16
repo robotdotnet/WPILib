@@ -18,7 +18,6 @@ public interface IDoubleArrayPublisher : IPublisher
     /// </summary>
     new DoubleArrayTopic Topic { get; }
 
-
     /// <summary>
     /// Publish a new value using the current NT time.
     /// </summary>

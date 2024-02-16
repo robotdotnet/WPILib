@@ -76,7 +76,6 @@ internal sealed class FloatEntryImpl<T> : EntryBase<T>, IFloatEntry where T : st
         return timestamped;
     }
 
-
     public void Set(float value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeFloat(value, 0);

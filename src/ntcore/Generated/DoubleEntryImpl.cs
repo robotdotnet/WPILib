@@ -76,7 +76,6 @@ internal sealed class DoubleEntryImpl<T> : EntryBase<T>, IDoubleEntry where T : 
         return timestamped;
     }
 
-
     public void Set(double value)
     {
         RefNetworkTableValue ntValue = RefNetworkTableValue.MakeDouble(value, 0);

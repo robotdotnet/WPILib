@@ -62,7 +62,7 @@ public class FloatArrayTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
                 "float[]"u8, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -91,7 +91,7 @@ public class FloatArrayTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -120,7 +120,7 @@ public class FloatArrayTopic : Topic
             NtCore.Subscribe(
                 Handle, NetworkTableType.FloatArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -292,7 +292,7 @@ public class FloatArrayTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,
                 "float[]"u8, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -326,7 +326,7 @@ public class FloatArrayTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
     /// <summary>
@@ -360,7 +360,7 @@ public class FloatArrayTopic : Topic
             NtCore.GetEntry(
                 Handle, NetworkTableType.FloatArray,
                 typeString, options),
-            defaultValue);
+            defaultValue ?? []);
     }
 
 }

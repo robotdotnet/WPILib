@@ -16,6 +16,16 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
         NtCore.DisposeValueArray(ptr, (nuint)len);
     }
 
+    /// <summary>
+    /// Gets if entry value contains a string.
+    /// </summary>
+    public bool IsString => Type == NetworkTableType.String;
+
+    /// <summary>
+    /// Gets if entry value contains a string.
+    /// </summary>
+    public bool IsStringArray => Type == NetworkTableType.StringArray;
+
     internal NetworkTableValue(NetworkTableType type, object? obj, long time, long serverTime)
     {
         Type = type;
@@ -95,6 +105,34 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
      */
     public bool IsValid => Type != NetworkTableType.Unassigned;
 
+    /// <summary>
+    /// Get the string value.
+    /// </summary>
+    /// <returns>The string value.</returns>
+    /// <exception cref="InvalidCastException">Thrown if the entry value is not of string type.</exception>
+    public string GetString()
+    {
+        if (Type != NetworkTableType.String)
+        {
+            throw new InvalidCastException($"cannot convert {Type} to string");
+        }
+        return m_objectValue as string ?? "";
+    }
+
+    /// <summary>
+    /// Get the string[] value.
+    /// </summary>
+    /// <returns>The string[] value.</returns>
+    /// <exception cref="InvalidCastException">Thrown if the entry value is not of string[] type.</exception>
+    public string[] GetStringArray()
+    {
+        if (Type != NetworkTableType.StringArray)
+        {
+            throw new InvalidCastException($"cannot convert {Type} to string[]");
+        }
+        return m_objectValue as string[] ?? [];
+    }
+
     public object? Value
     {
         get
@@ -137,6 +175,48 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
     public static NetworkTableValue MakeUnassigned(long time)
     {
         return new NetworkTableValue(NetworkTableType.Unassigned, null, time, 1);
+    }
+
+    /// <summary>
+    /// Creates a string value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
+    public static NetworkTableValue MakeString(string value)
+    {
+        return new NetworkTableValue(NetworkTableType.String, value);
+    }
+
+    /// <summary>
+    /// Creates a string value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
+    public static NetworkTableValue MakeString(string value, long time)
+    {
+        return new NetworkTableValue(NetworkTableType.String, value, time);
+    }
+
+    /// <summary>
+    /// Creates a string[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <returns>The entry value</returns>
+    public static NetworkTableValue MakeStringArray(string[] value)
+    {
+        return new NetworkTableValue(NetworkTableType.StringArray, value);
+    }
+
+    /// <summary>
+    /// Creates a string[] value.
+    /// </summary>
+    /// <param name="value">the value</param>
+    /// <param name="time">the creation time to use (instead of the current time)</param>
+    /// <returns>The entry value</returns>
+    public static NetworkTableValue MakeStringArray(string[] value, long time)
+    {
+        return new NetworkTableValue(NetworkTableType.StringArray, value, time);
     }
 
     // TODO Equals and HashCode

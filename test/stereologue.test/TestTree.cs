@@ -92,7 +92,7 @@ public partial record class GenerateRecordClass
 [GenerateLog]
 public partial class GenerateAllKnownTypes
 {
-    [Log(LogType = 0)]
+    [Log(LogType = LogType.None)]
     public bool boolVar;
     [Log(Key = "CustomKey")]
     public char charVar;
@@ -101,11 +101,11 @@ public partial class GenerateAllKnownTypes
     [Log(LogType = LogType.File | LogType.Nt | LogType.Once)]
     public sbyte sbyteVar;
     public short shortVar;
-    [Log]
+    [Log(Key = null!)]
     public ushort ushortVar;
-    [Log]
+    [Log(LogType = LogType.File)]
     public int intVar;
-    [Log]
+    [Log(LogType = LogType.File)]
     public uint uintVar;
     [Log]
     public long longVar;
