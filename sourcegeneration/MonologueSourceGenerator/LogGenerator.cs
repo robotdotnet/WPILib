@@ -6,7 +6,9 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace Monologue.SourceGenerator;
 
-internal record ClassData(ImmutableArray<string> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
+internal record LogData(string? PreComputed, string? GetOperation, string? Path, string? Type);
+
+internal record ClassData(ImmutableArray<LogData> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
 
 [Generator]
 public class LogGenerator : IIncrementalGenerator
@@ -27,7 +29,7 @@ public class LogGenerator : IIncrementalGenerator
 
         var classMembers = classSymbol.GetMembers();
 
-        var loggableMembers = ImmutableArray.CreateBuilder<string>(classMembers.Length);
+        var loggableMembers = ImmutableArray.CreateBuilder<LogData>(classMembers.Length);
 
         foreach (var member in classMembers)
         {
@@ -82,17 +84,7 @@ public class LogGenerator : IIncrementalGenerator
                         throw new InvalidOperationException("Field is not loggable");
                     }
 
-                    string fullOperation;
-
-                    if (logType.AllInterfaces.Where(x => x.ToDisplayString() == "Monologue.ILogged").Any())
-                    {
-                        fullOperation = $"{getOperation}.UpdateMonologue($\"{{path}}/{defaultPathName}\", logger);";
-                    }
-                    else
-                    {
-                        // TODO the rest of the types
-                        fullOperation = "";
-                    }
+                    var fullOperation = ComputeOperation(logType, getOperation, defaultPathName);
                     token.ThrowIfCancellationRequested();
                     loggableMembers.Add(fullOperation);
                     break;
@@ -101,6 +93,37 @@ public class LogGenerator : IIncrementalGenerator
         }
 
         return new ClassData(loggableMembers.ToImmutable(), classSymbol.Name, typeBuilder.ToString(), ns);
+    }
+
+    private static LogData ComputeOperation(ITypeSymbol logType, string getOp, string path)
+    {
+        if (logType.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Monologue.GenerateLogAttribute").Any())
+        {
+            return new($"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);", null, null, null);
+        }
+        if (logType.AllInterfaces.Where(x => x.ToDisplayString() == "Monologue.ILogged").Any())
+        {
+            return new($"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);", null, null, null);
+            //return $"{getOp}.UpdateMonologue($\"{{path}}/{path}\", logger);";
+        }
+        var fullName = logType.ToDisplayString();
+        var structName = $"WPIUtil.Serialization.Struct.IStructSerializable<{fullName}>";
+        var protobufName = $"WPIUtil.Serialization.Protobuf.IProtobufSerializable<{fullName}>";
+        foreach (var inf in logType.AllInterfaces)
+        {
+            var interfaceName = inf.ToDisplayString();
+            // For now prefer struct
+            if (interfaceName == structName)
+            {
+                return new($"logger.LogStruct($\"{{path}}/{path}\", LogType.Nt, {getOp});", null, null, null);
+            }
+            else if (interfaceName == protobufName)
+            {
+                return new($"logger.LogProto($\"{{path}}/{path}\", LogType.Nt, {getOp});", null, null, null);
+            }
+        }
+
+        return new(null, getOp, path, fullName);
     }
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -116,6 +139,33 @@ public class LogGenerator : IIncrementalGenerator
             static (spc, source) => Execute(source, spc));
     }
 
+    static void ConstructCall(LogData data, StringBuilder builder)
+    {
+        if (data.PreComputed is not null) {
+
+            builder.AppendLine($"        {data.PreComputed}");
+            return;
+        }
+
+        var ret = data.Type switch {
+            "float" => ("LogFloat", ""),
+            "double" => ("LogDouble", ""),
+            "byte" => ("LogInteger", ""),
+            "sbyte" => ("LogInteger", ""),
+            "short" => ("LogInteger", ""),
+            "ushort" => ("LogInteger", ""),
+            "int" => ("LogInteger", ""),
+            "uint" => ("LogInteger", ""),
+            "long" => ("LogInteger", ""),
+            "ulong" => ("LogInteger", "(long)"),
+            "bool" => ("LogBoolean", ""),
+            "char" => ("LogChar", ""),
+            _ => (data.Type, "")
+        };
+
+        builder.AppendLine($"        logger.{ret.Item1}($\"{{path}}/{data.Path}\", LogType.Nt, {ret.Item2}{data.GetOperation});");
+    }
+
     static void Execute(ClassData? classData, SourceProductionContext context)
     {
         if (classData is { } value)
@@ -126,14 +176,13 @@ public class LogGenerator : IIncrementalGenerator
                 builder.AppendLine($"namespace {value.Namespace};");
                 builder.AppendLine();
 
-                builder.Append(value.ClassDeclaration);
-                builder.AppendLine(" : ILogged");
+                builder.AppendLine(value.ClassDeclaration);
                 builder.AppendLine("{");
                 builder.AppendLine("    public void UpdateMonologue(string path, Monologue.Monologuer logger)");
                 builder.AppendLine("    {");
                 foreach (var call in value.LoggedItems)
                 {
-                    builder.AppendLine($"        {call}");
+                    ConstructCall(call, builder);
                 }
                 builder.AppendLine("    }");
                 builder.AppendLine("}");

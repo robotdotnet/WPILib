@@ -7,6 +7,8 @@ public partial class GenerateGenericClass<T>
 {
     [Log]
     public int Variable { get; }
+    [Log]
+    public Int32 Variable2 { get; }
 }
 
 [GenerateLog]
@@ -103,26 +105,25 @@ public partial class TestRootClass
     public TestStruct TS { get; } = new();
 }
 
-public class TestClass : ILogged
+[GenerateLog]
+public partial class TestClass
 {
     [Log]
     public TestStruct TS { get; } = new();
-
-    public void UpdateMonologue(string path, Monologuer logger)
-    {
-        TS.UpdateMonologue($"{path}/TS", logger);
-    }
 }
 
-public struct TestStruct : ILogged
+[GenerateLog]
+public partial struct TestStruct
 {
     [Log]
     public Rotation2d Rotation { get; set; } = new();
 
     public TestStruct() { }
+}
 
-    public readonly void UpdateMonologue(string path, Monologuer logger)
-    {
-        logger.LogStruct($"{path}/Rotation", LogType.Nt, Rotation);
-    }
+[GenerateLog]
+public partial class TestDemo
+{
+    [Log]
+    public Rotation2d Rotation { get; set; } = new();
 }

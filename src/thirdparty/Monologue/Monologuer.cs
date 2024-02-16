@@ -29,6 +29,7 @@ public sealed class Monologuer
 
     private readonly DataLog log = null!;
 
+    private readonly Dictionary<string, (IIntegerPublisher? topic, IntegerLogEntry? logEntry)> integerLogs = [];
     private readonly Dictionary<string, (IBooleanPublisher? topic, BooleanLogEntry? logEntry)> booleanLogs = [];
     private readonly Dictionary<string, (object? topic, object? logEntry)> structLogs = [];
 
@@ -47,6 +48,25 @@ public sealed class Monologuer
         if (logType.HasFlag(LogType.File))
         {
             logs.logEntry ??= new BooleanLogEntry(log, path);
+            logs.logEntry.Append(value);
+        }
+    }
+
+    public void LogInteger(string path, LogType logType, long value)
+    {
+        if (logType == LogType.None)
+        {
+            return;
+        }
+        ref var logs = ref CollectionsMarshal.GetValueRefOrAddDefault(integerLogs, path, out _);
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= NetworkTableInstance.Default.GetIntegerTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new IntegerLogEntry(log, path);
             logs.logEntry.Append(value);
         }
     }
