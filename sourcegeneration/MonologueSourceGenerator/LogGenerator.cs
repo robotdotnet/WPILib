@@ -145,13 +145,15 @@ public class LogGenerator : IIncrementalGenerator
 
     static void ConstructCall(LogData data, StringBuilder builder)
     {
-        if (data.PreComputed is not null) {
+        if (data.PreComputed is not null)
+        {
 
             builder.AppendLine($"        {data.PreComputed}");
             return;
         }
 
-        var ret = data.Type switch {
+        var ret = data.Type switch
+        {
             "System.Single" => ("LogFloat", "", ""),
             "System.Double" => ("LogDouble", "", ""),
             "System.Byte" => ("LogInteger", "", ""),

@@ -308,7 +308,8 @@ internal class DataLogSendableBuilder : INtSendableBuilder
                     break;
             }
         }
-        foreach(var updateTable in updateTables) {
+        foreach (var updateTable in updateTables)
+        {
             updateTable();
         }
     }

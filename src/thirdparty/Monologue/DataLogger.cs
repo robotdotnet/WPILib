@@ -1,5 +1,6 @@
 namespace Monologue;
 
-public sealed class DataLogger {
+public sealed class DataLogger
+{
 
 }

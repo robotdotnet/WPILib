@@ -5,7 +5,8 @@ namespace Monologue;
 
 internal static class EvaluateAttributes
 {
-    public static IEnumerable<LogAttribute> From(MemberInfo member) {
+    public static IEnumerable<LogAttribute> From(MemberInfo member)
+    {
         return member.GetCustomAttributes<LogAttribute>();
     }
 }

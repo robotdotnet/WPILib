@@ -1,4 +1,4 @@
-﻿namespace Monologue;
+namespace Monologue;
 
 public enum LogLevel
 {
