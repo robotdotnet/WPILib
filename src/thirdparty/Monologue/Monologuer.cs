@@ -214,8 +214,6 @@ public sealed class Monologuer
         }
     }
 
-    private readonly HashSet<string> sentOnceKeys = [];
-
     private ref TypedLogs<TNT, TDataLog> CheckDoLog<TNT, TDataLog>(string path,
         ref LogType logType, LogLevel logLevel, Dictionary<string, TypedLogs<TNT, TDataLog>> dict)
             where TNT : class, IPublisher
@@ -230,13 +228,14 @@ public sealed class Monologuer
         // We have the once flag, we need to check if we've already sent the path
         if ((logType & LogType.Once) != 0)
         {
-            if (!sentOnceKeys.Add(path))
+            ref var onceRef = ref CollectionsMarshal.GetValueRefOrAddDefault(dict, path, out bool exists);
+            // If we've already done a write, do nothing
+            if (exists)
             {
                 return ref Unsafe.NullRef<TypedLogs<TNT, TDataLog>>();
             }
-            // Unconditionally write if we're a once flag.
-
-            return ref CollectionsMarshal.GetValueRefOrAddDefault(dict, path, out _);
+            // Otherwise do a single write
+            return ref onceRef;
         }
 
         // If we're override file only, we're unconditionally logging
