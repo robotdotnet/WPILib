@@ -92,7 +92,10 @@ public class LogGenerator : IIncrementalGenerator
             }
         }
 
-        return new ClassData(loggableMembers.ToImmutable(), classSymbol.Name, typeBuilder.ToString(), ns);
+        var fmt = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.None);
+        var fileName = $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}";
+
+        return new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns);
     }
 
     private static LogData ComputeOperation(ITypeSymbol logType, string getOp, string path)
