@@ -34,7 +34,8 @@ internal enum DeclarationKind
     ReadOnlyMemory,
     Memory,
     Array,
-    Nullable,
+    NullableValueType,
+    NullableReferenceType
 }
 
 // Contains all information about a loggable member
@@ -58,7 +59,7 @@ internal static class LoggableMemberExtensions
         {
             namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
             innerType = namedTypeSymbol.TypeArguments[0];
-            return DeclarationKind.Nullable;
+            return DeclarationKind.NullableValueType;
         }
 
         var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
@@ -83,7 +84,7 @@ internal static class LoggableMemberExtensions
         }
 
         innerType = typeSymbol;
-        return innerType.IsReferenceType ? DeclarationKind.Nullable : DeclarationKind.None;
+        return innerType.IsReferenceType ? DeclarationKind.NullableReferenceType : DeclarationKind.None;
     }
 
     private static (DeclarationType, DeclarationKind)? GetDeclarationType(this ITypeSymbol typeSymbol, LogAttributeInfo attributeInfo, CancellationToken token)
@@ -162,7 +163,7 @@ internal static class LoggableMemberExtensions
         }
 
         // Special case non nested and nullables
-        if (nestedKind == DeclarationKind.None || nestedKind == DeclarationKind.Nullable)
+        if (nestedKind == DeclarationKind.None || nestedKind == DeclarationKind.NullableReferenceType || nestedKind == DeclarationKind.NullableValueType)
         {
             return (fullTypeName switch
             {

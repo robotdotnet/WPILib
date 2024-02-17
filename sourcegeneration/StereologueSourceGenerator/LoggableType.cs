@@ -173,18 +173,35 @@ internal static class LoggableTypeExtensions
 
         if (data.LoggedType == DeclarationType.Protobuf)
         {
+            if (data.LoggedKind != DeclarationKind.None && data.LoggedKind != DeclarationKind.NullableValueType && data.LoggedKind != DeclarationKind.NullableReferenceType)
+            {
+                builder.Append("Cannot log an array of protobufs");
+            }
+            if (data.LoggedKind == DeclarationKind.NullableValueType)
+            {
+                getOperation = $"{getOperation}.GetValueOrDefault()";
+            }
+            builder.Append("logger.LogProto($\"{path}/");
+            builder.Append(path);
+            builder.Append("\", ");
+            builder.Append(data.AttributeInfo.LogType);
+            builder.Append(", ");
+            builder.Append(getOperation);
+            builder.Append(", ");
+            builder.Append(data.AttributeInfo.LogLevel);
+            builder.Append(");");
             return;
         }
 
         string logMethod;
 
-        if (data.LoggedKind == DeclarationKind.None || data.LoggedKind == DeclarationKind.Nullable)
+        if (data.LoggedKind == DeclarationKind.None || data.LoggedKind == DeclarationKind.NullableReferenceType || data.LoggedKind == DeclarationKind.NullableValueType)
         {
             if (data.LoggedType == DeclarationType.String)
             {
                 getOperation = $"{getOperation}.AsSpan()";
             }
-            else if (data.LoggedKind == DeclarationKind.Nullable)
+            else if (data.LoggedKind == DeclarationKind.NullableValueType)
             {
                 getOperation = $"{getOperation}.GetValueOrDefault()";
             }
