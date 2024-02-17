@@ -20,7 +20,7 @@ internal record LogAttributeInfo(string Path, string LogLevel, string LogType, b
 
 internal record LogData(string GetOperation, string? Type, DeclarationType DecelType, LogAttributeInfo AttributeInfo);
 
-internal record ClassData(EquatableArray<LogData> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
+internal record ClassData(EquatableArray<LogData> LoggedItems, string Name, string ClassDeclaration, bool IsRefStruct, string? Namespace);
 
 internal record ClassOrDiagnostic(ClassData? ValidClassData, EquatableArray<DiagnosticInfo> Diagnostic);
 
@@ -147,21 +147,47 @@ public class LogGenerator : IIncrementalGenerator
         }
 
         var fmt = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.None);
-        var fileName = $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}";
-
-        return new ClassOrDiagnostic(new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns), diagnosticList.ToImmutable());
+        return new ClassOrDiagnostic(new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), classSymbol.IsRefLikeType, ns), diagnosticList.ToImmutable());
     }
 
     private static LogData ComputeOperation(ITypeSymbol logType, string getOp, LogAttributeInfo attributeInfo)
     {
+        // If we know we're generating a loggable implementation
         if (logType.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
             return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
         }
+        // If we know we already implement ILogged
         if (logType.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
             return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
         }
+
+        // If we have an UpdateMonologue function
+        var members = logType.GetMembers("UpdateStereologue");
+        foreach (var member in members)
+        {
+            // Must be a method
+            if (member is IMethodSymbol method)
+            {
+                // Must return void
+                if (!method.ReturnsVoid)
+                {
+                    continue;
+                }
+                // Must have a string first parameter, and a Stereologue.Stereologuer second paramter
+                var parameters = method.Parameters;
+                if (parameters.Length != 2)
+                {
+                    continue;
+                }
+                if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
+                {
+                    return new LogData(getOp, null, DeclarationType.Logged, attributeInfo);
+                }
+            }
+        }
+
         var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
         var fullTypeName = logType.ToDisplayString(fmt);
         var structName = $"WPIUtil.Serialization.Struct.IStructSerializable<{fullTypeName}>";
@@ -209,7 +235,7 @@ public class LogGenerator : IIncrementalGenerator
         switch (data.DecelType)
         {
             case DeclarationType.Logged:
-                builder.AppendLine($"{data.GetOperation}?.UpdateStereologue($\"{{path}}/{data.AttributeInfo.Path}\", logger, {data.AttributeInfo.LogLevel});");
+                builder.AppendLine($"{data.GetOperation}.UpdateStereologue($\"{{path}}/{data.AttributeInfo.Path}\", logger, {data.AttributeInfo.LogLevel});");
                 return;
             case DeclarationType.Struct:
                 builder.AppendLine($"logger.LogStruct($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {data.GetOperation}, {data.AttributeInfo.LogLevel});");
@@ -284,7 +310,7 @@ public class LogGenerator : IIncrementalGenerator
                 builder.AppendLine($"namespace {value.Namespace};");
                 builder.AppendLine();
 
-                builder.AppendLine(value.ClassDeclaration);
+                builder.AppendLine($"{value.ClassDeclaration}{(value.IsRefStruct ? "" : " : Stereologue.ILogged")}");
                 builder.AppendLine("{");
                 builder.AppendLine("    public void UpdateStereologue(string path, Stereologue.Stereologuer logger)");
                 builder.AppendLine("    {");
@@ -305,18 +331,6 @@ public class LogGenerator : IIncrementalGenerator
         if (!syntax.IsInPartialContext(out var nonPartialIdentifier))
         {
             return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeNotPartial, syntax.Identifier.GetLocation(), [symbol.Name, nonPartialIdentifier]);
-        }
-
-        // Ensure class doesn't implement ILogged
-        if (symbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
-        {
-            return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeImplementsILogged, syntax.Identifier.GetLocation(), [symbol.Name]);
-        }
-
-        // Ensure implementation isn't ref struct
-        if (symbol.IsRefLikeType)
-        {
-            return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeIsRefStruct, syntax.Identifier.GetLocation(), [symbol.Name]);
         }
 
         // Ensure implementation isn't interface

@@ -40,19 +40,19 @@ public readonly partial struct GenerateReadonlyStruct
     public int Variable { get; }
 }
 
-// [GenerateLog]
-// public ref partial struct GenerateRefStruct
-// {
-//     [Log]
-//     public int Variable { get; }
-// }
+[GenerateLog]
+public ref partial struct GenerateRefStruct
+{
+    [Log]
+    public int Variable { get; }
+}
 
-// [GenerateLog]
-// public readonly ref partial struct GenerateReadonlyRefStruct
-// {
-//     [Log]
-//     public int Variable { get; }
-// }
+[GenerateLog]
+public readonly ref partial struct GenerateReadonlyRefStruct
+{
+    [Log]
+    public int Variable { get; }
+}
 
 // [GenerateLog]
 // public partial interface GenerateInterface
@@ -62,7 +62,7 @@ public readonly partial struct GenerateReadonlyStruct
 // }
 
 [GenerateLog]
-public partial record GenerateRecord
+public partial record GenerateRecord : ILogged
 {
     [Log]
     public int Variable { get; }

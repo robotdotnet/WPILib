@@ -35,10 +35,10 @@ public static class GeneratorDiagnostics
         Ids.LoggableTypeNotSupported, "", "", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
 
     public static readonly DiagnosticDescriptor GeneratedTypeIsInterface = new(
-        Ids.LoggableTypeNotSupported, "", "", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.LoggableTypeNotSupported, "Generated types cannot be ref", "", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
 
     public static readonly DiagnosticDescriptor GeneratedTypeIsRefStruct = new(
-        Ids.GeneratedTypeIsRefStruct, "", "", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.GeneratedTypeIsRefStruct, "Generated types cannot be ref struct", "HelloWorld", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
 
     public static readonly DiagnosticDescriptor LoggedMethodDoesntReturnVoid = new(
         Ids.LoggedMethodDoesntReturnVoid, "", "", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
