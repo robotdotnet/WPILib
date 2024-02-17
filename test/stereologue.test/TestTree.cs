@@ -162,4 +162,14 @@ public partial class GenerateAllKnownTypes
 
     [Log(UseProtobuf = true)]
     public Rotation2d RotationProto => new();
+
+    [Log]
+    public GenerateStruct NonNullStruct;
+    [Log]
+    public GenerateStruct? NullStruct;
+
+    [Log]
+    public GenerateClass NonNullClass = null!;
+    [Log]
+    public GenerateClass? NullClass;
 }

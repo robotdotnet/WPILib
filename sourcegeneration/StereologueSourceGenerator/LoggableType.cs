@@ -171,18 +171,20 @@ internal static class LoggableTypeExtensions
         if (data.LoggedType == DeclarationType.Logged)
         {
             // TODO check log type to see if we should actually do this
-            // TODO nullable check
             // TODO arrays of loggables
             builder.Append(getOperation);
-            builder.Append("UpdateStereoLogue($\"{path}/");
+            if (data.LoggedModifiers == DeclarationModifiers.AllowNullConditionalOperator)
+            {
+                builder.Append("?");
+            }
+            builder.Append(".UpdateStereologue($\"{path}/");
             builder.Append(path);
-            builder.Append("\", logger, ");
-            builder.Append(data.AttributeInfo.LogLevel);
-            builder.Append(");");
+            builder.Append("\", logger);");
             return;
         }
 
-        var logCall = data.LoggedType switch {
+        var logCall = data.LoggedType switch
+        {
             DeclarationType.Struct => "LogStruct",
             DeclarationType.StructArray => "LogStructArray",
             DeclarationType.Protobuf => "LogProto",

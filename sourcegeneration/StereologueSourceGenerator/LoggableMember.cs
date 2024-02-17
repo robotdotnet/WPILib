@@ -35,7 +35,8 @@ internal enum DeclarationModifiers
 {
     None,
     AsSpan,
-    LongCast
+    LongCast,
+    AllowNullConditionalOperator,
 }
 
 // Contains all information about a loggable member
@@ -46,16 +47,35 @@ internal static class LoggableMemberExtensions
     private static (DeclarationType, DeclarationModifiers)? GetDeclarationType(this ITypeSymbol typeSymbol, LogAttributeInfo attributeInfo, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
+
+        var modifiers = DeclarationModifiers.None;
+
+        if (typeSymbol.IsReferenceType)
+        {
+            modifiers = DeclarationModifiers.AllowNullConditionalOperator;
+        }
+        else if (typeSymbol.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+        {
+            // Pull out the inner type
+            var namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            var innerType = namedTypeSymbol.TypeArguments[0];
+            typeSymbol = innerType;
+
+            modifiers = DeclarationModifiers.AllowNullConditionalOperator;
+        }
+
+        token.ThrowIfCancellationRequested();
+
         // If we know we're generating a loggable implementation
         if (typeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
-            return (DeclarationType.Logged, DeclarationModifiers.None);
+            return (DeclarationType.Logged, modifiers);
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
         if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
-            return (DeclarationType.Logged, DeclarationModifiers.None);
+            return (DeclarationType.Logged, modifiers);
         }
         token.ThrowIfCancellationRequested();
         // If we have an UpdateMonologue function
@@ -79,7 +99,7 @@ internal static class LoggableMemberExtensions
                 }
                 if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
                 {
-                    return (DeclarationType.Logged, DeclarationModifiers.None);
+                    return (DeclarationType.Logged, modifiers);
                 }
             }
         }
