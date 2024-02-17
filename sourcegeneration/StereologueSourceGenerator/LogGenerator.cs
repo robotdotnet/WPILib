@@ -20,18 +20,29 @@ internal record LogAttributeInfo(string Path, string LogLevel, string LogType, b
 
 internal record LogData(string GetOperation, string? Type, DeclarationType DecelType, LogAttributeInfo AttributeInfo);
 
-internal record ClassData(ImmutableArray<LogData> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
+internal record ClassData(EquatableArray<LogData> LoggedItems, string Name, string ClassDeclaration, string? Namespace);
+
+internal record ClassOrDiagnostic(ClassData? ValidClassData, EquatableArray<DiagnosticInfo> Diagnostic);
 
 [Generator]
 public class LogGenerator : IIncrementalGenerator
 {
-    static ClassData? GetClassData(SemanticModel semanticModel, SyntaxNode classDeclarationSyntax, CancellationToken token)
+    static ClassOrDiagnostic? GetClassData(GeneratorAttributeSyntaxContext context, CancellationToken token)
     {
-        if (semanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol classSymbol)
+        if (context.SemanticModel.GetDeclaredSymbol(context.TargetNode) is not INamedTypeSymbol classSymbol)
         {
             return null;
         }
         token.ThrowIfCancellationRequested();
+
+        var diagnosticList = new ImmutableArray<DiagnosticInfo>();
+
+        var diagnostic = GetDiagnosticIfInvalidClassForGeneration((TypeDeclarationSyntax)context.TargetNode, classSymbol);
+        if (diagnostic is { } ds)
+        {
+            diagnosticList.Add(ds);
+            return new(null, diagnosticList);
+        }
 
         var ns = classSymbol.ContainingNamespace?.ToDisplayString();
         token.ThrowIfCancellationRequested();
@@ -109,11 +120,13 @@ public class LogGenerator : IIncrementalGenerator
                     {
                         if (method.ReturnsVoid)
                         {
-                            throw new InvalidOperationException("Cannot have a void returning method");
+                            diagnosticList.Add(DiagnosticInfo.Create(GeneratorDiagnostics.LoggedMethodDoesntReturnVoid, null, [method.Name]));
+                            continue;
                         }
                         if (!method.Parameters.IsEmpty)
                         {
-                            throw new InvalidOperationException("Cannot take a parameter");
+                            diagnosticList.Add(DiagnosticInfo.Create(GeneratorDiagnostics.LoggedMethodTakesArguments, null, [method.Name]));
+                            continue;
                         }
 
                         getOperation = $"{method.Name}()";
@@ -121,7 +134,8 @@ public class LogGenerator : IIncrementalGenerator
                     }
                     else
                     {
-                        throw new InvalidOperationException("Field is not loggable");
+                        diagnosticList.Add(DiagnosticInfo.Create(GeneratorDiagnostics.LoggedMemberTypeNotSupported, null, [member.Name]));
+                        continue;
                     }
 
                     var fullOperation = ComputeOperation(logType, getOperation, attributeInfo);
@@ -135,7 +149,7 @@ public class LogGenerator : IIncrementalGenerator
         var fmt = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.None);
         var fileName = $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}";
 
-        return new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns);
+        return new ClassOrDiagnostic(new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns), diagnosticList);
     }
 
     private static LogData ComputeOperation(ITypeSymbol logType, string getOp, LogAttributeInfo attributeInfo)
@@ -181,14 +195,14 @@ public class LogGenerator : IIncrementalGenerator
             .ForAttributeWithMetadataName(
                 "Stereologue.GenerateLogAttribute",
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
-                transform: static (ctx, token) => GetClassData(ctx.SemanticModel, ctx.TargetNode, token))
+                transform: static (ctx, token) => GetClassData(ctx, token))
             .Where(static m => m is not null);
 
         context.RegisterSourceOutput(attributedTypes,
             static (spc, source) => Execute(source, spc));
     }
 
-    static void ConstructCall(LogData data, StringBuilder builder)
+    static void ConstructCall(LogData data, StringBuilder builder, SourceProductionContext context)
     {
         builder.Append("        ");
 
@@ -239,15 +253,30 @@ public class LogGenerator : IIncrementalGenerator
             "System.Span<System.String>" => ("LogStringArray", "", ""),
             "System.Span<System.Byte>" => ("LogRaw", "", ""),
             "System.Span<System.Boolean>" => ("LogBooleanArray", "", ""),
-            _ => (data.Type, "", "")
+            _ => (null, "", "")
         };
+
+        if (ret.LogMethod is null)
+        {
+            //context.ReportDiagnostic(DiagnosticInfo.Create(GeneratorDiagnostics.LoggableTypeNotSupported, null, [data.Type]).CreateDiagnostic());
+            builder.AppendLine();
+            return;
+        }
 
         builder.AppendLine($"logger.{ret.LogMethod}($\"{{path}}/{data.AttributeInfo.Path}\", {data.AttributeInfo.LogType}, {ret.Cast}{data.GetOperation}{ret.Conversion}, {data.AttributeInfo.LogLevel});");
     }
 
-    static void Execute(ClassData? classData, SourceProductionContext context)
+    static void Execute(ClassOrDiagnostic? classData, SourceProductionContext context)
     {
-        if (classData is { } value)
+        if (classData?.Diagnostic is { } diagnostic)
+        {
+            foreach (var d in diagnostic)
+            {
+                context.ReportDiagnostic(d.CreateDiagnostic());
+            }
+        }
+
+        if (classData?.ValidClassData is { } value)
         {
             StringBuilder builder = new StringBuilder();
             if (value.Namespace is not null)
@@ -261,7 +290,7 @@ public class LogGenerator : IIncrementalGenerator
                 builder.AppendLine("    {");
                 foreach (var call in value.LoggedItems)
                 {
-                    ConstructCall(call, builder);
+                    ConstructCall(call, builder, context);
                 }
                 builder.AppendLine("    }");
                 builder.AppendLine("}");
@@ -270,12 +299,31 @@ public class LogGenerator : IIncrementalGenerator
         }
     }
 
-    private static object? GetDiagnosticIfInvalidClassForGeneration(TypeDeclarationSyntax syntax, ITypeSymbol symbol)
+    private static DiagnosticInfo? GetDiagnosticIfInvalidClassForGeneration(TypeDeclarationSyntax syntax, ITypeSymbol symbol)
     {
         // Ensure class is partial
         if (!syntax.IsInPartialContext(out var nonPartialIdentifier))
         {
-            return new object();
+            return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeNotPartial, syntax.Identifier.GetLocation(), [symbol.Name, nonPartialIdentifier]);
+            ;
+        }
+
+        // Ensure class doesn't implement ILogged
+        if (symbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
+        {
+            return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeImplementsILogged, syntax.Identifier.GetLocation(), [symbol.Name]);
+        }
+
+        // Ensure implementation isn't ref struct
+        if (symbol.IsRefLikeType)
+        {
+            return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeIsRefStruct, syntax.Identifier.GetLocation(), [symbol.Name]);
+        }
+
+        // Ensure implementation isn't interface
+        if (symbol.TypeKind == TypeKind.Interface)
+        {
+            return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeIsInterface, syntax.Identifier.GetLocation(), [symbol.Name]);
         }
 
         return null;
