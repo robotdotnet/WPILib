@@ -35,13 +35,13 @@ public class LogGenerator : IIncrementalGenerator
         }
         token.ThrowIfCancellationRequested();
 
-        var diagnosticList = new ImmutableArray<DiagnosticInfo>();
+        var diagnosticList = ImmutableArray.CreateBuilder<DiagnosticInfo>();
 
         var diagnostic = GetDiagnosticIfInvalidClassForGeneration((TypeDeclarationSyntax)context.TargetNode, classSymbol);
         if (diagnostic is { } ds)
         {
             diagnosticList.Add(ds);
-            return new(null, diagnosticList);
+            return new(null, diagnosticList.ToImmutable());
         }
 
         var ns = classSymbol.ContainingNamespace?.ToDisplayString();
@@ -149,7 +149,7 @@ public class LogGenerator : IIncrementalGenerator
         var fmt = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.None);
         var fileName = $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}";
 
-        return new ClassOrDiagnostic(new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns), diagnosticList);
+        return new ClassOrDiagnostic(new ClassData(loggableMembers.ToImmutable(), $"{classSymbol.ContainingNamespace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", typeBuilder.ToString(), ns), diagnosticList.ToImmutable());
     }
 
     private static LogData ComputeOperation(ITypeSymbol logType, string getOp, LogAttributeInfo attributeInfo)
@@ -258,7 +258,7 @@ public class LogGenerator : IIncrementalGenerator
 
         if (ret.LogMethod is null)
         {
-            //context.ReportDiagnostic(DiagnosticInfo.Create(GeneratorDiagnostics.LoggableTypeNotSupported, null, [data.Type]).CreateDiagnostic());
+            context.ReportDiagnostic(DiagnosticInfo.Create(GeneratorDiagnostics.LoggableTypeNotSupported, null, [data.Type]).CreateDiagnostic());
             builder.AppendLine();
             return;
         }
@@ -305,7 +305,6 @@ public class LogGenerator : IIncrementalGenerator
         if (!syntax.IsInPartialContext(out var nonPartialIdentifier))
         {
             return DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeNotPartial, syntax.Identifier.GetLocation(), [symbol.Name, nonPartialIdentifier]);
-            ;
         }
 
         // Ensure class doesn't implement ILogged
