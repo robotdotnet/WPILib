@@ -7,43 +7,6 @@ namespace Stereologue.SourceGenerator;
 
 public static class SyntaxExtensions
 {
-    public static void GetTypeDeclaration(this ITypeSymbol symbol, StringBuilder builder, CancellationToken token)
-    {
-        var displayFormat = new SymbolDisplayFormat(
-            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
-            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters | SymbolDisplayGenericsOptions.IncludeVariance);
-
-        var nameString = symbol.ToDisplayString(displayFormat);
-        token.ThrowIfCancellationRequested();
-
-        if (symbol.IsReadOnly)
-        {
-            builder.Append("readonly ");
-        }
-
-        if (symbol.IsRefLikeType)
-        {
-            builder.Append("ref ");
-        }
-
-        builder.Append("partial ");
-
-        if (symbol.IsRecord)
-        {
-            builder.Append("record ");
-        }
-
-        builder.Append(symbol.TypeKind switch
-        {
-            TypeKind.Class => "class ",
-            TypeKind.Struct => "struct ",
-            TypeKind.Interface => "interface ",
-            _ => throw new InvalidOperationException(), // Or however you want to handle that
-        });
-
-        builder.Append(nameString);
-    }
-
     public static bool IsInPartialContext(this TypeDeclarationSyntax syntax, out SyntaxToken? nonPartialIdentifier)
     {
         for (SyntaxNode? parentNode = syntax; parentNode is TypeDeclarationSyntax typeDecl; parentNode = parentNode.Parent)
