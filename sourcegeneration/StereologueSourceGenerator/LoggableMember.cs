@@ -15,67 +15,95 @@ internal enum DeclarationType
     None,
     Logged,
     Struct,
-    StructArray,
     Protobuf,
     Boolean,
     Float,
     Double,
     Integer,
     String,
-    BooleanArray,
-    FloatArray,
-    DoubleArray,
-    IntegerArray,
     Raw,
-    StringArray,
     Char,
+    ULong,
 }
 
-internal enum DeclarationModifiers
+internal enum DeclarationKind
 {
     None,
-    AsSpan,
-    LongCast,
-    AllowNullConditionalOperator,
+    ReadOnlySpan,
+    Span,
+    ReadOnlyMemory,
+    Memory,
+    Array,
+    Nullable,
 }
 
 // Contains all information about a loggable member
-internal record LoggableMember(string Name, MemberType MemberType, DeclarationType LoggedType, DeclarationModifiers LoggedModifiers, LogAttributeInfo AttributeInfo);
+internal record LoggableMember(string Name, MemberType MemberType, DeclarationType LoggedType, DeclarationKind LoggedKind, LogAttributeInfo AttributeInfo);
 
 internal static class LoggableMemberExtensions
 {
-    private static (DeclarationType, DeclarationModifiers)? GetDeclarationType(this ITypeSymbol typeSymbol, LogAttributeInfo attributeInfo, CancellationToken token)
+    private static DeclarationKind GetInnerType(this ITypeSymbol typeSymbol, out ITypeSymbol innerType)
+    {
+        // Check if we're an array
+        if (typeSymbol is IArrayTypeSymbol arrayTypeSymbol)
+        {
+            innerType = arrayTypeSymbol.ElementType;
+            return DeclarationKind.Array;
+        }
+
+        INamedTypeSymbol namedTypeSymbol;
+
+        // Check if we're a nullable
+        if (typeSymbol.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+        {
+            namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            innerType = namedTypeSymbol.TypeArguments[0];
+            return DeclarationKind.Nullable;
+        }
+
+        var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
+        switch (typeSymbol.ToDisplayString(fmt))
+        {
+            case "System.ReadOnlySpan":
+                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+                innerType = namedTypeSymbol.TypeArguments[0];
+                return DeclarationKind.ReadOnlySpan;
+            case "System.Span":
+                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+                innerType = namedTypeSymbol.TypeArguments[0];
+                return DeclarationKind.Span;
+            case "System.ReadOnlyMemory":
+                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+                innerType = namedTypeSymbol.TypeArguments[0];
+                return DeclarationKind.ReadOnlyMemory;
+            case "System.Memory":
+                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+                innerType = namedTypeSymbol.TypeArguments[0];
+                return DeclarationKind.Memory;
+        }
+
+        innerType = typeSymbol;
+        return innerType.IsReferenceType ? DeclarationKind.Nullable : DeclarationKind.None;
+    }
+
+    private static (DeclarationType, DeclarationKind)? GetDeclarationType(this ITypeSymbol typeSymbol, LogAttributeInfo attributeInfo, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
-        var modifiers = DeclarationModifiers.None;
-
-        if (typeSymbol.IsReferenceType)
-        {
-            modifiers = DeclarationModifiers.AllowNullConditionalOperator;
-        }
-        else if (typeSymbol.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
-        {
-            // Pull out the inner type
-            var namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-            var innerType = namedTypeSymbol.TypeArguments[0];
-            typeSymbol = innerType;
-
-            modifiers = DeclarationModifiers.AllowNullConditionalOperator;
-        }
+        var nestedKind = typeSymbol.GetInnerType(out typeSymbol);
 
         token.ThrowIfCancellationRequested();
 
         // If we know we're generating a loggable implementation
         if (typeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
-            return (DeclarationType.Logged, modifiers);
+            return (DeclarationType.Logged, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
         if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
-            return (DeclarationType.Logged, modifiers);
+            return (DeclarationType.Logged, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we have an UpdateMonologue function
@@ -99,7 +127,7 @@ internal static class LoggableMemberExtensions
                 }
                 if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
                 {
-                    return (DeclarationType.Logged, modifiers);
+                    return (DeclarationType.Logged, nestedKind);
                 }
             }
         }
@@ -118,70 +146,54 @@ internal static class LoggableMemberExtensions
             token.ThrowIfCancellationRequested();
             if (interfaceName == structName)
             {
-                // TODO figure out arrays of structs
                 if (!attributeInfo.UseProtobuf)
                 {
-                    return (DeclarationType.Struct, DeclarationModifiers.None);
+                    return (DeclarationType.Struct, nestedKind);
                 }
             }
             else if (interfaceName == protobufName)
             {
                 if (attributeInfo.UseProtobuf)
                 {
-                    return (DeclarationType.Protobuf, DeclarationModifiers.None);
+                    // TODO disallow arrays of protobuf types
+                    return (DeclarationType.Protobuf, nestedKind);
                 }
             }
         }
 
-        return fullTypeName switch
+        // Special case non nested and nullables
+        if (nestedKind == DeclarationKind.None || nestedKind == DeclarationKind.Nullable)
         {
-            "System.Single" => (DeclarationType.Float, DeclarationModifiers.None),
-            "System.Double" => (DeclarationType.Double, DeclarationModifiers.None),
-            "System.Byte" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.SByte" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.Int16" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.UInt16" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.Int32" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.UInt32" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.Int64" => (DeclarationType.Integer, DeclarationModifiers.None),
-            "System.UInt64" => (DeclarationType.Integer, DeclarationModifiers.LongCast),
-            "System.Boolean" => (DeclarationType.Boolean, DeclarationModifiers.None),
-            "System.Char" => (DeclarationType.Char, DeclarationModifiers.None),
-            "System.String" => (DeclarationType.String, DeclarationModifiers.AsSpan),
-            "System.Single[]" => (DeclarationType.FloatArray, DeclarationModifiers.AsSpan),
-            "System.Double[]" => (DeclarationType.DoubleArray, DeclarationModifiers.AsSpan),
-            "System.Int64[]" => (DeclarationType.IntegerArray, DeclarationModifiers.AsSpan),
-            "System.String[]" => (DeclarationType.StringArray, DeclarationModifiers.AsSpan),
-            "System.Byte[]" => (DeclarationType.Raw, DeclarationModifiers.AsSpan),
-            "System.Boolean[]" => (DeclarationType.BooleanArray, DeclarationModifiers.AsSpan),
-            "System.ReadOnlySpan<System.Char>" => (DeclarationType.String, DeclarationModifiers.None),
-            "System.ReadOnlySpan<System.Single>" => (DeclarationType.FloatArray, DeclarationModifiers.None),
-            "System.ReadOnlySpan<System.Double>" => (DeclarationType.DoubleArray, DeclarationModifiers.None),
-            "System.ReadOnlySpan<System.Int64>" => (DeclarationType.IntegerArray, DeclarationModifiers.None),
-            "System.ReadOnlySpan<System.String>" => (DeclarationType.StringArray, DeclarationModifiers.None),
-            "System.ReadOnlySpan<System.Byte>" => (DeclarationType.Raw, DeclarationModifiers.None),
-            "System.ReadOnlySpan<System.Boolean>" => (DeclarationType.BooleanArray, DeclarationModifiers.None),
-            "System.Span<System.Single>" => (DeclarationType.FloatArray, DeclarationModifiers.None),
-            "System.Span<System.Double>" => (DeclarationType.DoubleArray, DeclarationModifiers.None),
-            "System.Span<System.Int64>" => (DeclarationType.IntegerArray, DeclarationModifiers.None),
-            "System.Span<System.String>" => (DeclarationType.StringArray, DeclarationModifiers.None),
-            "System.Span<System.Byte>" => (DeclarationType.Raw, DeclarationModifiers.None),
-            "System.Span<System.Boolean>" => (DeclarationType.BooleanArray, DeclarationModifiers.None),
-            "System.ReadOnlyMemory<System.Char>" => (DeclarationType.String, DeclarationModifiers.AsSpan),
-            "System.ReadOnlyMemory<System.Single>" => (DeclarationType.FloatArray, DeclarationModifiers.AsSpan),
-            "System.ReadOnlyMemory<System.Double>" => (DeclarationType.DoubleArray, DeclarationModifiers.AsSpan),
-            "System.ReadOnlyMemory<System.Int64>" => (DeclarationType.IntegerArray, DeclarationModifiers.AsSpan),
-            "System.ReadOnlyMemory<System.String>" => (DeclarationType.StringArray, DeclarationModifiers.AsSpan),
-            "System.ReadOnlyMemory<System.Byte>" => (DeclarationType.Raw, DeclarationModifiers.AsSpan),
-            "System.ReadOnlyMemory<System.Boolean>" => (DeclarationType.BooleanArray, DeclarationModifiers.AsSpan),
-            "System.Memory<System.Single>" => (DeclarationType.FloatArray, DeclarationModifiers.AsSpan),
-            "System.Memory<System.Double>" => (DeclarationType.DoubleArray, DeclarationModifiers.AsSpan),
-            "System.Memory<System.Int64>" => (DeclarationType.IntegerArray, DeclarationModifiers.AsSpan),
-            "System.Memory<System.String>" => (DeclarationType.StringArray, DeclarationModifiers.AsSpan),
-            "System.Memory<System.Byte>" => (DeclarationType.Raw, DeclarationModifiers.AsSpan),
-            "System.Memory<System.Boolean>" => (DeclarationType.BooleanArray, DeclarationModifiers.AsSpan),
-            _ => (DeclarationType.None, DeclarationModifiers.None)
-        };
+            return (fullTypeName switch
+            {
+                "System.Single" => DeclarationType.Float,
+                "System.Double" => DeclarationType.Double,
+                "System.Byte" => DeclarationType.Integer,
+                "System.SByte" => DeclarationType.Integer,
+                "System.Int16" => DeclarationType.Integer,
+                "System.UInt16" => DeclarationType.Integer,
+                "System.Int32" => DeclarationType.Integer,
+                "System.UInt32" => DeclarationType.Integer,
+                "System.Int64" => DeclarationType.Integer,
+                "System.UInt64" => DeclarationType.ULong,
+                "System.Boolean" => DeclarationType.Boolean,
+                "System.Char" => DeclarationType.Char,
+                "System.String" => DeclarationType.String,
+                _ => DeclarationType.None
+            }, nestedKind);
+        }
+
+
+        return (fullTypeName switch
+        {
+            "System.Single" => DeclarationType.Float,
+            "System.Double" => DeclarationType.Double,
+            "System.Byte" => DeclarationType.Raw,
+            "System.Int64" => DeclarationType.Integer,
+            "System.Boolean" => DeclarationType.Boolean,
+            "System.String" => DeclarationType.String,
+            _ => DeclarationType.None
+        }, nestedKind);
     }
 
     public static LoggableMember? ToLoggableMember(this ISymbol member, CancellationToken token, out DiagnosticInfo? diagnostic)

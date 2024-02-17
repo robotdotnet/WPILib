@@ -159,52 +159,76 @@ internal static class LoggableTypeExtensions
             _ => "UNKNOWN"
         };
 
-        getOperation = data.LoggedModifiers switch
-        {
-            DeclarationModifiers.AsSpan => $"{getOperation}.AsSpan()",
-            DeclarationModifiers.LongCast => $"(long){getOperation}",
-            _ => getOperation
-        };
-
         var path = string.IsNullOrWhiteSpace(data.AttributeInfo.Path) ? data.Name : data.AttributeInfo.Path;
 
         if (data.LoggedType == DeclarationType.Logged)
         {
-            // TODO check log type to see if we should actually do this
-            // TODO arrays of loggables
-            builder.Append(getOperation);
-            if (data.LoggedModifiers == DeclarationModifiers.AllowNullConditionalOperator)
-            {
-                builder.Append("?");
-            }
-            builder.Append(".UpdateStereologue($\"{path}/");
-            builder.Append(path);
-            builder.Append("\", logger);");
             return;
         }
 
-        var logCall = data.LoggedType switch
+        if (data.LoggedType == DeclarationType.Struct)
         {
-            DeclarationType.Struct => "LogStruct",
-            DeclarationType.StructArray => "LogStructArray",
-            DeclarationType.Protobuf => "LogProto",
-            DeclarationType.Char => "LogChar",
-            DeclarationType.String => "LogString",
-            DeclarationType.StringArray => "LogStringArray",
-            DeclarationType.Boolean => "LogBoolean",
-            DeclarationType.BooleanArray => "LogBooleanArray",
-            DeclarationType.Float => "LogFloat",
-            DeclarationType.FloatArray => "LogFloatArray",
-            DeclarationType.Double => "LogDouble",
-            DeclarationType.DoubleArray => "LogDoubleArray",
-            DeclarationType.Integer => "LogInteger",
-            DeclarationType.IntegerArray => "LogIntegerArray",
-            DeclarationType.Raw => "LogRaw",
-            _ => "UNLOGGABLE_TYPE"
-        };
+            return;
+        }
+
+        if (data.LoggedType == DeclarationType.Protobuf)
+        {
+            return;
+        }
+
+        string logMethod;
+
+        if (data.LoggedKind == DeclarationKind.None || data.LoggedKind == DeclarationKind.Nullable)
+        {
+            if (data.LoggedType == DeclarationType.String)
+            {
+                getOperation = $"{getOperation}.AsSpan()";
+            }
+            else if (data.LoggedKind == DeclarationKind.Nullable)
+            {
+                getOperation = $"{getOperation}.GetValueOrDefault()";
+            }
+            if (data.LoggedType == DeclarationType.ULong)
+            {
+                getOperation = $"(long){getOperation}";
+            }
+
+            logMethod = data.LoggedType switch
+            {
+                DeclarationType.Struct => "LogStruct",
+                DeclarationType.Protobuf => "LogProto",
+                DeclarationType.Char => "LogChar",
+                DeclarationType.String => "LogString",
+                DeclarationType.Boolean => "LogBoolean",
+                DeclarationType.Float => "LogFloat",
+                DeclarationType.Double => "LogDouble",
+                DeclarationType.Integer => "LogInteger",
+                DeclarationType.ULong => "LogInteger",
+                _ => $"Unknown Type: {data.LoggedType}"
+            };
+        }
+        else
+        {
+            // We're array of a basic type
+            if (data.LoggedKind != DeclarationKind.ReadOnlySpan && data.LoggedKind != DeclarationKind.Span)
+            {
+                getOperation = $"{getOperation}.AsSpan()";
+            }
+
+            logMethod = data.LoggedType switch
+            {
+                DeclarationType.String => "LogStringArray",
+                DeclarationType.Boolean => "LogBooleanArray",
+                DeclarationType.Float => "LogFloatArray",
+                DeclarationType.Double => "LogDoubleArray",
+                DeclarationType.Integer => "LogIntegerArray",
+                DeclarationType.Raw => "LogRaw",
+                _ => $"Unknown Array: {data.LoggedType}"
+            };
+        }
 
         builder.Append("logger.");
-        builder.Append(logCall);
+        builder.Append(logMethod);
         builder.Append("($\"{path}/");
         builder.Append(path);
         builder.Append("\", ");
@@ -214,6 +238,63 @@ internal static class LoggableTypeExtensions
         builder.Append(", ");
         builder.Append(data.AttributeInfo.LogLevel);
         builder.Append(");");
+
+
+        // getOperation = data.LoggedModifiers switch
+        // {
+        //     DeclarationModifiers.AsSpan => $"{getOperation}.AsSpan()",
+        //     DeclarationModifiers.LongCast => $"(long){getOperation}",
+        //     _ => getOperation
+        // };
+
+        //
+
+        // if (data.LoggedType == DeclarationType.Logged)
+        // {
+        //     // TODO check log type to see if we should actually do this
+        //     // TODO arrays of loggables
+        //     builder.Append(getOperation);
+        //     if (data.LoggedModifiers == DeclarationModifiers.AllowNullConditionalOperator)
+        //     {
+        //         builder.Append("?");
+        //     }
+        //     builder.Append(".UpdateStereologue($\"{path}/");
+        //     builder.Append(path);
+        //     builder.Append("\", logger);");
+        //     return;
+        // }
+
+        // var logCall = data.LoggedType switch
+        // {
+        //     DeclarationType.Struct => "LogStruct",
+        //     DeclarationType.StructArray => "LogStructArray",
+        //     DeclarationType.Protobuf => "LogProto",
+        //     DeclarationType.Char => "LogChar",
+        //     DeclarationType.String => "LogString",
+        //     DeclarationType.StringArray => "LogStringArray",
+        //     DeclarationType.Boolean => "LogBoolean",
+        //     DeclarationType.BooleanArray => "LogBooleanArray",
+        //     DeclarationType.Float => "LogFloat",
+        //     DeclarationType.FloatArray => "LogFloatArray",
+        //     DeclarationType.Double => "LogDouble",
+        //     DeclarationType.DoubleArray => "LogDoubleArray",
+        //     DeclarationType.Integer => "LogInteger",
+        //     DeclarationType.IntegerArray => "LogIntegerArray",
+        //     DeclarationType.Raw => "LogRaw",
+        //     _ => "UNLOGGABLE_TYPE"
+        // };
+
+        // builder.Append("logger.");
+        // builder.Append(logCall);
+        // builder.Append("($\"{path}/");
+        // builder.Append(path);
+        // builder.Append("\", ");
+        // builder.Append(data.AttributeInfo.LogType);
+        // builder.Append(", ");
+        // builder.Append(getOperation);
+        // builder.Append(", ");
+        // builder.Append(data.AttributeInfo.LogLevel);
+        // builder.Append(");");
     }
 
     public static void AddClassDeclaration(LoggableType type, StringBuilder builder)

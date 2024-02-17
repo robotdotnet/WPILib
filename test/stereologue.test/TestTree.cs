@@ -163,6 +163,12 @@ public partial class GenerateAllKnownTypes
     [Log(UseProtobuf = true)]
     public Rotation2d RotationProto => new();
 
+    [Log()]
+    public Rotation2d[] RotationArray = [];
+
+    [Log]
+    public int? NullableInt;
+
     [Log]
     public GenerateStruct NonNullStruct;
     [Log]
