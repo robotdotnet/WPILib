@@ -69,13 +69,40 @@ internal static class LoggableTypeExtensions
             MemberType.Field => data.Name,
             MemberType.Property => data.Name,
             MemberType.Method => $"{data.Name}()",
-            _ => "Unknown member type"
+            _ => "ScrollUpInLogForActualError_WPILIB1001"
         };
 
         var path = string.IsNullOrWhiteSpace(data.AttributeInfo.Path) ? data.Name : data.AttributeInfo.Path;
 
         if (data.MemberDeclaration.LoggedType == DeclarationType.Logged)
         {
+            // If we're a basic logged, just do a simple ? based null check if possible.
+            if (data.MemberDeclaration.LoggedKind == DeclarationKind.None || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType)
+            {
+                builder.Append(getOperation);
+                if (data.MemberDeclaration.LoggedKind != DeclarationKind.None)
+                {
+                    builder.Append("?");
+                }
+                builder.Append(".UpdateStereologue($\"{path}/");
+                builder.Append(path);
+                builder.Append("\", logger);");
+            }
+            else
+            {
+                // We're an array, loop
+                builder.AppendLine($"foreach(var __tmpValue in {getOperation})");
+                builder.AppendLine("        {");
+                builder.Append("            __tmpValue");
+                if (data.MemberDeclaration.SpecialType == SpecialType.System_Nullable_T)
+                {
+                    builder.Append("?");
+                }
+                builder.Append(".UpdateStereologue($\"{path}/");
+                builder.Append(path);
+                builder.AppendLine("\", logger);");
+                builder.AppendLine("        }");
+            }
             return;
         }
 
@@ -92,10 +119,6 @@ internal static class LoggableTypeExtensions
             {
                 logMethod = "LogStruct";
             }
-            if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-            {
-                getOperation = $"{getOperation}.GetValueOrDefault()";
-            }
         }
 
         else if (data.MemberDeclaration.LoggedType == DeclarationType.Protobuf)
@@ -103,28 +126,16 @@ internal static class LoggableTypeExtensions
 
             if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
             {
-                logMethod = "Cannot log an array of protobufs";
+                logMethod = "ScrollUpInLogForActualError_WPILIB1004";
             }
             else
             {
                 logMethod = "LogProto";
             }
-            if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-            {
-                getOperation = $"{getOperation}.GetValueOrDefault()";
-            }
         }
         else if (data.MemberDeclaration.LoggedKind == DeclarationKind.None || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
         {
             // We're not an array. We're either Nullable<T> or a plain type
-            if (data.MemberDeclaration.SpecialType == SpecialType.System_String)
-            {
-                getOperation = $"{getOperation}.AsSpan()";
-            }
-            else if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-            {
-                getOperation = $"{getOperation}.GetValueOrDefault()";
-            }
             if (data.MemberDeclaration.SpecialType == SpecialType.System_UInt64 || data.MemberDeclaration.SpecialType == SpecialType.System_IntPtr || data.MemberDeclaration.SpecialType == SpecialType.System_UIntPtr)
             {
                 getOperation = $"(long){getOperation}";
@@ -147,16 +158,12 @@ internal static class LoggableTypeExtensions
                 SpecialType.System_UInt64 => "LogInteger",
                 SpecialType.System_IntPtr => "LogInteger",
                 SpecialType.System_UIntPtr => "LogInteger",
-                _ => $"Unknown Type: {data.MemberDeclaration}"
+                _ => $"ScrollUpInLogForActualError_WPILIB1002"
             };
         }
         else
         {
             // We're array of a basic type
-            if (data.MemberDeclaration.LoggedKind != DeclarationKind.ReadOnlySpan && data.MemberDeclaration.LoggedKind != DeclarationKind.Span)
-            {
-                getOperation = $"{getOperation}.AsSpan()";
-            }
 
             logMethod = data.MemberDeclaration.SpecialType switch
             {
@@ -166,8 +173,30 @@ internal static class LoggableTypeExtensions
                 SpecialType.System_Double => "LogDoubleArray",
                 SpecialType.System_Byte => "LogRaw",
                 SpecialType.System_Int64 => "LogIntegerArray",
-                _ => $"Unknown Array: {data.MemberDeclaration}"
+                _ => $"ScrollUpInLogForActualError_WPILIB1003"
             };
+        }
+
+        bool isNullable = false;
+
+        if (data.MemberDeclaration.LoggedKind == DeclarationKind.Array || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
+        {
+            // We're nullable. We need to do some tricks.
+            builder.AppendLine("{");
+            builder.AppendLine($"            var __tmpValue = {getOperation};");
+            builder.AppendLine($"            if (__tmpValue is not null)");
+            builder.AppendLine("            {");
+            builder.Append("                ");
+            getOperation = "__tmpValue";
+            if (data.MemberDeclaration.SpecialType == SpecialType.System_String || data.MemberDeclaration.LoggedKind == DeclarationKind.Array)
+            {
+                getOperation = $"{getOperation}.AsSpan()";
+            }
+            if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
+            {
+                getOperation = $"{getOperation}.Value";
+            }
+            isNullable = true;
         }
 
         builder.Append("logger.");
@@ -181,6 +210,13 @@ internal static class LoggableTypeExtensions
         builder.Append(", ");
         builder.Append(data.AttributeInfo.LogLevel);
         builder.Append(");");
+
+        if (isNullable)
+        {
+            builder.AppendLine();
+            builder.AppendLine("            }");
+            builder.Append("        }");
+        }
     }
 
     public static void AddClassDeclaration(LoggableType type, StringBuilder builder)

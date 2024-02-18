@@ -91,24 +91,32 @@ internal static class LoggableMemberExtensions
 
         token.ThrowIfCancellationRequested();
 
-        // TODO support IntPtr and NIntPtr
-
         if (typeSymbol.SpecialType != SpecialType.None)
         {
             // We're a built in special type, no need to check for anything else
             return new(DeclarationType.SpecialType, typeSymbol.SpecialType, nestedKind);
         }
 
+        // See if we need to unwrap a nullable array
+        bool innerNullable = false;
+        if (typeSymbol.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T)
+        {
+            var namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            typeSymbol = namedTypeSymbol.TypeArguments[0];
+            innerNullable = true;
+        }
+
         // If we know we're generating a loggable implementation
         if (typeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
-            return new(DeclarationType.Logged, SpecialType.None, nestedKind);
+
+            return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
         if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
-            return new(DeclarationType.Logged, SpecialType.None, nestedKind);
+            return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we have an UpdateMonologue function
@@ -132,7 +140,7 @@ internal static class LoggableMemberExtensions
                 }
                 if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
                 {
-                    return new(DeclarationType.Logged, SpecialType.None, nestedKind);
+                    return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
                 }
             }
         }

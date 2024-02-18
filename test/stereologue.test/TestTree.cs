@@ -177,6 +177,32 @@ public partial class GenerateAllKnownTypes
     [Log()]
     public Rotation2d[] RotationArray = [];
 
+    // [Log()]
+    // public Rotation2d?[] RotationNullableArray = [];
+
+    // [Log(UseProtobuf = true)]
+    // public Rotation2d[] RotationProtoArray = [];
+
+    // [Log(UseProtobuf = true)]
+    // public Rotation2d?[] RotationProtoNullableArray = [];
+
+    // [Log]
+    // public object Object = null!;
+
+    // [Log]
+    // public unsafe int* PtrValue;
+
+    // [Log]
+    // public IEnumerable<bool> BoolEnumerable = null!;
+
+    // [Log]
+    // public int[] intArr = null!;
+
+    // [Log]
+    // public DateTime dateTime;
+
+    // public DateTime[] dateTimeArray = null!;
+
     [Log]
     public int? NullableInt;
 
@@ -189,4 +215,10 @@ public partial class GenerateAllKnownTypes
     public GenerateClass NonNullClass = null!;
     [Log]
     public GenerateClass? NullClass;
+    [Log]
+    public GenerateClass[] ClassArray = null!;
+    [Log]
+    public GenerateClass?[] NullableClassArray = null!;
+    [Log]
+    public GenerateStruct?[] NullableStructArray = null!;
 }

@@ -19,3 +19,15 @@ public class LogGenerator : IIncrementalGenerator
             static (spc, source) => source.ExecuteSourceGeneration(spc));
     }
 }
+
+// Notes on what analyzer needs to block
+// * Type marked [GenerateLog] is not partial
+// * Type marked [GenerateLog] is interface (Might be fixed)
+// * Array Like types of Nullable<T> for [Log] marked members
+// * Pointer types for [Log] marked members
+// * Only Allow Span, ROS and [] for array types
+// * If array, only allow Long for integers
+// * Types must be either primitives, ILogged, Array of ILogged, IStructSerializable, Array of IStructSerializable, or IProtobufSerializable
+
+// What analyzer needs to warn
+// * Class contains [Log] annotations, but is not marked [GenerateLog]
