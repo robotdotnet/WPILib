@@ -112,6 +112,18 @@ public sealed class Stereologuer
         }
     }
 
+    public void LogStructArray<T>(string path, LogType logType, T[]? value, LogLevel logLevel = LogLevel.Default) where T : IStructSerializable<T>
+    {
+        ReadOnlySpan<T> ros = value.AsSpan();
+        LogStructArray(path, logType, ros, logLevel);
+    }
+
+    public void LogStructArray<T>(string path, LogType logType, Span<T> value, LogLevel logLevel = LogLevel.Default) where T : IStructSerializable<T>
+    {
+        ReadOnlySpan<T> ros = value;
+        LogStructArray(path, logType, ros, logLevel);
+    }
+
     public void LogStructArray<T>(string path, LogType logType, ReadOnlySpan<T> value, LogLevel logLevel = LogLevel.Default) where T : IStructSerializable<T>
     {
         ref var logs = ref CheckDoLog(path, ref logType, logLevel, structArrayLogs);

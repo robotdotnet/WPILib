@@ -32,7 +32,7 @@ internal enum DeclarationKind
     NullableReferenceType
 }
 
-internal record MemberDeclaration(DeclarationType LoggedType, SpecialType SpecialType, DeclarationKind LoggedKind, string? FQN);
+internal record MemberDeclaration(DeclarationType LoggedType, SpecialType SpecialType, DeclarationKind LoggedKind);
 
 // Contains all information about a loggable member
 internal record LoggableMember(string Name, MemberType MemberType, MemberDeclaration MemberDeclaration, LogAttributeInfo AttributeInfo);
@@ -96,19 +96,19 @@ internal static class LoggableMemberExtensions
         if (typeSymbol.SpecialType != SpecialType.None)
         {
             // We're a built in special type, no need to check for anything else
-            return new(DeclarationType.SpecialType, typeSymbol.SpecialType, nestedKind, null);
+            return new(DeclarationType.SpecialType, typeSymbol.SpecialType, nestedKind);
         }
 
         // If we know we're generating a loggable implementation
         if (typeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
-            return new(DeclarationType.Logged, SpecialType.None, nestedKind, null);
+            return new(DeclarationType.Logged, SpecialType.None, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
         if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
-            return new(DeclarationType.Logged, SpecialType.None, nestedKind, null);
+            return new(DeclarationType.Logged, SpecialType.None, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we have an UpdateMonologue function
@@ -132,7 +132,7 @@ internal static class LoggableMemberExtensions
                 }
                 if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
                 {
-                    return new(DeclarationType.Logged, SpecialType.None, nestedKind, null);
+                    return new(DeclarationType.Logged, SpecialType.None, nestedKind);
                 }
             }
         }
@@ -153,20 +153,20 @@ internal static class LoggableMemberExtensions
             {
                 if (!attributeInfo.UseProtobuf)
                 {
-                    return new(DeclarationType.Struct, SpecialType.None, nestedKind, typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                    return new(DeclarationType.Struct, SpecialType.None, nestedKind);
                 }
             }
             else if (interfaceName == protobufName)
             {
                 if (attributeInfo.UseProtobuf)
                 {
-                    return new(DeclarationType.Protobuf, SpecialType.None, nestedKind, typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
+                    return new(DeclarationType.Protobuf, SpecialType.None, nestedKind);
                 }
             }
         }
 
         // We get here by attempting to log a type we have no clue about
-        return new(DeclarationType.None, SpecialType.None, DeclarationKind.None, null);
+        return new(DeclarationType.None, SpecialType.None, DeclarationKind.None);
     }
 
     public static LoggableMember? ToLoggableMember(this ISymbol member, CancellationToken token)

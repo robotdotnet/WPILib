@@ -86,11 +86,11 @@ internal static class LoggableTypeExtensions
             if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
             {
                 // We're an array
-                logMethod = $"LogStructArray<{data.MemberDeclaration.FQN}>";
+                logMethod = "LogStructArray";
             }
             else
             {
-                logMethod = $"LogStruct<{data.MemberDeclaration.FQN}>";
+                logMethod = "LogStruct";
             }
             if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
             {
@@ -107,7 +107,7 @@ internal static class LoggableTypeExtensions
             }
             else
             {
-                logMethod = $"LogProto<{data.MemberDeclaration.FQN}>";
+                logMethod = "LogProto";
             }
             if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
             {
