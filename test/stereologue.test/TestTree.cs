@@ -62,7 +62,7 @@ public readonly ref partial struct GenerateReadonlyRefStruct
 // }
 
 [GenerateLog]
-public partial record GenerateRecord : ILogged
+public partial record GenerateRecord
 {
     [Log]
     public int Variable { get; }
@@ -180,8 +180,8 @@ public partial class GenerateAllKnownTypes
     // [Log()]
     // public Rotation2d?[] RotationNullableArray = [];
 
-    // [Log(UseProtobuf = true)]
-    // public Rotation2d[] RotationProtoArray = [];
+    [Log(UseProtobuf = true)]
+    public Rotation2d[] RotationProtoArray = [];
 
     // [Log(UseProtobuf = true)]
     // public Rotation2d?[] RotationProtoNullableArray = [];

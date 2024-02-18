@@ -11,7 +11,7 @@ public sealed class LogAttribute : Attribute
     public bool UseProtobuf { get; init; } = false;
 }
 
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 public sealed class GenerateLogAttribute : Attribute
 {
 }

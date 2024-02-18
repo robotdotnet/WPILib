@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Stereologue.SourceGenerator;
@@ -18,12 +19,8 @@ internal static class LoggableTypeExtensions
         return new TypeDeclType(symbol.TypeKind, symbol.IsReadOnly, symbol.IsRefLikeType, symbol.IsRecord);
     }
 
-    public static LoggableType? GetLoggableType(this GeneratorAttributeSyntaxContext context, CancellationToken token)
+    public static LoggableType GetLoggableType(this INamedTypeSymbol classSymbol, CancellationToken token)
     {
-        if (context.SemanticModel.GetDeclaredSymbol(context.TargetNode) is not INamedTypeSymbol classSymbol)
-        {
-            return null;
-        }
         token.ThrowIfCancellationRequested();
 
         var typeDeclType = classSymbol.GetTypeDeclType();
@@ -69,8 +66,13 @@ internal static class LoggableTypeExtensions
             MemberType.Field => data.Name,
             MemberType.Property => data.Name,
             MemberType.Method => $"{data.Name}()",
-            _ => "ScrollUpInLogForActualError_WPILIB1001"
+            _ => null // Attribute applied to unknown type
         };
+
+        if (getOperation is null)
+        {
+            return;
+        }
 
         var path = string.IsNullOrWhiteSpace(data.AttributeInfo.Path) ? data.Name : data.AttributeInfo.Path;
 
@@ -106,7 +108,7 @@ internal static class LoggableTypeExtensions
             return;
         }
 
-        string logMethod;
+        string? logMethod;
 
         if (data.MemberDeclaration.LoggedType == DeclarationType.Struct)
         {
@@ -126,7 +128,8 @@ internal static class LoggableTypeExtensions
 
             if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
             {
-                logMethod = "ScrollUpInLogForActualError_WPILIB1004";
+                // Protobuf is array
+                return;
             }
             else
             {
@@ -158,8 +161,13 @@ internal static class LoggableTypeExtensions
                 SpecialType.System_UInt64 => "LogInteger",
                 SpecialType.System_IntPtr => "LogInteger",
                 SpecialType.System_UIntPtr => "LogInteger",
-                _ => $"ScrollUpInLogForActualError_WPILIB1002"
+                _ => null // SpecialType is unknown, for non array
             };
+
+            if (logMethod is null)
+            {
+                return;
+            }
         }
         else
         {
@@ -173,8 +181,13 @@ internal static class LoggableTypeExtensions
                 SpecialType.System_Double => "LogDoubleArray",
                 SpecialType.System_Byte => "LogRaw",
                 SpecialType.System_Int64 => "LogIntegerArray",
-                _ => $"ScrollUpInLogForActualError_WPILIB1003"
+                _ => null // Type is not usable for array
             };
+
+            if (logMethod is null)
+            {
+                return;
+            }
         }
 
         bool isNullable = false;

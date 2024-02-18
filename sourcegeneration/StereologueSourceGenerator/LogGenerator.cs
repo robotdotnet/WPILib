@@ -12,7 +12,14 @@ public class LogGenerator : IIncrementalGenerator
             .ForAttributeWithMetadataName(
                 "Stereologue.GenerateLogAttribute",
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
-                transform: static (ctx, token) => ctx.GetLoggableType(token))
+                transform: static (ctx, token) =>
+                {
+                    if (ctx.SemanticModel.GetDeclaredSymbol(ctx.TargetNode) is not INamedTypeSymbol classSymbol)
+                    {
+                        return null;
+                    }
+                    return classSymbol.GetLoggableType(token);
+                })
             .Where(static m => m is not null);
 
         context.RegisterSourceOutput(attributedTypes,
