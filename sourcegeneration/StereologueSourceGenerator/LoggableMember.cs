@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Stereologue.SourceGenerator;
 
@@ -16,14 +17,7 @@ internal enum DeclarationType
     Logged,
     Struct,
     Protobuf,
-    Boolean,
-    Float,
-    Double,
-    Integer,
-    String,
-    Raw,
-    Char,
-    ULong,
+    SpecialType,
 }
 
 internal enum DeclarationKind
@@ -38,8 +32,10 @@ internal enum DeclarationKind
     NullableReferenceType
 }
 
+internal record MemberDeclaration(DeclarationType LoggedType, SpecialType SpecialType, DeclarationKind LoggedKind, string? FQN);
+
 // Contains all information about a loggable member
-internal record LoggableMember(string Name, MemberType MemberType, DeclarationType LoggedType, DeclarationKind LoggedKind, LogAttributeInfo AttributeInfo);
+internal record LoggableMember(string Name, MemberType MemberType, MemberDeclaration MemberDeclaration, LogAttributeInfo AttributeInfo);
 
 internal static class LoggableMemberExtensions
 {
@@ -87,7 +83,7 @@ internal static class LoggableMemberExtensions
         return innerType.IsReferenceType ? DeclarationKind.NullableReferenceType : DeclarationKind.None;
     }
 
-    private static (DeclarationType, DeclarationKind)? GetDeclarationType(this ITypeSymbol typeSymbol, LogAttributeInfo attributeInfo, CancellationToken token)
+    private static MemberDeclaration? GetDeclarationType(this ITypeSymbol typeSymbol, LogAttributeInfo attributeInfo, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
 
@@ -95,16 +91,24 @@ internal static class LoggableMemberExtensions
 
         token.ThrowIfCancellationRequested();
 
+        // TODO support IntPtr and NIntPtr
+
+        if (typeSymbol.SpecialType != SpecialType.None)
+        {
+            // We're a built in special type, no need to check for anything else
+            return new(DeclarationType.SpecialType, typeSymbol.SpecialType, nestedKind, null);
+        }
+
         // If we know we're generating a loggable implementation
         if (typeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
         {
-            return (DeclarationType.Logged, nestedKind);
+            return new(DeclarationType.Logged, SpecialType.None, nestedKind, null);
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
         if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
         {
-            return (DeclarationType.Logged, nestedKind);
+            return new(DeclarationType.Logged, SpecialType.None, nestedKind, null);
         }
         token.ThrowIfCancellationRequested();
         // If we have an UpdateMonologue function
@@ -128,7 +132,7 @@ internal static class LoggableMemberExtensions
                 }
                 if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
                 {
-                    return (DeclarationType.Logged, nestedKind);
+                    return new(DeclarationType.Logged, SpecialType.None, nestedKind, null);
                 }
             }
         }
@@ -149,55 +153,23 @@ internal static class LoggableMemberExtensions
             {
                 if (!attributeInfo.UseProtobuf)
                 {
-                    return (DeclarationType.Struct, nestedKind);
+                    return new(DeclarationType.Struct, SpecialType.None, nestedKind, typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
                 }
             }
             else if (interfaceName == protobufName)
             {
                 if (attributeInfo.UseProtobuf)
                 {
-                    // TODO disallow arrays of protobuf types
-                    return (DeclarationType.Protobuf, nestedKind);
+                    return new(DeclarationType.Protobuf, SpecialType.None, nestedKind, typeSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
                 }
             }
         }
 
-        // Special case non nested and nullables
-        if (nestedKind == DeclarationKind.None || nestedKind == DeclarationKind.NullableReferenceType || nestedKind == DeclarationKind.NullableValueType)
-        {
-            return (fullTypeName switch
-            {
-                "System.Single" => DeclarationType.Float,
-                "System.Double" => DeclarationType.Double,
-                "System.Byte" => DeclarationType.Integer,
-                "System.SByte" => DeclarationType.Integer,
-                "System.Int16" => DeclarationType.Integer,
-                "System.UInt16" => DeclarationType.Integer,
-                "System.Int32" => DeclarationType.Integer,
-                "System.UInt32" => DeclarationType.Integer,
-                "System.Int64" => DeclarationType.Integer,
-                "System.UInt64" => DeclarationType.ULong,
-                "System.Boolean" => DeclarationType.Boolean,
-                "System.Char" => DeclarationType.Char,
-                "System.String" => DeclarationType.String,
-                _ => DeclarationType.None
-            }, nestedKind);
-        }
-
-
-        return (fullTypeName switch
-        {
-            "System.Single" => DeclarationType.Float,
-            "System.Double" => DeclarationType.Double,
-            "System.Byte" => DeclarationType.Raw,
-            "System.Int64" => DeclarationType.Integer,
-            "System.Boolean" => DeclarationType.Boolean,
-            "System.String" => DeclarationType.String,
-            _ => DeclarationType.None
-        }, nestedKind);
+        // We get here by attempting to log a type we have no clue about
+        return new(DeclarationType.None, SpecialType.None, DeclarationKind.None, null);
     }
 
-    public static LoggableMember? ToLoggableMember(this ISymbol member, CancellationToken token, out DiagnosticInfo? diagnostic)
+    public static LoggableMember? ToLoggableMember(this ISymbol member, CancellationToken token)
     {
         var attributes = member.GetAttributes();
         foreach (AttributeData attribute in attributes)
@@ -231,12 +203,10 @@ internal static class LoggableMemberExtensions
             {
                 if (method.ReturnsVoid)
                 {
-                    diagnostic = DiagnosticInfo.Create(GeneratorDiagnostics.LoggedMethodDoesntReturnVoid, null, [method.Name]);
                     return null;
                 }
                 if (!method.Parameters.IsEmpty)
                 {
-                    diagnostic = DiagnosticInfo.Create(GeneratorDiagnostics.LoggedMethodTakesArguments, null, [method.Name]);
                     return null;
                 }
                 logType = method.ReturnType;
@@ -244,7 +214,6 @@ internal static class LoggableMemberExtensions
             }
             else
             {
-                diagnostic = DiagnosticInfo.Create(GeneratorDiagnostics.LoggedMemberTypeNotSupported, null, [member.Name]);
                 return null;
             }
             token.ThrowIfCancellationRequested();
@@ -253,15 +222,11 @@ internal static class LoggableMemberExtensions
             token.ThrowIfCancellationRequested();
             if (declType is null)
             {
-                // TODO change this to unsupported type
-                diagnostic = DiagnosticInfo.Create(GeneratorDiagnostics.GeneratedTypeIsInterface, null, null);
                 return null;
             }
 
-            diagnostic = null;
-            return new LoggableMember(member.Name, memberType, declType.Value.Item1, declType.Value.Item2, attributeInfo);
+            return new LoggableMember(member.Name, memberType, declType, attributeInfo);
         }
-        diagnostic = null;
         return null;
     }
 }

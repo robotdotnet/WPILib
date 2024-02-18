@@ -8,20 +8,10 @@ public sealed class StructArrayLogEntry<T> : DataLogEntry where T : IStructSeria
     private StructBuffer<T> m_storage;
     private readonly object m_lockObject = new();
 
-    private StructArrayLogEntry(DataLog log, string name, IStruct<T> value, string metadata, long timestamp) : base(log, name, $"{value.TypeString}[]", metadata, timestamp)
+    public StructArrayLogEntry(DataLog log, string name, string metadata = "", long timestamp = 0) : base(log, name, $"{T.Struct.TypeString}[]", metadata, timestamp)
     {
         m_storage = new();
-        log.AddSchema(value, timestamp);
-    }
-
-    public StructArrayLogEntry<T> Create(DataLog log, string name, IStruct<T> value, string metadata = "", long timestamp = 0)
-    {
-        return new StructArrayLogEntry<T>(log, name, value, metadata, timestamp);
-    }
-
-    public StructArrayLogEntry<T> Create(DataLog log, string name, string metadata = "", long timestamp = 0)
-    {
-        return new StructArrayLogEntry<T>(log, name, T.Struct, metadata, timestamp);
+        log.AddSchema(T.Struct, timestamp);
     }
 
     public void Reserve(int nelem)

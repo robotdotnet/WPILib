@@ -116,6 +116,14 @@ public partial class GenerateAllKnownTypes
     [Log]
     public double doubleVar;
     [Log]
+    public IntPtr intptrVar;
+    [Log]
+    public UIntPtr uintptrVar;
+    [Log]
+    public nint nintVar;
+    [Log]
+    public nuint nuintVar;
+    [Log]
     public string? stringVar;
 
     [Log]

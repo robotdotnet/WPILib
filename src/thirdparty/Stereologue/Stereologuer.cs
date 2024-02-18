@@ -51,7 +51,6 @@ public sealed class Stereologuer
     private readonly Dictionary<string, TypedLogs<IDoubleArrayPublisher, DoubleArrayLogEntry>> doubleArrayLogs = [];
     private readonly Dictionary<string, TypedLogs<IStringArrayPublisher, StringArrayLogEntry>> stringArrayLogs = [];
     private readonly Dictionary<string, TypedLogs<IPublisher, DataLogEntry>> structArrayLogs = [];
-    private readonly Dictionary<string, TypedLogs<IPublisher, DataLogEntry>> protobufArrayLogs = [];
     private readonly Dictionary<string, TypedLogs<IRawPublisher, RawLogEntry>> rawLogs = [];
 
     public void LogBoolean(string path, LogType logType, bool value, LogLevel logLevel = LogLevel.Default)
@@ -109,6 +108,27 @@ public sealed class Stereologuer
         {
             logs.logEntry ??= new StructLogEntry<T>(log, path);
             StructLogEntry<T> tl = (StructLogEntry<T>)logs.logEntry;
+            tl.Append(value);
+        }
+    }
+
+    public void LogStructArray<T>(string path, LogType logType, ReadOnlySpan<T> value, LogLevel logLevel = LogLevel.Default) where T : IStructSerializable<T>
+    {
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, structArrayLogs);
+        if (Unsafe.IsNullRef(ref logs))
+        {
+            return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetStructArrayTopic<T>(path).Publish(PubSubOptions.None);
+            IStructArrayPublisher<T> tl = (IStructArrayPublisher<T>)logs.topic;
+            tl.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new StructArrayLogEntry<T>(log, path);
+            StructArrayLogEntry<T> tl = (StructArrayLogEntry<T>)logs.logEntry;
             tl.Append(value);
         }
     }
