@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 namespace Stereologue.SourceGenerator;
@@ -19,7 +20,7 @@ internal static class LoggableTypeExtensions
         return new TypeDeclType(symbol.TypeKind, symbol.IsReadOnly, symbol.IsRefLikeType, symbol.IsRecord);
     }
 
-    public static LoggableType GetLoggableType(this INamedTypeSymbol classSymbol, CancellationToken token)
+    public static LoggableType GetLoggableType(this INamedTypeSymbol classSymbol, CancellationToken token, List<(FailureMode, ISymbol)>? failures, Dictionary<LoggableMember, ISymbol>? symbolMap)
     {
         token.ThrowIfCancellationRequested();
 
@@ -35,14 +36,20 @@ internal static class LoggableTypeExtensions
         {
             token.ThrowIfCancellationRequested();
 
-            var loggableMember = member.ToLoggableMember(token);
+            var loggableMemberFailure = member.ToLoggableMember(token, out var loggableMember);
             token.ThrowIfCancellationRequested();
-            if (loggableMember is null)
+            if (loggableMemberFailure == FailureMode.None)
             {
+                // This is either a valid log, or has no attribute
+                if (loggableMember is not null)
+                {
+                    loggableMembers.Add(loggableMember);
+                    symbolMap?.Add(loggableMember, member);
+                }
                 continue;
             }
-
-            loggableMembers.Add(loggableMember);
+            // Getting here means we errored
+            failures?.Add((loggableMemberFailure, member));
         }
 
         var nameString = classSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
@@ -55,181 +62,6 @@ internal static class LoggableTypeExtensions
         var loggableType = new LoggableType(typeDeclType, $"{nspace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", nameString, nspace, loggableMembers.ToImmutable());
 
         return loggableType;
-    }
-
-    private static void ConstructCall(LoggableMember data, StringBuilder builder, SourceProductionContext context)
-    {
-        builder.Append("        ");
-
-        var getOperation = data.MemberType switch
-        {
-            MemberType.Field => data.Name,
-            MemberType.Property => data.Name,
-            MemberType.Method => $"{data.Name}()",
-            _ => null // Attribute applied to unknown type
-        };
-
-        if (getOperation is null)
-        {
-            return;
-        }
-
-        var path = string.IsNullOrWhiteSpace(data.AttributeInfo.Path) ? data.Name : data.AttributeInfo.Path;
-
-        if (data.MemberDeclaration.LoggedType == DeclarationType.Logged)
-        {
-            // If we're a basic logged, just do a simple ? based null check if possible.
-            if (data.MemberDeclaration.LoggedKind == DeclarationKind.None || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType)
-            {
-                builder.Append(getOperation);
-                if (data.MemberDeclaration.LoggedKind != DeclarationKind.None)
-                {
-                    builder.Append("?");
-                }
-                builder.Append(".UpdateStereologue($\"{path}/");
-                builder.Append(path);
-                builder.Append("\", logger);");
-            }
-            else
-            {
-                // We're an array, loop
-                builder.AppendLine($"foreach(var __tmpValue in {getOperation})");
-                builder.AppendLine("        {");
-                builder.Append("            __tmpValue");
-                if (data.MemberDeclaration.SpecialType == SpecialType.System_Nullable_T)
-                {
-                    builder.Append("?");
-                }
-                builder.Append(".UpdateStereologue($\"{path}/");
-                builder.Append(path);
-                builder.AppendLine("\", logger);");
-                builder.AppendLine("        }");
-            }
-            return;
-        }
-
-        string? logMethod;
-
-        if (data.MemberDeclaration.LoggedType == DeclarationType.Struct)
-        {
-            if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
-            {
-                // We're an array
-                logMethod = "LogStructArray";
-            }
-            else
-            {
-                logMethod = "LogStruct";
-            }
-        }
-
-        else if (data.MemberDeclaration.LoggedType == DeclarationType.Protobuf)
-        {
-
-            if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
-            {
-                // Protobuf is array
-                return;
-            }
-            else
-            {
-                logMethod = "LogProto";
-            }
-        }
-        else if (data.MemberDeclaration.LoggedKind == DeclarationKind.None || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-        {
-            // We're not an array. We're either Nullable<T> or a plain type
-            if (data.MemberDeclaration.SpecialType == SpecialType.System_UInt64 || data.MemberDeclaration.SpecialType == SpecialType.System_IntPtr || data.MemberDeclaration.SpecialType == SpecialType.System_UIntPtr)
-            {
-                getOperation = $"(long){getOperation}";
-            }
-
-            logMethod = data.MemberDeclaration.SpecialType switch
-            {
-                SpecialType.System_Char => "LogChar",
-                SpecialType.System_String => "LogString",
-                SpecialType.System_Boolean => "LogBoolean",
-                SpecialType.System_Single => "LogFloat",
-                SpecialType.System_Double => "LogDouble",
-                SpecialType.System_Byte => "LogInteger",
-                SpecialType.System_SByte => "LogInteger",
-                SpecialType.System_Int16 => "LogInteger",
-                SpecialType.System_UInt16 => "LogInteger",
-                SpecialType.System_Int32 => "LogInteger",
-                SpecialType.System_UInt32 => "LogInteger",
-                SpecialType.System_Int64 => "LogInteger",
-                SpecialType.System_UInt64 => "LogInteger",
-                SpecialType.System_IntPtr => "LogInteger",
-                SpecialType.System_UIntPtr => "LogInteger",
-                _ => null // SpecialType is unknown, for non array
-            };
-
-            if (logMethod is null)
-            {
-                return;
-            }
-        }
-        else
-        {
-            // We're array of a basic type
-
-            logMethod = data.MemberDeclaration.SpecialType switch
-            {
-                SpecialType.System_String => "LogStringArray",
-                SpecialType.System_Boolean => "LogBooleanArray",
-                SpecialType.System_Single => "LogFloatArray",
-                SpecialType.System_Double => "LogDoubleArray",
-                SpecialType.System_Byte => "LogRaw",
-                SpecialType.System_Int64 => "LogIntegerArray",
-                _ => null // Type is not usable for array
-            };
-
-            if (logMethod is null)
-            {
-                return;
-            }
-        }
-
-        bool isNullable = false;
-
-        if (data.MemberDeclaration.LoggedKind == DeclarationKind.Array || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-        {
-            // We're nullable. We need to do some tricks.
-            builder.AppendLine("{");
-            builder.AppendLine($"            var __tmpValue = {getOperation};");
-            builder.AppendLine($"            if (__tmpValue is not null)");
-            builder.AppendLine("            {");
-            builder.Append("                ");
-            getOperation = "__tmpValue";
-            if (data.MemberDeclaration.SpecialType == SpecialType.System_String || data.MemberDeclaration.LoggedKind == DeclarationKind.Array)
-            {
-                getOperation = $"{getOperation}.AsSpan()";
-            }
-            if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-            {
-                getOperation = $"{getOperation}.Value";
-            }
-            isNullable = true;
-        }
-
-        builder.Append("logger.");
-        builder.Append(logMethod);
-        builder.Append("($\"{path}/");
-        builder.Append(path);
-        builder.Append("\", ");
-        builder.Append(data.AttributeInfo.LogType);
-        builder.Append(", ");
-        builder.Append(getOperation);
-        builder.Append(", ");
-        builder.Append(data.AttributeInfo.LogLevel);
-        builder.Append(");");
-
-        if (isNullable)
-        {
-            builder.AppendLine();
-            builder.AppendLine("            }");
-            builder.Append("        }");
-        }
     }
 
     public static void AddClassDeclaration(LoggableType type, StringBuilder builder)
@@ -276,6 +108,23 @@ internal static class LoggableTypeExtensions
         }
     }
 
+    public static void ExecuteAnalysis(this LoggableType? maybeType, SymbolAnalysisContext context, Dictionary<LoggableMember, ISymbol> symbolMap)
+    {
+        if (maybeType is { } loggableType)
+        {
+            foreach (var call in loggableType.LoggableMembers)
+            {
+                var failureMode = call.ConstructLogCall(null);
+                if (failureMode == FailureMode.None)
+                {
+                    continue;
+                }
+                // We're errored
+                context.ReportDiagnostic(failureMode, symbolMap[call]);
+            }
+        }
+    }
+
     public static void ExecuteSourceGeneration(this LoggableType? maybeType, SourceProductionContext context)
     {
 
@@ -294,7 +143,7 @@ internal static class LoggableTypeExtensions
             builder.AppendLine("    {");
             foreach (var call in loggableType.LoggableMembers)
             {
-                ConstructCall(call, builder, context);
+                call.ConstructLogCall(builder);
                 builder.AppendLine();
             }
             builder.AppendLine("    }");

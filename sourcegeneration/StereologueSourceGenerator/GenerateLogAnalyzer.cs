@@ -1,7 +1,5 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace Stereologue.SourceGenerator;
@@ -10,47 +8,23 @@ namespace Stereologue.SourceGenerator;
 public sealed class GenerateLogAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create([
-        LoggerDiagnostics.GeneratedTypeNotPartial
+        LoggerDiagnostics.UnknownMemberType,
+        LoggerDiagnostics.ProtobufIsArray,
+        LoggerDiagnostics.UnknownSpecialTypeArray,
+        LoggerDiagnostics.LoggedMethodReturnsVoid,
+        LoggerDiagnostics.LoggedMethodTakeParameters,
+        LoggerDiagnostics.LoggedHasUnknownType,
+        LoggerDiagnostics.UnknownFailureMode,
+        LoggerDiagnostics.NullableStructArray,
+        LoggerDiagnostics.UnknownSpecialTypeIntArray
     ]);
 
     public override void Initialize(AnalysisContext context)
     {
         context.EnableConcurrentExecution();
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-
-        // context.RegisterSyntaxNodeAction(AnalyzeSyntax,
-        //     SyntaxKind.ClassDeclaration,
-        //     SyntaxKind.StructDeclaration,
-        //     SyntaxKind.RecordDeclaration,
-        //     SyntaxKind.RecordStructDeclaration,
-        //     SyntaxKind.InterfaceDeclaration);
-
         context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
     }
-
-    // private static void AnalyzeSyntax(SyntaxNodeAnalysisContext context)
-    // {
-    //     if (context.SemanticModel.GetDeclaredSymbol(context.Node) is not INamedTypeSymbol namedTypeSymbol)
-    //     {
-    //         return;
-    //     }
-
-    //     if (!namedTypeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == Strings.GenerateLogAttributeName).Any())
-    //     {
-    //         return;
-    //     }
-
-    //     if (context.Node is TypeDeclarationSyntax typeSyntax)
-    //     {
-    //         // Ensure type is partial.
-    //         if (!typeSyntax.IsInPartialContext(out var nonPartialIdentifier))
-    //         {
-    //             context.ReportDiagnostic(
-    //                 Diagnostic.Create(LoggerDiagnostics.GeneratedTypeNotPartial, typeSyntax.GetLocation(), namedTypeSymbol.Name)
-    //             );
-    //         }
-    //     }
-    // }
 
     private static void AnalyzeSymbol(SymbolAnalysisContext context)
     {
@@ -62,52 +36,17 @@ public sealed class GenerateLogAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        var model = namedTypeSymbol.GetLoggableType(token);
+        List<(FailureMode, ISymbol)> failures = [];
+        Dictionary<LoggableMember, ISymbol> symbolMap = [];
+
+        var model = namedTypeSymbol.GetLoggableType(token, failures, symbolMap);
         token.ThrowIfCancellationRequested();
 
-        foreach (var member in model.LoggableMembers)
+        model.ExecuteAnalysis(context, symbolMap);
+
+        foreach (var failure in failures)
         {
-            if (member.MemberDeclaration.LoggedType == DeclarationType.Protobuf)
-            {
-                if (member.MemberDeclaration.LoggedKind != DeclarationKind.None && member.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && member.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
-                {
-                    foreach (var location in namedTypeSymbol.Locations)
-                    {
-                        context.ReportDiagnostic(
-                            Diagnostic.Create(LoggerDiagnostics.GeneratedTypeNotPartial, location, namedTypeSymbol.Name));
-                    }
-
-                }
-            }
+            context.ReportDiagnostic(failure.Item1, failure.Item2);
         }
-
-
-        // // Find our attributes
-
-        // if (!namedTypeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == Strings.GenerateLogAttributeName).Any())
-        // {
-        //     return;
-        // }
-
-        // token.ThrowIfCancellationRequested();
-
-        // var syntaxNodes = namedTypeSymbol.DeclaringSyntaxReferences.Select(x => x.GetSyntax());
-
-        // foreach (var node in syntaxNodes)
-        // {
-
-        //     if (node is TypeDeclarationSyntax typeSyntax)
-        //     {
-        //         // Ensure type is partial.
-        //         if (!typeSyntax.IsInPartialContext(out var nonPartialIdentifier))
-        //         {
-        //             context.ReportDiagnostic(
-        //                 Diagnostic.Create(LoggerDiagnostics.GeneratedTypeNotPartial, typeSyntax.GetLocation(), namedTypeSymbol.Name)
-        //             );
-        //         }
-        //     }
-
-        // }
-
     }
 }

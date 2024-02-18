@@ -18,7 +18,7 @@ public class LogGenerator : IIncrementalGenerator
                     {
                         return null;
                     }
-                    return classSymbol.GetLoggableType(token);
+                    return classSymbol.GetLoggableType(token, null, null);
                 })
             .Where(static m => m is not null);
 

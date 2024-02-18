@@ -180,8 +180,8 @@ public partial class GenerateAllKnownTypes
     // [Log()]
     // public Rotation2d?[] RotationNullableArray = [];
 
-    [Log(UseProtobuf = true)]
-    public Rotation2d[] RotationProtoArray = [];
+    // [Log(UseProtobuf = true)]
+    // public Rotation2d[] RotationProtoArray = [];
 
     // [Log(UseProtobuf = true)]
     // public Rotation2d?[] RotationProtoNullableArray = [];
@@ -201,7 +201,14 @@ public partial class GenerateAllKnownTypes
     // [Log]
     // public DateTime dateTime;
 
+    // [Log]
     // public DateTime[] dateTimeArray = null!;
+
+    // [Log]
+    // public void GetThing() { }
+
+    // [Log]
+    // public int GetIntThing(int x) => x;
 
     [Log]
     public int? NullableInt;
