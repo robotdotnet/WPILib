@@ -2,5 +2,5 @@ namespace WPIMath;
 
 public interface Nat
 {
-    public static abstract int Num {get;}
+    public static abstract int Num { get; }
 }

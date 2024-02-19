@@ -13,66 +13,71 @@ public static unsafe partial class CsNative
 {
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyKind")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial PropertyKind GetPropertyKindRefShim(CsProperty property, ref StatusValue status);
+    public static partial PropertyKind GetPropertyKind(CsProperty property, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyKind")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetPropertyNameRefShim(CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller))] out string name, ref StatusValue status);
+    public static partial void GetPropertyName(CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller))] out string name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetPropertyRefShim(CsProperty property, ref StatusValue status);
+    public static partial int GetProperty(CsProperty property, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetPropertyRefShim(CsProperty property, int value, ref StatusValue status);
+    public static partial void SetProperty(CsProperty property, int value, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyMin")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetPropertyMinRefShim(CsProperty property, ref StatusValue status);
+    public static partial int GetPropertyMin(CsProperty property, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyMax")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetPropertyMaxRefShim(CsProperty property, ref StatusValue status);
+    public static partial int GetPropertyMax(CsProperty property, out StatusValue status);
 
 
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyStep")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetPropertyStepRefShim(CsProperty property, ref StatusValue status);
+    public static partial int GetPropertyStep(CsProperty property, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetPropertyDefault")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetPropertyDefaultRefShim(CsProperty property, ref StatusValue status);
+    public static partial int GetPropertyDefault(CsProperty property, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetStringProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetStringPropertyRefShim(CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller))] out string value, ref StatusValue status);
+    public static partial void GetStringProperty(CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller))] out string value, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetStringProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetStringPropertyRefShim(CsProperty property, WpiString value, ref StatusValue status);
+    public static partial void SetStringProperty(CsProperty property, WpiString value, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetEnumPropertyChoices")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(UnmanagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     [return: MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)]
-    internal static partial string[] GetEnumPropertyChoicesRefShim(CsProperty property, out int count, ref StatusValue status);
+    public static partial string[] GetEnumPropertyChoices(CsProperty property, out int count, out StatusValue status);
+
+    public static string[] GetEnumPropertyChoices(CsProperty property, out StatusValue status)
+    {
+        return GetEnumPropertyChoices(property, out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateUsbCameraDev")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CreateUsbCameraRefShim(WpiString name, int dev, ref StatusValue status);
+    public static partial CsSource CreateUsbCamera(WpiString name, int dev, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateUsbCameraPath")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CreateUsbCameraRefShim(WpiString name, WpiString path, ref StatusValue status);
+    public static partial CsSource CreateUsbCamera(WpiString name, WpiString path, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateHttpCamera")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CreateHttpCameraRefShim(WpiString name, WpiString url, HttpCameraKind kind, ref StatusValue status);
+    public static partial CsSource CreateHttpCamera(WpiString name, WpiString url, HttpCameraKind kind, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateHttpCameraMulti")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CreateHttpCameraRefShim(WpiString name, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> urls, int count, HttpCameraKind kind, ref StatusValue status);
+    public static partial CsSource CreateHttpCamera(WpiString name, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> urls, int count, HttpCameraKind kind, out StatusValue status);
 
     public static CsSource CreateHttpCamera(string name, ReadOnlySpan<string> urls, HttpCameraKind kind, out StatusValue status)
     {
@@ -81,154 +86,169 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateCvSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CreateCvSourceRefShim(WpiString name, in VideoMode mode, ref StatusValue status);
+    public static partial CsSource CreateCvSource(WpiString name, in VideoMode mode, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceKind")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial SourceKind GetSourceKindRefShim(CsSource source, ref StatusValue status);
+    public static partial SourceKind GetSourceKind(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSourceNameRefShim(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string name, ref StatusValue status);
+    public static partial void GetSourceName(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceDescription")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSourceDescriptionRefShim(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string description, ref StatusValue status);
+    public static partial void GetSourceDescription(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string description, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceLastFrameTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial ulong GetSourceLastFrameTimeRefShim(CsSource source, ref StatusValue status);
+    public static partial ulong GetSourceLastFrameTime(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceConnectionStrategy")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetSourceConnectionStrategyRefShim(CsSource source, ConnectionStrategy strategy, ref StatusValue status);
+    public static partial void SetSourceConnectionStrategy(CsSource source, ConnectionStrategy strategy, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_IsSourceConnected")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool IsSourceConnectedRefShim(CsSource source, ref StatusValue status);
+    public static partial bool IsSourceConnected(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_IsSourceEnabled")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool IsSourceEnabledRefShim(CsSource source, ref StatusValue status);
+    public static partial bool IsSourceEnabled(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsProperty GetSourcePropertyRefShim(CsSource source, WpiString name, ref StatusValue status);
+    public static partial CsProperty GetSourceProperty(CsSource source, WpiString name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSourceProperties")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
-    internal static partial CsProperty[] EnumerateSourcePropertiesRefShim(CsSource source, out int count, ref StatusValue status);
+    public static partial CsProperty[] EnumerateSourceProperties(CsSource source, out int count, out StatusValue status);
+
+    public static CsProperty[] EnumerateSourceProperties(CsSource source, out StatusValue status)
+    {
+        return EnumerateSourceProperties(source, out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceVideoMode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSourceVideoModeRefShim(CsSource source, out VideoMode mode, ref StatusValue status);
+    public static partial void GetSourceVideoMode(CsSource source, out VideoMode mode, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceVideoMode")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSourceVideoModeRefShim(CsSource source, in VideoMode mode, ref StatusValue status);
+    public static partial bool SetSourceVideoMode(CsSource source, in VideoMode mode, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceVideoModeDiscrete")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSourceVideoModeRefShim(CsSource source, PixelFormat pixelFormat, int width, int height, int fps, ref StatusValue status);
+    public static partial bool SetSourceVideoMode(CsSource source, PixelFormat pixelFormat, int width, int height, int fps, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourcePixelFormat")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSourcePixelFormatRefShim(CsSource source, PixelFormat pixelFormat, ref StatusValue status);
+    public static partial bool SetSourcePixelFormat(CsSource source, PixelFormat pixelFormat, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceResolution")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSourceResolutionRefShim(CsSource source, int width, int height, ref StatusValue status);
+    public static partial bool SetSourceResolution(CsSource source, int width, int height, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceFPS")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSourceFpsRefShim(CsSource source, int fps, ref StatusValue status);
+    public static partial bool SetSourceFps(CsSource source, int fps, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceConfigJson")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSourceConfigJsonRefShim(CsSource source, WpiString config, ref StatusValue status);
+    public static partial bool SetSourceConfigJson(CsSource source, WpiString config, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSourceConfigJson")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSourceConfigJsonRefShim(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string config, ref StatusValue status);
+    public static partial void GetSourceConfigJson(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string config, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSourceVideoModes")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static partial VideoMode[] EnumerateSourceVideoModesRefShim(CsSource source, out int count, ref StatusValue status);
+    public static partial VideoMode[] EnumerateSourceVideoModes(CsSource source, out int count, out StatusValue status);
+
+    public static VideoMode[] EnumerateSourceVideoModes(CsSource source, out StatusValue status)
+    {
+        return EnumerateSourceVideoModes(source, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSourceSinks")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static partial CsSink[] EnumerateSourceSinksRefShim(CsSource source, out int count, ref StatusValue status);
+    public static partial CsSink[] EnumerateSourceSinks(CsSource source, out int count, out StatusValue status);
+
+    public static CsSink[] EnumerateSourceSinks(CsSource source, out StatusValue status)
+    {
+        return EnumerateSourceSinks(source, out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_CopySource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CopySourceRefShim(CsSource source, ref StatusValue status);
+    public static partial CsSource CopySource(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_ReleaseSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void ReleaseSourceRefShim(CsSource source, ref StatusValue status);
+    public static partial void ReleaseSource(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraBrightness")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraBrightnessRefShim(CsSource source, int brightness, ref StatusValue status);
+    public static partial void SetCameraBrightness(CsSource source, int brightness, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetCameraBrightness")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetCameraBrightnessRefShim(CsSource source, ref StatusValue status);
+    public static partial int GetCameraBrightness(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraWhiteBalanceAuto")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraWhiteBalanceAutoRefShim(CsSource source, ref StatusValue status);
+    public static partial void SetCameraWhiteBalanceAuto(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraWhiteBalanceHoldCurrent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraWhiteBalanceHoldCurrentRefShim(CsSource source, ref StatusValue status);
+    public static partial void SetCameraWhiteBalanceHoldCurrent(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraWhiteBalanceManual")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraWhiteBalanceManualRefShim(CsSource source, int value, ref StatusValue status);
+    public static partial void SetCameraWhiteBalanceManual(CsSource source, int value, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraExposureAuto")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraExposureAutoRefShim(CsSource source, ref StatusValue status);
+    public static partial void SetCameraExposureAuto(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraExposureHoldCurrent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraExposureHoldCurrentRefShim(CsSource source, ref StatusValue status);
+    public static partial void SetCameraExposureHoldCurrent(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetCameraExposureManual")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetCameraExposureManualRefShim(CsSource source, int value, ref StatusValue status);
+    public static partial void SetCameraExposureManual(CsSource source, int value, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetUsbCameraPath")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetUsbCameraPathRefShim(CsSource source, WpiString path, ref StatusValue status);
+    public static partial void SetUsbCameraPath(CsSource source, WpiString path, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetUsbCameraPath")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetUsbCameraPathRefShim(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string path, ref StatusValue status);
+    public static partial void GetUsbCameraPath(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller))] out string path, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetUsbCameraInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial UsbCameraInfo GetUsbCameraInfoRefShim(CsSource source, ref StatusValue status);
+    public static partial UsbCameraInfo GetUsbCameraInfo(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetHttpCameraKind")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HttpCameraKind GetHttpCameraKindRefShim(CsSource source, ref StatusValue status);
+    public static partial HttpCameraKind GetHttpCameraKind(CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetHttpCameraUrls")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetHttpCameraUrlsRefShim(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> urls, int count, ref StatusValue status);
+    public static partial void SetHttpCameraUrls(CsSource source, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> urls, int count, out StatusValue status);
 
     public static void SetHttpCameraUrls(CsSource source, ReadOnlySpan<string> urls, out StatusValue status)
     {
@@ -239,27 +259,32 @@ public static unsafe partial class CsNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(UnmanagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
     [return: MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)]
-    internal static partial string[] GetHttpCameraUrlsRefShim(CsSource source, out int count, ref StatusValue status);
+    public static partial string[] GetHttpCameraUrls(CsSource source, out int count, out StatusValue status);
+
+    public static string[] GetHttpCameraUrls(CsSource source, out StatusValue status)
+    {
+        return GetHttpCameraUrls(source, out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_NotifySourceError")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void NotifySourceErrorRefShim(CsSource source, WpiString msg, ref StatusValue status);
+    public static partial void NotifySourceError(CsSource source, WpiString msg, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceConnected")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetSourceConnectedRefShim(CsSource source, [MarshalAs(UnmanagedType.I4)] bool connected, ref StatusValue status);
+    public static partial void SetSourceConnected(CsSource source, [MarshalAs(UnmanagedType.I4)] bool connected, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceDescription")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetSourceDescriptionRefShim(CsSource source, WpiString description, ref StatusValue status);
+    public static partial void SetSourceDescription(CsSource source, WpiString description, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateSourceProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsProperty CreateSourcePropertyRefShim(CsSource source, WpiString name, PropertyKind kind, int minimum, int maximum, int step, int defaultValue, int value, ref StatusValue status);
+    public static partial CsProperty CreateSourceProperty(CsSource source, WpiString name, PropertyKind kind, int minimum, int maximum, int step, int defaultValue, int value, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceEnumPropertyChoices")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetSourceEnumPropertyChoicesRefShim(CsSource source, CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> choices, int count, ref StatusValue status);
+    public static partial void SetSourceEnumPropertyChoices(CsSource source, CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> choices, int count, out StatusValue status);
 
     public static void SetSourceEnumPropertyChoices(CsSource source, CsProperty property, ReadOnlySpan<string> choices, out StatusValue status)
     {
@@ -268,85 +293,90 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateMjpegServer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSink CreateMjpegServerRefShim(WpiString name, WpiString listenAddress, int port, ref StatusValue status);
+    public static partial CsSink CreateMjpegServer(WpiString name, WpiString listenAddress, int port, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateCvSink")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSink CreateCvSinkRefShim(WpiString name, PixelFormat pixelFormat, ref StatusValue status);
+    public static partial CsSink CreateCvSink(WpiString name, PixelFormat pixelFormat, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateCvSink")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSink CreateCvSinkCallbackRefShim(WpiString name, PixelFormat pixelFormat, void* data, delegate* unmanaged[Cdecl]<void*, ulong, void> processFrame, ref StatusValue status);
+    public static partial CsSink CreateCvSinkCallback(WpiString name, PixelFormat pixelFormat, void* data, delegate* unmanaged[Cdecl]<void*, ulong, void> processFrame, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkKind")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial SinkKind GetSinkKindRefShim(CsSink sink, ref StatusValue status);
+    public static partial SinkKind GetSinkKind(CsSink sink, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSinkNameRefShim(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string name, ref StatusValue status);
+    public static partial void GetSinkName(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkDescription")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSinkDescriptionRefShim(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string description, ref StatusValue status);
+    public static partial void GetSinkDescription(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string description, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsProperty GetSinkPropertyRefShim(CsSink sink, WpiString name, ref StatusValue status);
+    public static partial CsProperty GetSinkProperty(CsSink sink, WpiString name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSinkProperties")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
-    internal static partial CsProperty[] EnumerateSinkPropertiesRefShim(CsSink sink, out int count, ref StatusValue status);
+    public static partial CsProperty[] EnumerateSinkProperties(CsSink sink, out int count, out StatusValue status);
+
+    public static CsProperty[] EnumerateSinkProperties(CsSink sink, out StatusValue status)
+    {
+        return EnumerateSinkProperties(sink, out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSinkSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetSinkSourceRefShim(CsSink sink, CsSource source, ref StatusValue status);
+    public static partial void SetSinkSource(CsSink sink, CsSource source, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkSourceProperty")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsProperty GetSinkSourcePropertyRefShim(CsSink sink, WpiString name, ref StatusValue status);
+    public static partial CsProperty GetSinkSourceProperty(CsSink sink, WpiString name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSinkConfigJson")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    internal static partial bool SetSinkConfigJsonRefShim(CsSink sink, WpiString config, ref StatusValue status);
+    public static partial bool SetSinkConfigJson(CsSink sink, WpiString config, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkConfigJson")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSinkConfigJsonRefShim(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string config, ref StatusValue status);
+    public static partial void GetSinkConfigJson(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string config, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource GetSinkSourceRefShim(CsSink sink, ref StatusValue status);
+    public static partial CsSource GetSinkSource(CsSink sink, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CopySink")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSink CopySinkRefShim(CsSink sink, ref StatusValue status);
+    public static partial CsSink CopySink(CsSink sink, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_ReleaseSink")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSink ReleaseSinkRefShim(CsSink sink, ref StatusValue status);
+    public static partial CsSink ReleaseSink(CsSink sink, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetMjpegServerListenAddress")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetMjpegServerListenAddressRefShim(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string listenAddress, ref StatusValue status);
+    public static partial void GetMjpegServerListenAddress(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string listenAddress, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetMjpegServerPort")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetMjpegServerPortRefShim(CsSink sink, ref StatusValue status);
+    public static partial int GetMjpegServerPort(CsSink sink, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSinkDescription")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetSinkDescriptionRefShim(CsSink sink, WpiString description, ref StatusValue status);
+    public static partial void SetSinkDescription(CsSink sink, WpiString description, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetSinkError")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void GetSinkErrorRefShim(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string error, ref StatusValue status);
+    public static partial void GetSinkError(CsSink sink, [MarshalUsing(typeof(WpiStringMarshaller))] out string error, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetSinkEnabled")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int SetSinkEnabledRefShim(CsSink sink, [MarshalAs(UnmanagedType.I4)] bool enabled, ref StatusValue status);
+    public static partial int SetSinkEnabled(CsSink sink, [MarshalAs(UnmanagedType.I4)] bool enabled, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateListenerPoller")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -358,26 +388,26 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_AddPolledListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsListener AddPolledListenerRefShim(CsListenerPoller poller, EventKind eventMask, [MarshalAs(UnmanagedType.I4)] bool immediateNotify, ref StatusValue status);
+    public static partial CsListener AddPolledListener(CsListenerPoller poller, EventKind eventMask, [MarshalAs(UnmanagedType.I4)] bool immediateNotify, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_PollListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
-    internal static partial VideoEvent[] PollListener(CsListenerPoller poller, out int count);
+    public static partial VideoEvent[] PollListener(CsListenerPoller poller, out int count);
 
     public static VideoEvent[] PollListener(CsListenerPoller poller)
     {
-        return PollListener(poller, out var _);
+        return PollListener(poller, out _);
     }
 
     [LibraryImport("cscore", EntryPoint = "CS_PollListenerTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = "count")]
-    internal static partial VideoEvent[] PollListener(CsListenerPoller poller, out int count, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
+    public static partial VideoEvent[] PollListener(CsListenerPoller poller, out int count, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
 
     public static VideoEvent[] PollListener(CsListenerPoller poller, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut)
     {
-        return PollListener(poller, out var _, timeout, out timedOut);
+        return PollListener(poller, out _, timeout, out timedOut);
     }
 
     [LibraryImport("cscore", EntryPoint = "CS_FreeEvents")]
@@ -390,7 +420,7 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_RemoveListener")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void RemoveListenerRefShim(CsListener listener, ref StatusValue status);
+    public static partial void RemoveListener(CsListener listener, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_NotifierDestroyed")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -407,11 +437,11 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial long GetTelemetryValueRefShim(CsSource source, TelemetryKind kind, ref StatusValue status);
+    public static partial long GetTelemetryValue(CsSource source, TelemetryKind kind, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GetTelemetryAverageValue")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial long GetTelemetryAverageValueRefShim(CsSource source, TelemetryKind kind, ref StatusValue status);
+    public static partial long GetTelemetryAverageValue(CsSource source, TelemetryKind kind, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_SetLogger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -428,17 +458,32 @@ public static unsafe partial class CsNative
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateUsbCameras")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static partial UsbCameraInfo[] EnumerateUsbCamerasRefShim(out int count, ref StatusValue status);
+    public static partial UsbCameraInfo[] EnumerateUsbCameras(out int count, out StatusValue status);
+
+    public static UsbCameraInfo[] EnumerateUsbCameras(out StatusValue status)
+    {
+        return EnumerateUsbCameras(out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSources")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static partial CsSource[] EnumerateSourcesRefShim(out int count, ref StatusValue status);
+    public static partial CsSource[] EnumerateSources(out int count, out StatusValue status);
+
+    public static CsSource[] EnumerateSources(out StatusValue status)
+    {
+        return EnumerateSources(out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_EnumerateSinks")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalUsing(typeof(ManagedFreeArrayMarshaller<,>), CountElementName = nameof(count))]
-    internal static partial CsSink[] EnumerateSinksRefShim(out int count, ref StatusValue status);
+    public static partial CsSink[] EnumerateSinks(out int count, out StatusValue status);
+
+    public static CsSink[] EnumerateSinks(out StatusValue status)
+    {
+        return EnumerateSinks(out _, out status);
+    }
 
     [LibraryImport("cscore", EntryPoint = "CS_GetHostname")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -452,21 +497,21 @@ public static unsafe partial class CsNative
 
     [LibraryImport("cscore", EntryPoint = "CS_GrabRawSinkFrame")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial ulong GrabRawSinkFrameRefShim(CsSink sink, RawFrameReader rawImage, ref StatusValue status);
+    public static partial ulong GrabRawSinkFrame(CsSink sink, RawFrameReader rawImage, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_GrabRawSinkFrameTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial ulong GrabRawSinkFrameRefShim(CsSink sink, RawFrameReader rawImage, double timeout, ref StatusValue status);
+    public static partial ulong GrabRawSinkFrame(CsSink sink, RawFrameReader rawImage, double timeout, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateRawSink")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSink CreateRawSinkRefShim(WpiString name, ref StatusValue status);
+    public static partial CsSink CreateRawSink(WpiString name, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_PutRawSourceFrame")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void PutRawSourceFrameRefShim(CsSource source, RawFrameWriter rawImage, ref StatusValue status);
+    public static partial void PutRawSourceFrame(CsSource source, RawFrameWriter rawImage, out StatusValue status);
 
     [LibraryImport("cscore", EntryPoint = "CS_CreateRawSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial CsSource CreateRawSourceRefShim(WpiString name, in VideoMode mode, ref StatusValue status);
+    public static partial CsSource CreateRawSource(WpiString name, in VideoMode mode, out StatusValue status);
 }
