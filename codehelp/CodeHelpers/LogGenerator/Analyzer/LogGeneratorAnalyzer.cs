@@ -37,23 +37,6 @@ public sealed class LogGeneratorAnalyzer : DiagnosticAnalyzer
             return;
         }
 
-        // Enumerate all members to check for [Log] without [GenerateLog]
-        foreach (var member in namedTypeSymbol.GetMembers())
-        {
-            if (!member.HasLogAttribute())
-            {
-                continue;
-            }
-
-            if (!namedTypeSymbol.HasGenerateLogAttribute())
-            {
-                foreach (var location in namedTypeSymbol.Locations)
-                {
-                    context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, member.Name, namedTypeSymbol.ToDisplayString()));
-                }
-            }
-        }
-
         List<(FailureMode, ISymbol)> failures = [];
         Dictionary<LoggableMember, ISymbol> symbolMap = [];
 

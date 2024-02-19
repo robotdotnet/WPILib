@@ -124,6 +124,14 @@ internal static class LoggableTypeExtensions
                 // We're errored
                 context.ReportDiagnostic(failureMode, symbolMap[call]);
             }
+
+            if (!loggableType.LoggableMembers.IsEmpty && !context.Symbol.HasGenerateLogAttribute())
+            {
+                foreach (var location in context.Symbol.Locations)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, context.Symbol.ToDisplayString()));
+                }
+            }
         }
     }
 

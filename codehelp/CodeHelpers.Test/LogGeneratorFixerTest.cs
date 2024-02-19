@@ -46,7 +46,7 @@ public partial class MyNewClass
 ";
         testString += InternalTypes;
         fixedCode += InternalTypes;
-        var expected = Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(4, 22).WithArguments(["Variable", "MyNewClass"]);
+        var expected = Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(4, 22).WithArguments(["MyNewClass"]);
         await Verify.VerifyCodeFixAsync(testString, expected, fixedCode);
     }
 }

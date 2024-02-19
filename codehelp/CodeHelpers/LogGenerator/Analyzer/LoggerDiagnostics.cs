@@ -45,7 +45,7 @@ public static class LoggerDiagnostics
     public static readonly DiagnosticDescriptor UnknownSpecialTypeIntArray = new(
         Ids.UnknownSpecialTypeIntArray, "Loggable member has invalid integer type for array use", "[Log] attribute cannot be applied to member '{0}'. Cannot log arrays of type '{1}'. Can only log arrays of 'long'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor MissingGenerateLog = new(
-        Ids.MissingGenerateLog, "Type has Log member but is not GenerateLog", "Member '{0}' has [Log] attribute, however containing type {1} is not attributed with [GenerateLog]. No logging will be generated for this member.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.MissingGenerateLog, "Type has Log member but is not GenerateLog", "Type {0} has a member annotated with [Log], but is not attributed with [GenerateLog]. No logging will be generated for this type.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
 
     public static void ReportDiagnostic(this SymbolAnalysisContext context, FailureMode failureMode, ISymbol symbol)
     {
