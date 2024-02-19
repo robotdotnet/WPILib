@@ -1,7 +1,8 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using WPILib.CodeHelpers.LogGenerator;
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator.SourceGenerator;
 
 [Generator]
 public class LogGenerator : IIncrementalGenerator

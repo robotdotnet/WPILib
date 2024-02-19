@@ -1,10 +1,11 @@
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator.Analyzer;
 
 #pragma warning disable RS2008 // Enable analyzer release tracking
 
 using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
+using WPILib.CodeHelpers;
 
 public static class LoggerDiagnostics
 {
@@ -20,28 +21,31 @@ public static class LoggerDiagnostics
         public const string UnknownFailureMode = Prefix + "1006";
         public const string NullableStructArray = Prefix + "1007";
         public const string UnknownSpecialTypeIntArray = Prefix + "1008";
+        public const string MissingGenerateLog = Prefix + "1008";
     }
 
-    private const string Category = "StereologueSourceGenerator";
+    private const string Category = "SourceGeneration";
 
     public static readonly DiagnosticDescriptor UnknownMemberType = new(
-        Ids.UnknownMemberType, "Loggable member call type is unknown", "[Log] attribute cannot be applied to member {0}. Member type is unknown.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.UnknownMemberType, "Loggable member call type is unknown", "[Log] attribute cannot be applied to member '{0}'. Member type is unknown.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor ProtobufIsArray = new(
-        Ids.ProtobufIsArray, "Loggable member is array of protobufs", "[Log] attribute cannot be applied to member {0}. Cannot log array of Protobufs.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.ProtobufIsArray, "Loggable member is array of protobufs", "[Log] attribute cannot be applied to member '{0}'. Cannot log array of Protobufs.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor UnknownSpecialTypeArray = new(
-        Ids.UnknownSpecialTypeArray, "Loggable member has invalid type for array use", "[Log] attribute cannot be applied to member {0}. Cannot log arrays of type '{1}'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.UnknownSpecialTypeArray, "Loggable member has invalid type for array use", "[Log] attribute cannot be applied to member '{0}'. Cannot log arrays of type '{1}'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor LoggedMethodReturnsVoid = new(
-        Ids.LoggedMethodReturnsVoid, "Loggable method returns void", "[Log] attribute cannot be applied to member {0}. Cannot log from a void returning method.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.LoggedMethodReturnsVoid, "Loggable method returns void", "[Log] attribute cannot be applied to member '{0}'. Cannot log from a void returning method.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor LoggedMethodTakeParameters = new(
-        Ids.LoggedMethodTakeParameters, "Loggable method takes parameters", "[Log] attribute cannot be applied to member {0}. Cannot log from a method taking parameters.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.LoggedMethodTakeParameters, "Loggable method takes parameters", "[Log] attribute cannot be applied to member '{0}'. Cannot log from a method taking parameters.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor LoggedHasUnknownType = new(
-        Ids.LoggedHasUnknownType, "Loggable member type is not loggable", "[Log] attribute cannot be applied to member {0}; cannot log type '{1}'", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.LoggedHasUnknownType, "Loggable member type is not loggable", "[Log] attribute cannot be applied to member '{0}'; cannot log type '{1}'", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor UnknownFailureMode = new(
         Ids.UnknownFailureMode, "Unknown Failure Mode", "Failure mode has no diagnostic. Report to RobotDotNet.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor NullableStructArray = new(
-        Ids.NullableStructArray, "Loggable member is array of Nullable<Struct>", "[Log] attribute cannot be applied to member {0}. Cannot log arrays of Nullable Structs.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.NullableStructArray, "Loggable member is array of Nullable<Struct>", "[Log] attribute cannot be applied to member '{0}'. Cannot log arrays of Nullable Structs.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
     public static readonly DiagnosticDescriptor UnknownSpecialTypeIntArray = new(
-        Ids.UnknownSpecialTypeIntArray, "Loggable member has invalid integer type for array use", "[Log] attribute cannot be applied to member {0}. Cannot log arrays of type '{1}'. Can only log arrays of 'long'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+        Ids.UnknownSpecialTypeIntArray, "Loggable member has invalid integer type for array use", "[Log] attribute cannot be applied to member '{0}'. Cannot log arrays of type '{1}'. Can only log arrays of 'long'.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
+    public static readonly DiagnosticDescriptor MissingGenerateLog = new(
+        Ids.MissingGenerateLog, "Type has Log member but is not GenerateLog", "Member '{0}' has [Log] attribute, however containing type {1} is not attributed with [GenerateLog]. No logging will be generated for this member.", Category, DiagnosticSeverity.Error, isEnabledByDefault: true, "");
 
     public static void ReportDiagnostic(this SymbolAnalysisContext context, FailureMode failureMode, ISymbol symbol)
     {
@@ -88,6 +92,9 @@ public static class LoggerDiagnostics
                     break;
                 case FailureMode.NullableStructArray:
                     context.ReportDiagnostic(Diagnostic.Create(NullableStructArray, location, symbol.Name));
+                    break;
+                case FailureMode.MissingGenerateLog:
+                    context.ReportDiagnostic(Diagnostic.Create(MissingGenerateLog, location, symbol.Name, symbol.ContainingType?.ToDisplayString()));
                     break;
                 default:
                     context.ReportDiagnostic(Diagnostic.Create(UnknownFailureMode, location));

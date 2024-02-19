@@ -4,7 +4,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator;
 
 internal enum MemberType
 {

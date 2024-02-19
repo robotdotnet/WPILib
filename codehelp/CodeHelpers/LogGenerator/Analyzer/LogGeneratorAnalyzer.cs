@@ -2,10 +2,10 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator.Analyzer;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-public sealed class GenerateLogAnalyzer : DiagnosticAnalyzer
+public sealed class LogGeneratorAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create([
         LoggerDiagnostics.UnknownMemberType,
@@ -16,7 +16,8 @@ public sealed class GenerateLogAnalyzer : DiagnosticAnalyzer
         LoggerDiagnostics.LoggedHasUnknownType,
         LoggerDiagnostics.UnknownFailureMode,
         LoggerDiagnostics.NullableStructArray,
-        LoggerDiagnostics.UnknownSpecialTypeIntArray
+        LoggerDiagnostics.UnknownSpecialTypeIntArray,
+        LoggerDiagnostics.MissingGenerateLog,
     ]);
 
     public override void Initialize(AnalysisContext context)
@@ -24,6 +25,25 @@ public sealed class GenerateLogAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
+        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Method | SymbolKind.Field | SymbolKind.Property);
+    }
+
+    private static void AnalyzeMembers(SymbolAnalysisContext context)
+    {
+        if (!context.Symbol.HasLogAttribute()) {
+            return;
+        }
+
+        var containingType = context.Symbol.ContainingType;
+        if (containingType is null) {
+            return;
+        }
+
+        if (!containingType.HasGenerateLogAttribute()) {
+            foreach (var location in containingType.Locations) {
+                context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, context.Symbol.Name, containingType.ToDisplayString()));
+            }
+        }
     }
 
     private static void AnalyzeSymbol(SymbolAnalysisContext context)

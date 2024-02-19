@@ -1,7 +1,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator;
 
 // Contains all information about a [Log] attribute
 internal record LogAttributeInfo(string? Path, string LogLevel, string LogType, bool UseProtobuf);

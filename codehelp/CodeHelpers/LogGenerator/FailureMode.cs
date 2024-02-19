@@ -1,4 +1,4 @@
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator;
 
 public enum FailureMode
 {
@@ -11,4 +11,5 @@ public enum FailureMode
     MethodHasParameters,
     UnknownTypeToLog,
     NullableStructArray,
+    MissingGenerateLog,
 }

@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 
 #pragma warning disable CS0809, IDE0009, IDE1006, IDE0048
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers;
 
 /// <summary>
 /// A polyfill type that mirrors some methods from <see cref="HashCode"/> on .7.

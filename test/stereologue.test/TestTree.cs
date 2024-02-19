@@ -18,7 +18,6 @@ public partial class GenerateGenericClassConstraint<T> where T : struct
     public int Variable { get; }
 }
 
-
 [GenerateLog]
 public partial class GenerateClass
 {

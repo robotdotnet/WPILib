@@ -4,8 +4,10 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
+using WPILib.CodeHelpers;
+using WPILib.CodeHelpers.LogGenerator.Analyzer;
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers.LogGenerator;
 
 
 internal record TypeDeclType(TypeKind TypeKind, bool IsReadOnly, bool IsRefLikeType, bool IsRecord);

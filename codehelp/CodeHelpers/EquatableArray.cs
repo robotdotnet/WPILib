@@ -10,7 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Stereologue.SourceGenerator;
+namespace WPILib.CodeHelpers;
 
 /// <summary>
 /// Extensions for <see cref="EquatableArray{T}"/>.

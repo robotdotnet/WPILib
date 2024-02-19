@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace Stereologue;
+namespace WPILib.CodeHelpers;
 
 public static class SpecialTypeExtensions
 {
