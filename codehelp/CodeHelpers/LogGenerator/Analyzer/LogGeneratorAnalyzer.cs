@@ -25,27 +25,6 @@ public sealed class LogGeneratorAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
-        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Method);
-        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Field);
-        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Property);
-    }
-
-    private static void AnalyzeMembers(SymbolAnalysisContext context)
-    {
-        if (!context.Symbol.HasLogAttribute()) {
-            return;
-        }
-
-        var containingType = context.Symbol.ContainingType;
-        if (containingType is null) {
-            return;
-        }
-
-        if (!containingType.HasGenerateLogAttribute()) {
-            foreach (var location in containingType.Locations) {
-                context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, context.Symbol.Name, containingType.ToDisplayString()));
-            }
-        }
     }
 
     private static void AnalyzeSymbol(SymbolAnalysisContext context)
@@ -56,6 +35,23 @@ public sealed class LogGeneratorAnalyzer : DiagnosticAnalyzer
         if (context.Symbol is not INamedTypeSymbol namedTypeSymbol)
         {
             return;
+        }
+
+        // Enumerate all members to check for [Log] without [GenerateLog]
+        foreach (var member in namedTypeSymbol.GetMembers())
+        {
+            if (!member.HasLogAttribute())
+            {
+                continue;
+            }
+
+            if (!namedTypeSymbol.HasGenerateLogAttribute())
+            {
+                foreach (var location in namedTypeSymbol.Locations)
+                {
+                    context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, member.Name, namedTypeSymbol.ToDisplayString()));
+                }
+            }
         }
 
         List<(FailureMode, ISymbol)> failures = [];

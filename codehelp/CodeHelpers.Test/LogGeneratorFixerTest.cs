@@ -27,6 +27,7 @@ public sealed class GenerateLogAttribute : System.Attribute
     {
         string testString = @"
 using Stereologue;
+
 public partial class MyNewClass
 {
     [Log]
@@ -35,15 +36,17 @@ public partial class MyNewClass
 ";
         string fixedCode = @"
 using Stereologue;
+
 [GenerateLog]
 public partial class MyNewClass
 {
     [Log]
     public int Variable { get; }
-}";
+}
+";
         testString += InternalTypes;
         fixedCode += InternalTypes;
-        var expected = Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(3, 22).WithArguments(["Variable", "MyNewClass"]);
+        var expected = Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(4, 22).WithArguments(["Variable", "MyNewClass"]);
         await Verify.VerifyCodeFixAsync(testString, expected, fixedCode);
     }
 }

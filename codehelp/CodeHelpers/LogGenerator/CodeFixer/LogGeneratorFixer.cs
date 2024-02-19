@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Formatting;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
 
 namespace WPILib.CodeHelpers.LogGenerator.CodeFixer;
@@ -11,7 +12,7 @@ namespace WPILib.CodeHelpers.LogGenerator.CodeFixer;
 [ExportCodeFixProvider(LanguageNames.CSharp)]
 public class LogGeneratorFixer : CodeFixProvider
 {
-    private const string title = "Make constant";
+    private const string title = "Add GenerateLog";
 
     public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create([
         LoggerDiagnostics.Ids.MissingGenerateLog,
@@ -44,15 +45,24 @@ public class LogGeneratorFixer : CodeFixProvider
     private async Task<Document> AddGenerateLogAttribute(Document document, TypeDeclarationSyntax typeSyntax, CancellationToken cancellationToken)
     {
         var root = await document.GetSyntaxRootAsync(cancellationToken)!;
+        SyntaxToken firstToken = typeSyntax.GetFirstToken();
+        SyntaxTriviaList leadingTrivia = firstToken.LeadingTrivia;
+        TypeDeclarationSyntax trimmedLocal = typeSyntax.ReplaceToken(
+            firstToken, firstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
+
         var attributes = typeSyntax.AttributeLists.Add(
             SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(
                 SyntaxFactory.Attribute(SyntaxFactory.IdentifierName("GenerateLog"))
-            )));
+            )).WithLeadingTrivia(leadingTrivia));
 
-        return document.WithSyntaxRoot(
-            root!.ReplaceNode(
+        var newLocal = trimmedLocal.WithAttributeLists(attributes);
+        var formattedLocal = newLocal.WithAdditionalAnnotations(Formatter.Annotation);
+
+        var newRoot = root!.ReplaceNode(
                 typeSyntax,
-                typeSyntax.WithAttributeLists(attributes).NormalizeWhitespace()
-            ));
+                formattedLocal
+            );
+
+        return document.WithSyntaxRoot(newRoot);
     }
 }
