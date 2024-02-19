@@ -7,7 +7,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <EmitCompilerGeneratedFiles>false</EmitCompilerGeneratedFiles>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
 </Project>

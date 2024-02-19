@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace CsCore;
 
 public enum StatusValue : int
@@ -14,4 +16,13 @@ public enum StatusValue : int
     BadUrl = -2007,
     TelemetryNotEnabled = -2008,
     UnsupportedMode = -2009,
+}
+
+public static class StatusValueExtensions
+{
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void ThrowIfFailed(this StatusValue status)
+    {
+
+    }
 }

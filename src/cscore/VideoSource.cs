@@ -102,9 +102,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public bool SetConfigJson(string config)
     {
-        var ret = CsNative.SetSourceConfigJson(Handle, config, out var status);
-        VideoException.ThrowIfFailed(status);
-        return ret;
+        return CsNative.SetSourceConfigJson(Handle, config);
     }
 
     public string GetConfigJson()

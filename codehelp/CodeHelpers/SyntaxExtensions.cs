@@ -20,4 +20,9 @@ public static class SyntaxExtensions
         nonPartialIdentifier = null;
         return true;
     }
+
+    public static bool RequiresUnsafe(this ITypeSymbol symbol)
+    {
+        return symbol.TypeKind == TypeKind.Pointer || symbol.TypeKind == TypeKind.FunctionPointer;
+    }
 }
