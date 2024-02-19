@@ -16,15 +16,15 @@ public static partial class HalAnalogOutput
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetAnalogOutput")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetAnalogOutputRefShim(HalAnalogOutputHandle analogOutputHandle, ref HalStatus status);
+    public static partial double GetAnalogOutput(HalAnalogOutputHandle analogOutputHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeAnalogOutputPort", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalAnalogOutputHandle InitializeAnalogOutputPortRefShim(HalPortHandle portHandle, string allocationLocation, ref HalStatus status);
+    public static partial HalAnalogOutputHandle InitializeAnalogOutputPort(HalPortHandle portHandle, string allocationLocation, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetAnalogOutput")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetAnalogOutputRefShim(HalAnalogOutputHandle analogOutputHandle, double voltage, ref HalStatus status);
+    public static partial void SetAnalogOutput(HalAnalogOutputHandle analogOutputHandle, double voltage, out HalStatus status);
 
 
 }

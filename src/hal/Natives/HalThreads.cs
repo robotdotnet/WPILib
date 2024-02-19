@@ -7,19 +7,19 @@ public static partial class HalThreads
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetCurrentThreadPriority")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetCurrentThreadPriorityRefShim(out int isRealTime, ref HalStatus status);
+    public static partial int GetCurrentThreadPriority(out int isRealTime, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetThreadPriority")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static unsafe partial int GetThreadPriorityRefShim(void* handle, out int isRealTime, ref HalStatus status);
+    internal static unsafe partial int GetThreadPriority(void* handle, out int isRealTime, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetCurrentThreadPriority")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int SetCurrentThreadPriorityRefShim(int realTime, int priority, ref HalStatus status);
+    public static partial int SetCurrentThreadPriority(int realTime, int priority, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetThreadPriority")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static unsafe partial int SetThreadPriorityRefShim(void* handle, int realTime, int priority, ref HalStatus status);
+    internal static unsafe partial int SetThreadPriority(void* handle, int realTime, int priority, out HalStatus status);
 
 
 }

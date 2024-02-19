@@ -13,11 +13,11 @@ public static partial class HalCANAPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeCAN")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalCANHandle InitializeCANRefShim(CANManufacturer manufacturer, int deviceId, CANDeviceType deviceType, ref HalStatus status);
+    public static partial HalCANHandle InitializeCAN(CANManufacturer manufacturer, int deviceId, CANDeviceType deviceType, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadCANPacketLatest")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void ReadCANPacketLatestRefShim(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, ref HalStatus status);
+    public static partial void ReadCANPacketLatest(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, out HalStatus status);
 
     public static Span<byte> ReadCANPacketLatest(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, out HalStatus status)
     {
@@ -27,7 +27,7 @@ public static partial class HalCANAPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadCANPacketNew")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void ReadCANPacketNewRefShim(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, ref HalStatus status);
+    public static partial void ReadCANPacketNew(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, out HalStatus status);
 
     public static Span<byte> ReadCANPacketNew(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, out HalStatus status)
     {
@@ -37,7 +37,7 @@ public static partial class HalCANAPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ReadCANPacketTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void ReadCANPacketTimeoutRefShim(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, int timeoutMs, ref HalStatus status);
+    public static partial void ReadCANPacketTimeout(HalCANHandle handle, int apiId, Span<byte> data, out int length, out ulong receivedTimestamp, int timeoutMs, out HalStatus status);
 
     public static Span<byte> ReadCANPacketTimeout(HalCANHandle handle, int apiId, Span<byte> data, out ulong receivedTimestamp, int timeoutMs, out HalStatus status)
     {
@@ -47,11 +47,11 @@ public static partial class HalCANAPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_StopCANPacketRepeating")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void StopCANPacketRepeatingRefShim(HalCANHandle handle, int apiId, ref HalStatus status);
+    public static partial void StopCANPacketRepeating(HalCANHandle handle, int apiId, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_WriteCANPacket")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void WriteCANPacketRefShim(HalCANHandle handle, ReadOnlySpan<byte> data, int length, int apiId, ref HalStatus status);
+    public static partial void WriteCANPacket(HalCANHandle handle, ReadOnlySpan<byte> data, int length, int apiId, out HalStatus status);
 
     public static void WriteCANPacket(HalCANHandle handle, ReadOnlySpan<byte> data, int apiId, out HalStatus status)
     {
@@ -60,7 +60,7 @@ public static partial class HalCANAPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_WriteCANPacketRepeating")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void WriteCANPacketRepeatingRefShim(HalCANHandle handle, ReadOnlySpan<byte> data, int length, int apiId, int repeatMs, ref HalStatus status);
+    public static partial void WriteCANPacketRepeating(HalCANHandle handle, ReadOnlySpan<byte> data, int length, int apiId, int repeatMs, out HalStatus status);
 
     public static void WriteCANPacketRepeating(HalCANHandle handle, ReadOnlySpan<byte> data, int apiId, int repeatMs, out HalStatus status)
     {
@@ -69,7 +69,7 @@ public static partial class HalCANAPI
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_WriteCANRTRFrame")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void WriteCANRTRFrameRefShim(HalCANHandle handle, int length, int apiId, ref HalStatus status);
+    public static partial void WriteCANRTRFrame(HalCANHandle handle, int length, int apiId, out HalStatus status);
 
 
 }

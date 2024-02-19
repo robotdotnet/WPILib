@@ -8,75 +8,75 @@ public static partial class HalEncoder
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_FreeEncoder")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void FreeEncoderRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial void FreeEncoder(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoder")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoder(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderDecodingScaleFactor")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetEncoderDecodingScaleFactorRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial double GetEncoderDecodingScaleFactor(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderDirection")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderDirectionRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoderDirection(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderDistance")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetEncoderDistanceRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial double GetEncoderDistance(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderDistancePerPulse")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetEncoderDistancePerPulseRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial double GetEncoderDistancePerPulse(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderEncodingScale")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderEncodingScaleRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoderEncodingScale(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderEncodingType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial EncoderEncodingType GetEncoderEncodingTypeRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial EncoderEncodingType GetEncoderEncodingType(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderFPGAIndex")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderFPGAIndexRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoderFPGAIndex(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderPeriod")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetEncoderPeriodRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial double GetEncoderPeriod(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderRate")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetEncoderRateRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial double GetEncoderRate(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderRaw")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderRawRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoderRaw(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderSamplesToAverage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderSamplesToAverageRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoderSamplesToAverage(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetEncoderStopped")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetEncoderStoppedRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial int GetEncoderStopped(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeEncoder")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalEncoderHandle InitializeEncoderRefShim(HalAnalogTriggerHandle digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, HalAnalogTriggerHandle digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType, ref HalStatus status);
+    public static partial HalEncoderHandle InitializeEncoder(HalAnalogTriggerHandle digitalSourceHandleA, AnalogTriggerType analogTriggerTypeA, HalAnalogTriggerHandle digitalSourceHandleB, AnalogTriggerType analogTriggerTypeB, int reverseDirection, EncoderEncodingType encodingType, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ResetEncoder")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void ResetEncoderRefShim(HalEncoderHandle encoderHandle, ref HalStatus status);
+    public static partial void ResetEncoder(HalEncoderHandle encoderHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderDistancePerPulse")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderDistancePerPulseRefShim(HalEncoderHandle encoderHandle, double distancePerPulse, ref HalStatus status);
+    public static partial void SetEncoderDistancePerPulse(HalEncoderHandle encoderHandle, double distancePerPulse, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderIndexSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderIndexSourceRefShim(HalEncoderHandle encoderHandle, HalDigitalHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, ref HalStatus status);
+    public static partial void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HalDigitalHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, out HalStatus status);
 
     public static void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HalDigitalHandle digitalSourceHandle, EncoderIndexingType type, out HalStatus status)
     {
@@ -85,23 +85,23 @@ public static partial class HalEncoder
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderIndexSource")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderIndexSourceRefShim(HalEncoderHandle encoderHandle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, ref HalStatus status);
+    public static partial void SetEncoderIndexSource(HalEncoderHandle encoderHandle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, EncoderIndexingType type, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderMaxPeriod")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderMaxPeriodRefShim(HalEncoderHandle encoderHandle, double maxPeriod, ref HalStatus status);
+    public static partial void SetEncoderMaxPeriod(HalEncoderHandle encoderHandle, double maxPeriod, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderMinRate")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderMinRateRefShim(HalEncoderHandle encoderHandle, double minRate, ref HalStatus status);
+    public static partial void SetEncoderMinRate(HalEncoderHandle encoderHandle, double minRate, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderReverseDirection")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderReverseDirectionRefShim(HalEncoderHandle encoderHandle, int reverseDirection, ref HalStatus status);
+    public static partial void SetEncoderReverseDirection(HalEncoderHandle encoderHandle, int reverseDirection, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderSamplesToAverage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetEncoderSamplesToAverageRefShim(HalEncoderHandle encoderHandle, int samplesToAverage, ref HalStatus status);
+    public static partial void SetEncoderSamplesToAverage(HalEncoderHandle encoderHandle, int samplesToAverage, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetEncoderSimDevice")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

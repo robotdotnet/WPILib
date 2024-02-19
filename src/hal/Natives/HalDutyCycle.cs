@@ -12,15 +12,15 @@ public static partial class HalDutyCycle
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDutyCycleFPGAIndex")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetDutyCycleFPGAIndexRefShim(HalDutyCycleHandle dutyCycleHandle, ref HalStatus status);
+    public static partial int GetDutyCycleFPGAIndex(HalDutyCycleHandle dutyCycleHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDutyCycleFrequency")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetDutyCycleFrequencyRefShim(HalDutyCycleHandle dutyCycleHandle, ref HalStatus status);
+    public static partial int GetDutyCycleFrequency(HalDutyCycleHandle dutyCycleHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalDutyCycleHandle InitializeDutyCycleRefShim(HalDigitalHandle digitalSourceHandle, AnalogTriggerType triggerType, ref HalStatus status);
+    public static partial HalDutyCycleHandle InitializeDutyCycle(HalDigitalHandle digitalSourceHandle, AnalogTriggerType triggerType, out HalStatus status);
 
     public static HalDutyCycleHandle InitializeDutyCycle(HalDigitalHandle digitalSourceHandle, out HalStatus status)
     {
@@ -29,7 +29,7 @@ public static partial class HalDutyCycle
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalDutyCycleHandle InitializeDutyCycleRefShim(HalAnalogTriggerHandle analogTriggerHandle, AnalogTriggerType triggerType, ref HalStatus status);
+    public static partial HalDutyCycleHandle InitializeDutyCycle(HalAnalogTriggerHandle analogTriggerHandle, AnalogTriggerType triggerType, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDutyCycleSimDevice")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

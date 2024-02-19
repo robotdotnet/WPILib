@@ -16,15 +16,15 @@ public static partial class HalRelay
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetRelay")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial int GetRelayRefShim(HalRelayHandle relayPortHandle, ref HalStatus status);
+    public static partial int GetRelay(HalRelayHandle relayPortHandle, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeRelayPort", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial HalRelayHandle InitializeRelayPortRefShim(HalPortHandle portHandle, int fwd, string allocationLocation, ref HalStatus status);
+    public static partial HalRelayHandle InitializeRelayPort(HalPortHandle portHandle, int fwd, string allocationLocation, out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetRelay")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial void SetRelayRefShim(HalRelayHandle relayPortHandle, int on, ref HalStatus status);
+    public static partial void SetRelay(HalRelayHandle relayPortHandle, int on, out HalStatus status);
 
 
 }

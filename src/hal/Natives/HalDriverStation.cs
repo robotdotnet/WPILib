@@ -9,7 +9,7 @@ public static partial class HalDriverStation
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetAllianceStation")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial AllianceStationID GetAllianceStationRefShim(ref HalStatus status);
+    public static partial AllianceStationID GetAllianceStation(out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetControlWord")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -53,7 +53,7 @@ public static partial class HalDriverStation
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetMatchTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial double GetMatchTimeRefShim(ref HalStatus status);
+    public static partial double GetMatchTime(out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_ObserveUserProgramAutonomous")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
