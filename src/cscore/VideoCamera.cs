@@ -14,50 +14,50 @@ public class VideoCamera : VideoSource
     {
         get
         {
-            int brightness = CsNative.GetCameraBrightness(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int brightness = CsNative.GetCameraBrightness(Handle);
+
             return brightness;
         }
         set
         {
-            CsNative.SetCameraBrightness(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetCameraBrightness(Handle, value);
+
         }
     }
 
     public void SetWhiteBalanceAuto()
     {
-        CsNative.SetCameraWhiteBalanceAuto(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetCameraWhiteBalanceAuto(Handle);
+
     }
 
     public void SetWhiteBalanceHoldCurrent()
     {
-        CsNative.SetCameraWhiteBalanceHoldCurrent(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetCameraWhiteBalanceHoldCurrent(Handle);
+
     }
 
     public void SetWhiteBalanceManual(int value)
     {
-        CsNative.SetCameraWhiteBalanceManual(Handle, value, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetCameraWhiteBalanceManual(Handle, value);
+
     }
 
     public void SetExposureAuto()
     {
-        CsNative.SetCameraExposureAuto(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetCameraExposureAuto(Handle);
+
     }
 
     public void SetExposureHoldCurrent()
     {
-        CsNative.SetCameraExposureHoldCurrent(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetCameraExposureHoldCurrent(Handle);
+
     }
 
     public void SetExposureManual(int value)
     {
-        CsNative.SetCameraExposureManual(Handle, value, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetCameraExposureManual(Handle, value);
+
     }
 }

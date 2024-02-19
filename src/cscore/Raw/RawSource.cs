@@ -8,8 +8,8 @@ public class RawSource(string name, VideoMode mode) : ImageSource(CreateRawSourc
 {
     private static CsSource CreateRawSource(string name, ref readonly VideoMode mode)
     {
-        var source = CsNative.CreateRawSource(name, mode, out var status);
-        VideoException.ThrowIfFailed(status);
+        var source = CsNative.CreateRawSource(name, mode);
+
         return source;
     }
 
@@ -24,7 +24,7 @@ public class RawSource(string name, VideoMode mode) : ImageSource(CreateRawSourc
 
     public void PutFrame(RawFrameWriter image)
     {
-        CsNative.PutRawSourceFrame(Handle, image, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.PutRawSourceFrame(Handle, image);
+
     }
 }

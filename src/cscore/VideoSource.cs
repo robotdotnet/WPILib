@@ -20,8 +20,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            var kind = CsNative.GetSourceKind(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var kind = CsNative.GetSourceKind(Handle);
+
             return kind;
         }
     }
@@ -30,8 +30,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            CsNative.GetSourceName(Handle, out var name, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetSourceName(Handle, out var name);
+
             return name;
         }
     }
@@ -40,8 +40,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            CsNative.GetSourceDescription(Handle, out var description, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetSourceDescription(Handle, out var description);
+
             return description;
         }
     }
@@ -50,8 +50,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            var frameTime = CsNative.GetSourceLastFrameTime(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var frameTime = CsNative.GetSourceLastFrameTime(Handle);
+
             return (long)frameTime;
         }
     }
@@ -60,8 +60,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         set
         {
-            CsNative.SetSourceConnectionStrategy(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetSourceConnectionStrategy(Handle, value);
+
         }
     }
 
@@ -69,8 +69,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            var isConnected = CsNative.IsSourceConnected(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var isConnected = CsNative.IsSourceConnected(Handle);
+
             return isConnected;
         }
     }
@@ -79,8 +79,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            var isEnabled = CsNative.IsSourceEnabled(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var isEnabled = CsNative.IsSourceEnabled(Handle);
+
             return isEnabled;
         }
     }
@@ -89,14 +89,14 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         get
         {
-            CsNative.GetSourceVideoMode(Handle, out var mode, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetSourceVideoMode(Handle, out var mode);
+
             return mode;
         }
         set
         {
-            CsNative.SetSourceVideoMode(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetSourceVideoMode(Handle, value);
+
         }
     }
 
@@ -107,36 +107,36 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public string GetConfigJson()
     {
-        CsNative.GetSourceConfigJson(Handle, out var str, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.GetSourceConfigJson(Handle, out var str);
+
         return str;
     }
 
     public double GetActualFPS()
     {
-        var avg = CsNative.GetTelemetryAverageValue(Handle, TelemetryKind.SourceFramesReceived, out var status);
-        VideoException.ThrowIfFailed(status);
+        var avg = CsNative.GetTelemetryAverageValue(Handle, TelemetryKind.SourceFramesReceived);
+
         return avg;
     }
 
     public double GetActualDataRate()
     {
-        var avg = CsNative.GetTelemetryAverageValue(Handle, TelemetryKind.SourceBytesReceived, out var status);
-        VideoException.ThrowIfFailed(status);
+        var avg = CsNative.GetTelemetryAverageValue(Handle, TelemetryKind.SourceBytesReceived);
+
         return avg;
     }
 
     public VideoMode[] EnumerateVideoModes()
     {
-        var modes = CsNative.EnumerateSourceVideoModes(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        var modes = CsNative.EnumerateSourceVideoModes(Handle);
+
         return modes;
     }
 
     public VideoSink[] EnumerateSinks()
     {
-        var handles = CsNative.EnumerateSourceSinks(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        var handles = CsNative.EnumerateSourceSinks(Handle);
+
         VideoSink[] rv = new VideoSink[handles.Length];
         for (int i = 0; i < handles.Length; i++)
         {
@@ -147,15 +147,15 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public VideoProperty GetProperty(string name)
     {
-        var property = CsNative.GetSourceProperty(Handle, name, out var status);
-        VideoException.ThrowIfFailed(status);
+        var property = CsNative.GetSourceProperty(Handle, name);
+
         return new VideoProperty(property);
     }
 
     public VideoProperty[] EnumerateProperties()
     {
-        var handles = CsNative.EnumerateSourceProperties(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        var handles = CsNative.EnumerateSourceProperties(Handle);
+
         VideoProperty[] rv = new VideoProperty[handles.Length];
         for (int i = 0; i < handles.Length; i++)
         {
@@ -167,7 +167,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     public static VideoSource[] EnumerateSources()
     {
         var handles = CsNative.EnumerateSources(out var status);
-        VideoException.ThrowIfFailed(status);
+
         VideoSource[] rv = new VideoSource[handles.Length];
         for (int i = 0; i < handles.Length; i++)
         {
@@ -180,8 +180,8 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
     {
         if (Handle.Handle != 0)
         {
-            CsNative.ReleaseSource(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.ReleaseSource(Handle);
+
         }
         Handle = default;
     }

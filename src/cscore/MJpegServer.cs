@@ -7,8 +7,8 @@ public class MJpegServer : VideoSink
 {
     private static CsSink CreateMJpegServer(string name, string listenAddress, int port)
     {
-        var ret = CsNative.CreateMjpegServer(name, listenAddress, port, out var status);
-        VideoException.ThrowIfFailed(status);
+        var ret = CsNative.CreateMjpegServer(name, listenAddress, port);
+
         return ret;
     }
 
@@ -24,8 +24,7 @@ public class MJpegServer : VideoSink
     {
         get
         {
-            CsNative.GetMjpegServerListenAddress(Handle, out var address, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetMjpegServerListenAddress(Handle, out var address);
             return address;
         }
     }
@@ -34,46 +33,35 @@ public class MJpegServer : VideoSink
     {
         get
         {
-            int port = CsNative.GetMjpegServerPort(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int port = CsNative.GetMjpegServerPort(Handle);
             return port;
         }
     }
 
     public void SetResolution(int width, int height)
     {
-        CsProperty prop = CsNative.GetSinkProperty(Handle, "width"u8, out var status);
-        VideoException.ThrowIfFailed(status);
-        CsNative.SetProperty(prop, width, out status);
-        VideoException.ThrowIfFailed(status);
-
-        prop = CsNative.GetSinkProperty(Handle, "height"u8, out status);
-        VideoException.ThrowIfFailed(status);
-        CsNative.SetProperty(prop, height, out status);
-        VideoException.ThrowIfFailed(status);
+        CsProperty prop = CsNative.GetSinkProperty(Handle, "width"u8);
+        CsNative.SetProperty(prop, width);
+        prop = CsNative.GetSinkProperty(Handle, "height"u8);
+        CsNative.SetProperty(prop, height);
     }
 
     public void SetFPS(int fps)
     {
-        CsProperty prop = CsNative.GetSinkProperty(Handle, "fps"u8, out var status);
-        VideoException.ThrowIfFailed(status);
-        CsNative.SetProperty(prop, fps, out status);
-        VideoException.ThrowIfFailed(status);
+        CsProperty prop = CsNative.GetSinkProperty(Handle, "fps"u8);
+        CsNative.SetProperty(prop, fps);
     }
 
     public void SetCompression(int quality)
     {
-        CsProperty prop = CsNative.GetSinkProperty(Handle, "compression"u8, out var status);
-        VideoException.ThrowIfFailed(status);
-        CsNative.SetProperty(prop, quality, out status);
-        VideoException.ThrowIfFailed(status);
+        CsProperty prop = CsNative.GetSinkProperty(Handle, "compression"u8);
+        CsNative.SetProperty(prop, quality);
     }
 
     public void SetDefaultCompression(int quality)
     {
-        CsProperty prop = CsNative.GetSinkProperty(Handle, "default_compression"u8, out var status);
-        VideoException.ThrowIfFailed(status);
-        CsNative.SetProperty(prop, quality, out status);
-        VideoException.ThrowIfFailed(status);
+        CsProperty prop = CsNative.GetSinkProperty(Handle, "default_compression"u8);
+        CsNative.SetProperty(prop, quality);
+
     }
 }

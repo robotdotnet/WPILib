@@ -7,15 +7,15 @@ public class UsbCamera : VideoCamera
 {
     private static CsSource CreateUsbCameraDev(string name, int dev)
     {
-        var handle = CsNative.CreateUsbCamera(name, dev, out var status);
-        VideoException.ThrowIfFailed(status);
+        var handle = CsNative.CreateUsbCamera(name, dev);
+
         return handle;
     }
 
     private static CsSource CreateUsbCameraPath(string name, string path)
     {
-        var handle = CsNative.CreateUsbCamera(name, path, out var status);
-        VideoException.ThrowIfFailed(status);
+        var handle = CsNative.CreateUsbCamera(name, path);
+
         return handle;
     }
 
@@ -30,7 +30,7 @@ public class UsbCamera : VideoCamera
     public static UsbCameraInfo[] EnumerateUsbCameras()
     {
         var info = CsNative.EnumerateUsbCameras(out var status);
-        VideoException.ThrowIfFailed(status);
+
         return info;
     }
 
@@ -38,14 +38,14 @@ public class UsbCamera : VideoCamera
     {
         get
         {
-            CsNative.GetUsbCameraPath(Handle, out var path, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetUsbCameraPath(Handle, out var path);
+
             return path;
         }
         set
         {
-            CsNative.SetUsbCameraPath(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetUsbCameraPath(Handle, value);
+
         }
     }
 
@@ -53,17 +53,15 @@ public class UsbCamera : VideoCamera
     {
         get
         {
-            var info = CsNative.GetUsbCameraInfo(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var info = CsNative.GetUsbCameraInfo(Handle);
+
             return info;
         }
     }
 
     public void SetConnectVerbose(int level)
     {
-        var property = CsNative.GetSourceProperty(Handle, "connect_verbose"u8, out var status);
-        VideoException.ThrowIfFailed(status);
-        CsNative.SetProperty(property, level, out status);
-        VideoException.ThrowIfFailed(status);
+        var property = CsNative.GetSourceProperty(Handle, "connect_verbose"u8);
+        CsNative.SetProperty(property, level);
     }
 }

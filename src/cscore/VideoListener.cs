@@ -78,8 +78,8 @@ public class VideoListener : IDisposable, IEquatable<VideoListener?>
                 s_poller = CsNative.CreateListenerPoller();
                 StartThread();
             }
-            Handle = CsNative.AddPolledListener(s_poller, eventMask, immediateNotify, out var status);
-            VideoException.ThrowIfFailed(status);
+            Handle = CsNative.AddPolledListener(s_poller, eventMask, immediateNotify);
+
             s_listeners.Add(Handle, listener);
         }
     }
@@ -92,8 +92,8 @@ public class VideoListener : IDisposable, IEquatable<VideoListener?>
             {
                 s_listeners.Remove(Handle);
             }
-            CsNative.RemoveListener(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.RemoveListener(Handle);
+
         }
         Handle = default;
     }

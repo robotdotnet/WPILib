@@ -20,8 +20,8 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
     {
         get
         {
-            var kind = CsNative.GetSinkKind(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var kind = CsNative.GetSinkKind(Handle);
+
             return kind;
         }
     }
@@ -30,8 +30,8 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
     {
         get
         {
-            CsNative.GetSinkName(Handle, out var name, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetSinkName(Handle, out var name);
+
             return name;
         }
     }
@@ -40,23 +40,23 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
     {
         get
         {
-            CsNative.GetSinkDescription(Handle, out var description, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetSinkDescription(Handle, out var description);
+
             return description;
         }
     }
 
     public bool SetConfigJson(string config)
     {
-        var ret = CsNative.SetSinkConfigJson(Handle, config, out var status);
-        VideoException.ThrowIfFailed(status);
+        var ret = CsNative.SetSinkConfigJson(Handle, config);
+
         return ret;
     }
 
     public string GetConfigJson()
     {
-        CsNative.GetSinkConfigJson(Handle, out var str, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.GetSinkConfigJson(Handle, out var str);
+
         return str;
     }
 
@@ -64,8 +64,8 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
     {
         get
         {
-            var sourceHandle = CsNative.GetSinkSource(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var sourceHandle = CsNative.GetSinkSource(Handle);
+
             if (sourceHandle.Handle == 0)
             {
                 return null;
@@ -79,22 +79,22 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
             {
                 sourceHandle = value.Handle;
             }
-            CsNative.SetSinkSource(Handle, sourceHandle, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetSinkSource(Handle, sourceHandle);
+
         }
     }
 
     public VideoProperty GetProperty(string name)
     {
-        var property = CsNative.GetSinkProperty(Handle, name, out var status);
-        VideoException.ThrowIfFailed(status);
+        var property = CsNative.GetSinkProperty(Handle, name);
+
         return new VideoProperty(property);
     }
 
     public VideoProperty[] EnumerateProperties()
     {
-        var handles = CsNative.EnumerateSinkProperties(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        var handles = CsNative.EnumerateSinkProperties(Handle);
+
         VideoProperty[] rv = new VideoProperty[handles.Length];
         for (int i = 0; i < handles.Length; i++)
         {
@@ -105,15 +105,15 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
 
     public VideoProperty GetSourceProperty(string name)
     {
-        var property = CsNative.GetSinkSourceProperty(Handle, name, out var status);
-        VideoException.ThrowIfFailed(status);
+        var property = CsNative.GetSinkSourceProperty(Handle, name);
+
         return new VideoProperty(property);
     }
 
     public static VideoSink[] EnumerateSinks()
     {
         var handles = CsNative.EnumerateSinks(out var status);
-        VideoException.ThrowIfFailed(status);
+
         VideoSink[] rv = new VideoSink[handles.Length];
         for (int i = 0; i < handles.Length; i++)
         {
@@ -126,8 +126,8 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
     {
         if (Handle.Handle != 0)
         {
-            CsNative.ReleaseSink(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.ReleaseSink(Handle);
+
         }
         Handle = default;
     }

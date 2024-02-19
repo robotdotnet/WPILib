@@ -15,8 +15,8 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            CsNative.GetPropertyName(Handle, out var value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetPropertyName(Handle, out var value);
+
             return value;
         }
     }
@@ -35,14 +35,14 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            int res = CsNative.GetProperty(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int res = CsNative.GetProperty(Handle);
+
             return res;
         }
         set
         {
-            CsNative.SetProperty(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetProperty(Handle, value);
+
         }
     }
 
@@ -50,8 +50,8 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            int res = CsNative.GetPropertyMin(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int res = CsNative.GetPropertyMin(Handle);
+
             return res;
         }
     }
@@ -60,8 +60,8 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            int res = CsNative.GetPropertyMax(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int res = CsNative.GetPropertyMax(Handle);
+
             return res;
         }
     }
@@ -70,8 +70,8 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            int res = CsNative.GetPropertyStep(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int res = CsNative.GetPropertyStep(Handle);
+
             return res;
         }
     }
@@ -80,8 +80,8 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            int res = CsNative.GetPropertyDefault(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            int res = CsNative.GetPropertyDefault(Handle);
+
             return res;
         }
     }
@@ -90,14 +90,14 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            CsNative.GetStringProperty(Handle, out var res, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.GetStringProperty(Handle, out var res);
+
             return res;
         }
         set
         {
-            CsNative.SetStringProperty(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetStringProperty(Handle, value);
+
         }
     }
 
@@ -105,16 +105,16 @@ public class VideoProperty : IEquatable<VideoProperty?>
     {
         get
         {
-            string[] res = CsNative.GetEnumPropertyChoices(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            string[] res = CsNative.GetEnumPropertyChoices(Handle);
+
             return res;
         }
     }
 
     public int Get()
     {
-        int res = CsNative.GetProperty(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        int res = CsNative.GetProperty(Handle);
+
         return res;
     }
 
@@ -126,8 +126,8 @@ public class VideoProperty : IEquatable<VideoProperty?>
     internal VideoProperty(CsProperty handle)
     {
         Handle = handle;
-        Kind = CsNative.GetPropertyKind(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        Kind = CsNative.GetPropertyKind(Handle);
+
     }
 
     internal VideoProperty(CsProperty handle, PropertyKind kind)

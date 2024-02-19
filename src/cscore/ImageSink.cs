@@ -9,15 +9,15 @@ public abstract class ImageSink(CsSink handle) : VideoSink(handle)
     {
         set
         {
-            CsNative.SetSinkDescription(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetSinkDescription(Handle, value);
+
         }
     }
 
     public string GetError()
     {
-        CsNative.GetSinkError(Handle, out var error, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.GetSinkError(Handle, out var error);
+
         return error;
     }
 
@@ -25,8 +25,8 @@ public abstract class ImageSink(CsSink handle) : VideoSink(handle)
     {
         set
         {
-            CsNative.SetSinkEnabled(Handle, value, out var status);
-            VideoException.ThrowIfFailed(status);
+            CsNative.SetSinkEnabled(Handle, value);
+
         }
     }
 }

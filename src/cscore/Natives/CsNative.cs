@@ -89,11 +89,11 @@ public static partial class CsNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial CsSource CreateHttpCamera(WpiString name, WpiString url, HttpCameraKind kind, out StatusValue status);
 
-    [AutomateStatusCheck]
     [LibraryImport("cscore", EntryPoint = "CS_CreateHttpCameraMulti")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial CsSource CreateHttpCamera(WpiString name, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> urls, int count, HttpCameraKind kind, out StatusValue status);
 
+    [AutomateStatusCheck]
     public static CsSource CreateHttpCamera(string name, ReadOnlySpan<string> urls, HttpCameraKind kind, out StatusValue status)
     {
         return CreateHttpCamera(name, urls, urls.Length, kind, out status);
@@ -337,11 +337,11 @@ public static partial class CsNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial CsProperty CreateSourceProperty(CsSource source, WpiString name, PropertyKind kind, int minimum, int maximum, int step, int defaultValue, int value, out StatusValue status);
 
-    [AutomateStatusCheck]
     [LibraryImport("cscore", EntryPoint = "CS_SetSourceEnumPropertyChoices")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetSourceEnumPropertyChoices(CsSource source, CsProperty property, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> choices, int count, out StatusValue status);
 
+    [AutomateStatusCheck]
     public static void SetSourceEnumPropertyChoices(CsSource source, CsProperty property, ReadOnlySpan<string> choices, out StatusValue status)
     {
         SetSourceEnumPropertyChoices(source, property, choices, choices.Length, out status);

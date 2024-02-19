@@ -8,15 +8,15 @@ public class HttpCamera : VideoCamera
 {
     private static CsSource CreateHttpCamera(string name, string url, HttpCameraKind kind)
     {
-        var source = CsNative.CreateHttpCamera(name, url, kind, out var status);
-        VideoException.ThrowIfFailed(status);
+        var source = CsNative.CreateHttpCamera(name, url, kind);
+
         return source;
     }
 
     private static CsSource CreateHttpCamera(string name, ReadOnlySpan<string> urls, HttpCameraKind kind)
     {
-        var source = CsNative.CreateHttpCamera(name, urls, kind, out var status);
-        VideoException.ThrowIfFailed(status);
+        var source = CsNative.CreateHttpCamera(name, urls, kind);
+
         return source;
     }
 
@@ -33,22 +33,22 @@ public class HttpCamera : VideoCamera
     {
         get
         {
-            var ret = CsNative.GetHttpCameraKind(Handle, out var status);
-            VideoException.ThrowIfFailed(status);
+            var ret = CsNative.GetHttpCameraKind(Handle);
+
             return ret;
         }
     }
 
     public void SetUrls(ReadOnlySpan<string> urls)
     {
-        CsNative.SetHttpCameraUrls(Handle, urls, out var status);
-        VideoException.ThrowIfFailed(status);
+        CsNative.SetHttpCameraUrls(Handle, urls);
+
     }
 
     public string[] GetUrls()
     {
-        var ret = CsNative.GetHttpCameraUrls(Handle, out var status);
-        VideoException.ThrowIfFailed(status);
+        var ret = CsNative.GetHttpCameraUrls(Handle);
+
         return ret;
     }
 }
