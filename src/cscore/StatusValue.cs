@@ -23,6 +23,10 @@ public static class StatusValueExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfFailed(this StatusValue status)
     {
-
+        if (status == StatusValue.Ok)
+        {
+            return;
+        }
+        VideoException.ThrowException(status);
     }
 }
