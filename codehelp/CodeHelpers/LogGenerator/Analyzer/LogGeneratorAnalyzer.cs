@@ -25,7 +25,9 @@ public sealed class LogGeneratorAnalyzer : DiagnosticAnalyzer
         context.EnableConcurrentExecution();
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.RegisterSymbolAction(AnalyzeSymbol, SymbolKind.NamedType);
-        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Method | SymbolKind.Field | SymbolKind.Property);
+        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Method);
+        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Field);
+        context.RegisterSymbolAction(AnalyzeMembers, SymbolKind.Property);
     }
 
     private static void AnalyzeMembers(SymbolAnalysisContext context)
