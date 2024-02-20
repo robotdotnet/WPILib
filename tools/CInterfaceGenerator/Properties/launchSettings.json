@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "CInterfaceGenerator": {
-      "commandName": "Project",
-      "commandLineArgs": "C:\\Users\\thad.house\\GitHub\\allwpilib\\hal\\src\\main\\native\\include\\hal C:\\Users\\thad.house\\GitHub\\RobotDotNet\\WPILib\\src\\hal\\Natives\\HALFunctions.json"
-    }
-  }
-}
