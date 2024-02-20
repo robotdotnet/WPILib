@@ -34,7 +34,8 @@ public class StatusCheckGenerator : IIncrementalGenerator
     private static void Execute(ImmutableArray<MethodModel?> model, SourceProductionContext context)
     {
         IndentedStringBuilder builder = new IndentedStringBuilder();
-        foreach (var method in model) {
+        foreach (var method in model)
+        {
             method?.WriteMethod(builder);
         }
 

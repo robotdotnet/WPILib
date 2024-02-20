@@ -27,7 +27,8 @@ internal record MethodModel(TypeDeclType TypeDeclType, string TypeName, string? 
             builder.Append("ref ");
         }
 
-        if (NeedsUnsafe) {
+        if (NeedsUnsafe)
+        {
             builder.Append("unsafe ");
         }
 
@@ -212,7 +213,8 @@ internal static class MethodModelExtensions
 
         var returnType = symbol.ToDisplayString(returnTypeFmt).Replace(symbol.Name, "");
 
-        if (symbol.ReturnType.RequiresUnsafe()) {
+        if (symbol.ReturnType.RequiresUnsafe())
+        {
             needsUnsafe = true;
         }
 

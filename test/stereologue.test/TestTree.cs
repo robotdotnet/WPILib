@@ -4,12 +4,6 @@ using WPIUtil;
 
 namespace Stereologue.Test;
 
-public static class IntExtensions {
-    public static void ThrowIfFailed(this int x) {
-
-    }
-}
-
 [GenerateLog]
 public partial class GenerateGenericClass<T>
 {
@@ -24,24 +18,6 @@ public partial class GenerateGenericClassConstraint<T> where T : struct
 {
     [Log]
     public int Variable { get; }
-
-    [AutomateStatusCheck]
-    public static ref readonly int PerformStatusCheck<T2>(int x, ref int y, out int z, ref readonly int a, in int b, out int status) where T2 : struct {
-        z = y;
-        status = 0;
-        return ref Unsafe.NullRef<int>();
-    }
-
-    [AutomateStatusCheck]
-    public static void PerformStatusCheck(out int status) {
-        status = 0;
-    }
-
-    [AutomateStatusCheck]
-    public static int PerformStatusCheck(int x, out int status) {
-        status = 0;
-        return x;
-    }
 }
 
 [GenerateLog]

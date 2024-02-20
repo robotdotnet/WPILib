@@ -7,11 +7,16 @@ public record ParameterModel(string ParameterString, string Name, RefKind RefKin
 {
     public void WriteCallString(IndentedStringBuilder builder)
     {
-        if (RefKind == RefKind.RefReadOnlyParameter) {
+        if (RefKind == RefKind.RefReadOnlyParameter)
+        {
             builder.Append("in ");
-        } else if (RefKind == RefKind.Ref) {
+        }
+        else if (RefKind == RefKind.Ref)
+        {
             builder.Append("ref ");
-        } else if (RefKind == RefKind.Out) {
+        }
+        else if (RefKind == RefKind.Out)
+        {
             builder.Append("out ");
         }
         builder.Append(Name);
@@ -33,7 +38,8 @@ internal static class ParameterModelExtensions
             miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
         );
 
-        if (symbol.Type.RequiresUnsafe()) {
+        if (symbol.Type.RequiresUnsafe())
+        {
             needsUnsafe = true;
         }
 
