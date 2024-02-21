@@ -1,4 +1,3 @@
-using System;
 using WPIUtil.Sendable;
 
 namespace NetworkTables;

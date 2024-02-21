@@ -1,5 +1,3 @@
-using System;
-using System.Buffers;
 using CsCore.Handles;
 using CsCore.Natives;
 

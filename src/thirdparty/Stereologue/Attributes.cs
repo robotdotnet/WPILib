@@ -1,5 +1,3 @@
-using System;
-
 namespace Stereologue;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method | AttributeTargets.Field, Inherited = false, AllowMultiple = false)]

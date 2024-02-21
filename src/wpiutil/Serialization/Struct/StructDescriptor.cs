@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace WPIUtil.Serialization.Struct;
 
 public sealed class StructDescriptor

@@ -1,4 +1,3 @@
-using System;
 using WPIUtil.Natives;
 
 namespace WPIUtil.Concurrent;

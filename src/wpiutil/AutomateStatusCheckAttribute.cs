@@ -1,5 +1,3 @@
-using System;
-
 namespace WPIUtil;
 
 [AttributeUsage(AttributeTargets.Method)]

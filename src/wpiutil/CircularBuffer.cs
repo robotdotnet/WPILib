@@ -1,5 +1,3 @@
-using System;
-
 namespace WPIUtil;
 
 public class CircularBuffer<T>(int size)

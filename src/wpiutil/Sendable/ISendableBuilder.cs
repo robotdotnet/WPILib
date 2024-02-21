@@ -1,5 +1,3 @@
-using System;
-
 namespace WPIUtil.Sendable;
 
 public interface ISendableBuilder : IDisposable

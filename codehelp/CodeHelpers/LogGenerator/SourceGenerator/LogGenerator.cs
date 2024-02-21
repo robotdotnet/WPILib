@@ -1,6 +1,5 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using WPILib.CodeHelpers.LogGenerator;
 
 namespace WPILib.CodeHelpers.LogGenerator.SourceGenerator;
 

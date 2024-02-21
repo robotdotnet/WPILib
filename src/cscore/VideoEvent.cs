@@ -1,9 +1,7 @@
-using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using CsCore.Handles;
 using CsCore.Natives;
-using WPIUtil;
 using WPIUtil.Marshal;
 
 namespace CsCore;

@@ -1,4 +1,3 @@
-using System;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 

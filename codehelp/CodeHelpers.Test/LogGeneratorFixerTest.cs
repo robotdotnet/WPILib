@@ -1,6 +1,3 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
 using Verify = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.CodeFixVerifier<WPILib.CodeHelpers.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.LogGenerator.CodeFixer.LogGeneratorFixer>;
 

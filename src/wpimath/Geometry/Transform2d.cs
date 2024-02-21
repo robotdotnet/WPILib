@@ -1,10 +1,7 @@
-using System;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using Google.Protobuf.Reflection;
 using UnitsNet;
-using UnitsNet.NumberExtensions.NumberToAngle;
-using UnitsNet.NumberExtensions.NumberToLength;
 using WPIMath.Proto;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;

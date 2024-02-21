@@ -1,5 +1,3 @@
-using System;
-
 namespace WPIUtil.Serialization.Struct;
 
 public struct StructBuffer<T> where T : IStructSerializable<T>

@@ -1,4 +1,3 @@
-using System;
 using CommunityToolkit.Diagnostics;
 using WPIUtil.Natives;
 

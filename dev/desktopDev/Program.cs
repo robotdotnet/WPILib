@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using System.Text.Json;
 using CsCore;
 using CsCore.Raw;
-using NetworkTables;
 using UnitsNet.NumberExtensions.NumberToAngle;
 using WPIMath.Geometry;
 using WPIUtil;

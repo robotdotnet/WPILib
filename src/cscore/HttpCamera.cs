@@ -1,4 +1,3 @@
-using System;
 using CsCore.Handles;
 using CsCore.Natives;
 

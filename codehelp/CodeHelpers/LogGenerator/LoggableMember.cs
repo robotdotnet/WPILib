@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.CodeAnalysis;
 
 namespace WPILib.CodeHelpers.LogGenerator;

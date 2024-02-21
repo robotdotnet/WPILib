@@ -1,6 +1,4 @@
-using System.Runtime.CompilerServices;
 using WPIMath.Geometry;
-using WPIUtil;
 
 namespace Stereologue.Test;
 

@@ -1,4 +1,3 @@
-using System;
 using WPIHal.Natives;
 
 namespace WPILib;

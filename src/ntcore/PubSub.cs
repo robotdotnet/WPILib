@@ -1,4 +1,3 @@
-using System;
 using NetworkTables.Handles;
 
 namespace NetworkTables;

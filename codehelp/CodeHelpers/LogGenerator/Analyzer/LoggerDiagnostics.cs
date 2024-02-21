@@ -2,7 +2,6 @@ namespace WPILib.CodeHelpers.LogGenerator.Analyzer;
 
 #pragma warning disable RS2008 // Enable analyzer release tracking
 
-using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using WPILib.CodeHelpers;

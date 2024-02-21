@@ -1,5 +1,3 @@
-using System;
-
 namespace WPIUtil.Serialization.Struct;
 
 public interface IStructBase

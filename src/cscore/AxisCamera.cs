@@ -1,7 +1,3 @@
-using System;
-using CsCore.Handles;
-using CsCore.Natives;
-
 namespace CsCore;
 
 public class AxisCamera : HttpCamera
