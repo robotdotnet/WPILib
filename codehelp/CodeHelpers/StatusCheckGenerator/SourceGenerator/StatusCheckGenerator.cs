@@ -17,7 +17,7 @@ public class StatusCheckGenerator : IIncrementalGenerator
                 predicate: static (s, _) => s is MethodDeclarationSyntax,
                 transform: static (ctx, token) =>
                 {
-                    if (ctx.SemanticModel.GetDeclaredSymbol(ctx.TargetNode) is not IMethodSymbol classSymbol)
+                    if (ctx.TargetSymbol is not IMethodSymbol classSymbol)
                     {
                         return null;
                     }

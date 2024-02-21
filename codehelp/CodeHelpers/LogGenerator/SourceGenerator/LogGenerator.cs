@@ -15,7 +15,7 @@ public class LogGenerator : IIncrementalGenerator
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
                 transform: static (ctx, token) =>
                 {
-                    if (ctx.SemanticModel.GetDeclaredSymbol(ctx.TargetNode) is not INamedTypeSymbol classSymbol)
+                    if (ctx.TargetSymbol is not INamedTypeSymbol classSymbol)
                     {
                         return null;
                     }
