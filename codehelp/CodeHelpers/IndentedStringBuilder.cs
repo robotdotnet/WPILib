@@ -29,9 +29,9 @@ public class IndentedStringBuilder
         EndLine();
     }
 
-    public IndentedScope EnterScope()
+    public IndentedScope EnterScope(int count = 0)
     {
-        return new(this);
+        return new(this, count);
     }
 
     public void EnterManualScope()
@@ -54,18 +54,23 @@ public class IndentedStringBuilder
     public readonly ref struct IndentedScope
     {
         private readonly IndentedStringBuilder m_builder;
+        private readonly int m_count;
 
-        public IndentedScope(IndentedStringBuilder builder)
+        public IndentedScope(IndentedStringBuilder builder, int count = 0)
         {
             m_builder = builder;
             builder.AppendFullLine("{");
+            m_count = count + 1;
             m_builder.m_scopeCount++;
         }
 
         public void Dispose()
         {
-            m_builder.m_scopeCount--;
-            m_builder.AppendFullLine("}");
+            for (int i = 0; i < m_count; i++)
+            {
+                m_builder.m_scopeCount--;
+                m_builder.AppendFullLine("}");
+            }
         }
     }
 }

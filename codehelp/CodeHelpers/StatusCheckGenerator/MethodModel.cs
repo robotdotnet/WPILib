@@ -11,34 +11,21 @@ internal enum ReturnKind
     Ref
 }
 
-internal record MethodModel(TypeDeclarationModel TypeDeclaration, string TypeName, string? TypeNamespace, string MethodDeclaration, string NameForCall, string TypeConstraints, string ReturnType, ReturnKind ReturnKind, bool NeedsUnsafe, string StatusCheckMethod, EquatableArray<ParameterModel> Parameters)
+internal record MethodModel(TypeDeclarationModel TypeDeclaration, string MethodDeclaration, string NameForCall, string TypeConstraints, string ReturnType, ReturnKind ReturnKind, bool NeedsUnsafe, string StatusCheckMethod, EquatableArray<ParameterModel> Parameters)
 {
-    public void AddClassDeclaration(IndentedStringBuilder builder)
+    public IndentedStringBuilder.IndentedScope AddClassDeclaration(IndentedStringBuilder builder)
     {
-        builder.AppendFullLine($"{TypeDeclaration.GetClassDeclaration(NeedsUnsafe, true)} {TypeName}");
+        return TypeDeclaration.WriteClassDeclaration(builder, NeedsUnsafe, "");
     }
 
     public void WriteMethod(IndentedStringBuilder builder)
     {
-        if (TypeNamespace is not null)
-        {
-            builder.AppendFullLine($"namespace {TypeNamespace}");
-            builder.EnterManualScope();
-        }
-
-        {
-            AddClassDeclaration(builder);
-            using var classScope = builder.EnterScope();
-            WriteMethodDeclaration(builder);
-            using var methodScope = builder.EnterScope();
-            WriteCallString(builder);
-            WriteStatusCheck(builder);
-            WriteReturn(builder);
-        }
-        if (TypeNamespace is not null)
-        {
-            builder.ExitManualScope();
-        }
+        using var classScopes = AddClassDeclaration(builder);
+        WriteMethodDeclaration(builder);
+        using var methodScope = builder.EnterScope();
+        WriteCallString(builder);
+        WriteStatusCheck(builder);
+        WriteReturn(builder);
     }
 
     public void WriteMethodDeclaration(IndentedStringBuilder builder)
@@ -197,9 +184,6 @@ internal static class MethodModelExtensions
 
         var classSymbol = symbol.ContainingType;
 
-        var nameString = classSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-        var nspace = classSymbol.ContainingNamespace is { IsGlobalNamespace: false } ns ? ns.ToDisplayString() : null;
-
         string statusCheckMethod = "ThrowIfFailed()";
 
         foreach (var attribute in symbol.GetAttributes())
@@ -227,6 +211,6 @@ internal static class MethodModelExtensions
             }
         }
 
-        return new(classSymbol.GetTypeDeclarationModel(), nameString, nspace, methodDeclaration, callDeclaration, constraints, returnType, retKind, needsUnsafe, statusCheckMethod, parameters.ToImmutable());
+        return new(classSymbol.GetTypeDeclarationModel(), methodDeclaration, callDeclaration, constraints, returnType, retKind, needsUnsafe, statusCheckMethod, parameters.ToImmutable());
     }
 }

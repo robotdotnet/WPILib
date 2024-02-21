@@ -25,6 +25,16 @@ public static class SymbolExtensions
             modifiers |= TypeModifiers.IsRecord;
         }
 
-        return new(symbol.TypeKind, modifiers);
+        var className = symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+        string? nspace = null;
+
+        TypeDeclarationModel? parent = null;
+        if (symbol.ContainingType is not null) {
+            parent = symbol.ContainingType.GetTypeDeclarationModel();
+        } else {
+            nspace = symbol.ContainingNamespace is { IsGlobalNamespace: false } ns ? ns.ToDisplayString() : null;
+        }
+
+        return new(symbol.TypeKind, modifiers, className, nspace, parent);
     }
 }

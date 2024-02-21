@@ -4,23 +4,23 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
+using static WPILib.CodeHelpers.IndentedStringBuilder;
 
 namespace WPILib.CodeHelpers.LogGenerator;
 
 // Contains all information on a loggable type
 internal record LoggableType(TypeDeclarationModel TypeDeclaration, string FileName, string TypeName, string? TypeNamespace, EquatableArray<LoggableMember> LoggableMembers)
 {
-    private void AddClassDeclaration(IndentedStringBuilder builder)
+    private IndentedScope AddClassDeclaration(IndentedStringBuilder builder)
     {
         string iLogged = "";
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
-            iLogged = $" : global::{Strings.ILoggedName}";
+            iLogged = $" : global::{Strings.ILoggedName} ";
         }
 
-
-        builder.AppendFullLine($"{TypeDeclaration.GetClassDeclaration(false, true)} {TypeName}{iLogged}");
+        return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged);
     }
 
     private void WriteMethodDeclaration(IndentedStringBuilder builder)
@@ -30,26 +30,12 @@ internal record LoggableType(TypeDeclarationModel TypeDeclaration, string FileNa
 
     public void WriteMethod(IndentedStringBuilder builder)
     {
-        if (TypeNamespace is not null)
+        using var classScopes = AddClassDeclaration(builder);
+        WriteMethodDeclaration(builder);
+        using var methodScope = builder.EnterScope();
+        foreach (var call in LoggableMembers)
         {
-            builder.AppendFullLine($"namespace {TypeNamespace}");
-            builder.EnterManualScope();
-        }
-
-        {
-            AddClassDeclaration(builder);
-            using var classScope = builder.EnterScope();
-            WriteMethodDeclaration(builder);
-            using var methodScope = builder.EnterScope();
-            foreach (var call in LoggableMembers)
-            {
-                call.WriteLogCall(builder);
-            }
-        }
-
-        if (TypeNamespace is not null)
-        {
-            builder.ExitManualScope();
+            call.WriteLogCall(builder);
         }
     }
 }
