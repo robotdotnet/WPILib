@@ -110,7 +110,7 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
 
     public static VideoSink[] EnumerateSinks()
     {
-        var handles = CsNative.EnumerateSinks(out var status);
+        var handles = CsNative.EnumerateSinks();
 
         VideoSink[] rv = new VideoSink[handles.Length];
         for (int i = 0; i < handles.Length; i++)
@@ -122,6 +122,7 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         if (Handle.Handle != 0)
         {
             CsNative.ReleaseSink(Handle);

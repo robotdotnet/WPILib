@@ -83,6 +83,7 @@ public class VideoListener : IDisposable, IEquatable<VideoListener?>
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         if (Handle.Handle != 0)
         {
             lock (s_listenerLock)

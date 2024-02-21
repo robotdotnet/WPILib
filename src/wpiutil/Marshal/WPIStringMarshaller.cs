@@ -141,7 +141,7 @@ public static unsafe class WpiStringMarshaller
             return (WpiStringNative*)Unsafe.AsPointer(ref nativeString);
         }
 
-        public void Free()
+        public readonly void Free()
         {
             // Purposely empty
         }

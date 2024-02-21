@@ -13,7 +13,9 @@ public unsafe ref struct RefNetworkTableValueMarshaller
     public static int BufferSize => 256;
     private ref readonly byte m_toPin;
 
+#pragma warning disable IDE0052 // Remove unread private members
     private ref Ptr<byte> m_toAssignPin;
+#pragma warning restore IDE0052 // Remove unread private members
 
     private NetworkTableValueMarshaller.NativeNetworkTableValue m_nativeValue;
 

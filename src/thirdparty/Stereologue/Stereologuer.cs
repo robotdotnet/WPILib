@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using Google.Protobuf.WellKnownTypes;
 using NetworkTables;
 using WPIUtil.Logging;
 using WPIUtil.Serialization.Protobuf;
@@ -186,10 +187,20 @@ public sealed class Stereologuer
 
     public void LogFloat(string path, LogType logType, float value, LogLevel logLevel = LogLevel.Default)
     {
-        ref var logs = ref CheckDoLog(path, ref logType, logLevel, doubleLogs);
+        ref var logs = ref CheckDoLog(path, ref logType, logLevel, floatLogs);
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetFloatTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new FloatLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 
@@ -199,6 +210,16 @@ public sealed class Stereologuer
         if (Unsafe.IsNullRef(ref logs))
         {
             return;
+        }
+        if (logType.HasFlag(LogType.Nt))
+        {
+            logs.topic ??= ntInstance.GetDoubleTopic(path).Publish(PubSubOptions.None);
+            logs.topic.Set(value);
+        }
+        if (logType.HasFlag(LogType.File))
+        {
+            logs.logEntry ??= new DoubleLogEntry(log, path);
+            logs.logEntry.Append(value);
         }
     }
 

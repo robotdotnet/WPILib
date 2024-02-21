@@ -128,7 +128,29 @@ public static class SendableRegistery
         }
     }
 
-    public static void AddLW(ISendable sendable, string name, string moduleType, int moduleNumber, int channel)
+    public static void AddLW(ISendable sendable, string moduleType, int channel)
+    {
+        lock (s_lockObject)
+        {
+            Component comp = GetOrAdd(sendable);
+            if (liveWindowFactory is not null)
+            {
+                try
+                {
+                    comp.m_builder?.Dispose();
+                }
+                catch
+                {
+                    // Ignore
+                }
+                comp.m_builder = liveWindowFactory();
+            }
+            comp.m_liveWindow = true;
+            comp.SetName(moduleType, channel);
+        }
+    }
+
+    public static void AddLW(ISendable sendable, string moduleType, int moduleNumber, int channel)
     {
         lock (s_lockObject)
         {
@@ -423,7 +445,7 @@ public static class SendableRegistery
         public ISendableBuilder? Builder { get; internal set; }
     }
 
-    private static List<Component> ForeachComponents = [];
+    private static readonly List<Component> ForeachComponents = [];
 
     public static void ForeachLiveWindow(int dataHandle, Action<CallbackData> callback)
     {

@@ -34,7 +34,7 @@ public static partial class HalI2C
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int TransactionI2C(I2CPort port, int deviceAddress, ReadOnlySpan<byte> dataToSend, int sendSize, Span<byte> dataReceived, int receiveSize);
 
-    public static Span<byte> TransactionI2C(I2CPort port, int deviceAddress, ReadOnlySpan<byte> dataToSend, int sendSize, Span<byte> dataReceived)
+    public static Span<byte> TransactionI2C(I2CPort port, int deviceAddress, ReadOnlySpan<byte> dataToSend, Span<byte> dataReceived)
     {
         int read = TransactionI2C(port, deviceAddress, dataToSend, dataToSend.Length, dataReceived, dataReceived.Length);
         if (read > 0)

@@ -139,7 +139,7 @@ public class DynamicStruct
             }
         }
 
-        OperationStatus result = Rune.DecodeLastFromUtf8(bytes[..stringLength], out var lastChar, out var consumed);
+        OperationStatus result = Rune.DecodeLastFromUtf8(bytes[..stringLength], out _, out var consumed);
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
         ReadOnlySpan<byte> buffer = result switch
         {

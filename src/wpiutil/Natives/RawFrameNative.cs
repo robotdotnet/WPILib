@@ -39,7 +39,7 @@ public unsafe ref struct RawFrameWriterMarshaller
         return (NativeRawFrame*)Unsafe.AsPointer(ref rawFrame);
     }
 
-    public void Free()
+    public readonly void Free()
     {
     }
 }

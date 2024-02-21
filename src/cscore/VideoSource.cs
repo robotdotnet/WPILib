@@ -164,7 +164,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public static VideoSource[] EnumerateSources()
     {
-        var handles = CsNative.EnumerateSources(out var status);
+        var handles = CsNative.EnumerateSources();
 
         VideoSource[] rv = new VideoSource[handles.Length];
         for (int i = 0; i < handles.Length; i++)
@@ -176,6 +176,7 @@ public class VideoSource : IDisposable, IEquatable<VideoSource?>
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
         if (Handle.Handle != 0)
         {
             CsNative.ReleaseSource(Handle);

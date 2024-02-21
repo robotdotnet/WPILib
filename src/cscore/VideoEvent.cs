@@ -8,16 +8,10 @@ namespace CsCore;
 
 [NativeMarshalling(typeof(VideoEventMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly struct VideoEvent : INativeArrayFree<VideoEventMarshaller.NativeCsEvent>
+public readonly struct VideoEvent(in VideoEventMarshaller.NativeCsEvent csEvent) : INativeArrayFree<VideoEventMarshaller.NativeCsEvent>
 {
-    public EventKind Kind { get; }
-    public CsListener Listener { get; }
-
-    public VideoEvent(in VideoEventMarshaller.NativeCsEvent csEvent)
-    {
-        Kind = csEvent.kind;
-        Listener = new CsListener(csEvent.listener);
-    }
+    public EventKind Kind { get; } = csEvent.kind;
+    public CsListener Listener { get; } = new CsListener(csEvent.listener);
 
     public static unsafe void FreeArray(VideoEventMarshaller.NativeCsEvent* ptr, int len)
     {

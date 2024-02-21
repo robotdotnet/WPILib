@@ -29,7 +29,7 @@ public class UsbCamera : VideoCamera
 
     public static UsbCameraInfo[] EnumerateUsbCameras()
     {
-        var info = CsNative.EnumerateUsbCameras(out var status);
+        var info = CsNative.EnumerateUsbCameras();
 
         return info;
     }
