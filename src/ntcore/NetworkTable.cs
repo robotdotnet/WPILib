@@ -202,11 +202,11 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         return Instance.AddListener([m_pathWithSep], eventKinds, ntEvent =>
         {
             string? topicName = null;
-            if (ntEvent.TopicInfo != null)
+            if (ntEvent.TopicInfo is not null)
             {
                 topicName = ntEvent.TopicInfo.Value.Name;
             }
-            else if (ntEvent.ValueData != null)
+            else if (ntEvent.ValueData is not null)
             {
                 // Don't fully construct the lazy object
                 topicName = ntEvent.ValueData.Value.GetTopicName();

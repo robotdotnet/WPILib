@@ -21,7 +21,7 @@ public static class SendableRegistery
         public void Dispose()
         {
             m_builder?.Dispose();
-            if (m_data != null)
+            if (m_data is not null)
             {
                 foreach (var data in m_data)
                 {
@@ -114,7 +114,7 @@ public static class SendableRegistery
         lock (s_lockObject)
         {
             Component comp = GetOrAdd(sendable);
-            if (liveWindowFactory != null)
+            if (liveWindowFactory is not null)
             {
                 try
                 {
@@ -136,7 +136,7 @@ public static class SendableRegistery
         lock (s_lockObject)
         {
             Component comp = GetOrAdd(sendable);
-            if (liveWindowFactory != null)
+            if (liveWindowFactory is not null)
             {
                 try
                 {
@@ -158,7 +158,7 @@ public static class SendableRegistery
         lock (s_lockObject)
         {
             Component comp = GetOrAdd(sendable);
-            if (liveWindowFactory != null)
+            if (liveWindowFactory is not null)
             {
                 try
                 {
@@ -352,7 +352,7 @@ public static class SendableRegistery
         {
             if (components.TryGetValue(sendable, out var comp))
             {
-                if (comp.m_data != null && handle < comp.m_data.Length)
+                if (comp.m_data is not null && handle < comp.m_data.Length)
                 {
                     return comp.m_data[handle];
                 }
@@ -388,7 +388,7 @@ public static class SendableRegistery
         lock (s_lockObject)
         {
             Component comp = GetOrAdd(sendable);
-            if (comp.m_builder != null)
+            if (comp.m_builder is not null)
             {
                 try
                 {
@@ -444,11 +444,11 @@ public static class SendableRegistery
                 cbdata.Name = comp.m_name;
                 cbdata.Subsystem = comp.m_subsystem;
                 cbdata.Parent = null;
-                if (comp.m_parent != null && comp.m_parent.TryGetTarget(out var parent))
+                if (comp.m_parent is not null && comp.m_parent.TryGetTarget(out var parent))
                 {
                     cbdata.Parent = parent;
                 }
-                if (comp.m_data != null && dataHandle < comp.m_data.Length)
+                if (comp.m_data is not null && dataHandle < comp.m_data.Length)
                 {
                     cbdata.Data = comp.m_data[dataHandle];
                 }
@@ -466,7 +466,7 @@ public static class SendableRegistery
                     Console.Error.WriteLine($"Unhandled exception calling LiveWindow for {comp.m_name} : {ex}");
                     comp.m_liveWindow = false;
                 }
-                if (cbdata.Data != null)
+                if (cbdata.Data is not null)
                 {
                     if (comp.m_data == null)
                     {
@@ -481,7 +481,7 @@ public static class SendableRegistery
                     if (!ReferenceEquals(comp.m_data[dataHandle], cbdata.Data))
                     {
                         IDisposable? disposable = comp.m_data[dataHandle];
-                        if (disposable != null)
+                        if (disposable is not null)
                         {
                             try
                             {

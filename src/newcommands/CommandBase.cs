@@ -85,7 +85,7 @@ namespace WPILib2.Commands
             get => SendableRegistry.Instance.GetSubsystem(this);
             set
             {
-                if (value == null) return;
+                if (value is null) return;
                 SendableRegistry.Instance.SetSubsystem(this, value);
             }
         }

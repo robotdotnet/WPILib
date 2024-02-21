@@ -70,7 +70,7 @@ public sealed class StructFieldDescriptor
 
     public bool IsArray => ArraySize > 1;
 
-    public bool HasEnum => EnumValues != null;
+    public bool HasEnum => EnumValues is not null;
 
     public long UintMin => 0;
     public long UintMax => BitMask;

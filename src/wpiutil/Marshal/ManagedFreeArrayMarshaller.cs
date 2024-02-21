@@ -27,7 +27,7 @@ public unsafe ref struct ManagedFreeArrayMarshaller<T, TUnmanagedElement> where 
 
     public readonly void Free()
     {
-        if (unmanagedStorage != null && length.HasValue)
+        if (unmanagedStorage is not null && length.HasValue)
         {
             T.FreeArray(unmanagedStorage, length.Value);
         }

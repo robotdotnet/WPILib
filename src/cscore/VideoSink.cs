@@ -75,7 +75,7 @@ public class VideoSink : IDisposable, IEquatable<VideoSink?>
         set
         {
             CsSource sourceHandle = default;
-            if (value != null)
+            if (value is not null)
             {
                 sourceHandle = value.Handle;
             }

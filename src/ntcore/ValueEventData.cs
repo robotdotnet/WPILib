@@ -12,14 +12,11 @@ public record struct ValueEventData(NtTopic TopicHandle, int Subentry, NetworkTa
     private Topic? m_topicObject;
     public Topic GetTopic(NetworkTableInstance instance)
     {
-        if (m_topicObject == null)
-        {
-            m_topicObject = new Topic(instance, TopicHandle);
-        }
+        m_topicObject ??= new Topic(instance, TopicHandle);
         return m_topicObject;
     }
 
-    public string GetTopicName()
+    public readonly string GetTopicName()
     {
         NtCore.GetTopicName(TopicHandle, out var name);
         return name;

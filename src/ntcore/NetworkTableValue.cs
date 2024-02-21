@@ -137,7 +137,7 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
     {
         get
         {
-            if (m_objectValue != null)
+            if (m_objectValue is not null)
             {
                 return m_objectValue;
             }

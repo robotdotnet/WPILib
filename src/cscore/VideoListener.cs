@@ -34,7 +34,7 @@ public class VideoListener : IDisposable, IEquatable<VideoListener?>
                     {
                         s_listeners.TryGetValue(videoEvent.Listener, out listener);
                     }
-                    if (listener != null)
+                    if (listener is not null)
                     {
                         try
                         {

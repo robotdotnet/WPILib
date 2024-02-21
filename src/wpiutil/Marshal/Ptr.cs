@@ -23,7 +23,7 @@ public readonly unsafe struct Ptr<T> where T : unmanaged
     public bool IsNull
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        get => ptr == null;
+        get => ptr is null;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

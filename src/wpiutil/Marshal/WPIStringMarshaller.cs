@@ -85,7 +85,7 @@ public static unsafe class WpiStringMarshaller
         public static void Free(WpiStringNative unmanaged)
         {
             byte* ptr = unmanaged.Str;
-            if (ptr != null)
+            if (ptr is not null)
             {
                 NativeMemory.Free(ptr);
             }

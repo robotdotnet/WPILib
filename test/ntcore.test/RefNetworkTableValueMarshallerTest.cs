@@ -42,14 +42,14 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.Boolean, v->type);
             Assert.Equal(0, v->data.valueBoolean);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
 
         HandleInMarshal(RefNetworkTableValue.MakeBoolean(true), (v, pinned) =>
         {
             Assert.Equal(NetworkTableType.Boolean, v->type);
             Assert.Equal(1, v->data.valueBoolean);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
     }
 
@@ -60,14 +60,14 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.Integer, v->type);
             Assert.Equal(42, v->data.valueInt);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
 
         HandleInMarshal(RefNetworkTableValue.MakeInteger(0), (v, pinned) =>
         {
             Assert.Equal(NetworkTableType.Integer, v->type);
             Assert.Equal(0, v->data.valueInt);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
     }
 
@@ -78,14 +78,14 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.Double, v->type);
             Assert.Equal(42.0, v->data.valueDouble);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
 
         HandleInMarshal(RefNetworkTableValue.MakeDouble(56.5), (v, pinned) =>
         {
             Assert.Equal(NetworkTableType.Double, v->type);
             Assert.Equal(56.5, v->data.valueDouble);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
     }
 
@@ -96,14 +96,14 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.Float, v->type);
             Assert.Equal(42.0f, v->data.valueFloat, 1e-9);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
 
         HandleInMarshal(RefNetworkTableValue.MakeFloat(56.5f), (v, pinned) =>
         {
             Assert.Equal(NetworkTableType.Float, v->type);
             Assert.Equal(56.5f, v->data.valueFloat, 1e-9);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
     }
 
@@ -113,13 +113,13 @@ public class RefNetworkTableValueMarshallerTest
         HandleInMarshal(RefNetworkTableValue.MakeUnassigned(), (v, pinned) =>
         {
             Assert.Equal(NetworkTableType.Unassigned, v->type);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
 
         HandleInMarshal(RefNetworkTableValue.MakeUnassigned(), (v, pinned) =>
         {
             Assert.Equal(NetworkTableType.Unassigned, v->type);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
         });
     }
 
@@ -143,7 +143,7 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.Raw, v->type);
             Assert.Equal((nuint)0, v->data.valueRaw.size);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
             Assert.True(v->data.valueRaw.data.IsNull);
         });
     }
@@ -188,7 +188,7 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.String, v->type);
             Assert.Equal((nuint)0, v->data.valueString.Len);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
             Assert.True(v->data.valueString.Str.IsNull);
         });
     }
@@ -217,7 +217,7 @@ public class RefNetworkTableValueMarshallerTest
         {
             Assert.Equal(NetworkTableType.StringArray, v->type);
             Assert.Equal((nuint)0, v->data.arrString.size);
-            Assert.True(pinned == null);
+            Assert.True(pinned is null);
             Assert.True(v->data.arrString.arr.IsNull);
         });
     }
