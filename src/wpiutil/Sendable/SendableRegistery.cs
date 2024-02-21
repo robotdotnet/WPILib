@@ -316,7 +316,7 @@ public static class SendableRegistery
             }
 
             IDisposable? rv = null;
-            if (comp.m_data == null)
+            if (comp.m_data is null)
             {
                 comp.m_data = new IDisposable?[handle + 1];
             }
@@ -437,7 +437,7 @@ public static class SendableRegistery
             ForeachComponents.AddRange(components.Select(x => x.Value));
             foreach (var comp in ForeachComponents)
             {
-                if (comp.m_builder == null || comp.m_sendable == null)
+                if (comp.m_builder is null || comp.m_sendable is null)
                 {
                     continue;
                 }
@@ -468,7 +468,7 @@ public static class SendableRegistery
                 }
                 if (cbdata.Data is not null)
                 {
-                    if (comp.m_data == null)
+                    if (comp.m_data is null)
                     {
                         comp.m_data = new IDisposable[dataHandle + 1];
                     }

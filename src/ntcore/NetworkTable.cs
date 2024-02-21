@@ -211,7 +211,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
                 // Don't fully construct the lazy object
                 topicName = ntEvent.ValueData.Value.GetTopicName();
             }
-            if (topicName == null)
+            if (topicName is null)
             {
                 return;
             }
@@ -240,7 +240,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
 
         public void OnEvent(NetworkTableEvent ntEvent)
         {
-            if (ntEvent.TopicInfo == null)
+            if (ntEvent.TopicInfo is null)
             {
                 return;
             }
