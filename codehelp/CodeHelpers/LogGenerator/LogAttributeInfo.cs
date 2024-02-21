@@ -14,7 +14,7 @@ internal static class LogAttributeInfoExtensions
         {
             return null;
         }
-        if (attributeClass.ToDisplayString() == "Stereologue.LogAttribute")
+        if (attributeClass.ToDisplayString() == Strings.LogAttributeName)
         {
             token.ThrowIfCancellationRequested();
 

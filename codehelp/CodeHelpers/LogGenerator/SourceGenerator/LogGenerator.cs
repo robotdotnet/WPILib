@@ -11,7 +11,7 @@ public class LogGenerator : IIncrementalGenerator
     {
         var attributedTypes = context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                "Stereologue.GenerateLogAttribute",
+                Strings.GenerateLogAttributeName,
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
                 transform: static (ctx, token) =>
                 {

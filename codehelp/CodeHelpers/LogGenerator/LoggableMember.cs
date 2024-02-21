@@ -1,8 +1,5 @@
-using System.Collections.Immutable;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace WPILib.CodeHelpers.LogGenerator;
 
@@ -37,7 +34,172 @@ internal enum DeclarationKind
 internal record MemberDeclaration(DeclarationType LoggedType, SpecialType SpecialType, DeclarationKind LoggedKind);
 
 // Contains all information about a loggable member
-internal record LoggableMember(string Name, MemberType MemberType, MemberDeclaration MemberDeclaration, LogAttributeInfo AttributeInfo);
+internal record LoggableMember(string Name, MemberType MemberType, MemberDeclaration MemberDeclaration, LogAttributeInfo AttributeInfo)
+{
+    public FailureMode WriteLogCall(IndentedStringBuilder? builder)
+    {
+        var getOperation = MemberType switch
+        {
+            MemberType.Field => Name,
+            MemberType.Property => Name,
+            MemberType.Method => $"{Name}()",
+            _ => null
+        };
+
+        if (getOperation is null)
+        {
+            // Attribute applied to unknown type
+            return FailureMode.AttributeUnknownMemberType;
+        }
+
+        var path = string.IsNullOrWhiteSpace(AttributeInfo.Path) ? Name : AttributeInfo.Path;
+
+        if (MemberDeclaration.LoggedType == DeclarationType.Logged)
+        {
+            if (builder is null)
+            {
+                // At this point, we cannot error anymore. Just bail early if the string builder is null
+                return FailureMode.None;
+            }
+            if (MemberDeclaration.LoggedKind == DeclarationKind.None || MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType || MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType)
+            {
+                string nullCheck = "";
+                if (MemberDeclaration.LoggedKind != DeclarationKind.None)
+                {
+                    nullCheck = "?";
+                }
+                builder.AppendFullLine($"{getOperation}{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger);");
+            }
+            else
+            {
+                // We're an array, loop
+                builder.AppendFullLine($"foreach (var __tmpValue in {getOperation})");
+                using var callScope = builder.EnterScope();
+                string nullCheck = "";
+                if (MemberDeclaration.LoggedKind != DeclarationKind.None)
+                {
+                    nullCheck = "?";
+                }
+                builder.AppendFullLine($"__tmpValue{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger);");
+            }
+            return FailureMode.None;
+        }
+
+        string? logMethod;
+
+        if (MemberDeclaration.LoggedType == DeclarationType.Struct)
+        {
+            if (MemberDeclaration.LoggedKind != DeclarationKind.None && MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
+            {
+                // We're an array
+                logMethod = "LogStructArray";
+            }
+            else
+            {
+                logMethod = "LogStruct";
+            }
+        }
+
+        else if (MemberDeclaration.LoggedType == DeclarationType.Protobuf)
+        {
+
+            if (MemberDeclaration.LoggedKind != DeclarationKind.None && MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
+            {
+                // Protobuf is array
+                return FailureMode.ProtobufArray;
+            }
+            else
+            {
+                logMethod = "LogProto";
+            }
+        }
+        else if (MemberDeclaration.LoggedKind == DeclarationKind.None || MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
+        {
+            // We're not an array. We're either Nullable<T> or a plain type
+            if (MemberDeclaration.SpecialType == SpecialType.System_UInt64 || MemberDeclaration.SpecialType == SpecialType.System_IntPtr || MemberDeclaration.SpecialType == SpecialType.System_UIntPtr)
+            {
+                getOperation = $"(long){getOperation}";
+            }
+
+            logMethod = MemberDeclaration.SpecialType switch
+            {
+                SpecialType.System_Char => "LogChar",
+                SpecialType.System_String => "LogString",
+                SpecialType.System_Boolean => "LogBoolean",
+                SpecialType.System_Single => "LogFloat",
+                SpecialType.System_Double => "LogDouble",
+                SpecialType.System_Byte => "LogInteger",
+                SpecialType.System_SByte => "LogInteger",
+                SpecialType.System_Int16 => "LogInteger",
+                SpecialType.System_UInt16 => "LogInteger",
+                SpecialType.System_Int32 => "LogInteger",
+                SpecialType.System_UInt32 => "LogInteger",
+                SpecialType.System_Int64 => "LogInteger",
+                SpecialType.System_UInt64 => "LogInteger",
+                SpecialType.System_IntPtr => "LogInteger",
+                SpecialType.System_UIntPtr => "LogInteger",
+                _ => null
+            };
+
+            if (logMethod is null)
+            {
+                // SpecialType is unknown, for non array
+                return FailureMode.UnknownTypeNonArray;
+            }
+        }
+        else
+        {
+            // We're array of a basic type
+
+            logMethod = MemberDeclaration.SpecialType switch
+            {
+                SpecialType.System_String => "LogStringArray",
+                SpecialType.System_Boolean => "LogBooleanArray",
+                SpecialType.System_Single => "LogFloatArray",
+                SpecialType.System_Double => "LogDoubleArray",
+                SpecialType.System_Byte => "LogRaw",
+                SpecialType.System_Int64 => "LogIntegerArray",
+                _ => null
+            };
+
+            if (logMethod is null)
+            {
+                // SpecialType is unknown for array
+                return FailureMode.UnknownTypeArray;
+            }
+        }
+
+        if (builder is null)
+        {
+            // At this point, we cannot error anymore. Just bail early if the string builder is null
+            return FailureMode.None;
+        }
+
+        if (MemberDeclaration.LoggedKind == DeclarationKind.Array || MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
+        {
+            using var nameScope = builder.EnterScope();
+            builder.AppendFullLine($"var __tmpValue = {getOperation};");
+            builder.AppendFullLine($"if (__tmpValue is not null)");
+            using var callScope = builder.EnterScope();
+            getOperation = "__tmpValue";
+            if (MemberDeclaration.SpecialType == SpecialType.System_String || MemberDeclaration.LoggedKind == DeclarationKind.Array)
+            {
+                getOperation = $"{getOperation}.AsSpan()";
+            }
+            if (MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
+            {
+                getOperation = $"{getOperation}.Value";
+            }
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.LogType}, {getOperation}, {AttributeInfo.LogLevel});");
+        }
+        else
+        {
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.LogType}, {getOperation}, {AttributeInfo.LogLevel});");
+        }
+
+        return FailureMode.None;
+    }
+}
 
 internal static class LoggableMemberExtensions
 {
@@ -109,19 +271,19 @@ internal static class LoggableMemberExtensions
         }
 
         // If we know we're generating a loggable implementation
-        if (typeSymbol.GetAttributes().Where(x => x.AttributeClass?.ToDisplayString() == "Stereologue.GenerateLogAttribute").Any())
+        if (typeSymbol.HasGenerateLogAttribute())
         {
             return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
-        if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == "Stereologue.ILogged").Any())
+        if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == Strings.ILoggedName).Any())
         {
             return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
         }
         token.ThrowIfCancellationRequested();
         // If we have an UpdateMonologue function
-        var members = typeSymbol.GetMembers("UpdateStereologue");
+        var members = typeSymbol.GetMembers(Strings.UpdateStereologueName);
         foreach (var member in members)
         {
             token.ThrowIfCancellationRequested();
@@ -139,7 +301,7 @@ internal static class LoggableMemberExtensions
                 {
                     continue;
                 }
-                if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == "Stereologue.Stereologuer")
+                if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == Strings.StereologgerClass)
                 {
                     return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
                 }
@@ -251,197 +413,6 @@ internal static class LoggableMemberExtensions
             loggableMember = new LoggableMember(member.Name, memberType, declType, attributeInfo);
             return FailureMode.None;
         }
-        return FailureMode.None;
-    }
-
-    public static FailureMode ConstructLogCall(this LoggableMember data, StringBuilder? builder)
-    {
-        var getOperation = data.MemberType switch
-        {
-            MemberType.Field => data.Name,
-            MemberType.Property => data.Name,
-            MemberType.Method => $"{data.Name}()",
-            _ => null
-        };
-
-        if (getOperation is null)
-        {
-            // Attribute applied to unknown type
-            return FailureMode.AttributeUnknownMemberType;
-        }
-
-        var path = string.IsNullOrWhiteSpace(data.AttributeInfo.Path) ? data.Name : data.AttributeInfo.Path;
-
-        if (data.MemberDeclaration.LoggedType == DeclarationType.Logged)
-        {
-            if (builder is null)
-            {
-                // At this point, we cannot error anymore. Just bail early if the string builder is null
-                return FailureMode.None;
-            }
-            builder.Append("        ");
-            // If we're a basic logged, just do a simple ? based null check if possible.
-            if (data.MemberDeclaration.LoggedKind == DeclarationKind.None || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType)
-            {
-                builder.Append(getOperation);
-                if (data.MemberDeclaration.LoggedKind != DeclarationKind.None)
-                {
-                    builder.Append("?");
-                }
-                builder.Append(".UpdateStereologue($\"{path}/");
-                builder.Append(path);
-                builder.Append("\", logger);");
-            }
-            else
-            {
-                // We're an array, loop
-                builder.AppendLine($"foreach (var __tmpValue in {getOperation})");
-                builder.AppendLine("        {");
-                builder.Append("            __tmpValue");
-                if (data.MemberDeclaration.SpecialType == SpecialType.System_Nullable_T)
-                {
-                    builder.Append("?");
-                }
-                builder.Append(".UpdateStereologue($\"{path}/");
-                builder.Append(path);
-                builder.AppendLine("\", logger);");
-                builder.Append("        }");
-            }
-            return FailureMode.None;
-        }
-
-        string? logMethod;
-
-        if (data.MemberDeclaration.LoggedType == DeclarationType.Struct)
-        {
-            if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
-            {
-                // We're an array
-                logMethod = "LogStructArray";
-            }
-            else
-            {
-                logMethod = "LogStruct";
-            }
-        }
-
-        else if (data.MemberDeclaration.LoggedType == DeclarationType.Protobuf)
-        {
-
-            if (data.MemberDeclaration.LoggedKind != DeclarationKind.None && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableValueType && data.MemberDeclaration.LoggedKind != DeclarationKind.NullableReferenceType)
-            {
-                // Protobuf is array
-                return FailureMode.ProtobufArray;
-            }
-            else
-            {
-                logMethod = "LogProto";
-            }
-        }
-        else if (data.MemberDeclaration.LoggedKind == DeclarationKind.None || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-        {
-            // We're not an array. We're either Nullable<T> or a plain type
-            if (data.MemberDeclaration.SpecialType == SpecialType.System_UInt64 || data.MemberDeclaration.SpecialType == SpecialType.System_IntPtr || data.MemberDeclaration.SpecialType == SpecialType.System_UIntPtr)
-            {
-                getOperation = $"(long){getOperation}";
-            }
-
-            logMethod = data.MemberDeclaration.SpecialType switch
-            {
-                SpecialType.System_Char => "LogChar",
-                SpecialType.System_String => "LogString",
-                SpecialType.System_Boolean => "LogBoolean",
-                SpecialType.System_Single => "LogFloat",
-                SpecialType.System_Double => "LogDouble",
-                SpecialType.System_Byte => "LogInteger",
-                SpecialType.System_SByte => "LogInteger",
-                SpecialType.System_Int16 => "LogInteger",
-                SpecialType.System_UInt16 => "LogInteger",
-                SpecialType.System_Int32 => "LogInteger",
-                SpecialType.System_UInt32 => "LogInteger",
-                SpecialType.System_Int64 => "LogInteger",
-                SpecialType.System_UInt64 => "LogInteger",
-                SpecialType.System_IntPtr => "LogInteger",
-                SpecialType.System_UIntPtr => "LogInteger",
-                _ => null
-            };
-
-            if (logMethod is null)
-            {
-                // SpecialType is unknown, for non array
-                return FailureMode.UnknownTypeNonArray;
-            }
-        }
-        else
-        {
-            // We're array of a basic type
-
-            logMethod = data.MemberDeclaration.SpecialType switch
-            {
-                SpecialType.System_String => "LogStringArray",
-                SpecialType.System_Boolean => "LogBooleanArray",
-                SpecialType.System_Single => "LogFloatArray",
-                SpecialType.System_Double => "LogDoubleArray",
-                SpecialType.System_Byte => "LogRaw",
-                SpecialType.System_Int64 => "LogIntegerArray",
-                _ => null
-            };
-
-            if (logMethod is null)
-            {
-                // SpecialType is unknown for array
-                return FailureMode.UnknownTypeArray;
-            }
-        }
-
-        bool isNullable = false;
-
-        if (builder is null)
-        {
-            // At this point, we cannot error anymore. Just bail early if the string builder is null
-            return FailureMode.None;
-        }
-        builder.Append("        ");
-
-        if (data.MemberDeclaration.LoggedKind == DeclarationKind.Array || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-        {
-            // We're nullable. We need to do some tricks.
-            builder.AppendLine("{");
-            builder.AppendLine($"            var __tmpValue = {getOperation};");
-            builder.AppendLine($"            if (__tmpValue is not null)");
-            builder.AppendLine("            {");
-            builder.Append("                ");
-            getOperation = "__tmpValue";
-            if (data.MemberDeclaration.SpecialType == SpecialType.System_String || data.MemberDeclaration.LoggedKind == DeclarationKind.Array)
-            {
-                getOperation = $"{getOperation}.AsSpan()";
-            }
-            if (data.MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
-            {
-                getOperation = $"{getOperation}.Value";
-            }
-            isNullable = true;
-        }
-
-        builder.Append("logger.");
-        builder.Append(logMethod);
-        builder.Append("($\"{path}/");
-        builder.Append(path);
-        builder.Append("\", ");
-        builder.Append(data.AttributeInfo.LogType);
-        builder.Append(", ");
-        builder.Append(getOperation);
-        builder.Append(", ");
-        builder.Append(data.AttributeInfo.LogLevel);
-        builder.Append(");");
-
-        if (isNullable)
-        {
-            builder.AppendLine();
-            builder.AppendLine("            }");
-            builder.Append("        }");
-        }
-
         return FailureMode.None;
     }
 }

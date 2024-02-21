@@ -1,7 +1,6 @@
 using System.Collections.Immutable;
-using System.Text;
 using Microsoft.CodeAnalysis;
-using WPILib.CodeHelpers.LogGenerator;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace WPILib.CodeHelpers.StatusCheckGenerator;
 
@@ -12,48 +11,11 @@ internal enum ReturnKind
     Ref
 }
 
-internal record MethodModel(TypeDeclType TypeDeclType, string TypeName, string? TypeNamespace, string MethodDeclaration, string NameForCall, string TypeConstraints, string ReturnType, ReturnKind ReturnKind, bool NeedsUnsafe, EquatableArray<ParameterModel> Parameters)
+internal record MethodModel(TypeDeclarationModel TypeDeclaration, string TypeName, string? TypeNamespace, string MethodDeclaration, string NameForCall, string TypeConstraints, string ReturnType, ReturnKind ReturnKind, bool NeedsUnsafe, string StatusCheckMethod, EquatableArray<ParameterModel> Parameters)
 {
     public void AddClassDeclaration(IndentedStringBuilder builder)
     {
-        builder.StartLine();
-        if (TypeDeclType.IsReadOnly)
-        {
-            builder.Append("readonly ");
-        }
-
-        if (TypeDeclType.IsRefLikeType)
-        {
-            builder.Append("ref ");
-        }
-
-        if (NeedsUnsafe)
-        {
-            builder.Append("unsafe ");
-        }
-
-        builder.Append("partial ");
-
-        if (TypeDeclType.IsRecord)
-        {
-            builder.Append("record ");
-        }
-
-        if (TypeDeclType.TypeKind == TypeKind.Class)
-        {
-            builder.Append("class ");
-        }
-        else if (TypeDeclType.TypeKind == TypeKind.Struct)
-        {
-            builder.Append("struct ");
-        }
-        else if (TypeDeclType.TypeKind == TypeKind.Interface)
-        {
-            builder.Append("interface ");
-        }
-
-        builder.Append(TypeName);
-        builder.EndLine();
+        builder.AppendFullLine($"{TypeDeclaration.GetClassDeclaration(NeedsUnsafe, true)} {TypeName}");
     }
 
     public void WriteMethod(IndentedStringBuilder builder)
@@ -139,7 +101,7 @@ internal record MethodModel(TypeDeclType TypeDeclType, string TypeName, string? 
 
     public void WriteStatusCheck(IndentedStringBuilder builder)
     {
-        builder.AppendFullLine("__tmpStatus.ThrowIfFailed();");
+        builder.AppendFullLine($"__tmpStatus.{StatusCheckMethod};");
     }
 
     public void WriteReturn(IndentedStringBuilder builder)
@@ -186,29 +148,28 @@ internal static class MethodModelExtensions
         var methodDeclarationFormat = new SymbolDisplayFormat(
             genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-            memberOptions: SymbolDisplayMemberOptions.IncludeType | SymbolDisplayMemberOptions.IncludeModifiers | SymbolDisplayMemberOptions.IncludeAccessibility | SymbolDisplayMemberOptions.IncludeRef
-
+            memberOptions: SymbolDisplayMemberOptions.IncludeType | SymbolDisplayMemberOptions.IncludeModifiers | SymbolDisplayMemberOptions.IncludeAccessibility | SymbolDisplayMemberOptions.IncludeRef,
+            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
+            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
             );
 
         var methodDeclaration = symbol.ToDisplayString(methodDeclarationFormat);
 
-        var callDeclarationFormat = new SymbolDisplayFormat(
-            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
-            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
-            memberOptions: SymbolDisplayMemberOptions.IncludeRef
-            );
-
-        var callDeclaration = symbol.ToDisplayString(callDeclarationFormat);
+        var callDeclaration = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeRef | SymbolDisplayMemberOptions.IncludeContainingType));
 
         var constraintsFmt = new SymbolDisplayFormat(
-            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeConstraints
+            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeConstraints,
+            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
+            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
         );
 
         var constraints = symbol.ToDisplayString(constraintsFmt).Replace(symbol.Name, "");
 
         var returnTypeFmt = new SymbolDisplayFormat(
             memberOptions: SymbolDisplayMemberOptions.IncludeType | SymbolDisplayMemberOptions.IncludeRef,
-            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces
+            typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
+            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
+            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
         );
 
         var returnType = symbol.ToDisplayString(returnTypeFmt).Replace(symbol.Name, "");
@@ -239,6 +200,33 @@ internal static class MethodModelExtensions
         var nameString = classSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
         var nspace = classSymbol.ContainingNamespace is { IsGlobalNamespace: false } ns ? ns.ToDisplayString() : null;
 
-        return new(classSymbol.GetTypeDeclType(), nameString, nspace, methodDeclaration, callDeclaration, constraints, returnType, retKind, needsUnsafe, parameters.ToImmutable());
+        string statusCheckMethod = "ThrowIfFailed()";
+
+        foreach (var attribute in symbol.GetAttributes())
+        {
+            if (attribute.AttributeClass?.ToDisplayString() != Strings.StatusCheckAttribute)
+            {
+                continue;
+            }
+            bool found = false;
+            foreach (var named in attribute.NamedArguments)
+            {
+                if (named.Key == "StatusCheckMethod")
+                {
+                    if (!named.Value.IsNull)
+                    {
+                        statusCheckMethod = SymbolDisplay.FormatPrimitive(named.Value.Value!, false, false);
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (found)
+            {
+                break;
+            }
+        }
+
+        return new(classSymbol.GetTypeDeclarationModel(), nameString, nspace, methodDeclaration, callDeclaration, constraints, returnType, retKind, needsUnsafe, statusCheckMethod, parameters.ToImmutable());
     }
 }

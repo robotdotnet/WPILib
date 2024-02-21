@@ -12,7 +12,7 @@ namespace WPILib.CodeHelpers.LogGenerator.CodeFixer;
 [ExportCodeFixProvider(LanguageNames.CSharp)]
 public class LogGeneratorFixer : CodeFixProvider
 {
-    private const string title = "Add GenerateLog";
+    private const string Title = "Add [GenerateLog]";
 
     public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create([
         LoggerDiagnostics.Ids.MissingGenerateLog,
@@ -36,9 +36,9 @@ public class LogGeneratorFixer : CodeFixProvider
         // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(
-                title: title,
+                title: Title,
                 createChangedDocument: c => AddGenerateLogAttribute(context.Document, declaration!, c),
-                equivalenceKey: title),
+                equivalenceKey: Title),
             diagnostic);
     }
 

@@ -1,32 +1,67 @@
 using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
-using WPILib.CodeHelpers;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
 
 namespace WPILib.CodeHelpers.LogGenerator;
 
-
-internal record TypeDeclType(TypeKind TypeKind, bool IsReadOnly, bool IsRefLikeType, bool IsRecord);
-
 // Contains all information on a loggable type
-internal record LoggableType(TypeDeclType TypeDeclType, string FileName, string TypeName, string? TypeNamespace, EquatableArray<LoggableMember> LoggableMembers);
+internal record LoggableType(TypeDeclarationModel TypeDeclaration, string FileName, string TypeName, string? TypeNamespace, EquatableArray<LoggableMember> LoggableMembers)
+{
+    private void AddClassDeclaration(IndentedStringBuilder builder)
+    {
+        string iLogged = "";
+
+        if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
+        {
+            iLogged = $" : global::{Strings.ILoggedName}";
+        }
+
+
+        builder.AppendFullLine($"{TypeDeclaration.GetClassDeclaration(false, true)} {TypeName}{iLogged}");
+    }
+
+    private void WriteMethodDeclaration(IndentedStringBuilder builder)
+    {
+        builder.AppendFullLine(Strings.FullMethodDeclaration);
+    }
+
+    public void WriteMethod(IndentedStringBuilder builder)
+    {
+        if (TypeNamespace is not null)
+        {
+            builder.AppendFullLine($"namespace {TypeNamespace}");
+            builder.EnterManualScope();
+        }
+
+        {
+            AddClassDeclaration(builder);
+            using var classScope = builder.EnterScope();
+            WriteMethodDeclaration(builder);
+            using var methodScope = builder.EnterScope();
+            foreach (var call in LoggableMembers)
+            {
+                call.WriteLogCall(builder);
+            }
+        }
+
+        if (TypeNamespace is not null)
+        {
+            builder.ExitManualScope();
+        }
+    }
+}
 
 internal static class LoggableTypeExtensions
 {
-    public static TypeDeclType GetTypeDeclType(this INamedTypeSymbol symbol)
-    {
-        return new TypeDeclType(symbol.TypeKind, symbol.IsReadOnly, symbol.IsRefLikeType, symbol.IsRecord);
-    }
 
     public static LoggableType GetLoggableType(this INamedTypeSymbol classSymbol, CancellationToken token, List<(FailureMode, ISymbol)>? failures, Dictionary<LoggableMember, ISymbol>? symbolMap)
     {
         token.ThrowIfCancellationRequested();
 
-        var typeDeclType = classSymbol.GetTypeDeclType();
+        var typeDeclType = classSymbol.GetTypeDeclarationModel();
         token.ThrowIfCancellationRequested();
 
         var classMembers = classSymbol.GetMembers();
@@ -66,57 +101,13 @@ internal static class LoggableTypeExtensions
         return loggableType;
     }
 
-    public static void AddClassDeclaration(LoggableType type, StringBuilder builder)
-    {
-        if (type.TypeDeclType.IsReadOnly)
-        {
-            builder.Append("readonly ");
-        }
-
-        if (type.TypeDeclType.IsRefLikeType)
-        {
-            builder.Append("ref ");
-        }
-
-        builder.Append("partial ");
-
-        if (type.TypeDeclType.IsRecord)
-        {
-            builder.Append("record ");
-        }
-
-        if (type.TypeDeclType.TypeKind == TypeKind.Class)
-        {
-            builder.Append("class ");
-        }
-        else if (type.TypeDeclType.TypeKind == TypeKind.Struct)
-        {
-            builder.Append("struct ");
-        }
-        else if (type.TypeDeclType.TypeKind == TypeKind.Interface)
-        {
-            builder.Append("interface ");
-        }
-
-        builder.Append(type.TypeName);
-
-        if (type.TypeDeclType.IsRefLikeType)
-        {
-            builder.AppendLine();
-        }
-        else
-        {
-            builder.AppendLine(" : ILogged");
-        }
-    }
-
     public static void ExecuteAnalysis(this LoggableType? maybeType, SymbolAnalysisContext context, Dictionary<LoggableMember, ISymbol> symbolMap)
     {
         if (maybeType is { } loggableType)
         {
             foreach (var call in loggableType.LoggableMembers)
             {
-                var failureMode = call.ConstructLogCall(null);
+                var failureMode = call.WriteLogCall(null);
                 if (failureMode == FailureMode.None)
                 {
                     continue;
@@ -140,24 +131,9 @@ internal static class LoggableTypeExtensions
 
         if (maybeType is { } loggableType)
         {
-            StringBuilder builder = new StringBuilder();
-            if (loggableType.TypeNamespace is not null)
-            {
-                builder.AppendLine($"namespace {loggableType.TypeNamespace};");
-                builder.AppendLine();
-            }
+            IndentedStringBuilder builder = new IndentedStringBuilder();
 
-            AddClassDeclaration(loggableType, builder);
-            builder.AppendLine("{");
-            builder.AppendLine("    public void UpdateStereologue(string path, Stereologue.Stereologuer logger)");
-            builder.AppendLine("    {");
-            foreach (var call in loggableType.LoggableMembers)
-            {
-                call.ConstructLogCall(builder);
-                builder.AppendLine();
-            }
-            builder.AppendLine("    }");
-            builder.AppendLine("}");
+            loggableType.WriteMethod(builder);
 
             context.AddSource($"Stereologue.{loggableType.FileName}.g.cs", SourceText.From(builder.ToString(), Encoding.UTF8));
         }

@@ -35,7 +35,8 @@ internal static class ParameterModelExtensions
                               SymbolDisplayParameterOptions.IncludeName |
                               SymbolDisplayParameterOptions.IncludeDefaultValue,
             genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
-            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
+            miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes,
+            globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included
         );
 
         if (symbol.Type.RequiresUnsafe())
