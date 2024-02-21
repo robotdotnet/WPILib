@@ -58,7 +58,7 @@ public partial class Translation2dJsonContext : JsonSerializerContext
 {
 }
 
-public readonly struct Translation2d : IStructSerializable<Translation2d>, IProtobufSerializable<Translation2d>,
+public readonly struct Translation2d : IStructSerializable<Translation2d>, IProtobufSerializable<Translation2d, ProtobufTranslation2d>,
                                         IAdditionOperators<Translation2d, Translation2d, Translation2d>,
                                     ISubtractionOperators<Translation2d, Translation2d, Translation2d>,
                                     IUnaryNegationOperators<Translation2d, Translation2d>,
@@ -71,7 +71,6 @@ public readonly struct Translation2d : IStructSerializable<Translation2d>, IProt
 {
     public static IStruct<Translation2d> Struct { get; } = new Translation2dStruct();
     public static IProtobuf<Translation2d, ProtobufTranslation2d> Proto { get; } = new Translation2dProto();
-    static IGenericProtobuf<Translation2d> IProtobufSerializable<Translation2d>.ProtoGeneric => Proto;
 
     [JsonIgnore]
     public Length X { get; }

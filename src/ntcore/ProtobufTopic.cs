@@ -7,7 +7,7 @@ namespace NetworkTables;
 
 public sealed class ProtobufTopic<T> : Topic, IEquatable<ProtobufTopic<T>?>, IEqualityOperators<ProtobufTopic<T>?, ProtobufTopic<T>?, bool> where T : IProtobufSerializable<T>
 {
-    public IGenericProtobuf<T> Proto { get; } = T.ProtoGeneric;
+    public IGenericProtobuf<T> Proto { get; } = T.Proto;
 
     private ProtobufTopic(Topic topic) : base(topic.Instance, topic.Handle)
     {

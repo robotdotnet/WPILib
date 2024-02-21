@@ -7,9 +7,9 @@ public sealed class ProtobufLogEntry<T> : DataLogEntry where T : IProtobufSerial
     private readonly ProtobufBuffer<T> m_storage = new();
     private readonly object m_lockObject = new();
 
-    public ProtobufLogEntry(DataLog log, string name, string metadata = "", long timestamp = 0) : base(log, name, T.ProtoGeneric.TypeString, metadata, timestamp)
+    public ProtobufLogEntry(DataLog log, string name, string metadata = "", long timestamp = 0) : base(log, name, T.Proto.TypeString, metadata, timestamp)
     {
-        log.AddSchema(T.ProtoGeneric, timestamp);
+        log.AddSchema(T.Proto, timestamp);
     }
 
     public void Append(T value, long timestamp = 0)

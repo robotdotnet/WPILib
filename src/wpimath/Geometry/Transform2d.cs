@@ -71,7 +71,6 @@ public readonly struct Transform2d : IAdditionOperators<Transform2d, Transform2d
 {
     public static IStruct<Transform2d> Struct { get; } = new Transform2dStruct();
     public static IProtobuf<Transform2d, ProtobufTransform2d> Proto { get; } = new Transform2dProto();
-    static IGenericProtobuf<Transform2d> IProtobufSerializable<Transform2d>.ProtoGeneric => Proto;
 
     [JsonInclude]
     [JsonPropertyName("translation")]

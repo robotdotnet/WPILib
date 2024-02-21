@@ -58,7 +58,7 @@ public partial class Pose2dJsonContext : JsonSerializerContext
 {
 }
 
-public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializable<Pose2d>,
+public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializable<Pose2d, ProtobufPose2d>,
                                     IMultiplyOperators<Pose2d, double, Pose2d>,
                                     IAdditionOperators<Pose2d, Transform2d, Pose2d>,
                                     ISubtractionOperators<Pose2d, Pose2d, Transform2d>,
@@ -69,7 +69,6 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
 {
     public static IStruct<Pose2d> Struct { get; } = new Pose2dStruct();
     public static IProtobuf<Pose2d, ProtobufPose2d> Proto { get; } = new Pose2dProto();
-    static IGenericProtobuf<Pose2d> IProtobufSerializable<Pose2d>.ProtoGeneric => Proto;
 
     [JsonInclude]
     [JsonPropertyName("translation")]

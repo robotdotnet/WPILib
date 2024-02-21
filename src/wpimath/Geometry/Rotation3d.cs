@@ -72,7 +72,6 @@ public readonly struct Rotation3d : IStructSerializable<Rotation3d>,
 {
     public static IStruct<Rotation3d> Struct { get; } = new Rotation3dStruct();
     public static IProtobuf<Rotation3d, ProtobufRotation3d> Proto { get; } = new Rotation3dProto();
-    static IGenericProtobuf<Rotation3d> IProtobufSerializable<Rotation3d>.ProtoGeneric => Proto;
 
     [JsonInclude]
     [JsonPropertyName("quaternion")]

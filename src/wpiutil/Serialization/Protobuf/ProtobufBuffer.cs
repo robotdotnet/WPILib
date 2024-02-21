@@ -6,7 +6,7 @@ public struct ProtobufBuffer<T> where T : IProtobufSerializable<T>
 {
     public ProtobufBuffer()
     {
-        Proto = T.ProtoGeneric;
+        Proto = T.Proto;
         m_msg = Proto.GenericCreateMessage();
     }
 
