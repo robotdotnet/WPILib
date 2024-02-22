@@ -325,7 +325,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             m_thread = new Thread(() =>
             {
                 bool wasInterrupted = false;
-                ReadOnlySpan<int> handles = [m_poller.Handle, m_waitQueueEvent.Handle];
+                ReadOnlySpan<int> handles = [m_poller.Handle, m_waitQueueEvent.Handle.Handle];
                 Span<int> signaledStorage = [0, 0];
                 while (true)
                 {

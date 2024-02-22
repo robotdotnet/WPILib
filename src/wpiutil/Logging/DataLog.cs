@@ -46,9 +46,12 @@ public sealed unsafe class DataLog : IDisposable
         }
     }
 
-    public void SetFilename(string filename)
+    public string Filename
     {
-        DataLogNative.SetFilename(NativeHandle, filename);
+        set
+        {
+            DataLogNative.SetFilename(NativeHandle, value);
+        }
     }
 
     public void Flush()

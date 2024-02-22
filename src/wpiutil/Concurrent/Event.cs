@@ -1,17 +1,21 @@
+using System.Runtime.InteropServices.Marshalling;
+using WPIUtil.Handles;
 using WPIUtil.Natives;
 
 namespace WPIUtil.Concurrent;
 
+
+
 public sealed class Event(bool manualReset = false, bool initialState = false) : IDisposable
 {
-    public int Handle { get; private set; } = SynchronizationNative.CreateEvent(manualReset, initialState);
+    public WpiEventHandle Handle { get; private set; } = SynchronizationNative.CreateEvent(manualReset, initialState);
 
     public void Dispose()
     {
-        if (Handle != 0)
+        if (Handle.Handle != 0)
         {
             SynchronizationNative.DestroyEvent(Handle);
-            Handle = 0;
+            Handle = default;
         }
     }
 

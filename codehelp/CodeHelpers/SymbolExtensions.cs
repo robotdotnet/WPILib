@@ -16,7 +16,8 @@ public static class SymbolExtensions
         return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
     }
 
-    public static string? GetNamespace(this ITypeSymbol symbol) {
+    public static string? GetNamespace(this ITypeSymbol symbol)
+    {
         // TODO Stop using ToDisplayString
         return symbol.ContainingNamespace is { IsGlobalNamespace: false } ns ? ns.ToDisplayString() : null;
     }
