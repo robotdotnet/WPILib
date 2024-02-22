@@ -1,5 +1,6 @@
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
+using WPIUtil.Function;
 
 namespace WPIUtil.Serialization.Protobuf;
 
@@ -9,12 +10,12 @@ public interface IProtobuf
     MessageDescriptor Descriptor { get; }
     IProtobuf[] Nested => [];
 
-    void ForEachDescriptor(Func<string, bool> exists, Action<string, byte[]> fn)
+    void ForEachDescriptor(Function<string, bool> exists, BiConsumer<string, byte[]> fn)
     {
         ForEachDescriptorImpl(Descriptor.File, exists, fn);
     }
 
-    private static void ForEachDescriptorImpl(FileDescriptor desc, Func<string, bool> exists, Action<string, byte[]> fn)
+    private static void ForEachDescriptorImpl(FileDescriptor desc, Function<string, bool> exists, BiConsumer<string, byte[]> fn)
     {
         string name = $"proto:{desc.Name}";
         if (exists(name))

@@ -2,19 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Packable>false</Packable>
+    <RootNamespace>TestRobot</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\hal\hal.csproj" />
-    <!--<ProjectReference Include="..\..\src\newcommands\newcommands.csproj" />-->
-    <ProjectReference Include="..\..\src\ntcore\ntcore.csproj" />
-    <!--<ProjectReference Include="..\..\src\thirdparty\oblog\oblog.csproj" />
-    <ProjectReference Include="..\..\src\thirdparty\SparkMax\SparkMax.csproj" />-->
-    <ProjectReference Include="..\..\src\wpilibsharp\wpilibsharp.csproj" />
-    <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
-  </ItemGroup>
 
 </Project>

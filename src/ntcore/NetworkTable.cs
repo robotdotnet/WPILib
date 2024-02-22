@@ -192,7 +192,9 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
 
     public string Path { get; }
 
-    public NtListener AddListener(EventFlags eventKinds, Action<NetworkTable, string, NetworkTableEvent> listener)
+    public delegate void TableEventListener(NetworkTable table, string key, NetworkTableEvent tableEvent);
+
+    public NtListener AddListener(EventFlags eventKinds, TableEventListener listener)
     {
         int prefixLex = Path.Length + 1;
         return Instance.AddListener([m_pathWithSep], eventKinds, ntEvent =>
@@ -221,17 +223,19 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         });
     }
 
-    public NtListener AddListener(string key, EventFlags eventKinds, Action<NetworkTable, string, NetworkTableEvent> listener)
+    public NtListener AddListener(string key, EventFlags eventKinds, TableEventListener listener)
     {
         var entry = GetEntry(key);
         return Instance.AddListener(entry, eventKinds, ntEvent => listener(this, key, ntEvent));
     }
 
-    private class SubTableListenerHolder(int prefixLen, NetworkTable parent, Action<NetworkTable, string, NetworkTable> listener)
+    public delegate void SubTableListener(NetworkTable parent, string name, NetworkTable table);
+
+    private class SubTableListenerHolder(int prefixLen, NetworkTable parent, SubTableListener listener)
     {
         private readonly int m_prefixLen = prefixLen;
         private readonly NetworkTable m_parent = parent;
-        private readonly Action<NetworkTable, string, NetworkTable> m_listener = listener;
+        private readonly SubTableListener m_listener = listener;
         private readonly HashSet<string> m_notifiedTables = [];
 
         public void OnEvent(NetworkTableEvent ntEvent)
@@ -256,7 +260,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         }
     }
 
-    public NtListener AddSubTableListener(Action<NetworkTable, string, NetworkTable> listener)
+    public NtListener AddSubTableListener(SubTableListener listener)
     {
         int prefixLen = Path.Length + 1;
         SubTableListenerHolder holder = new(prefixLen, this, listener);

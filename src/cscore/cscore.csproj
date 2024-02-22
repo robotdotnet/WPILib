@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
     <ProjectReference Include="..\wpinet\wpinet.csproj" />
-    <ProjectReference Include="..\..\codehelp\CodeHelpers\WPILib.CodeHelpers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>

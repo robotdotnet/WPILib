@@ -1,3 +1,5 @@
+using WPIUtil.Function;
+
 namespace WPIUtil.Sendable;
 
 public interface ISendableBuilder : IDisposable
@@ -16,51 +18,51 @@ public interface ISendableBuilder : IDisposable
 
     void SetActuator(bool value);
 
-    void SetSafeState(Action func);
+    void SetSafeState(Runnable func);
 
-    void AddBooleanProperty(string key, Func<bool> getter, Action<bool> setter);
+    void AddBooleanProperty(string key, Supplier<bool> getter, Consumer<bool> setter);
 
     void PublishConstBoolean(string key, bool value);
 
-    void AddIntegerProperty(string key, Func<long> getter, Action<long> setter);
+    void AddIntegerProperty(string key, Supplier<long> getter, Consumer<long> setter);
 
     void PublishConstInteger(string key, long value);
 
-    void AddFloatProperty(string key, Func<float> getter, Action<float> setter);
+    void AddFloatProperty(string key, Supplier<float> getter, Consumer<float> setter);
 
     void PublishConstFloat(string key, float value);
 
-    void AddDoubleProperty(string key, Func<double> getter, Action<double> setter);
+    void AddDoubleProperty(string key, Supplier<double> getter, Consumer<double> setter);
 
     void PublishConstDouble(string key, double value);
 
-    void AddStringProperty(string key, Func<string> getter, Action<string> setter);
+    void AddStringProperty(string key, Supplier<string> getter, Consumer<string> setter);
 
     void PublishConstString(string key, string value);
 
     void PublishConstString(string key, ReadOnlySpan<byte> value);
 
-    void AddBooleanArrayProperty(string key, Func<bool[]> getter, Action<bool[]> setter);
+    void AddBooleanArrayProperty(string key, Supplier<bool[]> getter, Consumer<bool[]> setter);
 
     void PublishConstBooleanArray(string key, ReadOnlySpan<bool> value);
 
-    void AddIntegerArrayProperty(string key, Func<long[]> getter, Action<long[]> setter);
+    void AddIntegerArrayProperty(string key, Supplier<long[]> getter, Consumer<long[]> setter);
 
     void PublishConstIntegerArray(string key, ReadOnlySpan<long> value);
 
-    void AddFloatArrayProperty(string key, Func<float[]> getter, Action<float[]> setter);
+    void AddFloatArrayProperty(string key, Supplier<float[]> getter, Consumer<float[]> setter);
 
     void PublishConstFloatArray(string key, ReadOnlySpan<float> value);
 
-    void AddDoubleArrayProperty(string key, Func<double[]> getter, Action<double[]> setter);
+    void AddDoubleArrayProperty(string key, Supplier<double[]> getter, Consumer<double[]> setter);
 
     void PublishConstDoubleArray(string key, ReadOnlySpan<double> value);
 
-    void AddStringArrayProperty(string key, Func<string[]> getter, Action<string[]> setter);
+    void AddStringArrayProperty(string key, Supplier<string[]> getter, Consumer<string[]> setter);
 
     void PublishConstStringArray(string key, ReadOnlySpan<string> value);
 
-    void AddRawProperty(string key, string typeString, Func<byte[]> getter, Action<byte[]> setter);
+    void AddRawProperty(string key, string typeString, Supplier<byte[]> getter, Consumer<byte[]> setter);
 
     void PublishConstRaw(string key, string typeString, ReadOnlySpan<byte> value);
 

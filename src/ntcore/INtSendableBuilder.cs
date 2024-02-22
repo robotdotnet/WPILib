@@ -1,10 +1,11 @@
+using WPIUtil.Function;
 using WPIUtil.Sendable;
 
 namespace NetworkTables;
 
 public interface INtSendableBuilder : ISendableBuilder
 {
-    Action UpdateTable { set; }
+    Runnable UpdateTable { set; }
 
     Topic GetTopic(string key);
 
