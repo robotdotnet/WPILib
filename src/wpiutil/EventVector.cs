@@ -1,3 +1,4 @@
+using WPIUtil.Handles;
 using WPIUtil.Natives;
 
 namespace WPIUtil;
@@ -29,7 +30,7 @@ public class EventVector
         {
             foreach (int handle in m_events)
             {
-                SynchronizationNative.SetEvent(handle);
+                SynchronizationNative.SetEvent(new WpiEventHandle(handle));
             }
         }
     }

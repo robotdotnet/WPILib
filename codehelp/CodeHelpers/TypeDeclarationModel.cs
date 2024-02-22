@@ -16,8 +16,6 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
 {
     private string GetClassDeclaration(bool addUnsafe)
     {
-        string readonlyString = (Modifiers & TypeModifiers.IsReadOnly) != 0 ? "readonly " : "";
-        string refString = (Modifiers & TypeModifiers.IsRefLikeType) != 0 ? "ref " : "";
         string recordString = (Modifiers & TypeModifiers.IsRecord) != 0 ? "record " : "";
         string unsafeString = addUnsafe ? "unsafe " : "";
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
@@ -29,7 +27,7 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
-        return $"{unsafeString}{readonlyString}{refString}partial {recordString}{kindString}";
+        return $"{unsafeString}partial {recordString}{kindString}";
     }
 
     private void GetGenericParameters(IndentedStringBuilder builder)

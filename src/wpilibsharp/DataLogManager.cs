@@ -19,7 +19,6 @@ public static class DataLogManger
     private static NtConnectionDataLogger m_ntConnLogger;
     private static StringLogEntry? m_messageLog;
     private static readonly object m_lockObject = new();
-    private static volatile int m_runThread = 1;
 
     // if less than this much free space, delete log files until there is this much free space
     // OR there are this many files remaining.
