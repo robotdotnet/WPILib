@@ -12,7 +12,7 @@ namespace WPILib.CodeHelpers;
 /// <summary>
 /// Extensions for <see cref="EquatableArray{T}"/>.
 /// </summary>
-internal static class EquatableArray
+public static class EquatableArray
 {
     /// <summary>
     /// Creates an <see cref="EquatableArray{T}"/> instance from a given <see cref="ImmutableArray{T}"/>.
@@ -32,7 +32,7 @@ internal static class EquatableArray
 /// </summary>
 /// <typeparam name="T">The type of values in the array.</typeparam>
 /// <param name="array">The input <see cref="ImmutableArray{T}"/> to wrap.</param>
-internal readonly struct EquatableArray<T>(ImmutableArray<T> array) : IEquatable<EquatableArray<T>>, IEnumerable<T>
+public readonly struct EquatableArray<T>(ImmutableArray<T> array) : IEquatable<EquatableArray<T>>, IEnumerable<T>
     where T : IEquatable<T>
 {
     /// <summary>
