@@ -15,7 +15,9 @@ public static partial class TimestampNative
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_SetNowImpl")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
     public static unsafe partial void SetNowImpl(delegate* unmanaged[Cdecl]<ulong> callback);
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_Now")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

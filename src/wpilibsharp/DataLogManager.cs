@@ -287,7 +287,7 @@ public static class DataLogManger
         bool fmsRenamed = m_filenameOverride;
         int sysTimeCount = 0;
         IntegerLogEntry sysSimteEntry = new IntegerLogEntry(m_log!, "systemTime", "{\"source\":\"DataLogManager\",\"format\":\"time_t_us\"}");
-        using Event newDataEvent = new();
+        using WpiEvent newDataEvent = new();
         DriverStation.ProvideRefreshedDataEventHandle(newDataEvent.Handle);
         while (Interlocked.CompareExchange(ref m_thread, null, null) != null)
         {

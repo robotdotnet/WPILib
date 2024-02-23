@@ -16,7 +16,7 @@ public sealed class StructLogEntry<T> : DataLogEntry where T : IStructSerializab
     {
         lock (m_lockObject)
         {
-            m_log.AppendRaw(m_entry, m_storage.Write(value), timestamp);
+            Log.AppendRaw(Entry, m_storage.Write(value), timestamp);
         }
     }
 }

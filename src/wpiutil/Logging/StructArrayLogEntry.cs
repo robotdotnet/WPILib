@@ -25,7 +25,7 @@ public sealed class StructArrayLogEntry<T> : DataLogEntry where T : IStructSeria
     {
         lock (m_lockObject)
         {
-            m_log.AppendRaw(m_entry, m_storage.WriteArray(value), timestamp);
+            Log.AppendRaw(Entry, m_storage.WriteArray(value), timestamp);
         }
     }
 }

@@ -32,7 +32,7 @@ public class StringLogEntry(DataLog log, string name, string metadata = "", long
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(string value, long timestamp = 0)
     {
-        m_log.AppendString(m_entry, value, timestamp);
+        Log.AppendString(Entry, value, timestamp);
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public class StringLogEntry(DataLog log, string name, string metadata = "", long
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<char> value, long timestamp = 0)
     {
-        m_log.AppendString(m_entry, value, timestamp);
+        Log.AppendString(Entry, value, timestamp);
     }
 
     /// <summary>
@@ -52,6 +52,6 @@ public class StringLogEntry(DataLog log, string name, string metadata = "", long
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<byte> value, long timestamp = 0)
     {
-        m_log.AppendString(m_entry, value, timestamp);
+        Log.AppendString(Entry, value, timestamp);
     }
 }

@@ -28,10 +28,7 @@ public class DynamicStruct
 
     public void SetData(ReadOnlySpan<byte> data)
     {
-        if (data.Length < Descriptor.Size)
-        {
-            throw new Exception("TODO Custom exception underflow");
-        }
+        Guard.HasSizeGreaterThanOrEqualTo(data, Descriptor.Size);
         data.CopyTo(Buffer.Span);
     }
 
@@ -177,7 +174,7 @@ public class DynamicStruct
     {
         if (field.Type.Type != StructFieldType.Struct)
         {
-            throw new Exception();
+            throw new StructException("Field is not a struct");
         }
         if (field.Parent != Descriptor)
         {
@@ -185,13 +182,11 @@ public class DynamicStruct
         }
         if (!Descriptor.IsValid)
         {
-            throw new Exception("TODO better exception");
+            throw new StructException("Invalid descriptor");
         }
-        if (arrIndex < 0 || arrIndex >= field.ArraySize)
-        {
-            throw new IndexOutOfRangeException("TODO");
-        }
+        Guard.IsInRange(arrIndex, 0, field.ArraySize);
         StructDescriptor strct = field.Struct!;
+
         return Wrap(strct, Buffer[(field.Offset + arrIndex * strct.Size)..]);
     }
 
@@ -199,7 +194,7 @@ public class DynamicStruct
     {
         if (field.Type.Type != StructFieldType.Struct)
         {
-            throw new Exception();
+            throw new StructException("Field is not a struct");
         }
         if (field.Parent != Descriptor)
         {
@@ -207,21 +202,18 @@ public class DynamicStruct
         }
         if (!Descriptor.IsValid)
         {
-            throw new Exception("TODO better exception");
+            throw new StructException("Invalid descriptor");
         }
         StructDescriptor strct = field.Struct!;
         if (value.Descriptor != strct)
         {
-            throw new Exception();
+            throw new StructException("Descriptor does not match");
         }
         if (!value.Descriptor.IsValid)
         {
-            throw new Exception();
+            throw new StructException("Invalid descriptor");
         }
-        if (arrIndex < 0 || arrIndex >= field.ArraySize)
-        {
-            throw new IndexOutOfRangeException("TODO");
-        }
+        Guard.IsInRange(arrIndex, 0, field.ArraySize);
 
         value.Buffer.Span[..value.Descriptor.Size].CopyTo(Buffer.Span[(field.Offset + arrIndex * strct.Size)..]);
     }
@@ -234,23 +226,21 @@ public class DynamicStruct
         }
         if (!Descriptor.IsValid)
         {
-            throw new Exception("TODO better exception");
+            throw new StructException("Invalid descriptor");
         }
-        if (arrIndex < 0 || arrIndex >= field.ArraySize)
-        {
-            throw new IndexOutOfRangeException("TODO");
-        }
+        Guard.IsInRange(arrIndex, 0, field.ArraySize);
 
         ReadOnlySpan<byte> data = Buffer.Span;
 
+#pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
         long val = field.Size switch
         {
             1 => data[field.Offset + arrIndex],
             2 => BinaryPrimitives.ReadInt16LittleEndian(data[(field.Offset + arrIndex * 2)..]),
             4 => BinaryPrimitives.ReadInt32LittleEndian(data[(field.Offset + arrIndex * 4)..]),
             8 => BinaryPrimitives.ReadInt64LittleEndian(data[(field.Offset + arrIndex * 8)..]),
-            _ => throw new Exception("Illegal state"),
         };
+#pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
         if (field.IsUint || field.Type.Type == StructFieldType.Bool)
         {
@@ -274,12 +264,9 @@ public class DynamicStruct
         }
         if (!Descriptor.IsValid)
         {
-            throw new Exception("TODO better exception");
+            throw new StructException("Invalid descriptor");
         }
-        if (arrIndex < 0 || arrIndex >= field.ArraySize)
-        {
-            throw new IndexOutOfRangeException("TODO");
-        }
+        Guard.IsInRange(arrIndex, 0, field.ArraySize);
 
         Span<byte> data = Buffer.Span;
 
@@ -300,7 +287,7 @@ public class DynamicStruct
                     BinaryPrimitives.WriteInt64LittleEndian(data[(field.Offset + arrIndex * 8)..], value);
                     break;
                 default:
-                    throw new Exception("invalid field size");
+                    throw new StructException("invalid field size");
             }
             return;
         }
@@ -343,7 +330,7 @@ public class DynamicStruct
                     break;
                 }
             default:
-                throw new Exception("invalid field size");
+                throw new StructException("invalid field size");
         }
     }
 }

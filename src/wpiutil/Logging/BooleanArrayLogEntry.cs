@@ -39,6 +39,6 @@ public class BooleanArrayLogEntry(DataLog log, string name, string metadata = ""
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<bool> value, long timestamp = 0)
     {
-        m_log.AppendBooleanArray(m_entry, value, timestamp);
+        Log.AppendBooleanArray(Entry, value, timestamp);
     }
 }

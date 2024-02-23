@@ -7,7 +7,7 @@ public static class SendableRegistery
 {
     private static readonly object s_lockObject = new();
 
-    private class Component : IDisposable
+    private sealed class Component : IDisposable
     {
         public Component() { }
 

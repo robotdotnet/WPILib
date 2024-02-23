@@ -32,6 +32,6 @@ public class DoubleLogEntry(DataLog log, string name, string metadata = "", long
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(double value, long timestamp = 0)
     {
-        m_log.AppendDouble(m_entry, value, timestamp);
+        Log.AppendDouble(Entry, value, timestamp);
     }
 }

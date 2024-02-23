@@ -33,6 +33,6 @@ public class RawLogEntry(DataLog log, string name, string metadata = "", string 
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<byte> value, long timestamp = 0)
     {
-        m_log.AppendRaw(m_entry, value, timestamp);
+        Log.AppendRaw(Entry, value, timestamp);
     }
 }

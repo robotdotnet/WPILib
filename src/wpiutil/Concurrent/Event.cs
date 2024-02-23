@@ -6,7 +6,7 @@ namespace WPIUtil.Concurrent;
 
 
 
-public sealed class Event(bool manualReset = false, bool initialState = false) : IDisposable
+public sealed class WpiEvent(bool manualReset = false, bool initialState = false) : IDisposable
 {
     public WpiEventHandle Handle { get; private set; } = SynchronizationNative.CreateEvent(manualReset, initialState);
 

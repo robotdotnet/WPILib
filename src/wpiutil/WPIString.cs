@@ -7,8 +7,10 @@ namespace WPIUtil;
 [NativeMarshalling(typeof(WpiStringMarshaller))]
 public readonly ref struct WpiString
 {
+#pragma warning disable CA1051 // Do not declare visible instance fields
     public readonly ReadOnlySpan<byte> buffer;
     public readonly bool isString;
+#pragma warning restore CA1051 // Do not declare visible instance fields
 
     public WpiString(ReadOnlySpan<char> buffer)
     {

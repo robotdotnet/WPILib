@@ -46,7 +46,7 @@ public struct StructBuffer<T> where T : IStructSerializable<T>
     {
         if ((buffer.Length % m_structSize) != 0)
         {
-            throw new Exception("Buffer size not a multiple of struct size");
+            throw new StructBufferException("Buffer size not a multiple of struct size");
         }
         int nelem = buffer.Length / m_structSize;
         int length = int.Min(nelem, output.Length);
@@ -77,7 +77,7 @@ public struct StructBuffer<T> where T : IStructSerializable<T>
     {
         if ((buffer.Length % m_structSize) != 0)
         {
-            throw new Exception("Buffer size not a multiple of struct size");
+            throw new StructBufferException("Buffer size not a multiple of struct size");
         }
         int nelem = buffer.Length / m_structSize;
         T[] arr = new T[nelem];

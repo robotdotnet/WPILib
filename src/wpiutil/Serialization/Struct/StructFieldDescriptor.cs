@@ -70,7 +70,9 @@ public sealed class StructFieldDescriptor
 
     public bool HasEnum => EnumValues is not null;
 
+#pragma warning disable CA1822 // Mark members as static
     public long UintMin => 0;
+#pragma warning restore CA1822 // Mark members as static
     public long UintMax => BitMask;
     public long IntMin => (-(BitMask >> 1)) - 1;
     public long IntMax => BitMask >> 1;

@@ -41,7 +41,7 @@ public interface IGenericProtobuf<T> : IProtobuf
     void GenericUnpackInto(ref T value, IMessage msg);
 }
 
-public interface IProtobuf<T, MessageType> : IGenericProtobuf<T> where MessageType : IMessage<MessageType>
+public interface IProtobuf<T, TMessageType> : IGenericProtobuf<T> where TMessageType : IMessage<TMessageType>
 {
     IMessage IGenericProtobuf<T>.GenericCreateMessage()
     {
@@ -50,26 +50,26 @@ public interface IProtobuf<T, MessageType> : IGenericProtobuf<T> where MessageTy
 
     T IGenericProtobuf<T>.GenericUnpack(IMessage msg)
     {
-        return Unpack((MessageType)msg);
+        return Unpack((TMessageType)msg);
     }
 
     void IGenericProtobuf<T>.GenericPack(IMessage msg, T value)
     {
-        Pack((MessageType)msg, value);
+        Pack((TMessageType)msg, value);
     }
 
     void IGenericProtobuf<T>.GenericUnpackInto(ref T value, IMessage msg)
     {
-        UnpackInto(ref value, (MessageType)msg);
+        UnpackInto(ref value, (TMessageType)msg);
     }
 
-    MessageType CreateMessage();
+    TMessageType CreateMessage();
 
-    T Unpack(MessageType msg);
+    T Unpack(TMessageType msg);
 
-    void Pack(MessageType msg, T value);
+    void Pack(TMessageType msg, T value);
 
-    void UnpackInto(ref T value, MessageType msg)
+    void UnpackInto(ref T value, TMessageType msg)
     {
 
         throw new NotSupportedException("Object does not support UnpackInto");

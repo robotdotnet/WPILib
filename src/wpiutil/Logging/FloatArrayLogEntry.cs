@@ -32,6 +32,6 @@ public class FloatArrayLogEntry(DataLog log, string name, string metadata = "", 
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<float> value, long timestamp = 0)
     {
-        m_log.AppendFloatArray(m_entry, value, timestamp);
+        Log.AppendFloatArray(Entry, value, timestamp);
     }
 }

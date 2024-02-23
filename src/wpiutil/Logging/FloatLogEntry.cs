@@ -32,6 +32,6 @@ public class FloatLogEntry(DataLog log, string name, string metadata = "", long 
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(float value, long timestamp = 0)
     {
-        m_log.AppendFloat(m_entry, value, timestamp);
+        Log.AppendFloat(Entry, value, timestamp);
     }
 }

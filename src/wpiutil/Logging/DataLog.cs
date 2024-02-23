@@ -20,8 +20,8 @@ public sealed unsafe class DataLog : IDisposable
         }
     }
 
-    private GCHandle? gcHandle = null;
-    private readonly DataLogCallback? callback = null;
+    private GCHandle? gcHandle;
+    private readonly DataLogCallback? callback;
 
     public delegate void DataLogCallback(ReadOnlySpan<byte> data);
 

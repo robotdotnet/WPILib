@@ -6,7 +6,7 @@ namespace WPIUtil;
 [NativeMarshalling(typeof(RawFrameReaderMarshaller))]
 public sealed class RawFrameReader : IDisposable
 {
-    private NativeRawFrame internalFrame = new();
+    private NativeRawFrame internalFrame;
 
     public void Dispose()
     {

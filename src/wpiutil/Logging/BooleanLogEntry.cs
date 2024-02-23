@@ -32,6 +32,6 @@ public class BooleanLogEntry(DataLog log, string name, string metadata = "", lon
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(bool value, long timestamp = 0)
     {
-        m_log.AppendBoolean(m_entry, value, timestamp);
+        Log.AppendBoolean(Entry, value, timestamp);
     }
 }

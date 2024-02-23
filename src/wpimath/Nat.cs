@@ -1,6 +1,6 @@
 namespace WPIMath;
 
-public interface Nat
+public interface INat
 {
     public static abstract int Num { get; }
 }

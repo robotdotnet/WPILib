@@ -32,6 +32,6 @@ public class IntegerLogEntry(DataLog log, string name, string metadata = "", lon
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(long value, long timestamp = 0)
     {
-        m_log.AppendInteger(m_entry, value, timestamp);
+        Log.AppendInteger(Entry, value, timestamp);
     }
 }

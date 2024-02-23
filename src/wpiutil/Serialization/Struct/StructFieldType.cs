@@ -6,6 +6,7 @@ namespace WPIUtil.Serialization.Struct;
 public enum StructFieldType
 {
     Bool,
+#pragma warning disable CA1720 // Identifier contains type name
     Char,
     Int8,
     Int16,
@@ -17,6 +18,7 @@ public enum StructFieldType
     Uint64,
     Float,
     Double,
+#pragma warning restore CA1720 // Identifier contains type name
     Struct
 }
 

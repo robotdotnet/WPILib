@@ -32,6 +32,6 @@ public class IntegerArrayLogEntry(DataLog log, string name, string metadata = ""
     /// <param name="timestamp">Time stamp (0 to indicate now)</param>
     public void Append(ReadOnlySpan<long> value, long timestamp = 0)
     {
-        m_log.AppendIntegerArray(m_entry, value, timestamp);
+        Log.AppendIntegerArray(Entry, value, timestamp);
     }
 }

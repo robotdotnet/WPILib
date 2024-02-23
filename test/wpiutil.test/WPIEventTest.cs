@@ -8,7 +8,7 @@ public class WPIEventTest
     [Fact]
     public void TestEvent()
     {
-        using Event evnt = new();
-        using Event evnt2 = new();
+        using WpiEvent evnt = new();
+        using WpiEvent evnt2 = new();
     }
 }

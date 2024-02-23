@@ -210,7 +210,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         private Thread? m_thread;
         private NtListenerPoller m_poller;
         private bool m_waitQueue;
-        private readonly Event m_waitQueueEvent = new();
+        private readonly WpiEvent m_waitQueueEvent = new();
         private readonly NtInst m_inst = inst;
 
         public NtListener Add(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
