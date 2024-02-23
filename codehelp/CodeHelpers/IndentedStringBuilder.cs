@@ -34,6 +34,16 @@ public class IndentedStringBuilder
         return new(this, count);
     }
 
+    public IndentedScope EnterEmptyScope()
+    {
+        return new(this);
+    }
+
+    public void Clear() {
+        m_builder.Clear();
+        m_scopeCount = 0;
+    }
+
     public void EnterManualScope()
     {
         AppendFullLine("{");
@@ -51,19 +61,35 @@ public class IndentedStringBuilder
         return m_builder.ToString();
     }
 
-    public StringBuilder Builder => m_builder;
-
-    public readonly ref struct IndentedScope
+    public ref struct IndentedScope
     {
         private readonly IndentedStringBuilder m_builder;
-        private readonly int m_count;
+        private int m_count;
 
-        public IndentedScope(IndentedStringBuilder builder, int count = 0)
+        public IndentedScope(IndentedStringBuilder builder, int count)
         {
             m_builder = builder;
             builder.AppendFullLine("{");
             m_count = count + 1;
             m_builder.m_scopeCount++;
+        }
+
+        public IndentedScope(IndentedStringBuilder builder)
+        {
+            m_builder = builder;
+            m_count = 0;
+        }
+
+        public void AddLineToScope() {
+            m_builder.AppendFullLine("{");
+            m_builder.m_scopeCount++;
+            m_count++;
+        }
+
+        public void RemoveLineFromScope() {
+            m_builder.m_scopeCount--;
+            m_count--;
+            m_builder.AppendFullLine("}");
         }
 
         public void Dispose()

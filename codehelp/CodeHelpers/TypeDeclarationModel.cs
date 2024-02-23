@@ -13,17 +13,17 @@ public enum TypeModifiers
     IsRecord = 4,
 }
 
-public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, string TypeName, EquatableArray<TypeParameterModel> TypeParameters, string? Namespace, TypeDeclarationModel? Parent)
+public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, string TypeName, EquatableArray<TypeParameterModel> TypeParameters, NamespaceModel? Namespace, TypeDeclarationModel? Parent)
 {
-    public void WriteFileName(StringBuilder builder)
+    public void WriteFileName(IndentedStringBuilder builder)
     {
         if (Parent is not null)
         {
             Parent.WriteFileName(builder);
         }
-        else if (Namespace is not null)
+        else
         {
-            builder.Append($"{Namespace}.");
+            Namespace!.WriteFileName(builder);
         }
         builder.Append($"{TypeName}.");
     }
@@ -66,31 +66,28 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         }
     }
 
-    private int WriteClassDeclarationCount(IndentedStringBuilder builder, bool addUnsafe, string inheritanceToAdd)
+    public IndentedStringBuilder.IndentedScope WriteClassDeclaration(IndentedStringBuilder builder, bool addUnsafe, string? inheritanceToAdd)
     {
         // Write all the way up
-        int indentCount = 0;
+        IndentedStringBuilder.IndentedScope scope;
         if (Parent is not null)
         {
-            indentCount = Parent.WriteClassDeclarationCount(builder, false, "");
+            scope = Parent.WriteClassDeclaration(builder, false, null);
         }
-        else if (Namespace is not null)
+        else
         {
-            indentCount += 1;
-            builder.AppendFullLine($"namespace {Namespace}");
-            builder.EnterManualScope();
+            // We are guaranteed to have a namespace here
+            scope = Namespace!.WriteNamespaceDeclaration(builder);
         }
         builder.StartLine();
         builder.Append($"{GetClassDeclaration(addUnsafe)} {TypeName}");
         GetGenericParameters(builder);
+        if (inheritanceToAdd is not null) {
+            builder.Append(inheritanceToAdd);
+        }
         builder.EndLine();
-        return indentCount;
-    }
-
-    public IndentedStringBuilder.IndentedScope WriteClassDeclaration(IndentedStringBuilder builder, bool addUnsafe, string inheritanceToAdd)
-    {
-        int count = WriteClassDeclarationCount(builder, addUnsafe, inheritanceToAdd);
-        return builder.EnterScope(count);
+        scope.AddLineToScope();
+        return scope;
     }
 }
 
@@ -129,7 +126,7 @@ public static class TypeDeclarationExtensions
             typeParameters = [];
         }
 
-        string? nspace = null;
+        NamespaceModel? nspace = null;
 
         TypeDeclarationModel? parent = null;
         if (symbol.ContainingType is not null)
@@ -138,7 +135,7 @@ public static class TypeDeclarationExtensions
         }
         else
         {
-            nspace = symbol.GetNamespace();
+            nspace = symbol.ContainingNamespace.GetNamespaceModel();
         }
 
         return new(symbol.TypeKind, modifiers, symbol.Name, typeParameters, nspace, parent);

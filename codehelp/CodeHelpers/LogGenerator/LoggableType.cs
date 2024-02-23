@@ -13,7 +13,7 @@ internal record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArra
 {
     private IndentedScope AddClassDeclaration(IndentedStringBuilder builder)
     {
-        string iLogged = "";
+        string? iLogged = null;
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
@@ -112,10 +112,10 @@ internal static class LoggableTypeExtensions
         {
             IndentedStringBuilder builder = new IndentedStringBuilder();
 
-            loggableType.TypeDeclaration.WriteFileName(builder.Builder);
-            builder.Builder.Append(".g.cs");
-            string fileName = builder.Builder.ToString();
-            builder.Builder.Clear();
+            loggableType.TypeDeclaration.WriteFileName(builder);
+            builder.Append(".g.cs");
+            string fileName = builder.ToString();
+            builder.Clear();
 
             loggableType.WriteMethod(builder);
 
