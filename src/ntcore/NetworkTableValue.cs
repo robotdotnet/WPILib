@@ -9,9 +9,9 @@ namespace NetworkTables;
 [StructLayout(LayoutKind.Auto)]
 public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>
 {
-    public static unsafe void FreeArray(NetworkTableValueMarshaller.NativeNetworkTableValue* ptr, int len)
+    public static unsafe void FreeArray(NetworkTableValueMarshaller.NativeNetworkTableValue* array, int len)
     {
-        NtCore.DisposeValueArray(ptr, (nuint)len);
+        NtCore.DisposeValueArray(array, (nuint)len);
     }
 
     /// <summary>

@@ -5,6 +5,7 @@ public enum NetworkTableType : uint
 {
     Unassigned = 0,
     Boolean = 0x01,
+#pragma warning disable CA1720 // Identifier contains type name
     Double = 0x02,
     String = 0x04,
     Raw = 0x08,
@@ -14,6 +15,7 @@ public enum NetworkTableType : uint
     Rpc = 0x80,
     Integer = 0x100,
     Float = 0x200,
+#pragma warning restore CA1720 // Identifier contains type name
     IntegerArray = 0x400,
     FloatArray = 0x800
 }

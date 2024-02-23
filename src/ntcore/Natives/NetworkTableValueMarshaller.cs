@@ -27,7 +27,7 @@ public static unsafe class NetworkTableValueMarshaller
 
         public static NativeNetworkTableValue ConvertToUnmanaged(in NetworkTableValue managed) => throw new NotSupportedException();
     }
-
+#pragma warning disable CA1051 // Do not declare visible instance fields
     [StructLayout(LayoutKind.Sequential)]
     public struct NativeNetworkTableValue
     {
@@ -113,5 +113,5 @@ public static unsafe class NetworkTableValueMarshaller
             }
         }
     }
-
+#pragma warning restore CA1051 // Do not declare visible instance fields
 }

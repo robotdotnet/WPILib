@@ -8,8 +8,8 @@ namespace CsCore.Handles;
 [NativeMarshalling(typeof(WPIIntHandleMarshaller<CsProperty>))]
 public record struct CsProperty(int Handle) : IWPIIntHandle, INativeArrayFree<int>
 {
-    public static unsafe void FreeArray(int* ptr, int len)
+    public static unsafe void FreeArray(int* array, int len)
     {
-        CsNative.FreeEnumeratedProperties(ptr, len);
+        CsNative.FreeEnumeratedProperties(array, len);
     }
 }

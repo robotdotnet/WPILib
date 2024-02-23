@@ -183,7 +183,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         {
             return new NetworkTable(this, "");
         }
-        else if (key[0] == NetworkTable.PATH_SEPARATOR)
+        else if (key[0] == NetworkTable.PathSeparator)
         {
             return new NetworkTable(this, key);
         }
@@ -203,7 +203,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.WaitForQueue(timeout);
     }
 
-    private class ListenerStorage(NtInst inst) : IDisposable
+    private sealed class ListenerStorage(NtInst inst) : IDisposable
     {
         private readonly object m_lock = new();
         private readonly Dictionary<NtListener, Consumer<NetworkTableEvent>> m_listeners = [];

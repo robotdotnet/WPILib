@@ -18,9 +18,9 @@ public readonly struct NetworkTableEvent : INativeArrayFree<NetworkTableEventMar
     public LogMessage? LogMessage { get; init; }
     public TimeSyncEventData? TimeSyncData { get; init; }
 
-    public static unsafe void FreeArray(NetworkTableEventMarshaller.NativeNetworkTableEvent* ptr, int len)
+    public static unsafe void FreeArray(NetworkTableEventMarshaller.NativeNetworkTableEvent* array, int len)
     {
-        NtCore.DisposeEventArray(ptr, (nuint)len);
+        NtCore.DisposeEventArray(array, (nuint)len);
     }
 }
 

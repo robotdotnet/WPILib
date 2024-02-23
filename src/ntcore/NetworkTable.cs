@@ -6,12 +6,12 @@ namespace NetworkTables;
 
 public sealed partial class NetworkTable : IEquatable<NetworkTable?>
 {
-    public const char PATH_SEPARATOR = '/';
+    public const char PathSeparator = '/';
     private readonly string m_pathWithSep;
 
     public static ReadOnlySpan<char> BasenameKey(ReadOnlySpan<char> key)
     {
-        int slash = key.LastIndexOf(PATH_SEPARATOR);
+        int slash = key.LastIndexOf(PathSeparator);
         if (slash == -1)
         {
             return key;
@@ -24,14 +24,14 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         string normalized;
         if (withLeadingSlash)
         {
-            normalized = $"{PATH_SEPARATOR}{key}";
+            normalized = $"{PathSeparator}{key}";
         }
         else
         {
             normalized = key;
         }
-        normalized = normalized.Replace($"{PATH_SEPARATOR}{PATH_SEPARATOR}", $"{PATH_SEPARATOR}");
-        if (!withLeadingSlash && normalized[0] == PATH_SEPARATOR)
+        normalized = normalized.Replace($"{PathSeparator}{PathSeparator}", $"{PathSeparator}");
+        if (!withLeadingSlash && normalized[0] == PathSeparator)
         {
             normalized = normalized[1..];
         }
@@ -47,7 +47,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
             hierarchy.Add(normal);
             return hierarchy;
         }
-        for (int i = 0; ; i = normal.IndexOf(PATH_SEPARATOR, i + 1))
+        for (int i = 0; ; i = normal.IndexOf(PathSeparator, i + 1))
         {
             if (i == -1)
             {
@@ -66,7 +66,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
     internal NetworkTable(NetworkTableInstance inst, string path)
     {
         Path = path;
-        m_pathWithSep = $"{path}{PATH_SEPARATOR}";
+        m_pathWithSep = $"{path}{PathSeparator}";
         Instance = inst;
     }
 
@@ -94,7 +94,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
 
     public bool ContainsSubTable(string key)
     {
-        Topic[] topics = Instance.GetTopics($"{m_pathWithSep}{key}{PATH_SEPARATOR}");
+        Topic[] topics = Instance.GetTopics($"{m_pathWithSep}{key}{PathSeparator}");
         return topics.Length != 0;
     }
 
@@ -105,7 +105,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
-            if (relativeKey.IndexOf(PATH_SEPARATOR) != -1)
+            if (relativeKey.IndexOf(PathSeparator) != -1)
             {
                 continue;
             }
@@ -121,7 +121,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
-            if (relativeKey.IndexOf(PATH_SEPARATOR) != -1)
+            if (relativeKey.IndexOf(PathSeparator) != -1)
             {
                 continue;
             }
@@ -137,7 +137,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
-            if (relativeKey.IndexOf(PATH_SEPARATOR) != -1)
+            if (relativeKey.IndexOf(PathSeparator) != -1)
             {
                 continue;
             }
@@ -153,7 +153,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
         foreach (TopicInfo info in Instance.GetTopicInfo(m_pathWithSep, types))
         {
             ReadOnlySpan<char> relativeKey = info.Name.AsSpan()[prefixLen..];
-            int endSubTable = relativeKey.IndexOf(PATH_SEPARATOR);
+            int endSubTable = relativeKey.IndexOf(PathSeparator);
             if (endSubTable == -1)
             {
                 continue;
@@ -214,7 +214,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
                 return;
             }
             string relativeKey = topicName[prefixLex..];
-            if (relativeKey.Contains(PATH_SEPARATOR))
+            if (relativeKey.Contains(PathSeparator))
             {
                 // part of a subtable
                 return;
@@ -231,7 +231,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
 
     public delegate void SubTableListener(NetworkTable parent, string name, NetworkTable table);
 
-    private class SubTableListenerHolder(int prefixLen, NetworkTable parent, SubTableListener listener)
+    private sealed class SubTableListenerHolder(int prefixLen, NetworkTable parent, SubTableListener listener)
     {
         private readonly int m_prefixLen = prefixLen;
         private readonly NetworkTable m_parent = parent;
@@ -245,7 +245,7 @@ public sealed partial class NetworkTable : IEquatable<NetworkTable?>
                 return;
             }
             var relativeKey = ntEvent.TopicInfo.Value.Name.AsSpan()[m_prefixLen..];
-            int endSubTable = relativeKey.IndexOf(PATH_SEPARATOR);
+            int endSubTable = relativeKey.IndexOf(PathSeparator);
             if (endSubTable == -1)
             {
                 return;

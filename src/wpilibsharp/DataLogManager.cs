@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using NetworkTables;
 using NetworkTables.Handles;
@@ -8,7 +9,7 @@ namespace WPILib;
 
 public static class DataLogManger
 {
-    private static DataLog? m_log = null;
+    private static DataLog? m_log;
     private static bool m_stopped;
     private static string? m_logDir;
     private static bool m_filenameOverride;
@@ -37,7 +38,7 @@ public static class DataLogManger
                 // Delete all previously existing FRC_TBD_*.wpilog files. These only exist when the robot
                 // never connects to the DS, so they are very unlikely to have useful data and just clutter
                 // the filesystem.
-                var files = Directory.GetFiles(m_logDir).Where(name => Path.GetFileName(name).StartsWith("FRC_TBD_") && name.EndsWith(".wpilog"));
+                var files = Directory.GetFiles(m_logDir).Where(name => Path.GetFileName(name).StartsWith("FRC_TBD_", StringComparison.InvariantCulture) && name.EndsWith(".wpilog", StringComparison.InvariantCulture));
                 foreach (var file in files)
                 {
                     try
@@ -206,7 +207,7 @@ public static class DataLogManger
         filename.Append("FRC_TBD_");
         for (int i = 0; i < 4; i++)
         {
-            filename.Append(rnd.Next(0x10000).ToString("x4"));
+            filename.Append(rnd.Next(0x10000).ToString("x4", CultureInfo.InvariantCulture));
         }
         filename.Append(".wpilog");
         return filename.ToString();
@@ -238,9 +239,9 @@ public static class DataLogManger
                 var files = Directory.GetFiles(logDir).Where(name =>
                 {
                     name = Path.GetFileName(name);
-                    return name.StartsWith("FRC_")
-                        && name.EndsWith(".wpilog")
-                        && !name.StartsWith("FRC_TBD_");
+                    return name.StartsWith("FRC_", StringComparison.InvariantCultureIgnoreCase)
+                        && name.EndsWith(".wpilog", StringComparison.InvariantCultureIgnoreCase)
+                        && !name.StartsWith("FRC_TBD_", StringComparison.InvariantCultureIgnoreCase);
                 }).OrderBy(File.GetLastWriteTimeUtc);
                 int count = 0;
                 foreach (var file in files)

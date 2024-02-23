@@ -349,7 +349,9 @@ public class StringTopic : Topic
     /// </param>
     /// <param name="options">publish and/or subscribe options</param>
     /// <returns>entry</returns>
+#pragma warning disable CA1711 // Identifiers should not have incorrect suffix
     public IStringEntry GetEntryEx(
+#pragma warning restore CA1711 // Identifiers should not have incorrect suffix
         ReadOnlySpan<byte> typeString,
         string defaultValue,
         PubSubOptions options)

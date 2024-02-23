@@ -6,6 +6,7 @@ namespace WPIHal.Marshal;
 [CustomMarshaller(typeof(string), MarshalMode.ElementOut, typeof(NullTerminatedStringMarshaller<>))]
 public static unsafe class NullTerminatedStringMarshaller<TFree> where TFree : INullTerminatedStringFree<byte>
 {
+
     public static string? ConvertToManaged(byte* unmanaged)
     {
         string? ret = System.Runtime.InteropServices.Marshal.PtrToStringUTF8((nint)unmanaged);

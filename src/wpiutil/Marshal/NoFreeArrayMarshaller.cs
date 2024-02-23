@@ -2,7 +2,6 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIUtil.Marshal;
 
-#pragma warning disable CA1000 // Do not declare static members on generic types
 [CustomMarshaller(typeof(CustomMarshallerAttribute.GenericPlaceholder[]), MarshalMode.ManagedToUnmanagedOut, typeof(NoFreeArrayMarshaller<,>))]
 [ContiguousCollectionMarshaller]
 public static unsafe class NoFreeArrayMarshaller<T, TUnmanagedElement> where TUnmanagedElement : unmanaged
@@ -22,4 +21,3 @@ public static unsafe class NoFreeArrayMarshaller<T, TUnmanagedElement> where TUn
     public static ReadOnlySpan<TUnmanagedElement> GetUnmanagedValuesSource(TUnmanagedElement* unmanagedValue, int numElements)
         => new(unmanagedValue, numElements);
 }
-#pragma warning restore CA1000 // Do not declare static members on generic types

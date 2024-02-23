@@ -10,9 +10,9 @@ namespace CsCore;
 [StructLayout(LayoutKind.Auto)]
 public record struct VideoMode(PixelFormat PixelFormat, int Width, int Height, int Fps) : INativeArrayFree<VideoModeMarshaller.NativeVideoMode>
 {
-    public static unsafe void FreeArray(VideoModeMarshaller.NativeVideoMode* ptr, int len)
+    public static unsafe void FreeArray(VideoModeMarshaller.NativeVideoMode* array, int len)
     {
-        CsNative.FreeEnumeratedVideoModes(ptr, len);
+        CsNative.FreeEnumeratedVideoModes(array, len);
     }
 }
 

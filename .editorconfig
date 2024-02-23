@@ -18,6 +18,9 @@ end_of_line = lf
 # .NET Coding Conventions     #
 ###############################
 [*.{cs,vb}]
+dotnet_diagnostic.CA1711.severity = none
+dotnet_diagnostic.CA1716.severity = none
+dotnet_diagnostic.CA1000.severity = none
 # Organize usings
 dotnet_sort_system_directives_first = true
 # this. preferences

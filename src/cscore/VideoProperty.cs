@@ -116,9 +116,9 @@ public class VideoProperty : IEquatable<VideoProperty?>
         return res;
     }
 
-    public void Set()
+    public void Set(int value)
     {
-
+        CsNative.SetProperty(Handle, value);
     }
 
     internal VideoProperty(CsProperty handle)

@@ -6,7 +6,7 @@ public sealed class LogAttribute : Attribute
     public string Key { get; init; } = "";
     public LogLevel LogLevel { get; init; } = LogLevel.Default;
     public LogType LogType { get; init; } = LogType.Nt | LogType.File;
-    public bool UseProtobuf { get; init; } = false;
+    public bool UseProtobuf { get; init; }
 }
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]

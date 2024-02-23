@@ -16,9 +16,9 @@ public readonly struct UsbCameraInfo : INativeArrayFree<UsbCameraInfoMarshaller.
     public required int VendorId { get; init; }
     public required int ProductId { get; init; }
 
-    public static unsafe void FreeArray(UsbCameraInfoMarshaller.NativeUsbCameraInfo* ptr, int len)
+    public static unsafe void FreeArray(UsbCameraInfoMarshaller.NativeUsbCameraInfo* array, int len)
     {
-        CsNative.FreeEnumeratedUsbCameras(ptr, len);
+        CsNative.FreeEnumeratedUsbCameras(array, len);
     }
 }
 

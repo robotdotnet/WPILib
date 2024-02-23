@@ -534,17 +534,17 @@ public static partial class CsNative
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport(LibraryName, EntryPoint = "CS_SetLogger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial void SetLogger(delegate* unmanaged[Cdecl]<uint, byte*, uint, byte*, void> func, uint min_level);
+    public static unsafe partial void SetLogger(delegate* unmanaged[Cdecl]<uint, byte*, uint, byte*, void> func, uint minLevel);
 
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport(LibraryName, EntryPoint = "CS_SetDefaultLogger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDefaultLogger(uint min_level);
+    public static partial void SetDefaultLogger(uint minLevel);
 
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport(LibraryName, EntryPoint = "CS_Shutdown")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CS_Shutdown();
+    public static partial void Shutdown();
 
     [LibraryImport(LibraryName, EntryPoint = "CS_EnumerateUsbCameras")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

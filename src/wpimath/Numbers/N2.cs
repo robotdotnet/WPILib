@@ -1,6 +1,6 @@
 namespace WPIMath.Numbers;
 
-public sealed class N2 : Nat
+public sealed class N2 : INat
 {
     private N2() { }
 

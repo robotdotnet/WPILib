@@ -14,14 +14,9 @@ public record struct TopicInfo(NtTopic TopicHandle, string Name, NetworkTableTyp
         return new Topic(inst, TopicHandle);
     }
 
-    public static unsafe void Free(TopicInfoMarshaller.NativeTopicInfo* ptr)
+    public static unsafe void FreeArray(TopicInfoMarshaller.NativeTopicInfo* array, int len)
     {
-        NtCore.DisposeTopicInfo(ptr);
-    }
-
-    public static unsafe void FreeArray(TopicInfoMarshaller.NativeTopicInfo* ptr, int len)
-    {
-        NtCore.DisposeTopicInfoArray(ptr, (nuint)len);
+        NtCore.DisposeTopicInfoArray(array, (nuint)len);
     }
 }
 

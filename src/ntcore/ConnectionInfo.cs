@@ -8,9 +8,9 @@ namespace NetworkTables.Natives;
 [StructLayout(LayoutKind.Auto)]
 public record struct ConnectionInfo(string RemoteId, string RemoteIp, uint RemotePort, ulong LastUpdate, uint ProtocolVersion) : INativeArrayFree<ConnectionInfoMarshaller.NativeConnectionInfo>
 {
-    public static unsafe void FreeArray(ConnectionInfoMarshaller.NativeConnectionInfo* ptr, int len)
+    public static unsafe void FreeArray(ConnectionInfoMarshaller.NativeConnectionInfo* array, int len)
     {
-        NtCore.DisposeConnectionInfoArray(ptr, (nuint)len);
+        NtCore.DisposeConnectionInfoArray(array, (nuint)len);
     }
 }
 
