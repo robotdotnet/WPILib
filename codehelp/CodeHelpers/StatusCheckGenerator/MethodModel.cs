@@ -88,7 +88,14 @@ internal record MethodModel(TypeDeclarationModel TypeDeclaration, string MethodD
 
     public void WriteStatusCheck(IndentedStringBuilder builder)
     {
-        builder.AppendFullLine($"__tmpStatus.{StatusCheckMethod};");
+        if (string.IsNullOrWhiteSpace(StatusCheckMethod))
+        {
+            builder.AppendFullLine("__tmpStatus");
+        }
+        else
+        {
+            builder.AppendFullLine(string.Format(StatusCheckMethod, "__tmpStatus"));
+        }
     }
 
     public void WriteReturn(IndentedStringBuilder builder)
@@ -184,7 +191,7 @@ internal static class MethodModelExtensions
 
         var classSymbol = symbol.ContainingType;
 
-        string statusCheckMethod = "ThrowIfFailed()";
+        string statusCheckMethod = "";
 
         foreach (var attribute in symbol.GetAttributes())
         {
