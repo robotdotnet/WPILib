@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Stereologue;
 using WPILib;
 
 namespace TestRobot;
@@ -20,4 +21,11 @@ internal static class RobotInitializer
         // accidentally used too early later
         RobotRunner.InitializeHAL();
     }
+}
+
+[GenerateLog]
+public partial class MyClass
+{
+    [Log]
+    public int ToLog2;
 }

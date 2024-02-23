@@ -113,7 +113,7 @@ internal static class LoggableTypeExtensions
             IndentedStringBuilder builder = new IndentedStringBuilder();
 
             loggableType.TypeDeclaration.WriteFileName(builder);
-            builder.Append("g.cs");
+            builder.Append("g");
             string fileName = builder.ToString();
             builder.Clear();
 
