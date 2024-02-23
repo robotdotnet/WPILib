@@ -221,22 +221,21 @@ internal static class LoggableMemberExtensions
             return DeclarationKind.NullableValueType;
         }
 
-        var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces);
-        switch (typeSymbol.ToDisplayString(fmt))
+        switch (typeSymbol.GetFullyQualifiedTypeNameWithoutGenerics())
         {
-            case "System.ReadOnlySpan":
+            case "global::System.ReadOnlySpan":
                 namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
                 innerType = namedTypeSymbol.TypeArguments[0];
                 return DeclarationKind.ReadOnlySpan;
-            case "System.Span":
+            case "global::System.Span":
                 namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
                 innerType = namedTypeSymbol.TypeArguments[0];
                 return DeclarationKind.Span;
-            case "System.ReadOnlyMemory":
+            case "global::System.ReadOnlyMemory":
                 namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
                 innerType = namedTypeSymbol.TypeArguments[0];
                 return DeclarationKind.ReadOnlyMemory;
-            case "System.Memory":
+            case "global::System.Memory":
                 namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
                 innerType = namedTypeSymbol.TypeArguments[0];
                 return DeclarationKind.Memory;
@@ -276,7 +275,7 @@ internal static class LoggableMemberExtensions
         }
         token.ThrowIfCancellationRequested();
         // If we know we already implement ILogged
-        if (typeSymbol.AllInterfaces.Where(x => x.ToDisplayString() == Strings.ILoggedName).Any())
+        if (typeSymbol.HasILoggedInterface())
         {
             return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
         }
@@ -300,24 +299,23 @@ internal static class LoggableMemberExtensions
                 {
                     continue;
                 }
-                if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.ToDisplayString() == Strings.StereologgerClass)
+                if (parameters[0].Type.SpecialType == SpecialType.System_String && parameters[1].Type.IsLoggerType())
                 {
                     return new(DeclarationType.Logged, (innerNullable | typeSymbol.IsReferenceType) ? SpecialType.System_Nullable_T : SpecialType.None, nestedKind);
                 }
             }
         }
 
-        var fmt = new SymbolDisplayFormat(typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces, genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters);
         token.ThrowIfCancellationRequested();
-        var fullTypeName = typeSymbol.ToDisplayString(fmt);
+        var fullTypeName = typeSymbol.GetFullyQualifiedTypeName();
         token.ThrowIfCancellationRequested();
-        var structName = $"WPIUtil.Serialization.Struct.IStructSerializable<{fullTypeName}>";
-        var protobufName = $"WPIUtil.Serialization.Protobuf.IProtobufSerializable<{fullTypeName}>";
+        var structName = $"{Strings.IStructSerializableName}<{fullTypeName}>";
+        var protobufName = $"{Strings.IProtobufSerializableString}<{fullTypeName}>";
 
         foreach (var inf in typeSymbol.AllInterfaces)
         {
             token.ThrowIfCancellationRequested();
-            var interfaceName = inf.ToDisplayString();
+            var interfaceName = inf.GetFullyQualifiedTypeName();
             token.ThrowIfCancellationRequested();
             if (interfaceName == structName)
             {

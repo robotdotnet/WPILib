@@ -60,7 +60,7 @@ public static class LoggerDiagnostics
             switch (failureMode)
             {
                 case FailureMode.UnknownTypeToLog:
-                    context.ReportDiagnostic(Diagnostic.Create(LoggedHasUnknownType, location, symbol.Name, typeSymbol?.ToDisplayString()));
+                    context.ReportDiagnostic(Diagnostic.Create(LoggedHasUnknownType, location, symbol.Name, typeSymbol?.Name));
                     break;
                 case FailureMode.AttributeUnknownMemberType:
                     context.ReportDiagnostic(Diagnostic.Create(UnknownMemberType, location, symbol.Name));
@@ -69,7 +69,7 @@ public static class LoggerDiagnostics
                     context.ReportDiagnostic(Diagnostic.Create(ProtobufIsArray, location, symbol.Name));
                     break;
                 case FailureMode.UnknownTypeNonArray:
-                    context.ReportDiagnostic(Diagnostic.Create(LoggedHasUnknownType, location, symbol.Name, typeSymbol?.ToDisplayString()));
+                    context.ReportDiagnostic(Diagnostic.Create(LoggedHasUnknownType, location, symbol.Name, typeSymbol?.Name));
                     break;
                 case FailureMode.UnknownTypeArray:
                     if (typeSymbol is ITypeSymbol actualTypeSymbol)
@@ -77,11 +77,11 @@ public static class LoggerDiagnostics
                         actualTypeSymbol.GetInnerType(out var innerSymbol);
                         if (innerSymbol.SpecialType.IsIntegerLikeType())
                         {
-                            context.ReportDiagnostic(Diagnostic.Create(UnknownSpecialTypeIntArray, location, symbol.Name, typeSymbol?.ToDisplayString()));
+                            context.ReportDiagnostic(Diagnostic.Create(UnknownSpecialTypeIntArray, location, symbol.Name, typeSymbol?.Name));
                             break;
                         }
                     }
-                    context.ReportDiagnostic(Diagnostic.Create(UnknownSpecialTypeArray, location, symbol.Name, typeSymbol?.ToDisplayString()));
+                    context.ReportDiagnostic(Diagnostic.Create(UnknownSpecialTypeArray, location, symbol.Name, typeSymbol?.Name));
                     break;
                 case FailureMode.MethodReturnsVoid:
                     context.ReportDiagnostic(Diagnostic.Create(LoggedMethodReturnsVoid, location, symbol.Name));
@@ -93,7 +93,7 @@ public static class LoggerDiagnostics
                     context.ReportDiagnostic(Diagnostic.Create(NullableStructArray, location, symbol.Name));
                     break;
                 case FailureMode.MissingGenerateLog:
-                    context.ReportDiagnostic(Diagnostic.Create(MissingGenerateLog, location, symbol.Name, symbol.ContainingType?.ToDisplayString()));
+                    context.ReportDiagnostic(Diagnostic.Create(MissingGenerateLog, location, symbol.Name, symbol.ContainingType?.Name));
                     break;
                 default:
                     context.ReportDiagnostic(Diagnostic.Create(UnknownFailureMode, location));

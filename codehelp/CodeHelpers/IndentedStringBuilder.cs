@@ -51,6 +51,8 @@ public class IndentedStringBuilder
         return m_builder.ToString();
     }
 
+    public StringBuilder Builder => m_builder;
+
     public readonly ref struct IndentedScope
     {
         private readonly IndentedStringBuilder m_builder;

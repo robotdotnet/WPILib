@@ -14,7 +14,7 @@ internal static class LogAttributeInfoExtensions
         {
             return null;
         }
-        if (attributeClass.ToDisplayString() == Strings.LogAttributeName)
+        if (attributeClass.IsLogAttributeClass())
         {
             token.ThrowIfCancellationRequested();
 

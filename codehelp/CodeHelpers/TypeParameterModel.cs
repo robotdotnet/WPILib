@@ -147,7 +147,7 @@ public static class TypeParameterExtensions
                 for (int i = 0; i < typeConstraints.Length; i++)
                 {
                     var constraintSymbol = typeConstraints[i];
-                    var name = constraintSymbol.GetFullTypeName();
+                    var name = constraintSymbol.GetFullyQualifiedTypeName();
                     builder.Add(new DirectTypeConstraint(name, nullableConstraints[i] == NullableAnnotation.Annotated));
                 }
 

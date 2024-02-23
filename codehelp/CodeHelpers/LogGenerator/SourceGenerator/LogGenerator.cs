@@ -10,7 +10,7 @@ public class LogGenerator : IIncrementalGenerator
     {
         var attributedTypes = context.SyntaxProvider
             .ForAttributeWithMetadataName(
-                Strings.GenerateLogAttributeName,
+                Strings.GenerateLogAttributeNameWithoutGlobal,
                 predicate: static (s, _) => s is TypeDeclarationSyntax,
                 transform: static (ctx, token) =>
                 {

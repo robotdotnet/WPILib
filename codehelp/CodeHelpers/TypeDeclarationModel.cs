@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Text;
 using Microsoft.CodeAnalysis;
 
 namespace WPILib.CodeHelpers;
@@ -14,6 +15,19 @@ public enum TypeModifiers
 
 public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, string TypeName, EquatableArray<TypeParameterModel> TypeParameters, string? Namespace, TypeDeclarationModel? Parent)
 {
+    public void WriteFileName(StringBuilder builder)
+    {
+        if (Parent is not null)
+        {
+            Parent.WriteFileName(builder);
+        }
+        else if (Namespace is not null)
+        {
+            builder.Append($"{Namespace}.");
+        }
+        builder.Append($"{TypeName}.");
+    }
+
     private string GetClassDeclaration(bool addUnsafe)
     {
         string recordString = (Modifiers & TypeModifiers.IsRecord) != 0 ? "record " : "";

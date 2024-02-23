@@ -9,7 +9,7 @@ using static WPILib.CodeHelpers.IndentedStringBuilder;
 namespace WPILib.CodeHelpers.LogGenerator;
 
 // Contains all information on a loggable type
-internal record LoggableType(TypeDeclarationModel TypeDeclaration, string FileName, string TypeName, string? TypeNamespace, EquatableArray<LoggableMember> LoggableMembers)
+internal record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<LoggableMember> LoggableMembers)
 {
     private IndentedScope AddClassDeclaration(IndentedStringBuilder builder)
     {
@@ -17,7 +17,7 @@ internal record LoggableType(TypeDeclarationModel TypeDeclaration, string FileNa
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
-            iLogged = $" : global::{Strings.ILoggedName} ";
+            iLogged = $" : {Strings.LoggerInterfaceFullyQualified} ";
         }
 
         return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged);
@@ -75,14 +75,7 @@ internal static class LoggableTypeExtensions
             failures?.Add((loggableMemberFailure, member));
         }
 
-        var nameString = classSymbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-        token.ThrowIfCancellationRequested();
-
-        var nspace = classSymbol.ContainingNamespace is { IsGlobalNamespace: false } ns ? ns.ToDisplayString() : null;
-        token.ThrowIfCancellationRequested();
-
-        var fmt = new SymbolDisplayFormat(genericsOptions: SymbolDisplayGenericsOptions.None);
-        var loggableType = new LoggableType(typeDeclType, $"{nspace}{classSymbol.ToDisplayString(fmt)}{classSymbol.MetadataName}", nameString, nspace, loggableMembers.ToImmutable());
+        var loggableType = new LoggableType(typeDeclType, loggableMembers.ToImmutable());
 
         return loggableType;
     }
@@ -106,7 +99,7 @@ internal static class LoggableTypeExtensions
             {
                 foreach (var location in context.Symbol.Locations)
                 {
-                    context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, context.Symbol.ToDisplayString()));
+                    context.ReportDiagnostic(Diagnostic.Create(LoggerDiagnostics.MissingGenerateLog, location, context.Symbol.Name));
                 }
             }
         }
@@ -119,9 +112,14 @@ internal static class LoggableTypeExtensions
         {
             IndentedStringBuilder builder = new IndentedStringBuilder();
 
+            loggableType.TypeDeclaration.WriteFileName(builder.Builder);
+            builder.Builder.Append(".g.cs");
+            string fileName = builder.Builder.ToString();
+            builder.Builder.Clear();
+
             loggableType.WriteMethod(builder);
 
-            context.AddSource($"Stereologue.{loggableType.FileName}.g.cs", SourceText.From(builder.ToString(), Encoding.UTF8));
+            context.AddSource(fileName, SourceText.From(builder.ToString(), Encoding.UTF8));
         }
     }
 }
