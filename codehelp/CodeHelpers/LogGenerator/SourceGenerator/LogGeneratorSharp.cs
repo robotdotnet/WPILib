@@ -3,8 +3,8 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace WPILib.CodeHelpers.LogGenerator.SourceGenerator;
 
-[Generator]
-public class LogGenerator : IIncrementalGenerator
+[Generator(LanguageNames.CSharp)]
+public class LogGeneratorSharp : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {

@@ -39,7 +39,8 @@ public class IndentedStringBuilder
         return new(this);
     }
 
-    public void Clear() {
+    public void Clear()
+    {
         m_builder.Clear();
         m_scopeCount = 0;
     }
@@ -80,13 +81,15 @@ public class IndentedStringBuilder
             m_count = 0;
         }
 
-        public void AddLineToScope() {
+        public void AddLineToScope()
+        {
             m_builder.AppendFullLine("{");
             m_builder.m_scopeCount++;
             m_count++;
         }
 
-        public void RemoveLineFromScope() {
+        public void RemoveLineFromScope()
+        {
             m_builder.m_scopeCount--;
             m_count--;
             m_builder.AppendFullLine("}");

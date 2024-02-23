@@ -14,6 +14,6 @@ public abstract class DataLogEntry(DataLog log, string name, string type, string
         Log.Finish(Entry, timestamp);
     }
 
-    protected DataLog Log {get;} = log;
-    protected DataLogEntryHandle Entry {get;} = log.Start(name, type, metadata, timestamp);
+    protected DataLog Log { get; } = log;
+    protected DataLogEntryHandle Entry { get; } = log.Start(name, type, metadata, timestamp);
 }

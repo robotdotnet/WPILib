@@ -23,6 +23,16 @@ public class LogGeneratorFixer : CodeFixProvider
         return WellKnownFixAllProviders.BatchFixer;
     }
 
+    private SyntaxTrivia _detectLineBreakTrivia(SyntaxNode root)
+    {
+        var result = root.DescendantTokens()
+                         .SelectMany(token => token.TrailingTrivia)
+                          .FirstOrDefault(trivia => trivia.IsKind(SyntaxKind.EndOfLineTrivia));
+        if (Equals(result, default(SyntaxTrivia)))
+            result = SyntaxFactory.CarriageReturnLineFeed;
+        return result;
+    }
+
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);

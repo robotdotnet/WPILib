@@ -82,7 +82,8 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         builder.StartLine();
         builder.Append($"{GetClassDeclaration(addUnsafe)} {TypeName}");
         GetGenericParameters(builder);
-        if (inheritanceToAdd is not null) {
+        if (inheritanceToAdd is not null)
+        {
             builder.Append(inheritanceToAdd);
         }
         builder.EndLine();

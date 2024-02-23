@@ -17,7 +17,7 @@ internal record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArra
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
-            iLogged = $" : {Strings.LoggerInterfaceFullyQualified} ";
+            iLogged = $" : {Strings.LoggerInterfaceFullyQualified}";
         }
 
         return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged);
@@ -113,7 +113,7 @@ internal static class LoggableTypeExtensions
             IndentedStringBuilder builder = new IndentedStringBuilder();
 
             loggableType.TypeDeclaration.WriteFileName(builder);
-            builder.Append(".g.cs");
+            builder.Append("g.cs");
             string fileName = builder.ToString();
             builder.Clear();
 
