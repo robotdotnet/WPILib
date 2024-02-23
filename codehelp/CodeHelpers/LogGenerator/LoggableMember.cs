@@ -189,11 +189,11 @@ internal record LoggableMember(string Name, MemberType MemberType, MemberDeclara
             {
                 getOperation = $"{getOperation}.Value";
             }
-            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.LogType}, {getOperation}, {AttributeInfo.LogLevel});");
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString()}, {getOperation}, {AttributeInfo.GetLogLevelString()});");
         }
         else
         {
-            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.LogType}, {getOperation}, {AttributeInfo.LogLevel});");
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString()}, {getOperation}, {AttributeInfo.GetLogLevelString()});");
         }
 
         return FailureMode.None;

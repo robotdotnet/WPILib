@@ -9,6 +9,8 @@ public enum LogLevel
 
 public static class LogLevelExtensions
 {
+    public const LogLevel DefaultLogLevel = LogLevel.Default;
+
     public static bool ShouldLog(this LogLevel logLevel, bool fileOnly, bool nt)
     {
         switch (logLevel)

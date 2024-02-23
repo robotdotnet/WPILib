@@ -1,10 +1,92 @@
+using System.Collections.Immutable;
+using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.PooledObjects;
+using Stereologue;
 
 namespace WPILib.CodeHelpers.LogGenerator;
 
 // Contains all information about a [Log] attribute
-internal record LogAttributeInfo(string? Path, string LogLevel, string LogType, bool UseProtobuf);
+internal record LogAttributeInfo(string? Path, LogLevel LogLevel, LogType LogType, bool UseProtobuf)
+{
+    public string GetLogLevelString()
+    {
+        return AllLevelValues[(int)LogLevel];
+    }
+
+    public string GetLogTypeString()
+    {
+        return AllTypeValues[(int)LogType];
+    }
+
+    private static ImmutableList<string> GetAllLevelValues()
+    {
+        LogLevel[] allLogLevels = (LogLevel[])Enum.GetValues(typeof(LogLevel));
+        var builder = ImmutableList.CreateBuilder<string>();
+        string fullName = typeof(LogLevel).FullName;
+        string rootName = $"global::{fullName}.";
+        foreach (var i in allLogLevels)
+        {
+            builder.Add($"{rootName}{i}");
+        }
+        return builder.ToImmutable();
+    }
+
+    private static ImmutableList<string> GetAllTypeValues()
+    {
+        LogType[] allLogTypes = (LogType[])Enum.GetValues(typeof(LogType));
+        var builder = ImmutableList.CreateBuilder<string>();
+        LogType baseLog = LogType.None;
+        foreach (var i in allLogTypes)
+        {
+            baseLog |= i;
+        }
+        int permutations = (int)baseLog;
+        permutations += 1;
+        string fullName = typeof(LogType).FullName;
+        string rootName = $"global::{fullName}.";
+        builder.Add($"{rootName}{nameof(LogType.None)}");
+        StringBuilder stringBuilder = new();
+        for (int i = 1; i < permutations; i++)
+        {
+            LogType type = (LogType)i;
+
+            if ((type & LogType.File) != 0)
+            {
+                if (stringBuilder.Length != 0)
+                {
+                    stringBuilder.Append(" | ");
+                }
+                stringBuilder.Append($"{rootName}{nameof(LogType.File)}");
+            }
+            if ((type & LogType.Nt) != 0)
+            {
+                if (stringBuilder.Length != 0)
+                {
+                    stringBuilder.Append(" | ");
+                }
+                stringBuilder.Append($"{rootName}{nameof(LogType.Nt)}");
+            }
+            if ((type & LogType.Once) != 0)
+            {
+                if (stringBuilder.Length != 0)
+                {
+                    stringBuilder.Append(" | ");
+                }
+                stringBuilder.Append($"{rootName}{nameof(LogType.Once)}");
+            }
+            builder.Add(stringBuilder.ToString());
+            stringBuilder.Clear();
+        }
+
+        return builder.ToImmutable();
+    }
+
+    public static ImmutableList<string> AllTypeValues { get; } = GetAllTypeValues();
+
+    public static ImmutableList<string> AllLevelValues { get; } = GetAllLevelValues();
+}
 
 internal static class LogAttributeInfoExtensions
 {
@@ -20,8 +102,8 @@ internal static class LogAttributeInfoExtensions
 
             string? path = null;
             bool useProtobuf = false;
-            string logTypeEnum = "Stereologue.LogType.Nt | Stereologue.LogType.File";
-            string logLevel = "Stereologue.LogLevel.Default";
+            LogType logTypeEnum = LogTypeExtensions.DefaultLogType;
+            LogLevel logLevel = LogLevelExtensions.DefaultLogLevel;
 
             // Get the log attribute
             foreach (var named in attributeData.NamedArguments)
@@ -36,12 +118,14 @@ internal static class LogAttributeInfoExtensions
                 }
                 else if (named.Key == "LogLevel")
                 {
-                    logLevel = named.Value.ToCSharpString();
+                    // A boxed primitive can be unboxed to an enum with the same underlying type.
+                    logLevel = (LogLevel)named.Value.Value!;
                     token.ThrowIfCancellationRequested();
                 }
                 else if (named.Key == "LogType")
                 {
-                    logTypeEnum = named.Value.ToCSharpString();
+                    // A boxed primitive can be unboxed to an enum with the same underlying type.
+                    logTypeEnum = (LogType)named.Value.Value!;
                     token.ThrowIfCancellationRequested();
                 }
                 else if (named.Key == "UseProtobuf")
