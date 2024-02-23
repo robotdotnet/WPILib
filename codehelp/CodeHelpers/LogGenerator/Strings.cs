@@ -11,6 +11,8 @@ public static class Strings
     public const string LoggerInterfaceFullyQualified = "global::Stereologue.ILogged";
     public const string UpdateStereologueName = "UpdateStereologue";
     public const string FullMethodDeclaration = $"public void {UpdateStereologueName}(string path, global::{LogNamespace}.{LoggerTypeName} logger)";
-    public const string IStructSerializableName = "global::WPIUtil.Serialization.Struct.IStructSerializable";
-    public const string IProtobufSerializableString = "global::WPIUtil.Serialization.Protobuf.IProtobufSerializable";
+    public const string IStructSerializableName = "IStructSerializable";
+
+    // WPIUtil.Serialization.Struct
+    public const string IProtobufSerializableString = "IProtobufSerializable";
 }

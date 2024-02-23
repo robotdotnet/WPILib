@@ -221,24 +221,29 @@ internal static class LoggableMemberExtensions
             return DeclarationKind.NullableValueType;
         }
 
-        switch (typeSymbol.GetFullyQualifiedTypeNameWithoutGenerics())
+        if (typeSymbol.IsReadOnlySpan())
         {
-            case "global::System.ReadOnlySpan":
-                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-                innerType = namedTypeSymbol.TypeArguments[0];
-                return DeclarationKind.ReadOnlySpan;
-            case "global::System.Span":
-                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-                innerType = namedTypeSymbol.TypeArguments[0];
-                return DeclarationKind.Span;
-            case "global::System.ReadOnlyMemory":
-                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-                innerType = namedTypeSymbol.TypeArguments[0];
-                return DeclarationKind.ReadOnlyMemory;
-            case "global::System.Memory":
-                namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
-                innerType = namedTypeSymbol.TypeArguments[0];
-                return DeclarationKind.Memory;
+            namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            innerType = namedTypeSymbol.TypeArguments[0];
+            return DeclarationKind.ReadOnlySpan;
+        }
+        else if (typeSymbol.IsSpan())
+        {
+            namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            innerType = namedTypeSymbol.TypeArguments[0];
+            return DeclarationKind.Span;
+        }
+        else if (typeSymbol.IsReadOnlyMemory())
+        {
+            namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            innerType = namedTypeSymbol.TypeArguments[0];
+            return DeclarationKind.ReadOnlyMemory;
+        }
+        else if (typeSymbol.IsMemory())
+        {
+            namedTypeSymbol = (INamedTypeSymbol)typeSymbol;
+            innerType = namedTypeSymbol.TypeArguments[0];
+            return DeclarationKind.Memory;
         }
 
         innerType = typeSymbol;
@@ -307,17 +312,11 @@ internal static class LoggableMemberExtensions
         }
 
         token.ThrowIfCancellationRequested();
-        var fullTypeName = typeSymbol.GetFullyQualifiedTypeName();
-        token.ThrowIfCancellationRequested();
-        var structName = $"{Strings.IStructSerializableName}<{fullTypeName}>";
-        var protobufName = $"{Strings.IProtobufSerializableString}<{fullTypeName}>";
 
         foreach (var inf in typeSymbol.AllInterfaces)
         {
             token.ThrowIfCancellationRequested();
-            var interfaceName = inf.GetFullyQualifiedTypeName();
-            token.ThrowIfCancellationRequested();
-            if (interfaceName == structName)
+            if (inf.IsStructSerializable())
             {
                 if (!attributeInfo.UseProtobuf)
                 {
@@ -332,7 +331,7 @@ internal static class LoggableMemberExtensions
                     return new(DeclarationType.Struct, SpecialType.None, nestedKind);
                 }
             }
-            else if (interfaceName == protobufName)
+            else if (inf.IsProtobufSerializable())
             {
                 if (attributeInfo.UseProtobuf)
                 {

@@ -103,6 +103,12 @@ public record TypeParameterModel(string Name, VarianceKind Kind, TypeParameterCo
 
 public static class TypeParameterExtensions
 {
+    private static string GetFullyQualifiedTypeName(this ITypeSymbol symbol)
+    {
+        // TODO stop using fully qualified
+        return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+    }
+
     public static TypeParameterModel GetTypeParameterModel(this ITypeParameterSymbol symbol, bool grabConstraints)
     {
         TypeParameterConstraintFlags flags = TypeParameterConstraintFlags.None;
