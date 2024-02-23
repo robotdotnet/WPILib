@@ -28,20 +28,72 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         builder.Append($"{TypeName}.");
     }
 
-    private string GetClassDeclaration(bool addUnsafe)
+    private static string GetClassNameForLanguage(LanguageKind language)
+    {
+        if (language == LanguageKind.CSharp)
+        {
+            return "class";
+        }
+        else if (language == LanguageKind.VisualBasic)
+        {
+            return "Class";
+        }
+        return "";
+    }
+
+    private static string GetStructNameForLanguage(LanguageKind language)
+    {
+        if (language == LanguageKind.CSharp)
+        {
+            return "struct";
+        }
+        else if (language == LanguageKind.VisualBasic)
+        {
+            return "Structure";
+        }
+        return "";
+    }
+
+    private static string GetInterfaceNameForLanguage(LanguageKind language)
+    {
+        if (language == LanguageKind.CSharp)
+        {
+            return "interface";
+        }
+        else if (language == LanguageKind.VisualBasic)
+        {
+            return "Interface";
+        }
+        return "";
+    }
+
+    private static string GetPartialNameForLanguage(LanguageKind language)
+    {
+        if (language == LanguageKind.CSharp)
+        {
+            return "partial";
+        }
+        else if (language == LanguageKind.VisualBasic)
+        {
+            return "Partial";
+        }
+        return "";
+    }
+
+    private string GetClassDeclaration(bool addUnsafe, LanguageKind language)
     {
         string recordString = (Modifiers & TypeModifiers.IsRecord) != 0 ? "record " : "";
         string unsafeString = addUnsafe ? "unsafe " : "";
 #pragma warning disable CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
         string kindString = Kind switch
         {
-            TypeKind.Class => "class",
-            TypeKind.Struct => "struct",
-            TypeKind.Interface => "interface",
+            TypeKind.Class => GetClassNameForLanguage(language),
+            TypeKind.Struct => GetStructNameForLanguage(language),
+            TypeKind.Interface => GetInterfaceNameForLanguage(language),
         };
 #pragma warning restore CS8509 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
 
-        return $"{unsafeString}partial {recordString}{kindString}";
+        return $"{unsafeString}{GetPartialNameForLanguage(language)} {recordString}{kindString}";
     }
 
     private void GetGenericParameters(IndentedStringBuilder builder)
@@ -66,29 +118,42 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         }
     }
 
-    public IndentedStringBuilder.IndentedScope WriteClassDeclaration(IndentedStringBuilder builder, bool addUnsafe, string? inheritanceToAdd)
+    public int WriteClassDeclaration(IndentedStringBuilder builder, bool addUnsafe, string[]? inheritanceToAdd)
     {
         // Write all the way up
-        IndentedStringBuilder.IndentedScope scope;
+        int scopeCount;
         if (Parent is not null)
         {
-            scope = Parent.WriteClassDeclaration(builder, false, null);
+            scopeCount = Parent.WriteClassDeclaration(builder, false, null);
         }
         else
         {
             // We are guaranteed to have a namespace here
-            scope = Namespace!.WriteNamespaceDeclaration(builder);
+            scopeCount = Namespace!.WriteNamespaceDeclaration(builder);
         }
         builder.StartLine();
-        builder.Append($"{GetClassDeclaration(addUnsafe)} {TypeName}");
+        builder.Append($"{GetClassDeclaration(addUnsafe, builder.Language)} {TypeName}");
         GetGenericParameters(builder);
         if (inheritanceToAdd is not null)
         {
-            builder.Append(inheritanceToAdd);
+            // TODO add everything
+            //
         }
         builder.EndLine();
-        scope.AddLineToScope();
-        return scope;
+        if (Kind == TypeKind.Class)
+        {
+            builder.EnterScope(ScopeType.Class);
+        }
+        else if (Kind == TypeKind.Struct)
+        {
+            builder.EnterScope(ScopeType.Struct);
+        }
+        else if (Kind == TypeKind.Interface)
+        {
+            builder.EnterScope(ScopeType.Interface);
+        }
+
+        return scopeCount + 1;
     }
 }
 

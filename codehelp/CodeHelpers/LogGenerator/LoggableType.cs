@@ -11,31 +11,43 @@ namespace WPILib.CodeHelpers.LogGenerator;
 // Contains all information on a loggable type
 internal record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<LoggableMember> LoggableMembers)
 {
-    private IndentedScope AddClassDeclaration(IndentedStringBuilder builder)
+    private int AddClassDeclaration(IndentedStringBuilder builder)
     {
-        string? iLogged = null;
+        string? iLogged = "null";
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
             iLogged = $" : {Strings.LoggerInterfaceFullyQualified}";
         }
 
-        return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged);
+        return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged is null ? [] : [iLogged]);
     }
 
     private void WriteMethodDeclaration(IndentedStringBuilder builder)
     {
-        builder.AppendFullLine(Strings.FullMethodDeclaration);
+        if (builder.Language == LanguageKind.CSharp)
+        {
+            builder.AppendFullLine(Strings.FullMethodDeclaration);
+        }
+        else if (builder.Language == LanguageKind.VisualBasic)
+        {
+            builder.AppendFullLine(Strings.FullMethodDeclarationVb);
+        }
     }
 
     public void WriteMethod(IndentedStringBuilder builder)
     {
-        using var classScopes = AddClassDeclaration(builder);
+        var classScopes = AddClassDeclaration(builder);
         WriteMethodDeclaration(builder);
-        using var methodScope = builder.EnterScope();
+        builder.EnterScope(ScopeType.NonReturningMethod);
         foreach (var call in LoggableMembers)
         {
             call.WriteLogCall(builder);
+        }
+        builder.ExitScope(); // Method scope
+        for (int i = 0; i < classScopes; i++)
+        {
+            builder.ExitScope(); // Class scopes
         }
     }
 }
@@ -105,12 +117,12 @@ internal static class LoggableTypeExtensions
         }
     }
 
-    public static void ExecuteSourceGeneration(this LoggableType? maybeType, SourceProductionContext context)
+    public static void ExecuteSourceGeneration(this LoggableType? maybeType, SourceProductionContext context, LanguageKind language)
     {
 
         if (maybeType is { } loggableType)
         {
-            IndentedStringBuilder builder = new IndentedStringBuilder();
+            IndentedStringBuilder builder = new IndentedStringBuilder(language);
 
             loggableType.TypeDeclaration.WriteFileName(builder);
             builder.Append("g");

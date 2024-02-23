@@ -1,15 +1,38 @@
 using System.Text;
+using Microsoft.CodeAnalysis;
 
 namespace WPILib.CodeHelpers;
 
-public class IndentedStringBuilder
+public enum ScopeType
+{
+    Namespace,
+    Class,
+    Struct,
+    Interface,
+    NonReturningMethod,
+    ForEach,
+    If,
+    Empty
+}
+
+public enum LanguageKind
+{
+    CSharp,
+    VisualBasic
+}
+
+public class IndentedStringBuilder(LanguageKind language = LanguageKind.CSharp)
 {
     private readonly StringBuilder m_builder = new();
-    private int m_scopeCount = 0;
+    private readonly Stack<ScopeType> m_scopes = new(8);
+
+    public LanguageKind Language { get; } = language;
+
+    private int scopeCount => m_scopes.Count;
 
     public void StartLine()
     {
-        m_builder.Append(' ', m_scopeCount * 4);
+        m_builder.Append(' ', scopeCount * 4);
     }
 
     public void Append(string value)
@@ -29,79 +52,73 @@ public class IndentedStringBuilder
         EndLine();
     }
 
-    public IndentedScope EnterScope(int count = 0)
-    {
-        return new(this, count);
-    }
-
-    public IndentedScope EnterEmptyScope()
-    {
-        return new(this);
-    }
-
     public void Clear()
     {
         m_builder.Clear();
-        m_scopeCount = 0;
+        m_scopes.Clear();
     }
 
-    public void EnterManualScope()
+    public void EnterScope(ScopeType type)
     {
-        AppendFullLine("{");
-        m_scopeCount++;
+        if (Language == LanguageKind.CSharp)
+        {
+            AppendFullLine("{");
+        }
+        else if (Language == LanguageKind.VisualBasic)
+        {
+            // Nothing actually needs to be appended in VB
+            // Except for empty, which we fake with an If
+            if (type == ScopeType.Empty)
+            {
+                AppendFullLine("If True");
+            }
+        }
+
+        m_scopes.Push(type);
     }
 
-    public void ExitManualScope()
+    public void ExitScope()
     {
-        m_scopeCount--;
-        AppendFullLine("}");
+        // TODO VB Support
+        var scopeType = m_scopes.Pop();
+        if (Language == LanguageKind.CSharp)
+        {
+            AppendFullLine("}");
+        }
+        else if (Language == LanguageKind.VisualBasic)
+        {
+            switch (scopeType)
+            {
+                case ScopeType.Namespace:
+                    AppendFullLine("End Namespace");
+                    break;
+                case ScopeType.Class:
+                    AppendFullLine("End Class");
+                    break;
+                case ScopeType.Struct:
+                    AppendFullLine("End Structure");
+                    break;
+                case ScopeType.Interface:
+                    AppendFullLine("End Interface");
+                    break;
+                case ScopeType.NonReturningMethod:
+                    AppendFullLine("End Sub");
+                    break;
+                case ScopeType.If:
+                    AppendFullLine("End If");
+                    break;
+                case ScopeType.ForEach:
+                    AppendFullLine("Next");
+                    break;
+                case ScopeType.Empty:
+                    AppendFullLine("End If");
+                    break;
+            }
+        }
     }
 
     public override string ToString()
     {
         return m_builder.ToString();
-    }
-
-    public ref struct IndentedScope
-    {
-        private readonly IndentedStringBuilder m_builder;
-        private int m_count;
-
-        public IndentedScope(IndentedStringBuilder builder, int count)
-        {
-            m_builder = builder;
-            builder.AppendFullLine("{");
-            m_count = count + 1;
-            m_builder.m_scopeCount++;
-        }
-
-        public IndentedScope(IndentedStringBuilder builder)
-        {
-            m_builder = builder;
-            m_count = 0;
-        }
-
-        public void AddLineToScope()
-        {
-            m_builder.AppendFullLine("{");
-            m_builder.m_scopeCount++;
-            m_count++;
-        }
-
-        public void RemoveLineFromScope()
-        {
-            m_builder.m_scopeCount--;
-            m_count--;
-            m_builder.AppendFullLine("}");
-        }
-
-        public void Dispose()
-        {
-            for (int i = 0; i < m_count; i++)
-            {
-                m_builder.m_scopeCount--;
-                m_builder.AppendFullLine("}");
-            }
-        }
     }
 }

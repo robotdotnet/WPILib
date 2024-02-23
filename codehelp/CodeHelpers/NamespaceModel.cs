@@ -17,20 +17,26 @@ public record NamespaceModel(string? Name, NamespaceModel? Parent)
         builder.Append($"{Name}{(isLeaf ? "" : ".")}");
     }
 
-    public IndentedStringBuilder.IndentedScope WriteNamespaceDeclaration(IndentedStringBuilder builder)
+    public int WriteNamespaceDeclaration(IndentedStringBuilder builder)
     {
-        var scope = builder.EnterEmptyScope();
         if (Name is null)
         {
             // Global namespace, no scope
-            return scope;
+            return 0;
         }
         builder.StartLine();
-        builder.Append("namespace ");
+        if (builder.Language == LanguageKind.CSharp)
+        {
+            builder.Append("namespace ");
+        }
+        else if (builder.Language == LanguageKind.VisualBasic)
+        {
+            builder.Append("Namespace Global.");
+        }
         WriteNamespaceDeclarationInternal(builder, true);
         builder.EndLine();
-        scope.AddLineToScope();
-        return scope;
+        builder.EnterScope(ScopeType.Namespace);
+        return 1;
     }
 
     public void WriteFileName(IndentedStringBuilder builder)

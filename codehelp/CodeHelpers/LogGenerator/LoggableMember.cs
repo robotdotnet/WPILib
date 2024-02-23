@@ -73,13 +73,14 @@ internal record LoggableMember(string Name, MemberType MemberType, MemberDeclara
             {
                 // We're an array, loop
                 builder.AppendFullLine($"foreach (var __tmpValue in {getOperation})");
-                using var callScope = builder.EnterScope();
+                builder.EnterScope(ScopeType.ForEach);
                 string nullCheck = "";
                 if (MemberDeclaration.LoggedKind != DeclarationKind.None)
                 {
                     nullCheck = "?";
                 }
                 builder.AppendFullLine($"__tmpValue{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger);");
+                builder.ExitScope();
             }
             return FailureMode.None;
         }
@@ -176,10 +177,18 @@ internal record LoggableMember(string Name, MemberType MemberType, MemberDeclara
 
         if (MemberDeclaration.LoggedKind == DeclarationKind.Array || MemberDeclaration.LoggedKind == DeclarationKind.NullableReferenceType || MemberDeclaration.LoggedKind == DeclarationKind.NullableValueType)
         {
-            using var nameScope = builder.EnterScope();
-            builder.AppendFullLine($"var __tmpValue = {getOperation};");
-            builder.AppendFullLine($"if (__tmpValue is not null)");
-            using var callScope = builder.EnterScope();
+            builder.EnterScope(ScopeType.Empty);
+            if (builder.Language == LanguageKind.CSharp)
+            {
+                builder.AppendFullLine($"var __tmpValue = {getOperation};");
+                builder.AppendFullLine($"if (__tmpValue is not null)");
+            }
+            else if (builder.Language == LanguageKind.VisualBasic)
+            {
+                builder.AppendFullLine($"Dim __tmpValue = {getOperation}");
+                builder.AppendFullLine($"If __tmpValue IsNot Nothing");
+            }
+            builder.EnterScope(ScopeType.If);
             getOperation = "__tmpValue";
             if (MemberDeclaration.SpecialType == SpecialType.System_String || MemberDeclaration.LoggedKind == DeclarationKind.Array)
             {
@@ -189,11 +198,15 @@ internal record LoggableMember(string Name, MemberType MemberType, MemberDeclara
             {
                 getOperation = $"{getOperation}.Value";
             }
-            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString()}, {getOperation}, {AttributeInfo.GetLogLevelString()});");
+            string semi = builder.Language == LanguageKind.VisualBasic ? "" : ";";
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString(builder.Language)}, {getOperation}, {AttributeInfo.GetLogLevelString(builder.Language)}){semi}");
+            builder.ExitScope(); // If
+            builder.ExitScope(); // Empty
         }
         else
         {
-            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString()}, {getOperation}, {AttributeInfo.GetLogLevelString()});");
+            string semi = builder.Language == LanguageKind.VisualBasic ? "" : ";";
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString(builder.Language)}, {getOperation}, {AttributeInfo.GetLogLevelString(builder.Language)}){semi}");
         }
 
         return FailureMode.None;

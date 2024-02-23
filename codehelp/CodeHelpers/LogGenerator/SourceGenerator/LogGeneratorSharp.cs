@@ -23,7 +23,7 @@ public class LogGeneratorSharp : IIncrementalGenerator
             .Where(static m => m is not null);
 
         context.RegisterSourceOutput(attributedTypes,
-            static (spc, source) => source.ExecuteSourceGeneration(spc));
+            static (spc, source) => source.ExecuteSourceGeneration(spc, LanguageKind.CSharp));
     }
 }
 

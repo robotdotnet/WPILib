@@ -13,19 +13,24 @@ internal enum ReturnKind
 
 internal record MethodModel(TypeDeclarationModel TypeDeclaration, string MethodDeclaration, string NameForCall, string TypeConstraints, string ReturnType, ReturnKind ReturnKind, bool NeedsUnsafe, string StatusCheckMethod, EquatableArray<ParameterModel> Parameters)
 {
-    public IndentedStringBuilder.IndentedScope AddClassDeclaration(IndentedStringBuilder builder)
+    public int AddClassDeclaration(IndentedStringBuilder builder)
     {
-        return TypeDeclaration.WriteClassDeclaration(builder, NeedsUnsafe, "");
+        return TypeDeclaration.WriteClassDeclaration(builder, NeedsUnsafe, null);
     }
 
     public void WriteMethod(IndentedStringBuilder builder)
     {
-        using var classScopes = AddClassDeclaration(builder);
+        int classScopes = AddClassDeclaration(builder);
         WriteMethodDeclaration(builder);
-        using var methodScope = builder.EnterScope();
+        builder.EnterScope(ScopeType.NonReturningMethod);
         WriteCallString(builder);
         WriteStatusCheck(builder);
         WriteReturn(builder);
+        builder.ExitScope(); // Method Scope
+        for (int i = 0; i < classScopes; i++)
+        {
+            builder.ExitScope(); // Class Scopes
+        }
     }
 
     public void WriteMethodDeclaration(IndentedStringBuilder builder)
