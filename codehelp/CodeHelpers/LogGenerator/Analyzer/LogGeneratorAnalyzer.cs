@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace WPILib.CodeHelpers.LogGenerator.Analyzer;
 
-[DiagnosticAnalyzer(LanguageNames.CSharp)]
+[DiagnosticAnalyzer(LanguageNames.CSharp, [LanguageNames.VisualBasic])]
 public sealed class LogGeneratorAnalyzer : DiagnosticAnalyzer
 {
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; } = ImmutableArray.Create([
