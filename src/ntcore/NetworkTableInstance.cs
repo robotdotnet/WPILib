@@ -12,7 +12,6 @@ using CommunityToolkit.Diagnostics;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
 using WPIUtil.Concurrent;
-using WPIUtil.Function;
 using WPIUtil.Handles;
 using WPIUtil.Logging;
 using WPIUtil.Natives;
@@ -206,14 +205,14 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
     private sealed class ListenerStorage(NtInst inst) : IDisposable
     {
         private readonly object m_lock = new();
-        private readonly Dictionary<NtListener, Consumer<NetworkTableEvent>> m_listeners = [];
+        private readonly Dictionary<NtListener, Action<NetworkTableEvent>> m_listeners = [];
         private Thread? m_thread;
         private NtListenerPoller m_poller;
         private bool m_waitQueue;
         private readonly WpiEvent m_waitQueueEvent = new();
         private readonly NtInst m_inst = inst;
 
-        public NtListener Add(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+        public NtListener Add(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -228,7 +227,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             }
         }
 
-        public NtListener Add(NtInst handle, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+        public NtListener Add(NtInst handle, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -243,7 +242,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             }
         }
 
-        public NtListener Add(NtTopic handle, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+        public NtListener Add(NtTopic handle, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -258,7 +257,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             }
         }
 
-        public NtListener Add(NtMultiSubscriber handle, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+        public NtListener Add(NtMultiSubscriber handle, EventFlags eventKinds, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -273,7 +272,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             }
         }
 
-        public NtListener Add<T>(T handle, EventFlags eventKinds, Consumer<NetworkTableEvent> listener) where T : struct, INtEntryHandle
+        public NtListener Add<T>(T handle, EventFlags eventKinds, Action<NetworkTableEvent> listener) where T : struct, INtEntryHandle
         {
             lock (m_lock)
             {
@@ -288,7 +287,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             }
         }
 
-        public NtListener AddLogger(int minLevel, int maxLevel, Consumer<NetworkTableEvent> listener)
+        public NtListener AddLogger(int minLevel, int maxLevel, Action<NetworkTableEvent> listener)
         {
             lock (m_lock)
             {
@@ -346,7 +345,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
                     }
                     foreach (NetworkTableEvent evnt in NtCore.ReadListenerQueue(m_poller))
                     {
-                        Consumer<NetworkTableEvent>? listener;
+                        Action<NetworkTableEvent>? listener;
                         lock (m_lock)
                         {
                             if (!m_listeners.TryGetValue(evnt.ListenerHandle, out listener))
@@ -414,7 +413,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         }
     }
 
-    public NtListener AddConnectionListener(bool immediateNotify, Consumer<NetworkTableEvent> listener)
+    public NtListener AddConnectionListener(bool immediateNotify, Action<NetworkTableEvent> listener)
     {
         EventFlags flags = EventFlags.Connection;
         if (immediateNotify)
@@ -424,7 +423,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.Add(Handle, flags, listener);
     }
 
-    public NtListener AddTimeSyncListener(bool immediateNotify, Consumer<NetworkTableEvent> listener)
+    public NtListener AddTimeSyncListener(bool immediateNotify, Action<NetworkTableEvent> listener)
     {
         EventFlags flags = EventFlags.TimeSync;
         if (immediateNotify)
@@ -434,7 +433,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.Add(Handle, flags, listener);
     }
 
-    public NtListener AddListener(Topic topic, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+    public NtListener AddListener(Topic topic, EventFlags eventKinds, Action<NetworkTableEvent> listener)
     {
         if (topic.Instance.Handle != Handle)
         {
@@ -443,7 +442,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.Add(topic.Handle, eventKinds, listener);
     }
 
-    public NtListener AddListener(ISubscriber subscriber, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+    public NtListener AddListener(ISubscriber subscriber, EventFlags eventKinds, Action<NetworkTableEvent> listener)
     {
         if (subscriber.Topic.Instance.Handle != Handle)
         {
@@ -452,7 +451,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.Add(subscriber.Handle, eventKinds, listener);
     }
 
-    public NtListener AddListener(MultiSubscriber subscriber, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+    public NtListener AddListener(MultiSubscriber subscriber, EventFlags eventKinds, Action<NetworkTableEvent> listener)
     {
         if (subscriber.Instance.Handle != Handle)
         {
@@ -462,7 +461,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         return m_listeners.Add(subscriber.Handle, eventKinds, listener);
     }
 
-    public NtListener AddListener(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Consumer<NetworkTableEvent> listener)
+    public NtListener AddListener(ReadOnlySpan<string> prefixes, EventFlags eventKinds, Action<NetworkTableEvent> listener)
     {
         return m_listeners.Add(prefixes, eventKinds, listener);
     }
@@ -592,7 +591,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         NtCore.StopConnectionDataLog(logger);
     }
 
-    public NtListener AddLogger(int minLevel, int maxLevel, Consumer<NetworkTableEvent> callback)
+    public NtListener AddLogger(int minLevel, int maxLevel, Action<NetworkTableEvent> callback)
     {
         return m_listeners.AddLogger(minLevel, maxLevel, callback);
     }

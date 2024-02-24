@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using WPIUtil.Function;
 
 namespace WPIUtil.Sendable;
 
@@ -47,7 +46,7 @@ public static class SendableRegistery
         }
     }
 
-    private static Supplier<ISendableBuilder>? liveWindowFactory;
+    private static Func<ISendableBuilder>? liveWindowFactory;
     private static readonly ConditionalWeakTable<object, Component> components = [];
     private static int nextDataHandle;
 
@@ -65,7 +64,7 @@ public static class SendableRegistery
         return comp;
     }
 
-    public static void SetLiveWindowBuilderFactory(Supplier<ISendableBuilder> factory)
+    public static void SetLiveWindowBuilderFactory(Func<ISendableBuilder> factory)
     {
         lock (s_lockObject)
         {
@@ -448,7 +447,7 @@ public static class SendableRegistery
 
     private static readonly List<Component> ForeachComponents = [];
 
-    public static void ForeachLiveWindow(int dataHandle, Consumer<CallbackData> callback)
+    public static void ForeachLiveWindow(int dataHandle, Action<CallbackData> callback)
     {
         lock (s_lockObject)
         {

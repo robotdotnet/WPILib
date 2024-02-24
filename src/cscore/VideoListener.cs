@@ -1,13 +1,12 @@
 using CsCore.Handles;
 using CsCore.Natives;
-using WPIUtil.Function;
 
 namespace CsCore;
 
 public class VideoListener : IDisposable, IEquatable<VideoListener?>
 {
     private static readonly object s_listenerLock = new();
-    private static readonly Dictionary<CsListener, Consumer<VideoEvent>> s_listeners = [];
+    private static readonly Dictionary<CsListener, Action<VideoEvent>> s_listeners = [];
     private static Thread? s_thread;
     private static CsListenerPoller s_poller;
 
@@ -27,7 +26,7 @@ public class VideoListener : IDisposable, IEquatable<VideoListener?>
                 }
                 foreach (var videoEvent in events)
                 {
-                    Consumer<VideoEvent>? listener = null;
+                    Action<VideoEvent>? listener = null;
                     lock (s_listenerLock)
                     {
                         s_listeners.TryGetValue(videoEvent.Listener, out listener);
@@ -67,7 +66,7 @@ public class VideoListener : IDisposable, IEquatable<VideoListener?>
 
     public CsListener Handle { get; private set; }
 
-    public VideoListener(Consumer<VideoEvent> listener, EventKind eventMask, bool immediateNotify)
+    public VideoListener(Action<VideoEvent> listener, EventKind eventMask, bool immediateNotify)
     {
         lock (s_listenerLock)
         {
