@@ -1,38 +1,73 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using CommunityToolkit.Diagnostics;
+using WPIUtil.Sendable;
 
-namespace WPILib2.Commands
+namespace WPILib;
+
+public abstract class Command : ISendable
 {
-    public static class CommandExtensions
+    protected Command()
     {
-        public static ParallelRaceGroup WithTimeout(this ICommand command, TimeSpan time)
+        string name = this.GetType().Name;
+        SendableRegistery.Add(this, name);
+    }
+
+    public virtual void Initialize() { }
+
+    public virtual void Execute() { }
+
+    public virtual void End(bool interrupted) { }
+
+    public virtual bool IsFinished { get; }
+
+    public HashSet<ISubsystem> Requirements { get; } = [];
+
+    public void AddRequirements(params ISubsystem[] requirements)
+    {
+        foreach (var requirement in requirements)
         {
-            return new ParallelRaceGroup(command, new WaitCommand(time));
+            Guard.IsNotNull(requirement);
+            Requirements.Add(requirement);
         }
     }
 
-    public interface ICommand
+    public void AddRequirements(IEnumerable<ISubsystem> requirements)
     {
-        void Initialize();
+        foreach (var requirement in requirements)
+        {
+            Guard.IsNotNull(requirement);
+            Requirements.Add(requirement);
+        }
+    }
 
-        void Execute();
+    public string Name
+    {
+        get
+        {
+            return SendableRegistery.GetName(this);
+        }
+        set
+        {
+            SendableRegistery.SetName(this, value);
+        }
+    }
 
-        void End(bool interrupted);
+    public string Subsystem
+    {
+        get
+        {
+            return SendableRegistery.GetSubsystem(this);
+        }
+        set
+        {
+            SendableRegistery.SetSubsystem(this, value);
+        }
+    }
 
-        void Schedule(bool interruptible = true);
-
-        void Cancel();
-
-        bool IsFinished { get; }
-
-        bool IsScheduled { get; }
-
-        HashSet<ISubsystem> Requirements { get; }
-
-        bool HasRequirement(ISubsystem requirement);
-
-        public bool RunsWhenDisabled { get; }
-
-        string Name { get; }
+    public void InitSendable(ISendableBuilder builder)
+    {
+        builder.SetSmartDashboardType("Command");
+        builder.AddStringProperty(".name", () => Name, null);
     }
 }

@@ -1,19 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <AssemblyName>WPILibSharp.NewCommands</AssemblyName>
-    <RootNamespace>WPILib2.Commands</RootNamespace>
+    <AssemblyName>WPILibNewCommands</AssemblyName>
+    <RootNamespace>WPILib</RootNamespace>
+    <NoWarn>1591;CA1401</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\wpilibsharp\wpilibsharp.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Nullable" Version="1.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <ProjectReference Include="..\hal\hal.csproj" />
+    <ProjectReference Include="..\wpimath\wpimath.csproj" />
+    <ProjectReference Include="..\ntcore\ntcore.csproj" />
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
   </ItemGroup>
 
 </Project>
