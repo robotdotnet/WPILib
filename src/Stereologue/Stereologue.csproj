@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ntcore\ntcore.csproj" />
-    <ProjectReference Include="..\..\wpiutil\wpiutil.csproj" />
+    <ProjectReference Include="..\ntcore\ntcore.csproj" />
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
   </ItemGroup>
 
 </Project>

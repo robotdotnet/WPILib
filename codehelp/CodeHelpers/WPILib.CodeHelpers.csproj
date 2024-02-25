@@ -15,8 +15,8 @@
 
   <ItemGroup>
     <!-- Include enums used in attributes -->
-    <Compile Include="$(SolutionDir)src\thirdparty\Stereologue\LogLevel.cs" Link="Production\LogLevel.cs" />
-    <Compile Include="$(SolutionDir)src\thirdparty\Stereologue\LogType.cs" Link="Production\LogType.cs" />
+    <Compile Include="$(SolutionDir)src\Stereologue\LogLevel.cs" Link="LogLevel.cs" />
+    <Compile Include="$(SolutionDir)src\Stereologue\LogType.cs" Link="LogType.cs" />
 
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />

@@ -67,19 +67,28 @@ internal record LoggableMember(string Name, MemberType MemberType, MemberDeclara
                 {
                     nullCheck = "?";
                 }
-                builder.AppendFullLine($"{getOperation}{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger);");
+                string semi = builder.Language == LanguageKind.VisualBasic ? "" : ";";
+                builder.AppendFullLine($"{getOperation}{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger){semi}");
             }
             else
             {
                 // We're an array, loop
-                builder.AppendFullLine($"foreach (var __tmpValue in {getOperation})");
+                if (builder.Language == LanguageKind.CSharp)
+                {
+                    builder.AppendFullLine($"foreach (var __tmpValue in {getOperation})");
+                }
+                else if (builder.Language == LanguageKind.VisualBasic)
+                {
+                    builder.AppendFullLine($"For Each __tmpValue in {getOperation}");
+                }
                 builder.EnterScope(ScopeType.ForEach);
                 string nullCheck = "";
                 if (MemberDeclaration.LoggedKind != DeclarationKind.None)
                 {
                     nullCheck = "?";
                 }
-                builder.AppendFullLine($"__tmpValue{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger);");
+                string semi = builder.Language == LanguageKind.VisualBasic ? "" : ";";
+                builder.AppendFullLine($"__tmpValue{nullCheck}.{Strings.UpdateStereologueName}($\"{{path}}/{path}\", logger){semi}");
                 builder.ExitScope();
             }
             return FailureMode.None;
@@ -202,6 +211,11 @@ internal record LoggableMember(string Name, MemberType MemberType, MemberDeclara
             builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString(builder.Language)}, {getOperation}, {AttributeInfo.GetLogLevelString(builder.Language)}){semi}");
             builder.ExitScope(); // If
             builder.ExitScope(); // Empty
+        }
+        else if (MemberDeclaration.LoggedKind == DeclarationKind.ReadOnlyMemory || MemberDeclaration.LoggedKind == DeclarationKind.Memory)
+        {
+            string semi = builder.Language == LanguageKind.VisualBasic ? "" : ";";
+            builder.AppendFullLine($"logger.{logMethod}($\"{{path}}/{path}\", {AttributeInfo.GetLogTypeString(builder.Language)}, {getOperation}.Span, {AttributeInfo.GetLogLevelString(builder.Language)}){semi}");
         }
         else
         {
