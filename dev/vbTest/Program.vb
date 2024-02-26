@@ -10,6 +10,11 @@ End Module
 
 Namespace vbTest
     <Stereologue.GenerateLog()> Partial Public Class ExtraLogged
+        <Log()>
+        Public Function Variable() as Integer
+            Dim ret as Integer
+            Return ret
+        End Function
     End Class
 
     <Stereologue.GenerateLog()> Partial Public Class LoggedClass

@@ -2,14 +2,14 @@ using Microsoft.CodeAnalysis;
 
 namespace WPILib.CodeHelpers.LogGenerator;
 
-internal enum MemberType
+public enum MemberType
 {
     Field,
     Property,
     Method
 }
 
-internal enum DeclarationType
+public enum DeclarationType
 {
     None,
     Logged,
@@ -18,7 +18,7 @@ internal enum DeclarationType
     SpecialType,
 }
 
-internal enum DeclarationKind
+public enum DeclarationKind
 {
     None,
     ReadOnlySpan,
@@ -30,10 +30,10 @@ internal enum DeclarationKind
     NullableReferenceType
 }
 
-internal record MemberDeclaration(DeclarationType LoggedType, SpecialType SpecialType, DeclarationKind LoggedKind);
+public record MemberDeclaration(DeclarationType LoggedType, SpecialType SpecialType, DeclarationKind LoggedKind);
 
 // Contains all information about a loggable member
-internal record LoggableMember(string Name, MemberType MemberType, MemberDeclaration MemberDeclaration, LogAttributeInfo AttributeInfo)
+public record LoggableMember(string Name, MemberType MemberType, MemberDeclaration MemberDeclaration, LogAttributeInfo AttributeInfo)
 {
     public FailureMode WriteLogCall(IndentedStringBuilder? builder)
     {

@@ -1,8 +1,8 @@
-namespace CodeHelpers.Test;
+namespace CodeHelpers.Test.LogGenerator;
 
 using System.Text;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
-using Microsoft.CodeAnalysis.CSharp.Testing.XUnit;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
@@ -10,21 +10,6 @@ using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
 
 public class LogGeneratorTest
 {
-    const string InternalTypes = @"
-namespace Stereologue
-{
-[System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Method | System.AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-public sealed class LogAttribute : System.Attribute
-{
-}
-
-[System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
-public sealed class GenerateLogAttribute : System.Attribute
-{
-}
-}
-";
-
     [Theory]
     [InlineData("bool", "LogBoolean")]
     [InlineData("int", "LogInteger")]
@@ -42,15 +27,15 @@ public partial class MyNewClass
 }
 ";
 
-        string expected = @"partial class MyNewClass : global::Stereologue.ILogged
+        string expected = @"partial class MyNewClass
+    : global::Stereologue.ILogged
 {
     public void UpdateStereologue(string path, global::Stereologue.Stereologuer logger)
     {
-        logger.REPLACEME($""{path}/Variable"", Stereologue.LogType.Nt | Stereologue.LogType.File, Variable(), Stereologue.LogLevel.Default);
+        logger.REPLACEME($""{path}/Variable"", global::Stereologue.LogType.File | global::Stereologue.LogType.Nt, Variable(), global::Stereologue.LogLevel.Default);
     }
 }
 ";
-        testString += InternalTypes;
         testString = testString.Replace("\r\n", "\n").Replace("\n", "\r\n");
         testString = testString.Replace("REPLACEME", type);
 
@@ -61,6 +46,17 @@ public partial class MyNewClass
         {
             CompilerDiagnostics = CompilerDiagnostics.None,
             TestState = {
+                AdditionalProjectReferences = { "AttributesAssembly", },
+                AdditionalProjects = {
+                    ["AttributesAssembly", LanguageNames.CSharp] = {
+                        Sources = {
+                            LogResources.Attributes,
+                            LogResources.LogLevel,
+                            LogResources.LogType,
+                            LogResources.ExternalInit,
+                        }
+                    }
+                },
                 Sources = {
                     testString,
                 },

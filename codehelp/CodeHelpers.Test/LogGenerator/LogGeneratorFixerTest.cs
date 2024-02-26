@@ -1,7 +1,7 @@
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
 using Verify = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.CodeFixVerifier<WPILib.CodeHelpers.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.LogGenerator.CodeFixer.LogGeneratorFixer>;
 
-namespace CodeHelpers.Test;
+namespace CodeHelpers.Test.LogGenerator;
 
 public class LogGeneratorFixerTest
 {

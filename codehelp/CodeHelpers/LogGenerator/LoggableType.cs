@@ -9,7 +9,7 @@ using static WPILib.CodeHelpers.IndentedStringBuilder;
 namespace WPILib.CodeHelpers.LogGenerator;
 
 // Contains all information on a loggable type
-internal record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<LoggableMember> LoggableMembers)
+public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<LoggableMember> LoggableMembers)
 {
     private int AddClassDeclaration(IndentedStringBuilder builder)
     {
@@ -17,7 +17,11 @@ internal record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArra
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
-            iLogged = $" : {Strings.LoggerInterfaceFullyQualified}";
+            if (builder.Language == LanguageKind.CSharp) {
+                iLogged = Strings.LoggerInterfaceFullyQualified;
+            } else if (builder.Language == LanguageKind.VisualBasic) {
+                iLogged = Strings.LoggerInterfaceFullyQualifiedVb;
+            }
         }
 
         return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged is null ? [] : [iLogged]);

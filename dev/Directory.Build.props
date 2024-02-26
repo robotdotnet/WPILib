@@ -13,6 +13,6 @@
     <ProjectReference Include="..\..\src\wpilibsharp\wpilibsharp.csproj" />
     <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
     <ProjectReference Include="..\..\src\stereologue\stereologue.csproj" />
-    <ProjectReference Include="$(SolutionDir)codehelp\CodeHelpers\WPILib.CodeHelpers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers\WPILib.CodeHelpers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

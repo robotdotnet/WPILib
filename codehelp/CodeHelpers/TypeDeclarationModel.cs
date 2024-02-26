@@ -134,12 +134,42 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         builder.StartLine();
         builder.Append($"{GetClassDeclaration(addUnsafe, builder.Language)} {TypeName}");
         GetGenericParameters(builder);
-        if (inheritanceToAdd is not null)
-        {
-            // TODO add everything
-            //
-        }
         builder.EndLine();
+        var inheritanceSpan = inheritanceToAdd.AsSpan();
+        if (!inheritanceSpan.IsEmpty)
+        {
+            if (builder.Language == LanguageKind.CSharp) {
+                builder.StartLine();
+                builder.Append("    : ");
+                bool first = false;
+                foreach (var item in inheritanceSpan) {
+                    if (!first) {
+                        first = true;
+                    }
+                    else {
+                        builder.Append(", ");
+                    }
+                    builder.Append(item);
+                }
+                builder.EndLine();
+            }
+            else if (builder.Language == LanguageKind.VisualBasic) {
+                builder.StartLine();
+                builder.Append("    Implements ");
+                bool first = false;
+                foreach (var item in inheritanceSpan) {
+                    if (!first) {
+                        first = true;
+                    }
+                    else {
+                        builder.Append(", ");
+                    }
+                    builder.Append(item);
+                }
+                builder.EndLine();
+            }
+        }
+
         if (Kind == TypeKind.Class)
         {
             builder.EnterScope(ScopeType.Class);

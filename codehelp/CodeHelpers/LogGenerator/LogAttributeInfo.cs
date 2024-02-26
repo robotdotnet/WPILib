@@ -8,7 +8,7 @@ using Stereologue;
 namespace WPILib.CodeHelpers.LogGenerator;
 
 // Contains all information about a [Log] attribute
-internal record LogAttributeInfo(string? Path, LogLevel LogLevel, LogType LogType, bool UseProtobuf)
+public record LogAttributeInfo(string? Path, LogLevel LogLevel, LogType LogType, bool UseProtobuf)
 {
     public string GetLogLevelString(LanguageKind language)
     {
