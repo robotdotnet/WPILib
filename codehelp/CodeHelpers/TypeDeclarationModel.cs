@@ -138,30 +138,38 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         var inheritanceSpan = inheritanceToAdd.AsSpan();
         if (!inheritanceSpan.IsEmpty)
         {
-            if (builder.Language == LanguageKind.CSharp) {
+            if (builder.Language == LanguageKind.CSharp)
+            {
                 builder.StartLine();
                 builder.Append("    : ");
                 bool first = false;
-                foreach (var item in inheritanceSpan) {
-                    if (!first) {
+                foreach (var item in inheritanceSpan)
+                {
+                    if (!first)
+                    {
                         first = true;
                     }
-                    else {
+                    else
+                    {
                         builder.Append(", ");
                     }
                     builder.Append(item);
                 }
                 builder.EndLine();
             }
-            else if (builder.Language == LanguageKind.VisualBasic) {
+            else if (builder.Language == LanguageKind.VisualBasic)
+            {
                 builder.StartLine();
                 builder.Append("    Implements ");
                 bool first = false;
-                foreach (var item in inheritanceSpan) {
-                    if (!first) {
+                foreach (var item in inheritanceSpan)
+                {
+                    if (!first)
+                    {
                         first = true;
                     }
-                    else {
+                    else
+                    {
                         builder.Append(", ");
                     }
                     builder.Append(item);

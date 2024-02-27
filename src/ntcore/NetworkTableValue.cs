@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using NetworkTables.Natives;
@@ -7,7 +8,8 @@ namespace NetworkTables;
 
 [NativeMarshalling(typeof(NetworkTableValueMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>
+public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTableValueMarshaller.NativeNetworkTableValue>,
+                                                   IEquatable<NetworkTableValue>
 {
     public static unsafe void FreeArray(NetworkTableValueMarshaller.NativeNetworkTableValue* array, int len)
     {
@@ -217,7 +219,57 @@ public readonly partial struct NetworkTableValue : INativeArrayFree<NetworkTable
         return new NetworkTableValue(NetworkTableType.StringArray, value, time);
     }
 
-    // TODO Equals and HashCode
+    public override int GetHashCode()
+    {
+        int objectHash = Type switch
+        {
+            NetworkTableType.Double => m_structValue.doubleValue.GetHashCode(),
+            NetworkTableType.Integer => m_structValue.longValue.GetHashCode(),
+            NetworkTableType.Float => m_structValue.floatValue.GetHashCode(),
+            NetworkTableType.Boolean => m_structValue.boolValue.GetHashCode(),
+            _ => m_objectValue?.GetHashCode() ?? 0
+        };
+        return HashCode.Combine(Type, objectHash);
+    }
+
+    public override bool Equals([NotNullWhen(true)] object? obj)
+    {
+        if (obj is NetworkTableValue value)
+        {
+            return Equals(value);
+        }
+        return false;
+    }
+
+    public bool Equals(NetworkTableValue other)
+    {
+        return Type == other.Type && Type switch
+        {
+            NetworkTableType.Unassigned => true,
+            NetworkTableType.Boolean => m_structValue.boolValue == other.m_structValue.boolValue,
+            NetworkTableType.Double => m_structValue.doubleValue == other.m_structValue.doubleValue,
+            NetworkTableType.String => m_objectValue == other.m_objectValue,
+            NetworkTableType.Raw => m_objectValue is not null && other.m_objectValue is not null && ((byte[])m_objectValue).AsSpan().SequenceEqual(((byte[])other.m_objectValue).AsSpan()),
+            NetworkTableType.BooleanArray => m_objectValue is not null && other.m_objectValue is not null && ((bool[])m_objectValue).AsSpan().SequenceEqual(((bool[])other.m_objectValue).AsSpan()),
+            NetworkTableType.DoubleArray => m_objectValue is not null && other.m_objectValue is not null && ((double[])m_objectValue).AsSpan().SequenceEqual(((double[])other.m_objectValue).AsSpan()),
+            NetworkTableType.StringArray => m_objectValue is not null && other.m_objectValue is not null && ((string[])m_objectValue).AsSpan().SequenceEqual(((string[])other.m_objectValue).AsSpan()),
+            NetworkTableType.Integer => m_structValue.longValue == other.m_structValue.longValue,
+            NetworkTableType.Float => m_structValue.floatValue == other.m_structValue.floatValue,
+            NetworkTableType.IntegerArray => m_objectValue is not null && other.m_objectValue is not null && ((long[])m_objectValue).AsSpan().SequenceEqual(((long[])other.m_objectValue).AsSpan()),
+            NetworkTableType.FloatArray => m_objectValue is not null && other.m_objectValue is not null && ((float[])m_objectValue).AsSpan().SequenceEqual(((float[])other.m_objectValue).AsSpan()),
+            _ => false,
+        };
+    }
+
+    public static bool operator ==(NetworkTableValue? left, NetworkTableValue? right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(NetworkTableValue? left, NetworkTableValue? right)
+    {
+        return !(left == right);
+    }
 
     /**
      * Get the data type.

@@ -7,7 +7,8 @@ namespace CodeHelpers.Test.LogGenerator;
 public class LogGeneratorModelTest
 {
     [Fact]
-    public void TestEqualModel() {
+    public void TestEqualModel()
+    {
         var a = new LoggableType(
             TypeDeclaration: new(
                 Kind: TypeKind.Struct,
@@ -15,7 +16,7 @@ public class LogGeneratorModelTest
                 Namespace: new("ABC", new("NS", null)),
                 Parent: null,
                 TypeName: "ABC",
-                TypeParameters:  []
+                TypeParameters: []
             ),
             LoggableMembers: []
         );
@@ -26,7 +27,7 @@ public class LogGeneratorModelTest
                 Namespace: new("ABC", new("NS", null)),
                 Parent: null,
                 TypeName: "ABC",
-                TypeParameters:  []
+                TypeParameters: []
             ),
             LoggableMembers: []
         );

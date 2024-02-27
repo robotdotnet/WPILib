@@ -121,7 +121,7 @@ public class Topic : IEquatable<Topic?>, IEqualityOperators<Topic?, Topic?, bool
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(Handle);
+        return Handle.Handle;
     }
 
     public static bool operator ==(Topic? left, Topic? right)
