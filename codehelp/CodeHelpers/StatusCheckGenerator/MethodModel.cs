@@ -166,6 +166,7 @@ internal static class MethodModelExtensions
 
         var returnTypeFmt = new SymbolDisplayFormat(
             memberOptions: SymbolDisplayMemberOptions.IncludeType | SymbolDisplayMemberOptions.IncludeRef,
+            genericsOptions: SymbolDisplayGenericsOptions.IncludeTypeParameters,
             typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
             globalNamespaceStyle: SymbolDisplayGlobalNamespaceStyle.Included,
             miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
