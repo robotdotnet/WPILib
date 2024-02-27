@@ -20,18 +20,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.2" />
-    <ProjectReference Include="..\CodeHelpers\WPILib.CodeHelpers.csproj"/>
+    <ProjectReference Include="..\CodeHelpers\WPILib.CodeHelpers.csproj" />
     <ProjectReference Include="..\..\src\Stereologue\Stereologue.csproj" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.8.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.8.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="..\..\src\Stereologue\LogLevel.cs" Link="LogLevel.cs" LogicalName="LogLevel.cs" />
-    <EmbeddedResource Include="..\..\src\Stereologue\LogType.cs" Link="LogType.cs" LogicalName="LogType.cs"/>
-    <EmbeddedResource Include="..\..\src\Stereologue\Attributes.cs" Link="Attributes.cs" LogicalName="Attributes.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -43,8 +43,8 @@ public partial class MyNewClass
 ";
         testString += InternalTypes;
         fixedCode += InternalTypes;
-        testString = testString.Replace("\r\n", "\n").Replace("\n", "\r\n");
-        fixedCode = fixedCode.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        testString = testString.NormalizeLineEndings();
+        fixedCode = fixedCode.NormalizeLineEndings();
         var expected = Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(4, 22).WithArguments(["MyNewClass"]);
         await Verify.VerifyCodeFixAsync(testString, expected, fixedCode);
     }

@@ -6,6 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
+using Stereologue;
 using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
 
 public class LogGeneratorTest
@@ -36,32 +37,24 @@ public partial class MyNewClass
     }
 }
 ";
-        testString = testString.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        testString = testString.NormalizeLineEndings();
         testString = testString.Replace("REPLACEME", type);
 
-        expected = expected.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        expected = expected.NormalizeLineEndings();
         expected = expected.Replace("REPLACEME", output);
 
         await new CSharpSourceGeneratorTest<LogGeneratorSharp, XUnitVerifier>()
         {
-            CompilerDiagnostics = CompilerDiagnostics.None,
             TestState = {
-                AdditionalProjectReferences = { "AttributesAssembly", },
-                AdditionalProjects = {
-                    ["AttributesAssembly", LanguageNames.CSharp] = {
-                        Sources = {
-                            LogResources.Attributes,
-                            LogResources.LogLevel,
-                            LogResources.LogType,
-                            LogResources.ExternalInit,
-                        }
-                    }
+                AdditionalReferences = {
+                    typeof(LogAttribute).Assembly
                 },
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
                 Sources = {
                     testString,
                 },
                 GeneratedSources = {
-                    ("WPILib.CodeHelpers\\WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorSharp\\MyNewClass.g.cs", SourceText.From(expected, Encoding.UTF8))
+                    ($"WPILib.CodeHelpers{Path.DirectorySeparatorChar}WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorSharp{Path.DirectorySeparatorChar}MyNewClass.g.cs", SourceText.From(expected, Encoding.UTF8))
                 },
             },
         }.RunAsync();

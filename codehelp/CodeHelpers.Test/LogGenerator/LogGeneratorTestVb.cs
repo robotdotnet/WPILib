@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
 using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
+using Stereologue;
 
 public class LogGeneratorTestVb
 {
@@ -36,32 +37,24 @@ End Class
     End Sub
 End Class
 ";
-        testString = testString.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        testString = testString.NormalizeLineEndings();
         testString = testString.Replace("REPLACEME", type);
 
-        expected = expected.Replace("\r\n", "\n").Replace("\n", "\r\n");
+        expected = expected.NormalizeLineEndings();
         expected = expected.Replace("REPLACEME", output);
 
         await new VisualBasicSourceGeneratorTest<LogGeneratorVb, XUnitVerifier>()
         {
-            CompilerDiagnostics = CompilerDiagnostics.None,
             TestState = {
-                AdditionalProjectReferences = { "AttributesAssembly", },
-                AdditionalProjects = {
-                    ["AttributesAssembly", LanguageNames.CSharp] = {
-                        Sources = {
-                            LogResources.Attributes,
-                            LogResources.LogLevel,
-                            LogResources.LogType,
-                            LogResources.ExternalInit,
-                        }
-                    }
+                AdditionalReferences = {
+                    typeof(LogAttribute).Assembly
                 },
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
                 Sources = {
                     testString,
                 },
                 GeneratedSources = {
-                    ("WPILib.CodeHelpers\\WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorVb\\MyNewClass.g.vb", SourceText.From(expected, Encoding.UTF8))
+                    ($"WPILib.CodeHelpers{Path.DirectorySeparatorChar}WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorVb{Path.DirectorySeparatorChar}MyNewClass.g.vb", SourceText.From(expected, Encoding.UTF8))
                 },
             },
         }.RunAsync();
