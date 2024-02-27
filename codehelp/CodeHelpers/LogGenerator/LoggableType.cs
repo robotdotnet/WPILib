@@ -13,7 +13,7 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
 {
     private int AddClassDeclaration(IndentedStringBuilder builder)
     {
-        string? iLogged = "null";
+        string? iLogged = null;
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
