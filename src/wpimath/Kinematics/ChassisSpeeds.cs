@@ -50,6 +50,25 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
         this.Omega = Omega;
     }
 
+    /// <summary>
+    /// Discretizes a continuous-time chassis speed.
+    /// 
+    /// <para>
+    /// This function converts a continuous-time chassis speed into a discrete-time one such that
+    /// when the discrete-time chassis speed is applied for one timestep, the robot moves as if the
+    /// velocity components are independent (i.e., the robot moves v_x * dt along the x-axis, v_y * dt
+    /// along the y-axis, and omega * dt around the z-axis).
+    /// </para>
+    /// <para>
+    /// This is useful for compensating for translational skew when translating and rotating a
+    /// swerve drivetrain.
+    /// </para>
+    /// </summary>
+    /// <param name="Vx">Forward velocity.</param>
+    /// <param name="Vy">Sideways velocity (left is positive).</param>
+    /// <param name="Omega">Angular velocity (couter-clockwise is positive).</param>
+    /// <param name="Dt">Timestep the speed should be applied for (this should be the same as the robot loop duration for most users).</param>
+    /// <returns>Discretized ChassisSpeeds.</returns>
     public static ChassisSpeeds Discretize(Speed Vx, Speed Vy, RotationalSpeed Omega, TimeSpan Dt)
     {
         Pose2d desiredDeltaPose = new Pose2d(Vx * Dt, Vy * Dt, new Rotation2d(Omega * Dt));
@@ -57,9 +76,38 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
         return new(twist.Dx / Dt, twist.Dy / Dt, twist.Dtheta / Dt);
     }
 
+    /// <summary>
+    /// Discretizes a continuous-time chassis speed.
+    /// 
+    /// <para>
+    /// This function converts a continuous-time chassis speed into a discrete-time one such that
+    /// when the discrete-time chassis speed is applied for one timestep, the robot moves as if the
+    /// velocity components are independent (i.e., the robot moves v_x * dt along the x-axis, v_y * dt
+    /// along the y-axis, and omega * dt around the z-axis).
+    /// </para>
+    /// <para>
+    /// This is useful for compensating for translational skew when translating and rotating a
+    /// swerve drivetrain.
+    /// </para>
+    /// </summary>
+    /// <param name="ContinuousSpeeds">ChassisSpeeds to discretize.</param>
+    /// <param name="Dt">Timestep the speed should be applied for (this should be the same as the robot loop duration for most users).</param>
+    /// <returns>Discretized ChassisSpeeds.</returns>
     public static ChassisSpeeds Discretize(ChassisSpeeds ContinuousSpeeds, TimeSpan Dt) =>
         Discretize(ContinuousSpeeds.Vx, ContinuousSpeeds.Vy, ContinuousSpeeds.Omega, Dt);
 
+    /// <summary>
+    /// Converts a user provided field-relative set of speeds into a robot-relative ChassisSpeeds object.
+    /// </summary>
+    /// <param name="Vx">The component of speed in the x direction relative to the field. Positive x is away 
+    /// from your alliance wall.</param>
+    /// <param name="Vy">The component of speed in the y direction relative to the field. Positive y is to 
+    /// your left when standing behind the alliance wall.</param>
+    /// <param name="Omega">The angular velocity of the robot.</param>
+    /// <param name="RobotAngle">The angle of the robot as measured by a gyroscope. The robot's angle is 
+    /// considered to be zero when it is facing directly away from your alliance station wall.
+    /// Remember that this should be CCW positive.</param>
+    /// <returns>ChassisSpeeds object representing the speeds in the robot's frame of reference.</returns>
     public static ChassisSpeeds FromFieldRelativeSpeeds(Speed Vx, Speed Vy, RotationalSpeed Omega, Rotation2d RobotAngle)
     {
         var oneSecond = TimeSpan.FromSeconds(1);
@@ -68,9 +116,29 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
         return new(chassisFrameVelocity.X / oneSecond, chassisFrameVelocity.Y / oneSecond, Omega);
     }
 
+    /// <summary>
+    /// Converts a user provided field-relative set of speeds into a robot-relative ChassisSpeeds object.
+    /// </summary>
+    /// <param name="FieldRelativeSpeeds">Field-relative ChassisSpeeds.</param>
+    /// <param name="RobotAngle">The angle of the robot as measured by a gyroscope. The robot's angle is 
+    /// considered to be zero when it is facing directly away from your alliance station wall.
+    /// Remember that this should be CCW positive.</param>
+    /// <returns>ChassisSpeeds object representing the speeds in the robot's frame of reference.</returns>
     public static ChassisSpeeds FromFieldRelativeSpeeds(ChassisSpeeds FieldRelativeSpeeds, Rotation2d RobotAngle) =>
         FromFieldRelativeSpeeds(FieldRelativeSpeeds.Vx, FieldRelativeSpeeds.Vy, FieldRelativeSpeeds.Omega, RobotAngle);
 
+    /// <summary>
+    /// Converts a user provided robot-relative set of speeds into a field-relative ChassisSpeeds object.
+    /// </summary>
+    /// <param name="Vx">The component of speed in the x direction relative to the robot. Positive x is towards the 
+    /// robot's front.</param>
+    /// <param name="Vy">The component of speed in the y direction relative to the robot. Positive y is towards the 
+    /// robot's left.</param>
+    /// <param name="Omega">The angular velocity of the robot.</param>
+    /// <param name="RobotAngle">The angle of the robot as measured by a gyroscope. The robot's angle is 
+    /// considered to be zero when it is facing directly away from your alliance station wall.
+    /// Remember that this should be CCW positive.</param>
+    /// <returns>ChassisSpeeds object representing the speeds in the field's frame of reference.</returns>
     public static ChassisSpeeds FromRobotRelativeSpeeds(Speed Vx, Speed Vy, RotationalSpeed Omega, Rotation2d RobotAngle)
     {
         var oneSecond = TimeSpan.FromSeconds(1);
@@ -79,6 +147,15 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
         return new(chassisFrameVelocity.X / oneSecond, chassisFrameVelocity.Y / oneSecond, Omega);
     }
 
+    /// <summary>
+    /// Converts a user provided robot-relative ChassisSpeeds object into a field-relative ChassisSpeeds object.
+    /// </summary>
+    /// <param name="RobotRelativeSpeeds"> The ChassisSpeeds object representing the speeds in the robot frame 
+    /// of reference. Positive x is towards the robot's front. Positive y is towards the robot's left.</param>
+    /// <param name="RobotAngle">The angle of the robot as measured by a gyroscope. The robot's angle is 
+    /// considered to be zero when it is facing directly away from your alliance station wall.
+    /// Remember that this should be CCW positive.</param>
+    /// <returns>ChassisSpeeds object representing the speeds in the field's frame of reference.</returns>
     public static ChassisSpeeds FromRobotRelativeSpeeds(ChassisSpeeds RobotRelativeSpeeds, Rotation2d RobotAngle) =>
         FromRobotRelativeSpeeds(RobotRelativeSpeeds.Vx, RobotRelativeSpeeds.Vy, RobotRelativeSpeeds.Omega, RobotAngle);
 
