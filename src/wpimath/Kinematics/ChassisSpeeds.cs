@@ -1,6 +1,8 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Google.Protobuf.Reflection;
 using UnitsNet;
+using UnitsNet.NumberExtensions.NumberToRotationalSpeed;
+using UnitsNet.NumberExtensions.NumberToSpeed;
 using WPIMath.Geometry;
 using WPIMath.Proto;
 using WPIUtil.Serialization.Protobuf;
@@ -8,7 +10,7 @@ using WPIUtil.Serialization.Struct;
 
 namespace WPIMath;
 
-public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
+public class ChassisSpeeds : IAdditionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
                                 ISubtractionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
                                 IMultiplyOperators<ChassisSpeeds, double, ChassisSpeeds>,
                                 IDivisionOperators<ChassisSpeeds, double, ChassisSpeeds>,
@@ -35,7 +37,7 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
     /// <summary>
     /// Constructs a new ChassisSpeeds object with zero velocity on all axes.
     /// </summary>
-    public ChassisSpeeds() {}
+    public ChassisSpeeds() { }
 
     /// <summary>
     /// Constructs a new ChassisSpeeds object with the given velocities.
@@ -43,11 +45,24 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
     /// <param name="Vx">Chassis velocity in the X-axis (Forward is positive).</param>
     /// <param name="Vy">Chassis velocity in the Y-axis (Left is positive).</param>
     /// <param name="Omega">Chassis Angular velocity (Z-axis or theta, Counter-Clockwise is positive).</param>
-    public ChassisSpeeds(Speed Vx, Speed Vy, RotationalSpeed Omega) 
+    public ChassisSpeeds(Speed Vx, Speed Vy, RotationalSpeed Omega)
     {
         this.Vx = Vx;
         this.Vy = Vy;
         this.Omega = Omega;
+    }
+
+    /// <summary>
+    /// Constructs a new ChassisSpeeds object with the given velocities.
+    /// </summary>
+    /// <param name="vx">Chassis velocity in the X-axis (Forward is positive) in meters per second.</param>
+    /// <param name="vy">Chassis velocity in the Y-axis (Left is positive) in meters per second.</param>
+    /// <param name="omega">Chassis Angular velocity (Z-axis or theta, Counter-Clockwise is positive) in radians per second.</param>
+    public ChassisSpeeds(double vx, double vy, double omega)
+    {
+        Vx = vx.MetersPerSecond();
+        Vy = vy.MetersPerSecond();
+        Omega = omega.RadiansPerSecond();
     }
 
     /// <summary>
@@ -77,7 +92,7 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
     }
 
     /// <summary>
-    /// Discretizes a continuous-time chassis speed.
+    /// Discretizes a  continuous-time chassis speed.
     /// 
     /// <para>
     /// This function converts a continuous-time chassis speed into a discrete-time one such that
@@ -159,10 +174,10 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
     public static ChassisSpeeds FromRobotRelativeSpeeds(ChassisSpeeds RobotRelativeSpeeds, Rotation2d RobotAngle) =>
         FromRobotRelativeSpeeds(RobotRelativeSpeeds.Vx, RobotRelativeSpeeds.Vy, RobotRelativeSpeeds.Omega, RobotAngle);
 
-    public static ChassisSpeeds operator +(ChassisSpeeds left, ChassisSpeeds right) => 
+    public static ChassisSpeeds operator +(ChassisSpeeds left, ChassisSpeeds right) =>
         new(left.Vx + right.Vx, left.Vy + right.Vy, left.Omega + right.Omega);
-    
-    public static ChassisSpeeds operator -(ChassisSpeeds left, ChassisSpeeds right) => 
+
+    public static ChassisSpeeds operator -(ChassisSpeeds left, ChassisSpeeds right) =>
         new(left.Vx - right.Vx, left.Vy - right.Vy, left.Omega - right.Omega);
 
     public static ChassisSpeeds operator -(ChassisSpeeds value) =>
@@ -174,7 +189,7 @@ public class ChassisSpeeds :    IAdditionOperators<ChassisSpeeds, ChassisSpeeds,
     public static ChassisSpeeds operator /(ChassisSpeeds speeds, double scalar) =>
         new(speeds.Vx / scalar, speeds.Vy / scalar, speeds.Omega / scalar);
 
-    public override string ToString() => 
+    public override string ToString() =>
         $"ChassisSpeeds(Vx: {Vx:F2} {Vx.Unit}, Vy: {Vy:F2} {Vy.Unit}, Omega: {Omega:F2} {Omega.Unit})";
 }
 
@@ -184,7 +199,7 @@ public class ChassisSpeedsProto : IProtobuf<ChassisSpeeds, ProtobufChassisSpeeds
 
     public ProtobufChassisSpeeds CreateMessage() => new();
 
-    public void Pack(ProtobufChassisSpeeds msg, ChassisSpeeds value) 
+    public void Pack(ProtobufChassisSpeeds msg, ChassisSpeeds value)
     {
         msg.Vx = value.Vx.MetersPerSecond;
         msg.Vy = value.Vy.MetersPerSecond;
