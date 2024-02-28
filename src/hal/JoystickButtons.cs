@@ -1,44 +1,29 @@
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace WPIHal;
 
-[NativeMarshalling(typeof(JoystickButtonsMarshaller))]
-[StructLayout(LayoutKind.Auto)]
-public readonly record struct JoystickButtons(uint Buttons, int Count)
+[StructLayout(LayoutKind.Sequential)]
+public readonly struct JoystickButtons
 {
+    private readonly uint buttons;
+    private readonly byte count;
+
+    public int Count => count;
+
+    public uint Buttons => buttons;
+
     public bool? this[int index]
     {
         get
         {
-            if (index < Count)
+            if (index < count)
             {
-                return (Buttons & index) != 0;
+                return (buttons & index) != 0;
             }
             else
             {
                 return null;
             }
         }
-    }
-}
-
-[CustomMarshaller(typeof(JoystickButtons), MarshalMode.ManagedToUnmanagedOut, typeof(JoystickButtonsMarshaller))]
-public static class JoystickButtonsMarshaller
-{
-    public static JoystickButtons ConvertToManaged(NativeJoystickButtons unmanaged)
-    {
-        return new JoystickButtons
-        {
-            Buttons = unmanaged.buttons,
-            Count = unmanaged.count,
-        };
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NativeJoystickButtons
-    {
-        public uint buttons;
-        public byte count;
     }
 }

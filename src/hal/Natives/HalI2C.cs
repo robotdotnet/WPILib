@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using WPIUtil;
 
 namespace WPIHal.Natives;
 
@@ -9,6 +10,7 @@ public static partial class HalI2C
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void CloseI2C(I2CPort port);
 
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeI2C")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void InitializeI2C(I2CPort port, out HalStatus status);
