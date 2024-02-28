@@ -5,4 +5,8 @@
     <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Kinematics\Proto\" />
+  </ItemGroup>
+
 </Project>

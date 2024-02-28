@@ -10,7 +10,7 @@ using WPIUtil.Serialization.Struct;
 
 namespace WPIMath;
 
-public class ChassisSpeeds : IAdditionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
+public readonly struct ChassisSpeeds : IAdditionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
                                 ISubtractionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
                                 IMultiplyOperators<ChassisSpeeds, double, ChassisSpeeds>,
                                 IDivisionOperators<ChassisSpeeds, double, ChassisSpeeds>,
