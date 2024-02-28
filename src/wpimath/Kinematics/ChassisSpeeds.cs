@@ -14,7 +14,8 @@ public readonly struct ChassisSpeeds : IAdditionOperators<ChassisSpeeds, Chassis
                                 ISubtractionOperators<ChassisSpeeds, ChassisSpeeds, ChassisSpeeds>,
                                 IMultiplyOperators<ChassisSpeeds, double, ChassisSpeeds>,
                                 IDivisionOperators<ChassisSpeeds, double, ChassisSpeeds>,
-                                IUnaryNegationOperators<ChassisSpeeds, ChassisSpeeds>
+                                IUnaryNegationOperators<ChassisSpeeds, ChassisSpeeds>,
+                                IEquatable<ChassisSpeeds>
 {
     /// <summary>
     /// Chassis velocity in the X-axis (Forward is positive).
@@ -191,6 +192,31 @@ public readonly struct ChassisSpeeds : IAdditionOperators<ChassisSpeeds, Chassis
 
     public override string ToString() =>
         $"ChassisSpeeds(Vx: {Vx:F2} {Vx.Unit}, Vy: {Vy:F2} {Vy.Unit}, Omega: {Omega:F2} {Omega.Unit})";
+
+    public bool Equals(ChassisSpeeds other)
+    {
+        return
+            Math.Abs(Vx.MetersPerSecond - other.Vx.MetersPerSecond) < 1E-9 &&
+            Math.Abs(Vy.MetersPerSecond - other.Vy.MetersPerSecond) < 1E-9 &&
+            Math.Abs(Omega.RadiansPerSecond - other.Omega.RadiansPerSecond) < 1E-9;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return obj is ChassisSpeeds speeds && Equals(speeds);
+    }
+
+    public static bool operator ==(ChassisSpeeds left, ChassisSpeeds right)
+    {
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ChassisSpeeds left, ChassisSpeeds right)
+    {
+        return !(left == right);
+    }
+
+    public override int GetHashCode() => HashCode.Combine(Vx, Vy, Omega);
 }
 
 public class ChassisSpeedsProto : IProtobuf<ChassisSpeeds, ProtobufChassisSpeeds>
