@@ -75,7 +75,7 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
     public Translation2d Translation { get; init; }
     [JsonInclude]
     [JsonPropertyName("rotation")]
-    public Rotation2d Rotation { get; init; }
+    public Rotation2d Rotation { get; init; } = new Rotation2d();
 
     [JsonIgnore]
     public Length X => Translation.X;
@@ -98,7 +98,11 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
 
     public Pose2d TransformBy(Transform2d other)
     {
-        return new Pose2d(Translation + other.Translation.RotateBy(Rotation), other.Rotation + Rotation);
+        Translation2d rotated = other.Translation.RotateBy(Rotation);
+        Translation2d newTranslation = Translation + rotated;
+        Rotation2d newRotation = other.Rotation + Rotation;
+        Pose2d newPose = new Pose2d(newTranslation, newRotation);
+        return newPose;
     }
 
     public Pose2d RotateBy(Rotation2d other)

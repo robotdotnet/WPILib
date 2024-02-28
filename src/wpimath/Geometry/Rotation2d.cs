@@ -69,6 +69,13 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
     public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto { get; } = new Rotation2dProto();
 
+    public Rotation2d()
+    {
+        Angle = 0.Radians();
+        Cos = 1;
+        Sin = 0;
+    }
+
     public Rotation2d(Angle angle)
     {
         Angle = angle;
