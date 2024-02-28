@@ -179,4 +179,6 @@ public readonly struct Translation2d : IStructSerializable<Translation2d>, IProt
     {
         return HashCode.Combine(X, Y);
     }
+
+    public override string ToString() => $"Translation2d(X: {X}, Y: {Y})";
 }

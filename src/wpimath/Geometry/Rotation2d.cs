@@ -176,4 +176,5 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
         return MathExtras.Lerp(this, endValue, t);
     }
 
+    public override string ToString() => $"Rotation2d(Angle: {Angle})";
 }

@@ -236,4 +236,6 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
     {
         return HashCode.Combine(Translation, Rotation);
     }
+
+    public override string ToString() => $"Pose2d({Translation}, {Rotation})";
 }
