@@ -77,6 +77,11 @@ public readonly struct Rotation3d : IStructSerializable<Rotation3d>,
     [JsonPropertyName("quaternion")]
     public Quaternion Quaternion { get; init; }
 
+    public Rotation3d() : this(new())
+    {
+
+    }
+
     [JsonConstructor]
     public Rotation3d(Quaternion quaternion)
     {

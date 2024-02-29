@@ -81,6 +81,11 @@ public readonly struct Transform2d : IAdditionOperators<Transform2d, Transform2d
 
     public static Transform2d AdditiveIdentity => new();
 
+    public Transform2d() : this(new Translation2d(), new Rotation2d())
+    {
+
+    }
+
     [JsonConstructor]
     public Transform2d(Translation2d translation, Rotation2d rotation)
     {

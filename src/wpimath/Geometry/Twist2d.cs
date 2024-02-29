@@ -96,6 +96,10 @@ public readonly struct Twist2d : IEquatable<Twist2d>, IEqualityOperators<Twist2d
         Dtheta = dtheta.Radians();
     }
 
+    public Twist2d() : this(0.Meters(), 0.Meters(), 0.Radians())
+    {
+    }
+
     public Twist2d(Length dx, Length dy, Angle dtheta)
     {
         Dx = dx;
