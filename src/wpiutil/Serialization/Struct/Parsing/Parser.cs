@@ -7,6 +7,11 @@ public ref struct Parser(ReadOnlySpan<byte> inStr)
     private Lexer m_lexer = new(inStr);
     private TokenKind m_token;
 
+    public Parser() : this(default)
+    {
+
+    }
+
     public ParsedSchema Parse()
     {
         ParsedSchema schema = new ParsedSchema();

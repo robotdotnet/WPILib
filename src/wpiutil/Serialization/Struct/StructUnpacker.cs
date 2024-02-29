@@ -8,6 +8,11 @@ public ref struct StructUnpacker(ReadOnlySpan<byte> data)
     private readonly ReadOnlySpan<byte> m_data = data;
     private int m_length = 0;
 
+    public StructUnpacker() : this(default)
+    {
+
+    }
+
     public readonly ReadOnlySpan<byte> Used => m_data[..m_length];
     public readonly ReadOnlySpan<byte> Remaining => m_data[m_length..];
 

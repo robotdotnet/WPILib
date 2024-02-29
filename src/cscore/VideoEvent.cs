@@ -13,6 +13,11 @@ public readonly struct VideoEvent(in VideoEventMarshaller.NativeCsEvent csEvent)
     public EventKind Kind { get; } = csEvent.kind;
     public CsListener Listener { get; } = new CsListener(csEvent.listener);
 
+    public VideoEvent() : this(default)
+    {
+
+    }
+
     public static unsafe void FreeArray(VideoEventMarshaller.NativeCsEvent* array, int len)
     {
         CsNative.FreeEvents(array, len);

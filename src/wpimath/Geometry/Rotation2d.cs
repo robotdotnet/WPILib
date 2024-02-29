@@ -100,6 +100,10 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     [JsonPropertyName("radians")]
     internal double Radians => Angle.Radians;
 
+    public Rotation2d() {
+
+    }
+
     [JsonIgnore]
     public Angle Angle { get; } = 0.Radians();
     [JsonIgnore]

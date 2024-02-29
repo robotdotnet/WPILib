@@ -154,6 +154,11 @@ public static unsafe class WpiStringMarshaller
         public Ptr<byte> Str = str;
         public nuint Len = len;
 
+        public WpiStringNative() : this(null, 0)
+        {
+
+        }
+
         public static void FreeArray(WpiStringNative* array, int len)
         {
             StringsNative.FreeStringArray(array, (nuint)len);
