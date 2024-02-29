@@ -23,37 +23,5 @@ namespace WPIMath.Test.Geometry
             Pose2d applied = start.Exp(twist);
             Assert.Equal(end, applied);
         }
-        // TODO: Move tests to own classes to match with their relevant geometry types
-        [Fact]
-        public void TestPose2dTransformBy()
-        {
-            Pose2d start = new();
-
-            Transform2d transform = new(new Translation2d(5.Meters(), 5.Meters()), new Rotation2d(90.Degrees()));
-
-            Pose2d end = new(new Translation2d(5.Meters(), 5.Meters()), new Rotation2d(90.Degrees()));
-
-            Assert.Equal(end, start.TransformBy(transform));
-        }
-
-        [Fact]
-        public void TestTranslation2dRotateBy()
-        {
-            Translation2d start = new(5.Meters(), 0.Meters());
-            Rotation2d rotation = new(90.Degrees());
-            Translation2d end = start.RotateBy(rotation);
-
-            Assert.Equal(new Translation2d(0.Meters(), 5.Meters()), end);
-        }
-
-        [Fact]
-        public void TestTranslation2dAddition()
-        {
-            Translation2d start = new(5.Meters(), 0.Meters());
-            Translation2d offset = new(2.Meters(), 3.Meters());
-            Translation2d end = new(7.Meters(), 3.Meters());
-
-            Assert.Equal(end, start + offset);
-        }
     }
 }
