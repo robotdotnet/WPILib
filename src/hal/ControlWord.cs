@@ -15,27 +15,27 @@ public static class ControlWordMarshaller
         NativeControlWord ret = default;
         if (managed.Enabled)
         {
-            ret |= NativeControlWord.Enabled;
+            ret.control |= (uint)NativeControlWordEnum.Enabled;
         }
         if (managed.Autonomous)
         {
-            ret |= NativeControlWord.Autonomous;
+            ret.control |= (uint)NativeControlWordEnum.Autonomous;
         }
         if (managed.Test)
         {
-            ret |= NativeControlWord.Test;
+            ret.control |= (uint)NativeControlWordEnum.Test;
         }
         if (managed.EStop)
         {
-            ret |= NativeControlWord.EStop;
+            ret.control |= (uint)NativeControlWordEnum.EStop;
         }
         if (managed.FmsAttached)
         {
-            ret |= NativeControlWord.FmsArrached;
+            ret.control |= (uint)NativeControlWordEnum.FmsAttached;
         }
         if (managed.DsAttached)
         {
-            ret |= NativeControlWord.DsAttached;
+            ret.control |= (uint)NativeControlWordEnum.DsAttached;
         }
         return ret;
     }
@@ -44,23 +44,29 @@ public static class ControlWordMarshaller
     {
         return new ControlWord
         {
-            Enabled = unmanaged.HasFlag(NativeControlWord.Enabled),
-            Autonomous = unmanaged.HasFlag(NativeControlWord.Autonomous),
-            Test = unmanaged.HasFlag(NativeControlWord.Test),
-            EStop = unmanaged.HasFlag(NativeControlWord.EStop),
-            FmsAttached = unmanaged.HasFlag(NativeControlWord.FmsArrached),
-            DsAttached = unmanaged.HasFlag(NativeControlWord.DsAttached),
+            Enabled = (unmanaged.control & (uint)NativeControlWordEnum.Enabled) != 0,
+            Autonomous = (unmanaged.control & (uint)NativeControlWordEnum.Autonomous) != 0,
+            Test = (unmanaged.control & (uint)NativeControlWordEnum.Test) != 0,
+            EStop = (unmanaged.control & (uint)NativeControlWordEnum.EStop) != 0,
+            FmsAttached = (unmanaged.control & (uint)NativeControlWordEnum.FmsAttached) != 0,
+            DsAttached = (unmanaged.control & (uint)NativeControlWordEnum.DsAttached) != 0,
         };
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NativeControlWord
+    {
+        public uint control;
+    }
+
     [Flags]
-    public enum NativeControlWord : uint
+    public enum NativeControlWordEnum : uint
     {
         Enabled = 0x1,
         Autonomous = 0x2,
         Test = 0x4,
         EStop = 0x8,
-        FmsArrached = 0x10,
+        FmsAttached = 0x10,
         DsAttached = 0x20,
     }
 }

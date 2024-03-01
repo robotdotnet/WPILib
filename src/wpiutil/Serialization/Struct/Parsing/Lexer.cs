@@ -6,6 +6,11 @@ public ref struct Lexer(ReadOnlySpan<byte> inStr)
 {
     private Utf8CodePointEnumerator m_enumerator = new(inStr);
 
+    public Lexer() : this(default)
+    {
+
+    }
+
     public readonly int Position => m_enumerator.CurrentMark;
 
     public TokenKind Scan()

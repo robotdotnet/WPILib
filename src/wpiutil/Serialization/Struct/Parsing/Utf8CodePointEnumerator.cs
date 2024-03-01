@@ -5,6 +5,11 @@ namespace WPIUtil.Serialization.Struct.Parsing;
 
 public ref struct Utf8CodePointEnumerator(ReadOnlySpan<byte> str)
 {
+    public Utf8CodePointEnumerator() : this(default)
+    {
+
+    }
+
     private readonly ReadOnlySpan<byte> m_str = str;
     private int m_index;
     public Rune Current { readonly get; private set; } = Rune.ReplacementChar;

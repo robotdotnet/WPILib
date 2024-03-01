@@ -8,6 +8,11 @@ public ref struct StructPacker(Span<byte> data)
     private readonly Span<byte> m_data = data;
     private int m_length = 0;
 
+    public StructPacker() : this(default)
+    {
+
+    }
+
     public readonly ReadOnlySpan<byte> Filled => m_data[..m_length];
     public readonly Span<byte> Remaining => m_data[m_length..];
 

@@ -90,6 +90,10 @@ public readonly struct Translation2d : IStructSerializable<Translation2d>, IProt
     [JsonPropertyName("y")]
     internal double JsonY => Y.Meters;
 
+    public Translation2d() : this(0.Meters(), 0.Meters())
+    {
+    }
+
     public Translation2d(Length x, Length y)
     {
         X = x;

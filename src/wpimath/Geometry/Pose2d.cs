@@ -82,7 +82,10 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
     [JsonIgnore]
     public Length Y => Translation.Y;
 
-    public Pose2d() { }
+    public Pose2d() : this(new(), new())
+    {
+
+    }
 
     [JsonConstructor]
     public Pose2d(Translation2d translation, Rotation2d rotation)

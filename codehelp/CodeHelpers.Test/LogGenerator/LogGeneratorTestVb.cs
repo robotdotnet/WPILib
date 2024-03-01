@@ -2,12 +2,12 @@ namespace CodeHelpers.Test.LogGenerator;
 
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.VisualBasic.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
-using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
+using Microsoft.CodeAnalysis.VisualBasic.Testing;
 using Stereologue;
+using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
 
 public class LogGeneratorTestVb
 {

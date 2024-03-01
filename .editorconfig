@@ -122,6 +122,9 @@ csharp_space_between_method_call_empty_parameter_list_parentheses = false
 # Wrapping preferences
 csharp_preserve_single_line_statements = true
 csharp_preserve_single_line_blocks = true
+# enable internal WPILib diagnostics
+dotnet_diagnostic.WPILIB1100.severity = warning
+dotnet_diagnostic.WPILIB1101.severity = warning
 ###############################
 # VB Coding Conventions       #
 ###############################

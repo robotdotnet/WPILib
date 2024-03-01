@@ -17,9 +17,12 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
 
         if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
         {
-            if (builder.Language == LanguageKind.CSharp) {
+            if (builder.Language == LanguageKind.CSharp)
+            {
                 iLogged = Strings.LoggerInterfaceFullyQualified;
-            } else if (builder.Language == LanguageKind.VisualBasic) {
+            }
+            else if (builder.Language == LanguageKind.VisualBasic)
+            {
                 iLogged = Strings.LoggerInterfaceFullyQualifiedVb;
             }
         }
