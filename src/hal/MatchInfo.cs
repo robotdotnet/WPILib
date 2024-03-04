@@ -8,6 +8,7 @@ namespace WPIHal;
 public record struct MatchInfo(string EventName, MatchType MatchType, int MatchNumber, int ReplayNumber, byte[] GameSpecificMessage);
 
 [CustomMarshaller(typeof(MatchInfo), MarshalMode.ManagedToUnmanagedOut, typeof(MatchInfoMarshaller))]
+[CustomMarshaller(typeof(MatchInfo), MarshalMode.ManagedToUnmanagedIn, typeof(MatchInfoMarshaller))]
 public static class MatchInfoMarshaller
 {
     public static unsafe MatchInfo ConvertToManaged(NativeMatchInfo unmanaged)
@@ -20,6 +21,11 @@ public static class MatchInfoMarshaller
             ReplayNumber = unmanaged.replayNumber,
             GameSpecificMessage = unmanaged.gameSpecificMessage.FromRawBytes(unmanaged.gameSpecificMessageSize)
         };
+    }
+
+    public static NativeMatchInfo ConvertToUnmanaged(in MatchInfo managed)
+    {
+        throw new NotImplementedException();
     }
 
     [StructLayout(LayoutKind.Sequential)]

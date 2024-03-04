@@ -7,6 +7,7 @@ namespace WPIHal;
 public readonly record struct JoystickDescriptor(bool IsXbox, int Type, string Name, int[] AxisTypes, int ButtonCount, int PovCount);
 
 [CustomMarshaller(typeof(JoystickDescriptor), MarshalMode.ManagedToUnmanagedOut, typeof(JoystickDescriptorMarshaller))]
+[CustomMarshaller(typeof(JoystickDescriptor), MarshalMode.ManagedToUnmanagedIn, typeof(JoystickDescriptorMarshaller))]
 public static class JoystickDescriptorMarshaller
 {
     public static JoystickDescriptor ConvertToManaged(NativeJoystickDescriptor unmanaged)
@@ -20,6 +21,11 @@ public static class JoystickDescriptorMarshaller
             ButtonCount = unmanaged.buttonCount,
             PovCount = unmanaged.povCount,
         };
+    }
+
+    public static NativeJoystickDescriptor ConvertToUnmanaged(JoystickDescriptor managed)
+    {
+        throw new NotImplementedException();
     }
 
     [StructLayout(LayoutKind.Sequential)]
