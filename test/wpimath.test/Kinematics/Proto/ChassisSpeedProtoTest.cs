@@ -1,3 +1,4 @@
+using UnitsNet;
 using WPIMath.Proto;
 using Xunit;
 
@@ -5,7 +6,7 @@ namespace WPIMath.Test.Kinematics.Proto
 {
     public class ChassisSpeedsProtoTest
     {
-        readonly ChassisSpeeds data = new(1.0, 2.0, 3.0);
+        readonly ChassisSpeeds data = new(Speed.FromMetersPerSecond(1.0), Speed.FromMetersPerSecond(2.0), RotationalSpeed.FromRadiansPerSecond(3.0));
 
         [Fact]
         public void TestRoundtrip()
