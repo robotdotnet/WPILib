@@ -37,9 +37,10 @@ public partial class MyNewClass
     }
 }
 ";
-        testString = testString.NormalizeLineEndings();
         testString = testString.Replace("REPLACEME", type);
 
+        // Due to StringBuilder in the source generator,
+        // We must normalize the output line endings
         expected = expected.NormalizeLineEndings();
         expected = expected.Replace("REPLACEME", output);
 
@@ -52,6 +53,9 @@ public partial class MyNewClass
                 ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
                 Sources = {
                     testString,
+                },
+                AnalyzerConfigFiles = {
+                    ("/.editorconfig", SourceText.From(TestHelpers.EditorConfig, Encoding.UTF8))
                 },
                 GeneratedSources = {
                     ($"WPILib.CodeHelpers{Path.DirectorySeparatorChar}WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorSharp{Path.DirectorySeparatorChar}MyNewClass.g.cs", SourceText.From(expected, Encoding.UTF8))

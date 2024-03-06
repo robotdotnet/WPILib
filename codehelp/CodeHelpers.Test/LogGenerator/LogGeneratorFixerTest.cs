@@ -1,24 +1,17 @@
+using System.Text;
+using Microsoft.CodeAnalysis.CSharp.Testing;
+using Microsoft.CodeAnalysis.Testing;
+using Microsoft.CodeAnalysis.Testing.Verifiers;
+using Microsoft.CodeAnalysis.Text;
+using Stereologue;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
+using WPILib.CodeHelpers.LogGenerator.CodeFixer;
 using Verify = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.CodeFixVerifier<WPILib.CodeHelpers.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.LogGenerator.CodeFixer.LogGeneratorFixer>;
 
 namespace CodeHelpers.Test.LogGenerator;
 
 public class LogGeneratorFixerTest
 {
-    const string InternalTypes = @"
-namespace Stereologue
-{
-[System.AttributeUsage(System.AttributeTargets.Property | System.AttributeTargets.Method | System.AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-public sealed class LogAttribute : System.Attribute
-{
-}
-
-[System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Struct)]
-public sealed class GenerateLogAttribute : System.Attribute
-{
-}
-}
-";
     [Fact]
     public async void Test1()
     {
@@ -41,11 +34,26 @@ public partial class MyNewClass
     public int Variable { get; }
 }
 ";
-        testString += InternalTypes;
-        fixedCode += InternalTypes;
-        testString = testString.NormalizeLineEndings();
-        fixedCode = fixedCode.NormalizeLineEndings();
-        var expected = Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(4, 22).WithArguments(["MyNewClass"]);
-        await Verify.VerifyCodeFixAsync(testString, expected, fixedCode);
+
+        await new CSharpCodeFixTest<LogGeneratorAnalyzer, LogGeneratorFixer, XUnitVerifier>()
+        {
+            TestState = {
+                AdditionalReferences = {
+                    typeof(LogAttribute).Assembly
+                },
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
+                Sources = {
+                    testString,
+                },
+                AnalyzerConfigFiles = {
+                    ("/.editorconfig", SourceText.From(TestHelpers.EditorConfig, Encoding.UTF8))
+                }
+            },
+            FixedCode = fixedCode,
+            ExpectedDiagnostics = {
+                Verify.Diagnostic(LoggerDiagnostics.MissingGenerateLog).WithLocation(4, 22).WithArguments(["MyNewClass"])
+            }
+
+        }.RunAsync();
     }
 }
