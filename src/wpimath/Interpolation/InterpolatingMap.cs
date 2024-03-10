@@ -2,31 +2,18 @@ using System.Numerics;
 
 namespace WPIMath.Interpolation;
 
-public class InterpolatingMap<T>(IComparer<T> comparer) where T : notnull,
+public class InterpolatingMap<T> where T : struct,
                                                          IFloatingPointIeee754<T>
 {
     // TODO find a better solution to this
     private readonly List<(T key, T value)> m_map = [];
-    private readonly Comparison<(T key, T value)> m_comparer = (a, b) => comparer.Compare(a.key, b.key);
-    private readonly IComparer<T> m_keyComparer = comparer;
-
-    public InterpolatingMap() : this(Comparer<T>.Default)
-    {
-    }
+    private readonly IComparer<(T key, T value)> m_comparer = new KeyCoercingComparer();
 
     public void Add(T key, T value)
     {
-        int idx = m_map.FindIndex(x => m_keyComparer.Compare(x.key, key) == 0);
-        if (idx < 0)
-        {
-            m_map.Add((key, value));
-        }
-        else
-        {
-            var val = m_map[idx];
-            m_map[idx] = (key, val.value);
-        }
-        m_map.Sort(m_comparer);
+        // Doing this ensures the tree is always sorted.
+        int idx = m_map.BinarySearch((key, value), m_comparer);
+        m_map.Insert(~idx, (key, value));
     }
 
     public T this[T key]
@@ -38,37 +25,25 @@ public class InterpolatingMap<T>(IComparer<T> comparer) where T : notnull,
                 return T.Zero;
             }
 
-            // List is already sorted
-            (T key, T value) lower = m_map[0];
-            (T key, T value) upper = m_map[^1];
-
-            // Binary search
-            int minimum = 0;
-            int maximum = m_map.Count - 1;
-            while (minimum <= maximum)
-            {
-                int midpoint = (minimum + maximum) / 2;
-                int compare = m_keyComparer.Compare(key, m_map[midpoint].key);
-                if (compare == 0)
-                {
-                    return m_map[midpoint].value;
-                }
-                else if (compare < 0)
-                {
-                    upper = m_map[midpoint];
-                    maximum = midpoint - 1;
-                }
-                else
-                {
-                    lower = m_map[midpoint];
-                    minimum = midpoint + 1;
-                }
+            int idx = m_map.BinarySearch((key, T.Zero));
+            if (idx >= 0) {
+                return m_map[idx].value;
             }
 
-            if (m_comparer(lower, upper) == 0)
-            {
-                return lower.value;
+            int larger = ~idx;
+
+            // Request is smaller than all elements, return smallest
+            if (larger == 0) {
+                return m_map[larger].value;
             }
+
+            // Request is larger than all elements, return largest
+            if (larger == m_map.Count) {
+                return m_map[^1].value;
+            }
+
+            (T key, T value) lower = m_map[larger - 1];
+            (T key, T value) upper = m_map[larger];
 
             T delta = (key - lower.key) / (upper.key - lower.key);
             return T.Lerp(lower.value, upper.value, delta);
@@ -78,5 +53,14 @@ public class InterpolatingMap<T>(IComparer<T> comparer) where T : notnull,
     public void Clear()
     {
         m_map.Clear();
+    }
+
+    private sealed class KeyCoercingComparer : IComparer<(T key, T value)>
+    {
+        public int Compare((T key, T value) x, (T key, T value) y)
+        {
+            int result = x.key.CompareTo(y.key);
+            return result;
+        }
     }
 }
