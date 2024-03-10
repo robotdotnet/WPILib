@@ -9,36 +9,36 @@ public static unsafe partial class HalSimDeviceData
 {
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetSimDeviceEnabled", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetSimDeviceEnabled(string prefix, [MarshalAs(UnmanagedType.I4)] bool enabled);
+    public static partial void SetEnabled(string prefix, [MarshalAs(UnmanagedType.I4)] bool enabled);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_IsSimDeviceEnabled", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool IsSimDeviceEnabled(string name);
+    public static partial bool IsEnabled(string name);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSimDeviceCreatedCallback", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterSimDeviceCreatedCallback(string prefix, void* param, HALSIM_SimDeviceCallback callback, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterCreatedCallback(string prefix, void* param, HALSIM_SimDeviceCallback callback, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelSimDeviceCreatedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelSimDeviceCreatedCallback(int uid);
+    public static partial void CancelCreatedCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSimDeviceFreedCallback", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterSimDeviceFreedCallback(string prefix, void* param, HALSIM_SimDeviceCallback callback, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterFreedCallback(string prefix, void* param, HALSIM_SimDeviceCallback callback, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelSimDeviceFreedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelSimDeviceFreedCallback(int uid);
+    public static partial void CancelFreedCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetSimDeviceHandle", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial WPIHal.Handles.HalSimDeviceHandle GetSimDeviceHandle(string name);
+    public static partial WPIHal.Handles.HalSimDeviceHandle GetHandle(string name);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetSimDeviceName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial byte* GetSimDeviceName(WPIHal.Handles.HalSimDeviceHandle handle);
+    public static partial byte* GetName(WPIHal.Handles.HalSimDeviceHandle handle);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetSimValueDeviceHandle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -46,7 +46,7 @@ public static unsafe partial class HalSimDeviceData
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_EnumerateSimDevices", StringMarshalling = StringMarshalling.Utf8)]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void EnumerateSimDevices(string prefix, void* param, HALSIM_SimDeviceCallback callback);
+    public static partial void Enumerates(string prefix, void* param, HALSIM_SimDeviceCallback callback);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSimValueCreatedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -90,6 +90,6 @@ public static unsafe partial class HalSimDeviceData
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_ResetSimDeviceData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ResetSimDeviceData();
+    public static partial void ResetData();
 
 }

@@ -11,47 +11,47 @@ public static unsafe partial class HalSPIData
 {
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_ResetSPIData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ResetSPIData(int index);
+    public static partial void ResetData(int index);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSPIInitializedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterSPIInitializedCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterInitializedCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelSPIInitializedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelSPIInitializedCallback(int index, int uid);
+    public static partial void CancelInitializedCallback(int index, int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetSPIInitialized")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetSPIInitialized(int index);
+    public static partial bool GetInitialized(int index);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetSPIInitialized")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetSPIInitialized(int index, [MarshalAs(UnmanagedType.I4)] bool initialized);
+    public static partial void SetInitialized(int index, [MarshalAs(UnmanagedType.I4)] bool initialized);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSPIReadCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterSPIReadCallback(int index, HAL_BufferCallback callback, void* param);
+    public static partial int RegisterReadCallback(int index, HAL_BufferCallback callback, void* param);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelSPIReadCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelSPIReadCallback(int index, int uid);
+    public static partial void CancelReadCallback(int index, int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSPIWriteCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterSPIWriteCallback(int index, HAL_ConstBufferCallback callback, void* param);
+    public static partial int RegisterWriteCallback(int index, HAL_ConstBufferCallback callback, void* param);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelSPIWriteCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelSPIWriteCallback(int index, int uid);
+    public static partial void CancelWriteCallback(int index, int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterSPIReadAutoReceivedDataCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterSPIReadAutoReceivedDataCallback(int index, HAL_SpiReadAutoReceiveBufferCallback callback, void* param);
+    public static partial int RegisterReadAutoReceivedDataCallback(int index, HAL_SpiReadAutoReceiveBufferCallback callback, void* param);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelSPIReadAutoReceivedDataCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelSPIReadAutoReceivedDataCallback(int index, int uid);
+    public static partial void CancelReadAutoReceivedDataCallback(int index, int uid);
 
 }

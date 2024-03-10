@@ -15,141 +15,141 @@ public static unsafe partial class HalDriverStationData
 {
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_ResetDriverStationData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ResetDriverStationData();
+    public static partial void ResetData();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationEnabledCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationEnabledCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterEnabledCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationEnabledCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationEnabledCallback(int uid);
+    public static partial void CancelEnabledCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationEnabled")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDriverStationEnabled();
+    public static partial bool GetEnabled();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationEnabled")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationEnabled([MarshalAs(UnmanagedType.I4)] bool enabled);
+    public static partial void SetEnabled([MarshalAs(UnmanagedType.I4)] bool enabled);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationAutonomousCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationAutonomousCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterAutonomousCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationAutonomousCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationAutonomousCallback(int uid);
+    public static partial void CancelAutonomousCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationAutonomous")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDriverStationAutonomous();
+    public static partial bool GetAutonomous();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationAutonomous")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationAutonomous([MarshalAs(UnmanagedType.I4)] bool autonomous);
+    public static partial void SetAutonomous([MarshalAs(UnmanagedType.I4)] bool autonomous);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationTestCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationTestCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterTestCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationTestCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationTestCallback(int uid);
+    public static partial void CancelTestCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationTest")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDriverStationTest();
+    public static partial bool GetTest();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationTest")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationTest([MarshalAs(UnmanagedType.I4)] bool test);
+    public static partial void SetTest([MarshalAs(UnmanagedType.I4)] bool test);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationEStopCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationEStopCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterEStopCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationEStopCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationEStopCallback(int uid);
+    public static partial void CancelEStopCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationEStop")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDriverStationEStop();
+    public static partial bool GetEStop();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationEStop")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationEStop([MarshalAs(UnmanagedType.I4)] bool eStop);
+    public static partial void SetEStop([MarshalAs(UnmanagedType.I4)] bool eStop);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationFmsAttachedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationFmsAttachedCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterFmsAttachedCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationFmsAttachedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationFmsAttachedCallback(int uid);
+    public static partial void CancelFmsAttachedCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationFmsAttached")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDriverStationFmsAttached();
+    public static partial bool GetFmsAttached();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationFmsAttached")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationFmsAttached([MarshalAs(UnmanagedType.I4)] bool fmsAttached);
+    public static partial void SetFmsAttached([MarshalAs(UnmanagedType.I4)] bool fmsAttached);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationDsAttachedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationDsAttachedCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterDsAttachedCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationDsAttachedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationDsAttachedCallback(int uid);
+    public static partial void CancelDsAttachedCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationDsAttached")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDriverStationDsAttached();
+    public static partial bool GetDsAttached();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationDsAttached")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationDsAttached([MarshalAs(UnmanagedType.I4)] bool dsAttached);
+    public static partial void SetDsAttached([MarshalAs(UnmanagedType.I4)] bool dsAttached);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationAllianceStationIdCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationAllianceStationIdCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterAllianceStationIdCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationAllianceStationIdCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationAllianceStationIdCallback(int uid);
+    public static partial void CancelAllianceStationIdCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationAllianceStationId")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial WPIHal.AllianceStationID GetDriverStationAllianceStationId();
+    public static partial WPIHal.AllianceStationID GetAllianceStationId();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationAllianceStationId")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationAllianceStationId(WPIHal.AllianceStationID allianceStationId);
+    public static partial void SetAllianceStationId(WPIHal.AllianceStationID allianceStationId);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationMatchTimeCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationMatchTimeCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterMatchTimeCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationMatchTimeCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationMatchTimeCallback(int uid);
+    public static partial void CancelMatchTimeCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDriverStationMatchTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial double GetDriverStationMatchTime();
+    public static partial double GetMatchTime();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDriverStationMatchTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDriverStationMatchTime(double matchTime);
+    public static partial void SetMatchTime(double matchTime);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterJoystickAxesCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -317,18 +317,18 @@ public static unsafe partial class HalDriverStationData
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationAllCallbacks")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void RegisterDriverStationAllCallbacks(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial void RegisterAllCallbacks(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDriverStationNewDataCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDriverStationNewDataCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterNewDataCallback(HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDriverStationNewDataCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDriverStationNewDataCallback(int uid);
+    public static partial void CancelNewDataCallback(int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_NotifyDriverStationNewData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void NotifyDriverStationNewData();
+    public static partial void NotifyNewData();
 
 }

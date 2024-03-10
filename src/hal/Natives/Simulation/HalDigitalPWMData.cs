@@ -9,63 +9,63 @@ public static unsafe partial class HalDigitalPWMData
 {
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_FindDigitalPWMForChannel")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int FindDigitalPWMForChannel(int channel);
+    public static partial int FindForChannel(int channel);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_ResetDigitalPWMData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ResetDigitalPWMData(int index);
+    public static partial void ResetData(int index);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDigitalPWMInitializedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDigitalPWMInitializedCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterInitializedCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDigitalPWMInitializedCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDigitalPWMInitializedCallback(int index, int uid);
+    public static partial void CancelInitializedCallback(int index, int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDigitalPWMInitialized")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool GetDigitalPWMInitialized(int index);
+    public static partial bool GetInitialized(int index);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDigitalPWMInitialized")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDigitalPWMInitialized(int index, [MarshalAs(UnmanagedType.I4)] bool initialized);
+    public static partial void SetInitialized(int index, [MarshalAs(UnmanagedType.I4)] bool initialized);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDigitalPWMDutyCycleCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDigitalPWMDutyCycleCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterDutyCycleCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDigitalPWMDutyCycleCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDigitalPWMDutyCycleCallback(int index, int uid);
+    public static partial void CancelDutyCycleCallback(int index, int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDigitalPWMDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial double GetDigitalPWMDutyCycle(int index);
+    public static partial double GetDutyCycle(int index);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDigitalPWMDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDigitalPWMDutyCycle(int index, double dutyCycle);
+    public static partial void SetDutyCycle(int index, double dutyCycle);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDigitalPWMPinCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int RegisterDigitalPWMPinCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial int RegisterPinCallback(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_CancelDigitalPWMPinCallback")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CancelDigitalPWMPinCallback(int index, int uid);
+    public static partial void CancelPinCallback(int index, int uid);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetDigitalPWMPin")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetDigitalPWMPin(int index);
+    public static partial int GetPin(int index);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetDigitalPWMPin")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDigitalPWMPin(int index, int pin);
+    public static partial void SetPin(int index, int pin);
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterDigitalPWMAllCallbacks")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void RegisterDigitalPWMAllCallbacks(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
+    public static partial void RegisterAllCallbacks(int index, HAL_NotifyCallback callback, void* param, [MarshalAs(UnmanagedType.I4)] bool initialNotify);
 
 }

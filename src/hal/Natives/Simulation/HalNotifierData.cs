@@ -14,14 +14,14 @@ public static unsafe partial class HalNotifierData
 {
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetNextNotifierTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial ulong GetNextNotifierTimeout();
+    public static partial ulong GetNextTimeout();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetNumNotifiers")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetNumNotifiers();
+    public static partial int GetNums();
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetNotifierInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetNotifierInfo(Span<HalSimNotifierInfo> arr, int size);
+    public static partial int GetInfo(Span<HalSimNotifierInfo> arr, int size);
 
 }
