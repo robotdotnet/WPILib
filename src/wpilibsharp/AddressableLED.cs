@@ -1,3 +1,4 @@
+using UnitsNet;
 using WPIHal.Handles;
 using WPIHal.Natives;
 
@@ -41,14 +42,14 @@ public class AddressableLED : IDisposable
         HalAddressableLED.WriteAddressableLEDData(m_handle, buffer);
     }
 
-    public void SetBitTiming(TimeSpan highTime0, TimeSpan lowTime0, TimeSpan highTime1, TimeSpan lowTime1)
+    public void SetBitTiming(Duration highTime0, Duration lowTime0, Duration highTime1, Duration lowTime1)
     {
-        HalAddressableLED.SetAddressableLEDBitTiming(m_handle, (int)highTime0.TotalNanoseconds, (int)lowTime0.TotalNanoseconds, (int)highTime1.TotalNanoseconds, (int)lowTime1.TotalNanoseconds);
+        HalAddressableLED.SetAddressableLEDBitTiming(m_handle, (int)highTime0.Nanoseconds, (int)lowTime0.Nanoseconds, (int)highTime1.Nanoseconds, (int)lowTime1.Nanoseconds);
     }
 
-    public void SetSyncTime(TimeSpan syncTime)
+    public void SetSyncTime(Duration syncTime)
     {
-        HalAddressableLED.SetAddressableLEDSyncTime(m_handle, (int)syncTime.TotalMicroseconds);
+        HalAddressableLED.SetAddressableLEDSyncTime(m_handle, (int)syncTime.Microseconds);
     }
 
     public void Start()

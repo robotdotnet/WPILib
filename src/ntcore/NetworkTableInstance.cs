@@ -12,6 +12,7 @@ using System.Text;
 using CommunityToolkit.Diagnostics;
 using NetworkTables.Handles;
 using NetworkTables.Natives;
+using UnitsNet;
 using WPIUtil.Concurrent;
 using WPIUtil.Handles;
 using WPIUtil.Logging;
@@ -198,7 +199,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         m_listeners.Remove(listener);
     }
 
-    public bool WaitForListenerQueue(TimeSpan? timeout)
+    public bool WaitForListenerQueue(Duration? timeout)
     {
         return m_listeners.WaitForQueue(timeout);
     }
@@ -389,7 +390,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
             m_thread.Start();
         }
 
-        public bool WaitForQueue(TimeSpan? timeout)
+        public bool WaitForQueue(Duration? timeout)
         {
             lock (m_lock)
             {
@@ -406,7 +407,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
                     }
                     else
                     {
-                        return Monitor.Wait(m_lock, timeout.Value);
+                        return Monitor.Wait(m_lock, timeout.Value.ToTimeSpan());
                     }
                 }
             }
