@@ -75,4 +75,34 @@ public static partial class HalPower
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetVinVoltage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial double GetVinVoltage(out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetCPUTemp")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial double GetCPUTemp(out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetBrownoutVoltage")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial double GetBrownoutVoltage(out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetBrownoutVoltage")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetBrownoutVoltage(double voltage, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetUserRailEnabled3V3")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetUserRailEnabled3V3([MarshalAs(UnmanagedType.I4)] bool enabled, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetUserRailEnabled5V")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetUserRailEnabled5V([MarshalAs(UnmanagedType.I4)] bool enabled, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetUserRailEnabled6V")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetUserRailEnabled6V([MarshalAs(UnmanagedType.I4)] bool enabled, out HalStatus status);
 }

@@ -1,7 +1,10 @@
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToElectricCurrent;
 using UnitsNet.NumberExtensions.NumberToElectricPotential;
+using UnitsNet.NumberExtensions.NumberToTemperature;
+using WPIHal;
 using WPIHal.Natives;
+using WPIHal.Natives.Simulation;
 
 namespace WPILib;
 
@@ -21,4 +24,23 @@ public static class RobotController
     public static bool IsSystemTimeValid => HalBase.GetSystemTimeValid();
     public static ElectricPotential InputVoltage => BatteryVoltage;
     public static ElectricCurrent InputCurrent => HalPower.GetVinCurrent().Amperes();
+    public static ElectricPotential BrownoutVoltage
+    {
+        get => HalPower.GetBrownoutVoltage().Volts();
+        set => HalPower.SetBrownoutVoltage(value.Volts);
+    }
+    public static Temperature CPUTemp => HalPower.GetCPUTemp().DegreesCelsius();
+    public static RadioLEDState RadioLED
+    {
+        get => HalLEDs.GetRadioLEDState();
+        set => HalLEDs.SetRadioLEDState(value);
+    }
+    public static CANStatus CANStatus
+    {
+        get
+        {
+            HalCAN.GetCANStatus(out var percentBusUtilization, out var busOffCount, out var txFullCount, out var receiveErrorCount, out var transmitErrorCount);
+            return new CANStatus(percentBusUtilization, (int)busOffCount, (int)txFullCount, (int)receiveErrorCount, (int)transmitErrorCount);
+        }
+    }
 }
