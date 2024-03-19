@@ -3,7 +3,7 @@ using NetworkTables.Natives;
 
 namespace NetworkTables;
 
-public sealed class MultiSubscriber(NetworkTableInstance inst, string[] prefixes, in PubSubOptions options) : IDisposable
+public sealed class MultiSubscriber(NetworkTableInstance inst, string[] prefixes, PubSubOptions options = default) : IDisposable
 {
     public void Dispose()
     {

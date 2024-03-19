@@ -40,7 +40,8 @@ public static partial class HalNotifier
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetNotifierThreadPriority")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int SetNotifierThreadPriority(int realTime, int priority, out HalStatus status);
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool SetNotifierThreadPriority([MarshalAs(UnmanagedType.I4)] bool realTime, int priority, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_WaitForNotifierAlarm")]
