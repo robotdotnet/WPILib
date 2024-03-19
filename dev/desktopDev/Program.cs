@@ -22,13 +22,15 @@ class Program
     {
         var arr = typeof(HalAccelerometerData).Assembly.GetTypes().Where(x => x.Name.StartsWith("Hal") && x.Name.EndsWith("Data")).ToArray();
 
-        foreach (var item in arr) {
+        foreach (var item in arr)
+        {
             var nameWithoutHal = item.Name[3..];
             var nameWithoutData = nameWithoutHal[..^4];
             Console.WriteLine(nameWithoutData);
             var file2 = $@"C:\Users\thadh\Documents\GitHub\robotdotnet\WPILib\src\hal\Natives\Simulation\{item.Name}.cs";
             var txt = File.ReadAllText(file2);
-            foreach (var func in item.GetMethods()) {
+            foreach (var func in item.GetMethods())
+            {
                 var funcName = func.Name.Replace(nameWithoutData, "");
 
                 txt = txt.Replace($"{func.Name}(", $"{funcName}(");

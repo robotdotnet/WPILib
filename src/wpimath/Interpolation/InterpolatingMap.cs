@@ -26,19 +26,22 @@ public class InterpolatingMap<T> where T : struct,
             }
 
             int idx = m_map.BinarySearch((key, T.Zero));
-            if (idx >= 0) {
+            if (idx >= 0)
+            {
                 return m_map[idx].value;
             }
 
             int larger = ~idx;
 
             // Request is smaller than all elements, return smallest
-            if (larger == 0) {
+            if (larger == 0)
+            {
                 return m_map[larger].value;
             }
 
             // Request is larger than all elements, return largest
-            if (larger == m_map.Count) {
+            if (larger == m_map.Count)
+            {
                 return m_map[^1].value;
             }
 
