@@ -92,11 +92,22 @@ public static unsafe partial class HalAddressableLEDData
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_GetAddressableLEDData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetData(int index, HalAddressableLED.LedData* data);
+    public static partial int GetDataInternal(int index, Span<HalAddressableLED.LedData> data);
+
+    public static ReadOnlySpan<HalAddressableLED.LedData> GetData(int index, Span<HalAddressableLED.LedData> data)
+    {
+        int length = GetDataInternal(index, data);
+        return data[..length];
+    }
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_SetAddressableLEDData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetData(int index, HalAddressableLED.LedData* data, int length);
+    public static partial void SetData(int index, ReadOnlySpan<HalAddressableLED.LedData> data, int length);
+
+    public static void SetData(int index, ReadOnlySpan<HalAddressableLED.LedData> data)
+    {
+        SetData(index, data, data.Length);
+    }
 
     [LibraryImport("wpiHal", EntryPoint = "HALSIM_RegisterAddressableLEDAllCallbacks")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
