@@ -54,7 +54,7 @@ public class StringTopic : Topic
     /// <returns>subscriber</returns>
     public IStringSubscriber Subscribe(
         string defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class StringTopic : Topic
     public IStringSubscriber SubscribeEx(
         string typeString,
         string defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class StringTopic : Topic
     public IStringSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         string defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class StringTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IStringPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class StringTopic : Topic
     /// <returns>publisher</returns>
     public IStringPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class StringTopic : Topic
     public IStringPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class StringTopic : Topic
     public IStringPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class StringTopic : Topic
     public IStringPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class StringTopic : Topic
     /// <returns>entry</returns>
     public IStringEntry GetEntry(
         string defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class StringTopic : Topic
     public IStringEntry GetEntryEx(
         string typeString,
         string defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtEntry>(
             this,
@@ -354,7 +354,7 @@ public class StringTopic : Topic
 #pragma warning restore CA1711 // Identifiers should not have incorrect suffix
         ReadOnlySpan<byte> typeString,
         string defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringEntryImpl<NtEntry>(
             this,

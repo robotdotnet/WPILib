@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using NetworkTables;
 using NetworkTables.Handles;
+using UnitsNet.NumberExtensions.NumberToDuration;
 using WPIUtil.Concurrent;
 using WPIUtil.Logging;
 
@@ -292,7 +293,7 @@ public static class DataLogManger
         DriverStation.ProvideRefreshedDataEventHandle(newDataEvent.Handle);
         while (Interlocked.CompareExchange(ref m_thread, null, null) != null)
         {
-            var result = Synchronization.WaitForObject(newDataEvent.Handle.Handle, TimeSpan.FromSeconds(0.25));
+            var result = Synchronization.WaitForObject(newDataEvent.Handle.Handle, 0.25.Seconds());
             if (result == SynchronizationResult.Cancelled || Interlocked.CompareExchange(ref m_thread, null, null) != null)
             {
                 break;

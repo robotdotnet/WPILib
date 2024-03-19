@@ -54,7 +54,7 @@ public class IntegerTopic : Topic
     /// <returns>subscriber</returns>
     public IIntegerSubscriber Subscribe(
         long defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class IntegerTopic : Topic
     public IIntegerSubscriber SubscribeEx(
         string typeString,
         long defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class IntegerTopic : Topic
     public IIntegerSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         long defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class IntegerTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IIntegerPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class IntegerTopic : Topic
     /// <returns>publisher</returns>
     public IIntegerPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class IntegerTopic : Topic
     public IIntegerPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class IntegerTopic : Topic
     public IIntegerPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class IntegerTopic : Topic
     public IIntegerPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class IntegerTopic : Topic
     /// <returns>entry</returns>
     public IIntegerEntry GetEntry(
         long defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class IntegerTopic : Topic
     public IIntegerEntry GetEntryEx(
         string typeString,
         long defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class IntegerTopic : Topic
     public IIntegerEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         long defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerEntryImpl<NtEntry>(
             this,

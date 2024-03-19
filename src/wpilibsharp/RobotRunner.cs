@@ -20,9 +20,6 @@ public static class RobotRunner
 
     public static void InitializeHAL()
     {
-        if (!HalBase.Initialize(500, 0))
-        {
-            throw new HalInitializationException("Failed to initialize. Terminating");
-        }
+        HalBase.Initialize();
     }
 }

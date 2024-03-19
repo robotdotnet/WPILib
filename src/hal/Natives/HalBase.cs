@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
+using CommunityToolkit.Diagnostics;
 using WPIHal.Handles;
 using WPIHal.Marshal;
 using WPIUtil;
@@ -16,7 +17,15 @@ public static partial class HalBase
     [LibraryImport("wpiHal", EntryPoint = "HAL_Initialize")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]
-    public static partial bool Initialize(int timeout, int mode);
+    internal static partial bool Initialize(int timeout, int mode);
+
+    public static void Initialize()
+    {
+        if (!Initialize(500, 0))
+        {
+            ThrowHelper.ThrowInvalidOperationException("HAL failed to initialize");
+        }
+    }
 
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGATime")]
@@ -31,7 +40,8 @@ public static partial class HalBase
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetBrownedOut")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetBrownedOut(out HalStatus status);
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool GetBrownedOut(out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetErrorMessage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -41,7 +51,8 @@ public static partial class HalBase
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGAButton")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetFPGAButton(out HalStatus status);
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool GetFPGAButton(out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetFPGARevision")]
@@ -68,7 +79,8 @@ public static partial class HalBase
     [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetSystemActive")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial int GetSystemActive(out HalStatus status);
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool GetSystemActive(out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetLastError")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

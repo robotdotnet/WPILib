@@ -18,13 +18,17 @@ public static partial class HalDriverStation
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial HalStatus GetControlWord(out ControlWord controlWord);
 
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetControlWord")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static unsafe partial HalStatus GetControlWordNative(uint* controlWord);
+
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickAxes")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial HalStatus GetJoystickAxes(int joystickNum, out JoystickAxes axes);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickAxisType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalStatus GetJoystickAxisType(int joystickNum, int axis);
+    public static partial int GetJoystickAxisType(int joystickNum, int axis);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickButtons")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -36,7 +40,8 @@ public static partial class HalDriverStation
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickIsXbox")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalStatus GetJoystickIsXbox(int joystickNum);
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool GetJoystickIsXbox(int joystickNum);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickName")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -48,7 +53,7 @@ public static partial class HalDriverStation
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetJoystickType")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial HalStatus GetJoystickType(int joystickNum);
+    public static partial int GetJoystickType(int joystickNum);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetMatchInfo")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

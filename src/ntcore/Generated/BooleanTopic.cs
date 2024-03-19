@@ -54,7 +54,7 @@ public class BooleanTopic : Topic
     /// <returns>subscriber</returns>
     public IBooleanSubscriber Subscribe(
         bool defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class BooleanTopic : Topic
     public IBooleanSubscriber SubscribeEx(
         string typeString,
         bool defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class BooleanTopic : Topic
     public IBooleanSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         bool defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class BooleanTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IBooleanPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class BooleanTopic : Topic
     /// <returns>publisher</returns>
     public IBooleanPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class BooleanTopic : Topic
     public IBooleanPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class BooleanTopic : Topic
     public IBooleanPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class BooleanTopic : Topic
     public IBooleanPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class BooleanTopic : Topic
     /// <returns>entry</returns>
     public IBooleanEntry GetEntry(
         bool defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class BooleanTopic : Topic
     public IBooleanEntry GetEntryEx(
         string typeString,
         bool defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class BooleanTopic : Topic
     public IBooleanEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         bool defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanEntryImpl<NtEntry>(
             this,

@@ -1,11 +1,12 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using System.Text;
 
 namespace WPIHal;
 
 [NativeMarshalling(typeof(MatchInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct MatchInfo(string EventName, MatchType MatchType, int MatchNumber, int ReplayNumber, byte[] GameSpecificMessage);
+public record struct MatchInfo(string EventName, MatchType MatchType, int MatchNumber, int ReplayNumber, string GameSpecificMessage);
 
 [CustomMarshaller(typeof(MatchInfo), MarshalMode.ManagedToUnmanagedOut, typeof(MatchInfoMarshaller))]
 [CustomMarshaller(typeof(MatchInfo), MarshalMode.ManagedToUnmanagedIn, typeof(MatchInfoMarshaller))]
@@ -19,7 +20,7 @@ public static class MatchInfoMarshaller
             MatchType = unmanaged.matchType,
             MatchNumber = unmanaged.matchNumber,
             ReplayNumber = unmanaged.replayNumber,
-            GameSpecificMessage = unmanaged.gameSpecificMessage.FromRawBytes(unmanaged.gameSpecificMessageSize)
+            GameSpecificMessage = unmanaged.gameSpecificMessage.FromByteString(unmanaged.gameSpecificMessageSize)
         };
     }
 
@@ -49,8 +50,14 @@ public static class MatchInfoMarshaller
             {
                 byte[] ret = new byte[int.Min(length, 64)];
                 ReadOnlySpan<byte> thisSpan = this;
-                thisSpan[ret.Length..].CopyTo(ret.AsSpan());
+                thisSpan[..ret.Length].CopyTo(ret.AsSpan());
                 return ret;
+            }
+
+            public readonly unsafe string FromByteString(int length)
+            {
+                ReadOnlySpan<byte> thisSpan = this;
+                return Encoding.UTF8.GetString(thisSpan[..length]);
             }
         }
 

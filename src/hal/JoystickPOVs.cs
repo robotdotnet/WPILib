@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace WPIHal;
@@ -5,8 +6,9 @@ namespace WPIHal;
 [StructLayout(LayoutKind.Sequential)]
 public readonly struct JoystickPOVs
 {
+    public const int NumJoystickPOVs = 12;
 
-    [System.Runtime.CompilerServices.InlineArray(12)]
+    [System.Runtime.CompilerServices.InlineArray(NumJoystickPOVs)]
     public struct PovsBuffer
     {
         private short _element0;
@@ -16,6 +18,9 @@ public readonly struct JoystickPOVs
     private readonly PovsBuffer m_povs;
 
     public readonly int Count => m_count;
+
+    [UnscopedRef]
+    public ReadOnlySpan<short> PovsSpan => m_povs[..Count];
 
     public readonly int? this[int index]
     {
@@ -32,4 +37,8 @@ public readonly struct JoystickPOVs
         }
     }
 
+    public bool IsEqual(ref readonly JoystickPOVs other)
+    {
+        return m_count == other.Count && PovsSpan.SequenceEqual(other.PovsSpan);
+    }
 }
