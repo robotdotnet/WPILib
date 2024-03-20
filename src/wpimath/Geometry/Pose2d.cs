@@ -102,7 +102,11 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
 
     public Pose2d TransformBy(Transform2d other)
     {
-        return new Pose2d(Translation + other.Translation.RotateBy(Rotation), other.Rotation + Rotation);
+        Translation2d rotated = other.Translation.RotateBy(Rotation);
+        Translation2d newTranslation = Translation + rotated;
+        Rotation2d newRotation = other.Rotation + Rotation;
+        Pose2d newPose = new Pose2d(newTranslation, newRotation);
+        return newPose;
     }
 
     public Pose2d RotateBy(Rotation2d other)
@@ -240,4 +244,6 @@ public readonly struct Pose2d : IStructSerializable<Pose2d>, IProtobufSerializab
     {
         return HashCode.Combine(Translation, Rotation);
     }
+
+    public override string ToString() => $"Pose2d({Translation}, {Rotation})";
 }
