@@ -40,7 +40,7 @@ public abstract class RobotBase : IDisposable
 
     public static long MainThreadId { get; private set; } = -1;
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         GC.SuppressFinalize(this);
         m_suball.Dispose();
