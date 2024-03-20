@@ -7,7 +7,7 @@ namespace WPILib;
 
 public class TimedRobot : IterativeRobotBase
 {
-    private class Callback(Action func, Duration startTime, Duration period, Duration offset)
+    private sealed class Callback(Action func, Duration startTime, Duration period, Duration offset)
     {
         public Action CB { get; } = func;
         public Duration Period { get; } = period;
