@@ -10,15 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="runtimes\**" PackagePath="runtimes" />
-  </ItemGroup>
-
-  <ItemGroup>
-      <None Include="runtimes\win-x64\native\wpinet.dll" Link="wpinet.dll" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FRC.WPINet.runtime" Version="2024.3.2-137-geb3635e" />
   </ItemGroup>
 
 </Project>

@@ -10,16 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="runtimes\**" PackagePath="runtimes" />
-  </ItemGroup>
-
-  <ItemGroup>
-      <None Include="runtimes\win-x64\native\ntcore.dll" Link="ntcore.dll" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
     <ProjectReference Include="..\wpinet\wpinet.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FRC.NetworkTables.runtime" Version="2024.3.2-137-geb3635e" />
   </ItemGroup>
 
 </Project>
