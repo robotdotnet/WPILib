@@ -10,7 +10,7 @@ namespace WPILib;
 
 public static class DataLogManger
 {
-    private static DataLog? m_log;
+    private static DataLogBackgroundWriter? m_log;
     private static bool m_stopped;
     private static string? m_logDir;
     private static bool m_filenameOverride;
@@ -51,7 +51,7 @@ public static class DataLogManger
                         Console.Error.WriteLine($"DataLogManager: could not delete {file}");
                     }
                 }
-                m_log = new DataLog(m_logDir, MakeLogFilename(filename), period);
+                m_log = new(m_logDir, MakeLogFilename(filename), period);
                 m_messageLog = new StringLogEntry(m_log, "messages");
 
                 if (m_ntLoggerEnabled)

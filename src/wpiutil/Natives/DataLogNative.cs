@@ -10,13 +10,17 @@ public struct OpaqueDataLog { }
 
 public static partial class DataLogNative
 {
-    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Create")]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_CreateWriter")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial OpaqueDataLog* Create(WpiString dir, WpiString filename, double period, WpiString extraHeader);
+    public static unsafe partial OpaqueDataLog* Create(WpiString dir, WpiString filename);
 
-    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Create_Func")]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_CreateBackgroundWriter")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial OpaqueDataLog* CreateFunc(delegate* unmanaged[Cdecl]<void*, byte*, nuint, void> write, void* ptr, double period, WpiString extraHeader);
+    public static unsafe partial OpaqueDataLog* CreateBg(WpiString dir, WpiString filename, double period, WpiString extraHeader);
+
+    [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_CreateBackgroundWriter_Func")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static unsafe partial OpaqueDataLog* CreateBgFunc(delegate* unmanaged[Cdecl]<void*, byte*, nuint, void> write, void* ptr, double period, WpiString extraHeader);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_DataLog_Release")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

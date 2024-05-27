@@ -20,7 +20,7 @@ public class DataLogTest
     {
         CallbackData cb = new();
         {
-            using DataLog dl = new(cb.Callback);
+            using var dl = new DataLogBackgroundWriter(cb.Callback);
         }
     }
 }

@@ -1,6 +1,4 @@
 using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using WPIUtil.Handles;
 using WPIUtil.Natives;
 using WPIUtil.Serialization.Protobuf;
@@ -8,50 +6,16 @@ using WPIUtil.Serialization.Struct;
 
 namespace WPIUtil.Logging;
 
-public sealed unsafe class DataLog : IDisposable
+public unsafe class DataLog : IDisposable
 {
-    [UnmanagedCallersOnly(CallConvs = [typeof(CallConvCdecl)])]
-    private static void NativeDataLogCallback(void* ptr, byte* data, nuint len)
-    {
-        GCHandle handle = GCHandle.FromIntPtr((nint)ptr);
-        if (handle.Target is DataLog datalog)
-        {
-            datalog.callback?.Invoke(new ReadOnlySpan<byte>(data, (int)len));
-        }
+    protected DataLog(OpaqueDataLog* impl) {
+        NativeHandle = impl;
     }
 
-    private GCHandle? gcHandle;
-    private readonly DataLogCallback? callback;
-
-    public delegate void DataLogCallback(ReadOnlySpan<byte> data);
-
-    public DataLog(string dir = "", string filename = "", double period = 0.25, string extraHeader = "")
+    public virtual void Dispose()
     {
-        NativeHandle = DataLogNative.Create(dir, filename, period, extraHeader);
-    }
-
-    public DataLog(DataLogCallback callback, double period = 0.25, string extraHeader = "")
-    {
-        gcHandle = GCHandle.Alloc(this);
-        this.callback = callback;
-        NativeHandle = DataLogNative.CreateFunc(&NativeDataLogCallback, (void*)GCHandle.ToIntPtr(gcHandle.Value), period, extraHeader);
-    }
-
-    public void Dispose()
-    {
+        GC.SuppressFinalize(this);
         DataLogNative.Release(NativeHandle);
-        if (gcHandle.HasValue)
-        {
-            gcHandle.Value.Free();
-        }
-    }
-
-    public string Filename
-    {
-        set
-        {
-            DataLogNative.SetFilename(NativeHandle, value);
-        }
     }
 
     public void Flush()
@@ -228,6 +192,5 @@ public sealed unsafe class DataLog : IDisposable
     }
 
     private readonly ConcurrentDictionary<string, int> m_schemaMap = [];
-
-    public unsafe OpaqueDataLog* NativeHandle { get; } = null;
+    public unsafe OpaqueDataLog* NativeHandle { get; protected init;}
 }
