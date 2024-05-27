@@ -128,14 +128,14 @@ public readonly ref partial struct RefNetworkTableValue
 
     internal RefNetworkTableValue(ReadOnlySpan<string> value)
     {
-        Type = NetworkTableType.String;
+        Type = NetworkTableType.StringArray;
         Time = NtCore.Now();
         m_stringSpan = value;
     }
 
     internal RefNetworkTableValue(ReadOnlySpan<string> value, long time)
     {
-        Type = NetworkTableType.String;
+        Type = NetworkTableType.StringArray;
         Time = time;
         m_stringSpan = value;
     }
