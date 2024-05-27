@@ -25,3 +25,22 @@ jobs:
         run: dotnet publish -r ${{ matrix.target }}
       - name: Run tests
         run: dotnet test
+
+  build-linux:
+
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        dotnet-version: [ '8.x' ]
+        target: [ 'linux-x64' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Build ${{ matrix.target }}
+        run: dotnet publish -r ${{ matrix.target }}
+      - name: Run tests
+        run: dotnet test
