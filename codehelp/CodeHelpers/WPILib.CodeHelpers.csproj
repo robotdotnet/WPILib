@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\src\Stereologue\LogLevel.cs" Link="LogLevel.cs" />
-    <Compile Include="..\..\src\Stereologue\LogType.cs" Link="LogType.cs" />
+    <Compile Include="..\..\src\stereologue\LogLevel.cs" Link="LogLevel.cs" />
+    <Compile Include="..\..\src\stereologue\LogType.cs" Link="LogType.cs" />
   </ItemGroup>
 
   <ItemGroup>

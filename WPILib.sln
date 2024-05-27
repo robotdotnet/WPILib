@@ -31,7 +31,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wpiutil.test", "test\wpiuti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "wpilibsharp", "src\wpilibsharp\wpilibsharp.csproj", "{AA0BE2D8-DCE2-415C-A60B-4382F50D8C91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stereologue", "src\Stereologue\Stereologue.csproj", "{2124D403-17C4-4116-932D-74933812ECE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stereologue", "src\stereologue\stereologue.csproj", "{2124D403-17C4-4116-932D-74933812ECE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "stereologue.test", "test\stereologue.test\stereologue.test.csproj", "{630D08FD-CD06-4674-BC5A-F1F211619E83}"
 EndProject
