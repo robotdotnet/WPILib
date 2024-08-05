@@ -15,22 +15,22 @@ public sealed class ProtobufTopic<T> : Topic, IEquatable<ProtobufTopic<T>?>, IEq
     {
     }
 
-    public IProtobufSubscriber<T> Subscribe(T defaultValue, PubSubOptions options)
+    public IProtobufSubscriber<T> Subscribe(T defaultValue, PubSubOptions options = default)
     {
         return new ProtobufEntryImpl<T, NtSubscriber>(this, NtCore.Subscribe(Handle, NetworkTableType.Raw, T.Proto.TypeString, options), defaultValue, false);
     }
 
-    public IProtobufPublisher<T> Publish(PubSubOptions options)
+    public IProtobufPublisher<T> Publish(PubSubOptions options = default)
     {
         return new ProtobufEntryImpl<T, NtPublisher>(this, NtCore.Publish(Handle, NetworkTableType.Raw, T.Proto.TypeString, options), default!, false);
     }
 
-    public IProtobufPublisher<T> PublishEx(string properties, PubSubOptions options)
+    public IProtobufPublisher<T> PublishEx(string properties, PubSubOptions options = default)
     {
         return new ProtobufEntryImpl<T, NtPublisher>(this, NtCore.PublishEx(Handle, NetworkTableType.Raw, T.Proto.TypeString, properties, options), default!, false);
     }
 
-    public IProtobufEntry<T> GetEntry(T defaultValue, PubSubOptions options)
+    public IProtobufEntry<T> GetEntry(T defaultValue, PubSubOptions options = default)
     {
         return new ProtobufEntryImpl<T, NtEntry>(this, NtCore.GetEntry(Handle, NetworkTableType.Raw, T.Proto.TypeString, options), defaultValue, false);
     }

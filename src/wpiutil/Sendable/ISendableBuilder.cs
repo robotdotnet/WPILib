@@ -34,7 +34,7 @@ public interface ISendableBuilder : IDisposable
 
     void PublishConstDouble(string key, double value);
 
-    void AddStringProperty(string key, Func<string>? getter, Action<string>? setter);
+    void AddStringProperty(string key, Func<string> getter, Action<string>? setter);
 
     void PublishConstString(string key, string value);
 

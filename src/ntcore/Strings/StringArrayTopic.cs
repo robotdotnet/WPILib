@@ -54,7 +54,7 @@ public class StringArrayTopic : Topic
     /// <returns>subscriber</returns>
     public IStringArraySubscriber Subscribe(
         string[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class StringArrayTopic : Topic
     public IStringArraySubscriber SubscribeEx(
         string typeString,
         string[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class StringArrayTopic : Topic
     public IStringArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         string[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class StringArrayTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IStringArrayPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class StringArrayTopic : Topic
     /// <returns>publisher</returns>
     public IStringArrayPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class StringArrayTopic : Topic
     public IStringArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class StringArrayTopic : Topic
     public IStringArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class StringArrayTopic : Topic
     public IStringArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class StringArrayTopic : Topic
     /// <returns>entry</returns>
     public IStringArrayEntry GetEntry(
         string[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class StringArrayTopic : Topic
     public IStringArrayEntry GetEntryEx(
         string typeString,
         string[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class StringArrayTopic : Topic
     public IStringArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         string[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new StringArrayEntryImpl<NtEntry>(
             this,

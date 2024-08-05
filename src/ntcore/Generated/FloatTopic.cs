@@ -54,7 +54,7 @@ public class FloatTopic : Topic
     /// <returns>subscriber</returns>
     public IFloatSubscriber Subscribe(
         float defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class FloatTopic : Topic
     public IFloatSubscriber SubscribeEx(
         string typeString,
         float defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class FloatTopic : Topic
     public IFloatSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         float defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class FloatTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IFloatPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class FloatTopic : Topic
     /// <returns>publisher</returns>
     public IFloatPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class FloatTopic : Topic
     public IFloatPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class FloatTopic : Topic
     public IFloatPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class FloatTopic : Topic
     public IFloatPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class FloatTopic : Topic
     /// <returns>entry</returns>
     public IFloatEntry GetEntry(
         float defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class FloatTopic : Topic
     public IFloatEntry GetEntryEx(
         string typeString,
         float defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class FloatTopic : Topic
     public IFloatEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         float defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatEntryImpl<NtEntry>(
             this,

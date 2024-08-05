@@ -54,7 +54,7 @@ public class DoubleArrayTopic : Topic
     /// <returns>subscriber</returns>
     public IDoubleArraySubscriber Subscribe(
         double[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArraySubscriber SubscribeEx(
         string typeString,
         double[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         double[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class DoubleArrayTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IDoubleArrayPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class DoubleArrayTopic : Topic
     /// <returns>publisher</returns>
     public IDoubleArrayPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class DoubleArrayTopic : Topic
     /// <returns>entry</returns>
     public IDoubleArrayEntry GetEntry(
         double[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArrayEntry GetEntryEx(
         string typeString,
         double[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class DoubleArrayTopic : Topic
     public IDoubleArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         double[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleArrayEntryImpl<NtEntry>(
             this,

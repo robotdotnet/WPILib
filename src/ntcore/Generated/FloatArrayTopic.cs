@@ -54,7 +54,7 @@ public class FloatArrayTopic : Topic
     /// <returns>subscriber</returns>
     public IFloatArraySubscriber Subscribe(
         float[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class FloatArrayTopic : Topic
     public IFloatArraySubscriber SubscribeEx(
         string typeString,
         float[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class FloatArrayTopic : Topic
     public IFloatArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         float[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class FloatArrayTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IFloatArrayPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class FloatArrayTopic : Topic
     /// <returns>publisher</returns>
     public IFloatArrayPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class FloatArrayTopic : Topic
     public IFloatArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class FloatArrayTopic : Topic
     public IFloatArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class FloatArrayTopic : Topic
     public IFloatArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class FloatArrayTopic : Topic
     /// <returns>entry</returns>
     public IFloatArrayEntry GetEntry(
         float[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class FloatArrayTopic : Topic
     public IFloatArrayEntry GetEntryEx(
         string typeString,
         float[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class FloatArrayTopic : Topic
     public IFloatArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         float[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new FloatArrayEntryImpl<NtEntry>(
             this,

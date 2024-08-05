@@ -269,7 +269,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_Subscribe")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtSubscriber Subscribe(NtTopic topic, NetworkTableType type, WpiString typeStr, in PubSubOptions options);
+    public static partial NtSubscriber Subscribe(NtTopic topic, NetworkTableType type, WpiString typeStr, in PubSubOptions options = default);
 
     [LibraryImport("ntcore", EntryPoint = "NT_Unsubscribe")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -277,11 +277,11 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_Publish")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtPublisher Publish(NtTopic topic, NetworkTableType type, WpiString typeStr, in PubSubOptions options);
+    public static partial NtPublisher Publish(NtTopic topic, NetworkTableType type, WpiString typeStr, in PubSubOptions options = default);
 
     [LibraryImport("ntcore", EntryPoint = "NT_PublishEx")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial NtPublisher PublishEx(NtTopic topic, NetworkTableType type, WpiString typeStr, WpiString properties, in PubSubOptions options);
+    public static partial NtPublisher PublishEx(NtTopic topic, NetworkTableType type, WpiString typeStr, WpiString properties, in PubSubOptions options = default);
 
     [LibraryImport("ntcore", EntryPoint = "NT_Unpublish")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -294,7 +294,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_GetEntryEx")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial NtEntry GetEntry(NtTopic topic, NetworkTableType type, WpiString typeStr, in PubSubOptions options);
+    public static unsafe partial NtEntry GetEntry(NtTopic topic, NetworkTableType type, WpiString typeStr, in PubSubOptions options = default);
 
     [LibraryImport("ntcore", EntryPoint = "NT_ReleaseEntry")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -328,9 +328,9 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_SubscribeMultiple")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    internal static partial NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, in PubSubOptions options);
+    internal static partial NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, in PubSubOptions options = default);
 
-    public static NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, in PubSubOptions options)
+    public static NtMultiSubscriber SubscribeMultiple(NtInst inst, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, in PubSubOptions options = default)
     {
         return SubscribeMultiple(inst, prefixes, (nuint)prefixes.Length, options);
     }

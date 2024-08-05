@@ -1,10 +1,13 @@
+using Epilogue.Logging;
+using Epilogue.Logging.Errors;
 using NetworkTables;
 
 namespace Epilogue;
 
-public class EpilogueConfiguration {
-    public DataLogger DataLogger { get; set; } = new NTDataLogger(NetworkTableInstance.Default);
+public class EpilogueConfiguration
+{
+    public IDataLogger DataLogger { get; set; } = new NTDataLogger(NetworkTableInstance.Default);
     public LogImportance MinimumImportance { get; set; } = LogImportance.Debug;
-    public ErrorHandler ErrorHandler { get; set; } = new();
+    public IErrorHandler ErrorHandler { get; set; } = new ErrorPrinter();
     public string Root { get; set; } = "Robot";
 }

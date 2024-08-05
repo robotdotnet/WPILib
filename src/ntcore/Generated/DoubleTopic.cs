@@ -54,7 +54,7 @@ public class DoubleTopic : Topic
     /// <returns>subscriber</returns>
     public IDoubleSubscriber Subscribe(
         double defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class DoubleTopic : Topic
     public IDoubleSubscriber SubscribeEx(
         string typeString,
         double defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class DoubleTopic : Topic
     public IDoubleSubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         double defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class DoubleTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IDoublePublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class DoubleTopic : Topic
     /// <returns>publisher</returns>
     public IDoublePublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class DoubleTopic : Topic
     public IDoublePublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class DoubleTopic : Topic
     public IDoublePublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class DoubleTopic : Topic
     public IDoublePublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class DoubleTopic : Topic
     /// <returns>entry</returns>
     public IDoubleEntry GetEntry(
         double defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class DoubleTopic : Topic
     public IDoubleEntry GetEntryEx(
         string typeString,
         double defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class DoubleTopic : Topic
     public IDoubleEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         double defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new DoubleEntryImpl<NtEntry>(
             this,

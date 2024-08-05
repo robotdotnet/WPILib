@@ -54,7 +54,7 @@ public class BooleanArrayTopic : Topic
     /// <returns>subscriber</returns>
     public IBooleanArraySubscriber Subscribe(
         bool[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArraySubscriber SubscribeEx(
         string typeString,
         bool[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         bool[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class BooleanArrayTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IBooleanArrayPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class BooleanArrayTopic : Topic
     /// <returns>publisher</returns>
     public IBooleanArrayPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class BooleanArrayTopic : Topic
     /// <returns>entry</returns>
     public IBooleanArrayEntry GetEntry(
         bool[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArrayEntry GetEntryEx(
         string typeString,
         bool[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class BooleanArrayTopic : Topic
     public IBooleanArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         bool[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new BooleanArrayEntryImpl<NtEntry>(
             this,

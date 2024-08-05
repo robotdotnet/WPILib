@@ -81,29 +81,29 @@ public class Topic : IEquatable<Topic?>, IEqualityOperators<Topic?, Topic?, bool
         set => NtCore.SetTopicProperties(Handle, value);
     }
 
-    public IGenericSubscriber GenericSubscribe(in PubSubOptions options) => GenericSubscribe("", options);
+    public IGenericSubscriber GenericSubscribe(in PubSubOptions options = default) => GenericSubscribe("", options);
 
-    public IGenericSubscriber GenericSubscribe(string typeString, in PubSubOptions options)
+    public IGenericSubscriber GenericSubscribe(string typeString, in PubSubOptions options = default)
     {
         return new GenericEntryImpl<NtSubscriber>(this, NtCore.Subscribe(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }
 
-    public IGenericPublisher GenericPublish(string typeString, in PubSubOptions options)
+    public IGenericPublisher GenericPublish(string typeString, in PubSubOptions options = default)
     {
         return new GenericEntryImpl<NtPublisher>(this, NtCore.Publish(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }
 
-    public IGenericPublisher GenericPublishEx(string typeString, string properties, in PubSubOptions options)
+    public IGenericPublisher GenericPublishEx(string typeString, string properties, in PubSubOptions options = default)
     {
         return new GenericEntryImpl<NtPublisher>(this, NtCore.PublishEx(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, properties, options));
     }
 
-    public IGenericEntry GetGenericEntry(in PubSubOptions options)
+    public IGenericEntry GetGenericEntry(in PubSubOptions options = default)
     {
         return GetGenericEntry("", options);
     }
 
-    public IGenericEntry GetGenericEntry(string typeString, in PubSubOptions options)
+    public IGenericEntry GetGenericEntry(string typeString, in PubSubOptions options = default)
     {
         return new GenericEntryImpl<NtEntry>(this, NtCore.GetEntry(Handle, NetworkTableTypeHelpers.GetFromString(typeString), typeString, options));
     }

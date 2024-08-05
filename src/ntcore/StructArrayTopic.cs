@@ -15,22 +15,22 @@ public sealed class StructArrayTopic<T> : Topic, IEquatable<StructArrayTopic<T>?
     {
     }
 
-    public IStructArraySubscriber<T> Subscribe(T[] defaultValue, PubSubOptions options)
+    public IStructArraySubscriber<T> Subscribe(T[] defaultValue, PubSubOptions options = default)
     {
         return new StructArrayEntryImpl<T, NtSubscriber>(this, NtCore.Subscribe(Handle, NetworkTableType.Raw, T.Struct.TypeString, options), defaultValue, false);
     }
 
-    public IStructArrayPublisher<T> Publish(PubSubOptions options)
+    public IStructArrayPublisher<T> Publish(PubSubOptions options = default)
     {
         return new StructArrayEntryImpl<T, NtPublisher>(this, NtCore.Publish(Handle, NetworkTableType.Raw, T.Struct.TypeString, options), default!, false);
     }
 
-    public IStructArrayPublisher<T> PublishEx(string properties, PubSubOptions options)
+    public IStructArrayPublisher<T> PublishEx(string properties, PubSubOptions options = default)
     {
         return new StructArrayEntryImpl<T, NtPublisher>(this, NtCore.PublishEx(Handle, NetworkTableType.Raw, T.Struct.TypeString, properties, options), default!, false);
     }
 
-    public IStructArrayEntry<T> GetEntry(T[] defaultValue, PubSubOptions options)
+    public IStructArrayEntry<T> GetEntry(T[] defaultValue, PubSubOptions options = default)
     {
         return new StructArrayEntryImpl<T, NtEntry>(this, NtCore.GetEntry(Handle, NetworkTableType.Raw, T.Struct.TypeString, options), defaultValue, false);
     }

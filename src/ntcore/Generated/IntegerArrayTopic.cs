@@ -54,7 +54,7 @@ public class IntegerArrayTopic : Topic
     /// <returns>subscriber</returns>
     public IIntegerArraySubscriber Subscribe(
         long[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtSubscriber>(
             this,
@@ -83,7 +83,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArraySubscriber SubscribeEx(
         string typeString,
         long[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtSubscriber>(
             this,
@@ -112,7 +112,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArraySubscriber SubscribeEx(
         ReadOnlySpan<byte> typeString,
         long[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtSubscriber>(
             this,
@@ -137,7 +137,7 @@ public class IntegerArrayTopic : Topic
     /// <param name="options">publish options</param>
     /// <returns>publisher</returns>
     public IIntegerArrayPublisher Publish(
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtPublisher>(
             this,
@@ -165,7 +165,7 @@ public class IntegerArrayTopic : Topic
     /// <returns>publisher</returns>
     public IIntegerArrayPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtPublisher>(
             this,
@@ -194,7 +194,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtPublisher>(
             this,
@@ -223,7 +223,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArrayPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtPublisher>(
             this,
@@ -252,7 +252,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArrayPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtPublisher>(
             this,
@@ -284,7 +284,7 @@ public class IntegerArrayTopic : Topic
     /// <returns>entry</returns>
     public IIntegerArrayEntry GetEntry(
         long[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtEntry>(
             this,
@@ -318,7 +318,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArrayEntry GetEntryEx(
         string typeString,
         long[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtEntry>(
             this,
@@ -352,7 +352,7 @@ public class IntegerArrayTopic : Topic
     public IIntegerArrayEntry GetEntryEx(
         ReadOnlySpan<byte> typeString,
         long[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new IntegerArrayEntryImpl<NtEntry>(
             this,

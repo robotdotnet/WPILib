@@ -1,6 +1,7 @@
 namespace Epilogue;
 
-public enum LogImportance {
+public enum LogImportance
+{
     Debug,
     Info,
     Critical,

@@ -1,6 +1,7 @@
 namespace Epilogue;
 
-public enum LogStrategy {
+public enum LogStrategy
+{
     OptIn,
     OptOut,
 }

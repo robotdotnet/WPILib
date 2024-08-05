@@ -47,7 +47,7 @@ public class RawTopic : Topic
     public IRawSubscriber Subscribe(
         string typeString,
         byte[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtSubscriber>(
             this,
@@ -76,7 +76,7 @@ public class RawTopic : Topic
     public IRawSubscriber Subscribe(
         ReadOnlySpan<byte> typeString,
         byte[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtSubscriber>(
             this,
@@ -103,7 +103,7 @@ public class RawTopic : Topic
     /// <returns>publisher</returns>
     public IRawPublisher Publish(
         string typeString,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
@@ -130,7 +130,7 @@ public class RawTopic : Topic
     /// <returns>publisher</returns>
     public IRawPublisher Publish(
         ReadOnlySpan<byte> typeString,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
@@ -158,7 +158,7 @@ public class RawTopic : Topic
     /// <returns>publisher</returns>
     public IRawPublisher PublishEx(
         string typeString, string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
@@ -187,7 +187,7 @@ public class RawTopic : Topic
     public IRawPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         string properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
@@ -216,7 +216,7 @@ public class RawTopic : Topic
     public IRawPublisher PublishEx(
         string typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
@@ -245,7 +245,7 @@ public class RawTopic : Topic
     public IRawPublisher PublishEx(
         ReadOnlySpan<byte> typeString,
         ReadOnlySpan<byte> properties,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtPublisher>(
             this,
@@ -279,7 +279,7 @@ public class RawTopic : Topic
     public IRawEntry GetEntry(
         string typeString,
         byte[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtEntry>(
             this,
@@ -313,7 +313,7 @@ public class RawTopic : Topic
     public IRawEntry GetEntry(
         ReadOnlySpan<byte> typeString,
         byte[] defaultValue,
-        PubSubOptions options)
+        PubSubOptions options = default)
     {
         return new RawEntryImpl<NtEntry>(
             this,

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\epilogue\epilogue.csproj" />
+    <ProjectReference Include="..\..\src\wpimath\wpimath.csproj" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers\WPILib.CodeHelpers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+</Project>
