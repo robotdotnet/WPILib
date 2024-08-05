@@ -6,39 +6,95 @@ using Microsoft.CodeAnalysis.Text;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
 using static WPILib.CodeHelpers.IndentedStringBuilder;
 
-namespace WPILib.CodeHelpers.LogGenerator;
+namespace WPILib.CodeHelpers.EpilogueGenerator;
 
 // Contains all information on a loggable type
 public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<LoggableMember> LoggableMembers)
 {
+    private static void WriteTypeName(TypeDeclarationModel type, IndentedStringBuilder builder, bool leaf)
+    {
+        if (type.Parent is not null)
+        {
+            WriteTypeName(type.Parent, builder, false);
+        }
+        builder.Append($"{type.TypeName}{(leaf ? "" : "_")}");
+    }
+
+    private void WriteFQN(IndentedStringBuilder builder)
+    {
+        builder.Append("global::");
+        TypeDeclaration.WriteFileName(builder, true);
+        TypeDeclaration.GetGenericParameters(builder);
+    }
+
     private int AddClassDeclaration(IndentedStringBuilder builder)
     {
-        string? iLogged = null;
-
-        if ((TypeDeclaration.Modifiers & TypeModifiers.IsRefLikeType) == 0)
+        // Find our namespace and write it
+        TypeDeclarationModel root = TypeDeclaration;
+        TypeDeclarationModel? parent = TypeDeclaration.Parent;
+        while (parent is not null)
         {
-            if (builder.Language == LanguageKind.CSharp)
-            {
-                iLogged = Strings.LoggerInterfaceFullyQualified;
-            }
-            else if (builder.Language == LanguageKind.VisualBasic)
-            {
-                iLogged = Strings.LoggerInterfaceFullyQualifiedVb;
-            }
+            root = parent;
+            parent = parent.Parent;
         }
 
-        return TypeDeclaration.WriteClassDeclaration(builder, false, iLogged is null ? [] : [iLogged]);
+        int scopeCount = root.Namespace!.WriteNamespaceDeclaration(builder);
+
+        // Write out type name
+        builder.StartLine();
+        builder.Append("public sealed class ");
+        WriteTypeName(TypeDeclaration, builder, true);
+        builder.Append("Logger");
+        builder.EndLine();
+
+        // Add inheritance
+        if (builder.Language == LanguageKind.CSharp)
+        {
+            builder.StartLine();
+            builder.Append($"    : {Strings.ClassSpecificLoggerFullyQualifiedTypeName}<");
+            WriteFQN(builder);
+            builder.Append(">");
+            builder.EndLine();
+        }
+        else if (builder.Language == LanguageKind.VisualBasic)
+        {
+            throw new NotImplementedException();
+            // builder.StartLine();
+            // builder.Append("    Implements ");
+            // bool first = false;
+            // foreach (var item in inheritanceSpan)
+            // {
+            //     if (!first)
+            //     {
+            //         first = true;
+            //     }
+            //     else
+            //     {
+            //         builder.Append(", ");
+            //     }
+            //     builder.Append(item);
+            // }
+            // builder.EndLine();
+        }
+
+        builder.EnterScope(ScopeType.Class);
+
+        return scopeCount + 1;
     }
 
     private void WriteMethodDeclaration(IndentedStringBuilder builder)
     {
         if (builder.Language == LanguageKind.CSharp)
         {
-            builder.AppendFullLine(Strings.FullMethodDeclaration);
+            builder.StartLine();
+            builder.Append(Strings.UpdateFunctionStart);
+            WriteFQN(builder);
+            builder.Append(" value)");
+            builder.EndLine();
         }
         else if (builder.Language == LanguageKind.VisualBasic)
         {
-            builder.AppendFullLine(Strings.FullMethodDeclarationVb);
+            throw new NotImplementedException();
         }
     }
 
@@ -47,10 +103,6 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
         var classScopes = AddClassDeclaration(builder);
         WriteMethodDeclaration(builder);
         builder.EnterScope(ScopeType.NonReturningMethod);
-
-        //builder.AppendFullLine("if (global::Epilogue.)")
-
-
         foreach (var call in LoggableMembers)
         {
             call.WriteLogCall(builder);
@@ -65,9 +117,9 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
 
 internal static class LoggableTypeExtensions
 {
-
     public static LoggableType GetLoggableType(this INamedTypeSymbol classSymbol, CancellationToken token, List<(FailureMode, ISymbol)>? failures, Dictionary<LoggableMember, ISymbol>? symbolMap)
     {
+        // When we get here, the classSymbol is guaranteeds to have "LoggedAttribute"
         token.ThrowIfCancellationRequested();
 
         var typeDeclType = classSymbol.GetTypeDeclarationModel();
@@ -78,6 +130,7 @@ internal static class LoggableTypeExtensions
 
         var loggableMembers = ImmutableArray.CreateBuilder<LoggableMember>(classMembers.Length);
 
+        // Find all loggable memeber
         foreach (var member in classMembers)
         {
             token.ThrowIfCancellationRequested();
@@ -86,7 +139,7 @@ internal static class LoggableTypeExtensions
             token.ThrowIfCancellationRequested();
             if (loggableMemberFailure == FailureMode.None)
             {
-                // This is either a valid log, or has no attribute
+                // This is either a valid log, or has no attribute (or NotLogged)
                 if (loggableMember is not null)
                 {
                     loggableMembers.Add(loggableMember);
@@ -115,10 +168,11 @@ internal static class LoggableTypeExtensions
                     continue;
                 }
                 // We're errored
-                context.ReportDiagnostic(failureMode, symbolMap[call]);
+                throw new NotImplementedException();
+                //context.ReportDiagnostic(failureMode, symbolMap[call]);
             }
 
-            if (!loggableType.LoggableMembers.IsEmpty && !context.Symbol.HasGenerateLogAttribute())
+            if (!loggableType.LoggableMembers.IsEmpty && !context.Symbol.HasLoggedAttribute())
             {
                 foreach (var location in context.Symbol.Locations)
                 {
@@ -128,9 +182,8 @@ internal static class LoggableTypeExtensions
         }
     }
 
-    public static void ExecuteSourceGeneration(this LoggableType? maybeType, SourceProductionContext context, LanguageKind language)
+    public static void ExecuteSourceGeneration(this LoggableType? maybeType, SourceProductionContext context, ImmutableArray<CustomLoggerType?> customLoggers, LanguageKind language)
     {
-
         if (maybeType is { } loggableType)
         {
             IndentedStringBuilder builder = new IndentedStringBuilder(language);

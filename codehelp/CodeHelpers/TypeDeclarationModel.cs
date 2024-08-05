@@ -15,17 +15,18 @@ public enum TypeModifiers
 
 public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, string TypeName, EquatableArray<TypeParameterModel> TypeParameters, NamespaceModel? Namespace, TypeDeclarationModel? Parent)
 {
-    public void WriteFileName(IndentedStringBuilder builder)
+
+    public void WriteFileName(IndentedStringBuilder builder, bool leaf)
     {
         if (Parent is not null)
         {
-            Parent.WriteFileName(builder);
+            Parent.WriteFileName(builder, false);
         }
         else
         {
             Namespace!.WriteFileName(builder);
         }
-        builder.Append($"{TypeName}.");
+        builder.Append($"{TypeName}{(leaf ? "" : "_")}");
     }
 
     private static string GetClassNameForLanguage(LanguageKind language)
@@ -96,7 +97,7 @@ public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, strin
         return $"{unsafeString}{GetPartialNameForLanguage(language)} {recordString}{kindString}";
     }
 
-    private void GetGenericParameters(IndentedStringBuilder builder)
+    public void GetGenericParameters(IndentedStringBuilder builder)
     {
         bool first = true;
         foreach (var typeParamter in TypeParameters.AsSpan())

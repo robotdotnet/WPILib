@@ -6,3 +6,8 @@ public enum LogImportance
     Info,
     Critical,
 }
+
+public static class LogImportanceExtensions
+{
+    public const LogImportance DefaultLogImportance = LogImportance.Debug;
+}

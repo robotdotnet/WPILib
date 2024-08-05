@@ -16,6 +16,8 @@
   <ItemGroup>
     <Compile Include="..\..\src\stereologue\LogLevel.cs" Link="LogLevel.cs" />
     <Compile Include="..\..\src\stereologue\LogType.cs" Link="LogType.cs" />
+    <Compile Include="..\..\src\epilogue\LogStrategy.cs" Link="LogStrategy.cs" />
+    <Compile Include="..\..\src\epilogue\LogImportance.cs" Link="LogImportance.cs" />
   </ItemGroup>
 
   <ItemGroup>
