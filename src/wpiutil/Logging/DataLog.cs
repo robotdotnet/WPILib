@@ -8,7 +8,8 @@ namespace WPIUtil.Logging;
 
 public unsafe class DataLog : IDisposable
 {
-    protected DataLog(OpaqueDataLog* impl) {
+    protected DataLog(OpaqueDataLog* impl)
+    {
         NativeHandle = impl;
     }
 
@@ -192,5 +193,5 @@ public unsafe class DataLog : IDisposable
     }
 
     private readonly ConcurrentDictionary<string, int> m_schemaMap = [];
-    public unsafe OpaqueDataLog* NativeHandle { get; protected init;}
+    public unsafe OpaqueDataLog* NativeHandle { get; protected init; }
 }

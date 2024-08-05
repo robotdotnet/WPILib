@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
 using Stereologue;
 using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
@@ -44,7 +43,7 @@ public partial class MyNewClass
         expected = expected.NormalizeLineEndings();
         expected = expected.Replace("REPLACEME", output);
 
-        await new CSharpSourceGeneratorTest<LogGeneratorSharp, XUnitVerifier>()
+        await new CSharpSourceGeneratorTest<LogGeneratorSharp, DefaultVerifier>()
         {
             TestState = {
                 AdditionalReferences = {

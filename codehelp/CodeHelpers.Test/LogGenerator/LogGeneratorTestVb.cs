@@ -3,7 +3,6 @@ namespace CodeHelpers.Test.LogGenerator;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.VisualBasic.Testing;
 using Stereologue;
@@ -44,7 +43,7 @@ End Class
         expected = expected.NormalizeLineEndings();
         expected = expected.Replace("REPLACEME", output);
 
-        await new VisualBasicSourceGeneratorTest<LogGeneratorVb, XUnitVerifier>()
+        await new VisualBasicSourceGeneratorTest<LogGeneratorVb, DefaultVerifier>()
         {
             TestState = {
                 AdditionalReferences = {

@@ -1,12 +1,11 @@
 using System.Text;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Testing.Verifiers;
 using Microsoft.CodeAnalysis.Text;
 using Stereologue;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
 using WPILib.CodeHelpers.LogGenerator.CodeFixer;
-using Verify = Microsoft.CodeAnalysis.CSharp.Testing.XUnit.CodeFixVerifier<WPILib.CodeHelpers.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.LogGenerator.CodeFixer.LogGeneratorFixer>;
+using Verify = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixVerifier<WPILib.CodeHelpers.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.LogGenerator.CodeFixer.LogGeneratorFixer, Microsoft.CodeAnalysis.Testing.DefaultVerifier>;
 
 namespace CodeHelpers.Test.LogGenerator;
 
@@ -35,7 +34,7 @@ public partial class MyNewClass
 }
 ";
 
-        await new CSharpCodeFixTest<LogGeneratorAnalyzer, LogGeneratorFixer, XUnitVerifier>()
+        await new CSharpCodeFixTest<LogGeneratorAnalyzer, LogGeneratorFixer, DefaultVerifier>()
         {
             TestState = {
                 AdditionalReferences = {

@@ -21,7 +21,8 @@ public sealed unsafe class DataLogBackgroundWriter : DataLog
 
     public delegate void DataLogCallback(ReadOnlySpan<byte> data);
 
-    public DataLogBackgroundWriter(string dir = "", string filename = "", double period = 0.25, string extraHeader = "") : base(DataLogNative.CreateBg(dir, filename, period, extraHeader)) {
+    public DataLogBackgroundWriter(string dir = "", string filename = "", double period = 0.25, string extraHeader = "") : base(DataLogNative.CreateBg(dir, filename, period, extraHeader))
+    {
 
     }
 
@@ -35,7 +36,8 @@ public sealed unsafe class DataLogBackgroundWriter : DataLog
     public override void Dispose()
     {
         base.Dispose();
-        if (gcHandle.HasValue) {
+        if (gcHandle.HasValue)
+        {
             gcHandle.Value.Free();
         }
     }
