@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>Epilogue</RootNamespace>
+    <AssemblyName>FRC.Epilogue</AssemblyName>
+    <NoWarn>1591;CA1401;1570</NoWarn>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ntcore\ntcore.csproj" />
+    <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
+  </ItemGroup>
+
+</Project>
