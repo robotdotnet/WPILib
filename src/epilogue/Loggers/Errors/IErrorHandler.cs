@@ -1,4 +1,4 @@
-namespace Epilogue.Logging.Errors;
+namespace WPILib.Logging.Loggers.Errors;
 
 public interface IErrorHandler
 {

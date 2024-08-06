@@ -3,7 +3,7 @@ using WPIUtil.Logging;
 using WPIUtil.Serialization.Struct;
 using static WPIUtil.WpiGuard;
 
-namespace Epilogue.Logging;
+namespace WPILib.Logging.Loggers;
 
 public class FileLogger : IDataLogger
 {

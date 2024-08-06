@@ -1,5 +1,5 @@
 
-namespace Epilogue.Logging.Errors;
+namespace WPILib.Logging.Loggers.Errors;
 
 public class CrashOnError : IErrorHandler
 {

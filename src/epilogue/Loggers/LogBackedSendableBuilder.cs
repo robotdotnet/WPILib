@@ -1,7 +1,7 @@
 using WPIUtil.Sendable;
 using static WPIUtil.WpiGuard;
 
-namespace Epilogue.Logging;
+namespace WPILib.Logging.Loggers;
 
 public class LogBackedSenabledBuilder : ISendableBuilder
 {

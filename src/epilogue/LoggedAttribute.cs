@@ -1,4 +1,4 @@
-namespace Epilogue;
+namespace WPILib.Logging;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Struct)]
 public sealed class LoggedAttribute : Attribute

@@ -1,4 +1,4 @@
-namespace Epilogue;
+namespace WPILib.Logging;
 
 public enum LogImportance
 {

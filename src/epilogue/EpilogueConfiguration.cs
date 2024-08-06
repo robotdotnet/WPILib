@@ -1,8 +1,8 @@
-using Epilogue.Logging;
-using Epilogue.Logging.Errors;
 using NetworkTables;
+using WPILib.Logging.Loggers;
+using WPILib.Logging.Loggers.Errors;
 
-namespace Epilogue;
+namespace WPILib.Logging;
 
 public class EpilogueConfiguration
 {

@@ -18,7 +18,7 @@ public class EpilogueGeneratorSharp : IIncrementalGenerator
                     {
                         return null;
                     }
-                    return classSymbol.GetLoggableType(token, null, null);
+                    return ctx.Attributes.GetLoggableType(classSymbol, token, null, null);
                 })
             .Where(static m => m is not null);
 

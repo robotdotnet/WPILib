@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 
 namespace WPILib.CodeHelpers.EpilogueGenerator;
 
-public record CustomLoggerType(TypeDeclarationModel TypeDeclarations, EquatableArray<TypeDeclarationModel> SupportedTypes);
+public record CustomLoggerType(TypeDeclarationModel TypeDeclaration, EquatableArray<TypeDeclarationModel> SupportedTypes);
 
 internal static class CustomLoggerTypeExtensions
 {

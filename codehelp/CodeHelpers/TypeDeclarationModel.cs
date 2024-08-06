@@ -15,6 +15,12 @@ public enum TypeModifiers
 
 public record TypeDeclarationModel(TypeKind Kind, TypeModifiers Modifiers, string TypeName, EquatableArray<TypeParameterModel> TypeParameters, NamespaceModel? Namespace, TypeDeclarationModel? Parent)
 {
+    public void WriteLoggerName(IndentedStringBuilder builder, bool leaf)
+    {
+        Parent?.WriteFileName(builder, false);
+        builder.Append($"{TypeName}{(leaf ? "" : "_")}");
+        builder.Append("Logger");
+    }
 
     public void WriteFileName(IndentedStringBuilder builder, bool leaf)
     {

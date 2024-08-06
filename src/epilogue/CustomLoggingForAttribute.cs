@@ -1,4 +1,4 @@
-namespace Epilogue;
+namespace WPILib.Logging;
 
 [AttributeUsage(AttributeTargets.Class)]
 public sealed class CustomLoggerForAttribute : Attribute

@@ -1,7 +1,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Epilogue.Logging.Errors;
+namespace WPILib.Logging.Loggers.Errors;
 
 public class LoggerDisabler : IErrorHandler
 {

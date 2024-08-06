@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
@@ -20,7 +21,14 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
         builder.Append($"{type.TypeName}{(leaf ? "" : "_")}");
     }
 
-    private void WriteFQN(IndentedStringBuilder builder)
+    public void WriteLoggerFQN(IndentedStringBuilder builder)
+    {
+        builder.Append("global::");
+        TypeDeclaration.WriteFileName(builder, true);
+        builder.Append("Logger");
+    }
+
+    public void WriteFQN(IndentedStringBuilder builder)
     {
         builder.Append("global::");
         TypeDeclaration.WriteFileName(builder, true);
@@ -98,14 +106,14 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
         }
     }
 
-    public void WriteMethod(IndentedStringBuilder builder)
+    public void WriteMethod(IndentedStringBuilder builder, ImmutableArray<CustomLoggerType?> customLoggers)
     {
         var classScopes = AddClassDeclaration(builder);
         WriteMethodDeclaration(builder);
         builder.EnterScope(ScopeType.NonReturningMethod);
         foreach (var call in LoggableMembers)
         {
-            call.WriteLogCall(builder);
+            call.WriteLogCall(builder, customLoggers);
         }
         builder.ExitScope(); // Method scope
         for (int i = 0; i < classScopes; i++)
@@ -117,9 +125,15 @@ public record LoggableType(TypeDeclarationModel TypeDeclaration, EquatableArray<
 
 internal static class LoggableTypeExtensions
 {
-    public static LoggableType GetLoggableType(this INamedTypeSymbol classSymbol, CancellationToken token, List<(FailureMode, ISymbol)>? failures, Dictionary<LoggableMember, ISymbol>? symbolMap)
+    public static LoggableType GetLoggableType(this ImmutableArray<AttributeData> attributes, INamedTypeSymbol classSymbol, CancellationToken token, List<(FailureMode, ISymbol)>? failures, Dictionary<LoggableMember, ISymbol>? symbolMap)
     {
-        // When we get here, the classSymbol is guaranteeds to have "LoggedAttribute"
+        // Only use first attribute, we don't allow multiple, and we're guaranteed to have 1.
+        Debug.Assert(attributes.Length == 1);
+
+        token.ThrowIfCancellationRequested();
+
+        LogAttributeInfo info = attributes[0].ToAttributeInfo(token);
+
         token.ThrowIfCancellationRequested();
 
         var typeDeclType = classSymbol.GetTypeDeclarationModel();
@@ -135,11 +149,11 @@ internal static class LoggableTypeExtensions
         {
             token.ThrowIfCancellationRequested();
 
-            var loggableMemberFailure = member.ToLoggableMember(token, out var loggableMember);
+            var loggableMemberFailure = member.ToLoggableMember(token, info.LogStrategy, out var loggableMember);
             token.ThrowIfCancellationRequested();
             if (loggableMemberFailure == FailureMode.None)
             {
-                // This is either a valid log, or has no attribute (or NotLogged)
+                // This is either a valid log, or is not logged
                 if (loggableMember is not null)
                 {
                     loggableMembers.Add(loggableMember);
@@ -162,7 +176,7 @@ internal static class LoggableTypeExtensions
         {
             foreach (var call in loggableType.LoggableMembers)
             {
-                var failureMode = call.WriteLogCall(null);
+                var failureMode = call.WriteLogCall(null, []);
                 if (failureMode == FailureMode.None)
                 {
                     continue;
@@ -193,7 +207,7 @@ internal static class LoggableTypeExtensions
             string fileName = builder.ToString();
             builder.Clear();
 
-            loggableType.WriteMethod(builder);
+            loggableType.WriteMethod(builder, customLoggers);
 
             context.AddSource(fileName, SourceText.From(builder.ToString(), Encoding.UTF8));
         }

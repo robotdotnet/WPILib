@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>Epilogue</RootNamespace>
+    <RootNamespace>WPILib.Logging</RootNamespace>
     <AssemblyName>FRC.Epilogue</AssemblyName>
     <NoWarn>1591;CA1401;1570</NoWarn>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>

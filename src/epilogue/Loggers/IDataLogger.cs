@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using WPIUtil.Serialization.Struct;
 
-namespace Epilogue.Logging;
+namespace WPILib.Logging.Loggers;
 
 public interface IDataLogger
 {

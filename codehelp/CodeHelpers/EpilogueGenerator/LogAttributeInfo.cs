@@ -1,9 +1,10 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text;
-using Epilogue;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.PooledObjects;
+using WPILib.Logging;
 
 namespace WPILib.CodeHelpers.EpilogueGenerator;
 
@@ -173,57 +174,41 @@ public record LogAttributeInfo(string? Name, LogStrategy LogStrategy, LogImporta
 
 internal static class LogAttributeInfoExtensions
 {
-    public static LogAttributeInfo? ToAttributeInfo(this AttributeData attributeData, INamedTypeSymbol? attributeClass, CancellationToken token, out bool notLogged)
+    public static LogAttributeInfo ToAttributeInfo(this AttributeData attributeData, CancellationToken token)
     {
-        if (attributeClass is null)
-        {
-            notLogged = false;
-            return null;
-        }
+        // At this point, we're guaranteed its a logged attribute
+        Debug.Assert(attributeData.AttributeClass?.IsLoggedAttributeClass() ?? false);
 
-        if (attributeClass.IsNotLoggedAttributeClass())
-        {
-            notLogged = true;
-            return null;
-        }
-        notLogged = false;
-        if (attributeClass.IsLoggedAttributeClass())
+        token.ThrowIfCancellationRequested();
+
+        string? path = null;
+        LogStrategy logStrategyEnum = LogStrategyExtensions.DefaultLogStrategy;
+        LogImportance logImportanceEnum = LogImportanceExtensions.DefaultLogImportance;
+
+        // Get the log attribute
+        foreach (var named in attributeData.NamedArguments)
         {
             token.ThrowIfCancellationRequested();
-
-            string? path = null;
-            LogStrategy logStrategyEnum = LogStrategyExtensions.DefaultLogStrategy;
-            LogImportance logImportanceEnum = LogImportanceExtensions.DefaultLogImportance;
-
-            // Get the log attribute
-            foreach (var named in attributeData.NamedArguments)
+            if (named.Key == "Name")
             {
-                if (named.Key == "Name")
+                if (!named.Value.IsNull)
                 {
-                    if (!named.Value.IsNull)
-                    {
-                        path = SymbolDisplay.FormatPrimitive(named.Value.Value!, false, false);
-                    }
-                    token.ThrowIfCancellationRequested();
-                }
-                else if (named.Key == "Strategy")
-                {
-                    // A boxed primitive can be unboxed to an enum with the same underlying type.
-                    logStrategyEnum = (LogStrategy)named.Value.Value!;
-                    token.ThrowIfCancellationRequested();
-                }
-                else if (named.Key == "Importance")
-                {
-                    // A boxed primitive can be unboxed to an enum with the same underlying type.
-                    logImportanceEnum = (LogImportance)named.Value.Value!;
-                    token.ThrowIfCancellationRequested();
+                    path = SymbolDisplay.FormatPrimitive(named.Value.Value!, false, false);
                 }
             }
-
-            return new LogAttributeInfo(path, logStrategyEnum, logImportanceEnum);
+            else if (named.Key == "Strategy")
+            {
+                // A boxed primitive can be unboxed to an enum with the same underlying type.
+                logStrategyEnum = (LogStrategy)named.Value.Value!;
+            }
+            else if (named.Key == "Importance")
+            {
+                // A boxed primitive can be unboxed to an enum with the same underlying type.
+                logImportanceEnum = (LogImportance)named.Value.Value!;
+            }
         }
-        return null;
+
+        token.ThrowIfCancellationRequested();
+        return new LogAttributeInfo(path, logStrategyEnum, logImportanceEnum);
     }
-
-
 }

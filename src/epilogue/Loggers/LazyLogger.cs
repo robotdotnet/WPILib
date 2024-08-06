@@ -1,4 +1,4 @@
-namespace Epilogue.Logging;
+namespace WPILib.Logging.Loggers;
 
 using System;
 using System.Runtime.InteropServices;

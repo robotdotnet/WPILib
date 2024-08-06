@@ -66,7 +66,15 @@ public static class SymbolExtensions
         return symbol is
         {
             Name: Strings.LoggedAttributeTypeName,
-            ContainingNamespace: { Name: Strings.LogNamespace, ContainingNamespace.IsGlobalNamespace: true }
+            ContainingNamespace:
+            {
+                Name: Strings.LogInnerNamespace,
+                ContainingNamespace:
+                {
+                    Name: Strings.LogOuterNamespace,
+                    ContainingNamespace.IsGlobalNamespace: true
+                }
+            }
         };
     }
 
@@ -75,7 +83,15 @@ public static class SymbolExtensions
         return symbol is
         {
             Name: Strings.NotLoggedAttributeTypeName,
-            ContainingNamespace: { Name: Strings.LogNamespace, ContainingNamespace.IsGlobalNamespace: true }
+            ContainingNamespace:
+            {
+                Name: Strings.LogInnerNamespace,
+                ContainingNamespace:
+                {
+                    Name: Strings.LogOuterNamespace,
+                    ContainingNamespace.IsGlobalNamespace: true
+                }
+            }
         };
     }
 
@@ -84,7 +100,15 @@ public static class SymbolExtensions
         return symbol is
         {
             Name: Strings.CustomLoggerForAttributeName,
-            ContainingNamespace: { Name: Strings.LogNamespace, ContainingNamespace.IsGlobalNamespace: true }
+            ContainingNamespace:
+            {
+                Name: Strings.LogInnerNamespace,
+                ContainingNamespace:
+                {
+                    Name: Strings.LogOuterNamespace,
+                    ContainingNamespace.IsGlobalNamespace: true
+                }
+            }
         };
     }
 

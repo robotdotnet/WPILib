@@ -17,7 +17,7 @@ public class EpilogueGeneratorTest
     public async Task TestPrimitives(string type, string output)
     {
         string testString = @"
-using Epilogue;
+using WPILib.Logging;
 
 [Logged]
 public partial class MyNewClass

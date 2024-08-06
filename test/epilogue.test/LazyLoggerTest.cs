@@ -1,7 +1,7 @@
-using Epilogue.Logging;
+using WPILib.Logging.Loggers;
 using Xunit;
 
-namespace Epilogue;
+namespace WPILib.Logging;
 
 public class LazyLoggerTest
 {

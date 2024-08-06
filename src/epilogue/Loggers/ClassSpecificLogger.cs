@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
-using Epilogue.Logging.Errors;
+using WPILib.Logging.Loggers.Errors;
 using WPIUtil.Sendable;
 
-namespace Epilogue.Logging;
+namespace WPILib.Logging.Loggers;
 
 public abstract class ClassSpecificLogger
 {

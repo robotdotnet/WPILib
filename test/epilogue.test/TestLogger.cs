@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
-using Epilogue.Logging;
+using WPILib.Logging.Loggers;
 using WPIUtil.Serialization.Struct;
 
-namespace Epilogue;
+namespace WPILib.Logging;
 
 public class TestLogger : IDataLogger
 {

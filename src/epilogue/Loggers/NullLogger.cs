@@ -1,6 +1,6 @@
 using WPIUtil.Serialization.Struct;
 
-namespace Epilogue.Logging;
+namespace WPILib.Logging.Loggers;
 
 public class NullLogger : IDataLogger
 {
