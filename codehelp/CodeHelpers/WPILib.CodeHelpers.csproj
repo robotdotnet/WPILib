@@ -20,10 +20,7 @@
 
   <ItemGroup>
     <!-- Include enums used in attributes -->
-
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.10.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.10.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.10.0" PrivateAssets="all" />
     <PackageReference Include="PolySharp" Version="1.14.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -32,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.4" PrivateAssets="All" />
+    <PackageReference Include="DotNet.ReproducibleBuilds" Version="1.2.25" PrivateAssets="All" />
   </ItemGroup>
 
   <!-- This ensures the library will be packaged as a source generator when we use `dotnet pack` -->

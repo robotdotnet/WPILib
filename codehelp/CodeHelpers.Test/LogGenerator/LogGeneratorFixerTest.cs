@@ -12,7 +12,7 @@ namespace CodeHelpers.Test.LogGenerator;
 public class LogGeneratorFixerTest
 {
     [Fact]
-    public async void Test1()
+    public async Task Test1()
     {
         string testString = @"
 using Stereologue;
