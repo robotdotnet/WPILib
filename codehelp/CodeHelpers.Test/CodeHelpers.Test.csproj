@@ -25,6 +25,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.10.0" />
     <PackageReference Include="Microsoft.CodeAnalysis" Version="4.10.0" />
     <PackageReference Include="System.Formats.Asn1" Version="9.0.0" />
+    <PackageReference Include="System.Private.Uri" Version="4.3.2" />
   </ItemGroup>
 
   <ItemGroup>
