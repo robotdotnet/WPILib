@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.NetworkTables.runtime" Version="2024.3.2-137-geb3635e" />
+    <PackageReference Include="FRC.NetworkTables.runtime" Version="2025.1.1-beta-1-127-gd1de766" />
   </ItemGroup>
 
 </Project>
