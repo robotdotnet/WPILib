@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using Google.Protobuf.WellKnownTypes;
 using NetworkTables;
 using WPIUtil.Logging;
 using WPIUtil.Serialization.Protobuf;
@@ -18,7 +17,9 @@ public sealed class Stereologuer
 
     public static Stereologuer Logger { get; } = new();
 
+#pragma warning disable IDE0060 // Remove unused parameter
     public void Setup(string name, bool fileOnly, bool lazyLogging)
+#pragma warning restore IDE0060 // Remove unused parameter
     {
         rootPath = name;
         FileOnly = fileOnly;

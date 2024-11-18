@@ -6,8 +6,10 @@ public class DeferredCommand : Command
 {
     private readonly Command m_nullCommand = new PrintCommand("[DeferredCommand] Supplied command was null!");
 
+#pragma warning disable IDE0052 // Remove unread private members
     private readonly Func<Command> m_supplier;
     private Command m_command;
+#pragma warning restore IDE0052 // Remove unread private members
 
     public DeferredCommand(Func<Command> supplier, HashSet<ISubsystem> requirements)
     {

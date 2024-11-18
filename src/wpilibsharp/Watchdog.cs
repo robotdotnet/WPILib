@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToDuration;
 using WPIHal.Handles;

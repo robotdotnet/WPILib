@@ -1,10 +1,9 @@
-namespace WPIUtil.Natives;
-
-using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using CommunityToolkit.Diagnostics;
 using WPIUtil.Handles;
+
+namespace WPIUtil.Natives;
 
 public static partial class SynchronizationNative
 {

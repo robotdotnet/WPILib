@@ -11,13 +11,21 @@ public readonly struct JoystickAxes
     [System.Runtime.CompilerServices.InlineArray(NumJoystickAxes)]
     public struct AxesBuffer
     {
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
         private float _element0;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     }
 
     [System.Runtime.CompilerServices.InlineArray(NumJoystickAxes)]
     public struct RawBuffer
     {
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
         private byte _element0;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     }
     private readonly short m_count;
     private readonly AxesBuffer m_axes;

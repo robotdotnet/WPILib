@@ -11,7 +11,11 @@ public readonly struct JoystickPOVs
     [System.Runtime.CompilerServices.InlineArray(NumJoystickPOVs)]
     public struct PovsBuffer
     {
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
         private short _element0;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     }
 
     private readonly short m_count;

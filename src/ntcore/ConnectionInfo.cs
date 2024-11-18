@@ -1,8 +1,9 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using NetworkTables.Natives;
 using WPIUtil.Marshal;
 
-namespace NetworkTables.Natives;
+namespace NetworkTables;
 
 [NativeMarshalling(typeof(ConnectionInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]

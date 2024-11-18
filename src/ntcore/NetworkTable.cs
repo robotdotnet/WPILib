@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using NetworkTables.Handles;
-using NetworkTables.Natives;
 
 namespace NetworkTables;
 

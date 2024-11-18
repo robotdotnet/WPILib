@@ -1,7 +1,6 @@
 using CommunityToolkit.Diagnostics;
 using NetworkTables;
 using UnitsNet;
-using WPIHal;
 using WPIHal.Natives;
 
 namespace WPILib;

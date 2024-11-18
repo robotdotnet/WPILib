@@ -3,8 +3,6 @@ namespace WPILib.CodeHelpers.ParameterlessStructs.Analyzer;
 #pragma warning disable RS2008 // Enable analyzer release tracking
 
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Diagnostics;
-using WPILib.CodeHelpers;
 
 public static class ParameterlessStructDiagnostics
 {

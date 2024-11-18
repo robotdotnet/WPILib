@@ -15,7 +15,11 @@ public static class DataLogManger
     private static string? m_logDir;
     private static bool m_filenameOverride;
     private static Thread? m_thread;
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0052 // Remove unread private members
     private static TimeZoneInfo m_utc = TimeZoneInfo.Utc;
+#pragma warning restore IDE0052 // Remove unread private members
+#pragma warning restore IDE0044 // Add readonly modifier
     private static bool m_ntLoggerEnabled = true;
     private static NtDataLogger m_ntEntryLogger;
     private static NtConnectionDataLogger m_ntConnLogger;

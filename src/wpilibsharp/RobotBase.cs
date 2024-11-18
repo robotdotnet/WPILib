@@ -1,5 +1,3 @@
-using System.Runtime.ConstrainedExecution;
-using CommunityToolkit.Diagnostics;
 using NetworkTables;
 using WPIHal.Natives;
 
@@ -55,7 +53,7 @@ public abstract class RobotBase : IDisposable
         get
         {
             var rt = RuntimeType;
-            return rt == RuntimeType.RoboRIO || rt == RuntimeType.RoboRIO2;
+            return rt is RuntimeType.RoboRIO or RuntimeType.RoboRIO2;
         }
     }
 

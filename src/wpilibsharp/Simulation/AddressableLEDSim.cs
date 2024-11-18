@@ -1,6 +1,5 @@
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
-using WPIHal;
 using WPIHal.Natives;
 using WPIHal.Natives.Simulation;
 
@@ -15,7 +14,7 @@ public class AddressableLEDSim
         m_index = 0;
     }
 
-    public AddressableLEDSim(AddressableLED addressableLED)
+    public AddressableLEDSim(AddressableLED _)
     {
         m_index = 0;
     }

@@ -6,7 +6,9 @@ public class ConditionalCommand : Command
 {
     private readonly Command m_onTrue;
     private readonly Command m_onFalse;
+#pragma warning disable IDE0052 // Remove unread private members
     private readonly Func<bool> m_condition;
+#pragma warning restore IDE0052 // Remove unread private members
 
     public ConditionalCommand(Command onTrue, Command onFalse, Func<bool> condition)
     {

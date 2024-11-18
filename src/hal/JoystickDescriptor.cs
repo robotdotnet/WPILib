@@ -34,7 +34,9 @@ public static class JoystickDescriptorMarshaller
         [System.Runtime.CompilerServices.InlineArray(256)]
         public struct NameBuffer
         {
+#pragma warning disable IDE0044 // Add readonly modifier
             private byte _element0;
+#pragma warning restore IDE0044 // Add readonly modifier
 
             public readonly unsafe string FromNullTerminatedString()
             {
@@ -49,7 +51,11 @@ public static class JoystickDescriptorMarshaller
         [System.Runtime.CompilerServices.InlineArray(12)]
         public struct AxesTypeBuffer
         {
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
             private byte _element0;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
 
             public readonly unsafe int[] FromRawBytes(int length)
             {

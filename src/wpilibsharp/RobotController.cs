@@ -4,7 +4,6 @@ using UnitsNet.NumberExtensions.NumberToElectricPotential;
 using UnitsNet.NumberExtensions.NumberToTemperature;
 using WPIHal;
 using WPIHal.Natives;
-using WPIHal.Natives.Simulation;
 
 namespace WPILib;
 

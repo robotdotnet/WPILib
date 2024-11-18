@@ -1,9 +1,10 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
 using NetworkTables.Handles;
+using NetworkTables.Natives;
 using WPIUtil.Marshal;
 
-namespace NetworkTables.Natives;
+namespace NetworkTables;
 
 [NativeMarshalling(typeof(TopicInfoMarshaller))]
 [StructLayout(LayoutKind.Auto)]

@@ -44,6 +44,7 @@ public unsafe class DataLog : IDisposable
         return m_schemaMap.ContainsKey(name);
     }
 
+#pragma warning disable IDE0060 // Remove unused parameter
     private void AddSchemaNative(string name, WpiString type, WpiString schema, long timestamp = 0)
     {
         if (!m_schemaMap.TryAdd(name, 1))
@@ -81,7 +82,7 @@ public unsafe class DataLog : IDisposable
 
     public void AddSchema(IProtobuf proto, long timestamp = 0)
     {
-        long actualTimestamp = timestamp == 0 ? (long)TimestampNative.Now() : timestamp;
+        var actualTimestamp = timestamp == 0 ? (long)TimestampNative.Now() : timestamp;
         proto.ForEachDescriptor(HasSchema, (typeString, schema) =>
         {
             AddSchemaNative(typeString, "proto:FileDescriptorProto"u8, schema, actualTimestamp);
@@ -175,7 +176,7 @@ public unsafe class DataLog : IDisposable
 
     private void AddSchemaImpl(IStructBase value, long timestamp, HashSet<string> seen)
     {
-        string typeString = value.TypeString;
+        var typeString = value.TypeString;
         if (HasSchema(typeString))
         {
             return;

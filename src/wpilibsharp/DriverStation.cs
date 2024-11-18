@@ -340,10 +340,14 @@ public static class DriverStation
     private static MatchInfo m_matchInfoCache;
     private static ControlWord m_controlWordCache;
 
-    private static EventVector m_refreshEvents = new();
+    private static readonly EventVector m_refreshEvents = new();
 
-    private static int[] m_joystickButtonsPressed = new int[NumJoystickPorts];
-    private static int[] m_joystickButtonsReleased = new int[NumJoystickPorts];
+#pragma warning disable IDE0052 // Remove unread private members
+    private static readonly int[] m_joystickButtonsPressed = new int[NumJoystickPorts];
+#pragma warning restore IDE0052 // Remove unread private members
+#pragma warning disable IDE0052 // Remove unread private members
+    private static readonly int[] m_joystickButtonsReleased = new int[NumJoystickPorts];
+#pragma warning restore IDE0052 // Remove unread private members
 
     private static readonly MatchDataSender m_matchDataSender;
     private static DataLogSender? m_dataLogSender;
@@ -383,7 +387,7 @@ public static class DriverStation
 
     public static bool GetStickButton(int stick, int button)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -409,12 +413,12 @@ public static class DriverStation
 
     public static double GetStickAxis(int stick, int axis)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
 
-        if (axis < 0 || axis >= JoystickAxes.NumJoystickAxes)
+        if (axis is < 0 or >= JoystickAxes.NumJoystickAxes)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(axis), $"Joystick axis {axis} is out of range");
         }
@@ -434,12 +438,12 @@ public static class DriverStation
 
     public static int GetStickPOV(int stick, int pov)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
 
-        if (pov < 0 || pov >= JoystickPOVs.NumJoystickPOVs)
+        if (pov is < 0 or >= JoystickPOVs.NumJoystickPOVs)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(pov), $"Joystick pov {pov} is out of range");
         }
@@ -459,7 +463,7 @@ public static class DriverStation
 
     public static uint GetStickButtons(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -472,7 +476,7 @@ public static class DriverStation
 
     public static int GetStickAxisCount(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -485,7 +489,7 @@ public static class DriverStation
 
     public static int GetStickPOVCount(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -498,7 +502,7 @@ public static class DriverStation
 
     public static int GetStickButtonCount(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -511,7 +515,7 @@ public static class DriverStation
 
     public static bool GetJoystickIsXbox(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -521,7 +525,7 @@ public static class DriverStation
 
     public static int GetJoystickType(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -531,7 +535,7 @@ public static class DriverStation
 
     public static string GetJoystickName(int stick)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -542,7 +546,7 @@ public static class DriverStation
 
     public static int GetJoystickAxisType(int stick, int axis)
     {
-        if (stick < 0 || stick >= NumJoystickPorts)
+        if (stick is < 0 or >= NumJoystickPorts)
         {
             ThrowHelper.ThrowArgumentOutOfRangeException(nameof(stick), $"Joystick index {stick} is out of range, should be 0-5");
         }
@@ -834,12 +838,12 @@ public static class DriverStation
         dataLogSender?.Send((long)TimestampNative.Now());
     }
 
-    public static void ReportWarning(string warning, bool printTrace)
+    public static void ReportWarning(string _, bool __)
     {
 
     }
 
-    public static void ReportError(string warning, bool printTrace)
+    public static void ReportError(string _, bool __)
     {
 
     }

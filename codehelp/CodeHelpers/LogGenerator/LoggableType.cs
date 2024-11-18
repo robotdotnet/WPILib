@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 using WPILib.CodeHelpers.LogGenerator.Analyzer;
-using static WPILib.CodeHelpers.IndentedStringBuilder;
 
 namespace WPILib.CodeHelpers.LogGenerator;
 

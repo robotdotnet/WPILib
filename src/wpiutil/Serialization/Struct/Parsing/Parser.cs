@@ -149,7 +149,7 @@ public ref struct Parser(ReadOnlySpan<byte> inStr)
         return m_token;
     }
 
-    private void Expect(TokenKind kind)
+    private readonly void Expect(TokenKind kind)
     {
         if (m_token != kind)
         {

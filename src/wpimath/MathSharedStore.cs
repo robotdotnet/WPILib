@@ -28,10 +28,7 @@ public static class MathSharedStore
         {
             lock (m_lockObject)
             {
-                if (m_mathShared == null)
-                {
-                    m_mathShared = new DefaultMathShared();
-                }
+                m_mathShared ??= new DefaultMathShared();
                 return m_mathShared;
             }
         }

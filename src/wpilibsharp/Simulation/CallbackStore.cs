@@ -6,7 +6,6 @@ using unsafe HalGlobalCreate = delegate* managed<delegate* unmanaged[Cdecl]<byte
 using unsafe HalGlobalFree = delegate* managed<int, void>;
 using unsafe HalIndexedCreate = delegate* managed<int, delegate* unmanaged[Cdecl]<byte*, void*, WPIHal.HalValue*, void>, void*, bool, int>;
 using unsafe HalIndexedFree = delegate* managed<int, int, void>;
-using unsafe HalNativeNotifyCallback = delegate* unmanaged[Cdecl]<byte*, void*, WPIHal.HalValue*, void>;
 
 namespace WPILib.Simulation;
 

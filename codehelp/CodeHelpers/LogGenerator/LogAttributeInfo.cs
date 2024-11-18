@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.PooledObjects;
 using Stereologue;
 
 namespace WPILib.CodeHelpers.LogGenerator;

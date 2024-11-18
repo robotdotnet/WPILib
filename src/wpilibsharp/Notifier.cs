@@ -31,7 +31,7 @@ public class Notifier : IDisposable
         }
 
         HalNotifier.StopNotifier(handle);
-        if (m_thread.IsAlive == true)
+        if (m_thread.IsAlive)
         {
             m_thread.Interrupt();
             m_thread.Join();

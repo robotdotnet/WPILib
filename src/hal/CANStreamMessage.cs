@@ -16,7 +16,11 @@ public struct CANStreamMessage
     [System.Runtime.CompilerServices.InlineArray(8)]
     public struct DataBuffer
     {
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
         private byte _element0;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     }
 }
 
@@ -42,6 +46,10 @@ public readonly struct CANMessage
     [InlineArray(8)]
     public struct DataBuffer
     {
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable IDE0051 // Remove unused private members
         private byte _element0;
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0044 // Add readonly modifier
     }
 }
