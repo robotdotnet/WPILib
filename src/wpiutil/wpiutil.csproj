@@ -5,7 +5,7 @@
     <AssemblyName>FRC.WPIUtil</AssemblyName>
     <NoWarn>1591;CA1401</NoWarn>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisLevel>8.0</AnalysisLevel>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
