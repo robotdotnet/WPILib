@@ -1,10 +1,12 @@
 using System.Collections.Concurrent;
+using WPI.Logging.Natives;
+using WPIUtil;
 using WPIUtil.Handles;
 using WPIUtil.Natives;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
 
-namespace WPIUtil.Logging;
+namespace WPI.Logging;
 
 public unsafe class DataLog : IDisposable
 {

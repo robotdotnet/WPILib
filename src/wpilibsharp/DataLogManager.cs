@@ -3,8 +3,8 @@ using System.Text;
 using NetworkTables;
 using NetworkTables.Handles;
 using UnitsNet.NumberExtensions.NumberToDuration;
+using WPI.Logging;
 using WPIUtil.Concurrent;
-using WPIUtil.Logging;
 
 namespace WPILib;
 

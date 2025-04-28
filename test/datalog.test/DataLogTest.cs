@@ -1,7 +1,7 @@
-using WPIUtil.Logging;
+using WPI.Logging;
 using Xunit;
 
-namespace WPIUtil.Test;
+namespace Datalog.Test;
 
 internal class CallbackData
 {

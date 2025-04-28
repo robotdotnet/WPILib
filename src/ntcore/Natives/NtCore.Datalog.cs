@@ -1,8 +1,8 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NetworkTables.Handles;
+using WPI.Logging.Natives;
 using WPIUtil;
-using WPIUtil.Natives;
 
 namespace NetworkTables.Natives;
 

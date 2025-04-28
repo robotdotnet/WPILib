@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.WPINet.runtime" Version="2025.1.1-beta-1-127-gd1de766" />
+    <PackageReference Include="FRC.WPINet.runtime" Version="2025.3.2-114-g3681121" />
   </ItemGroup>
 
 </Project>

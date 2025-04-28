@@ -1,6 +1,6 @@
 using WPIUtil.Serialization.Struct;
 
-namespace WPIUtil.Logging;
+namespace WPI.Logging;
 
 public sealed class StructArrayLogEntry<T> : DataLogEntry where T : IStructSerializable<T>
 {

@@ -2,12 +2,12 @@ using CommunityToolkit.Diagnostics;
 using NetworkTables;
 using UnitsNet;
 using UnitsNet.NumberExtensions.NumberToDuration;
+using WPI.Logging;
 using WPIHal;
 using WPIHal.Natives;
 using WPIUtil;
 using WPIUtil.Concurrent;
 using WPIUtil.Handles;
-using WPIUtil.Logging;
 using WPIUtil.Natives;
 using MatchType = WPIHal.MatchType;
 

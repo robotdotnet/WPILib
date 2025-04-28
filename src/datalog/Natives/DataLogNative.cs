@@ -1,10 +1,11 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using WPIUtil;
 using WPIUtil.Handles;
 using WPIUtil.Marshal;
 
-namespace WPIUtil.Natives;
+namespace WPI.Logging.Natives;
 
 public struct OpaqueDataLog { }
 

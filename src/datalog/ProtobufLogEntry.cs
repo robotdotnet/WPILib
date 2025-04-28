@@ -1,6 +1,6 @@
 using WPIUtil.Serialization.Protobuf;
 
-namespace WPIUtil.Logging;
+namespace WPI.Logging;
 
 public sealed class ProtobufLogEntry<T> : DataLogEntry where T : IProtobufSerializable<T>
 {

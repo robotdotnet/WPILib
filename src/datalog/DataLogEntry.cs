@@ -1,6 +1,6 @@
 using WPIUtil.Handles;
 
-namespace WPIUtil.Logging;
+namespace WPI.Logging;
 
 public abstract class DataLogEntry(DataLog log, string name, string type, string metadata = "", long timestamp = 0)
 {

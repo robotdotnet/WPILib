@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NetworkTables;
-using WPIUtil.Logging;
+using WPI.Logging;
 using WPIUtil.Serialization.Protobuf;
 using WPIUtil.Serialization.Struct;
 

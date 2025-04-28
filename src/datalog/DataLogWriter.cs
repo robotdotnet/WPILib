@@ -1,6 +1,6 @@
-using WPIUtil.Natives;
+using WPI.Logging.Natives;
 
-namespace WPIUtil.Logging;
+namespace WPI.Logging;
 
 public unsafe class DataLogWriter : DataLog
 {
