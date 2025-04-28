@@ -5,10 +5,6 @@ namespace WPIUtil.Natives;
 
 public static partial class TimestampNative
 {
-    [LibraryImport("wpiutil", EntryPoint = "WPI_Impl_ShutdownNowRio")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ShutdownNowRio();
-
     [LibraryImport("wpiutil", EntryPoint = "WPI_NowDefault")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial ulong NowDefault();
