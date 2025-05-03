@@ -4,9 +4,6 @@
     <RootNamespace>WPINet</RootNamespace>
     <AssemblyName>FRC.WPINet</AssemblyName>
     <NoWarn>1591;CA1401</NoWarn>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>8.0</AnalysisLevel>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.WPINet.runtime" Version="2025.3.2-114-g3681121" />
+    <PackageReference Include="FRC.WPINet.runtime" Version="$(Version)" />
   </ItemGroup>
 
 </Project>

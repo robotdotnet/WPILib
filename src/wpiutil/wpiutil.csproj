@@ -4,14 +4,11 @@
     <RootNamespace>WPIUtil</RootNamespace>
     <AssemblyName>FRC.WPIUtil</AssemblyName>
     <NoWarn>1591;CA1401</NoWarn>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>8.0</AnalysisLevel>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.2" />
-    <PackageReference Include="FRC.WPIUtil.runtime" Version="2025.3.2-114-g3681121" />
+    <PackageReference Include="FRC.WPIUtil.runtime" Version="$(Version)" />
     <PackageReference Include="Google.Protobuf" Version="3.21.12" />
     <PackageReference Include="UnitsNet" Version="5.42.0" />
     <PackageReference Include="UnitsNet.NumberExtensions" Version="5.42.0" />

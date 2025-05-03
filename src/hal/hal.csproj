@@ -3,10 +3,6 @@
   <PropertyGroup>
     <RootNamespace>WPIHal</RootNamespace>
     <AssemblyName>FRC.WPIHal</AssemblyName>
-    <NoWarn>1591;CA1401;1570</NoWarn>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>8.0</AnalysisLevel>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.WPIHal.runtime" Version="2025.3.2-114-g3681121" />
+    <PackageReference Include="FRC.WPIHal.runtime" Version="$(Version)" />
   </ItemGroup>
 
 </Project>

@@ -4,9 +4,6 @@
     <RootNamespace>WPIMath</RootNamespace>
     <AssemblyName>FRC.WPIMath</AssemblyName>
     <NoWarn>1591;CA1401</NoWarn>
-    <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <AnalysisLevel>8.0</AnalysisLevel>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
   </PropertyGroup>
 
   <ItemGroup>

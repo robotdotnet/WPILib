@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.DataLog.runtime" Version="2025.3.2-114-g3681121" />
+    <PackageReference Include="FRC.DataLog.runtime" Version="$(Version)" />
   </ItemGroup>
 
 </Project>
