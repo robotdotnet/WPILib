@@ -12,6 +12,8 @@
   <ItemGroup>
     <ProjectReference Include="..\wpiutil\wpiutil.csproj" />
     <ProjectReference Include="..\wpinet\wpinet.csproj" />
+    <ProjectReference Include="..\datalog\datalog.csproj" />
+    <ProjectReference Include="..\ntcore\ntcore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
