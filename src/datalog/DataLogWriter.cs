@@ -4,7 +4,13 @@ namespace WPI.Logging;
 
 public unsafe class DataLogWriter : DataLog
 {
-    public DataLogWriter(string filename, string extraHeader = "") : base(DataLogNative.Create(filename, extraHeader))
+    private static OpaqueDataLog* Create(string filename, string extraHeader)
+    {
+        var errorCode = 0;
+        return DataLogNative.Create(filename, &errorCode, extraHeader);
+    }
+
+    public DataLogWriter(string filename, string extraHeader = "") : base(Create(filename, extraHeader))
     {
     }
 }

@@ -1,4 +1,4 @@
-﻿using Hal;
+﻿using WPIHal.Natives;
 using Xunit;
 
 namespace hal.test
@@ -8,7 +8,7 @@ namespace hal.test
         [Fact]
         public void TestHalLoads()
         {
-            Assert.True(HALLowLevel.Initialize());
+            HalBase.Initialize();
         }
     }
 }

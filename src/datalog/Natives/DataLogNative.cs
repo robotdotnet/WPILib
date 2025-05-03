@@ -13,7 +13,7 @@ public static partial class DataLogNative
 {
     [LibraryImport("datalog", EntryPoint = "WPI_DataLog_CreateWriter")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static unsafe partial OpaqueDataLog* Create(WpiString dir, WpiString filename);
+    public static unsafe partial OpaqueDataLog* Create(WpiString dir, int* errorCode, WpiString filename);
 
     [LibraryImport("datalog", EntryPoint = "WPI_DataLog_CreateBackgroundWriter")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -27,7 +27,7 @@ public static partial class DataLogNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void Release(OpaqueDataLog* datalog);
 
-    [LibraryImport("datalog", EntryPoint = "WPI_DataLog_SetFilename")]
+    [LibraryImport("datalog", EntryPoint = "WPI_DataLog_SetBackgroundWriterFilename")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial void SetFilename(OpaqueDataLog* datalog, WpiString filename);
 
