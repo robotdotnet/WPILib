@@ -24,7 +24,7 @@ public static partial class NtCore
 
     [LibraryImport("ntcore", EntryPoint = "NT_StartServer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartServer(NtInst inst, WpiString persistFilename, WpiString listenAddres, uint port3, uint port4);
+    public static partial void StartServer(NtInst inst, WpiString persistFilename, WpiString listenAddres, uint port);
 
     [LibraryImport("ntcore", EntryPoint = "NT_StopServer")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

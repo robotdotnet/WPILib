@@ -64,9 +64,7 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
     private readonly ConcurrentDictionary<NtTopic, Topic> m_topicsByHandle = new();
     private readonly ListenerStorage m_listeners;
     private readonly bool m_owned;
-
-    public const int KDefaultPort3 = 1735;
-    public const int KDefaultPort4 = 5810;
+    public const int KDefaultPort = 5810;
 
     private NetworkTableInstance(NtInst inst, bool owned)
     {
@@ -483,9 +481,9 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         NtCore.StopLocal(Handle);
     }
 
-    public void StartServer(string persistFilename = "networktables.json", string listenAddress = "", int port3 = KDefaultPort3, int port4 = KDefaultPort4)
+    public void StartServer(string persistFilename = "networktables.json", string listenAddress = "", int port = KDefaultPort)
     {
-        NtCore.StartServer(Handle, persistFilename, listenAddress, (uint)port3, (uint)port4);
+        NtCore.StartServer(Handle, persistFilename, listenAddress, (uint)port);
     }
 
     public void StopServer()
