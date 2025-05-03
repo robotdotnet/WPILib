@@ -11,7 +11,7 @@ public class LoggerTest
         List<NetworkTableEvent> msgs = [];
         instance.AddLogger((int)NtLogLevel.Info, 100, msgs.Add);
 
-        instance.StartClient4("client");
+        instance.StartClient("client");
         instance.SetServer("127.0.0.1", 10000);
 
         // Wait for client to report it's started, then wait another 0.1 sec

@@ -30,13 +30,9 @@ public static partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void StopServer(NtInst inst);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_StartClient3")]
+    [LibraryImport("ntcore", EntryPoint = "NT_StartClient")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartClient3(NtInst inst, WpiString identity);
-
-    [LibraryImport("ntcore", EntryPoint = "NT_StartClient4")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void StartClient4(NtInst inst, WpiString identity);
+    public static partial void StartClient(NtInst inst, WpiString identity);
 
     [LibraryImport("ntcore", EntryPoint = "NT_StopClient")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

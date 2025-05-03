@@ -493,14 +493,9 @@ public sealed partial class NetworkTableInstance : IDisposable, IEquatable<Netwo
         NtCore.StopServer(Handle);
     }
 
-    public void StartClient3(string identity)
+    public void StartClient(string identity)
     {
-        NtCore.StartClient3(Handle, identity);
-    }
-
-    public void StartClient4(string identity)
-    {
-        NtCore.StartClient4(Handle, identity);
+        NtCore.StartClient(Handle, identity);
     }
 
     public void SetServer(string serverName, int port = 0)
