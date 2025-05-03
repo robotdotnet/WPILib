@@ -7,13 +7,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-windows:
+  build-test:
 
-    runs-on: windows-latest
     strategy:
       matrix:
         dotnet-version: [ '8.x' ]
-        target: [ 'win-x64', 'win-arm64' ]
+        target: 
+          - dotnet: win-x64
+            os: windows-2025
+          - dotnet: win-arm64
+            os: windows-11-arm
+          - dotnet: linux-x64
+            os: ubuntu-24.04
+          - dotnet: linux-arm64
+            os: ubuntu-24.04-arm
+
+    runs-on: ${{ matrix.target.os }}
 
     steps:
       - uses: actions/checkout@v4
@@ -21,26 +30,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Build ${{ matrix.target }}
-        run: dotnet publish -r ${{ matrix.target }}
-      - name: Run tests
-        run: dotnet test
-
-  build-linux:
-
-    runs-on: ubuntu-22.04
-    strategy:
-      matrix:
-        dotnet-version: [ '8.x' ]
-        target: [ 'linux-x64' ]
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup dotnet ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Build ${{ matrix.target }}
-        run: dotnet publish -r ${{ matrix.target }}
+      - name: Build ${{ matrix.target.dotnet }}
+        run: dotnet publish -r ${{ matrix.target.dotnet }}
       - name: Run tests
         run: dotnet test
