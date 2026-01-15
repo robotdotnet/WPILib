@@ -5,7 +5,7 @@ namespace NetworkTables;
 
 [NativeMarshalling(typeof(PubSubOptionsMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct PubSubOptions(uint StructSize, uint PollSize, double Periodic, bool ExcludePublisher, bool SendAll, bool TopicsOnly, bool PrefixMatch, bool KeepDuplicates, bool DisableRemote, bool DisableLocal, bool ExcludeSelf)
+public record struct PubSubOptions(uint PollSize, double Periodic, bool ExcludePublisher, bool SendAll, bool TopicsOnly, bool PrefixMatch, bool KeepDuplicates, bool DisableRemote, bool DisableLocal, bool ExcludeSelf, bool Hidden)
 {
     public static PubSubOptions None => new();
 }
@@ -17,7 +17,7 @@ public static unsafe class PubSubOptionsMarshaller
     {
         return new NativePubSubOptions
         {
-            structSize = managed.StructSize,
+            structSize = (uint)sizeof(NativePubSubOptions),
             pollSize = managed.PollSize,
             periodic = managed.Periodic,
             excludePublisher = managed.ExcludePublisher ? 1 : 0,
@@ -28,6 +28,7 @@ public static unsafe class PubSubOptionsMarshaller
             disableRemote = managed.DisableRemote ? 1 : 0,
             disableLocal = managed.DisableLocal ? 1 : 0,
             excludeSelf = managed.ExcludeSelf ? 1 : 0,
+            hidden = managed.Hidden ? 1 : 0,
         };
     }
 
@@ -35,7 +36,6 @@ public static unsafe class PubSubOptionsMarshaller
     {
         return new PubSubOptions
         {
-            StructSize = unmanaged.structSize,
             PollSize = unmanaged.pollSize,
             Periodic = unmanaged.periodic,
             ExcludePublisher = unmanaged.excludePublisher != 0,
@@ -46,6 +46,7 @@ public static unsafe class PubSubOptionsMarshaller
             DisableRemote = unmanaged.disableRemote != 0,
             DisableLocal = unmanaged.disableLocal != 0,
             ExcludeSelf = unmanaged.excludeSelf != 0,
+            Hidden = unmanaged.hidden != 0,
         };
     }
 
@@ -63,6 +64,26 @@ public static unsafe class PubSubOptionsMarshaller
         public int disableRemote;
         public int disableLocal;
         public int excludeSelf;
+        public int hidden;
 
+        public override bool Equals(object? obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(NativePubSubOptions left, NativePubSubOptions right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(NativePubSubOptions left, NativePubSubOptions right)
+        {
+            return !(left == right);
+        }
     }
 }
