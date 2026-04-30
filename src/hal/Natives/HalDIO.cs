@@ -20,10 +20,9 @@ public static partial class HalDIO
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void FreeDIOPort(HalDigitalHandle dioPortHandle);
 
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_FreeDigitalPWM")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void FreeDigitalPWM(HalDigitalPWMHandle pwmGenerator, out HalStatus status);
+    public static partial void FreeDigitalPWM(HalDigitalPWMHandle pwmGenerator);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetDIO")]
@@ -65,10 +64,14 @@ public static partial class HalDIO
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void Pulse(HalDigitalHandle dioPortHandle, double pulseLengthSeconds, out HalStatus status);
 
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDIOSimDevice")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetDIOSimDevice(HalDigitalHandle handle, HalSimDeviceHandle device);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetDIO")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetDIO(HalDigitalHandle dioPortHandle, int value, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDIODirection")]
@@ -76,9 +79,19 @@ public static partial class HalDIO
     public static partial void SetDIODirection(HalDigitalHandle dioPortHandle, int input, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_PulseMultiple")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void PulseMultiple(uint channelMask, double pulseLengthSeconds, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDigitalPWMDutyCycle")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetDigitalPWMDutyCycle(HalDigitalPWMHandle pwmGenerator, double dutyCycle, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetDigitalPWMPPS")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetDigitalPWMPPS(HalDigitalPWMHandle pwmGenerator, double dutyCycle, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDigitalPWMOutputChannel")]

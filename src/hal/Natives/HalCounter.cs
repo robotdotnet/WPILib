@@ -17,10 +17,14 @@ public static partial class HalCounter
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void ClearCounterUpSource(HalCounterHandle counterHandle, out HalStatus status);
 
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_FreeCounter")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void FreeCounter(HalCounterHandle counterHandle, out HalStatus status);
+    public static partial void FreeCounter(HalCounterHandle counterHandle);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetCounter")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetCounter(HalCounterHandle counterHandle, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetCounterSamplesToAverage")]

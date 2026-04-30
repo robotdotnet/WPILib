@@ -9,7 +9,7 @@ public static partial class HalCANAPI
 {
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetCANPacketBaseTime")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial uint GetCANPacketBaseTime(HalCANHandle handle);
+    public static partial uint GetCANPacketBaseTime();
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_CleanCAN")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

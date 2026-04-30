@@ -69,5 +69,36 @@ public static partial class HalPorts
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int GetNumRelayHeaders();
 
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumCTREPCMModules")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumCTREPCMModules();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumCTRESolenoidChannels")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumCTRESolenoidChannels();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumCTREPDPModules")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumCTREPDPModules();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumCTREPDPChannels")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumCTREPDPChannels();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumREVPDHModules")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumREVPDHModules();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumREVPDHChannels")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumREVPDHChannels();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumREVPHModules")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumREVPHModules();
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetNumREVPHChannels")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetNumREVPHChannels();
 
 }

@@ -74,6 +74,14 @@ public static partial class HalSPI
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetSPIHandle(SPIPort port, int handle);
 
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetSPIMode")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetSPIMode(SPIPort port, SPIMode mode);
+
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetSPIMode")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial SPIMode GetSPIMode(SPIPort port);
+
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetSPISpeed")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetSPISpeed(SPIPort port, int speed);

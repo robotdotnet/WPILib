@@ -1,11 +1,11 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
-using System.Text;
 using CommunityToolkit.Diagnostics;
 using WPIHal.Handles;
 using WPIHal.Marshal;
 using WPIUtil;
+using WPIUtil.Marshal;
 
 namespace WPIHal.Natives;
 
@@ -89,35 +89,28 @@ public static partial class HalBase
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetSerialNumber")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial nuint GetSerialNumber(Span<byte> buffer, nuint bufferSize);
+    public static partial void GetSerialNumber([MarshalUsing(typeof(WpiStringMarshaller))] out string serialNumber);
 
     public static string GetSerialNumber()
     {
-        Span<byte> buffer = stackalloc byte[9];
-        nuint actual = GetSerialNumber(buffer, (nuint)buffer.Length);
-        if (actual == 0)
-        {
-            return "";
-        }
-        ReadOnlySpan<byte> read = buffer[0..checked((int)actual)];
-        return Encoding.UTF8.GetString(read);
+        GetSerialNumber(out string serial);
+        return serial;
     }
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetComments")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial nuint GetComments(Span<byte> buffer, nuint bufferSize);
+    public static partial void GetComments([MarshalUsing(typeof(WpiStringMarshaller))] out string comments);
 
     public static string GetComments()
     {
-        Span<byte> buffer = stackalloc byte[65];
-        nuint actual = GetComments(buffer, (nuint)buffer.Length);
-        if (actual == 0)
-        {
-            return "";
-        }
-        ReadOnlySpan<byte> read = buffer[0..checked((int)actual)];
-        return Encoding.UTF8.GetString(read);
+        GetComments(out string comments);
+        return comments;
     }
+
+    [AutomateStatusCheck(StatusCheckMethod = StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetCommsDisableCount")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetCommsDisableCount(out HalStatus status);
 
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetTeamNumber")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

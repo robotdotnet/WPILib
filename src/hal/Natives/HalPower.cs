@@ -87,6 +87,11 @@ public static partial class HalPower
     public static partial double GetBrownoutVoltage(out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_ResetUserCurrentFaults")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void ResetUserCurrentFaults(out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetBrownoutVoltage")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetBrownoutVoltage(double voltage, out HalStatus status);

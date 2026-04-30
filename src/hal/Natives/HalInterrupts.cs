@@ -51,6 +51,14 @@ public static partial class HalInterrupts
     [LibraryImport("wpiHal", EntryPoint = "HAL_WaitForInterrupt")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial long WaitForInterrupt(HalInterruptHandle interruptHandle, double timeout, int ignorePrevious, out HalStatus status);
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_WaitForMultipleInterrupts")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial long WaitForMultipleInterrupts(HalInterruptHandle interruptHandle, long mask, double timeout, int ignorePrevious, out HalStatus status);
 
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_ReleaseWaitingInterrupt")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void ReleaseWaitingInterrupt(HalInterruptHandle interruptHandle, out HalStatus status);
 
 }

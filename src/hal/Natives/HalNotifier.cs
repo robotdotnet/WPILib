@@ -12,10 +12,9 @@ public static partial class HalNotifier
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void CancelNotifierAlarm(HalNotifierHandle notifierHandle, out HalStatus status);
 
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_CleanNotifier")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CleanNotifier(HalNotifierHandle notifierHandle, out HalStatus status);
+    public static partial void CleanNotifier(HalNotifierHandle notifierHandle);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_InitializeNotifier")]

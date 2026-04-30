@@ -26,6 +26,11 @@ public static partial class HalAddressableLED
     public static partial HalAddressableLEDHandle InitializeAddressableLED(HalDigitalHandle outputPort, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetAddressableLEDColorOrder")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetAddressableLEDColorOrder(HalAddressableLEDHandle handle, AddressableLEDColorOrder colorOrder, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetAddressableLEDBitTiming")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetAddressableLEDBitTiming(HalAddressableLEDHandle handle, int highTime0NanoSeconds, int lowTime0NanoSeconds, int highTime1NanoSeconds, int lowTime1NanoSeconds, out HalStatus status);

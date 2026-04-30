@@ -12,10 +12,9 @@ public static partial class HalSerialPort
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void ClearSerial(HalSerialPortHandle handle, out HalStatus status);
 
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_CloseSerial")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void CloseSerial(HalSerialPortHandle handle, out HalStatus status);
+    public static partial void CloseSerial(HalSerialPortHandle handle);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_DisableSerialTermination")]

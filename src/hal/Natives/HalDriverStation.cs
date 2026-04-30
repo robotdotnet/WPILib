@@ -103,6 +103,11 @@ public static partial class HalDriverStation
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void GetAllJoystickData(Span<JoystickAxes> axes, Span<JoystickPOVs> povs, Span<JoystickButtons> buttons);
 
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetOutputsEnabled")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool GetOutputsEnabled();
+
     [LibraryImport("wpiHal", EntryPoint = "HAL_RefreshDSData")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     [return: MarshalAs(UnmanagedType.I4)]

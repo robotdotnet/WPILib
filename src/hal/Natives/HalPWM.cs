@@ -11,10 +11,9 @@ public static partial class HalPWM
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial int CheckPWMChannel(int channel);
 
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_FreePWMPort")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void FreePWMPort(HalDigitalHandle pwmPortHandle, out HalStatus status);
+    public static partial void FreePWMPort(HalDigitalHandle pwmPortHandle);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_GetPWMCycleStartTime")]
@@ -81,5 +80,24 @@ public static partial class HalPWM
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetPWMSpeed(HalDigitalHandle pwmPortHandle, double speed, out HalStatus status);
 
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetPWMConfigMicroseconds")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void GetPWMConfigMicroseconds(HalDigitalHandle pwmPortHandle, out int maxPwm, out int deadbandMaxPwm, out int centerPwm, out int deadbandMinPwm, out int minPwm, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_GetPWMPulseTimeMicroseconds")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int GetPWMPulseTimeMicroseconds(HalDigitalHandle pwmPortHandle, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetPWMAlwaysHighMode")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetPWMAlwaysHighMode(HalDigitalHandle pwmPortHandle, out HalStatus status);
+
+    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
+    [LibraryImport("wpiHal", EntryPoint = "HAL_SetPWMPulseTimeMicroseconds")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void SetPWMPulseTimeMicroseconds(HalDigitalHandle pwmPortHandle, int microsecondPulseTime, out HalStatus status);
 
 }
