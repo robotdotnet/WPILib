@@ -151,21 +151,6 @@ public static partial class HalDMA
     public static partial int SetDMAExternalTrigger(HalDMAHandle handle, HalAnalogTriggerHandle digitalSourceHandle, AnalogTriggerType analogTriggerType, int rising, int falling, out HalStatus status);
 
     [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
-    [LibraryImport("wpiHal", EntryPoint = "HAL_ClearDMAExternalTriggers")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ClearDMAExternalTriggers(HalDMAHandle handle, out HalStatus status);
-
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
-    [LibraryImport("wpiHal", EntryPoint = "HAL_ClearDMASensors")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void ClearDMASensors(HalDMAHandle handle, out HalStatus status);
-
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
-    [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMATimedTriggerCycles")]
-    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    public static partial void SetDMATimedTriggerCycles(HalDMAHandle handle, uint cycles, out HalStatus status);
-
-    [AutomateStatusCheck(StatusCheckMethod = HalBase.StatusCheckCall)]
     [LibraryImport("wpiHal", EntryPoint = "HAL_SetDMATimedTrigger")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void SetDMATimedTrigger(HalDMAHandle handle, double periodSeconds, out HalStatus status);
