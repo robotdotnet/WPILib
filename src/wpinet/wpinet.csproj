@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.WPINet.runtime" Version="$(Version)" />
+    <PackageReference Include="FRC.WPINet.runtime" />
   </ItemGroup>
 
 </Project>
