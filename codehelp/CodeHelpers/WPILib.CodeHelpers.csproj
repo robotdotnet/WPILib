@@ -9,6 +9,7 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageOutputPath>$(SolutionDir)nupkg</PackageOutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>$(NoWarn);RS1038</NoWarn>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
