@@ -13,4 +13,6 @@ public readonly ref struct RawFrameWriter
     public int Height { get; init; }
     public int Stride { get; init; }
     public PixelFormat PixelFormat { get; init; }
+    public ulong Timestamp { get; init; }
+    public TimestampSource TimestampSource { get; init; }
 }

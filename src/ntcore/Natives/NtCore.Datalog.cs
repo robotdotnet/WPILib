@@ -20,7 +20,7 @@ public static unsafe partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial NtConnectionDataLogger StartConnectionDataLog(NtInst inst, OpaqueDataLog* log, WpiString name);
 
-    [LibraryImport("ntcore", EntryPoint = "NT_StopEntryDataLog")]
+    [LibraryImport("ntcore", EntryPoint = "NT_StopConnectionDataLog")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void StopConnectionDataLog(NtConnectionDataLogger logger);
 }

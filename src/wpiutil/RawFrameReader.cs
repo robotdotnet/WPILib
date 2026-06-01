@@ -49,10 +49,24 @@ public sealed class RawFrameReader : IDisposable
         set => internalFrame.pixelFormat = value;
     }
 
+    public ulong Timestamp
+    {
+        get => internalFrame.timestamp;
+        set => internalFrame.timestamp = value;
+    }
+
+    public TimestampSource TimestampSource
+    {
+        get => internalFrame.timestampSrc;
+        set => internalFrame.timestampSrc = value;
+    }
+
     public unsafe RawFrameReader CreateCopy()
     {
         RawFrameReader ret = new RawFrameReader();
         ret.SetInfo(Width, Height, Stride, PixelFormat);
+        ret.Timestamp = Timestamp;
+        ret.TimestampSource = TimestampSource;
         NativeRawFrame.AllocateRawFrameData(ref ret.RawFrame, internalFrame.size);
         ret.internalFrame.size = internalFrame.size;
         new ReadOnlySpan<byte>(internalFrame.data, checked((int)internalFrame.size)).CopyTo(new Span<byte>(ret.internalFrame.data, (int)ret.internalFrame.size));
@@ -68,6 +82,8 @@ public sealed class RawFrameReader : IDisposable
             Height = Height,
             Stride = Stride,
             PixelFormat = PixelFormat,
+            Timestamp = Timestamp,
+            TimestampSource = TimestampSource,
         };
     }
 }

@@ -26,6 +26,16 @@ public static unsafe partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void DestroyListenerPoller(NtListenerPoller poller);
 
+
+    [LibraryImport("ntcore", EntryPoint = "NT_WaitForListenerQueue")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    [return: MarshalAs(UnmanagedType.I4)]
+    public static partial bool WaitForListenerQueue(int handle, double timeout);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_AddPolledListenerSingle")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial NtListener AddListener(NtListenerPoller poller, WPIUtil.WpiString prefix, EventFlags flags);
+
     [LibraryImport("ntcore", EntryPoint = "NT_AddPolledListenerMultiple")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial NtListener AddListener(NtListenerPoller poller, [MarshalUsing(typeof(WpiStringMarshaller), ElementIndirectionDepth = 1)] ReadOnlySpan<string> prefixes, nuint prefixesLen, EventFlags flags);

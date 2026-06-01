@@ -1,13 +1,20 @@
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.Marshalling;
+using NetworkTables.Handles;
 
 namespace NetworkTables;
 
 [NativeMarshalling(typeof(PubSubOptionsMarshaller))]
 [StructLayout(LayoutKind.Auto)]
-public record struct PubSubOptions(uint PollSize, double Periodic, bool ExcludePublisher, bool SendAll, bool TopicsOnly, bool PrefixMatch, bool KeepDuplicates, bool DisableRemote, bool DisableLocal, bool ExcludeSelf, bool Hidden)
+public record struct PubSubOptions(uint PollStorage, double Periodic, NtPublisher ExcludePublisher, bool SendAll, bool TopicsOnly, bool PrefixMatch, bool KeepDuplicates, bool DisableRemote, bool DisableLocal, bool ExcludeSelf, bool Hidden)
 {
     public static PubSubOptions None => new();
+
+    public uint PollSize
+    {
+        get => PollStorage;
+        set => PollStorage = value;
+    }
 }
 
 [CustomMarshaller(typeof(PubSubOptions), MarshalMode.Default, typeof(PubSubOptionsMarshaller))]
@@ -18,9 +25,9 @@ public static unsafe class PubSubOptionsMarshaller
         return new NativePubSubOptions
         {
             structSize = (uint)sizeof(NativePubSubOptions),
-            pollSize = managed.PollSize,
+            pollStorage = managed.PollStorage,
             periodic = managed.Periodic,
-            excludePublisher = managed.ExcludePublisher ? 1 : 0,
+            excludePublisher = managed.ExcludePublisher.Handle,
             sendAll = managed.SendAll ? 1 : 0,
             topicsOnly = managed.TopicsOnly ? 1 : 0,
             prefixMatch = managed.PrefixMatch ? 1 : 0,
@@ -36,9 +43,9 @@ public static unsafe class PubSubOptionsMarshaller
     {
         return new PubSubOptions
         {
-            PollSize = unmanaged.pollSize,
+            PollStorage = unmanaged.pollStorage,
             Periodic = unmanaged.periodic,
-            ExcludePublisher = unmanaged.excludePublisher != 0,
+            ExcludePublisher = new NtPublisher(unmanaged.excludePublisher),
             SendAll = unmanaged.sendAll != 0,
             TopicsOnly = unmanaged.topicsOnly != 0,
             PrefixMatch = unmanaged.prefixMatch != 0,
@@ -54,7 +61,7 @@ public static unsafe class PubSubOptionsMarshaller
     public struct NativePubSubOptions
     {
         public uint structSize;
-        public uint pollSize;
+        public uint pollStorage;
         public double periodic;
         public int excludePublisher;
         public int sendAll;
@@ -65,25 +72,5 @@ public static unsafe class PubSubOptionsMarshaller
         public int disableLocal;
         public int excludeSelf;
         public int hidden;
-
-        public override bool Equals(object? obj)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        public static bool operator ==(NativePubSubOptions left, NativePubSubOptions right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(NativePubSubOptions left, NativePubSubOptions right)
-        {
-            return !(left == right);
-        }
     }
 }
