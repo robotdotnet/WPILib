@@ -3,9 +3,9 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using Stereologue;
-using WPILib.CodeHelpers.LogGenerator.Analyzer;
-using WPILib.CodeHelpers.LogGenerator.CodeFixer;
-using Verify = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixVerifier<WPILib.CodeHelpers.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.LogGenerator.CodeFixer.LogGeneratorFixer, Microsoft.CodeAnalysis.Testing.DefaultVerifier>;
+using WPILib.CodeHelpers.CodeFixes.LogGenerator.CodeFixer;
+using WPILib.CodeHelpers.Core.LogGenerator.Analyzer;
+using Verify = Microsoft.CodeAnalysis.CSharp.Testing.CSharpCodeFixVerifier<WPILib.CodeHelpers.Core.LogGenerator.Analyzer.LogGeneratorAnalyzer, WPILib.CodeHelpers.CodeFixes.LogGenerator.CodeFixer.LogGeneratorFixer, Microsoft.CodeAnalysis.Testing.DefaultVerifier>;
 
 namespace CodeHelpers.Test.LogGenerator;
 

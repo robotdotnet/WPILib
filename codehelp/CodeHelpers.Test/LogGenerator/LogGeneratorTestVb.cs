@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.VisualBasic.Testing;
 using Stereologue;
-using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
+using WPILib.CodeHelpers.VisualBasic.LogGenerator.SourceGenerator;
 
 public class LogGeneratorTestVb
 {
@@ -56,7 +56,7 @@ End Class
                     ("/.editorconfig", SourceText.From(TestHelpers.EditorConfig, Encoding.UTF8))
                 },
                 GeneratedSources = {
-                    ($"WPILib.CodeHelpers{Path.DirectorySeparatorChar}WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorVb{Path.DirectorySeparatorChar}MyNewClass.g.vb", SourceText.From(expected, Encoding.UTF8))
+                    ($"WPILib.CodeHelpers.VisualBasic{Path.DirectorySeparatorChar}WPILib.CodeHelpers.VisualBasic.LogGenerator.SourceGenerator.LogGeneratorVb{Path.DirectorySeparatorChar}MyNewClass.g.vb", SourceText.From(expected, Encoding.UTF8))
                 },
             },
         }.RunAsync();

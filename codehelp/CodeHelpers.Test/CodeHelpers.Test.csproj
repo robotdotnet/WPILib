@@ -20,7 +20,10 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="xunit" />
     <PackageReference Include="xunit.runner.visualstudio" />
-    <ProjectReference Include="..\CodeHelpers\WPILib.CodeHelpers.csproj" />
+    <ProjectReference Include="..\CodeHelpers.Core\WPILib.CodeHelpers.Core.csproj" />
+    <ProjectReference Include="..\CodeHelpers.CSharp\WPILib.CodeHelpers.CSharp.csproj" />
+    <ProjectReference Include="..\CodeHelpers.VisualBasic\WPILib.CodeHelpers.VisualBasic.csproj" />
+    <ProjectReference Include="..\CodeHelpers.CodeFixes\WPILib.CodeHelpers.CodeFixes.csproj" />
     <ProjectReference Include="..\..\src\stereologue\stereologue.csproj" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" />
     <PackageReference Include="Microsoft.CodeAnalysis" />
