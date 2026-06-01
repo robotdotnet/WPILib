@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.WPIHal.runtime" Version="$(Version)" />
+    <PackageReference Include="FRC.WPIHal.runtime" />
   </ItemGroup>
 
 </Project>

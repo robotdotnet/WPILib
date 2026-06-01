@@ -40,7 +40,7 @@ public partial class MyNewClass
                 AdditionalReferences = {
                     typeof(LogAttribute).Assembly
                 },
-                ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net100,
                 Sources = {
                     testString,
                 },

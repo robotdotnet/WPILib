@@ -210,11 +210,15 @@ internal static class MethodModelExtensions
             {
                 if (named.Key == "StatusCheckMethod")
                 {
-                    if (!named.Value.IsNull)
+                    if (!named.Value.IsNull && named.Value.Value is not null)
                     {
-                        statusCheckMethod = SymbolDisplay.FormatPrimitive(named.Value.Value!, false, false);
-                        found = true;
-                        break;
+                        var formattedStatusCheckMethod = SymbolDisplay.FormatPrimitive(named.Value.Value, false, false);
+                        if (formattedStatusCheckMethod is not null)
+                        {
+                            statusCheckMethod = formattedStatusCheckMethod;
+                            found = true;
+                            break;
+                        }
                     }
                 }
             }

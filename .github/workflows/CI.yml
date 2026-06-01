@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet-version: [ '8.x' ]
+        dotnet-version: [ '10.x' ]
         target: 
           - dotnet: win-x64
             os: windows-2025
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Setup dotnet ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Build ${{ matrix.target.dotnet }}
