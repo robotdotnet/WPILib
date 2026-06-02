@@ -9,7 +9,6 @@
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <PackageOutputPath>$(SolutionDir)nupkg</PackageOutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>$(NoWarn);RS1038</NoWarn>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -22,7 +21,6 @@
   <ItemGroup>
     <!-- Include enums used in attributes -->
     <PackageReference Include="Microsoft.CodeAnalysis.Common" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis" PrivateAssets="all" />
     <PackageReference Include="PolySharp">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
