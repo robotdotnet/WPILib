@@ -67,6 +67,15 @@ public class Rotation2dTest
     }
 
     [Fact]
+    public void TestPlus()
+    {
+        Rotation2d rot1 = 70.Degrees();
+        Rotation2d rot2 = 30.Degrees();
+
+        Assert.Equal(100.0, (rot1 + rot2).Angle.Degrees, Epsilon);
+    }
+
+    [Fact]
     public void TestUrnaryMinus()
     {
         Rotation2d rot1 = 20.Degrees();

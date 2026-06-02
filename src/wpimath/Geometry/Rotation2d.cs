@@ -69,6 +69,11 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     public static IStruct<Rotation2d> Struct { get; } = new Rotation2dStruct();
     public static IProtobuf<Rotation2d, ProtobufRotation2d> Proto { get; } = new Rotation2dProto();
 
+    public Rotation2d() : this(0.Radians())
+    {
+
+    }
+
     public Rotation2d(Angle angle)
     {
         Angle = angle;
@@ -99,11 +104,6 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
     [JsonInclude]
     [JsonPropertyName("radians")]
     internal double Radians => Angle.Radians;
-
-    public Rotation2d() : this(0.Radians())
-    {
-
-    }
 
     [JsonIgnore]
     public Angle Angle { get; }
@@ -181,4 +181,5 @@ public readonly struct Rotation2d : IStructSerializable<Rotation2d>,
         return MathExtras.Lerp(this, endValue, t);
     }
 
+    public override string ToString() => $"Rotation2d(Angle: {Angle})";
 }
