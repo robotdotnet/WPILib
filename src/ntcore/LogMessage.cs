@@ -17,7 +17,7 @@ public static unsafe class LogMessageMarshaller
         {
             LogLevel = (int)unmanaged.level,
             Message = unmanaged.message.ConvertToString(),
-            Filename = unmanaged.message.ConvertToString(),
+            Filename = unmanaged.filename.ConvertToString(),
             Line = (int)unmanaged.line
         };
     }

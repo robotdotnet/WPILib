@@ -41,6 +41,38 @@ public static unsafe partial class NtCore
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void FreeCharArray(byte* nativePtr);
 
+    [LibraryImport("ntcore", EntryPoint = "NT_AllocateBooleanArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial int* AllocateBooleanArray(nuint len);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_AllocateIntegerArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial long* AllocateIntegerArray(nuint len);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_AllocateFloatArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial float* AllocateFloatArray(nuint len);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_AllocateDoubleArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial double* AllocateDoubleArray(nuint len);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_FreeBooleanArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void FreeBooleanArray(int* nativePtr);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_FreeIntegerArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void FreeIntegerArray(long* nativePtr);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_FreeFloatArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void FreeFloatArray(float* nativePtr);
+
+    [LibraryImport("ntcore", EntryPoint = "NT_FreeDoubleArray")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    public static partial void FreeDoubleArray(double* nativePtr);
+
     [LibraryImport("ntcore", EntryPoint = "NT_Meta_FreeTopicPublishers")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void MetaFreeTopicPublishers(void* nativePtr, nuint count);

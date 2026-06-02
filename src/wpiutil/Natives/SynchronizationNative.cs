@@ -7,7 +7,7 @@ namespace WPIUtil.Natives;
 
 public static partial class SynchronizationNative
 {
-    [LibraryImport("wpiutil", EntryPoint = "WPI_CreateEvent")]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_MakeEvent")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial WpiEventHandle CreateEvent([MarshalAs(UnmanagedType.I4)] bool manualReset, [MarshalAs(UnmanagedType.I4)] bool initialState);
 
@@ -23,7 +23,7 @@ public static partial class SynchronizationNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void ResetEvent(WpiEventHandle handle);
 
-    [LibraryImport("wpiutil", EntryPoint = "WPI_CreateSemaphore")]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_MakeSemaphore")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial WpiSemaphoreHandle CreateSemaphore(int initialCount, int maximumCount);
 
@@ -33,17 +33,17 @@ public static partial class SynchronizationNative
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_ReleaseSemaphore")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U4)]
+    [return: MarshalAs(UnmanagedType.I4)]
     public static unsafe partial bool ReleaseSemaphore(WpiSemaphoreHandle handle, int releaseCount, out int prevCount);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_WaitForObject")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U4)]
+    [return: MarshalAs(UnmanagedType.I4)]
     public static partial bool WaitForObject(int handle);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_WaitForObjectTimeout")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-    [return: MarshalAs(UnmanagedType.U4)]
+    [return: MarshalAs(UnmanagedType.I4)]
     public static unsafe partial bool WaitForObjectTimeout(int handle, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
 
     [LibraryImport("wpiutil", EntryPoint = "WPI_WaitForObjects")]
@@ -64,7 +64,7 @@ public static partial class SynchronizationNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static unsafe partial int WaitForObjectsTimeout(ReadOnlySpan<int> handles, int handlesCount, Span<int> signaled, double timeout, [MarshalAs(UnmanagedType.I4)] out bool timedOut);
 
-    [LibraryImport("wpiutil", EntryPoint = "WPI_CreateSemaphore")]
+    [LibraryImport("wpiutil", EntryPoint = "WPI_CreateSignalObject")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     public static partial void CreateSignalObject(int handle, [MarshalAs(UnmanagedType.I4)] bool manualReset, [MarshalAs(UnmanagedType.I4)] bool InitialState);
 

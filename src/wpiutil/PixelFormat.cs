@@ -9,5 +9,14 @@ public enum PixelFormat : int
     Bgr,
     Gray,
     Y16,
-    Uyvy
+    Uyvy,
+    Bgra
+}
+
+public enum TimestampSource : int
+{
+    Unknown = 0,
+    FrameDequeue,
+    V4lEof,
+    V4lSoe
 }
