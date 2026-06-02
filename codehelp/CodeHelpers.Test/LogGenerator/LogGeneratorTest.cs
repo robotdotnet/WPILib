@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using Stereologue;
-using WPILib.CodeHelpers.LogGenerator.SourceGenerator;
+using WPILib.CodeHelpers.CSharp.LogGenerator.SourceGenerator;
 
 public class LogGeneratorTest
 {
@@ -48,7 +48,7 @@ public partial class MyNewClass
                 AdditionalReferences = {
                     typeof(LogAttribute).Assembly
                 },
-                ReferenceAssemblies = ReferenceAssemblies.Net.Net80,
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net100,
                 Sources = {
                     testString,
                 },
@@ -56,7 +56,7 @@ public partial class MyNewClass
                     ("/.editorconfig", SourceText.From(TestHelpers.EditorConfig, Encoding.UTF8))
                 },
                 GeneratedSources = {
-                    ($"WPILib.CodeHelpers{Path.DirectorySeparatorChar}WPILib.CodeHelpers.LogGenerator.SourceGenerator.LogGeneratorSharp{Path.DirectorySeparatorChar}MyNewClass.g.cs", SourceText.From(expected, Encoding.UTF8))
+                    ($"WPILib.CodeHelpers.CSharp{Path.DirectorySeparatorChar}WPILib.CodeHelpers.CSharp.LogGenerator.SourceGenerator.LogGeneratorSharp{Path.DirectorySeparatorChar}MyNewClass.g.cs", SourceText.From(expected, Encoding.UTF8))
                 },
             },
         }.RunAsync();

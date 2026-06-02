@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.CsCore.runtime" Version="$(Version)" />
+    <PackageReference Include="FRC.CsCore.runtime" />
   </ItemGroup>
 
 </Project>

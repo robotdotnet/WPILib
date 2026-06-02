@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
-using WPILib.CodeHelpers;
-using WPILib.CodeHelpers.LogGenerator;
+using WPILib.CodeHelpers.Core;
+using WPILib.CodeHelpers.Core.LogGenerator;
 
 namespace CodeHelpers.Test.LogGenerator;
 

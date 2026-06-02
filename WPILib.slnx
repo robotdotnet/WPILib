@@ -1,0 +1,42 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/codehelp/">
+    <Project Path="codehelp/CodeHelpers/WPILib.CodeHelpers.csproj" />
+    <Project Path="codehelp/CodeHelpers.CodeFixes.CSharp/WPILib.CodeHelpers.CodeFixes.CSharp.csproj" />
+    <Project Path="codehelp/CodeHelpers.CodeFixes.VisualBasic/WPILib.CodeHelpers.CodeFixes.VisualBasic.csproj" />
+    <Project Path="codehelp/CodeHelpers.Core/WPILib.CodeHelpers.Core.csproj" />
+    <Project Path="codehelp/CodeHelpers.CSharp/WPILib.CodeHelpers.CSharp.csproj" />
+    <Project Path="codehelp/CodeHelpers.Test/CodeHelpers.Test.csproj" />
+    <Project Path="codehelp/CodeHelpers.VisualBasic/WPILib.CodeHelpers.VisualBasic.csproj" />
+  </Folder>
+  <Folder Name="/dev/">
+    <Project Path="dev/desktopDev/desktopDev.csproj" />
+    <Project Path="dev/roboRIODev/roboRIODev.csproj" />
+    <Project Path="dev/vbTest/vbTest.vbproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/cscore/cscore.csproj" />
+    <Project Path="src/datalog/datalog.csproj" />
+    <Project Path="src/hal/hal.csproj" />
+    <Project Path="src/newcommands/newcommands.csproj" />
+    <Project Path="src/ntcore/ntcore.csproj" />
+    <Project Path="src/wpilibsharp/wpilibsharp.csproj" />
+    <Project Path="src/wpimath/wpimath.csproj" />
+    <Project Path="src/wpinet/wpinet.csproj" />
+    <Project Path="src/wpiutil/wpiutil.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/datalog.test/datalog.test.csproj" />
+    <Project Path="test/hal.test/hal.test.csproj" />
+    <Project Path="test/ntcore.test/ntcore.test.csproj" />
+    <Project Path="test/stereologue.test/stereologue.test.csproj" />
+    <Project Path="test/wpimath.test/wpimath.test.csproj" />
+    <Project Path="test/wpinet.test/wpinet.test.csproj" />
+    <Project Path="test/wpiutil.test/wpiutil.test.csproj" />
+  </Folder>
+  <Project Path="src/stereologue/stereologue.csproj" />
+</Solution>

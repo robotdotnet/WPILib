@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FRC.NetworkTables.runtime" Version="$(Version)" />
+    <PackageReference Include="FRC.NetworkTables.runtime" />
   </ItemGroup>
 
 </Project>
