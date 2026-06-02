@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,36 +6,26 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>12.0</LangVersion>
-    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <PackageOutputPath>$(SolutionDir)nupkg</PackageOutputPath>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>$(NoWarn);RS1038</NoWarn>
+    <PackageOutputPath Condition="'$(SolutionDir)' != ''">$(SolutionDir)nupkg</PackageOutputPath>
+    <PackageOutputPath Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)..\..\nupkg</PackageOutputPath>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\src\stereologue\LogLevel.cs" Link="LogLevel.cs" />
-    <Compile Include="..\..\src\stereologue\LogType.cs" Link="LogType.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Include enums used in attributes -->
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis" PrivateAssets="all" />
-    <PackageReference Include="PolySharp">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
+    <ProjectReference Include="..\CodeHelpers.Core\WPILib.CodeHelpers.Core.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.CSharp\WPILib.CodeHelpers.CSharp.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.VisualBasic\WPILib.CodeHelpers.VisualBasic.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.CodeFixes.CSharp\WPILib.CodeHelpers.CodeFixes.CSharp.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.CodeFixes.VisualBasic\WPILib.CodeHelpers.CodeFixes.VisualBasic.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
-  <!-- This ensures the library will be packaged as a source generator when we use `dotnet pack` -->
   <ItemGroup>
-    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="..\CodeHelpers.Core\$(OutputPath)\WPILib.CodeHelpers.Core.dll" Pack="true" PackagePath="analyzers/dotnet" Visible="false" />
+    <None Include="..\CodeHelpers.CSharp\$(OutputPath)\WPILib.CodeHelpers.CSharp.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="..\CodeHelpers.CodeFixes.CSharp\$(OutputPath)\WPILib.CodeHelpers.CodeFixes.CSharp.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="..\CodeHelpers.VisualBasic\$(OutputPath)\WPILib.CodeHelpers.VisualBasic.dll" Pack="true" PackagePath="analyzers/dotnet/vb" Visible="false" />
+    <None Include="..\CodeHelpers.CodeFixes.VisualBasic\$(OutputPath)\WPILib.CodeHelpers.CodeFixes.VisualBasic.dll" Pack="true" PackagePath="analyzers/dotnet/vb" Visible="false" />
   </ItemGroup>
 
 </Project>

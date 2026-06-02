@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All"/>
-    <ProjectReference Include="..\..\codehelp\CodeHelpers\WPILib.CodeHelpers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers.Core\WPILib.CodeHelpers.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers.CSharp\WPILib.CodeHelpers.CSharp.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
   </ItemGroup>
 </Project>
