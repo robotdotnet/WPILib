@@ -2,17 +2,17 @@ using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Formatting;
+using Microsoft.CodeAnalysis.VisualBasic;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using WPILib.CodeHelpers.Core.LogGenerator.Analyzer;
 
-namespace WPILib.CodeHelpers.CodeFixes.LogGenerator.CodeFixer;
+namespace WPILib.CodeHelpers.CodeFixes.VisualBasic.LogGenerator.CodeFixer;
 
-[ExportCodeFixProvider(LanguageNames.CSharp)]
+[ExportCodeFixProvider(LanguageNames.VisualBasic)]
 public class LogGeneratorFixer : CodeFixProvider
 {
-    private const string Title = "Add [GenerateLog]";
+    private const string Title = "Add <GenerateLog>";
 
     public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create([
         LoggerDiagnostics.Ids.MissingGenerateLog,
@@ -30,38 +30,36 @@ public class LogGeneratorFixer : CodeFixProvider
         var diagnostic = context.Diagnostics.First();
         var diagnosticSpan = diagnostic.Location.SourceSpan;
 
-        // Find the type declaration identified by the diagnostic.
-        var declaration = root!.FindToken(diagnosticSpan.Start).Parent!.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
+        var declaration = root!.FindToken(diagnosticSpan.Start).Parent!.AncestorsAndSelf().OfType<TypeStatementSyntax>().First();
 
-        // Register a code action that will invoke the fix.
         context.RegisterCodeFix(
             CodeAction.Create(
                 title: Title,
-                createChangedDocument: c => AddGenerateLogAttribute(context.Document, declaration!, c),
+                createChangedDocument: c => AddGenerateLogAttribute(context.Document, declaration, c),
                 equivalenceKey: Title),
             diagnostic);
     }
 
-    private async Task<Document> AddGenerateLogAttribute(Document document, TypeDeclarationSyntax typeSyntax, CancellationToken cancellationToken)
+    private async Task<Document> AddGenerateLogAttribute(Document document, TypeStatementSyntax typeSyntax, CancellationToken cancellationToken)
     {
-        var root = await document.GetSyntaxRootAsync(cancellationToken)!;
+        var root = await document.GetSyntaxRootAsync(cancellationToken);
         SyntaxToken firstToken = typeSyntax.GetFirstToken();
         SyntaxTriviaList leadingTrivia = firstToken.LeadingTrivia;
-        TypeDeclarationSyntax trimmedLocal = typeSyntax.ReplaceToken(
+        TypeStatementSyntax trimmedLocal = typeSyntax.ReplaceToken(
             firstToken, firstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
 
         var attributes = typeSyntax.AttributeLists.Add(
             SyntaxFactory.AttributeList(SyntaxFactory.SingletonSeparatedList(
-                SyntaxFactory.Attribute(SyntaxFactory.IdentifierName("GenerateLog"))
+                SyntaxFactory.Attribute(SyntaxFactory.ParseName("GenerateLog"))
             )).WithLeadingTrivia(leadingTrivia));
 
         var newLocal = trimmedLocal.WithAttributeLists(attributes);
         var formattedLocal = newLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
         var newRoot = root!.ReplaceNode(
-                typeSyntax,
-                formattedLocal
-            );
+            typeSyntax,
+            formattedLocal
+        );
 
         return document.WithSyntaxRoot(newRoot);
     }

@@ -13,14 +13,14 @@
     <ProjectReference Include="..\..\src\wpilibsharp\wpilibsharp.csproj" />
     <ProjectReference Include="..\..\src\wpiutil\wpiutil.csproj" />
     <ProjectReference Include="..\..\src\stereologue\stereologue.csproj" />
-    <ProjectReference Include="..\..\codehelp\CodeHelpers.Core\WPILib.CodeHelpers.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers.Core\WPILib.CodeHelpers.Core.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
-    <ProjectReference Include="..\..\codehelp\CodeHelpers.CSharp\WPILib.CodeHelpers.CSharp.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers.CSharp\WPILib.CodeHelpers.CSharp.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.vbproj'">
-    <ProjectReference Include="..\..\codehelp\CodeHelpers.VisualBasic\WPILib.CodeHelpers.VisualBasic.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\..\codehelp\CodeHelpers.VisualBasic\WPILib.CodeHelpers.VisualBasic.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" PrivateAssets="all" />
   </ItemGroup>
 </Project>

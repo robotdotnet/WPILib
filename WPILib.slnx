@@ -5,7 +5,9 @@
     <Platform Name="x86" />
   </Configurations>
   <Folder Name="/codehelp/">
-    <Project Path="codehelp/CodeHelpers.CodeFixes/WPILib.CodeHelpers.CodeFixes.csproj" />
+    <Project Path="codehelp/CodeHelpers/WPILib.CodeHelpers.csproj" />
+    <Project Path="codehelp/CodeHelpers.CodeFixes.CSharp/WPILib.CodeHelpers.CodeFixes.CSharp.csproj" />
+    <Project Path="codehelp/CodeHelpers.CodeFixes.VisualBasic/WPILib.CodeHelpers.CodeFixes.VisualBasic.csproj" />
     <Project Path="codehelp/CodeHelpers.Core/WPILib.CodeHelpers.Core.csproj" />
     <Project Path="codehelp/CodeHelpers.CSharp/WPILib.CodeHelpers.CSharp.csproj" />
     <Project Path="codehelp/CodeHelpers.Test/CodeHelpers.Test.csproj" />

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <LangVersion>12.0</LangVersion>
+    <PackageOutputPath Condition="'$(SolutionDir)' != ''">$(SolutionDir)nupkg</PackageOutputPath>
+    <PackageOutputPath Condition="'$(SolutionDir)' == ''">$(MSBuildThisFileDirectory)..\..\nupkg</PackageOutputPath>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DotNet.ReproducibleBuilds" PrivateAssets="All" />
+    <ProjectReference Include="..\CodeHelpers.Core\WPILib.CodeHelpers.Core.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.CSharp\WPILib.CodeHelpers.CSharp.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.VisualBasic\WPILib.CodeHelpers.VisualBasic.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.CodeFixes.CSharp\WPILib.CodeHelpers.CodeFixes.CSharp.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="..\CodeHelpers.CodeFixes.VisualBasic\WPILib.CodeHelpers.CodeFixes.VisualBasic.csproj" PrivateAssets="all" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\CodeHelpers.Core\$(OutputPath)\WPILib.CodeHelpers.Core.dll" Pack="true" PackagePath="analyzers/dotnet" Visible="false" />
+    <None Include="..\CodeHelpers.CSharp\$(OutputPath)\WPILib.CodeHelpers.CSharp.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="..\CodeHelpers.CodeFixes.CSharp\$(OutputPath)\WPILib.CodeHelpers.CodeFixes.CSharp.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    <None Include="..\CodeHelpers.VisualBasic\$(OutputPath)\WPILib.CodeHelpers.VisualBasic.dll" Pack="true" PackagePath="analyzers/dotnet/vb" Visible="false" />
+    <None Include="..\CodeHelpers.CodeFixes.VisualBasic\$(OutputPath)\WPILib.CodeHelpers.CodeFixes.VisualBasic.dll" Pack="true" PackagePath="analyzers/dotnet/vb" Visible="false" />
+  </ItemGroup>
+
+</Project>
